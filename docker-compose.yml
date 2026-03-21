@@ -1,0 +1,37 @@
+services:
+  lm-harness:
+    build:
+      context: .
+      target: lm-harness
+    env_file: .env
+    volumes:
+      - ./results/lm-harness:/app/results/lm-harness
+      - hf-cache:/root/.cache/huggingface
+    # Uncomment for NVIDIA GPU support:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  inspect:
+    build:
+      context: .
+      target: inspect
+    env_file: .env
+    volumes:
+      - ./results/inspect:/app/results/inspect
+      - hf-cache:/root/.cache/huggingface
+    # Uncomment for NVIDIA GPU support:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+volumes:
+  hf-cache:
