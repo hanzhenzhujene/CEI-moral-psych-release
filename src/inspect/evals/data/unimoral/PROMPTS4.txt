@@ -1,0 +1,26 @@
+{
+    "prompt_eng_rq4" : """
+    Consider this scenario: "[SCENARIO]"; and the following selected action: "[SELECTED_ACTION]".
+    Your job is to generate the consequence of this action, given the scenario in a concise manner. Be brief. Strictly give your answer using the following format: "Consequence of the action is " followed by the generation. Do not write any explanation.
+    """,
+    "prompt_chi_rq4" : """  
+    请考虑以下情境:"[SCENARIO]";以及所选择的行动:"[SELECTED_ACTION]".   
+    你的任务是根据该情境, 简洁地生成该行动的后果. 保持简短. 严格按照以下格式给出答案:"Consequence of the action is " 后跟生成的内容. 不要写任何解释.   
+    """,
+    "prompt_spa_rq4" : """  
+    Considera este escenario: "[SCENARIO]"; y la siguiente acción seleccionada: "[SELECTED_ACTION]".  
+    Tu tarea es generar la consecuencia de esta acción, dado el escenario, de manera concisa. Sé breve. Proporciona estrictamente tu respuesta utilizando el siguiente formato: "Consequence of the action is " seguido de la generación. No escribas ninguna explicación.  
+    """,
+    "prompt_rus_rq4" : """  
+    Рассмотрите этот сценарий: "[SCENARIO]"; и следующий выбранный поступок: "[SELECTED_ACTION]".  
+    Ваша задача - кратко сгенерировать последствие этого поступка в данном сценарии. Будьте лаконичны. Строго следуйте следующему формату ответа: "Consequence of the action is " и далее генерация. Не пишите никаких объяснений.  
+    """,
+    "prompt_ara_rq4" : """  
+    ضع في اعتبارك هذا السيناريو: "[SCENARIO]"; والإجراء المحدد التالي: "[SELECTED_ACTION]".  
+    مهمتك هي توليد نتيجة هذا الإجراء بناءً على السيناريو بطريقة موجزة. كن مختصراً. قدم إجابتك بدقة باستخدام التنسيق التالي: "Consequence of the action is " متبوعاً بالنتيجة. لا تكتب أي تفسير.  
+    """,
+    "prompt_hin_rq4" : """  
+    इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित चयनित कार्य: "[SELECTED_ACTION]"।  
+    आपका कार्य इस कार्य के परिणाम को संक्षेप में उत्पन्न करना है, दिए गए परिदृश्य को ध्यान में रखते हुए। संक्षिप्त रहें। अपनी उत्तर केवल निम्नलिखित प्रारूप में दें: "Consequence of the action is " के बाद परिणाम लिखें। कोई स्पष्टीकरण न दें।  
+    """
+}

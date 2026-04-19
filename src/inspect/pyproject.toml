@@ -8,6 +8,7 @@ dependencies = [
     "torch>=2.2",
     "transformers>=4.40",
     "accelerate>=0.29",
+    "openai>=1.0",
 ]
 
 [tool.uv]

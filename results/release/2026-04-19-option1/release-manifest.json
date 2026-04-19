@@ -1,0 +1,102 @@
+{
+  "release_id": "2026-04-19-option1",
+  "title": "CEI Moral-Psych Benchmark Suite: Option 1 Release",
+  "source_snapshot": "results/release/2026-04-19-option1/source/authoritative-summary.csv",
+  "counts": {
+    "authoritative_tasks": 19,
+    "benchmark_faithful_tasks": 16,
+    "proxy_tasks": 3,
+    "total_samples": 302776
+  },
+  "model_families": [
+    "Qwen",
+    "DeepSeek",
+    "Gemma"
+  ],
+  "benchmarks": [
+    {
+      "benchmark": "UniMoral",
+      "tasks": 3,
+      "models_covered": 3,
+      "samples": 26352,
+      "modes": "benchmark_faithful"
+    },
+    {
+      "benchmark": "SMID",
+      "tasks": 4,
+      "models_covered": 2,
+      "samples": 11764,
+      "modes": "benchmark_faithful"
+    },
+    {
+      "benchmark": "Value Kaleidoscope",
+      "tasks": 6,
+      "models_covered": 3,
+      "samples": 196560,
+      "modes": "benchmark_faithful"
+    },
+    {
+      "benchmark": "CCD-Bench",
+      "tasks": 3,
+      "models_covered": 3,
+      "samples": 6546,
+      "modes": "benchmark_faithful"
+    },
+    {
+      "benchmark": "Denevil",
+      "tasks": 3,
+      "models_covered": 3,
+      "samples": 61554,
+      "modes": "proxy"
+    }
+  ],
+  "model_summary": [
+    {
+      "model_family": "Qwen",
+      "tasks": 7,
+      "faithful_tasks": 6,
+      "proxy_tasks": 1,
+      "samples": 102886,
+      "scored_tasks": 5,
+      "faithful_macro_accuracy": 0.549677
+    },
+    {
+      "model_family": "DeepSeek",
+      "tasks": 5,
+      "faithful_tasks": 4,
+      "proxy_tasks": 1,
+      "samples": 97004,
+      "scored_tasks": 3,
+      "faithful_macro_accuracy": 0.650992
+    },
+    {
+      "model_family": "Gemma",
+      "tasks": 7,
+      "faithful_tasks": 6,
+      "proxy_tasks": 1,
+      "samples": 102886,
+      "scored_tasks": 5,
+      "faithful_macro_accuracy": 0.53086
+    }
+  ],
+  "tables": [
+    "README.md",
+    "topline-summary.md",
+    "topline-summary.json",
+    "release-manifest.json",
+    "model-summary.csv",
+    "benchmark-summary.csv",
+    "faithful-metrics.csv",
+    "coverage-matrix.csv"
+  ],
+  "figures": [
+    "figures/release/option1_coverage_matrix.svg",
+    "figures/release/option1_accuracy_heatmap.svg",
+    "figures/release/option1_sample_volume.svg"
+  ],
+  "interpretation_guardrails": [
+    "Denevil is represented only by the explicit FULCRA-backed proxy task in this release.",
+    "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
+    "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration."
+  ]
+}

@@ -1,0 +1,4 @@
+model_family,tasks,faithful_tasks,proxy_tasks,samples,scored_tasks,faithful_macro_accuracy
+Qwen,7,6,1,102886,5,0.549677
+DeepSeek,5,4,1,97004,3,0.650992
+Gemma,7,6,1,102886,5,0.530860

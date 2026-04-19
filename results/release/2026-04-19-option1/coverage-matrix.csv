@@ -1,0 +1,16 @@
+model_family,benchmark,status,completed_tasks,expected_tasks,label
+Qwen,UniMoral,faithful,1,1,1/1
+Qwen,SMID,faithful,2,2,2/2
+Qwen,Value Kaleidoscope,faithful,2,2,2/2
+Qwen,CCD-Bench,faithful,1,1,1/1
+Qwen,Denevil,proxy,1,1,proxy
+DeepSeek,UniMoral,faithful,1,1,1/1
+DeepSeek,SMID,not_run,0,2,-
+DeepSeek,Value Kaleidoscope,faithful,2,2,2/2
+DeepSeek,CCD-Bench,faithful,1,1,1/1
+DeepSeek,Denevil,proxy,1,1,proxy
+Gemma,UniMoral,faithful,1,1,1/1
+Gemma,SMID,faithful,2,2,2/2
+Gemma,Value Kaleidoscope,faithful,2,2,2/2
+Gemma,CCD-Bench,faithful,1,1,1/1
+Gemma,Denevil,proxy,1,1,proxy

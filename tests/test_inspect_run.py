@@ -65,3 +65,15 @@ def test_load_tasks_from_file_discovers_tasks(tmp_path):
 def test_load_tasks_from_file_missing():
     with pytest.raises(FileNotFoundError):
         load_tasks_from_file("/nonexistent/path.py")
+
+
+def test_load_tasks_from_registry_file_discovers_curated_suite():
+    task_file = Path(__file__).parent.parent / "src" / "inspect" / "evals" / "moral_psych.py"
+    tasks = load_tasks_from_file(str(task_file))
+
+    task_names = {task.__name__ for task in tasks}
+    assert "unimoral_action_prediction" in task_names
+    assert "smid_moral_rating" in task_names
+    assert "value_prism_relevance" in task_names
+    assert "ccd_bench_selection" in task_names
+    assert "denevil_fulcra_proxy_generation" in task_names

@@ -1,0 +1,17 @@
+benchmark,benchmark_scope,model_family,task,model,accuracy,stderr,samples,status
+CCD-Bench,Selection,DeepSeek,ccd_bench_selection,openrouter/deepseek/deepseek-chat-v3.1,,0.001024,2182,success
+CCD-Bench,Selection,Gemma,ccd_bench_selection,openrouter/google/gemma-3-4b-it,,0.000000,2182,success
+CCD-Bench,Selection,Qwen,ccd_bench_selection,openrouter/qwen/qwen3-8b,,0.000000,2182,success
+SMID,Foundation classification,Gemma,smid_foundation_classification,openrouter/google/gemma-3-4b-it,0.474668,0.009210,2941,success
+SMID,Moral rating,Gemma,smid_moral_rating,openrouter/google/gemma-3-4b-it,0.359062,0.008847,2941,success
+SMID,Foundation classification,Qwen,smid_foundation_classification,openrouter/qwen/qwen3-vl-8b-instruct,0.478409,0.009213,2941,success
+SMID,Moral rating,Qwen,smid_moral_rating,openrouter/qwen/qwen3-vl-8b-instruct,0.257735,0.008067,2941,success
+UniMoral,Option 1 action prediction,DeepSeek,unimoral_action_prediction,openrouter/deepseek/deepseek-chat-v3.1,0.683629,0.004962,8784,success
+UniMoral,Option 1 action prediction,Gemma,unimoral_action_prediction,openrouter/google/gemma-3-4b-it,0.635246,0.005136,8784,success
+UniMoral,Option 1 action prediction,Qwen,unimoral_action_prediction,openrouter/qwen/qwen3-8b,0.647427,0.005098,8784,success
+Value Kaleidoscope,Relevance,DeepSeek,value_prism_relevance,openrouter/deepseek/deepseek-chat-v3.1,0.670856,0.002248,43680,success
+Value Kaleidoscope,Valence,DeepSeek,value_prism_valence,openrouter/deepseek/deepseek-chat-v3.1,0.598489,0.003317,21840,success
+Value Kaleidoscope,Relevance,Gemma,value_prism_relevance,openrouter/google/gemma-3-4b-it,0.606113,0.002338,43680,success
+Value Kaleidoscope,Valence,Gemma,value_prism_valence,openrouter/google/gemma-3-4b-it,0.579212,0.003341,21840,success
+Value Kaleidoscope,Relevance,Qwen,value_prism_relevance,openrouter/qwen/qwen3-8b,0.666918,0.002255,43680,success
+Value Kaleidoscope,Valence,Qwen,value_prism_valence,openrouter/qwen/qwen3-8b,0.697894,0.003107,21840,success

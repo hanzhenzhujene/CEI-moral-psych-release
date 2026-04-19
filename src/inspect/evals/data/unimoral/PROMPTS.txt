@@ -1,0 +1,334 @@
+{
+    "prompt_np_eng_rq1" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]".
+    Your job is to choose one of the possible actions given the scenario.
+    Strictly give your answer using the following format: "Selected action is <a or b>.". Do not write any explanation.
+    """,
+    "prompt_desc_eng_rq1" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]".
+    Your job is to think like a person who introduces them as follows: "[DESC]", and choose one of the possible actions given the scenario.
+    Strictly give your answer using the following format: "Selected action is <a or b>.". Do not write any explanation.
+    """,
+    "prompt_moral_eng_rq1" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]".
+    Your job is to think like a person who has the following score (out of 5) for the six moral values ('Care', 'Equality', 'Proportionality', 'Loyalty', 'Authority', 'Purity'): "[MORAL]", and choose one of the possible actions given the scenario.
+    Strictly give your answer using the following format: "Selected action is <a or b>.". Do not write any explanation.
+    """,
+    "prompt_moral2_eng_rq1" : """
+    Consider the following definition of moral values:
+    Care - Prioritizing kindness, compassion, and the prevention of harm to others.
+    Equality - Ensuring that all individuals have the same rights, opportunities, and treatment.
+    Proportionality - Rewarding or punishing individuals in fair proportion to their actions.
+    Loyalty - Maintaining steadfast commitment and allegiance to ones group or community.
+    Authority - Respecting and upholding legitimate leadership, rules, and social order.
+    Purity - Valuing cleanliness, sanctity, and self-discipline in thoughts and actions.
+    Now, consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]".
+    Your job is to think like a person who values [MORAL_VALUE_1] the most followed by [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6]. Choose one of the possible actions given the scenario.
+    Strictly give your answer using the following format: "Selected action is <a or b>.". Do not write any explanation.
+    """,
+    "prompt_culture_eng_rq1" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]".
+    Your job is to think like a person who has the following score (out of 5) for the six cultural dimensions ('Power Distance', 'Individualism', 'Motivation', 'Uncertainty Avoidance', 'Long Term Orientation', 'Indulgence'): "[CULTURE]", and choose one of the possible actions given the scenario.
+    Strictly give your answer using the following format: "Selected action is <a or b>.". Do not write any explanation.
+    """,
+    "prompt_culture2_eng_rq1" : """
+    Consider the following definition of cultural values:
+    Power Distance - The extent to which people accept and expect unequal power distribution in society.
+    Individualism - The degree to which individuals prioritize personal goals over group loyalty.
+    Motivation - The cultural preference for achievement and success (often linked to 'Masculinity' in Hofstede’s model).
+    Uncertainty Avoidance - The extent to which a society tolerates ambiguity and uncertainty.
+    Long-Term Orientation - The degree to which a culture values perseverance, future planning, and adaptability.
+    Indulgence - The extent to which a society allows for gratification of desires and enjoyment of life.
+    Now, consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]".
+    Your job is to think like a person who values [CULTURAL_VALUE_1] the most followed by [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6].Choose one of the possible actions given the scenario.
+    Strictly give your answer using the following format: "Selected action is <a or b>.". Do not write any explanation.
+    """,
+    "prompt_fs_eng_rq1" : """
+    Consider the following example scenarios, their possible actions, and the action selected by person A.
+    Example Scenario 1: "[FS_SCENARIO_1]"; Possible Actions: "[FS_ACTIONS_1]"; Selected Action: "[FS_GT_1]"
+    Example Scenario 2: "[FS_SCENARIO_2]"; Possible Actions: "[FS_ACTIONS_2]"; Selected Action: "[FS_GT_2]"
+    Example Scenario 3: "[FS_SCENARIO_3]"; Possible Actions: "[FS_ACTIONS_3]"; Selected Action: "[FS_GT_3]"
+
+    Your job is to think like this person A and choose one of the possible actions given this scenario: "[SCENARIO]" and these possible actions: "[ACTIONS]".
+    Strictly give your answer using the following format: "Selected action is <a or b>.". Do not write any explanation.
+    """,
+    "prompt_np_chi_rq1" : """  
+    请考虑以下情境:"[SCENARIO]";以及以下可能的行动:"[ACTIONS]".   
+    你的任务是根据情境选择其中一个可能的行动.   
+    严格按照以下格式给出答案:"Selected action is <a or b>.". 不要写任何解释.   
+    """,
+    "prompt_desc_chi_rq1" : """
+    考虑以下情景: "[SCENARIO]";以及以下可能的行动: "[ACTIONS]".   
+    你的任务是像这样介绍自己的人进行思考: "[DESC]", 并在该情景下选择一个可能的行动.   
+    请使用以下格式回答: "Selected action is <a or b>.".   
+    不要输出任何其他内容. 不要写任何解释. 
+    """,
+    "prompt_moral_chi_rq1" : """
+    考虑以下情景: "[SCENARIO]";以及以下可能的行动: "[ACTIONS]".   
+    你的任务是像一个在六种道德价值 ("关怀", "平等", "比例", "忠诚", "权威", "纯洁") 上得分 (满分5分) 为"[MORAL]"的人进行思考, 并在该情景下选择一个可能的行动.   
+    请使用以下格式回答: "Selected action is <a or b>.".   
+    不要输出任何其他内容. 不要写任何解释. 
+    """,
+    "prompt_moral2_chi_rq1" : """  
+    请考虑以下道德价值观的定义:  
+    关怀 (Care) – 优先考虑善良, 同情心, 并防止他人受到伤害.   
+    平等 (Equality) – 确保所有人享有相同的权利, 机会和待遇.   
+    比例 (Proportionality) – 根据个人行为给予公平的奖励或惩罚.   
+    忠诚 (Loyalty) – 对自己的群体或社区保持坚定的承诺和忠诚.   
+    权威 (Authority) – 尊重并维护合法的领导, 规则和社会秩序.   
+    纯洁 (Purity) – 重视清洁, 神圣性和思想及行为上的自律.   
+      
+    现在, 请考虑这个情境:"[SCENARIO]";以及以下可能的行动:"[ACTIONS]".   
+    你的任务是设身处地地思考, 像一个最重视[MORAL_VALUE_1], 其次是[MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6]的人, 选择一个符合该情境的可能行动.   
+    严格按照以下格式给出你的答案:"Selected action is <a or b>.". 不要写任何解释.   
+    """,
+    "prompt_culture_chi_rq1" : """
+    考虑以下情景: "[SCENARIO]";以及以下可能的行动: "[ACTIONS]".   
+    你的任务是像一个在六种道德价值 ("关怀", "平等", "比例", "忠诚", "权威", "纯洁") 上得分 (满分5分) 为"[MORAL]"的人进行思考, 并在该情景下选择一个可能的行动.   
+    请使用以下格式回答: "Selected action is <a or b>.".   
+    不要输出任何其他内容. 不要写任何解释. 
+    """,
+    "prompt_culture2_chi_rq1" : """  
+    请考虑以下文化价值观的定义:  
+    权力距离 (Power Distance) - 人们接受并期望社会中不平等的权力分配的程度.   
+    个人主义 (Individualism) - 个人优先考虑个人目标而非团体忠诚的程度.   
+    动机 (Motivation) - 对成就和成功的文化偏好 (通常与霍夫斯泰德模型中的“男性气质”相关) .   
+    不确定性规避 (Uncertainty Avoidance) - 社会容忍模糊性和不确定性的程度.   
+    长期取向 (Long-Term Orientation) - 文化重视毅力, 未来规划和适应性的程度.   
+    放纵 (Indulgence) - 社会在多大程度上允许欲望的满足和生活的享乐.   
+      
+    现在, 请考虑这个情境:"[SCENARIO]";以及以下可能的行动:"[ACTIONS]".   
+    你的任务是设身处地地思考, 像一个最重视[CULTURAL_VALUE_1], 其次是[CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6]的人, 选择一个符合该情境的可能行动.   
+    严格按照以下格式给出你的答案:"Selected action is <a or b>.". 不要写任何解释.   
+    """,
+    "prompt_fs_chi_rq1" : """
+    考虑以下示例情景, 它们的可能行动, 以及A人的选择的行动.   
+    示例情景1: "[FS_SCENARIO_1]";可能的行动: "[FS_ACTIONS_1]";选择的行动: "[FS_GT_1]"  
+    示例情景2: "[FS_SCENARIO_2]";可能的行动: "[FS_ACTIONS_2]";选择的行动: "[FS_GT_2]"  
+    示例情景3: "[FS_SCENARIO_3]";可能的行动: "[FS_ACTIONS_3]";选择的行动: "[FS_GT_3]"  
+
+    你的任务是像这个A人一样思考, 并在以下情景: "[SCENARIO]"及其可能的行动: "[ACTIONS]"中选择一个行动.   
+    请使用以下格式回答: "Selected action is <a or b>.".   
+    不要输出任何其他内容. 不要写任何解释. 
+    """,
+    "prompt_np_rus_rq1" : """  
+    Рассмотрите следующий сценарий: "[SCENARIO]"; и возможные действия: "[ACTIONS]".  
+    Ваша задача -выбрать одно из возможных действий, учитывая сценарий.  
+    Строго следуйте этому формату ответа: "Selected action is <a or b>.". Не пишите никаких объяснений.  
+    """,
+    "prompt_desc_rus_rq1" : """
+    Рассмотрите этот сценарий: "[SCENARIO]"; и следующие возможные действия: "[ACTIONS]".
+    Ваша задача -мыслить как человек, который представляется следующим образом: "[DESC]", и выбрать одно из возможных действий, учитывая данный сценарий.
+    Дайте ответ в следующем формате: "Selected action is <a or b>.". Не выводите ничего больше. Не пишите никаких объяснений.
+    """,
+    "prompt_moral_rus_rq1" : """
+    Рассмотрите этот сценарий: "[SCENARIO]"; и следующие возможные действия: "[ACTIONS]".
+    Ваша задача -мыслить как человек, который имеет следующий балл (из 5) по шести моральным ценностям ('Забота', 'Равенство', 'Пропорциональность', 'Лояльность', 'Авторитет', 'Чистота'): "[MORAL]", и выбрать одно из возможных действий, учитывая данный сценарий.
+    Дайте ответ в следующем формате: "Selected action is <a or b>.". Не выводите ничего больше. Не пишите никаких объяснений.
+    """,
+    "prompt_moral2_rus_rq1" : """  
+    Рассмотрите следующие определения моральных ценностей:  
+    Забота (Care) - Приоритет доброты, сострадания и предотвращения вреда другим.  
+    Равенство (Equality) - Обеспечение одинаковых прав, возможностей и отношения для всех.  
+    Пропорциональность (Proportionality) - Справедливое вознаграждение или наказание в соответствии с действиями.  
+    Лояльность (Loyalty) - Непоколебимая приверженность и верность своей группе или сообществу.  
+    Авторитет (Authority) - Уважение и поддержание законной власти, правил и общественного порядка.  
+    Чистота (Purity) - Ценность чистоты, святости и самодисциплины в мыслях и поступках.  
+      
+    Теперь рассмотрите следующий сценарий: "[SCENARIO]"; и возможные действия: "[ACTIONS]".  
+    Ваша задача -мыслить как человек, который больше всего ценит [MORAL_VALUE_1], затем [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6], и выбрать одно из возможных действий в данном сценарии.  
+    Строго следуйте этому формату ответа: "Selected action is <a or b>.". Не пишите никаких объяснений.  
+    """,
+    "prompt_culture_rus_rq1" : """
+    Рассмотрите этот сценарий: "[SCENARIO]"; и следующие возможные действия: "[ACTIONS]".
+    Ваша задача -мыслить как человек, который имеет следующий балл (из 5) по шести культурным измерениям ('Дистанция власти', 'Индивидуализм', 'Мотивация', 'Избегание неопределенности', 'Ориентация на долгосрочную перспективу', 'Снисходительность'): "[CULTURE]", и выбрать одно из возможных действий, учитывая данный сценарий.
+    Дайте ответ в следующем формате: "Selected action is <a or b>.". Не выводите ничего больше. Не пишите никаких объяснений.
+    """,
+    "prompt_culture2_rus_rq1" : """  
+    Рассмотрите следующие определения культурных ценностей:  
+    Дистанция власти (Power Distance) - Степень, в которой люди принимают и ожидают неравномерное распределение власти в обществе.  
+    Индивидуализм (Individualism) - Степень, в которой индивидуумы придают большее значение личным целям, чем лояльности группе.  
+    Мотивация (Motivation) - Культурное предпочтение достижений и успеха (часто связано с 'Маскулинностью' в модели Хофстеде).  
+    Избегание неопределенности (Uncertainty Avoidance) - Степень, в которой общество терпимо к неопределенности и неясности.  
+    Долгосрочная ориентация (Long-Term Orientation) - Степень, в которой культура ценит упорство, долгосрочное планирование и адаптивность.  
+    Развлечение (Indulgence) - Степень, в которой общество позволяет удовлетворять желания и наслаждаться жизнью.  
+      
+    Теперь рассмотрите этот сценарий: "[SCENARIO]"; и следующие возможные действия: "[ACTIONS]".  
+    Ваша задача -мыслить как человек, который больше всего ценит [CULTURAL_VALUE_1], затем [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6], и выбрать одно из возможных действий в данном сценарии.  
+    Строго следуйте этому формату ответа: "Selected action is <a or b>.". Не пишите никаких объяснений.  
+    """, 
+    "prompt_fs_rus_rq1" : """
+    Рассмотрите следующие примеры сценариев, их возможные действия и действие, выбранное человеком A.
+    Пример сценария 1: "[FS_SCENARIO_1]"; Возможные действия: "[FS_ACTIONS_1]"; Выбранное действие: "[FS_GT_1]"
+    Пример сценария 2: "[FS_SCENARIO_2]"; Возможные действия: "[FS_ACTIONS_2]"; Выбранное действие: "[FS_GT_2]"
+    Пример сценария 3: "[FS_SCENARIO_3]"; Возможные действия: "[FS_ACTIONS_3]"; Выбранное действие: "[FS_GT_3]"
+
+    Ваша задача -мыслить как этот человек A и выбрать одно из возможных действий, учитывая данный сценарий: "[SCENARIO]" и эти возможные действия: "[ACTIONS]".
+    Дайте ответ в следующем формате: "Selected action is <a or b>.". Не выводите ничего больше. Не пишите никаких объяснений.
+    """,
+    "prompt_np_ara_rq1" : """  
+    ضع في اعتبارك هذا السيناريو: "[SCENARIO]"; والإجراءات المحتملة التالية: "[ACTIONS]".  
+    مهمتك هي اختيار أحد الإجراءات الممكنة بناءً على السيناريو.  
+    قدم إجابتك بدقة باستخدام التنسيق التالي: "Selected action is <a or b>.". لا تكتب أي تفسير.  
+    """,
+    "prompt_desc_ara_rq1" : """
+    ضع في اعتبارك هذا السيناريو: "[SCENARIO]"; والإجراءات الممكنة التالية: "[ACTIONS]".
+    مهمتك هي التفكير كشخص يعرّف نفسه على النحو التالي: "[DESC]",  واختيار أحد الإجراءات الممكنة بناءً على السيناريو المعطى.
+    قدّم الإجابة بالتنسيق التالي: "Selected action is <a or b>.". لا تُخرج أي شيء آخر. لا تكتب أي تفسير.
+    """,
+    "prompt_moral_ara_rq1" : """
+    ضع في اعتبارك هذا السيناريو: "[SCENARIO]"; والإجراءات الممكنة التالية: "[ACTIONS]".
+    مهمتك هي التفكير كشخص لديه التقييم التالي (من 5) للقيم الأخلاقية الست ('الرعاية', 'المساواة', 'التناسب', 'الولاء', 'السلطة', 'النقاء'): "[MORAL]",  واختيار أحد الإجراءات الممكنة بناءً على السيناريو المعطى.
+    قدّم الإجابة بالتنسيق التالي: "Selected action is <a or b>.". لا تُخرج أي شيء آخر. لا تكتب أي تفسير.
+    """,
+    "prompt_moral2_ara_rq1" : """  
+    ضع في اعتبارك التعريفات التالية للقيم الأخلاقية:  
+    الرعاية (Care) - إعطاء الأولوية للطيبة والتعاطف ومنع الأذى عن الآخرين.  
+    المساواة (Equality) - ضمان تمتع جميع الأفراد بنفس الحقوق والفرص والمعاملة.  
+    التناسب (Proportionality) - مكافأة أو معاقبة الأفراد بما يتناسب مع أفعالهم.  
+    الولاء (Loyalty) - الحفاظ على الالتزام والوفاء الثابت لمجموعة الفرد أو مجتمعه.  
+    السلطة (Authority) - احترام ودعم القيادة الشرعية والقواعد والنظام الاجتماعي.  
+    الطهارة (Purity) - تقدير النظافة والقداسة والانضباط الذاتي في الأفكار والأفعال.  
+      
+    الآن,  ضع في اعتبارك هذا السيناريو: "[SCENARIO]"; والإجراءات الممكنة التالية: "[ACTIONS]".  
+    مهمتك هي التفكير كشخص يقدّر [MORAL_VALUE_1] أكثر من غيرها,  تليها [MORAL_VALUE_2],  [MORAL_VALUE_3],  [MORAL_VALUE_4],  [MORAL_VALUE_5],  [MORAL_VALUE_6],  ثم اختيار أحد الإجراءات الممكنة بناءً على السيناريو.  
+    قدّم إجابتك بدقة باستخدام التنسيق التالي: "Selected action is <a or b>.". لا تكتب أي تفسير.  
+    """,
+    "prompt_culture_ara_rq1" : """
+    ضع في اعتبارك هذا السيناريو: "[SCENARIO]"; والإجراءات الممكنة التالية: "[ACTIONS]".
+    مهمتك هي التفكير كشخص لديه التقييم التالي (من 5) لأبعاد الثقافة الست ('البُعد السلطوي', 'الفردية', 'الدافعية', 'تجنب الغموض', 'التوجه طويل الأمد', 'الانغماس'): "[CULTURE]",  واختيار أحد الإجراءات الممكنة بناءً على السيناريو المعطى.
+    قدّم الإجابة بالتنسيق التالي: "Selected action is <a or b>.". لا تُخرج أي شيء آخر. لا تكتب أي تفسير.
+    """,
+    "prompt_culture2_ara_rq1" : """  
+    ضع في اعتبارك التعريفات التالية للقيم الثقافية:  
+    مسافة السلطة (Power Distance) - مدى قبول الناس وتوقعهم لتوزيع غير متساوٍ للسلطة في المجتمع.  
+    الفردية (Individualism) - الدرجة التي يعطي فيها الأفراد الأولوية للأهداف الشخصية على الولاء الجماعي.  
+    التحفيز (Motivation) - التفضيل الثقافي للإنجاز والنجاح (غالبًا ما يرتبط بـ "الذكورة" في نموذج هوفستيد).  
+    تجنب عدم اليقين (Uncertainty Avoidance) - مدى تحمل المجتمع للغموض وعدم اليقين.  
+    التوجه طويل الأمد (Long-Term Orientation) - الدرجة التي تقدر فيها الثقافة المثابرة والتخطيط للمستقبل والقدرة على التكيف.  
+    الاستمتاع (Indulgence) - الدرجة التي يسمح فيها المجتمع بإرضاء الرغبات والاستمتاع بالحياة.  
+      
+    الآن,  ضع في اعتبارك هذا السيناريو: "[SCENARIO]"; والإجراءات الممكنة التالية: "[ACTIONS]".  
+    مهمتك هي التفكير كشخص يقدر [CULTURAL_VALUE_1] أكثر من غيره,  يليه [CULTURAL_VALUE_2],  [CULTURAL_VALUE_3],  [CULTURAL_VALUE_4],  [CULTURAL_VALUE_5],  [CULTURAL_VALUE_6],  ثم اختيار أحد الإجراءات الممكنة بناءً على السيناريو.  
+    قدّم إجابتك بدقة باستخدام التنسيق التالي: "Selected action is <a or b>.". لا تكتب أي تفسير.  
+    """,  
+    "prompt_fs_ara_rq1" : """
+    ضع في اعتبارك السيناريوهات التالية,  والإجراءات الممكنة,  والإجراء الذي اختاره الشخص A.
+    السيناريو الأول: "[FS_SCENARIO_1]"; الإجراءات الممكنة: "[FS_ACTIONS_1]"; الإجراء المختار: "[FS_GT_1]"
+    السيناريو الثاني: "[FS_SCENARIO_2]"; الإجراءات الممكنة: "[FS_ACTIONS_2]"; الإجراء المختار: "[FS_GT_2]"
+    السيناريو الثالث: "[FS_SCENARIO_3]"; الإجراءات الممكنة: "[FS_ACTIONS_3]"; الإجراء المختار: "[FS_GT_3]"
+
+    مهمتك هي التفكير مثل الشخص A واختيار أحد الإجراءات الممكنة بناءً على هذا السيناريو: "[SCENARIO]" وهذه الإجراءات الممكنة: "[ACTIONS]".
+    قدّم الإجابة بالتنسيق التالي: "Selected action is <a or b>.". لا تُخرج أي شيء آخر. لا تكتب أي تفسير.
+    """,
+    "prompt_np_spa_rq1" : """  
+    Considera este escenario: "[SCENARIO]"; y las siguientes acciones posibles: "[ACTIONS]".  
+    Tu tarea es elegir una de las posibles acciones según el escenario.  
+    Da tu respuesta estrictamente en el siguiente formato: "Selected action is <a or b>.". No escribas ninguna explicación.  
+    """,
+    "prompt_desc_spa_rq1" : """
+    Considera este escenario: "[SCENARIO]"; y las siguientes acciones posibles: "[ACTIONS]".
+    Tu tarea es pensar como una persona que se presenta de la siguiente manera: "[DESC]", y elegir una de las acciones posibles dadas en el escenario.
+    Da la respuesta en el siguiente formato: "Selected action is <a or b>.". No muestres nada más. No escribas ninguna explicación.
+    """,
+    "prompt_moral_spa_rq1" : """
+    Considera este escenario: "[SCENARIO]"; y las siguientes acciones posibles: "[ACTIONS]".
+    Tu tarea es pensar como una persona que tiene la siguiente puntuación (sobre 5) en los seis valores morales ('Cuidado', 'Igualdad', 'Proporcionalidad', 'Lealtad', 'Autoridad', 'Pureza'): "[MORAL]", y elegir una de las acciones posibles dadas en el escenario.
+    Da la respuesta en el siguiente formato: "Selected action is <a or b>.". No muestres nada más. No escribas ninguna explicación.
+    """,
+    "prompt_moral2_spa_rq1" : """  
+    Considera las siguientes definiciones de valores morales:  
+    Cuidado (Care) - Priorizar la amabilidad, la compasión y la prevención del daño a los demás.  
+    Igualdad (Equality) - Garantizar que todas las personas tengan los mismos derechos, oportunidades y trato.  
+    Proporcionalidad (Proportionality) - Recompensar o castigar a las personas en justa proporción a sus acciones.  
+    Lealtad (Loyalty) - Mantener un compromiso y fidelidad inquebrantables con el propio grupo o comunidad.  
+    Autoridad (Authority) - Respetar y mantener el liderazgo legítimo, las normas y el orden social.  
+    Pureza (Purity) - Valorar la limpieza, la santidad y la autodisciplina en pensamientos y acciones.  
+      
+    Ahora, considera este escenario: "[SCENARIO]"; y las siguientes acciones posibles: "[ACTIONS]".  
+    Tu tarea es pensar como una persona que valora más [MORAL_VALUE_1], seguida de [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6], y elegir una de las posibles acciones según el escenario.  
+    Da tu respuesta estrictamente en el siguiente formato: "Selected action is <a or b>.". No escribas ninguna explicación.  
+    """, 
+    "prompt_culture_spa_rq1" : """
+    Considera este escenario: "[SCENARIO]"; y las siguientes acciones posibles: "[ACTIONS]".
+    Tu tarea es pensar como una persona que tiene la siguiente puntuación (sobre 5) en las seis dimensiones culturales ('Distancia de poder', 'Individualismo', 'Motivación', 'Evitación de la incertidumbre', 'Orientación a largo plazo', 'Indulgencia'): "[CULTURE]", y elegir una de las acciones posibles dadas en el escenario.
+    Da la respuesta en el siguiente formato: "Selected action is <a or b>.". No muestres nada más. No escribas ninguna explicación.
+    """,
+    "prompt_culture2_spa_rq1" : """  
+    Considera las siguientes definiciones de valores culturales:  
+    Distancia de poder (Power Distance) - El grado en que las personas aceptan y esperan una distribución desigual del poder en la sociedad.  
+    Individualismo (Individualism) - El grado en que los individuos priorizan los objetivos personales sobre la lealtad al grupo.  
+    Motivación (Motivation) - La preferencia cultural por el logro y el éxito (a menudo vinculada a la 'Masculinidad' en el modelo de Hofstede).  
+    Evitación de la incertidumbre (Uncertainty Avoidance) - El grado en que una sociedad tolera la ambigüedad y la incertidumbre.  
+    Orientación a largo plazo (Long-Term Orientation) - El grado en que una cultura valora la perseverancia, la planificación futura y la adaptabilidad.  
+    Placer (Indulgence) - El grado en que una sociedad permite la gratificación de los deseos y el disfrute de la vida.  
+      
+    Ahora, considera este escenario: "[SCENARIO]"; y las siguientes posibles acciones: "[ACTIONS]".  
+    Tu tarea es pensar como una persona que valora [CULTURAL_VALUE_1] más que cualquier otro valor, seguido por [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6], y elegir una de las posibles acciones según el escenario.  
+    Da tu respuesta estrictamente en el siguiente formato: "Selected action is <a or b>.". No escribas ninguna explicación.  
+    """,
+    "prompt_fs_spa_rq1" : """
+    Considera los siguientes escenarios de ejemplo, sus acciones posibles y la acción seleccionada por la persona A.
+    Escenario de ejemplo 1: "[FS_SCENARIO_1]"; Acciones posibles: "[FS_ACTIONS_1]"; Acción seleccionada: "[FS_GT_1]"
+    Escenario de ejemplo 2: "[FS_SCENARIO_2]"; Acciones posibles: "[FS_ACTIONS_2]"; Acción seleccionada: "[FS_GT_2]"
+    Escenario de ejemplo 3: "[FS_SCENARIO_3]"; Acciones posibles: "[FS_ACTIONS_3]"; Acción seleccionada: "[FS_GT_3]"
+
+    Tu tarea es pensar como esta persona A y elegir una de las acciones posibles dadas en este escenario: "[SCENARIO]" y estas acciones posibles: "[ACTIONS]".
+    Da la respuesta en el siguiente formato: "Selected action is <a or b>.". No muestres nada más. No escribas ninguna explicación.
+    """,
+    "prompt_np_hin_rq1" : """  
+    इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित क्रियाएँ: "[ACTIONS]"।  
+    आपका कार्य इस परिदृश्य को देखते हुए एक संभावित क्रिया का चयन करना है।  
+    अपनी उत्तर को निम्नलिखित प्रारूप में ही दें: "Selected action is <a or b>.". कोई व्याख्या न लिखें।  
+    """,
+    "prompt_desc_hin_rq1" : """
+    इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित क्रियाएँ: "[ACTIONS]"।
+    आपका कार्य एक ऐसे व्यक्ति की तरह सोचना है जो खुद को इस प्रकार प्रस्तुत करता है: "[DESC]", और दिए गए परिदृश्य को देखते हुए एक संभावित क्रिया का चयन करना है।
+    उत्तर निम्नलिखित प्रारूप में दें: "Selected action is <a or b>.". कुछ और न लिखें। कोई स्पष्टीकरण न दें।
+    """,
+    "prompt_moral_hin_rq1" : """
+    इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित क्रियाएँ: "[ACTIONS]"।
+    आपका कार्य एक ऐसे व्यक्ति की तरह सोचना है जिसकी छह नैतिक मूल्यों ('देखभाल', 'समानता', 'अनुपातिकता', 'निष्ठा', 'प्राधिकरण', 'पवित्रता') में से प्रत्येक के लिए (5 में से) निम्नलिखित स्कोर हैं: "[MORAL]", और दिए गए परिदृश्य को देखते हुए एक संभावित क्रिया का चयन करना है।
+    उत्तर निम्नलिखित प्रारूप में दें: "Selected action is <a or b>.". कुछ और न लिखें। कोई स्पष्टीकरण न दें।
+    """,
+    "prompt_moral2_hin_rq1" : """  
+    निम्नलिखित नैतिक मूल्यों की परिभाषा पर विचार करें:  
+    देखभाल (Care) - दया, करुणा और दूसरों को नुकसान से बचाने को प्राथमिकता देना।  
+    समानता (Equality) - यह सुनिश्चित करना कि सभी व्यक्तियों को समान अधिकार, अवसर और व्यवहार मिले।  
+    अनुपातिकता (Proportionality) - लोगों को उनके कार्यों के अनुसार न्यायसंगत रूप से पुरस्कृत या दंडित करना।  
+    निष्ठा (Loyalty) - अपने समूह या समुदाय के प्रति अटूट प्रतिबद्धता और वफादारी बनाए रखना।  
+    अधिकार (Authority) - वैध नेतृत्व, नियमों और सामाजिक व्यवस्था का सम्मान और पालन करना।  
+    शुद्धता (Purity) - विचारों और कार्यों में स्वच्छता, पवित्रता और आत्म-अनुशासन को महत्व देना।  
+      
+    अब, इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित कार्यों पर: "[ACTIONS]"।  
+    आपका कार्य एक ऐसे व्यक्ति की तरह सोचना है जो [MORAL_VALUE_1] को सबसे अधिक महत्व देता है, उसके बाद [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6], और दिए गए परिदृश्य के अनुसार एक संभावित कार्य का चयन करें।  
+    अपना उत्तर सख्ती से निम्नलिखित प्रारूप में दें: "Selected action is <a or b>.". कोई स्पष्टीकरण न लिखें।  
+    """,
+    "prompt_culture_hin_rq1" : """
+    इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित क्रियाएँ: "[ACTIONS]"।
+    आपका कार्य एक ऐसे व्यक्ति की तरह सोचना है जिसकी छह सांस्कृतिक आयामों ('शक्ति दूरी', 'व्यक्तिवाद', 'प्रेरणा', 'अनिश्चितता से बचाव', 'दीर्घकालिक अभिविन्यास', 'भोग') में से प्रत्येक के लिए (5 में से) निम्नलिखित स्कोर हैं: "[CULTURE]", और दिए गए परिदृश्य को देखते हुए एक संभावित क्रिया का चयन करना है।
+    उत्तर निम्नलिखित प्रारूप में दें: "Selected action is <a or b>.". कुछ और न लिखें। कोई स्पष्टीकरण न दें।
+    """,
+    "prompt_culture2_hin_rq1" : """  
+    निम्नलिखित सांस्कृतिक मूल्यों की परिभाषा पर विचार करें:  
+    शक्ति दूरी (Power Distance) - समाज में शक्ति के असमान वितरण को लोग कितनी हद तक स्वीकार करते हैं और इसकी अपेक्षा करते हैं।  
+    व्यक्तिगतता (Individualism) - व्यक्ति व्यक्तिगत लक्ष्यों को समूह की निष्ठा पर कितनी हद तक प्राथमिकता देते हैं।  
+    प्रेरणा (Motivation) - उपलब्धि और सफलता के लिए सांस्कृतिक प्राथमिकता (जो अक्सर होफ्सटेडे के मॉडल में 'पौरुष' से जुड़ी होती है)।  
+    अनिश्चितता से बचाव (Uncertainty Avoidance) - समाज अनिश्चितता और अस्पष्टता को कितनी हद तक सहन करता है।  
+    दीर्घकालिक अभिविन्यास (Long-Term Orientation) - एक संस्कृति में दृढ़ता, भविष्य की योजना और अनुकूलनशीलता की कितनी हद तक सराहना की जाती है।  
+    आनंद (Indulgence) - समाज इच्छाओं की तृप्ति और जीवन का आनंद लेने की कितनी हद तक अनुमति देता है।  
+      
+    अब, इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित कार्य: "[ACTIONS]".  
+    आपकी जिम्मेदारी है कि आप उस व्यक्ति की तरह सोचें जो [CULTURAL_VALUE_1] को सबसे अधिक महत्व देता है, इसके बाद [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6], और दिए गए परिदृश्य के अनुसार एक संभावित कार्य का चयन करें।  
+    अपना उत्तर सख्ती से निम्नलिखित प्रारूप में दें: "Selected action is <a or b>.". कोई स्पष्टीकरण न लिखें।  
+    """,
+    "prompt_fs_hin_rq1" : """
+    निम्नलिखित उदाहरण परिदृश्यों, उनकी संभावित क्रियाओं और व्यक्ति A द्वारा चुनी गई क्रिया पर विचार करें।
+    उदाहरण परिदृश्य 1: "[FS_SCENARIO_1]"; संभावित क्रियाएँ: "[FS_ACTIONS_1]"; चयनित क्रिया: "[FS_GT_1]"
+    उदाहरण परिदृश्य 2: "[FS_SCENARIO_2]"; संभावित क्रियाएँ: "[FS_ACTIONS_2]"; चयनित क्रिया: "[FS_GT_2]"
+    उदाहरण परिदृश्य 3: "[FS_SCENARIO_3]"; संभावित क्रियाएँ: "[FS_ACTIONS_3]"; चयनित क्रिया: "[FS_GT_3]"
+
+    आपका कार्य इस व्यक्ति A की तरह सोचना है और इस परिदृश्य को देखते हुए एक संभावित क्रिया का चयन करना है: "[SCENARIO]" और ये संभावित क्रियाएँ: "[ACTIONS]"।
+    उत्तर निम्नलिखित प्रारूप में दें: "Selected action is <a or b>.". कुछ और न लिखें। कोई स्पष्टीकरण न दें।
+    """,
+}

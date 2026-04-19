@@ -26,7 +26,7 @@ from inspect_ai.solver import generate
 
 def _ethics_plan():
     """Zero-shot plan: single generate step."""
-    return [generate(max_tokens=16, temperature=0.01)]
+    return [generate(max_tokens=16, temperature=0.0)]
 
 
 def _ethics_scorer():

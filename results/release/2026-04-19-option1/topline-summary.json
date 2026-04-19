@@ -1,0 +1,35 @@
+{
+  "authoritative_tasks": 19,
+  "benchmark_faithful_tasks": 16,
+  "proxy_tasks": 3,
+  "total_samples": 302776,
+  "model_summary": [
+    {
+      "model_family": "Qwen",
+      "tasks": 7,
+      "faithful_tasks": 6,
+      "proxy_tasks": 1,
+      "samples": 102886,
+      "scored_tasks": 5,
+      "faithful_macro_accuracy": 0.549677
+    },
+    {
+      "model_family": "DeepSeek",
+      "tasks": 5,
+      "faithful_tasks": 4,
+      "proxy_tasks": 1,
+      "samples": 97004,
+      "scored_tasks": 3,
+      "faithful_macro_accuracy": 0.650992
+    },
+    {
+      "model_family": "Gemma",
+      "tasks": 7,
+      "faithful_tasks": 6,
+      "proxy_tasks": 1,
+      "samples": 102886,
+      "scored_tasks": 5,
+      "faithful_macro_accuracy": 0.53086
+    }
+  ]
+}
