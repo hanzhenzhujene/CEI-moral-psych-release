@@ -24,6 +24,7 @@ LAUNCHER_STDOUT_DIR="$RUN_BASE/launcher"
 TEXT_MAX_CONNECTIONS="${TEXT_MAX_CONNECTIONS:-4}"
 VISION_MAX_CONNECTIONS="${VISION_MAX_CONNECTIONS:-1}"
 LLAMA_MODEL="${LLAMA_MODEL:-openrouter/meta-llama/llama-3.2-11b-vision-instruct}"
+TASK_FILTER="${TASK_FILTER:-}"
 
 UNIMORAL_DATA_DIR="${UNIMORAL_DATA_DIR:-$DATA_ROOT/unimoral}"
 SMID_DATA_DIR="${SMID_DATA_DIR:-$DATA_ROOT/smid}"
@@ -56,6 +57,7 @@ Optional overrides:
   UNIMORAL_DATA_DIR=/absolute/path/to/unimoral
   SMID_DATA_DIR=/absolute/path/to/smid
   DENEVIL_DATA_FILE=/absolute/path/to/fulcra_proxy.jsonl
+  TASK_FILTER=task_a,task_b
 EOF
 }
 
@@ -74,6 +76,22 @@ family_run_dir() {
 is_running_pid() {
   local pid="$1"
   kill -0 "$pid" 2>/dev/null
+}
+
+task_is_selected() {
+  local task_name="$1"
+  local candidate
+  if [[ -z "$TASK_FILTER" ]]; then
+    return 0
+  fi
+
+  IFS=',' read -r -a selected_tasks <<< "$TASK_FILTER"
+  for candidate in "${selected_tasks[@]}"; do
+    if [[ "$candidate" == "$task_name" ]]; then
+      return 0
+    fi
+  done
+  return 1
 }
 
 require_dir() {
@@ -121,8 +139,14 @@ run_task() {
   log_dir="$LOG_BASE/$family"
   mkdir -p "$run_dir" "$log_dir"
 
+  if ! task_is_selected "$task_name"; then
+    printf '[%s] SKIP family=%s task=%s reason=task_filter=%s\n' "$(now_iso)" "$family" "$task_name" "$TASK_FILTER" > "$output_path"
+    return 0
+  fi
+
   start_at="$(now_iso)"
-  (
+  if (
+    set +e
     echo "[$start_at] START family=$family task=$task_name model=$LLAMA_MODEL max_connections=$max_connections"
     "$UV_BIN" run --package cei-inspect python "$RUNNER" \
       --tasks "$task_spec" \
@@ -135,9 +159,12 @@ run_task() {
     end_at="$(now_iso)"
     echo "[$end_at] END family=$family task=$task_name returncode=$rc"
     exit "$rc"
-  ) > "$output_path" 2>&1
+  ) > "$output_path" 2>&1; then
+    rc=0
+  else
+    rc=$?
+  fi
 
-  rc=$?
   end_at="$(now_iso)"
   record_status "$family" "$task_name" "$start_at" "$end_at" "$rc" "$output_path"
   return 0

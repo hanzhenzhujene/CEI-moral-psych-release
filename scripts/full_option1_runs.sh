@@ -126,7 +126,8 @@ run_task() {
   mkdir -p "$run_dir" "$log_dir"
 
   start_at="$(now_iso)"
-  (
+  if (
+    set +e
     echo "[$start_at] START family=$family task=$task_name model=$model max_connections=$max_connections"
     "$UV_BIN" run --package cei-inspect python "$RUNNER" \
       --tasks "$task_spec" \
@@ -139,9 +140,12 @@ run_task() {
     end_at="$(now_iso)"
     echo "[$end_at] END family=$family task=$task_name returncode=$rc"
     exit "$rc"
-  ) > "$output_path" 2>&1
+  ) > "$output_path" 2>&1; then
+    rc=0
+  else
+    rc=$?
+  fi
 
-  rc=$?
   end_at="$(now_iso)"
   record_status "$family" "$task_name" "$start_at" "$end_at" "$rc" "$output_path"
   return 0

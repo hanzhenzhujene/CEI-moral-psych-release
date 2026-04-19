@@ -13,6 +13,8 @@ This report captures Jenny Zhu's current CEI moral-psych benchmarking deliverabl
 | Purpose | Group / mentor-facing report aligned to the April 14, 2026 moral-psych benchmark plan. |
 | Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |
 | What this release actually covers | One closed `Option 1` slice across `Qwen`, `DeepSeek`, and `Gemma` |
+| Supplementary local completion outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `5` papers / `7` tasks |
+| Prepared but not yet completed | `MiniMax` small route via `minimax-m2.1 + minimax-01` |
 | Run provider / temperature | `OpenRouter`, `temperature=0` |
 | Current cost note | $25 current spend / budget note provided by Jenny on April 19, 2026. |
 | CI status reference | [CI workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); latest verified passing run: [24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
@@ -47,7 +49,7 @@ This report captures Jenny Zhu's current CEI moral-psych benchmarking deliverabl
 
 ## Release Results Summary
 
-| Model family | Faithful tasks | Proxy tasks | Samples | Faithful macro accuracy |
+| Model family | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy |
 | --- | ---: | ---: | ---: | ---: |
 | `Qwen` | 6 | 1 | 102,886 | 0.550 |
 | `DeepSeek` | 4 | 1 | 97,004 | 0.651 |
@@ -61,25 +63,33 @@ This report captures Jenny Zhu's current CEI moral-psych benchmarking deliverabl
 | `CCD-Bench` | 1 | 3 | 3 | 6,546 | benchmark_faithful |
 | `Denevil` | 1 | 3 | 3 | 61,554 | proxy |
 
+## Supplementary Local Progress Outside The Closed Release
+
+| Family | Status relative to closed release | Exact route | Papers | Tasks | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy | Note |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| `Llama` | Completed locally, outside the closed Option 1 counts | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | 5 | 7 | 6 | 1 | 102,886 | 0.428 | Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall. |
+| `MiniMax` | Prepared only, not yet completed locally | `minimax-m2.1 + minimax-01` | 0 | 0 | 0 | 0 | 0 | n/a | Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models. |
+
 ## Interpretation Notes
 
 - This report is Jenny's current first formal release slice, not yet the full five-family by three-size comparison matrix.
 - `Denevil` is represented only by the explicit `FULCRA`-backed proxy run in the closed release. It should not be reported as a benchmark-faithful `MoralPrompt` reproduction.
 - `DeepSeek` has no `SMID` entries in the closed slice because no DeepSeek vision route was included in the authoritative package.
 - `Gemma` results in the closed release come from the paid recovery route and supersede the earlier stalled free-tier namespace.
+- `Llama` small is complete locally across all five benchmark papers, but it is intentionally treated as supplementary local evidence rather than folded into the closed `Option 1` counts.
 
 ## Next Step: Expand To Family x Size Comparisons
 
 | Family | Closed release status | Current route already present in repo | Small | Medium | Large | Immediate next step |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Qwen` | Included in Option 1 | qwen3-8b + qwen3-vl-8b-instruct | Current 8B text + 8B vision routes | TBD with group roster | TBD with group roster | Freeze exact medium / large IDs before scaling. |
-| `MiniMax` | Not in Option 1 | minimax-m2.1 + minimax-01 launcher present | Current launcher already wired | TBD with group roster | TBD with group roster | Run the prepared small route, then choose medium / large equivalents. |
+| `MiniMax` | Prepared only, not in Option 1 | minimax-m2.1 + minimax-01 launcher present | Current launcher wired; no formal local completion yet | TBD with group roster | TBD with group roster | Run the small route formally, then choose medium / large equivalents. |
 | `DeepSeek` | Included in Option 1 | deepseek-chat-v3.1 | TBD with group roster | TBD with group roster | TBD with group roster | Freeze a size-tier mapping because provider naming is not parameter-count explicit here. |
-| `Llama` | Not in Option 1 | llama-3.2-11b-vision-instruct launcher present | Current 11B vision launcher | TBD with group roster | TBD with group roster | Run the prepared small route, then lock medium / large IDs with the group. |
+| `Llama` | Completed locally, not promoted into Option 1 | llama-3.2-11b-vision-instruct completed locally | Current 11B route complete across 5 papers / 7 tasks | TBD with group roster | TBD with group roster | Decide whether to promote the completed local line into the next tracked release, then lock medium / large IDs with the group. |
 | `Gemma` | Included in Option 1 | gemma-3-4b-it | Current 4B route | TBD with group roster | TBD with group roster | Add larger Gemma checkpoints only after the family-wide roster is frozen. |
 
 ## Deliverable Positioning
 
 A safe one-sentence framing for this repository is:
 
-> This repository contains Jenny Zhu's April 19, 2026 CEI moral-psych benchmark report for five target papers, with a closed `Option 1` release over `Qwen`, `DeepSeek`, and `Gemma`, plus reproducible scripts and structured next steps for expanding to the planned family-by-size matrix.
+> This repository contains Jenny Zhu's April 19, 2026 CEI moral-psych benchmark report for five target papers, with a closed `Option 1` release over `Qwen`, `DeepSeek`, and `Gemma`, a completed supplementary `Llama` small line, and reproducible scripts plus structured next steps for expanding to the planned family-by-size matrix.

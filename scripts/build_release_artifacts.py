@@ -156,12 +156,12 @@ FUTURE_MODEL_PLAN = [
     },
     {
         "family": "MiniMax",
-        "closed_release_status": "Not in Option 1",
+        "closed_release_status": "Prepared only, not in Option 1",
         "current_route": "minimax-m2.1 + minimax-01 launcher present",
-        "small_candidate": "Current launcher already wired",
+        "small_candidate": "Current launcher wired; no formal local completion yet",
         "medium_candidate": "TBD with group roster",
         "large_candidate": "TBD with group roster",
-        "next_step": "Run the prepared small route, then choose medium / large equivalents.",
+        "next_step": "Run the small route formally, then choose medium / large equivalents.",
     },
     {
         "family": "DeepSeek",
@@ -174,12 +174,12 @@ FUTURE_MODEL_PLAN = [
     },
     {
         "family": "Llama",
-        "closed_release_status": "Not in Option 1",
-        "current_route": "llama-3.2-11b-vision-instruct launcher present",
-        "small_candidate": "Current 11B vision launcher",
+        "closed_release_status": "Completed locally, not promoted into Option 1",
+        "current_route": "llama-3.2-11b-vision-instruct completed locally",
+        "small_candidate": "Current 11B route complete across 5 papers / 7 tasks",
         "medium_candidate": "TBD with group roster",
         "large_candidate": "TBD with group roster",
-        "next_step": "Run the prepared small route, then lock medium / large IDs with the group.",
+        "next_step": "Decide whether to promote the completed local line into the next tracked release, then lock medium / large IDs with the group.",
     },
     {
         "family": "Gemma",
@@ -189,6 +189,33 @@ FUTURE_MODEL_PLAN = [
         "medium_candidate": "TBD with group roster",
         "large_candidate": "TBD with group roster",
         "next_step": "Add larger Gemma checkpoints only after the family-wide roster is frozen.",
+    },
+]
+
+SUPPLEMENTARY_MODEL_PROGRESS = [
+    {
+        "family": "Llama",
+        "status_relative_to_closed_release": "Completed locally, outside the closed Option 1 counts",
+        "exact_route": "openrouter/meta-llama/llama-3.2-11b-vision-instruct",
+        "papers_covered": 5,
+        "tasks_completed": 7,
+        "benchmark_faithful_tasks": 6,
+        "proxy_tasks": 1,
+        "samples": 102886,
+        "benchmark_faithful_macro_accuracy": 0.427602,
+        "note": "Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall.",
+    },
+    {
+        "family": "MiniMax",
+        "status_relative_to_closed_release": "Prepared only, not yet completed locally",
+        "exact_route": "minimax-m2.1 + minimax-01",
+        "papers_covered": 0,
+        "tasks_completed": 0,
+        "benchmark_faithful_tasks": 0,
+        "proxy_tasks": 0,
+        "samples": 0,
+        "benchmark_faithful_macro_accuracy": None,
+        "note": "Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models.",
     },
 ]
 
@@ -222,6 +249,35 @@ def write_text(path: Path, text: str) -> None:
 
 def fmt_float(value: float | None, digits: int = 3) -> str:
     return "" if value is None else f"{value:.{digits}f}"
+
+
+def serialize_model_summary_row(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "model_family": row["model_family"],
+        "tasks": row["tasks"],
+        "benchmark_faithful_tasks": row["faithful_tasks"],
+        "proxy_tasks": row["proxy_tasks"],
+        "samples": row["samples"],
+        "scored_tasks": row["scored_tasks"],
+        "benchmark_faithful_macro_accuracy": None if row["faithful_macro_accuracy"] is None else row["faithful_macro_accuracy"],
+    }
+
+
+def serialize_supplementary_progress_row(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "family": row["family"],
+        "status_relative_to_closed_release": row["status_relative_to_closed_release"],
+        "exact_route": row["exact_route"],
+        "papers_covered": row["papers_covered"],
+        "tasks_completed": row["tasks_completed"],
+        "benchmark_faithful_tasks": row["benchmark_faithful_tasks"],
+        "proxy_tasks": row["proxy_tasks"],
+        "samples": row["samples"],
+        "benchmark_faithful_macro_accuracy": None
+        if row["benchmark_faithful_macro_accuracy"] is None
+        else row["benchmark_faithful_macro_accuracy"],
+        "note": row["note"],
+    }
 
 
 def markdown_link(label: str, url: str) -> str:
@@ -328,6 +384,10 @@ def build_future_model_plan() -> list[dict[str, Any]]:
     return list(FUTURE_MODEL_PLAN)
 
 
+def build_supplementary_model_progress() -> list[dict[str, Any]]:
+    return list(SUPPLEMENTARY_MODEL_PROGRESS)
+
+
 def build_faithful_metrics(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     faithful_rows = [row for row in rows if row["benchmark_mode"] == "benchmark_faithful"]
     output: list[dict[str, Any]] = []
@@ -367,7 +427,7 @@ def build_coverage_matrix(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 )
                 continue
             mode = cell_rows[0]["benchmark_mode"]
-            status = "proxy" if mode == "proxy" else "faithful"
+            status = "proxy" if mode == "proxy" else "benchmark_faithful"
             completed_tasks = len(cell_rows)
             expected = BENCHMARK_TASK_COUNTS[benchmark]
             label = "proxy" if status == "proxy" else f"{completed_tasks}/{expected}"
@@ -437,7 +497,7 @@ def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
     width, height = 1180, 520
     left, top = 210, 120
     cell_w, cell_h = 170, 74
-    colors = {"faithful": "#2f855a", "proxy": "#b7791f", "not_run": "#cbd5e1"}
+    colors = {"benchmark_faithful": "#2f855a", "proxy": "#b7791f", "not_run": "#cbd5e1"}
 
     matrix = {(row["model_family"], row["benchmark"]): row for row in rows}
     lines = svg_header(width, height)
@@ -464,7 +524,7 @@ def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
             lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="{color}"/>')
             label_x = x + (cell_w - 14) / 2
             lines.append(f'<text x="{label_x}" y="{y0 + 34}" text-anchor="middle" class="celltext">{escape_xml(cell["label"])}</text>')
-            detail = "benchmark-faithful" if cell["status"] == "faithful" else ("proxy" if cell["status"] == "proxy" else "not in release")
+            detail = "benchmark-faithful" if cell["status"] == "benchmark_faithful" else ("proxy" if cell["status"] == "proxy" else "not in release")
             text_color = "rgba(255,255,255,0.88)" if cell["status"] != "not_run" else "#415466"
             lines.append(
                 f'<text x="{label_x}" y="{y0 + 54}" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: {text_color};">{escape_xml(detail)}</text>'
@@ -547,10 +607,10 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
     gap = 52
 
     benchmark_totals: dict[str, dict[str, int]] = {
-        benchmark: {"faithful": 0, "proxy": 0} for benchmark in SAMPLE_BAR_ORDER
+        benchmark: {"benchmark_faithful": 0, "proxy": 0} for benchmark in SAMPLE_BAR_ORDER
     }
     for row in rows:
-        mode = "proxy" if row["benchmark_mode"] == "proxy" else "faithful"
+        mode = "proxy" if row["benchmark_mode"] == "proxy" else "benchmark_faithful"
         benchmark_totals[row["benchmark"]][mode] += row["total_samples"]
 
     max_total = max(sum(parts.values()) for parts in benchmark_totals.values())
@@ -567,7 +627,7 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
 
     for index, benchmark in enumerate(SAMPLE_BAR_ORDER):
         y = top + index * gap
-        faithful = benchmark_totals[benchmark]["faithful"]
+        faithful = benchmark_totals[benchmark]["benchmark_faithful"]
         proxy = benchmark_totals[benchmark]["proxy"]
         total = faithful + proxy
         faithful_w = 0 if max_total == 0 else bar_w * faithful / max_total
@@ -580,7 +640,7 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
             lines.append(f'<rect x="{left + faithful_w:.2f}" y="{y}" width="{proxy_w:.2f}" height="{bar_h}" rx="12" fill="#b7791f"/>')
         lines.append(f'<text x="{left + bar_w + 18}" y="{y + 22}" class="axis">{total:,}</text>')
         if faithful:
-            lines.append(f'<text x="{left + 10}" y="{y + 22}" class="cellsub">faithful {faithful:,}</text>')
+            lines.append(f'<text x="{left + 10}" y="{y + 22}" class="cellsub">benchmark-faithful {faithful:,}</text>')
         if proxy:
             lines.append(f'<text x="{left + faithful_w + 10:.2f}" y="{y + 22}" class="cellsub">proxy {proxy:,}</text>')
 
@@ -594,10 +654,15 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
     write_text(output_path, "\n".join(lines) + "\n")
 
 
-def build_topline_summary(rows: list[dict[str, Any]], model_summary: list[dict[str, Any]]) -> str:
+def build_topline_summary(
+    rows: list[dict[str, Any]],
+    model_summary: list[dict[str, Any]],
+    supplementary_model_progress: list[dict[str, Any]],
+) -> str:
     total_samples = sum(row["total_samples"] for row in rows)
     faithful_tasks = sum(row["benchmark_mode"] == "benchmark_faithful" for row in rows)
     proxy_tasks = sum(row["benchmark_mode"] == "proxy" for row in rows)
+    llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
     lines = [
         "# 2026-04-19 Option 1 Release Summary",
         "",
@@ -607,10 +672,11 @@ def build_topline_summary(rows: list[dict[str, Any]], model_summary: list[dict[s
         f"- total evaluated samples: `{total_samples:,}`",
         "- closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`",
         "- key methodological caveat: `Denevil` is represented by a `FULCRA`-backed proxy task rather than a benchmark-faithful `MoralPrompt` run",
+        f"- supplementary local progress outside the closed release: `Llama` small is complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks and is intentionally excluded from the authoritative `19 / 19` totals",
         "",
         "## Model Summary",
         "",
-        "| Model family | Faithful tasks | Proxy tasks | Samples | Faithful macro accuracy |",
+        "| Model family | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy |",
         "| --- | ---: | ---: | ---: | ---: |",
     ]
     for row in model_summary:
@@ -620,7 +686,7 @@ def build_topline_summary(rows: list[dict[str, Any]], model_summary: list[dict[s
     lines.extend(
         [
             "",
-            "Macro accuracy is computed over faithful tasks with a directly comparable accuracy metric. `CCD-Bench` and `Denevil` are excluded from that average.",
+            "Macro accuracy is computed over benchmark-faithful tasks with a directly comparable accuracy metric. `CCD-Bench` and `Denevil` are excluded from that average.",
         ]
     )
     return "\n".join(lines) + "\n"
@@ -631,7 +697,10 @@ def build_release_readme(
     benchmark_summary: list[dict[str, Any]],
     benchmark_catalog: list[dict[str, Any]],
     model_roster: list[dict[str, Any]],
+    supplementary_model_progress: list[dict[str, Any]],
 ) -> str:
+    llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
+    minimax_progress = next(row for row in supplementary_model_progress if row["family"] == "MiniMax")
     lines = [
         "# Option 1 Release Artifacts",
         "",
@@ -647,6 +716,8 @@ def build_release_readme(
         "| Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |",
         "| Current closed release | `Option 1` |",
         "| Model families in the closed release | `Qwen`, `DeepSeek`, `Gemma` |",
+        f"| Supplementary local completion outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
+        f"| Prepared but not yet completed | `MiniMax` small route via `{minimax_progress['exact_route']}` |",
         "| Provider / temperature | `OpenRouter`, `temperature=0` |",
         f"| Current cost note | {REPORT_COST_NOTE} |",
         f"| CI reference | {markdown_link('Workflow', CI_WORKFLOW_URL)}; last verified successful run: {markdown_link('run 24634450927', CI_RUN_URL)} |",
@@ -662,6 +733,7 @@ def build_release_readme(
         "- `benchmark-catalog.csv`: benchmark registry with papers, dataset links, modalities, and release scope",
         "- `model-summary.csv`: per-model task counts, sample counts, and macro accuracy",
         "- `model-roster.csv`: exact OpenRouter model routes used in the closed release",
+        "- `supplementary-model-progress.csv`: local expansion status for families intentionally kept outside the closed release counts",
         "- `future-model-plan.csv`: current family-by-size expansion plan",
         "- `benchmark-summary.csv`: per-benchmark coverage and sample volume",
         "- `faithful-metrics.csv`: task-level metrics for benchmark-faithful tasks",
@@ -699,13 +771,26 @@ def build_release_readme(
             "",
             "## Model Summary",
             "",
-            "| Model family | Faithful tasks | Proxy tasks | Samples | Faithful macro accuracy |",
+            "| Model family | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy |",
             "| --- | ---: | ---: | ---: | ---: |",
         ]
     )
     for row in model_summary:
         lines.append(
             f"| `{row['model_family']}` | {row['faithful_tasks']} | {row['proxy_tasks']} | {row['samples']:,} | {fmt_float(row['faithful_macro_accuracy']) or 'n/a'} |"
+        )
+    lines.extend(
+        [
+            "",
+            "## Supplementary Local Expansion Status",
+            "",
+            "| Family | Status relative to closed release | Exact route | Papers | Tasks | Samples | Benchmark-faithful macro accuracy | Note |",
+            "| --- | --- | --- | ---: | ---: | ---: | ---: | --- |",
+        ]
+    )
+    for row in supplementary_model_progress:
+        lines.append(
+            f"| `{row['family']}` | {row['status_relative_to_closed_release']} | `{row['exact_route']}` | {row['papers_covered']} | {row['tasks_completed']} | {row['samples']:,} | {fmt_float(row['benchmark_faithful_macro_accuracy']) or 'n/a'} | {row['note']} |"
         )
     lines.extend(["", "## Benchmark Summary", "", "| Benchmark | Unique task types | Evaluated lines | Models covered | Samples | Modes |", "| --- | ---: | ---: | ---: | ---: | --- |"])
     for row in benchmark_summary:
@@ -718,6 +803,7 @@ def build_release_readme(
             "## Interpretation Guardrails",
             "",
             "- Treat `Denevil` as a proxy line in this release.",
+            "- Treat the completed local `Llama` small line as supplementary evidence unless and until it is promoted into a new authoritative snapshot.",
             "- Treat the release outputs here as authoritative for the closed `Option 1` slice.",
             "- Use the raw `results/inspect/` tree only for local debugging or provenance checks.",
         ]
@@ -732,8 +818,11 @@ def build_jenny_group_report(
     benchmark_catalog: list[dict[str, Any]],
     model_roster: list[dict[str, Any]],
     future_model_plan: list[dict[str, Any]],
+    supplementary_model_progress: list[dict[str, Any]],
 ) -> str:
     total_samples = sum(row["total_samples"] for row in rows)
+    llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
+    minimax_progress = next(row for row in supplementary_model_progress if row["family"] == "MiniMax")
     lines = [
         "# Jenny Zhu Moral-Psych Benchmark Report",
         "",
@@ -750,6 +839,8 @@ def build_jenny_group_report(
         f"| Purpose | {REPORT_PURPOSE} |",
         "| Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |",
         "| What this release actually covers | One closed `Option 1` slice across `Qwen`, `DeepSeek`, and `Gemma` |",
+        f"| Supplementary local completion outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
+        f"| Prepared but not yet completed | `MiniMax` small route via `{minimax_progress['exact_route']}` |",
         "| Run provider / temperature | `OpenRouter`, `temperature=0` |",
         f"| Current cost note | {REPORT_COST_NOTE} |",
         f"| CI status reference | {markdown_link('CI workflow', CI_WORKFLOW_URL)}; latest verified passing run: {markdown_link('24634450927', CI_RUN_URL)} |",
@@ -807,7 +898,7 @@ def build_jenny_group_report(
             "",
             "## Release Results Summary",
             "",
-            "| Model family | Faithful tasks | Proxy tasks | Samples | Faithful macro accuracy |",
+            "| Model family | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy |",
             "| --- | ---: | ---: | ---: | ---: |",
         ]
     )
@@ -829,12 +920,26 @@ def build_jenny_group_report(
     lines.extend(
         [
             "",
+            "## Supplementary Local Progress Outside The Closed Release",
+            "",
+            "| Family | Status relative to closed release | Exact route | Papers | Tasks | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy | Note |",
+            "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
+        ]
+    )
+    for row in supplementary_model_progress:
+        lines.append(
+            f"| `{row['family']}` | {row['status_relative_to_closed_release']} | `{row['exact_route']}` | {row['papers_covered']} | {row['tasks_completed']} | {row['benchmark_faithful_tasks']} | {row['proxy_tasks']} | {row['samples']:,} | {fmt_float(row['benchmark_faithful_macro_accuracy']) or 'n/a'} | {row['note']} |"
+        )
+    lines.extend(
+        [
+            "",
             "## Interpretation Notes",
             "",
             "- This report is Jenny's current first formal release slice, not yet the full five-family by three-size comparison matrix.",
             "- `Denevil` is represented only by the explicit `FULCRA`-backed proxy run in the closed release. It should not be reported as a benchmark-faithful `MoralPrompt` reproduction.",
             "- `DeepSeek` has no `SMID` entries in the closed slice because no DeepSeek vision route was included in the authoritative package.",
             "- `Gemma` results in the closed release come from the paid recovery route and supersede the earlier stalled free-tier namespace.",
+            "- `Llama` small is complete locally across all five benchmark papers, but it is intentionally treated as supplementary local evidence rather than folded into the closed `Option 1` counts.",
             "",
             "## Next Step: Expand To Family x Size Comparisons",
             "",
@@ -853,7 +958,7 @@ def build_jenny_group_report(
             "",
             "A safe one-sentence framing for this repository is:",
             "",
-            "> This repository contains Jenny Zhu's April 19, 2026 CEI moral-psych benchmark report for five target papers, with a closed `Option 1` release over `Qwen`, `DeepSeek`, and `Gemma`, plus reproducible scripts and structured next steps for expanding to the planned family-by-size matrix.",
+            "> This repository contains Jenny Zhu's April 19, 2026 CEI moral-psych benchmark report for five target papers, with a closed `Option 1` release over `Qwen`, `DeepSeek`, and `Gemma`, a completed supplementary `Llama` small line, and reproducible scripts plus structured next steps for expanding to the planned family-by-size matrix.",
         ]
     )
     return "\n".join(lines) + "\n"
@@ -877,6 +982,7 @@ def build_release_manifest(
     rows: list[dict[str, Any]],
     model_summary: list[dict[str, Any]],
     benchmark_summary: list[dict[str, Any]],
+    supplementary_model_progress: list[dict[str, Any]],
 ) -> dict[str, Any]:
     return {
         "release_id": RELEASE_ID,
@@ -902,10 +1008,19 @@ def build_release_manifest(
         "benchmarks": benchmark_summary,
         "model_summary": [
             {
-                **row,
-                "faithful_macro_accuracy": None if row["faithful_macro_accuracy"] is None else round(row["faithful_macro_accuracy"], 6),
+                **serialize_model_summary_row(row),
+                "benchmark_faithful_macro_accuracy": None if row["faithful_macro_accuracy"] is None else round(row["faithful_macro_accuracy"], 6),
             }
             for row in model_summary
+        ],
+        "supplementary_model_progress": [
+            {
+                **serialize_supplementary_progress_row(row),
+                "benchmark_faithful_macro_accuracy": None
+                if row["benchmark_faithful_macro_accuracy"] is None
+                else round(row["benchmark_faithful_macro_accuracy"], 6),
+            }
+            for row in supplementary_model_progress
         ],
         "tables": [
             "README.md",
@@ -916,6 +1031,7 @@ def build_release_manifest(
             "benchmark-catalog.csv",
             "model-summary.csv",
             "model-roster.csv",
+            "supplementary-model-progress.csv",
             "future-model-plan.csv",
             "benchmark-summary.csv",
             "faithful-metrics.csv",
@@ -929,6 +1045,7 @@ def build_release_manifest(
         "interpretation_guardrails": [
             "Denevil is represented only by the explicit FULCRA-backed proxy task in this release.",
             "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
+            "The completed local Llama small line is supplementary and is not counted in the closed Option 1 totals.",
             "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration.",
         ],
     }
@@ -956,6 +1073,7 @@ def main() -> None:
     benchmark_catalog = build_benchmark_catalog(rows)
     model_roster = build_model_roster(rows)
     future_model_plan = build_future_model_plan()
+    supplementary_model_progress = build_supplementary_model_progress()
     faithful_metrics = build_faithful_metrics(rows)
     coverage_matrix = build_coverage_matrix(rows)
 
@@ -963,12 +1081,12 @@ def main() -> None:
         args.release_dir / "model-summary.csv",
         [
             {
-                **row,
-                "faithful_macro_accuracy": fmt_float(row["faithful_macro_accuracy"], 6),
+                **serialize_model_summary_row(row),
+                "benchmark_faithful_macro_accuracy": fmt_float(row["faithful_macro_accuracy"], 6),
             }
             for row in model_summary
         ],
-        ["model_family", "tasks", "faithful_tasks", "proxy_tasks", "samples", "scored_tasks", "faithful_macro_accuracy"],
+        ["model_family", "tasks", "benchmark_faithful_tasks", "proxy_tasks", "samples", "scored_tasks", "benchmark_faithful_macro_accuracy"],
     )
     write_csv(
         args.release_dir / "benchmark-summary.csv",
@@ -1001,6 +1119,28 @@ def main() -> None:
         ["model_family", "model", "size_hint", "modality", "benchmarks", "tasks", "release_modes", "samples", "note"],
     )
     write_csv(
+        args.release_dir / "supplementary-model-progress.csv",
+        [
+            {
+                **serialize_supplementary_progress_row(row),
+                "benchmark_faithful_macro_accuracy": fmt_float(row["benchmark_faithful_macro_accuracy"], 6),
+            }
+            for row in supplementary_model_progress
+        ],
+        [
+            "family",
+            "status_relative_to_closed_release",
+            "exact_route",
+            "papers_covered",
+            "tasks_completed",
+            "benchmark_faithful_tasks",
+            "proxy_tasks",
+            "samples",
+            "benchmark_faithful_macro_accuracy",
+            "note",
+        ],
+    )
+    write_csv(
         args.release_dir / "future-model-plan.csv",
         future_model_plan,
         ["family", "closed_release_status", "current_route", "small_candidate", "medium_candidate", "large_candidate", "next_step"],
@@ -1016,15 +1156,23 @@ def main() -> None:
         ["model_family", "benchmark", "status", "completed_tasks", "expected_tasks", "label"],
     )
 
-    topline_md = build_topline_summary(rows, model_summary)
+    topline_md = build_topline_summary(rows, model_summary, supplementary_model_progress)
     write_text(args.release_dir / "topline-summary.md", topline_md)
     write_text(
         args.release_dir / "README.md",
-        build_release_readme(model_summary, benchmark_summary, benchmark_catalog, model_roster),
+        build_release_readme(model_summary, benchmark_summary, benchmark_catalog, model_roster, supplementary_model_progress),
     )
     write_text(
         args.release_dir / "jenny-group-report.md",
-        build_jenny_group_report(rows, model_summary, benchmark_summary, benchmark_catalog, model_roster, future_model_plan),
+        build_jenny_group_report(
+            rows,
+            model_summary,
+            benchmark_summary,
+            benchmark_catalog,
+            model_roster,
+            future_model_plan,
+            supplementary_model_progress,
+        ),
     )
     write_text(args.release_dir / "source" / "README.md", build_source_readme())
     write_text(
@@ -1037,10 +1185,19 @@ def main() -> None:
                 "total_samples": sum(row["total_samples"] for row in rows),
                 "model_summary": [
                     {
-                        **row,
-                        "faithful_macro_accuracy": None if row["faithful_macro_accuracy"] is None else round(row["faithful_macro_accuracy"], 6),
+                        **serialize_model_summary_row(row),
+                        "benchmark_faithful_macro_accuracy": None if row["faithful_macro_accuracy"] is None else round(row["faithful_macro_accuracy"], 6),
                     }
                     for row in model_summary
+                ],
+                "supplementary_model_progress": [
+                    {
+                        **serialize_supplementary_progress_row(row),
+                        "benchmark_faithful_macro_accuracy": None
+                        if row["benchmark_faithful_macro_accuracy"] is None
+                        else round(row["benchmark_faithful_macro_accuracy"], 6),
+                    }
+                    for row in supplementary_model_progress
                 ],
             },
             indent=2,
@@ -1049,7 +1206,7 @@ def main() -> None:
     )
     write_text(
         args.release_dir / "release-manifest.json",
-        json.dumps(build_release_manifest(rows, model_summary, benchmark_summary), indent=2) + "\n",
+        json.dumps(build_release_manifest(rows, model_summary, benchmark_summary, supplementary_model_progress), indent=2) + "\n",
     )
 
     render_coverage_svg(coverage_matrix, args.figure_dir / "option1_coverage_matrix.svg")
@@ -1063,6 +1220,7 @@ def main() -> None:
             "benchmark-catalog.csv",
             "model-summary.csv",
             "model-roster.csv",
+            "supplementary-model-progress.csv",
             "future-model-plan.csv",
             "benchmark-summary.csv",
             "faithful-metrics.csv",

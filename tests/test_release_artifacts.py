@@ -43,6 +43,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         "model-summary.csv",
         "model-roster.csv",
         "release-manifest.json",
+        "supplementary-model-progress.csv",
         "topline-summary.json",
         "topline-summary.md",
         "source/README.md",

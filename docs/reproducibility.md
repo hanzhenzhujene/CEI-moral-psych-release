@@ -62,6 +62,7 @@ Release tables:
 - `results/release/2026-04-19-option1/benchmark-catalog.csv`
 - `results/release/2026-04-19-option1/model-summary.csv`
 - `results/release/2026-04-19-option1/model-roster.csv`
+- `results/release/2026-04-19-option1/supplementary-model-progress.csv`
 - `results/release/2026-04-19-option1/future-model-plan.csv`
 - `results/release/2026-04-19-option1/benchmark-summary.csv`
 - `results/release/2026-04-19-option1/faithful-metrics.csv`
@@ -124,4 +125,5 @@ The current public release is a closed `Option 1` slice, not the full intended f
 Two points are especially important for correct interpretation:
 
 - `Denevil` is currently a `FULCRA`-backed proxy line rather than a benchmark-faithful `MoralPrompt` reproduction.
-- `Llama` and `MiniMax` experiments are in progress locally and are not included in the closed release artifacts.
+- `Llama` small is complete locally across all five benchmark papers, but it is tracked as supplementary local evidence rather than folded into the closed `Option 1` counts.
+- `MiniMax` remains outside the closed release artifacts and still needs its first formal local run.

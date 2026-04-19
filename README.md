@@ -1,6 +1,6 @@
 # CEI Moral-Psych Benchmark Suite
 
-[![CI Workflow](https://img.shields.io/badge/CI-GitHub%20Actions-blue)](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml)
+[![CI Workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml)
 
 A reproducible extension of the CEI evaluation harness plus Jenny Zhu's April 19, 2026 moral-psych benchmark report for five target papers:
 
@@ -25,6 +25,8 @@ This repository serves two linked purposes:
 | Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |
 | Current closed release | `Option 1` |
 | Model families in the closed release | `Qwen`, `DeepSeek`, `Gemma` |
+| Supplementary local completion outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `5` papers / `7` tasks |
+| Prepared but not yet completed | `MiniMax` small route via `minimax-m2.1` + `minimax-01` |
 | Provider / temperature | `OpenRouter`, `temperature=0` |
 | Current cost note | `$25` current spend / budget note provided by Jenny |
 | CI reference | [workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml), last verified passing run [24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
@@ -39,6 +41,7 @@ The current public release is the `2026-04-19 Option 1` package:
 - `302,776` evaluated samples in the release package
 - benchmark-faithful coverage for `UniMoral`, `SMID`, `Value Kaleidoscope`, and `CCD-Bench`
 - a clearly labeled `FULCRA`-backed proxy for `Denevil` because the benchmark-faithful `MoralPrompt` export is still unavailable locally
+- a completed supplementary `Llama` small line outside the closed release, covering all five benchmark papers across `102,886` samples
 
 ## Five Benchmarks Under Test
 
@@ -64,22 +67,29 @@ The current public release is the `2026-04-19 Option 1` package:
 | Family | Closed release status | Current route already present in repo | Small | Medium | Large |
 | --- | --- | --- | --- | --- | --- |
 | `Qwen` | included | `qwen3-8b`, `qwen3-vl-8b-instruct` | current 8B routes | TBD with group roster | TBD with group roster |
-| `MiniMax` | not yet in closed release | `minimax-m2.1`, `minimax-01` launchers present | prepared | TBD with group roster | TBD with group roster |
+| `MiniMax` | prepared only, not in closed release | `minimax-m2.1`, `minimax-01` launchers present | current launcher wired; no formal local completion yet | TBD with group roster | TBD with group roster |
 | `DeepSeek` | included | `deepseek-chat-v3.1` | TBD with group roster | TBD with group roster | TBD with group roster |
-| `Llama` | not yet in closed release | `llama-3.2-11b-vision-instruct` launcher present | prepared | TBD with group roster | TBD with group roster |
+| `Llama` | completed locally, not promoted into closed release | `llama-3.2-11b-vision-instruct` completed locally | current 11B route complete across 5 papers / 7 tasks | TBD with group roster | TBD with group roster |
 | `Gemma` | included | `gemma-3-4b-it` | current 4B route | TBD with group roster | TBD with group roster |
+
+## Supplementary Local Expansion Progress
+
+| Family | Status relative to closed release | Exact route | Papers | Tasks | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy | Note |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| `Llama` | completed locally, outside the closed `Option 1` counts | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | 5 | 7 | 6 | 1 | 102,886 | 0.428 | combines the original namespace successes (`UniMoral` + `SMID` moral rating) with `recovery-v3` completions for the remaining five tasks after a temporary OpenRouter key-limit stall |
+| `MiniMax` | prepared only, not yet completed locally | `minimax-m2.1` + `minimax-01` | 0 | 0 | 0 | 0 | 0 | n/a | small-route launchers are wired in the repo, but this family still needs its first formal paid run |
 
 ## Key Results
 
 ### Model-Level Release Summary
 
-| Model family | Faithful tasks | Proxy tasks | Samples | Faithful macro accuracy* |
+| Model family | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy* |
 | --- | ---: | ---: | ---: | ---: |
 | `Qwen` | 6 | 1 | 102,886 | 0.550 |
 | `DeepSeek` | 4 | 1 | 97,004 | 0.651 |
 | `Gemma` | 6 | 1 | 102,886 | 0.531 |
 
-`*` Macro accuracy is averaged over tasks with an explicit accuracy metric. `CCD-Bench` and `Denevil` are excluded from that average because the current release records completion / choice-validity for those tasks rather than a comparable accuracy target.
+`*` Macro accuracy is averaged over benchmark-faithful tasks with an explicit accuracy metric. `CCD-Bench` and `Denevil` are excluded from that average because the current release records completion / choice-validity for those tasks rather than a comparable accuracy target.
 
 ## What This Repo Contributes
 
@@ -189,6 +199,7 @@ Expected outputs:
 - `results/release/2026-04-19-option1/benchmark-catalog.csv`
 - `results/release/2026-04-19-option1/model-summary.csv`
 - `results/release/2026-04-19-option1/model-roster.csv`
+- `results/release/2026-04-19-option1/supplementary-model-progress.csv`
 - `results/release/2026-04-19-option1/future-model-plan.csv`
 - `results/release/2026-04-19-option1/benchmark-summary.csv`
 - `results/release/2026-04-19-option1/faithful-metrics.csv`
@@ -248,7 +259,8 @@ The current `Denevil` line is a **proxy**, not a benchmark-faithful `MoralPrompt
 
 - full large / medium / small sweeps for all target model families
 - a benchmark-faithful `Denevil` run using `MoralPrompt`
-- the currently running `Llama` and `MiniMax` experiments, which remain outside the closed `Option 1` release package
+- the prepared but not yet completed `MiniMax` family
+- promotion of the completed local `Llama` small line into a future authoritative release snapshot, if the group wants it counted formally
 
 ## Data Access
 

@@ -12,6 +12,8 @@ This directory contains the tracked, publication-facing outputs for Jenny Zhu's 
 | Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |
 | Current closed release | `Option 1` |
 | Model families in the closed release | `Qwen`, `DeepSeek`, `Gemma` |
+| Supplementary local completion outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `5` papers / `7` tasks |
+| Prepared but not yet completed | `MiniMax` small route via `minimax-m2.1 + minimax-01` |
 | Provider / temperature | `OpenRouter`, `temperature=0` |
 | Current cost note | $25 current spend / budget note provided by Jenny on April 19, 2026. |
 | CI reference | [Workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); last verified successful run: [run 24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
@@ -27,6 +29,7 @@ This directory contains the tracked, publication-facing outputs for Jenny Zhu's 
 - `benchmark-catalog.csv`: benchmark registry with papers, dataset links, modalities, and release scope
 - `model-summary.csv`: per-model task counts, sample counts, and macro accuracy
 - `model-roster.csv`: exact OpenRouter model routes used in the closed release
+- `supplementary-model-progress.csv`: local expansion status for families intentionally kept outside the closed release counts
 - `future-model-plan.csv`: current family-by-size expansion plan
 - `benchmark-summary.csv`: per-benchmark coverage and sample volume
 - `faithful-metrics.csv`: task-level metrics for benchmark-faithful tasks
@@ -53,11 +56,18 @@ This directory contains the tracked, publication-facing outputs for Jenny Zhu's 
 
 ## Model Summary
 
-| Model family | Faithful tasks | Proxy tasks | Samples | Faithful macro accuracy |
+| Model family | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy |
 | --- | ---: | ---: | ---: | ---: |
 | `Qwen` | 6 | 1 | 102,886 | 0.550 |
 | `DeepSeek` | 4 | 1 | 97,004 | 0.651 |
 | `Gemma` | 6 | 1 | 102,886 | 0.531 |
+
+## Supplementary Local Expansion Status
+
+| Family | Status relative to closed release | Exact route | Papers | Tasks | Samples | Benchmark-faithful macro accuracy | Note |
+| --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| `Llama` | Completed locally, outside the closed Option 1 counts | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | 5 | 7 | 102,886 | 0.428 | Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall. |
+| `MiniMax` | Prepared only, not yet completed locally | `minimax-m2.1 + minimax-01` | 0 | 0 | 0 | n/a | Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models. |
 
 ## Benchmark Summary
 
@@ -72,5 +82,6 @@ This directory contains the tracked, publication-facing outputs for Jenny Zhu's 
 ## Interpretation Guardrails
 
 - Treat `Denevil` as a proxy line in this release.
+- Treat the completed local `Llama` small line as supplementary evidence unless and until it is promoted into a new authoritative snapshot.
 - Treat the release outputs here as authoritative for the closed `Option 1` slice.
 - Use the raw `results/inspect/` tree only for local debugging or provenance checks.

@@ -15,9 +15,11 @@ import argparse
 import ast
 import glob
 import importlib.util
+import json
 import os
 import sys
 from pathlib import Path
+from zipfile import BadZipFile, ZipFile
 
 
 def load_env_file(path: Path) -> None:
@@ -105,6 +107,21 @@ def parse_args():
         ),
     )
     return parser.parse_args()
+
+
+def eval_log_status(log_location: str | Path) -> str:
+    """Read an Inspect `.eval` archive and return its terminal status."""
+    try:
+        with ZipFile(log_location) as zf:
+            header = json.loads(zf.read("header.json").decode("utf-8"))
+    except (BadZipFile, FileNotFoundError):
+        return "unreadable"
+    except KeyError:
+        return "missing_header"
+
+    if isinstance(header, dict):
+        return str(header.get("status", "success"))
+    return "unknown"
 
 
 def load_tasks_from_file(filepath: str) -> list:
@@ -264,12 +281,21 @@ def main():
     logs = inspect_eval(**eval_kwargs)
 
     print("\n=== Eval Complete ===")
+    had_non_success = False
     for log in logs:
         print(f"  Log: {log.location}")
+        log_status = eval_log_status(log.location)
+        print(f"    status: {log_status}")
+        if log_status != "success":
+            had_non_success = True
         if hasattr(log, "results") and log.results:
             metrics = getattr(log.results, "metrics", {})
             for metric_name, metric_val in metrics.items():
                 print(f"    {metric_name}: {metric_val}")
+
+    if had_non_success:
+        print("\nOne or more eval logs finished with non-success status.", file=sys.stderr)
+        sys.exit(2)
 
 
 if __name__ == "__main__":

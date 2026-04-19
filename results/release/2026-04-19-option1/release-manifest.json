@@ -69,29 +69,55 @@
     {
       "model_family": "Qwen",
       "tasks": 7,
-      "faithful_tasks": 6,
+      "benchmark_faithful_tasks": 6,
       "proxy_tasks": 1,
       "samples": 102886,
       "scored_tasks": 5,
-      "faithful_macro_accuracy": 0.549677
+      "benchmark_faithful_macro_accuracy": 0.549677
     },
     {
       "model_family": "DeepSeek",
       "tasks": 5,
-      "faithful_tasks": 4,
+      "benchmark_faithful_tasks": 4,
       "proxy_tasks": 1,
       "samples": 97004,
       "scored_tasks": 3,
-      "faithful_macro_accuracy": 0.650992
+      "benchmark_faithful_macro_accuracy": 0.650992
     },
     {
       "model_family": "Gemma",
       "tasks": 7,
-      "faithful_tasks": 6,
+      "benchmark_faithful_tasks": 6,
       "proxy_tasks": 1,
       "samples": 102886,
       "scored_tasks": 5,
-      "faithful_macro_accuracy": 0.53086
+      "benchmark_faithful_macro_accuracy": 0.53086
+    }
+  ],
+  "supplementary_model_progress": [
+    {
+      "family": "Llama",
+      "status_relative_to_closed_release": "Completed locally, outside the closed Option 1 counts",
+      "exact_route": "openrouter/meta-llama/llama-3.2-11b-vision-instruct",
+      "papers_covered": 5,
+      "tasks_completed": 7,
+      "benchmark_faithful_tasks": 6,
+      "proxy_tasks": 1,
+      "samples": 102886,
+      "benchmark_faithful_macro_accuracy": 0.427602,
+      "note": "Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall."
+    },
+    {
+      "family": "MiniMax",
+      "status_relative_to_closed_release": "Prepared only, not yet completed locally",
+      "exact_route": "minimax-m2.1 + minimax-01",
+      "papers_covered": 0,
+      "tasks_completed": 0,
+      "benchmark_faithful_tasks": 0,
+      "proxy_tasks": 0,
+      "samples": 0,
+      "benchmark_faithful_macro_accuracy": null,
+      "note": "Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models."
     }
   ],
   "tables": [
@@ -103,6 +129,7 @@
     "benchmark-catalog.csv",
     "model-summary.csv",
     "model-roster.csv",
+    "supplementary-model-progress.csv",
     "future-model-plan.csv",
     "benchmark-summary.csv",
     "faithful-metrics.csv",
@@ -116,6 +143,7 @@
   "interpretation_guardrails": [
     "Denevil is represented only by the explicit FULCRA-backed proxy task in this release.",
     "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
+    "The completed local Llama small line is supplementary and is not counted in the closed Option 1 totals.",
     "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration."
   ]
 }

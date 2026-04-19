@@ -104,7 +104,8 @@ run_task() {
   mkdir -p "$run_dir" "$log_dir"
 
   start_at="$(now_iso)"
-  (
+  if (
+    set +e
     export DENEVIL_DATA_FILE="$DENEVIL_DATA_FILE"
     echo "[$start_at] START family=$family task=denevil_fulcra_proxy_generation model=$model max_connections=$TEXT_MAX_CONNECTIONS data_file=$DENEVIL_DATA_FILE"
     "$UV_BIN" run --package cei-inspect python "$RUNNER" \
@@ -118,9 +119,12 @@ run_task() {
     end_at="$(now_iso)"
     echo "[$end_at] END family=$family task=denevil_fulcra_proxy_generation returncode=$rc"
     exit "$rc"
-  ) > "$output_path" 2>&1
+  ) > "$output_path" 2>&1; then
+    rc=0
+  else
+    rc=$?
+  fi
 
-  rc=$?
   end_at="$(now_iso)"
   record_status "$family" "denevil_fulcra_proxy_generation" "$start_at" "$end_at" "$rc" "$output_path"
   return 0
