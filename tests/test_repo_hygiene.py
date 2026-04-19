@@ -10,11 +10,13 @@ ROOT = Path(__file__).parent.parent
 PUBLIC_GLOBS = [
     "README.md",
     "Makefile",
+    ".env.example",
     ".gitignore",
     ".github/workflows/*.yml",
     "CONTRIBUTING.md",
     "docs/*.md",
     "figures/*.md",
+    "figures/release/*.svg",
     "results/*.md",
     "results/lm-harness/*.md",
     "results/release/**/*.csv",

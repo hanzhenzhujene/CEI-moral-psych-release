@@ -44,6 +44,8 @@ For the public QA gate used in CI, run:
 make audit
 ```
 
+This is the fastest end-to-end public check because it runs the full test suite and refreshes the tracked release artifacts in one command.
+
 ## Rebuild the Public Release
 
 ```bash

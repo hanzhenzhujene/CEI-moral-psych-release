@@ -208,6 +208,16 @@ Expected outputs:
 - `figures/release/option1_accuracy_heatmap.svg`
 - `figures/release/option1_sample_volume.svg`
 
+### 4. Fastest public QA path
+
+If you want the closest thing to a one-command public reproducibility check, run:
+
+```bash
+make audit
+```
+
+This executes the test suite and rebuilds the public release package from the tracked source snapshot in one pass.
+
 ## Reproducing a Benchmark Run
 
 The release package above is generated from completed local runs. To execute the harness itself, use the `Inspect AI` path in `src/inspect/`.

@@ -24,3 +24,4 @@ For portability, the launchers now support:
 - `UV_BIN` for non-default `uv` locations
 - `DATA_ROOT` for a shared benchmark data root
 - benchmark-specific overrides such as `UNIMORAL_DATA_DIR` or `DENEVIL_DATA_FILE`
+- `TASK_FILTER` on the Llama small launcher for targeted reruns or recovery batches

@@ -68,3 +68,5 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
+    assert manifest["entry_points"]["report"].endswith("jenny-group-report.md")
+    assert manifest["entry_points"]["supplementary_progress"].endswith("supplementary-model-progress.csv")

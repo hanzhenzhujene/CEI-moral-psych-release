@@ -51,6 +51,8 @@ clean-release:
 		$(RELEASE_DIR)/model-summary.csv \
 		$(RELEASE_DIR)/model-roster.csv \
 		$(RELEASE_DIR)/release-manifest.json \
+		$(RELEASE_DIR)/source/README.md \
+		$(RELEASE_DIR)/supplementary-model-progress.csv \
 		$(RELEASE_DIR)/topline-summary.json \
 		$(RELEASE_DIR)/topline-summary.md
 	rm -rf figures/release

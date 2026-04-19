@@ -18,6 +18,25 @@ This directory contains the tracked, publication-facing outputs for Jenny Zhu's 
 | Current cost note | $25 current spend / budget note provided by Jenny on April 19, 2026. |
 | CI reference | [Workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); last verified successful run: [run 24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 
+## Open These First
+
+- `jenny-group-report.md`: the mentor-facing report with paper links, dataset access links, model roster, and interpretation notes
+- `topline-summary.md`: the quickest narrative summary of counts and guardrails
+- `release-manifest.json`: machine-readable entrypoint for downstream tooling, dashboards, or scripted checks
+- [coverage figure](../../../figures/release/option1_coverage_matrix.svg): visual summary of faithful vs proxy coverage
+- [accuracy figure](../../../figures/release/option1_accuracy_heatmap.svg): comparable accuracy snapshot across the closed release
+
+## Regeneration
+
+From the repo root:
+
+```bash
+make release
+make audit
+```
+
+`make release` rebuilds the tracked public package from the committed source snapshot. `make audit` is the one-command public QA gate that runs tests and rebuilds the package together.
+
 ## Files
 
 - `source/authoritative-summary.csv`: tracked source snapshot used to regenerate this release package

@@ -120,6 +120,16 @@
       "note": "Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models."
     }
   ],
+  "entry_points": {
+    "report": "results/release/2026-04-19-option1/jenny-group-report.md",
+    "topline_summary": "results/release/2026-04-19-option1/topline-summary.md",
+    "manifest": "results/release/2026-04-19-option1/release-manifest.json",
+    "benchmark_catalog": "results/release/2026-04-19-option1/benchmark-catalog.csv",
+    "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
+    "coverage_figure": "figures/release/option1_coverage_matrix.svg",
+    "accuracy_figure": "figures/release/option1_accuracy_heatmap.svg",
+    "sample_volume_figure": "figures/release/option1_sample_volume.svg"
+  },
   "tables": [
     "README.md",
     "jenny-group-report.md",
