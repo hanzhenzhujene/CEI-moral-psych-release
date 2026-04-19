@@ -34,10 +34,14 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     expected_release_files = {
         "README.md",
+        "benchmark-catalog.csv",
         "benchmark-summary.csv",
         "coverage-matrix.csv",
         "faithful-metrics.csv",
+        "future-model-plan.csv",
+        "jenny-group-report.md",
         "model-summary.csv",
+        "model-roster.csv",
         "release-manifest.json",
         "topline-summary.json",
         "topline-summary.md",
@@ -62,3 +66,4 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["authoritative_tasks"] == 19
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
+    assert manifest["report_metadata"]["owner"] == "Jenny Zhu"

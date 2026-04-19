@@ -1,7 +1,17 @@
 {
   "release_id": "2026-04-19-option1",
-  "title": "CEI Moral-Psych Benchmark Suite: Option 1 Release",
+  "title": "CEI Moral-Psych Benchmark Suite: Jenny Zhu Option 1 Report",
   "source_snapshot": "results/release/2026-04-19-option1/source/authoritative-summary.csv",
+  "report_metadata": {
+    "owner": "Jenny Zhu",
+    "date": "2026-04-19",
+    "purpose": "Group / mentor-facing report aligned to the April 14, 2026 moral-psych benchmark plan.",
+    "provider": "OpenRouter",
+    "temperature": "0",
+    "cost_note": "$25 current spend / budget note provided by Jenny on April 19, 2026.",
+    "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml",
+    "ci_last_verified_run_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
+  },
   "counts": {
     "authoritative_tasks": 19,
     "benchmark_faithful_tasks": 16,
@@ -16,35 +26,40 @@
   "benchmarks": [
     {
       "benchmark": "UniMoral",
-      "tasks": 3,
+      "task_types": 1,
+      "evaluated_lines": 3,
       "models_covered": 3,
       "samples": 26352,
       "modes": "benchmark_faithful"
     },
     {
       "benchmark": "SMID",
-      "tasks": 4,
+      "task_types": 2,
+      "evaluated_lines": 4,
       "models_covered": 2,
       "samples": 11764,
       "modes": "benchmark_faithful"
     },
     {
       "benchmark": "Value Kaleidoscope",
-      "tasks": 6,
+      "task_types": 2,
+      "evaluated_lines": 6,
       "models_covered": 3,
       "samples": 196560,
       "modes": "benchmark_faithful"
     },
     {
       "benchmark": "CCD-Bench",
-      "tasks": 3,
+      "task_types": 1,
+      "evaluated_lines": 3,
       "models_covered": 3,
       "samples": 6546,
       "modes": "benchmark_faithful"
     },
     {
       "benchmark": "Denevil",
-      "tasks": 3,
+      "task_types": 1,
+      "evaluated_lines": 3,
       "models_covered": 3,
       "samples": 61554,
       "modes": "proxy"
@@ -81,10 +96,14 @@
   ],
   "tables": [
     "README.md",
+    "jenny-group-report.md",
     "topline-summary.md",
     "topline-summary.json",
     "release-manifest.json",
+    "benchmark-catalog.csv",
     "model-summary.csv",
+    "model-roster.csv",
+    "future-model-plan.csv",
     "benchmark-summary.csv",
     "faithful-metrics.csv",
     "coverage-matrix.csv"

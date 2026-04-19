@@ -1,0 +1,6 @@
+family,closed_release_status,current_route,small_candidate,medium_candidate,large_candidate,next_step
+Qwen,Included in Option 1,qwen3-8b + qwen3-vl-8b-instruct,Current 8B text + 8B vision routes,TBD with group roster,TBD with group roster,Freeze exact medium / large IDs before scaling.
+MiniMax,Not in Option 1,minimax-m2.1 + minimax-01 launcher present,Current launcher already wired,TBD with group roster,TBD with group roster,"Run the prepared small route, then choose medium / large equivalents."
+DeepSeek,Included in Option 1,deepseek-chat-v3.1,TBD with group roster,TBD with group roster,TBD with group roster,Freeze a size-tier mapping because provider naming is not parameter-count explicit here.
+Llama,Not in Option 1,llama-3.2-11b-vision-instruct launcher present,Current 11B vision launcher,TBD with group roster,TBD with group roster,"Run the prepared small route, then lock medium / large IDs with the group."
+Gemma,Included in Option 1,gemma-3-4b-it,Current 4B route,TBD with group roster,TBD with group roster,Add larger Gemma checkpoints only after the family-wide roster is frozen.

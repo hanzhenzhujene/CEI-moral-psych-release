@@ -1,8 +1,8 @@
 # CEI Moral-Psych Benchmark Suite
 
-[![CI](https://github.com/nordbyerik/CEI/actions/workflows/ci.yml/badge.svg)](https://github.com/nordbyerik/CEI/actions/workflows/ci.yml)
+[![CI Workflow](https://img.shields.io/badge/CI-GitHub%20Actions-blue)](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml)
 
-A reproducible extension of the CEI evaluation harness for five moral-psychology benchmarks:
+A reproducible extension of the CEI evaluation harness plus Jenny Zhu's April 19, 2026 moral-psych benchmark report for five target papers:
 
 - `UniMoral`
 - `SMID`
@@ -10,10 +10,26 @@ A reproducible extension of the CEI evaluation harness for five moral-psychology
 - `CCD-Bench`
 - `Denevil`
 
-This repository now serves two roles:
+This repository serves two linked purposes:
 
 1. A **benchmarking codebase** built on `Inspect AI` and `lm-evaluation-harness`.
-2. A **research release** summarizing the current authoritative `Option 1` benchmark slice completed in this workspace.
+2. A **mentor-ready research report** summarizing Jenny's current authoritative `Option 1` slice.
+
+## Report Metadata
+
+| Field | Value |
+| --- | --- |
+| Report owner | `Jenny Zhu` |
+| Report date | `April 19, 2026` |
+| Intended use | Group / research mentor update aligned to the April 14, 2026 plan |
+| Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |
+| Current closed release | `Option 1` |
+| Model families in the closed release | `Qwen`, `DeepSeek`, `Gemma` |
+| Provider / temperature | `OpenRouter`, `temperature=0` |
+| Current cost note | `$25` current spend / budget note provided by Jenny |
+| CI reference | [workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml), last verified passing run [24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
+
+Detailed report artifacts live in [`results/release/2026-04-19-option1/`](results/release/2026-04-19-option1/), including [`jenny-group-report.md`](results/release/2026-04-19-option1/jenny-group-report.md) and the tracked source snapshot [`source/authoritative-summary.csv`](results/release/2026-04-19-option1/source/authoritative-summary.csv).
 
 ## Release Snapshot
 
@@ -24,24 +40,34 @@ The current public release is the `2026-04-19 Option 1` package:
 - benchmark-faithful coverage for `UniMoral`, `SMID`, `Value Kaleidoscope`, and `CCD-Bench`
 - a clearly labeled `FULCRA`-backed proxy for `Denevil` because the benchmark-faithful `MoralPrompt` export is still unavailable locally
 
-Release artifacts live in [`results/release/2026-04-19-option1/`](results/release/2026-04-19-option1/) and figures live in [`figures/release/`](figures/release/).
-The tracked source snapshot that makes the public package reproducible lives in [`results/release/2026-04-19-option1/source/authoritative-summary.csv`](results/release/2026-04-19-option1/source/authoritative-summary.csv).
+## Five Benchmarks Under Test
 
-## What This Repo Contributes
+| Benchmark | Citation | Paper | Dataset / access | Modality | Tasks in repo | Current release scope |
+| --- | --- | --- | --- | --- | --- | --- |
+| `UniMoral` | Kumar et al. (ACL 2025 Findings) | [paper](https://aclanthology.org/2025.acl-long.294/) | [HF dataset](https://huggingface.co/datasets/shivaniku/UniMoral) | Text, multilingual moral reasoning | `unimoral_action_prediction`; `unimoral_moral_typology`; `unimoral_factor_attribution`; `unimoral_consequence_generation` | Action prediction only |
+| `SMID` | Crone et al. (PLOS ONE 2018) | [paper](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0190954) | [OSF project](https://osf.io/ngzwx/) | Vision | `smid_moral_rating`; `smid_foundation_classification` | Moral rating + foundation classification |
+| `Value Kaleidoscope` | Sorensen et al. (AAAI 2024 / arXiv 2023) | [paper](https://arxiv.org/abs/2310.17681) | [HF dataset](https://huggingface.co/datasets/allenai/ValuePrism) | Text value reasoning | `value_prism_relevance`; `value_prism_valence` | Relevance + valence |
+| `CCD-Bench` | Rahman et al. (arXiv 2025) | [paper](https://arxiv.org/abs/2510.03553) | [repo](https://github.com/smartlab-nyu/CCD-Bench), [JSON](https://raw.githubusercontent.com/smartlab-nyu/CCD-Bench/main/datasets/CCD-Bench.json) | Text response selection | `ccd_bench_selection` | Selection |
+| `Denevil` | Duan et al. (ICLR 2024 submission / arXiv 2023) | [paper](https://arxiv.org/abs/2310.11905) | no stable public `MoralPrompt` download verified | Text generation | `denevil_generation`; `denevil_fulcra_proxy_generation` | `FULCRA`-backed proxy only |
 
-Compared with the original CEI ETHICS runner, this repo adds:
+## Current Models In The Closed Release
 
-- `Inspect AI` task implementations for five moral-psych benchmarks
-- local dataset wiring for public, gated, and multimodal benchmarks
-- reusable launchers for formal model sweeps
-- cross-namespace status recovery for interrupted runs
-- publication-ready release summaries and figures generated from authoritative logs
+| Family | Exact model route | Size hint | Modality | Benchmarks in release | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `Qwen` | `openrouter/qwen/qwen3-8b` | 8B | Text | `UniMoral`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` proxy | Closed-slice text route |
+| `Qwen` | `openrouter/qwen/qwen3-vl-8b-instruct` | 8B VL | Vision | `SMID` | Closed-slice vision route |
+| `DeepSeek` | `openrouter/deepseek/deepseek-chat-v3.1` | provider route | Text | `UniMoral`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` proxy | No DeepSeek vision route in the current release |
+| `Gemma` | `openrouter/google/gemma-3-4b-it` | 4B | Text + Vision | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` proxy | Paid recovery route supersedes the stalled free-tier namespace |
 
-Three release-level claims are directly supported by the tracked artifacts:
+## Next Step: Family x Size Expansion
 
-- the closed `Option 1` slice achieves complete coverage for the intended `Qwen`, `DeepSeek`, and `Gemma` tasks
-- `Value Kaleidoscope` dominates sample volume in the current release
-- `Denevil` remains clearly separated as a proxy line rather than a benchmark-faithful reproduction
+| Family | Closed release status | Current route already present in repo | Small | Medium | Large |
+| --- | --- | --- | --- | --- | --- |
+| `Qwen` | included | `qwen3-8b`, `qwen3-vl-8b-instruct` | current 8B routes | TBD with group roster | TBD with group roster |
+| `MiniMax` | not yet in closed release | `minimax-m2.1`, `minimax-01` launchers present | prepared | TBD with group roster | TBD with group roster |
+| `DeepSeek` | included | `deepseek-chat-v3.1` | TBD with group roster | TBD with group roster | TBD with group roster |
+| `Llama` | not yet in closed release | `llama-3.2-11b-vision-instruct` launcher present | prepared | TBD with group roster | TBD with group roster |
+| `Gemma` | included | `gemma-3-4b-it` | current 4B route | TBD with group roster | TBD with group roster |
 
 ## Key Results
 
@@ -54,6 +80,22 @@ Three release-level claims are directly supported by the tracked artifacts:
 | `Gemma` | 6 | 1 | 102,886 | 0.531 |
 
 `*` Macro accuracy is averaged over tasks with an explicit accuracy metric. `CCD-Bench` and `Denevil` are excluded from that average because the current release records completion / choice-validity for those tasks rather than a comparable accuracy target.
+
+## What This Repo Contributes
+
+Compared with the original CEI ETHICS runner, this repo adds:
+
+- `Inspect AI` task implementations for five moral-psych benchmarks
+- local dataset wiring for public, gated, and multimodal benchmarks
+- reusable launchers for formal model sweeps
+- cross-namespace status recovery for interrupted runs
+- publication-ready release summaries, figures, and mentor-facing report tables generated from authoritative logs
+
+Three release-level claims are directly supported by the tracked artifacts:
+
+- the closed `Option 1` slice achieves complete coverage for the intended `Qwen`, `DeepSeek`, and `Gemma` tasks
+- `Value Kaleidoscope` dominates sample volume in the current release
+- `Denevil` remains clearly separated as a proxy line rather than a benchmark-faithful reproduction
 
 ### Figures
 
@@ -142,8 +184,12 @@ This command regenerates the public package from the tracked authoritative snaps
 Expected outputs:
 
 - `results/release/2026-04-19-option1/source/authoritative-summary.csv`
+- `results/release/2026-04-19-option1/jenny-group-report.md`
 - `results/release/2026-04-19-option1/topline-summary.md`
+- `results/release/2026-04-19-option1/benchmark-catalog.csv`
 - `results/release/2026-04-19-option1/model-summary.csv`
+- `results/release/2026-04-19-option1/model-roster.csv`
+- `results/release/2026-04-19-option1/future-model-plan.csv`
 - `results/release/2026-04-19-option1/benchmark-summary.csv`
 - `results/release/2026-04-19-option1/faithful-metrics.csv`
 - `results/release/2026-04-19-option1/coverage-matrix.csv`

@@ -42,10 +42,14 @@ smoke:
 
 clean-release:
 	rm -f $(RELEASE_DIR)/README.md \
+		$(RELEASE_DIR)/benchmark-catalog.csv \
 		$(RELEASE_DIR)/benchmark-summary.csv \
 		$(RELEASE_DIR)/coverage-matrix.csv \
 		$(RELEASE_DIR)/faithful-metrics.csv \
+		$(RELEASE_DIR)/future-model-plan.csv \
+		$(RELEASE_DIR)/jenny-group-report.md \
 		$(RELEASE_DIR)/model-summary.csv \
+		$(RELEASE_DIR)/model-roster.csv \
 		$(RELEASE_DIR)/release-manifest.json \
 		$(RELEASE_DIR)/topline-summary.json \
 		$(RELEASE_DIR)/topline-summary.md

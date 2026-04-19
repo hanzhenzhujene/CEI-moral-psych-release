@@ -1,6 +1,6 @@
-benchmark,tasks,models_covered,samples,modes
-UniMoral,3,3,26352,benchmark_faithful
-SMID,4,2,11764,benchmark_faithful
-Value Kaleidoscope,6,3,196560,benchmark_faithful
-CCD-Bench,3,3,6546,benchmark_faithful
-Denevil,3,3,61554,proxy
+benchmark,task_types,evaluated_lines,models_covered,samples,modes
+UniMoral,1,3,3,26352,benchmark_faithful
+SMID,2,4,2,11764,benchmark_faithful
+Value Kaleidoscope,2,6,3,196560,benchmark_faithful
+CCD-Bench,1,3,3,6546,benchmark_faithful
+Denevil,1,3,3,61554,proxy

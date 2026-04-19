@@ -3,7 +3,7 @@
 ## Reporting
 
 - `build_authoritative_option1_status.py`: maintainer-only reconciliation step that rebuilds the authoritative `Option 1` status table from raw local run folders.
-- `build_release_artifacts.py`: converts the tracked authoritative source snapshot into release-ready CSV, Markdown, JSON, and SVG outputs.
+- `build_release_artifacts.py`: converts the tracked authoritative source snapshot into release-ready CSV, Markdown, JSON, and SVG outputs, including Jenny's benchmark registry, model roster, and future-plan report tables.
 - `summarize_inspect_eval_progress.py`: scans `.eval` artifacts and reports live progress from raw Inspect logs.
 
 ## Diagnostics

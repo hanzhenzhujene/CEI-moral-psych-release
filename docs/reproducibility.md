@@ -57,8 +57,12 @@ This target regenerates the public release package from the tracked authoritativ
 Release tables:
 
 - `results/release/2026-04-19-option1/source/authoritative-summary.csv`
+- `results/release/2026-04-19-option1/jenny-group-report.md`
 - `results/release/2026-04-19-option1/topline-summary.md`
+- `results/release/2026-04-19-option1/benchmark-catalog.csv`
 - `results/release/2026-04-19-option1/model-summary.csv`
+- `results/release/2026-04-19-option1/model-roster.csv`
+- `results/release/2026-04-19-option1/future-model-plan.csv`
 - `results/release/2026-04-19-option1/benchmark-summary.csv`
 - `results/release/2026-04-19-option1/faithful-metrics.csv`
 - `results/release/2026-04-19-option1/coverage-matrix.csv`
