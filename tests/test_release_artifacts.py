@@ -36,8 +36,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     expected_release_files = {
         "README.md",
         "benchmark-catalog.csv",
+        "benchmark-comparison.csv",
         "benchmark-summary.csv",
         "coverage-matrix.csv",
+        "family-size-progress.csv",
         "faithful-metrics.csv",
         "future-model-plan.csv",
         "jenny-group-report.md",
@@ -58,6 +60,7 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     expected_figures = {
         "option1_accuracy_heatmap.svg",
+        "option1_benchmark_accuracy_bars.svg",
         "option1_coverage_matrix.svg",
         "option1_sample_volume.svg",
     }
@@ -69,11 +72,19 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
+    assert manifest["target_matrix"]["family_size_benchmark_cells"] == 75
     assert manifest["entry_points"]["report"].endswith("jenny-group-report.md")
     assert manifest["entry_points"]["supplementary_progress"].endswith("supplementary-model-progress.csv")
+    assert manifest["entry_points"]["family_size_progress"].endswith("family-size-progress.csv")
 
     with (release_dir / "supplementary-model-progress.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         assert reader.fieldnames is not None
         assert "completed_benchmark_lines" in reader.fieldnames
         assert "missing_benchmark_lines" in reader.fieldnames
+
+    with (release_dir / "family-size-progress.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        rows = list(reader)
+    assert len(rows) == 15
+    assert any(row["line_label"] == "Gemma-L" and row["smid"] == "live" for row in rows)

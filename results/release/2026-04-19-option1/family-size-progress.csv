@@ -1,0 +1,16 @@
+family,size_slot,line_label,text_route,vision_route,unimoral,smid,value_kaleidoscope,ccd_bench,denevil,summary_note
+Qwen,S,Qwen-S,openrouter/qwen/qwen3-8b,openrouter/qwen/qwen3-vl-8b-instruct,done,done,done,done,proxy,Frozen Option 1 line.
+Qwen,M,Qwen-M,openrouter/qwen/qwen3-14b,TBD,queue,tbd,queue,queue,queue,Text route is queued. No medium vision route is locked for SMID yet.
+Qwen,L,Qwen-L,openrouter/qwen/qwen3-32b,openrouter/qwen/qwen3-vl-32b-instruct,queue,queue,queue,queue,queue,Text and vision checkpoints are both queued.
+MiniMax,S,MiniMax-S,openrouter/minimax/minimax-m2.1,openrouter/minimax/minimax-01,error,error,error,error,error,"Formal small-model run was attempted, but the line hit OpenRouter key-limit errors and is not counted as complete."
+MiniMax,M,MiniMax-M,openrouter/minimax/minimax-m2.5,TBD,queue,tbd,queue,queue,queue,Text route is queued. Separate medium vision route is not fixed yet.
+MiniMax,L,MiniMax-L,openrouter/minimax/minimax-m2.7,TBD,queue,tbd,queue,queue,queue,Text route is queued. Separate large vision route is not fixed yet.
+DeepSeek,S,DeepSeek-S,TBD,-,tbd,-,tbd,tbd,tbd,A smaller DeepSeek baseline has not been frozen yet. No vision route is in scope.
+DeepSeek,M,DeepSeek-M,openrouter/deepseek/deepseek-r1-distill-qwen-32b,-,queue,-,queue,queue,queue,Medium text route is queued. No vision route is in scope.
+DeepSeek,L,DeepSeek-L,openrouter/deepseek/deepseek-chat-v3.1,-,done,-,done,done,proxy,Frozen Option 1 large-class text line. No SMID vision route was included.
+Llama,S,Llama-S,openrouter/meta-llama/llama-3.2-11b-vision-instruct,openrouter/meta-llama/llama-3.2-11b-vision-instruct,done,done,done,done,proxy,"Complete locally across all five papers, but not folded into the frozen Option 1 counts."
+Llama,M,Llama-M,openrouter/meta-llama/llama-3.3-70b-instruct,-,queue,-,queue,queue,queue,Text-only medium route is queued. No SMID run is planned on this line.
+Llama,L,Llama-L,openrouter/meta-llama/llama-4-maverick,openrouter/meta-llama/llama-4-maverick,queue,queue,queue,queue,queue,Large text and SMID vision checkpoints are both queued.
+Gemma,S,Gemma-S,openrouter/google/gemma-3-4b-it,openrouter/google/gemma-3-4b-it,done,done,done,done,proxy,Frozen Option 1 recovery line.
+Gemma,M,Gemma-M,openrouter/google/gemma-3-12b-it,openrouter/google/gemma-3-12b-it,queue,queue,queue,queue,queue,Text and SMID queues are both approved but not started yet.
+Gemma,L,Gemma-L,openrouter/google/gemma-3-27b-it,openrouter/google/gemma-3-27b-it,done,live,live,queue,queue,Large Gemma is the actively running family-size checkpoint right now.

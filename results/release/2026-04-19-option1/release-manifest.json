@@ -4,13 +4,20 @@
   "source_snapshot": "results/release/2026-04-19-option1/source/authoritative-summary.csv",
   "report_metadata": {
     "owner": "Jenny Zhu",
-    "date": "2026-04-19",
-    "purpose": "Group / mentor-facing report aligned to the April 14, 2026 moral-psych benchmark plan.",
+    "date": "2026-04-20",
+    "frozen_snapshot_date": "2026-04-19",
+    "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "operations_note": "Active text and image family-size expansion queues continue alongside the closed April 19, 2026 release snapshot.",
+    "operations_note": "This repo was updated on April 20, 2026. The frozen public snapshot remains Option 1 from April 19, 2026, while larger family-size queues continue locally.",
     "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml",
     "ci_last_verified_run_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
+  },
+  "target_matrix": {
+    "benchmarks": 5,
+    "model_families": 5,
+    "size_slots": 3,
+    "family_size_benchmark_cells": 75
   },
   "counts": {
     "authoritative_tasks": 19,
@@ -130,8 +137,11 @@
     "manifest": "results/release/2026-04-19-option1/release-manifest.json",
     "benchmark_catalog": "results/release/2026-04-19-option1/benchmark-catalog.csv",
     "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
+    "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
+    "benchmark_comparison": "results/release/2026-04-19-option1/benchmark-comparison.csv",
     "coverage_figure": "figures/release/option1_coverage_matrix.svg",
     "accuracy_figure": "figures/release/option1_accuracy_heatmap.svg",
+    "benchmark_bar_figure": "figures/release/option1_benchmark_accuracy_bars.svg",
     "sample_volume_figure": "figures/release/option1_sample_volume.svg"
   },
   "tables": [
@@ -144,6 +154,8 @@
     "model-summary.csv",
     "model-roster.csv",
     "supplementary-model-progress.csv",
+    "family-size-progress.csv",
+    "benchmark-comparison.csv",
     "future-model-plan.csv",
     "benchmark-summary.csv",
     "faithful-metrics.csv",
@@ -152,12 +164,14 @@
   "figures": [
     "figures/release/option1_coverage_matrix.svg",
     "figures/release/option1_accuracy_heatmap.svg",
+    "figures/release/option1_benchmark_accuracy_bars.svg",
     "figures/release/option1_sample_volume.svg"
   ],
   "interpretation_guardrails": [
-    "Denevil is represented only by the explicit FULCRA-backed proxy task in this release.",
+    "Denevil is represented only by the explicit local proxy task in this release.",
     "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
     "The completed local Llama small line is supplementary and is not counted in the closed Option 1 totals.",
+    "The MiniMax small line has a formal attempt on disk, but the current run failed and is not yet a usable comparison point.",
     "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration."
   ]
 }

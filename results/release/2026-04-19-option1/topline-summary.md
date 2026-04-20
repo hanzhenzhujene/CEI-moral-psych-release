@@ -5,7 +5,7 @@
 - proxy tasks: `3`
 - total evaluated samples: `302,776`
 - closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`
-- key methodological caveat: `Denevil` is represented by a `FULCRA`-backed proxy task rather than a benchmark-faithful `MoralPrompt` run
+- key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup
 - supplementary local progress outside the closed release: `Llama` small is complete across `5` papers / `7` tasks and is intentionally excluded from the authoritative `19 / 19` totals
 
 ## Model Summary

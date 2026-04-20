@@ -43,8 +43,10 @@ smoke:
 clean-release:
 	rm -f $(RELEASE_DIR)/README.md \
 		$(RELEASE_DIR)/benchmark-catalog.csv \
+		$(RELEASE_DIR)/benchmark-comparison.csv \
 		$(RELEASE_DIR)/benchmark-summary.csv \
 		$(RELEASE_DIR)/coverage-matrix.csv \
+		$(RELEASE_DIR)/family-size-progress.csv \
 		$(RELEASE_DIR)/faithful-metrics.csv \
 		$(RELEASE_DIR)/future-model-plan.csv \
 		$(RELEASE_DIR)/jenny-group-report.md \

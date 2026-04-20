@@ -62,9 +62,11 @@ Release tables:
 - `results/release/2026-04-19-option1/jenny-group-report.md`
 - `results/release/2026-04-19-option1/topline-summary.md`
 - `results/release/2026-04-19-option1/benchmark-catalog.csv`
+- `results/release/2026-04-19-option1/benchmark-comparison.csv`
 - `results/release/2026-04-19-option1/model-summary.csv`
 - `results/release/2026-04-19-option1/model-roster.csv`
 - `results/release/2026-04-19-option1/supplementary-model-progress.csv`
+- `results/release/2026-04-19-option1/family-size-progress.csv`
 - `results/release/2026-04-19-option1/future-model-plan.csv`
 - `results/release/2026-04-19-option1/benchmark-summary.csv`
 - `results/release/2026-04-19-option1/faithful-metrics.csv`
@@ -75,6 +77,7 @@ Figures:
 
 - `figures/release/option1_coverage_matrix.svg`
 - `figures/release/option1_accuracy_heatmap.svg`
+- `figures/release/option1_benchmark_accuracy_bars.svg`
 - `figures/release/option1_sample_volume.svg`
 
 ## Refresh the Tracked Authoritative Snapshot
@@ -128,4 +131,4 @@ Two points are especially important for correct interpretation:
 
 - `Denevil` is currently a `FULCRA`-backed proxy line rather than a benchmark-faithful `MoralPrompt` reproduction.
 - `Llama` small is complete locally across all five benchmark papers, but it is tracked as supplementary local evidence rather than folded into the closed `Option 1` counts.
-- `MiniMax` remains outside the closed release artifacts and still needs its first formal local run.
+- `MiniMax` small has a formal local attempt on disk, but the current run failed and should not yet be treated as a completed comparison point.
