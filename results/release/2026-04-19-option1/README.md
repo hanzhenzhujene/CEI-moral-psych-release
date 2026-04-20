@@ -15,7 +15,7 @@ This directory contains the tracked, publication-facing outputs for Jenny Zhu's 
 | Supplementary local completion outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `5` papers / `7` tasks |
 | Prepared but not yet completed | `MiniMax` small route via `minimax-m2.1 + minimax-01` |
 | Provider / temperature | `OpenRouter`, `temperature=0` |
-| Current cost note | $33.25 current spend / budget note provided by Jenny on April 19, 2026. |
+| Current cost note | $35 baseline spend before the active family-size expansion launch on April 19, 2026, plus an approved image add-on queue projected at about $2.42 total (below the $5 cap). |
 | CI reference | [Workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); last verified successful run: [run 24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 
 ## Open These First
@@ -36,6 +36,30 @@ make audit
 ```
 
 `make release` rebuilds the tracked public package from the committed source snapshot. `make audit` is the one-command public QA gate that runs tests and rebuilds the package together.
+
+## Active Expansion Queues
+
+- text-only family-size expansion: `results/inspect/full-runs/2026-04-19-family-size-text-expansion`
+- image add-on queue under the $5 cap: `results/inspect/full-runs/2026-04-19-family-size-image-expansion`
+- status labels: `Active` = running now, `Queued` = approved and waiting, `Complete` = finished
+
+## Image Add-On Under The $5 Cap
+
+These image jobs are limited to `SMID`, use only routes with a clean medium or large vision-capable mapping, and stay below a combined projected add-on spend of about `$2.42`.
+
+| Family | Size slot | Image route | Benchmark | Estimated full-run cost | Status | Note |
+| --- | --- | --- | --- | ---: | --- | --- |
+| `Gemma` | Large | `openrouter/google/gemma-3-27b-it` | `SMID` | `$0.06` | Active | Cheapest selected image add-on route; running first in the capped SMID queue. |
+| `Gemma` | Medium | `openrouter/google/gemma-3-12b-it` | `SMID` | `$0.07` | Queued | Queued after Gemma 27B in the same image-only run. |
+| `Qwen` | Large | `openrouter/qwen/qwen3-vl-32b-instruct` | `SMID` | `$0.16` | Queued | Large Qwen image checkpoint under the same $5 cap. |
+| `Llama` | Large | `openrouter/meta-llama/llama-4-maverick` | `SMID` | `$2.14` | Queued | Selected because the projected full SMID pass stays below the cap. |
+
+Excluded from this capped image queue:
+
+- DeepSeek: no vision route in the current family-size plan.
+- Qwen medium: no clean Qwen medium VL route was locked for this pass.
+- Llama medium: the chosen 70B route is text-only.
+- MiniMax image: the shared `minimax-01` route projects to about $3.49 by itself and does not map cleanly onto separate medium / large size slots.
 
 ## Files
 

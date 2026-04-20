@@ -24,9 +24,12 @@ REPORT_DATE_ISO = "2026-04-19"
 REPORT_PURPOSE = "Group / mentor-facing report aligned to the April 14, 2026 moral-psych benchmark plan."
 REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
-REPORT_COST_NOTE = "$33.25 current spend / budget note provided by Jenny on April 19, 2026."
+REPORT_COST_NOTE = "$35 baseline spend before the active family-size expansion launch on April 19, 2026, plus an approved image add-on queue projected at about $2.42 total (below the $5 cap)."
 CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 CI_RUN_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
+TEXT_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-text-expansion"
+IMAGE_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-image-expansion"
+IMAGE_EXPANSION_PROJECTED_COST = 2.42
 
 MODEL_ORDER = ["Qwen", "DeepSeek", "Gemma"]
 BENCHMARK_ORDER = ["UniMoral", "SMID", "Value Kaleidoscope", "CCD-Bench", "Denevil"]
@@ -149,47 +152,93 @@ FUTURE_MODEL_PLAN = [
         "family": "Qwen",
         "closed_release_status": "Included in Option 1",
         "current_route": "qwen3-8b + qwen3-vl-8b-instruct",
-        "small_candidate": "Current 8B text + 8B vision routes",
-        "medium_candidate": "TBD with group roster",
-        "large_candidate": "TBD with group roster",
-        "next_step": "Freeze exact medium / large IDs before scaling.",
+        "small_candidate": "Current 8B text + 8B vision routes complete in the release",
+        "medium_candidate": "openrouter/qwen/qwen3-14b scheduled in the cost-ordered non-image expansion run",
+        "large_candidate": "openrouter/qwen/qwen3-32b scheduled after qwen3-14b in the same text-only run",
+        "next_step": "Let the medium / large text-only lines finish, then decide whether Qwen also needs larger vision checkpoints.",
     },
     {
         "family": "MiniMax",
         "closed_release_status": "Prepared only, not in Option 1",
         "current_route": "minimax-m2.1 + minimax-01 launcher present",
-        "small_candidate": "Current launcher wired; no formal local completion yet",
-        "medium_candidate": "TBD with group roster",
-        "large_candidate": "TBD with group roster",
-        "next_step": "Run the small route formally, then choose medium / large equivalents.",
+        "small_candidate": "Current small hybrid launcher exists, but the formal small line is still not closed",
+        "medium_candidate": "openrouter/minimax/minimax-m2.5 scheduled in the non-image expansion run",
+        "large_candidate": "openrouter/minimax/minimax-m2.7 scheduled last among the current cost-ordered text-only jobs",
+        "next_step": "After the medium / large text jobs finish, decide whether to formalize the small hybrid line too.",
     },
     {
         "family": "DeepSeek",
         "closed_release_status": "Included in Option 1",
         "current_route": "deepseek-chat-v3.1",
-        "small_candidate": "TBD with group roster",
-        "medium_candidate": "TBD with group roster",
-        "large_candidate": "TBD with group roster",
-        "next_step": "Freeze a size-tier mapping because provider naming is not parameter-count explicit here.",
+        "small_candidate": "Closed release already uses a large-class DeepSeek route; a smaller baseline is still not frozen",
+        "medium_candidate": "openrouter/deepseek/deepseek-r1-distill-qwen-32b scheduled for the non-image expansion run",
+        "large_candidate": "openrouter/deepseek/deepseek-chat-v3.1 already complete in the closed release",
+        "next_step": "If the group wants a stricter S/M/L ladder, add a smaller DeepSeek distill route after the current medium run.",
     },
     {
         "family": "Llama",
         "closed_release_status": "Completed locally, not promoted into Option 1",
         "current_route": "llama-3.2-11b-vision-instruct completed locally",
         "small_candidate": "Current 11B route complete across 5 papers / 7 tasks",
-        "medium_candidate": "TBD with group roster",
-        "large_candidate": "TBD with group roster",
-        "next_step": "Decide whether to promote the completed local line into the next tracked release, then lock medium / large IDs with the group.",
+        "medium_candidate": "openrouter/meta-llama/llama-3.3-70b-instruct scheduled in the non-image expansion run",
+        "large_candidate": "openrouter/meta-llama/llama-4-maverick scheduled after the 70B line in the same text-only queue",
+        "next_step": "Let the 70B and Maverick text-only lines finish, then decide whether to promote Llama into the next authoritative snapshot.",
     },
     {
         "family": "Gemma",
         "closed_release_status": "Included in Option 1",
         "current_route": "gemma-3-4b-it",
         "small_candidate": "Current 4B route",
-        "medium_candidate": "TBD with group roster",
-        "large_candidate": "TBD with group roster",
-        "next_step": "Add larger Gemma checkpoints only after the family-wide roster is frozen.",
+        "medium_candidate": "openrouter/google/gemma-3-12b-it scheduled in the cost-ordered non-image expansion run",
+        "large_candidate": "openrouter/google/gemma-3-27b-it scheduled first in the same text-only queue",
+        "next_step": "Use the 12B and 27B text-only results to decide whether larger Gemma vision work is worth the extra cost.",
     },
+]
+
+IMAGE_EXPANSION_PLAN = [
+    {
+        "family": "Gemma",
+        "size_slot": "Large",
+        "model": "openrouter/google/gemma-3-27b-it",
+        "benchmark": "SMID",
+        "estimated_cost": 0.06,
+        "status": "Active",
+        "note": "Cheapest selected image add-on route; running first in the capped SMID queue.",
+    },
+    {
+        "family": "Gemma",
+        "size_slot": "Medium",
+        "model": "openrouter/google/gemma-3-12b-it",
+        "benchmark": "SMID",
+        "estimated_cost": 0.07,
+        "status": "Queued",
+        "note": "Queued after Gemma 27B in the same image-only run.",
+    },
+    {
+        "family": "Qwen",
+        "size_slot": "Large",
+        "model": "openrouter/qwen/qwen3-vl-32b-instruct",
+        "benchmark": "SMID",
+        "estimated_cost": 0.16,
+        "status": "Queued",
+        "note": "Large Qwen image checkpoint under the same $5 cap.",
+    },
+    {
+        "family": "Llama",
+        "size_slot": "Large",
+        "model": "openrouter/meta-llama/llama-4-maverick",
+        "benchmark": "SMID",
+        "estimated_cost": 2.14,
+        "status": "Queued",
+        "note": "Selected because the projected full SMID pass stays below the cap.",
+    },
+]
+
+IMAGE_EXPANSION_EXCLUSIONS = [
+    "DeepSeek: no vision route in the current family-size plan.",
+    "Qwen medium: no clean Qwen medium VL route was locked for this pass.",
+    "Llama medium: the chosen 70B route is text-only.",
+    "MiniMax image: the shared `minimax-01` route projects to about $3.49 by itself and does not map cleanly onto separate medium / large size slots.",
 ]
 
 SUPPLEMENTARY_MODEL_PROGRESS = [
@@ -241,7 +290,7 @@ def read_rows(path: Path) -> list[dict[str, Any]]:
 def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -747,28 +796,58 @@ def build_release_readme(
         "",
         "`make release` rebuilds the tracked public package from the committed source snapshot. `make audit` is the one-command public QA gate that runs tests and rebuilds the package together.",
         "",
-        "## Files",
+        "## Active Expansion Queues",
         "",
-        "- `source/authoritative-summary.csv`: tracked source snapshot used to regenerate this release package",
-        "- `source/README.md`: provenance note for the tracked source snapshot",
-        "- `jenny-group-report.md`: mentor-ready narrative report with benchmark, model, and future-plan tables",
-        "- `topline-summary.md`: concise release narrative and topline counts",
-        "- `topline-summary.json`: machine-readable counterpart of the topline narrative",
-        "- `release-manifest.json`: machine-readable index of release files, counts, and interpretation guardrails",
-        "- `benchmark-catalog.csv`: benchmark registry with papers, dataset links, modalities, and release scope",
-        "- `model-summary.csv`: per-model task counts, sample counts, and macro accuracy",
-        "- `model-roster.csv`: exact OpenRouter model routes used in the closed release",
-        "- `supplementary-model-progress.csv`: local expansion status for families intentionally kept outside the closed release counts",
-        "- `future-model-plan.csv`: current family-by-size expansion plan",
-        "- `benchmark-summary.csv`: per-benchmark coverage and sample volume",
-        "- `faithful-metrics.csv`: task-level metrics for benchmark-faithful tasks",
-        "- `coverage-matrix.csv`: matrix used to render the release coverage figure",
+        f"- text-only family-size expansion: `{TEXT_EXPANSION_RUN_PATH}`",
+        f"- image add-on queue under the $5 cap: `{IMAGE_EXPANSION_RUN_PATH}`",
+        "- status labels: `Active` = running now, `Queued` = approved and waiting, `Complete` = finished",
         "",
-        "## Benchmark Registry",
+        "## Image Add-On Under The $5 Cap",
         "",
-        "| Benchmark | Paper | Dataset / access | Modality | Tasks in repo | Current release scope |",
-        "| --- | --- | --- | --- | --- | --- |",
+        f"These image jobs are limited to `SMID`, use only routes with a clean medium or large vision-capable mapping, and stay below a combined projected add-on spend of about `${IMAGE_EXPANSION_PROJECTED_COST:.2f}`.",
+        "",
+        "| Family | Size slot | Image route | Benchmark | Estimated full-run cost | Status | Note |",
+        "| --- | --- | --- | --- | ---: | --- | --- |",
     ]
+    for row in IMAGE_EXPANSION_PLAN:
+        lines.append(
+            f"| `{row['family']}` | {row['size_slot']} | `{row['model']}` | `{row['benchmark']}` | `${row['estimated_cost']:.2f}` | {row['status']} | {row['note']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "Excluded from this capped image queue:",
+            "",
+        ]
+    )
+    for note in IMAGE_EXPANSION_EXCLUSIONS:
+        lines.append(f"- {note}")
+    lines.extend(
+        [
+            "",
+            "## Files",
+            "",
+            "- `source/authoritative-summary.csv`: tracked source snapshot used to regenerate this release package",
+            "- `source/README.md`: provenance note for the tracked source snapshot",
+            "- `jenny-group-report.md`: mentor-ready narrative report with benchmark, model, and future-plan tables",
+            "- `topline-summary.md`: concise release narrative and topline counts",
+            "- `topline-summary.json`: machine-readable counterpart of the topline narrative",
+            "- `release-manifest.json`: machine-readable index of release files, counts, and interpretation guardrails",
+            "- `benchmark-catalog.csv`: benchmark registry with papers, dataset links, modalities, and release scope",
+            "- `model-summary.csv`: per-model task counts, sample counts, and macro accuracy",
+            "- `model-roster.csv`: exact OpenRouter model routes used in the closed release",
+            "- `supplementary-model-progress.csv`: local expansion status for families intentionally kept outside the closed release counts",
+            "- `future-model-plan.csv`: current family-by-size expansion plan",
+            "- `benchmark-summary.csv`: per-benchmark coverage and sample volume",
+            "- `faithful-metrics.csv`: task-level metrics for benchmark-faithful tasks",
+            "- `coverage-matrix.csv`: matrix used to render the release coverage figure",
+            "",
+            "## Benchmark Registry",
+            "",
+            "| Benchmark | Paper | Dataset / access | Modality | Tasks in repo | Current release scope |",
+            "| --- | --- | --- | --- | --- | --- |",
+        ]
+    )
     for row in benchmark_catalog:
         dataset_cell = row["dataset_label"]
         if row["dataset_url"]:
@@ -870,6 +949,12 @@ def build_jenny_group_report(
         f"| Current cost note | {REPORT_COST_NOTE} |",
         f"| CI status reference | {markdown_link('CI workflow', CI_WORKFLOW_URL)}; latest verified passing run: {markdown_link('24634450927', CI_RUN_URL)} |",
         f"| Total evaluated samples in this release | `{total_samples:,}` |",
+        "",
+        "## Active Local Expansion Queues",
+        "",
+        f"- text-only family-size expansion: `{TEXT_EXPANSION_RUN_PATH}`",
+        f"- image add-on queue under the $5 cap: `{IMAGE_EXPANSION_RUN_PATH}`",
+        "- status labels: `Active` = running now, `Queued` = approved and waiting, `Complete` = finished",
         "",
         "## The Five Papers / Benchmarks Under Test",
         "",
@@ -976,6 +1061,30 @@ def build_jenny_group_report(
         lines.append(
             f"| `{row['family']}` | {row['closed_release_status']} | {row['current_route']} | {row['small_candidate']} | {row['medium_candidate']} | {row['large_candidate']} | {row['next_step']} |"
         )
+    lines.extend(
+        [
+            "",
+            "## Image Add-On Under The $5 Cap",
+            "",
+            f"The active image queue only targets `SMID`, only uses medium / large routes with a clean vision mapping, and stays below a combined projected add-on spend of about `${IMAGE_EXPANSION_PROJECTED_COST:.2f}`.",
+            "",
+            "| Family | Size slot | Image route | Estimated full-run cost | Status | Note |",
+            "| --- | --- | --- | ---: | --- | --- |",
+        ]
+    )
+    for row in IMAGE_EXPANSION_PLAN:
+        lines.append(
+            f"| `{row['family']}` | {row['size_slot']} | `{row['model']}` | `${row['estimated_cost']:.2f}` | {row['status']} | {row['note']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "Excluded from this image queue:",
+            "",
+        ]
+    )
+    for note in IMAGE_EXPANSION_EXCLUSIONS:
+        lines.append(f"- {note}")
     lines.extend(
         [
             "",

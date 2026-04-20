@@ -8,7 +8,7 @@
     "purpose": "Group / mentor-facing report aligned to the April 14, 2026 moral-psych benchmark plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "cost_note": "$33.25 current spend / budget note provided by Jenny on April 19, 2026.",
+    "cost_note": "$35 baseline spend before the active family-size expansion launch on April 19, 2026, plus an approved image add-on queue projected at about $2.42 total (below the $5 cap).",
     "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml",
     "ci_last_verified_run_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
   },

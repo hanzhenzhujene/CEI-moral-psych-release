@@ -16,6 +16,8 @@
 - `denevil_proxy_formal_runs.sh`: formal proxy launcher for the `FULCRA`-backed `Denevil` path.
 - `full_option1_runs_llama_small.sh`: current `Llama 3.2 11B Vision` small-model launcher.
 - `full_option1_runs_minimax_small.sh`: current small-model `MiniMax` hybrid launcher.
+- `family_size_text_expansion.sh`: sequential cheapest-first launcher for the active non-image family-by-size expansion (`Gemma`, `Qwen`, `Llama`, `MiniMax`, plus a `DeepSeek` medium distill line).
+- `family_size_image_expansion.sh`: sequential `SMID`-only image add-on launcher for the selected medium / large vision routes that stay under the $5 cap.
 
 These launchers are historical and operationally useful, but the public release package should be generated from `build_release_artifacts.py` rather than by reading raw run folders directly.
 
