@@ -29,7 +29,9 @@ REPORT_TEMPERATURE = "0"
 REPORT_CURRENT_COST = "$35"
 REPORT_STATUS_NOTE = (
     "This repo was updated on April 20, 2026. "
-    "The frozen public snapshot remains Option 1 from April 19, 2026, while larger family-size queues continue locally."
+    "The frozen public snapshot remains Option 1 from April 19, 2026. "
+    "The family-size image queue has completed, the active text queue is currently on the Gemma-L Denevil proxy task, "
+    "and the Qwen-L SMID recovery route is now prepared with qwen2.5-vl-72b plus a non-Alibaba provider allowlist."
 )
 CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 CI_RUN_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
@@ -161,8 +163,8 @@ FUTURE_MODEL_PLAN = [
         "current_route": "qwen3-8b + qwen3-vl-8b-instruct",
         "small_candidate": "Current 8B text + 8B vision routes complete in the release",
         "medium_candidate": "openrouter/qwen/qwen3-14b scheduled in the active non-image expansion run",
-        "large_candidate": "openrouter/qwen/qwen3-32b scheduled after qwen3-14b in the same text-only run",
-        "next_step": "Let the medium / large text-only lines finish, then decide whether Qwen also needs larger vision checkpoints.",
+        "large_candidate": "text: openrouter/qwen/qwen3-32b; SMID recovery prep: openrouter/qwen/qwen2.5-vl-72b-instruct",
+        "next_step": "Run the prepared qwen2.5-vl-72b SMID smoke, then promote it to the full Qwen-L vision recovery if the provider-routed smoke stays clean.",
     },
     {
         "family": "MiniMax",
@@ -208,32 +210,32 @@ IMAGE_EXPANSION_PLAN = [
         "size_slot": "Large",
         "model": "openrouter/google/gemma-3-27b-it",
         "benchmark": "SMID",
-        "status": "Active",
-        "note": "First active image checkpoint in the current SMID queue.",
+        "status": "Completed",
+        "note": "Completed successfully in the family-size image queue.",
     },
     {
         "family": "Gemma",
         "size_slot": "Medium",
         "model": "openrouter/google/gemma-3-12b-it",
         "benchmark": "SMID",
-        "status": "Queued",
-        "note": "Queued after Gemma 27B in the same image-only run.",
+        "status": "Completed",
+        "note": "Completed successfully in the family-size image queue.",
     },
     {
         "family": "Qwen",
         "size_slot": "Large",
         "model": "openrouter/qwen/qwen3-vl-32b-instruct",
         "benchmark": "SMID",
-        "status": "Queued",
-        "note": "Scheduled large Qwen image checkpoint.",
+        "status": "Error",
+        "note": "Provider-side image moderation blocked the Alibaba-backed route after 59 / 2,941 samples on both SMID tasks. A safer recovery route is now prepared via openrouter/qwen/qwen2.5-vl-72b-instruct with a non-Alibaba provider allowlist.",
     },
     {
         "family": "Llama",
         "size_slot": "Large",
         "model": "openrouter/meta-llama/llama-4-maverick",
         "benchmark": "SMID",
-        "status": "Queued",
-        "note": "Scheduled large Llama image checkpoint.",
+        "status": "Completed",
+        "note": "Completed successfully in the family-size image queue.",
     },
 ]
 
@@ -307,13 +309,13 @@ FAMILY_SIZE_PROGRESS = [
         "size_slot": "L",
         "line_label": "Qwen-L",
         "text_route": "openrouter/qwen/qwen3-32b",
-        "vision_route": "openrouter/qwen/qwen3-vl-32b-instruct",
+        "vision_route": "openrouter/qwen/qwen2.5-vl-72b-instruct (recovery prep)",
         "unimoral": "queue",
-        "smid": "queue",
+        "smid": "error",
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Text and vision checkpoints are both queued.",
+        "summary_note": "Large text route is still queued. The first Qwen-L SMID attempt failed quickly on Alibaba moderation, and a safer qwen2.5-vl-72b recovery route is now prepared with non-Alibaba provider routing.",
     },
     {
         "family": "MiniMax",
@@ -426,11 +428,11 @@ FAMILY_SIZE_PROGRESS = [
         "text_route": "openrouter/meta-llama/llama-4-maverick",
         "vision_route": "openrouter/meta-llama/llama-4-maverick",
         "unimoral": "queue",
-        "smid": "queue",
+        "smid": "done",
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Large text and SMID vision checkpoints are both queued.",
+        "summary_note": "Large Llama SMID is complete. The text route is still queued.",
     },
     {
         "family": "Gemma",
@@ -452,11 +454,11 @@ FAMILY_SIZE_PROGRESS = [
         "text_route": "openrouter/google/gemma-3-12b-it",
         "vision_route": "openrouter/google/gemma-3-12b-it",
         "unimoral": "queue",
-        "smid": "queue",
+        "smid": "done",
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Text and SMID queues are both approved but not started yet.",
+        "summary_note": "Gemma-M SMID is complete. The text route is still queued behind the active Gemma-L run.",
     },
     {
         "family": "Gemma",
@@ -465,11 +467,11 @@ FAMILY_SIZE_PROGRESS = [
         "text_route": "openrouter/google/gemma-3-27b-it",
         "vision_route": "openrouter/google/gemma-3-27b-it",
         "unimoral": "done",
-        "smid": "live",
-        "value_kaleidoscope": "live",
-        "ccd_bench": "queue",
-        "denevil": "queue",
-        "summary_note": "Large Gemma is the actively running family-size checkpoint right now.",
+        "smid": "done",
+        "value_kaleidoscope": "done",
+        "ccd_bench": "done",
+        "denevil": "live",
+        "summary_note": "Large Gemma has finished UniMoral, SMID, Value Kaleidoscope, and CCD-Bench. Only the Denevil proxy task is still live.",
     },
 ]
 

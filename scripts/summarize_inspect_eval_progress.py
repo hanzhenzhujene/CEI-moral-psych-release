@@ -31,6 +31,13 @@ class EvalProgress:
     error_message: str = ""
 
 
+def _infer_family(eval_path: Path, log_root: Path) -> str:
+    parts = eval_path.relative_to(log_root).parts
+    if len(parts) >= 2:
+        return parts[0]
+    return eval_path.parent.name
+
+
 def _read_json(zf: ZipFile, member: str) -> dict[str, Any] | list[Any] | None:
     try:
         return json.loads(zf.read(member).decode("utf-8"))
@@ -43,7 +50,7 @@ def _iso_from_epoch(epoch_seconds: float) -> str:
 
 
 def _parse_eval(eval_path: Path, log_root: Path) -> EvalProgress:
-    family = eval_path.relative_to(log_root).parts[0]
+    family = _infer_family(eval_path, log_root)
     artifact_mb = eval_path.stat().st_size / (1024 * 1024)
     created_at = _iso_from_epoch(eval_path.stat().st_mtime)
 

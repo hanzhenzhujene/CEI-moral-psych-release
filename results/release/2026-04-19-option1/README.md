@@ -23,7 +23,7 @@ It separates two things clearly:
 | Extra completed local line outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `5` papers / `7` tasks |
 | MiniMax small status | formal attempt exists, but the current run failed and is not counted as complete |
 | Provider / temperature | `OpenRouter`, `temperature=0` |
-| Current operations note | This repo was updated on April 20, 2026. The frozen public snapshot remains Option 1 from April 19, 2026, while larger family-size queues continue locally. |
+| Current operations note | This repo was updated on April 20, 2026. The frozen public snapshot remains Option 1 from April 19, 2026. The family-size image queue has completed, the active text queue is currently on the Gemma-L Denevil proxy task, and the Qwen-L SMID recovery route is now prepared with qwen2.5-vl-72b plus a non-Alibaba provider allowlist. |
 | CI reference | [Workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); last verified successful run: [run 24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 
 ## Open These First
@@ -53,7 +53,7 @@ This is the cleanest repo-level summary of where the full `5 x 5 x 3` plan stand
 | --- | --- | --- | --- | --- | --- | --- |
 | `Qwen-S` | done | done | done | done | proxy | Frozen Option 1 line. |
 | `Qwen-M` | queue | tbd | queue | queue | queue | Text route is queued. No medium vision route is locked for SMID yet. |
-| `Qwen-L` | queue | queue | queue | queue | queue | Text and vision checkpoints are both queued. |
+| `Qwen-L` | queue | error | queue | queue | queue | Large text route is still queued. The first Qwen-L SMID attempt failed quickly on Alibaba moderation, and a safer qwen2.5-vl-72b recovery route is now prepared with non-Alibaba provider routing. |
 | `MiniMax-S` | error | error | error | error | error | Formal small-model run was attempted, but the line hit OpenRouter key-limit errors and is not counted as complete. |
 | `MiniMax-M` | queue | tbd | queue | queue | queue | Text route is queued. Separate medium vision route is not fixed yet. |
 | `MiniMax-L` | queue | tbd | queue | queue | queue | Text route is queued. Separate large vision route is not fixed yet. |
@@ -62,10 +62,10 @@ This is the cleanest repo-level summary of where the full `5 x 5 x 3` plan stand
 | `DeepSeek-L` | done | - | done | done | proxy | Frozen Option 1 large-class text line. No SMID vision route was included. |
 | `Llama-S` | done | done | done | done | proxy | Complete locally across all five papers, but not folded into the frozen Option 1 counts. |
 | `Llama-M` | queue | - | queue | queue | queue | Text-only medium route is queued. No SMID run is planned on this line. |
-| `Llama-L` | queue | queue | queue | queue | queue | Large text and SMID vision checkpoints are both queued. |
+| `Llama-L` | queue | done | queue | queue | queue | Large Llama SMID is complete. The text route is still queued. |
 | `Gemma-S` | done | done | done | done | proxy | Frozen Option 1 recovery line. |
-| `Gemma-M` | queue | queue | queue | queue | queue | Text and SMID queues are both approved but not started yet. |
-| `Gemma-L` | done | live | live | queue | queue | Large Gemma is the actively running family-size checkpoint right now. |
+| `Gemma-M` | queue | done | queue | queue | queue | Gemma-M SMID is complete. The text route is still queued behind the active Gemma-L run. |
+| `Gemma-L` | done | done | done | done | live | Large Gemma has finished UniMoral, SMID, Value Kaleidoscope, and CCD-Bench. Only the Denevil proxy task is still live. |
 
 ## Benchmark List
 

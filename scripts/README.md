@@ -18,6 +18,7 @@
 - `full_option1_runs_minimax_small.sh`: current small-model `MiniMax` hybrid launcher.
 - `family_size_text_expansion.sh`: sequential fixed-order launcher for the active non-image family-by-size expansion (`Gemma`, `Qwen`, `Llama`, `MiniMax`, plus a `DeepSeek` medium distill line).
 - `family_size_image_expansion.sh`: sequential `SMID`-only image expansion launcher for the selected medium / large vision routes.
+- `qwen_large_smid_recovery.sh`: safer `Qwen-L` `SMID` recovery launcher using `qwen2.5-vl-72b-instruct` plus explicit non-Alibaba provider routing.
 
 These launchers are historical and operationally useful, but the public release package should be generated from `build_release_artifacts.py` rather than by reading raw run folders directly.
 

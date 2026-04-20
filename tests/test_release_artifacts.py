@@ -94,4 +94,18 @@ def test_release_builder_emits_expected_files(tmp_path):
         reader = csv.DictReader(handle)
         rows = list(reader)
     assert len(rows) == 15
-    assert any(row["line_label"] == "Gemma-L" and row["smid"] == "live" for row in rows)
+    assert any(
+        row["line_label"] == "Gemma-L"
+        and row["smid"] == "done"
+        and row["value_kaleidoscope"] == "done"
+        and row["ccd_bench"] == "done"
+        and row["denevil"] == "live"
+        for row in rows
+    )
+    assert any(row["line_label"] == "Gemma-M" and row["smid"] == "done" for row in rows)
+    assert any(row["line_label"] == "Llama-L" and row["smid"] == "done" for row in rows)
+    assert any(row["line_label"] == "Qwen-L" and row["smid"] == "error" for row in rows)
+
+    report_text = (release_dir / "jenny-group-report.md").read_text(encoding="utf-8")
+    assert "qwen2.5-vl-72b-instruct" in report_text
+    assert "non-Alibaba provider routing" in report_text

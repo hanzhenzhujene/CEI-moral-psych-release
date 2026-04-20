@@ -79,6 +79,75 @@ print(datetime.now().astimezone().isoformat())
 PY
 }
 
+latest_eval_file() {
+  local job="$1"
+  local log_dir="$LOG_BASE/$job"
+  ls -1t "$log_dir"/*.eval 2>/dev/null | head -n 1 || true
+}
+
+show_live_eval_progress() {
+  local job="$1"
+  local eval_path
+  eval_path="$(latest_eval_file "$job")"
+  [[ -z "$eval_path" ]] && return 0
+
+  python3 - "$eval_path" <<'PY'
+from __future__ import annotations
+
+import json
+import sys
+from datetime import datetime
+from pathlib import Path
+from zipfile import BadZipFile, ZipFile
+
+eval_path = Path(sys.argv[1])
+
+
+def read_json(zf: ZipFile, member: str) -> dict | list | None:
+    try:
+        return json.loads(zf.read(member).decode("utf-8"))
+    except KeyError:
+        return None
+
+
+try:
+    with ZipFile(eval_path) as zf:
+        names = zf.namelist()
+        start = read_json(zf, "_journal/start.json") or {}
+        header = read_json(zf, "header.json") or {}
+        base = header or start
+        meta = base.get("eval", {}) if isinstance(base, dict) else {}
+        task = str(meta.get("task", eval_path.stem))
+        model = str(meta.get("model", ""))
+        total = int(meta.get("dataset", {}).get("samples", 0) or 0)
+        completed = sum(1 for name in names if name.startswith("samples/") and name.endswith(".json"))
+        updated_at = datetime.fromtimestamp(eval_path.stat().st_mtime).astimezone().isoformat()
+        status = str(header.get("status", "running")) if header else "running"
+
+        print(f"  live_eval: {eval_path.name}")
+        print(f"  live_task: {task}")
+        if model:
+            print(f"  live_model: {model}")
+        if total:
+            progress_pct = completed / total * 100.0
+            print(f"  persisted_progress: {completed}/{total} ({progress_pct:.1f}%)")
+            chunk_size = total // 10
+            if chunk_size and completed and completed % chunk_size == 0 and status == "running":
+                print("  note: Inspect writes this archive in chunked flushes, so file updates can pause while requests keep running.")
+        else:
+            print(f"  persisted_samples: {completed}")
+        print(f"  live_eval_updated_at: {updated_at}")
+
+        if header and status != "success":
+            error = header.get("error")
+            if isinstance(error, dict) and error.get("message"):
+                print(f"  live_error: {error['message']}")
+except BadZipFile:
+    print(f"  live_eval: {eval_path.name}")
+    print("  note: eval archive is still being finalized")
+PY
+}
+
 job_run_dir() {
   local job="$1"
   echo "$RUN_BASE/$job"
@@ -170,7 +239,7 @@ run_task() {
   if (
     set +e
     echo "[$start_at] START job=$job task=$task_name model=$model max_connections=$max_connections"
-    "${RUN_PREFIX[@]}" "$RUNNER" \
+    env PYTHONUNBUFFERED=1 "${RUN_PREFIX[@]}" "$RUNNER" \
       --tasks "$task_spec" \
       --model "$model" \
       --temperature 0 \
@@ -280,7 +349,7 @@ launch_master() {
 }
 
 show_status() {
-  local pid job run_dir status_file
+  local pid job run_dir status_file current_job
   echo "[master]"
   if [[ -f "$MASTER_PIDFILE" ]]; then
     pid="$(cat "$MASTER_PIDFILE")"
@@ -291,6 +360,8 @@ show_status() {
       echo "  state: stopped"
       echo "  pid: $pid"
     fi
+  elif [[ -f "$MASTER_STATUS_FILE" ]] && grep -q '^running:' "$MASTER_STATUS_FILE"; then
+    echo "  state: active_no_master_pid"
   else
     echo "  state: not_launched"
   fi
@@ -298,7 +369,8 @@ show_status() {
     echo "  status: $(cat "$MASTER_STATUS_FILE")"
   fi
   if [[ -f "$CURRENT_JOB_FILE" ]]; then
-    echo "  current_job: $(cat "$CURRENT_JOB_FILE")"
+    current_job="$(cat "$CURRENT_JOB_FILE")"
+    echo "  current_job: $current_job"
   fi
 
   while IFS= read -r job; do
@@ -314,6 +386,8 @@ show_status() {
     fi
     if [[ -f "$run_dir/job_done.txt" ]]; then
       echo "  completed_at: $(cat "$run_dir/job_done.txt")"
+    elif [[ "$job" == "${current_job:-}" ]]; then
+      show_live_eval_progress "$job"
     fi
   done < <(selected_jobs)
 }

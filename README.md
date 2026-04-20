@@ -36,6 +36,18 @@ Quick links:
 | MiniMax small status | formal attempt exists, but the current line failed and is not counted as complete |
 | Run setting | `OpenRouter`, `temperature=0` |
 
+## Live Local Expansion Status
+
+As of the latest local check on `April 20, 2026`:
+
+- the family-size image queue is complete
+- `Gemma-L` text has finished `UniMoral`, `Value Kaleidoscope`, and `CCD-Bench`, and is now running `Denevil` proxy generation
+- `Gemma-M` `SMID` is complete
+- `Llama-L` `SMID` is complete
+- `Qwen-L` `SMID` hit a provider-side image moderation error after `59 / 2,941` samples on both SMID tasks
+- the safer `Qwen-L` `SMID` recovery route is now prepared via `scripts/qwen_large_smid_recovery.sh`, using `openrouter/qwen/qwen2.5-vl-72b-instruct` with a non-Alibaba provider allowlist
+- the next text jobs already queued in order are `Gemma-M`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, `MiniMax-M`, `DeepSeek-M`, and `MiniMax-L`
+
 ## Progress Legend
 
 - `done`: benchmark line finished with a usable result
@@ -54,7 +66,7 @@ This is the main repo-level status table for the full group plan.
 | --- | --- | --- | --- | --- | --- | --- |
 | `Qwen-S` | done | done | done | done | proxy | Frozen Option 1 line. |
 | `Qwen-M` | queue | tbd | queue | queue | queue | Text route is queued. No medium vision route is locked for SMID yet. |
-| `Qwen-L` | queue | queue | queue | queue | queue | Text and vision checkpoints are both queued. |
+| `Qwen-L` | queue | error | queue | queue | queue | Large text route is still queued. The first Qwen-L SMID attempt failed on Alibaba moderation, and a safer qwen2.5-vl-72b recovery route is now prepared with non-Alibaba provider routing. |
 | `MiniMax-S` | error | error | error | error | error | Formal small-model run was attempted, but the line hit OpenRouter key-limit errors and is not counted as complete. |
 | `MiniMax-M` | queue | tbd | queue | queue | queue | Text route is queued. Separate medium vision route is not fixed yet. |
 | `MiniMax-L` | queue | tbd | queue | queue | queue | Text route is queued. Separate large vision route is not fixed yet. |
@@ -63,10 +75,10 @@ This is the main repo-level status table for the full group plan.
 | `DeepSeek-L` | done | - | done | done | proxy | Frozen Option 1 large-class text line. No SMID vision route was included. |
 | `Llama-S` | done | done | done | done | proxy | Complete locally across all five papers, but not folded into the frozen Option 1 counts. |
 | `Llama-M` | queue | - | queue | queue | queue | Text-only medium route is queued. No SMID run is planned on this line. |
-| `Llama-L` | queue | queue | queue | queue | queue | Large text and SMID vision checkpoints are both queued. |
+| `Llama-L` | queue | done | queue | queue | queue | Large Llama SMID is complete. The text route is still queued. |
 | `Gemma-S` | done | done | done | done | proxy | Frozen Option 1 recovery line. |
-| `Gemma-M` | queue | queue | queue | queue | queue | Text and SMID queues are both approved but not started yet. |
-| `Gemma-L` | done | live | live | queue | queue | Large Gemma is the actively running family-size checkpoint right now. |
+| `Gemma-M` | queue | done | queue | queue | queue | Gemma-M SMID is complete. The text route is still queued behind the active Gemma-L run. |
+| `Gemma-L` | done | done | done | done | live | Large Gemma has finished UniMoral, SMID, Value Kaleidoscope, and CCD-Bench. Only the Denevil proxy task is still live. |
 
 The same matrix is also saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv).
 
@@ -84,7 +96,7 @@ The same matrix is also saved as [family-size-progress.csv](results/release/2026
 
 | Family | Small route | Medium route | Large route |
 | --- | --- | --- | --- |
-| `Qwen` | `text: openrouter/qwen/qwen3-8b; vision: openrouter/qwen/qwen3-vl-8b-instruct` | `openrouter/qwen/qwen3-14b` | `text: openrouter/qwen/qwen3-32b; vision: openrouter/qwen/qwen3-vl-32b-instruct` |
+| `Qwen` | `text: openrouter/qwen/qwen3-8b; vision: openrouter/qwen/qwen3-vl-8b-instruct` | `openrouter/qwen/qwen3-14b` | `text: openrouter/qwen/qwen3-32b; SMID recovery: openrouter/qwen/qwen2.5-vl-72b-instruct` |
 | `MiniMax` | `text: openrouter/minimax/minimax-m2.1; vision: openrouter/minimax/minimax-01` | `openrouter/minimax/minimax-m2.5` | `openrouter/minimax/minimax-m2.7` |
 | `DeepSeek` | `TBD` | `openrouter/deepseek/deepseek-r1-distill-qwen-32b` | `openrouter/deepseek/deepseek-chat-v3.1` |
 | `Llama` | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | `openrouter/meta-llama/llama-3.3-70b-instruct` | `openrouter/meta-llama/llama-4-maverick` |

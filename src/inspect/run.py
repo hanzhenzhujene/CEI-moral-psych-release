@@ -106,7 +106,41 @@ def parse_args():
             "(default: none; pass provider-specific options explicitly when needed)"
         ),
     )
+    parser.add_argument(
+        "--model_args_json",
+        default="",
+        help=(
+            "JSON object merged into model_args. Use this for nested provider routing "
+            "config such as extra_body/provider settings."
+        ),
+    )
     return parser.parse_args()
+
+
+def parse_model_args(raw_pairs: str = "", raw_json: str = "") -> dict:
+    """Parse legacy key=value args plus an optional JSON object for nested provider config."""
+    model_args: dict = {}
+
+    if raw_pairs:
+        for pair in raw_pairs.split(","):
+            k, _, v = pair.strip().partition("=")
+            if not k:
+                continue
+            try:
+                model_args[k] = ast.literal_eval(v)
+            except (ValueError, SyntaxError):
+                model_args[k] = v
+
+    if raw_json:
+        try:
+            json_args = json.loads(raw_json)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"Invalid --model_args_json: {exc}") from exc
+        if not isinstance(json_args, dict):
+            raise ValueError("--model_args_json must decode to a JSON object.")
+        model_args.update(json_args)
+
+    return model_args
 
 
 def eval_log_status(log_location: str | Path) -> str:
@@ -248,16 +282,11 @@ def main():
     if args.limit:
         print(f"Limit: {args.limit} samples per task")
 
-    # Parse model_args from "key=val,key=val" string into a dict
-    model_args: dict = {}
-    if args.model_args:
-        for pair in args.model_args.split(","):
-            k, _, v = pair.strip().partition("=")
-            if k:
-                try:
-                    model_args[k] = ast.literal_eval(v)
-                except (ValueError, SyntaxError):
-                    model_args[k] = v
+    try:
+        model_args = parse_model_args(args.model_args, args.model_args_json)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        sys.exit(1)
 
     models: str | list[str]
     if "," in args.model:

@@ -9,7 +9,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "inspect"))
 
-from run import parse_args, resolve_task_files, load_tasks_from_file
+from run import parse_args, parse_model_args, resolve_task_files, load_tasks_from_file
 
 
 def test_parse_args_defaults():
@@ -22,11 +22,30 @@ def test_parse_args_defaults():
 
 
 def test_parse_args_custom():
-    with patch("sys.argv", ["run.py", "--model", "openai/gpt-4o", "--limit", "10", "--no_sandbox"]):
+    with patch(
+        "sys.argv",
+        ["run.py", "--model", "openai/gpt-4o", "--limit", "10", "--no_sandbox", "--model_args_json", '{"a": 1}'],
+    ):
         args = parse_args()
     assert args.model == "openai/gpt-4o"
     assert args.limit == 10
     assert args.no_sandbox is True
+    assert args.model_args_json == '{"a": 1}'
+
+
+def test_parse_model_args_merges_json_for_nested_provider_config():
+    parsed = parse_model_args(
+        "timeout=60",
+        '{"extra_body": {"provider": {"only": ["nebius", "novita", "parasail"], "allow_fallbacks": true}}}',
+    )
+    assert parsed["timeout"] == 60
+    assert parsed["extra_body"]["provider"]["only"] == ["nebius", "novita", "parasail"]
+    assert parsed["extra_body"]["provider"]["allow_fallbacks"] is True
+
+
+def test_parse_model_args_rejects_non_mapping_json():
+    with pytest.raises(ValueError, match="JSON object"):
+        parse_model_args(raw_json='["not", "a", "mapping"]')
 
 
 def test_resolve_task_files_direct_path(tmp_path):
