@@ -22,9 +22,20 @@ This report covers Jenny Zhu's five assigned moral-psych benchmark papers under 
 | Extra completed local line outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `5` papers / `7` tasks |
 | MiniMax small status | formal attempt exists, but the current line failed and is not counted as complete |
 | Run provider / temperature | `OpenRouter`, `temperature=0` |
-| Current operations note | Updated April 20, 2026. The frozen public snapshot is still Option 1 from April 19. The image queue is complete, Gemma-L is running the Denevil proxy task, and Qwen-L SMID recovery is prepared on qwen2.5-vl-72b with a non-Alibaba provider allowlist. |
+| Current operations note | Updated April 20, 2026. The frozen public snapshot is still Option 1 from April 19. The image queue is complete, Qwen-L SMID recovery is complete on qwen2.5-vl-72b with a non-Alibaba provider allowlist, Gemma-L is still running the Denevil proxy task, and the Gemma-M / Qwen-M text batches are now live locally. |
 | CI status reference | [CI workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); latest verified passing run: [24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 | Total evaluated samples in this release | `302,776` |
+
+## Local Expansion Checkpoint
+
+| Line or batch | Status | Note |
+| --- | --- | --- |
+| `Qwen-L SMID recovery` | Done | Completed April 20, 2026 via openrouter/qwen/qwen2.5-vl-72b-instruct after the earlier qwen3-vl-32b moderation stop. |
+| `Gemma-L text batch` | Live | UniMoral, Value Kaleidoscope, and CCD-Bench are done; Denevil proxy generation is still running locally. |
+| `Gemma-M text batch` | Live | The medium non-image batch is live locally and started from UniMoral; the Gemma-M SMID line was already complete. |
+| `Qwen-M text batch` | Live | The medium non-image batch is live locally and started from UniMoral; the Qwen-M SMID route is still TBD. |
+| `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
+| `Next queued text lines` | Queue | Qwen-L text, Llama-M, Llama-L, MiniMax-M, DeepSeek-M, and MiniMax-L remain queued after the active Gemma / Qwen medium batches. |
 
 Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-results.md)
 
@@ -52,7 +63,7 @@ Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-
 
 | Family | Small route | Medium route | Large route |
 | --- | --- | --- | --- |
-| `Qwen` | `text: openrouter/qwen/qwen3-8b; vision: openrouter/qwen/qwen3-vl-8b-instruct` | `openrouter/qwen/qwen3-14b` | `text: openrouter/qwen/qwen3-32b; vision: openrouter/qwen/qwen2.5-vl-72b-instruct (recovery prep)` |
+| `Qwen` | `text: openrouter/qwen/qwen3-8b; vision: openrouter/qwen/qwen3-vl-8b-instruct` | `openrouter/qwen/qwen3-14b` | `text: openrouter/qwen/qwen3-32b; vision: openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete)` |
 | `MiniMax` | `text: openrouter/minimax/minimax-m2.1; vision: openrouter/minimax/minimax-01` | `openrouter/minimax/minimax-m2.5` | `openrouter/minimax/minimax-m2.7` |
 | `DeepSeek` | `TBD` | `openrouter/deepseek/deepseek-r1-distill-qwen-32b` | `openrouter/deepseek/deepseek-chat-v3.1` |
 | `Llama` | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | `openrouter/meta-llama/llama-3.3-70b-instruct` | `openrouter/meta-llama/llama-4-maverick` |
@@ -63,8 +74,8 @@ Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-
 | Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | Note |
 | :--- | :---: | :---: | :---: | :---: | :---: | --- |
 | `Qwen-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 line. |
-| `Qwen-M` | Queue | TBD | Queue | Queue | Queue | Text queued; no medium SMID route is fixed yet. |
-| `Qwen-L` | Queue | Error | Queue | Queue | Queue | Text queued; SMID recovery is prepared on qwen2.5-vl-72b after the Alibaba moderation failure. |
+| `Qwen-M` | Live | TBD | Queue | Queue | Queue | Text batch is live locally; UniMoral is in progress and no medium SMID route is fixed yet. |
+| `Qwen-L` | Queue | Done | Queue | Queue | Queue | SMID recovery is complete on qwen2.5-vl-72b; the large text line is still queued. |
 | `MiniMax-S` | Error | Error | Error | Error | Error | Attempted, but key-limit failures made the line unusable. |
 | `MiniMax-M` | Queue | TBD | Queue | Queue | Queue | Text queued; no medium SMID route is fixed yet. |
 | `MiniMax-L` | Queue | TBD | Queue | Queue | Queue | Text queued; no large SMID route is fixed yet. |
@@ -75,7 +86,7 @@ Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-
 | `Llama-M` | Queue | - | Queue | Queue | Queue | Text queued; no SMID run is planned. |
 | `Llama-L` | Queue | Done | Queue | Queue | Queue | SMID done; text is still queued. |
 | `Gemma-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 recovery line. |
-| `Gemma-M` | Queue | Done | Queue | Queue | Queue | SMID done; text is queued behind Gemma-L. |
+| `Gemma-M` | Live | Done | Queue | Queue | Queue | Text batch is live locally; UniMoral is in progress and SMID is already complete. |
 | `Gemma-L` | Done | Done | Done | Done | Live | UniMoral, SMID, Value, and CCD are done; Denevil is live. |
 
 ## Current Comparable Accuracy Snapshot

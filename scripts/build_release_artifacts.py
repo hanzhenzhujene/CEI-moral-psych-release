@@ -30,8 +30,8 @@ REPORT_CURRENT_COST = "$35"
 REPORT_STATUS_NOTE = (
     "Updated April 20, 2026. "
     "The frozen public snapshot is still Option 1 from April 19. "
-    "The image queue is complete, Gemma-L is running the Denevil proxy task, "
-    "and Qwen-L SMID recovery is prepared on qwen2.5-vl-72b with a non-Alibaba provider allowlist."
+    "The image queue is complete, Qwen-L SMID recovery is complete on qwen2.5-vl-72b with a non-Alibaba provider allowlist, "
+    "Gemma-L is still running the Denevil proxy task, and the Gemma-M / Qwen-M text batches are now live locally."
 )
 CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 CI_RUN_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
@@ -163,8 +163,8 @@ FUTURE_MODEL_PLAN = [
         "current_route": "qwen3-8b + qwen3-vl-8b-instruct",
         "small_candidate": "Current 8B text + 8B vision routes complete in the release",
         "medium_candidate": "openrouter/qwen/qwen3-14b scheduled in the active non-image expansion run",
-        "large_candidate": "text: openrouter/qwen/qwen3-32b; SMID recovery prep: openrouter/qwen/qwen2.5-vl-72b-instruct",
-        "next_step": "Run the prepared qwen2.5-vl-72b SMID smoke, then promote it to the full Qwen-L vision recovery if the provider-routed smoke stays clean.",
+        "large_candidate": "text: openrouter/qwen/qwen3-32b; vision: openrouter/qwen/qwen2.5-vl-72b-instruct (SMID recovery complete)",
+        "next_step": "Keep the completed Qwen-L SMID recovery as the large vision route, then run the queued qwen3-32b text line for UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy.",
     },
     {
         "family": "MiniMax",
@@ -224,10 +224,10 @@ IMAGE_EXPANSION_PLAN = [
     {
         "family": "Qwen",
         "size_slot": "Large",
-        "model": "openrouter/qwen/qwen3-vl-32b-instruct",
+        "model": "openrouter/qwen/qwen2.5-vl-72b-instruct",
         "benchmark": "SMID",
-        "status": "Error",
-        "note": "Provider-side image moderation blocked the Alibaba-backed route after 59 / 2,941 samples on both SMID tasks. A safer recovery route is now prepared via openrouter/qwen/qwen2.5-vl-72b-instruct with a non-Alibaba provider allowlist.",
+        "status": "Completed",
+        "note": "The original qwen3-vl-32b-instruct route hit provider-side image moderation after 59 / 2,941 samples on both SMID tasks, but the large Qwen line was recovered and completed via openrouter/qwen/qwen2.5-vl-72b-instruct with a non-Alibaba provider allowlist.",
     },
     {
         "family": "Llama",
@@ -277,6 +277,39 @@ SUPPLEMENTARY_MODEL_PROGRESS = [
     },
 ]
 
+LOCAL_EXPANSION_CHECKPOINT = [
+    {
+        "line": "Qwen-L SMID recovery",
+        "status": "done",
+        "note": "Completed April 20, 2026 via openrouter/qwen/qwen2.5-vl-72b-instruct after the earlier qwen3-vl-32b moderation stop.",
+    },
+    {
+        "line": "Gemma-L text batch",
+        "status": "live",
+        "note": "UniMoral, Value Kaleidoscope, and CCD-Bench are done; Denevil proxy generation is still running locally.",
+    },
+    {
+        "line": "Gemma-M text batch",
+        "status": "live",
+        "note": "The medium non-image batch is live locally and started from UniMoral; the Gemma-M SMID line was already complete.",
+    },
+    {
+        "line": "Qwen-M text batch",
+        "status": "live",
+        "note": "The medium non-image batch is live locally and started from UniMoral; the Qwen-M SMID route is still TBD.",
+    },
+    {
+        "line": "Llama-L SMID",
+        "status": "done",
+        "note": "The large Llama vision line is complete locally.",
+    },
+    {
+        "line": "Next queued text lines",
+        "status": "queue",
+        "note": "Qwen-L text, Llama-M, Llama-L, MiniMax-M, DeepSeek-M, and MiniMax-L remain queued after the active Gemma / Qwen medium batches.",
+    },
+]
+
 FAMILY_SIZE_PROGRESS = [
     {
         "family": "Qwen",
@@ -297,25 +330,25 @@ FAMILY_SIZE_PROGRESS = [
         "line_label": "Qwen-M",
         "text_route": "openrouter/qwen/qwen3-14b",
         "vision_route": "TBD",
-        "unimoral": "queue",
+        "unimoral": "live",
         "smid": "tbd",
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Text queued; no medium SMID route is fixed yet.",
+        "summary_note": "Text batch is live locally; UniMoral is in progress and no medium SMID route is fixed yet.",
     },
     {
         "family": "Qwen",
         "size_slot": "L",
         "line_label": "Qwen-L",
         "text_route": "openrouter/qwen/qwen3-32b",
-        "vision_route": "openrouter/qwen/qwen2.5-vl-72b-instruct (recovery prep)",
+        "vision_route": "openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete)",
         "unimoral": "queue",
-        "smid": "error",
+        "smid": "done",
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Text queued; SMID recovery is prepared on qwen2.5-vl-72b after the Alibaba moderation failure.",
+        "summary_note": "SMID recovery is complete on qwen2.5-vl-72b; the large text line is still queued.",
     },
     {
         "family": "MiniMax",
@@ -453,12 +486,12 @@ FAMILY_SIZE_PROGRESS = [
         "line_label": "Gemma-M",
         "text_route": "openrouter/google/gemma-3-12b-it",
         "vision_route": "openrouter/google/gemma-3-12b-it",
-        "unimoral": "queue",
+        "unimoral": "live",
         "smid": "done",
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "SMID done; text is queued behind Gemma-L.",
+        "summary_note": "Text batch is live locally; UniMoral is in progress and SMID is already complete.",
     },
     {
         "family": "Gemma",
@@ -696,6 +729,17 @@ def build_supplementary_model_progress() -> list[dict[str, Any]]:
 
 def build_family_size_progress() -> list[dict[str, Any]]:
     return list(FAMILY_SIZE_PROGRESS)
+
+
+def append_local_expansion_checkpoint_table(lines: list[str]) -> None:
+    lines.extend(
+        [
+            "| Line or batch | Status | Note |",
+            "| --- | --- | --- |",
+        ]
+    )
+    for row in LOCAL_EXPANSION_CHECKPOINT:
+        lines.append(f"| `{row['line']}` | {STATUS_DISPLAY[row['status']]} | {row['note']} |")
 
 
 def build_faithful_metrics(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -1255,32 +1299,40 @@ def build_release_readme(
         f"| Current operations note | {REPORT_STATUS_NOTE} |",
         f"| CI reference | {markdown_link('Workflow', CI_WORKFLOW_URL)}; last verified successful run: {markdown_link('run 24634450927', CI_RUN_URL)} |",
         "",
-        "## Open These First",
-        "",
-        "- `jenny-group-report.md`: mentor-facing report with the benchmark list, progress matrix, model roster, and current results",
-        "- `topline-summary.md`: shortest narrative summary of the frozen Option 1 snapshot",
-        "- `release-manifest.json`: machine-readable release index",
-        f"- {markdown_link('how to read the results', '../../../docs/how-to-read-results.md')}: plain-language explanation of the report terms",
-        f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: current cross-model benchmark comparison",
-        f"- {markdown_link('accuracy heatmap', '../../../figures/release/option1_accuracy_heatmap.svg')}: task-level view of comparable metrics",
-        f"- {markdown_link('coverage matrix', '../../../figures/release/option1_coverage_matrix.svg')}: frozen Option 1 coverage only",
-        f"- {markdown_link('sample volume chart', '../../../figures/release/option1_sample_volume.svg')}: where the evaluated samples are concentrated",
-        "",
-        "## Progress Legend",
-        "",
-        "- `done`: benchmark line finished with a usable result",
-        "- `proxy`: finished, but only with a substitute proxy dataset instead of the paper's original setup",
-        "- `live`: currently running",
-        "- `error`: formal attempt exists, but the current result is not usable",
-        "- `queue`: approved and queued next",
-        "- `tbd`: family-size route is not frozen yet",
-        "- `-`: no run is planned on that line right now",
-        "",
-        "## Family-Size Progress Matrix",
-        "",
-        "This is the cleanest repo-level summary of where the full `5 x 5 x 3` plan stands today.",
+        "## Local Expansion Checkpoint",
         "",
     ]
+    append_local_expansion_checkpoint_table(lines)
+    lines.extend(
+        [
+            "",
+            "## Open These First",
+            "",
+            "- `jenny-group-report.md`: mentor-facing report with the benchmark list, progress matrix, model roster, and current results",
+            "- `topline-summary.md`: shortest narrative summary of the frozen Option 1 snapshot",
+            "- `release-manifest.json`: machine-readable release index",
+            f"- {markdown_link('how to read the results', '../../../docs/how-to-read-results.md')}: plain-language explanation of the report terms",
+            f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: current cross-model benchmark comparison",
+            f"- {markdown_link('accuracy heatmap', '../../../figures/release/option1_accuracy_heatmap.svg')}: task-level view of comparable metrics",
+            f"- {markdown_link('coverage matrix', '../../../figures/release/option1_coverage_matrix.svg')}: frozen Option 1 coverage only",
+            f"- {markdown_link('sample volume chart', '../../../figures/release/option1_sample_volume.svg')}: where the evaluated samples are concentrated",
+            "",
+            "## Progress Legend",
+            "",
+            "- `done`: benchmark line finished with a usable result",
+            "- `proxy`: finished, but only with a substitute proxy dataset instead of the paper's original setup",
+            "- `live`: currently running",
+            "- `error`: formal attempt exists, but the current result is not usable",
+            "- `queue`: approved and queued next",
+            "- `tbd`: family-size route is not frozen yet",
+            "- `-`: no run is planned on that line right now",
+            "",
+            "## Family-Size Progress Matrix",
+            "",
+            "This is the cleanest repo-level summary of where the full `5 x 5 x 3` plan stands today.",
+            "",
+        ]
+    )
     append_family_size_progress_table(lines, family_size_progress)
     lines.extend(
         [
@@ -1402,23 +1454,31 @@ def build_jenny_group_report(
         f"| CI status reference | {markdown_link('CI workflow', CI_WORKFLOW_URL)}; latest verified passing run: {markdown_link('24634450927', CI_RUN_URL)} |",
         f"| Total evaluated samples in this release | `{total_samples:,}` |",
         "",
-        "Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-results.md)",
+        "## Local Expansion Checkpoint",
         "",
-        "## Progress Legend",
-        "",
-        "- `done`: benchmark line finished with a usable result",
-        "- `proxy`: finished, but only with a substitute proxy dataset instead of the paper's original setup",
-        "- `live`: currently running",
-        "- `error`: formal attempt exists, but the current result is not usable",
-        "- `queue`: approved and queued next",
-        "- `tbd`: family-size route is not frozen yet",
-        "- `-`: no run is planned on that line right now",
-        "",
-        "## The Five Papers / Benchmarks Under Test",
-        "",
-        "| Benchmark | Citation | Paper link | Dataset / access link | Modality | What this repo tests now |",
-        "| --- | --- | --- | --- | --- | --- |",
     ]
+    append_local_expansion_checkpoint_table(lines)
+    lines.extend(
+        [
+            "",
+            "Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-results.md)",
+            "",
+            "## Progress Legend",
+            "",
+            "- `done`: benchmark line finished with a usable result",
+            "- `proxy`: finished, but only with a substitute proxy dataset instead of the paper's original setup",
+            "- `live`: currently running",
+            "- `error`: formal attempt exists, but the current result is not usable",
+            "- `queue`: approved and queued next",
+            "- `tbd`: family-size route is not frozen yet",
+            "- `-`: no run is planned on that line right now",
+            "",
+            "## The Five Papers / Benchmarks Under Test",
+            "",
+            "| Benchmark | Citation | Paper link | Dataset / access link | Modality | What this repo tests now |",
+            "| --- | --- | --- | --- | --- | --- |",
+        ]
+    )
     for row in benchmark_catalog:
         dataset_cell = row["dataset_label"]
         if row["dataset_url"]:

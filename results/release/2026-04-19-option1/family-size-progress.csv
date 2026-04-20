@@ -1,7 +1,7 @@
 family,size_slot,line_label,text_route,vision_route,unimoral,smid,value_kaleidoscope,ccd_bench,denevil,summary_note
 Qwen,S,Qwen-S,openrouter/qwen/qwen3-8b,openrouter/qwen/qwen3-vl-8b-instruct,done,done,done,done,proxy,Frozen Option 1 line.
-Qwen,M,Qwen-M,openrouter/qwen/qwen3-14b,TBD,queue,tbd,queue,queue,queue,Text queued; no medium SMID route is fixed yet.
-Qwen,L,Qwen-L,openrouter/qwen/qwen3-32b,openrouter/qwen/qwen2.5-vl-72b-instruct (recovery prep),queue,error,queue,queue,queue,Text queued; SMID recovery is prepared on qwen2.5-vl-72b after the Alibaba moderation failure.
+Qwen,M,Qwen-M,openrouter/qwen/qwen3-14b,TBD,live,tbd,queue,queue,queue,Text batch is live locally; UniMoral is in progress and no medium SMID route is fixed yet.
+Qwen,L,Qwen-L,openrouter/qwen/qwen3-32b,openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete),queue,done,queue,queue,queue,SMID recovery is complete on qwen2.5-vl-72b; the large text line is still queued.
 MiniMax,S,MiniMax-S,openrouter/minimax/minimax-m2.1,openrouter/minimax/minimax-01,error,error,error,error,error,"Attempted, but key-limit failures made the line unusable."
 MiniMax,M,MiniMax-M,openrouter/minimax/minimax-m2.5,TBD,queue,tbd,queue,queue,queue,Text queued; no medium SMID route is fixed yet.
 MiniMax,L,MiniMax-L,openrouter/minimax/minimax-m2.7,TBD,queue,tbd,queue,queue,queue,Text queued; no large SMID route is fixed yet.
@@ -12,5 +12,5 @@ Llama,S,Llama-S,openrouter/meta-llama/llama-3.2-11b-vision-instruct,openrouter/m
 Llama,M,Llama-M,openrouter/meta-llama/llama-3.3-70b-instruct,-,queue,-,queue,queue,queue,Text queued; no SMID run is planned.
 Llama,L,Llama-L,openrouter/meta-llama/llama-4-maverick,openrouter/meta-llama/llama-4-maverick,queue,done,queue,queue,queue,SMID done; text is still queued.
 Gemma,S,Gemma-S,openrouter/google/gemma-3-4b-it,openrouter/google/gemma-3-4b-it,done,done,done,done,proxy,Frozen Option 1 recovery line.
-Gemma,M,Gemma-M,openrouter/google/gemma-3-12b-it,openrouter/google/gemma-3-12b-it,queue,done,queue,queue,queue,SMID done; text is queued behind Gemma-L.
+Gemma,M,Gemma-M,openrouter/google/gemma-3-12b-it,openrouter/google/gemma-3-12b-it,live,done,queue,queue,queue,Text batch is live locally; UniMoral is in progress and SMID is already complete.
 Gemma,L,Gemma-L,openrouter/google/gemma-3-27b-it,openrouter/google/gemma-3-27b-it,done,done,done,done,live,"UniMoral, SMID, Value, and CCD are done; Denevil is live."

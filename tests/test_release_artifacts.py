@@ -102,18 +102,21 @@ def test_release_builder_emits_expected_files(tmp_path):
         and row["denevil"] == "live"
         for row in rows
     )
-    assert any(row["line_label"] == "Gemma-M" and row["smid"] == "done" for row in rows)
+    assert any(row["line_label"] == "Gemma-M" and row["unimoral"] == "live" and row["smid"] == "done" for row in rows)
     assert any(row["line_label"] == "Llama-L" and row["smid"] == "done" for row in rows)
-    assert any(row["line_label"] == "Qwen-L" and row["smid"] == "error" for row in rows)
+    assert any(row["line_label"] == "Qwen-L" and row["smid"] == "done" for row in rows)
+    assert any(row["line_label"] == "Qwen-M" and row["unimoral"] == "live" for row in rows)
 
     report_text = (release_dir / "jenny-group-report.md").read_text(encoding="utf-8")
     assert "qwen2.5-vl-72b-instruct" in report_text
     assert "non-Alibaba provider allowlist" in report_text
+    assert "## Local Expansion Checkpoint" in report_text
     assert "## Figure Gallery" in report_text
     assert "![Coverage matrix]" in report_text
     assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" in report_text
 
     release_readme = (release_dir / "README.md").read_text(encoding="utf-8")
+    assert "## Local Expansion Checkpoint" in release_readme
     assert "sample volume chart" in release_readme
     assert "## Figure Gallery" in release_readme
     assert "Done" in release_readme
