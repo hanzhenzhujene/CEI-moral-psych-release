@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Sequential launcher for the non-image family-by-size expansion matrix.
-# Jobs run in a fixed cheapest-first order so budget growth stays predictable.
+# Jobs run in a fixed execution order so monitoring stays predictable.
 
 set -euo pipefail
 

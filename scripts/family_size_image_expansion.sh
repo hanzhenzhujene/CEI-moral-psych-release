@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Sequential launcher for the image-only family-by-size expansion under a fixed
-# budget cap. Jobs run cheapest-first using only routes with a clean medium or
-# large vision-capable mapping.
+# Sequential launcher for the image-only family-by-size expansion. Jobs follow a
+# fixed order using only routes with a clean medium or large vision-capable
+# mapping.
 
 set -euo pipefail
 
@@ -30,8 +30,6 @@ CURRENT_JOB_FILE="$RUN_BASE/current_job.txt"
 MASTER_STATUS_FILE="$RUN_BASE/master_status.txt"
 SMID_DATA_DIR="${SMID_DATA_DIR:-$DATA_ROOT/smid}"
 
-# Estimated full-SMID costs: Gemma 27B ~$0.06, Gemma 12B ~$0.07, Qwen 32B VL
-# ~$0.16, Llama 4 Maverick ~$2.14. Total selected add-on cost stays below $5.
 jobs=(
   gemma_27b_large_smid
   gemma_12b_medium_smid

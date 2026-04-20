@@ -15,9 +15,7 @@ This repository serves two linked purposes:
 1. A **benchmarking codebase** built on `Inspect AI` and `lm-evaluation-harness`.
 2. A **mentor-ready research report** summarizing Jenny's current authoritative `Option 1` slice.
 
-Baseline spend before the active family-size expansion launch on `April 19, 2026`: `$35`
-
-Approved image add-on queue checked on `April 19, 2026`: about `$2.42` total, which stays below the `$5` cap
+Active local expansion status: text and image family-size queues are running alongside the closed `Option 1` release snapshot.
 
 ## Report Metadata
 
@@ -32,7 +30,7 @@ Approved image add-on queue checked on `April 19, 2026`: about `$2.42` total, wh
 | Supplementary local completion outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `5` papers / `7` tasks |
 | Prepared but not yet completed | `MiniMax` small route via `minimax-m2.1` + `minimax-01` |
 | Provider / temperature | `OpenRouter`, `temperature=0` |
-| Current cost note | `$35` baseline spend before the active family-size expansion launch, plus an approved image add-on queue projected at about `$2.42` total |
+| Current operations note | Active text and image family-size expansion queues continue alongside the closed April 19, 2026 release snapshot |
 | CI reference | [workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml), last verified passing run [24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 
 Detailed report artifacts live in [`results/release/2026-04-19-option1/`](results/release/2026-04-19-option1/), including [`jenny-group-report.md`](results/release/2026-04-19-option1/jenny-group-report.md) and the tracked source snapshot [`source/authoritative-summary.csv`](results/release/2026-04-19-option1/source/authoritative-summary.csv).
@@ -64,48 +62,48 @@ The current public release is the `2026-04-19 Option 1` package:
 | `Qwen` | `openrouter/qwen/qwen3-8b` | 8B | Text | `UniMoral`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` proxy | Closed-slice text route |
 | `Qwen` | `openrouter/qwen/qwen3-vl-8b-instruct` | 8B VL | Vision | `SMID` | Closed-slice vision route |
 | `DeepSeek` | `openrouter/deepseek/deepseek-chat-v3.1` | provider route | Text | `UniMoral`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` proxy | No DeepSeek vision route in the current release |
-| `Gemma` | `openrouter/google/gemma-3-4b-it` | 4B | Text + Vision | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` proxy | Paid recovery route supersedes the stalled free-tier namespace |
+| `Gemma` | `openrouter/google/gemma-3-4b-it` | 4B | Text + Vision | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` proxy | Recovery route supersedes the earlier stalled namespace |
 
 ## Next Step: Family x Size Expansion
 
 Active queues:
 
 - text-only expansion: `results/inspect/full-runs/2026-04-19-family-size-text-expansion`
-- image add-on queue under the `$5` cap: `results/inspect/full-runs/2026-04-19-family-size-image-expansion`
+- image expansion queue: `results/inspect/full-runs/2026-04-19-family-size-image-expansion`
 - status labels: `active` = running now, `queued` = approved and waiting, `complete` = finished
 
-The text-only queue is ordered from cheaper to more expensive. The image queue only includes `SMID` routes with a clean medium / large vision-capable mapping and a combined projected extra spend of about `$2.42`.
+The text-only queue follows a fixed execution order. The image queue only includes `SMID` routes with a clean medium / large vision-capable mapping.
 
 | Family | Closed release status | Current route already present in repo | Small | Medium | Large |
 | --- | --- | --- | --- | --- | --- |
 | `Qwen` | included | `qwen3-8b`, `qwen3-vl-8b-instruct` | current 8B routes complete in the release | `openrouter/qwen/qwen3-14b` scheduled in the active text-only expansion run | `openrouter/qwen/qwen3-32b` scheduled after `qwen3-14b` in the same run |
-| `MiniMax` | prepared only, not in closed release | `minimax-m2.1`, `minimax-01` launchers present | current small hybrid launcher exists, but the formal small line is still not closed | `openrouter/minimax/minimax-m2.5` scheduled in the active text-only expansion run | `openrouter/minimax/minimax-m2.7` scheduled last among the current cost-ordered jobs |
+| `MiniMax` | prepared only, not in closed release | `minimax-m2.1`, `minimax-01` launchers present | current small hybrid launcher exists, but the formal small line is still not closed | `openrouter/minimax/minimax-m2.5` scheduled in the active text-only expansion run | `openrouter/minimax/minimax-m2.7` scheduled last among the current text-only jobs |
 | `DeepSeek` | included | `deepseek-chat-v3.1` | current release already uses a large-class DeepSeek route; a smaller baseline is still not frozen | `openrouter/deepseek/deepseek-r1-distill-qwen-32b` scheduled in the active text-only expansion run | `openrouter/deepseek/deepseek-chat-v3.1` already complete in the closed release |
 | `Llama` | completed locally, not promoted into closed release | `llama-3.2-11b-vision-instruct` completed locally | current 11B route complete across 5 papers / 7 tasks | `openrouter/meta-llama/llama-3.3-70b-instruct` scheduled in the active text-only expansion run | `openrouter/meta-llama/llama-4-maverick` scheduled after the 70B line in the same run |
 | `Gemma` | included | `gemma-3-4b-it` | current 4B route | `openrouter/google/gemma-3-12b-it` scheduled in the active text-only expansion run | `openrouter/google/gemma-3-27b-it` scheduled first in the same run |
 
-### Image Add-On Under The $5 Cap
+### Active Image Expansion Queue
 
-| Family | Size slot | Image route | Benchmark | Estimated full-run cost | Status | Note |
-| --- | --- | --- | --- | ---: | --- | --- |
-| `Gemma` | Large | `openrouter/google/gemma-3-27b-it` | `SMID` | `$0.06` | active | cheapest selected image route; started first |
-| `Gemma` | Medium | `openrouter/google/gemma-3-12b-it` | `SMID` | `$0.07` | queued | follows Gemma 27B in the same image queue |
-| `Qwen` | Large | `openrouter/qwen/qwen3-vl-32b-instruct` | `SMID` | `$0.16` | queued | selected large Qwen image checkpoint |
-| `Llama` | Large | `openrouter/meta-llama/llama-4-maverick` | `SMID` | `$2.14` | queued | included because the projected full SMID pass stays below the cap |
+| Family | Size slot | Image route | Benchmark | Status | Note |
+| --- | --- | --- | --- | --- | --- |
+| `Gemma` | Large | `openrouter/google/gemma-3-27b-it` | `SMID` | active | first active image checkpoint in the current SMID queue |
+| `Gemma` | Medium | `openrouter/google/gemma-3-12b-it` | `SMID` | queued | follows Gemma 27B in the same image queue |
+| `Qwen` | Large | `openrouter/qwen/qwen3-vl-32b-instruct` | `SMID` | queued | scheduled large Qwen image checkpoint |
+| `Llama` | Large | `openrouter/meta-llama/llama-4-maverick` | `SMID` | queued | scheduled large Llama image checkpoint |
 
-Excluded from this capped image queue:
+Excluded from this image queue:
 
 - `DeepSeek`: no current vision route in the family-size plan
 - `Qwen` medium: no clean medium VL route locked for this pass
 - `Llama` medium: the chosen `70B` route is text-only
-- `MiniMax` image: the shared `minimax-01` route is projected at about `$3.49` by itself and does not map cleanly onto separate medium / large size slots
+- `MiniMax` image: the shared `minimax-01` route does not map cleanly onto separate medium / large size slots
 
 ## Supplementary Local Expansion Progress
 
 | Family | Status relative to closed release | Exact route | Benchmark lines done | Benchmark lines still missing | Papers | Tasks | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy | Note |
 | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | `Llama` | completed locally, outside the closed `Option 1` counts | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | `UniMoral`; `SMID`; `Value Kaleidoscope`; `CCD-Bench`; `Denevil` proxy | benchmark-faithful `Denevil` via `MoralPrompt` | 5 | 7 | 6 | 1 | 102,886 | 0.428 | combines the original namespace successes (`UniMoral` + `SMID` moral rating) with `recovery-v3` completions for the remaining five tasks after a temporary OpenRouter key-limit stall |
-| `MiniMax` | prepared only, not yet completed locally | `minimax-m2.1` + `minimax-01` | none yet | `UniMoral`; `SMID`; `Value Kaleidoscope`; `CCD-Bench`; `Denevil` proxy; benchmark-faithful `Denevil` via `MoralPrompt` | 0 | 0 | 0 | 0 | 0 | n/a | small-route launchers are wired in the repo, but this family still needs its first formal paid run |
+| `MiniMax` | prepared only, not yet completed locally | `minimax-m2.1` + `minimax-01` | none yet | `UniMoral`; `SMID`; `Value Kaleidoscope`; `CCD-Bench`; `Denevil` proxy; benchmark-faithful `Denevil` via `MoralPrompt` | 0 | 0 | 0 | 0 | 0 | n/a | small-route launchers are wired in the repo, but this family still needs its first formal comparison run |
 
 ## Key Results
 

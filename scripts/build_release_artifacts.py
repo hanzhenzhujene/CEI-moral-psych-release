@@ -24,12 +24,11 @@ REPORT_DATE_ISO = "2026-04-19"
 REPORT_PURPOSE = "Group / mentor-facing report aligned to the April 14, 2026 moral-psych benchmark plan."
 REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
-REPORT_COST_NOTE = "$35 baseline spend before the active family-size expansion launch on April 19, 2026, plus an approved image add-on queue projected at about $2.42 total (below the $5 cap)."
+REPORT_STATUS_NOTE = "Active text and image family-size expansion queues continue alongside the closed April 19, 2026 release snapshot."
 CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 CI_RUN_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
 TEXT_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-text-expansion"
 IMAGE_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-image-expansion"
-IMAGE_EXPANSION_PROJECTED_COST = 2.42
 
 MODEL_ORDER = ["Qwen", "DeepSeek", "Gemma"]
 BENCHMARK_ORDER = ["UniMoral", "SMID", "Value Kaleidoscope", "CCD-Bench", "Denevil"]
@@ -143,7 +142,7 @@ MODEL_ROUTE_METADATA = {
     "openrouter/google/gemma-3-4b-it": {
         "size_hint": "4B",
         "modality": "Text + Vision",
-        "note": "Paid recovery route that superseded the stalled free-tier Gemma namespace.",
+        "note": "Recovery route that superseded the earlier stalled Gemma namespace.",
     },
 }
 
@@ -153,7 +152,7 @@ FUTURE_MODEL_PLAN = [
         "closed_release_status": "Included in Option 1",
         "current_route": "qwen3-8b + qwen3-vl-8b-instruct",
         "small_candidate": "Current 8B text + 8B vision routes complete in the release",
-        "medium_candidate": "openrouter/qwen/qwen3-14b scheduled in the cost-ordered non-image expansion run",
+        "medium_candidate": "openrouter/qwen/qwen3-14b scheduled in the active non-image expansion run",
         "large_candidate": "openrouter/qwen/qwen3-32b scheduled after qwen3-14b in the same text-only run",
         "next_step": "Let the medium / large text-only lines finish, then decide whether Qwen also needs larger vision checkpoints.",
     },
@@ -163,7 +162,7 @@ FUTURE_MODEL_PLAN = [
         "current_route": "minimax-m2.1 + minimax-01 launcher present",
         "small_candidate": "Current small hybrid launcher exists, but the formal small line is still not closed",
         "medium_candidate": "openrouter/minimax/minimax-m2.5 scheduled in the non-image expansion run",
-        "large_candidate": "openrouter/minimax/minimax-m2.7 scheduled last among the current cost-ordered text-only jobs",
+        "large_candidate": "openrouter/minimax/minimax-m2.7 scheduled last among the current text-only jobs",
         "next_step": "After the medium / large text jobs finish, decide whether to formalize the small hybrid line too.",
     },
     {
@@ -189,9 +188,9 @@ FUTURE_MODEL_PLAN = [
         "closed_release_status": "Included in Option 1",
         "current_route": "gemma-3-4b-it",
         "small_candidate": "Current 4B route",
-        "medium_candidate": "openrouter/google/gemma-3-12b-it scheduled in the cost-ordered non-image expansion run",
+        "medium_candidate": "openrouter/google/gemma-3-12b-it scheduled in the active non-image expansion run",
         "large_candidate": "openrouter/google/gemma-3-27b-it scheduled first in the same text-only queue",
-        "next_step": "Use the 12B and 27B text-only results to decide whether larger Gemma vision work is worth the extra cost.",
+        "next_step": "Use the 12B and 27B text-only results to decide whether larger Gemma vision follow-up is needed.",
     },
 ]
 
@@ -201,16 +200,14 @@ IMAGE_EXPANSION_PLAN = [
         "size_slot": "Large",
         "model": "openrouter/google/gemma-3-27b-it",
         "benchmark": "SMID",
-        "estimated_cost": 0.06,
         "status": "Active",
-        "note": "Cheapest selected image add-on route; running first in the capped SMID queue.",
+        "note": "First active image checkpoint in the current SMID queue.",
     },
     {
         "family": "Gemma",
         "size_slot": "Medium",
         "model": "openrouter/google/gemma-3-12b-it",
         "benchmark": "SMID",
-        "estimated_cost": 0.07,
         "status": "Queued",
         "note": "Queued after Gemma 27B in the same image-only run.",
     },
@@ -219,18 +216,16 @@ IMAGE_EXPANSION_PLAN = [
         "size_slot": "Large",
         "model": "openrouter/qwen/qwen3-vl-32b-instruct",
         "benchmark": "SMID",
-        "estimated_cost": 0.16,
         "status": "Queued",
-        "note": "Large Qwen image checkpoint under the same $5 cap.",
+        "note": "Scheduled large Qwen image checkpoint.",
     },
     {
         "family": "Llama",
         "size_slot": "Large",
         "model": "openrouter/meta-llama/llama-4-maverick",
         "benchmark": "SMID",
-        "estimated_cost": 2.14,
         "status": "Queued",
-        "note": "Selected because the projected full SMID pass stays below the cap.",
+        "note": "Scheduled large Llama image checkpoint.",
     },
 ]
 
@@ -238,7 +233,7 @@ IMAGE_EXPANSION_EXCLUSIONS = [
     "DeepSeek: no vision route in the current family-size plan.",
     "Qwen medium: no clean Qwen medium VL route was locked for this pass.",
     "Llama medium: the chosen 70B route is text-only.",
-    "MiniMax image: the shared `minimax-01` route projects to about $3.49 by itself and does not map cleanly onto separate medium / large size slots.",
+    "MiniMax image: the shared `minimax-01` route does not map cleanly onto separate medium / large size slots.",
 ]
 
 SUPPLEMENTARY_MODEL_PROGRESS = [
@@ -268,7 +263,7 @@ SUPPLEMENTARY_MODEL_PROGRESS = [
         "benchmark_faithful_macro_accuracy": None,
         "completed_benchmark_lines": "None yet",
         "missing_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy; Benchmark-faithful Denevil via MoralPrompt",
-        "note": "Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models.",
+        "note": "Small-route launchers are wired in the repo, but this family still needs its first formal comparison run before it can be compared against the closed release models.",
     },
 ]
 
@@ -774,7 +769,7 @@ def build_release_readme(
         f"| Supplementary local completion outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
         f"| Prepared but not yet completed | `MiniMax` small route via `{minimax_progress['exact_route']}` |",
         "| Provider / temperature | `OpenRouter`, `temperature=0` |",
-        f"| Current cost note | {REPORT_COST_NOTE} |",
+        f"| Current operations note | {REPORT_STATUS_NOTE} |",
         f"| CI reference | {markdown_link('Workflow', CI_WORKFLOW_URL)}; last verified successful run: {markdown_link('run 24634450927', CI_RUN_URL)} |",
         "",
         "## Open These First",
@@ -799,24 +794,24 @@ def build_release_readme(
         "## Active Expansion Queues",
         "",
         f"- text-only family-size expansion: `{TEXT_EXPANSION_RUN_PATH}`",
-        f"- image add-on queue under the $5 cap: `{IMAGE_EXPANSION_RUN_PATH}`",
+        f"- image expansion queue: `{IMAGE_EXPANSION_RUN_PATH}`",
         "- status labels: `Active` = running now, `Queued` = approved and waiting, `Complete` = finished",
         "",
-        "## Image Add-On Under The $5 Cap",
+        "## Active Image Expansion Queue",
         "",
-        f"These image jobs are limited to `SMID`, use only routes with a clean medium or large vision-capable mapping, and stay below a combined projected add-on spend of about `${IMAGE_EXPANSION_PROJECTED_COST:.2f}`.",
+        "These image jobs are limited to `SMID` and use only routes with a clean medium or large vision-capable mapping.",
         "",
-        "| Family | Size slot | Image route | Benchmark | Estimated full-run cost | Status | Note |",
-        "| --- | --- | --- | --- | ---: | --- | --- |",
+        "| Family | Size slot | Image route | Benchmark | Status | Note |",
+        "| --- | --- | --- | --- | --- | --- |",
     ]
     for row in IMAGE_EXPANSION_PLAN:
         lines.append(
-            f"| `{row['family']}` | {row['size_slot']} | `{row['model']}` | `{row['benchmark']}` | `${row['estimated_cost']:.2f}` | {row['status']} | {row['note']} |"
+            f"| `{row['family']}` | {row['size_slot']} | `{row['model']}` | `{row['benchmark']}` | {row['status']} | {row['note']} |"
         )
     lines.extend(
         [
             "",
-            "Excluded from this capped image queue:",
+            "Excluded from this image queue:",
             "",
         ]
     )
@@ -946,14 +941,14 @@ def build_jenny_group_report(
         f"| Supplementary local completion outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
         f"| Prepared but not yet completed | `MiniMax` small route via `{minimax_progress['exact_route']}` |",
         "| Run provider / temperature | `OpenRouter`, `temperature=0` |",
-        f"| Current cost note | {REPORT_COST_NOTE} |",
+        f"| Current operations note | {REPORT_STATUS_NOTE} |",
         f"| CI status reference | {markdown_link('CI workflow', CI_WORKFLOW_URL)}; latest verified passing run: {markdown_link('24634450927', CI_RUN_URL)} |",
         f"| Total evaluated samples in this release | `{total_samples:,}` |",
         "",
         "## Active Local Expansion Queues",
         "",
         f"- text-only family-size expansion: `{TEXT_EXPANSION_RUN_PATH}`",
-        f"- image add-on queue under the $5 cap: `{IMAGE_EXPANSION_RUN_PATH}`",
+        f"- image expansion queue: `{IMAGE_EXPANSION_RUN_PATH}`",
         "- status labels: `Active` = running now, `Queued` = approved and waiting, `Complete` = finished",
         "",
         "## The Five Papers / Benchmarks Under Test",
@@ -1048,7 +1043,7 @@ def build_jenny_group_report(
             "- This report is Jenny's current first formal release slice, not yet the full five-family by three-size comparison matrix.",
             "- `Denevil` is represented only by the explicit `FULCRA`-backed proxy run in the closed release. It should not be reported as a benchmark-faithful `MoralPrompt` reproduction.",
             "- `DeepSeek` has no `SMID` entries in the closed slice because no DeepSeek vision route was included in the authoritative package.",
-            "- `Gemma` results in the closed release come from the paid recovery route and supersede the earlier stalled free-tier namespace.",
+            "- `Gemma` results in the closed release come from the recovery route and supersede the earlier stalled namespace.",
             "- `Llama` small is complete locally across all five benchmark papers, but it is intentionally treated as supplementary local evidence rather than folded into the closed `Option 1` counts.",
             "",
             "## Next Step: Expand To Family x Size Comparisons",
@@ -1064,17 +1059,17 @@ def build_jenny_group_report(
     lines.extend(
         [
             "",
-            "## Image Add-On Under The $5 Cap",
+            "## Active Image Expansion Queue",
             "",
-            f"The active image queue only targets `SMID`, only uses medium / large routes with a clean vision mapping, and stays below a combined projected add-on spend of about `${IMAGE_EXPANSION_PROJECTED_COST:.2f}`.",
+            "The active image queue only targets `SMID` and uses medium / large routes with a clean vision mapping.",
             "",
-            "| Family | Size slot | Image route | Estimated full-run cost | Status | Note |",
-            "| --- | --- | --- | ---: | --- | --- |",
+            "| Family | Size slot | Image route | Status | Note |",
+            "| --- | --- | --- | --- | --- |",
         ]
     )
     for row in IMAGE_EXPANSION_PLAN:
         lines.append(
-            f"| `{row['family']}` | {row['size_slot']} | `{row['model']}` | `${row['estimated_cost']:.2f}` | {row['status']} | {row['note']} |"
+            f"| `{row['family']}` | {row['size_slot']} | `{row['model']}` | {row['status']} | {row['note']} |"
         )
     lines.extend(
         [
@@ -1134,7 +1129,7 @@ def build_release_manifest(
             "purpose": REPORT_PURPOSE,
             "provider": REPORT_PROVIDER,
             "temperature": REPORT_TEMPERATURE,
-            "cost_note": REPORT_COST_NOTE,
+            "operations_note": REPORT_STATUS_NOTE,
             "ci_workflow_url": CI_WORKFLOW_URL,
             "ci_last_verified_run_url": CI_RUN_URL,
         },

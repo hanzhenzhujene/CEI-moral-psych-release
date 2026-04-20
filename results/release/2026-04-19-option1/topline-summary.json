@@ -59,7 +59,7 @@
       "missing_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy; Benchmark-faithful Denevil via MoralPrompt",
       "samples": 0,
       "benchmark_faithful_macro_accuracy": null,
-      "note": "Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models."
+      "note": "Small-route launchers are wired in the repo, but this family still needs its first formal comparison run before it can be compared against the closed release models."
     }
   ]
 }

@@ -55,7 +55,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="unimoral_action_prediction",
         source_run="main_funded",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Main funded namespace completed this task cleanly.",
+        authoritative_reason="Primary release namespace completed this task cleanly.",
     ),
     AuthoritativeTask(
         benchmark="UniMoral",
@@ -65,7 +65,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="unimoral_action_prediction",
         source_run="main_funded",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Main funded namespace completed this task cleanly.",
+        authoritative_reason="Primary release namespace completed this task cleanly.",
     ),
     AuthoritativeTask(
         benchmark="UniMoral",
@@ -75,7 +75,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="unimoral_action_prediction",
         source_run="gemma_paid_v2",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Paid Gemma recovery supersedes the stalled free-tier namespace.",
+        authoritative_reason="Gemma recovery namespace supersedes the earlier stalled namespace.",
     ),
     AuthoritativeTask(
         benchmark="SMID",
@@ -85,7 +85,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="smid_moral_rating",
         source_run="main_funded",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Main funded namespace completed this task cleanly.",
+        authoritative_reason="Primary release namespace completed this task cleanly.",
         note="Vision-capable route.",
     ),
     AuthoritativeTask(
@@ -96,7 +96,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="smid_foundation_classification",
         source_run="main_funded",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Main funded namespace completed this task cleanly.",
+        authoritative_reason="Primary release namespace completed this task cleanly.",
         note="Vision-capable route.",
     ),
     AuthoritativeTask(
@@ -107,7 +107,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="smid_moral_rating",
         source_run="gemma_paid_v2",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Paid Gemma recovery supersedes the stalled free-tier namespace.",
+        authoritative_reason="Gemma recovery namespace supersedes the earlier stalled namespace.",
         note="Vision-capable route.",
     ),
     AuthoritativeTask(
@@ -118,7 +118,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="smid_foundation_classification",
         source_run="gemma_paid_v2",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Paid Gemma recovery supersedes the stalled free-tier namespace.",
+        authoritative_reason="Gemma recovery namespace supersedes the earlier stalled namespace.",
         note="Vision-capable route.",
     ),
     AuthoritativeTask(
@@ -129,7 +129,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="value_prism_relevance",
         source_run="main_funded",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Main funded namespace completed this task cleanly.",
+        authoritative_reason="Primary release namespace completed this task cleanly.",
     ),
     AuthoritativeTask(
         benchmark="Value Kaleidoscope",
@@ -139,7 +139,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="value_prism_valence",
         source_run="qwen_recovery_v1",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Qwen recovery namespace supersedes the earlier 402-stopped main-funded attempt.",
+        authoritative_reason="Qwen recovery namespace supersedes the earlier 402-stopped primary attempt.",
     ),
     AuthoritativeTask(
         benchmark="Value Kaleidoscope",
@@ -149,7 +149,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="value_prism_relevance",
         source_run="main_funded",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Main funded namespace completed this task cleanly.",
+        authoritative_reason="Primary release namespace completed this task cleanly.",
     ),
     AuthoritativeTask(
         benchmark="Value Kaleidoscope",
@@ -159,7 +159,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="value_prism_valence",
         source_run="main_funded",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Main funded namespace completed this task cleanly.",
+        authoritative_reason="Primary release namespace completed this task cleanly.",
     ),
     AuthoritativeTask(
         benchmark="Value Kaleidoscope",
@@ -169,7 +169,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="value_prism_relevance",
         source_run="gemma_paid_v2",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Paid Gemma recovery supersedes the stalled free-tier namespace.",
+        authoritative_reason="Gemma recovery namespace supersedes the earlier stalled namespace.",
     ),
     AuthoritativeTask(
         benchmark="Value Kaleidoscope",
@@ -179,7 +179,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="value_prism_valence",
         source_run="gemma_paid_v2",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Paid Gemma recovery supersedes the stalled free-tier namespace.",
+        authoritative_reason="Gemma recovery namespace supersedes the earlier stalled namespace.",
     ),
     AuthoritativeTask(
         benchmark="CCD-Bench",
@@ -189,7 +189,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="ccd_bench_selection",
         source_run="qwen_recovery_v1",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Qwen recovery namespace supersedes the earlier 402-stopped main-funded attempt.",
+        authoritative_reason="Qwen recovery namespace supersedes the earlier 402-stopped primary attempt.",
     ),
     AuthoritativeTask(
         benchmark="CCD-Bench",
@@ -199,7 +199,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="ccd_bench_selection",
         source_run="main_funded",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Main funded namespace completed this task cleanly.",
+        authoritative_reason="Primary release namespace completed this task cleanly.",
     ),
     AuthoritativeTask(
         benchmark="CCD-Bench",
@@ -209,7 +209,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="ccd_bench_selection",
         source_run="gemma_paid_v2",
         benchmark_mode="benchmark_faithful",
-        authoritative_reason="Paid Gemma recovery supersedes the stalled free-tier namespace.",
+        authoritative_reason="Gemma recovery namespace supersedes the earlier stalled namespace.",
     ),
     AuthoritativeTask(
         benchmark="Denevil",
@@ -241,7 +241,7 @@ AUTHORITATIVE_TASKS: list[AuthoritativeTask] = [
         task="denevil_fulcra_proxy_generation",
         source_run="denevil_formal_v3",
         benchmark_mode="proxy",
-        authoritative_reason="Formal-v3 namespace completed successfully on paid Gemma.",
+        authoritative_reason="Formal-v3 namespace completed successfully on the Gemma recovery route.",
         note="Proxy only; not benchmark-faithful MoralPrompt.",
     ),
 ]
@@ -573,7 +573,7 @@ def render_markdown(rows: list[dict[str, str]], live_rows: list[dict[str, str]],
     lines.append("")
     lines.append("- This is the `Option 1` task slice, not yet the full meeting-notes sweep over every model family and three size tiers.")
     lines.append("- `Denevil` is currently represented by a `FULCRA`-backed proxy task, because a benchmark-faithful public `MoralPrompt` export is still unavailable locally.")
-    lines.append("- Free-tier Gemma artifacts in the original funded namespace are audit history only. Paid Gemma recovery is the authoritative Gemma source.")
+    lines.append("- Earlier stalled Gemma artifacts in the original namespace are audit history only. The Gemma recovery namespace is the authoritative Gemma source.")
     lines.append("")
     lines.append("## Model Summary")
     lines.append("")

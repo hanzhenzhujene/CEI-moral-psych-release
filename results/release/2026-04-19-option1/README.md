@@ -15,7 +15,7 @@ This directory contains the tracked, publication-facing outputs for Jenny Zhu's 
 | Supplementary local completion outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `5` papers / `7` tasks |
 | Prepared but not yet completed | `MiniMax` small route via `minimax-m2.1 + minimax-01` |
 | Provider / temperature | `OpenRouter`, `temperature=0` |
-| Current cost note | $35 baseline spend before the active family-size expansion launch on April 19, 2026, plus an approved image add-on queue projected at about $2.42 total (below the $5 cap). |
+| Current operations note | Active text and image family-size expansion queues continue alongside the closed April 19, 2026 release snapshot. |
 | CI reference | [Workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); last verified successful run: [run 24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 
 ## Open These First
@@ -40,26 +40,26 @@ make audit
 ## Active Expansion Queues
 
 - text-only family-size expansion: `results/inspect/full-runs/2026-04-19-family-size-text-expansion`
-- image add-on queue under the $5 cap: `results/inspect/full-runs/2026-04-19-family-size-image-expansion`
+- image expansion queue: `results/inspect/full-runs/2026-04-19-family-size-image-expansion`
 - status labels: `Active` = running now, `Queued` = approved and waiting, `Complete` = finished
 
-## Image Add-On Under The $5 Cap
+## Active Image Expansion Queue
 
-These image jobs are limited to `SMID`, use only routes with a clean medium or large vision-capable mapping, and stay below a combined projected add-on spend of about `$2.42`.
+These image jobs are limited to `SMID` and use only routes with a clean medium or large vision-capable mapping.
 
-| Family | Size slot | Image route | Benchmark | Estimated full-run cost | Status | Note |
-| --- | --- | --- | --- | ---: | --- | --- |
-| `Gemma` | Large | `openrouter/google/gemma-3-27b-it` | `SMID` | `$0.06` | Active | Cheapest selected image add-on route; running first in the capped SMID queue. |
-| `Gemma` | Medium | `openrouter/google/gemma-3-12b-it` | `SMID` | `$0.07` | Queued | Queued after Gemma 27B in the same image-only run. |
-| `Qwen` | Large | `openrouter/qwen/qwen3-vl-32b-instruct` | `SMID` | `$0.16` | Queued | Large Qwen image checkpoint under the same $5 cap. |
-| `Llama` | Large | `openrouter/meta-llama/llama-4-maverick` | `SMID` | `$2.14` | Queued | Selected because the projected full SMID pass stays below the cap. |
+| Family | Size slot | Image route | Benchmark | Status | Note |
+| --- | --- | --- | --- | --- | --- |
+| `Gemma` | Large | `openrouter/google/gemma-3-27b-it` | `SMID` | Active | First active image checkpoint in the current SMID queue. |
+| `Gemma` | Medium | `openrouter/google/gemma-3-12b-it` | `SMID` | Queued | Queued after Gemma 27B in the same image-only run. |
+| `Qwen` | Large | `openrouter/qwen/qwen3-vl-32b-instruct` | `SMID` | Queued | Scheduled large Qwen image checkpoint. |
+| `Llama` | Large | `openrouter/meta-llama/llama-4-maverick` | `SMID` | Queued | Scheduled large Llama image checkpoint. |
 
-Excluded from this capped image queue:
+Excluded from this image queue:
 
 - DeepSeek: no vision route in the current family-size plan.
 - Qwen medium: no clean Qwen medium VL route was locked for this pass.
 - Llama medium: the chosen 70B route is text-only.
-- MiniMax image: the shared `minimax-01` route projects to about $3.49 by itself and does not map cleanly onto separate medium / large size slots.
+- MiniMax image: the shared `minimax-01` route does not map cleanly onto separate medium / large size slots.
 
 ## Files
 
@@ -95,7 +95,7 @@ Excluded from this capped image queue:
 | `Qwen` | `openrouter/qwen/qwen3-8b` | Text | CCD-Bench; Denevil; UniMoral; Value Kaleidoscope | 97,004 | Closed-slice text route for UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy. |
 | `Qwen` | `openrouter/qwen/qwen3-vl-8b-instruct` | Vision | SMID | 5,882 | Closed-slice vision route for SMID. |
 | `DeepSeek` | `openrouter/deepseek/deepseek-chat-v3.1` | Text | CCD-Bench; Denevil; UniMoral; Value Kaleidoscope | 97,004 | Closed-slice DeepSeek route. No separate SMID vision route is present in the release. |
-| `Gemma` | `openrouter/google/gemma-3-4b-it` | Text + Vision | CCD-Bench; Denevil; SMID; UniMoral; Value Kaleidoscope | 102,886 | Paid recovery route that superseded the stalled free-tier Gemma namespace. |
+| `Gemma` | `openrouter/google/gemma-3-4b-it` | Text + Vision | CCD-Bench; Denevil; SMID; UniMoral; Value Kaleidoscope | 102,886 | Recovery route that superseded the earlier stalled Gemma namespace. |
 
 ## Model Summary
 
@@ -110,7 +110,7 @@ Excluded from this capped image queue:
 | Family | Status relative to closed release | Exact route | Benchmark lines done | Benchmark lines still missing | Papers | Tasks | Samples | Benchmark-faithful macro accuracy | Note |
 | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
 | `Llama` | Completed locally, outside the closed Option 1 counts | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy | Benchmark-faithful Denevil via MoralPrompt | 5 | 7 | 102,886 | 0.428 | Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall. |
-| `MiniMax` | Prepared only, not yet completed locally | `minimax-m2.1 + minimax-01` | None yet | UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy; Benchmark-faithful Denevil via MoralPrompt | 0 | 0 | 0 | n/a | Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models. |
+| `MiniMax` | Prepared only, not yet completed locally | `minimax-m2.1 + minimax-01` | None yet | UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy; Benchmark-faithful Denevil via MoralPrompt | 0 | 0 | 0 | n/a | Small-route launchers are wired in the repo, but this family still needs its first formal comparison run before it can be compared against the closed release models. |
 
 ## Benchmark Summary
 

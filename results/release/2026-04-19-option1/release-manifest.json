@@ -8,7 +8,7 @@
     "purpose": "Group / mentor-facing report aligned to the April 14, 2026 moral-psych benchmark plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "cost_note": "$35 baseline spend before the active family-size expansion launch on April 19, 2026, plus an approved image add-on queue projected at about $2.42 total (below the $5 cap).",
+    "operations_note": "Active text and image family-size expansion queues continue alongside the closed April 19, 2026 release snapshot.",
     "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml",
     "ci_last_verified_run_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
   },
@@ -121,7 +121,7 @@
       "missing_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy; Benchmark-faithful Denevil via MoralPrompt",
       "samples": 0,
       "benchmark_faithful_macro_accuracy": null,
-      "note": "Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models."
+      "note": "Small-route launchers are wired in the repo, but this family still needs its first formal comparison run before it can be compared against the closed release models."
     }
   ],
   "entry_points": {
