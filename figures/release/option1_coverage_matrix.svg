@@ -15,7 +15,7 @@
 </defs>
 <rect x="24" y="24" width="1132" height="472" rx="22" class="panel"/>
 <text x="48" y="64" class="title">Option 1 Benchmark Coverage</text>
-<text x="48" y="88" class="subtitle">Green cells are benchmark-faithful. Amber cells are explicit proxy evaluations. Gray cells were not part of the closed release.</text>
+<text x="48" y="88" class="subtitle">Green cells follow the paper setup. Amber cells are proxy-only. Gray cells were not part of the frozen release.</text>
 <text x="295.0" y="112" text-anchor="middle" class="axis">UniMoral</text>
 <text x="465.0" y="112" text-anchor="middle" class="axis">SMID</text>
 <text x="635.0" y="112" text-anchor="middle" class="axis">Value Kaleidoscope</text>
@@ -24,53 +24,53 @@
 <text x="186" y="163.0" text-anchor="end" class="axis">Qwen</text>
 <rect x="210" y="120" width="156" height="60" rx="16" fill="#2f855a"/>
 <text x="288.0" y="154" text-anchor="middle" class="celltext">1/1</text>
-<text x="288.0" y="174" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">benchmark-faithful</text>
+<text x="288.0" y="174" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">paper setup</text>
 <rect x="380" y="120" width="156" height="60" rx="16" fill="#2f855a"/>
 <text x="458.0" y="154" text-anchor="middle" class="celltext">2/2</text>
-<text x="458.0" y="174" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">benchmark-faithful</text>
+<text x="458.0" y="174" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">paper setup</text>
 <rect x="550" y="120" width="156" height="60" rx="16" fill="#2f855a"/>
 <text x="628.0" y="154" text-anchor="middle" class="celltext">2/2</text>
-<text x="628.0" y="174" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">benchmark-faithful</text>
+<text x="628.0" y="174" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">paper setup</text>
 <rect x="720" y="120" width="156" height="60" rx="16" fill="#2f855a"/>
 <text x="798.0" y="154" text-anchor="middle" class="celltext">1/1</text>
-<text x="798.0" y="174" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">benchmark-faithful</text>
+<text x="798.0" y="174" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">paper setup</text>
 <rect x="890" y="120" width="156" height="60" rx="16" fill="#b7791f"/>
 <text x="968.0" y="154" text-anchor="middle" class="celltext">proxy</text>
 <text x="968.0" y="174" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">proxy</text>
 <text x="186" y="237.0" text-anchor="end" class="axis">DeepSeek</text>
 <rect x="210" y="194" width="156" height="60" rx="16" fill="#2f855a"/>
 <text x="288.0" y="228" text-anchor="middle" class="celltext">1/1</text>
-<text x="288.0" y="248" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">benchmark-faithful</text>
+<text x="288.0" y="248" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">paper setup</text>
 <rect x="380" y="194" width="156" height="60" rx="16" fill="#cbd5e1"/>
 <text x="458.0" y="228" text-anchor="middle" class="celltext">-</text>
 <text x="458.0" y="248" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: #415466;">not in release</text>
 <rect x="550" y="194" width="156" height="60" rx="16" fill="#2f855a"/>
 <text x="628.0" y="228" text-anchor="middle" class="celltext">2/2</text>
-<text x="628.0" y="248" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">benchmark-faithful</text>
+<text x="628.0" y="248" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">paper setup</text>
 <rect x="720" y="194" width="156" height="60" rx="16" fill="#2f855a"/>
 <text x="798.0" y="228" text-anchor="middle" class="celltext">1/1</text>
-<text x="798.0" y="248" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">benchmark-faithful</text>
+<text x="798.0" y="248" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">paper setup</text>
 <rect x="890" y="194" width="156" height="60" rx="16" fill="#b7791f"/>
 <text x="968.0" y="228" text-anchor="middle" class="celltext">proxy</text>
 <text x="968.0" y="248" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">proxy</text>
 <text x="186" y="311.0" text-anchor="end" class="axis">Gemma</text>
 <rect x="210" y="268" width="156" height="60" rx="16" fill="#2f855a"/>
 <text x="288.0" y="302" text-anchor="middle" class="celltext">1/1</text>
-<text x="288.0" y="322" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">benchmark-faithful</text>
+<text x="288.0" y="322" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">paper setup</text>
 <rect x="380" y="268" width="156" height="60" rx="16" fill="#2f855a"/>
 <text x="458.0" y="302" text-anchor="middle" class="celltext">2/2</text>
-<text x="458.0" y="322" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">benchmark-faithful</text>
+<text x="458.0" y="322" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">paper setup</text>
 <rect x="550" y="268" width="156" height="60" rx="16" fill="#2f855a"/>
 <text x="628.0" y="302" text-anchor="middle" class="celltext">2/2</text>
-<text x="628.0" y="322" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">benchmark-faithful</text>
+<text x="628.0" y="322" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">paper setup</text>
 <rect x="720" y="268" width="156" height="60" rx="16" fill="#2f855a"/>
 <text x="798.0" y="302" text-anchor="middle" class="celltext">1/1</text>
-<text x="798.0" y="322" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">benchmark-faithful</text>
+<text x="798.0" y="322" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">paper setup</text>
 <rect x="890" y="268" width="156" height="60" rx="16" fill="#b7791f"/>
 <text x="968.0" y="302" text-anchor="middle" class="celltext">proxy</text>
 <text x="968.0" y="322" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: rgba(255,255,255,0.88);">proxy</text>
 <rect x="48" y="448" width="18" height="18" rx="4" fill="#2f855a"/>
-<text x="76" y="462" class="label">benchmark-faithful</text>
+<text x="76" y="462" class="label">paper setup</text>
 <rect x="258" y="448" width="18" height="18" rx="4" fill="#b7791f"/>
 <text x="286" y="462" class="label">proxy</text>
 <rect x="468" y="448" width="18" height="18" rx="4" fill="#cbd5e1"/>

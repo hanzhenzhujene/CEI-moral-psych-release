@@ -6,6 +6,7 @@
     "owner": "Jenny Zhu",
     "date": "2026-04-20",
     "frozen_snapshot_date": "2026-04-19",
+    "current_cost": "$35",
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
     "provider": "OpenRouter",
     "temperature": "0",
@@ -118,7 +119,7 @@
     },
     {
       "family": "MiniMax",
-      "status_relative_to_closed_release": "Prepared only, not yet completed locally",
+      "status_relative_to_closed_release": "Attempted locally, but current results are not usable",
       "exact_route": "minimax-m2.1 + minimax-01",
       "papers_covered": 0,
       "tasks_completed": 0,
@@ -128,7 +129,7 @@
       "missing_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy; Benchmark-faithful Denevil via MoralPrompt",
       "samples": 0,
       "benchmark_faithful_macro_accuracy": null,
-      "note": "Small-route launchers are wired in the repo, but this family still needs its first formal comparison run before it can be compared against the closed release models."
+      "note": "A formal small-model run exists, but OpenRouter key-limit failures interrupted both the text and SMID legs, so the line still needs a clean rerun."
     }
   ],
   "entry_points": {
@@ -170,7 +171,7 @@
   "interpretation_guardrails": [
     "Denevil is represented only by the explicit local proxy task in this release.",
     "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
-    "The completed local Llama small line is supplementary and is not counted in the closed Option 1 totals.",
+    "The completed local Llama small line sits outside the frozen Option 1 totals.",
     "The MiniMax small line has a formal attempt on disk, but the current run failed and is not yet a usable comparison point.",
     "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration."
   ]

@@ -3,6 +3,7 @@
 ## Public Docs
 
 - [`reproducibility.md`](reproducibility.md): setup, testing, release regeneration, and benchmark run instructions.
+- [`how-to-read-results.md`](how-to-read-results.md): plain-language guide to the report terms and progress labels.
 - [`data-access.md`](data-access.md): benchmark-by-benchmark dataset and environment-variable requirements.
 - [`legacy-baselines.md`](legacy-baselines.md): how the older lm-evaluation-harness ETHICS path fits into the repo.
 

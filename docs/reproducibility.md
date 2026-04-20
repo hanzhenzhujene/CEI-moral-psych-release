@@ -24,6 +24,7 @@ Fill in `.env` with:
 - local dataset paths such as `UNIMORAL_DATA_DIR` and `SMID_DATA_DIR`
 
 For benchmark-by-benchmark data expectations, see [`data-access.md`](data-access.md).
+For plain-language report terms such as `proxy`, `live`, and `frozen snapshot`, see [`how-to-read-results.md`](how-to-read-results.md).
 
 ## Test Suite
 
@@ -129,6 +130,6 @@ The current public release is a closed `Option 1` slice, not the full intended f
 
 Two points are especially important for correct interpretation:
 
-- `Denevil` is currently a `FULCRA`-backed proxy line rather than a benchmark-faithful `MoralPrompt` reproduction.
-- `Llama` small is complete locally across all five benchmark papers, but it is tracked as supplementary local evidence rather than folded into the closed `Option 1` counts.
+- `Denevil` is currently a proxy line rather than the paper's original `MoralPrompt` setup.
+- `Llama` small is complete locally across all five benchmark papers, but it is tracked as an extra local result rather than folded into the closed `Option 1` counts.
 - `MiniMax` small has a formal local attempt on disk, but the current run failed and should not yet be treated as a completed comparison point.

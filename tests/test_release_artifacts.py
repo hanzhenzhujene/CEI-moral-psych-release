@@ -72,6 +72,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
+    assert manifest["report_metadata"]["current_cost"] == "$35"
     assert manifest["target_matrix"]["family_size_benchmark_cells"] == 75
     assert manifest["entry_points"]["report"].endswith("jenny-group-report.md")
     assert manifest["entry_points"]["supplementary_progress"].endswith("supplementary-model-progress.csv")
@@ -82,6 +83,12 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert reader.fieldnames is not None
         assert "completed_benchmark_lines" in reader.fieldnames
         assert "missing_benchmark_lines" in reader.fieldnames
+        rows = list(reader)
+    assert any(
+        row["family"] == "MiniMax"
+        and row["status_relative_to_closed_release"] == "Attempted locally, but current results are not usable"
+        for row in rows
+    )
 
     with (release_dir / "family-size-progress.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)

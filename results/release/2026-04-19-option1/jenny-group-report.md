@@ -13,17 +13,20 @@ This report covers Jenny Zhu's five assigned moral-psych benchmark papers under 
 | Report owner | `Jenny Zhu` |
 | Repo update date | `April 20, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
+| Current cost to date | `$35` |
 | Purpose | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
 | Full target matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
 | Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |
 | Agreed model families | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |
 | What the frozen snapshot actually covers | one closed `Option 1` slice across `Qwen`, `DeepSeek`, and `Gemma` |
-| Supplementary local completion outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `5` papers / `7` tasks |
+| Extra completed local line outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `5` papers / `7` tasks |
 | MiniMax small status | formal attempt exists, but the current line failed and is not counted as complete |
 | Run provider / temperature | `OpenRouter`, `temperature=0` |
 | Current operations note | This repo was updated on April 20, 2026. The frozen public snapshot remains Option 1 from April 19, 2026, while larger family-size queues continue locally. |
 | CI status reference | [CI workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); latest verified passing run: [24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 | Total evaluated samples in this release | `302,776` |
+
+Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-results.md)
 
 ## Progress Legend
 
@@ -43,7 +46,7 @@ This report covers Jenny Zhu's five assigned moral-psych benchmark papers under 
 | `SMID` | Crone et al. (PLOS ONE 2018) | [paper](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0190954) | [OSF project page](https://osf.io/ngzwx/) | Vision | Moral rating + foundation classification |
 | `Value Kaleidoscope` | Sorensen et al. (AAAI 2024 / arXiv 2023) | [paper](https://arxiv.org/abs/2310.17681) | [Hugging Face dataset card](https://huggingface.co/datasets/allenai/ValuePrism) | Text value reasoning | Relevance + valence |
 | `CCD-Bench` | Rahman et al. (arXiv 2025) | [paper](https://arxiv.org/abs/2510.03553) | [GitHub repo](https://github.com/smartlab-nyu/CCD-Bench); [JSON](https://raw.githubusercontent.com/smartlab-nyu/CCD-Bench/main/datasets/CCD-Bench.json) | Text response selection | Selection |
-| `Denevil` | Duan et al. (ICLR 2024 submission / arXiv 2023) | [paper](https://arxiv.org/abs/2310.11905) | No stable public MoralPrompt download verified | Text generation | Proxy generation only |
+| `Denevil` | Duan et al. (ICLR 2024 submission / arXiv 2023) | [paper](https://arxiv.org/abs/2310.11905) | No public MoralPrompt export confirmed | Text generation | Proxy generation only |
 
 ## Model Families And Size Routes
 
@@ -83,14 +86,14 @@ Only benchmarks with a directly comparable accuracy metric are shown below. `CCD
 | --- | ---: | ---: | ---: | --- |
 | `Qwen-S` | 0.647 | 0.368 | 0.682 | Frozen Option 1 line. |
 | `DeepSeek-L` | 0.684 | n/a | 0.635 | Frozen large-class text line. No SMID vision route was included. |
-| `Llama-S` | 0.648 | 0.216 | 0.529 | Complete locally across all five papers, but still supplementary to the frozen Option 1 snapshot. |
+| `Llama-S` | 0.648 | 0.216 | 0.529 | Complete locally across all five papers, but still outside the frozen Option 1 snapshot counts. |
 | `Gemma-S` | 0.635 | 0.417 | 0.593 | Frozen Option 1 recovery line. |
 
 ![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
 
 ## Frozen Option 1 Summary
 
-| Model family | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy |
+| Model family | Paper-setup tasks | Proxy tasks | Samples | Paper-setup macro accuracy |
 | --- | ---: | ---: | ---: | ---: |
 | `Qwen` | 6 | 1 | 102,886 | 0.550 |
 | `DeepSeek` | 4 | 1 | 97,004 | 0.651 |
@@ -99,11 +102,11 @@ Only benchmarks with a directly comparable accuracy metric are shown below. `CCD
 ## Interpretation Notes
 
 - The `5 x 5 x 3` matrix is the target plan, not a claim that all 75 cells are already complete.
-- `Llama-S` is complete locally and should be reported as a supplementary completed line outside the frozen Option 1 counts.
+- `Llama-S` is complete locally and should be reported as an extra completed local line outside the frozen Option 1 counts.
 - `MiniMax-S` should currently be reported as a failed formal attempt, not as a completed benchmark line.
 - `DeepSeek` does not yet have a frozen SMID vision route in this deliverable.
 - `Denevil` is still proxy-only in the public release because the original paper-faithful `MoralPrompt` export is not available locally.
 
 ## Safe One-Sentence Framing
 
-> This repository contains Jenny Zhu's CEI moral-psych benchmark deliverable for five target papers, with a frozen Option 1 snapshot over Qwen, DeepSeek, and Gemma, a completed supplementary Llama small line, and a clearly labeled family-size progress matrix for the broader five-family plan.
+> This repository contains Jenny Zhu's CEI moral-psych benchmark deliverable for five target papers, with a frozen Option 1 snapshot over Qwen, DeepSeek, and Gemma, an extra completed Llama small line outside the frozen counts, and a clearly labeled family-size progress matrix for the broader five-family plan.

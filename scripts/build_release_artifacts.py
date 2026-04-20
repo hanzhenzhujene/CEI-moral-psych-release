@@ -26,6 +26,7 @@ SNAPSHOT_DATE_ISO = "2026-04-19"
 REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan."
 REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
+REPORT_CURRENT_COST = "$35"
 REPORT_STATUS_NOTE = (
     "This repo was updated on April 20, 2026. "
     "The frozen public snapshot remains Option 1 from April 19, 2026, while larger family-size queues continue locally."
@@ -118,7 +119,7 @@ BENCHMARK_METADATA = {
         "paper_title": "DeNEVIL: Navigating the Ethical Landscape of LLMs as Evaluators through Debate",
         "citation": "Duan et al. (ICLR 2024 submission / arXiv 2023)",
         "paper_url": "https://arxiv.org/abs/2310.11905",
-        "dataset_label": "No stable public MoralPrompt download verified",
+        "dataset_label": "No public MoralPrompt export confirmed",
         "dataset_url": "",
         "modality": "Text generation",
         "repo_tasks": [
@@ -260,7 +261,7 @@ SUPPLEMENTARY_MODEL_PROGRESS = [
     },
     {
         "family": "MiniMax",
-        "status_relative_to_closed_release": "Prepared only, not yet completed locally",
+        "status_relative_to_closed_release": "Attempted locally, but current results are not usable",
         "exact_route": "minimax-m2.1 + minimax-01",
         "papers_covered": 0,
         "tasks_completed": 0,
@@ -270,7 +271,7 @@ SUPPLEMENTARY_MODEL_PROGRESS = [
         "benchmark_faithful_macro_accuracy": None,
         "completed_benchmark_lines": "None yet",
         "missing_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy; Benchmark-faithful Denevil via MoralPrompt",
-        "note": "Small-route launchers are wired in the repo, but this family still needs its first formal comparison run before it can be compared against the closed release models.",
+        "note": "A formal small-model run exists, but OpenRouter key-limit failures interrupted both the text and SMID legs, so the line still needs a clean rerun.",
     },
 ]
 
@@ -505,7 +506,7 @@ SUPPLEMENTARY_COMPARISON_LINES = [
         "unimoral_action_accuracy": 0.6479963570127505,
         "smid_average_accuracy": 0.21642298537912275,
         "value_average_accuracy": 0.5285828754578754,
-        "coverage_note": "Complete locally across all five papers, but still supplementary to the frozen Option 1 snapshot.",
+        "coverage_note": "Complete locally across all five papers, but still outside the frozen Option 1 snapshot counts.",
     }
 ]
 
@@ -834,7 +835,7 @@ def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
         [
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             '<text x="48" y="64" class="title">Option 1 Benchmark Coverage</text>',
-            '<text x="48" y="88" class="subtitle">Green cells are benchmark-faithful. Amber cells are explicit proxy evaluations. Gray cells were not part of the closed release.</text>',
+            '<text x="48" y="88" class="subtitle">Green cells follow the paper setup. Amber cells are proxy-only. Gray cells were not part of the frozen release.</text>',
         ]
     )
 
@@ -853,14 +854,14 @@ def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
             lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="{color}"/>')
             label_x = x + (cell_w - 14) / 2
             lines.append(f'<text x="{label_x}" y="{y0 + 34}" text-anchor="middle" class="celltext">{escape_xml(cell["label"])}</text>')
-            detail = "benchmark-faithful" if cell["status"] == "benchmark_faithful" else ("proxy" if cell["status"] == "proxy" else "not in release")
+            detail = "paper setup" if cell["status"] == "benchmark_faithful" else ("proxy" if cell["status"] == "proxy" else "not in release")
             text_color = "rgba(255,255,255,0.88)" if cell["status"] != "not_run" else "#415466"
             lines.append(
                 f'<text x="{label_x}" y="{y0 + 54}" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: {text_color};">{escape_xml(detail)}</text>'
             )
 
     legend_y = height - 58
-    legend_items = [("#2f855a", "benchmark-faithful"), ("#b7791f", "proxy"), ("#cbd5e1", "not in release")]
+    legend_items = [("#2f855a", "paper setup"), ("#b7791f", "proxy"), ("#cbd5e1", "not in release")]
     for index, (color, label) in enumerate(legend_items):
         x = 48 + index * 210
         lines.append(f'<rect x="{x}" y="{legend_y - 14}" width="18" height="18" rx="4" fill="{color}"/>')
@@ -950,7 +951,7 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
         [
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             '<text x="48" y="64" class="title">Sample Volume by Benchmark</text>',
-            f'<text x="48" y="88" class="subtitle">The closed Option 1 release contains {total_samples:,} evaluated samples. Proxy volume is isolated to Denevil.</text>',
+            f'<text x="48" y="88" class="subtitle">The closed Option 1 release contains {total_samples:,} evaluated samples. Proxy volume appears only in Denevil.</text>',
         ]
     )
 
@@ -969,13 +970,13 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
             lines.append(f'<rect x="{left + faithful_w:.2f}" y="{y}" width="{proxy_w:.2f}" height="{bar_h}" rx="12" fill="#b7791f"/>')
         lines.append(f'<text x="{left + bar_w + 18}" y="{y + 22}" class="axis">{total:,}</text>')
         if faithful:
-            lines.append(f'<text x="{left + 10}" y="{y + 22}" class="cellsub">benchmark-faithful {faithful:,}</text>')
+            lines.append(f'<text x="{left + 10}" y="{y + 22}" class="cellsub">paper setup {faithful:,}</text>')
         if proxy:
             lines.append(f'<text x="{left + faithful_w + 10:.2f}" y="{y + 22}" class="cellsub">proxy {proxy:,}</text>')
 
     legend_y = height - 66
     lines.append(f'<rect x="48" y="{legend_y - 14}" width="18" height="18" rx="4" fill="#2f855a"/>')
-    lines.append(f'<text x="76" y="{legend_y}" class="label">benchmark-faithful samples</text>')
+    lines.append(f'<text x="76" y="{legend_y}" class="label">paper-setup samples</text>')
     lines.append(f'<rect x="286" y="{legend_y - 14}" width="18" height="18" rx="4" fill="#b7791f"/>')
     lines.append(f'<text x="314" y="{legend_y}" class="label">proxy samples</text>')
 
@@ -1071,17 +1072,18 @@ def build_topline_summary(
     lines = [
         "# 2026-04-19 Option 1 Release Summary",
         "",
-        f"- authoritative tasks: `{len(rows)}`",
-        f"- benchmark-faithful tasks: `{faithful_tasks}`",
+        f"- tasks in frozen snapshot: `{len(rows)}`",
+        f"- paper-setup tasks: `{faithful_tasks}`",
         f"- proxy tasks: `{proxy_tasks}`",
         f"- total evaluated samples: `{total_samples:,}`",
+        f"- current cost to date: `{REPORT_CURRENT_COST}`",
         "- closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`",
         "- key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup",
-        f"- supplementary local progress outside the closed release: `Llama` small is complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks and is intentionally excluded from the authoritative `19 / 19` totals",
+        f"- extra local progress outside the frozen snapshot: `Llama` small is complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks and is intentionally excluded from the frozen `19 / 19` totals",
         "",
         "## Model Summary",
         "",
-        "| Model family | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy |",
+        "| Model family | Paper-setup tasks | Proxy tasks | Samples | Paper-setup macro accuracy |",
         "| --- | ---: | ---: | ---: | ---: |",
     ]
     for row in model_summary:
@@ -1091,7 +1093,7 @@ def build_topline_summary(
     lines.extend(
         [
             "",
-            "Macro accuracy is computed over benchmark-faithful tasks with a directly comparable accuracy metric. `CCD-Bench` and `Denevil` are excluded from that average.",
+            "Macro accuracy is computed over paper-setup tasks with a directly comparable accuracy metric. `CCD-Bench` and `Denevil` are excluded from that average.",
         ]
     )
     return "\n".join(lines) + "\n"
@@ -1179,12 +1181,13 @@ def build_release_readme(
         f"| Report owner | `{REPORT_OWNER}` |",
         f"| Repo update date | `{REPORT_DATE_LONG}` |",
         f"| Frozen public snapshot | `Option 1`, `{SNAPSHOT_DATE_LONG}` |",
+        f"| Current cost to date | `{REPORT_CURRENT_COST}` |",
         f"| Intended use | {REPORT_PURPOSE} |",
         "| Agreed target matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |",
         "| Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |",
         "| Agreed model families | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |",
         "| Frozen families already in Option 1 | `Qwen`, `DeepSeek`, `Gemma` |",
-        f"| Supplementary local completion outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
+        f"| Extra completed local line outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
         "| MiniMax small status | formal attempt exists, but the current run failed and is not counted as complete |",
         "| Provider / temperature | `OpenRouter`, `temperature=0` |",
         f"| Current operations note | {REPORT_STATUS_NOTE} |",
@@ -1195,6 +1198,7 @@ def build_release_readme(
         "- `jenny-group-report.md`: mentor-facing report with the benchmark list, progress matrix, model roster, and current results",
         "- `topline-summary.md`: shortest narrative summary of the frozen Option 1 snapshot",
         "- `release-manifest.json`: machine-readable release index",
+        f"- {markdown_link('how to read the results', '../../../docs/how-to-read-results.md')}: plain-language explanation of the report terms",
         f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: current cross-model benchmark comparison",
         f"- {markdown_link('coverage matrix', '../../../figures/release/option1_coverage_matrix.svg')}: frozen Option 1 coverage only",
         "",
@@ -1249,7 +1253,7 @@ def build_release_readme(
             "",
             "## Frozen Option 1 Model Summary",
             "",
-            "| Model family | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy |",
+            "| Model family | Paper-setup tasks | Proxy tasks | Samples | Paper-setup macro accuracy |",
             "| --- | ---: | ---: | ---: | ---: |",
         ]
     )
@@ -1287,7 +1291,7 @@ def build_release_readme(
             "",
             "- The full `5 x 5 x 3` plan is the target matrix, not a claim of completed coverage.",
             "- The frozen `Option 1` snapshot still only includes `Qwen`, `DeepSeek`, and `Gemma`.",
-            "- `Llama-S` is complete locally and is shown in comparison tables, but it remains supplementary to the frozen snapshot.",
+            "- `Llama-S` is complete locally and is shown in comparison tables, but it remains outside the frozen snapshot counts.",
             "- `MiniMax-S` has a formal attempt on disk, but it is still an error line rather than a finished comparison point.",
             "- `Denevil` is still proxy-only in the current public release because the paper-faithful `MoralPrompt` export is not available locally.",
         ]
@@ -1322,17 +1326,20 @@ def build_jenny_group_report(
         f"| Report owner | `{REPORT_OWNER}` |",
         f"| Repo update date | `{REPORT_DATE_LONG}` |",
         f"| Frozen public snapshot | `Option 1`, `{SNAPSHOT_DATE_LONG}` |",
+        f"| Current cost to date | `{REPORT_CURRENT_COST}` |",
         f"| Purpose | {REPORT_PURPOSE} |",
         "| Full target matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |",
         "| Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |",
         "| Agreed model families | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |",
         "| What the frozen snapshot actually covers | one closed `Option 1` slice across `Qwen`, `DeepSeek`, and `Gemma` |",
-        f"| Supplementary local completion outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
+        f"| Extra completed local line outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
         "| MiniMax small status | formal attempt exists, but the current line failed and is not counted as complete |",
         "| Run provider / temperature | `OpenRouter`, `temperature=0` |",
         f"| Current operations note | {REPORT_STATUS_NOTE} |",
         f"| CI status reference | {markdown_link('CI workflow', CI_WORKFLOW_URL)}; latest verified passing run: {markdown_link('24634450927', CI_RUN_URL)} |",
         f"| Total evaluated samples in this release | `{total_samples:,}` |",
+        "",
+        "Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-results.md)",
         "",
         "## Progress Legend",
         "",
@@ -1394,7 +1401,7 @@ def build_jenny_group_report(
             "",
             "## Frozen Option 1 Summary",
             "",
-            "| Model family | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy |",
+            "| Model family | Paper-setup tasks | Proxy tasks | Samples | Paper-setup macro accuracy |",
             "| --- | ---: | ---: | ---: | ---: |",
         ]
     )
@@ -1408,14 +1415,14 @@ def build_jenny_group_report(
             "## Interpretation Notes",
             "",
             "- The `5 x 5 x 3` matrix is the target plan, not a claim that all 75 cells are already complete.",
-            "- `Llama-S` is complete locally and should be reported as a supplementary completed line outside the frozen Option 1 counts.",
+            "- `Llama-S` is complete locally and should be reported as an extra completed local line outside the frozen Option 1 counts.",
             "- `MiniMax-S` should currently be reported as a failed formal attempt, not as a completed benchmark line.",
             "- `DeepSeek` does not yet have a frozen SMID vision route in this deliverable.",
             "- `Denevil` is still proxy-only in the public release because the original paper-faithful `MoralPrompt` export is not available locally.",
             "",
             "## Safe One-Sentence Framing",
             "",
-            "> This repository contains Jenny Zhu's CEI moral-psych benchmark deliverable for five target papers, with a frozen Option 1 snapshot over Qwen, DeepSeek, and Gemma, a completed supplementary Llama small line, and a clearly labeled family-size progress matrix for the broader five-family plan.",
+            "> This repository contains Jenny Zhu's CEI moral-psych benchmark deliverable for five target papers, with a frozen Option 1 snapshot over Qwen, DeepSeek, and Gemma, an extra completed Llama small line outside the frozen counts, and a clearly labeled family-size progress matrix for the broader five-family plan.",
         ]
     )
     return "\n".join(lines) + "\n"
@@ -1457,6 +1464,7 @@ def build_release_manifest(
             "owner": REPORT_OWNER,
             "date": REPORT_DATE_ISO,
             "frozen_snapshot_date": SNAPSHOT_DATE_ISO,
+            "current_cost": REPORT_CURRENT_COST,
             "purpose": REPORT_PURPOSE,
             "provider": REPORT_PROVIDER,
             "temperature": REPORT_TEMPERATURE,
@@ -1533,7 +1541,7 @@ def build_release_manifest(
         "interpretation_guardrails": [
             "Denevil is represented only by the explicit local proxy task in this release.",
             "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
-            "The completed local Llama small line is supplementary and is not counted in the closed Option 1 totals.",
+            "The completed local Llama small line sits outside the frozen Option 1 totals.",
             "The MiniMax small line has a formal attempt on disk, but the current run failed and is not yet a usable comparison point.",
             "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration.",
         ],

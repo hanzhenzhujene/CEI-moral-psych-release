@@ -4,6 +4,8 @@
 
 This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.
 
+> Current cost to date: `$35`
+
 It combines three things in one clean public surface:
 
 1. a reproducible benchmarking codebase built on `Inspect AI` and `lm-evaluation-harness`
@@ -15,6 +17,7 @@ Quick links:
 - [Jenny's group report](results/release/2026-04-19-option1/jenny-group-report.md)
 - [Release appendix](results/release/2026-04-19-option1/README.md)
 - [Frozen source snapshot](results/release/2026-04-19-option1/source/authoritative-summary.csv)
+- [How to read the results](docs/how-to-read-results.md)
 - [Reproducibility guide](docs/reproducibility.md)
 
 ## Snapshot
@@ -24,11 +27,12 @@ Quick links:
 | Report owner | `Jenny Zhu` |
 | Repo update date | `April 20, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
+| Current cost to date | `$35` |
 | Group plan target | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
 | Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |
-| Clarified model families used here | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |
+| Model families in scope | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |
 | Frozen families already in Option 1 | `Qwen`, `DeepSeek`, `Gemma` |
-| Supplementary completed line | `Llama-S`, complete locally across all five papers |
+| Extra completed local line | `Llama-S`, complete locally across all five papers |
 | MiniMax small status | formal attempt exists, but the current line failed and is not counted as complete |
 | Run setting | `OpenRouter`, `temperature=0` |
 
@@ -74,7 +78,7 @@ The same matrix is also saved as [family-size-progress.csv](results/release/2026
 | `SMID` | [Crone et al. (PLOS ONE 2018)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0190954) | [OSF project page](https://osf.io/ngzwx/) | Vision | Moral rating and foundation classification |
 | `Value Kaleidoscope` | [Sorensen et al. (AAAI 2024 / arXiv 2023)](https://arxiv.org/abs/2310.17681) | [Hugging Face dataset card](https://huggingface.co/datasets/allenai/ValuePrism) | Text value reasoning | Relevance and valence |
 | `CCD-Bench` | [Rahman et al. (arXiv 2025)](https://arxiv.org/abs/2510.03553) | [GitHub repo](https://github.com/smartlab-nyu/CCD-Bench), [JSON](https://raw.githubusercontent.com/smartlab-nyu/CCD-Bench/main/datasets/CCD-Bench.json) | Text response selection | Selection |
-| `Denevil` | [Duan et al. (ICLR 2024 submission / arXiv 2023)](https://arxiv.org/abs/2310.11905) | paper-faithful `MoralPrompt` export not available locally | Text generation | Proxy-only generation line for now |
+| `Denevil` | [Duan et al. (ICLR 2024 submission / arXiv 2023)](https://arxiv.org/abs/2310.11905) | no public `MoralPrompt` export confirmed locally | Text generation | Proxy-only generation line for now |
 
 ## Model Families And Size Routes
 
@@ -94,7 +98,7 @@ Only benchmarks with a directly comparable accuracy metric are shown below. `CCD
 | --- | ---: | ---: | ---: | --- |
 | `Qwen-S` | 0.647 | 0.368 | 0.682 | Frozen Option 1 line. |
 | `DeepSeek-L` | 0.684 | n/a | 0.635 | Frozen large-class text line. No SMID vision route was included. |
-| `Llama-S` | 0.648 | 0.216 | 0.529 | Complete locally across all five papers, but still supplementary to the frozen Option 1 snapshot. |
+| `Llama-S` | 0.648 | 0.216 | 0.529 | Complete locally across all five papers, but still outside the frozen Option 1 snapshot counts. |
 | `Gemma-S` | 0.635 | 0.417 | 0.593 | Frozen Option 1 recovery line. |
 
 The underlying table is saved as [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv).
@@ -140,7 +144,7 @@ For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibil
 ## Important Notes
 
 - The full `5 x 5 x 3` matrix is the target plan, not a claim that all 75 cells are already complete.
-- `Llama-S` is a completed local line and is intentionally shown as supplementary to the frozen Option 1 snapshot.
+- `Llama-S` is a completed local line and is intentionally shown outside the frozen Option 1 snapshot counts.
 - `MiniMax-S` should currently be reported as a failed formal attempt, not as a completed comparison point.
 - `Denevil` is still proxy-only in the public release because the original paper-faithful `MoralPrompt` export is not available locally.
 - The detailed appendix lives in [results/release/2026-04-19-option1/](results/release/2026-04-19-option1/).
