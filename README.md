@@ -19,6 +19,9 @@ Quick links:
 - [Frozen source snapshot](results/release/2026-04-19-option1/source/authoritative-summary.csv)
 - [How to read the results](docs/how-to-read-results.md)
 - [Reproducibility guide](docs/reproducibility.md)
+- [Accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)
+- [Coverage matrix](figures/release/option1_coverage_matrix.svg)
+- [Sample volume chart](figures/release/option1_sample_volume.svg)
 
 ## Snapshot
 
@@ -50,12 +53,12 @@ As of the latest local check on `April 20, 2026`:
 
 ## Progress Legend
 
-- `done`: benchmark line finished with a usable result
-- `proxy`: finished, but only with a substitute proxy dataset instead of the paper's original setup
-- `live`: currently running
-- `error`: formal attempt exists, but the current result is not usable
-- `queue`: approved and queued next
-- `tbd`: family-size route is not frozen yet
+- `Done`: benchmark line finished with a usable result
+- `Proxy`: finished, but only with a substitute proxy dataset instead of the paper's original setup
+- `Live`: currently running
+- `Error`: formal attempt exists, but the current result is not usable
+- `Queue`: approved and queued next
+- `TBD`: family-size route is not frozen yet
 - `-`: no run is planned on that line right now
 
 ## Family-Size Progress Matrix
@@ -63,22 +66,22 @@ As of the latest local check on `April 20, 2026`:
 This is the main repo-level status table for the full group plan.
 
 | Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | Note |
-| --- | --- | --- | --- | --- | --- | --- |
-| `Qwen-S` | done | done | done | done | proxy | Frozen Option 1 line. |
-| `Qwen-M` | queue | tbd | queue | queue | queue | Text route is queued. No medium vision route is locked for SMID yet. |
-| `Qwen-L` | queue | error | queue | queue | queue | Large text route is still queued. The first Qwen-L SMID attempt failed on Alibaba moderation, and a safer qwen2.5-vl-72b recovery route is now prepared with non-Alibaba provider routing. |
-| `MiniMax-S` | error | error | error | error | error | Formal small-model run was attempted, but the line hit OpenRouter key-limit errors and is not counted as complete. |
-| `MiniMax-M` | queue | tbd | queue | queue | queue | Text route is queued. Separate medium vision route is not fixed yet. |
-| `MiniMax-L` | queue | tbd | queue | queue | queue | Text route is queued. Separate large vision route is not fixed yet. |
-| `DeepSeek-S` | tbd | - | tbd | tbd | tbd | A smaller DeepSeek baseline has not been frozen yet. No vision route is in scope. |
-| `DeepSeek-M` | queue | - | queue | queue | queue | Medium text route is queued. No vision route is in scope. |
-| `DeepSeek-L` | done | - | done | done | proxy | Frozen Option 1 large-class text line. No SMID vision route was included. |
-| `Llama-S` | done | done | done | done | proxy | Complete locally across all five papers, but not folded into the frozen Option 1 counts. |
-| `Llama-M` | queue | - | queue | queue | queue | Text-only medium route is queued. No SMID run is planned on this line. |
-| `Llama-L` | queue | done | queue | queue | queue | Large Llama SMID is complete. The text route is still queued. |
-| `Gemma-S` | done | done | done | done | proxy | Frozen Option 1 recovery line. |
-| `Gemma-M` | queue | done | queue | queue | queue | Gemma-M SMID is complete. The text route is still queued behind the active Gemma-L run. |
-| `Gemma-L` | done | done | done | done | live | Large Gemma has finished UniMoral, SMID, Value Kaleidoscope, and CCD-Bench. Only the Denevil proxy task is still live. |
+| :--- | :---: | :---: | :---: | :---: | :---: | --- |
+| `Qwen-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 line. |
+| `Qwen-M` | Queue | TBD | Queue | Queue | Queue | Text queued; no medium SMID route is fixed yet. |
+| `Qwen-L` | Queue | Error | Queue | Queue | Queue | Text queued; SMID recovery is prepared on qwen2.5-vl-72b after the Alibaba moderation failure. |
+| `MiniMax-S` | Error | Error | Error | Error | Error | Attempted, but key-limit failures made the line unusable. |
+| `MiniMax-M` | Queue | TBD | Queue | Queue | Queue | Text queued; no medium SMID route is fixed yet. |
+| `MiniMax-L` | Queue | TBD | Queue | Queue | Queue | Text queued; no large SMID route is fixed yet. |
+| `DeepSeek-S` | TBD | - | TBD | TBD | TBD | Small baseline not frozen; no vision route is in scope. |
+| `DeepSeek-M` | Queue | - | Queue | Queue | Queue | Text queued; no vision route is in scope. |
+| `DeepSeek-L` | Done | - | Done | Done | Proxy | Frozen large text line; no SMID route was included. |
+| `Llama-S` | Done | Done | Done | Done | Proxy | Complete locally across all five papers. |
+| `Llama-M` | Queue | - | Queue | Queue | Queue | Text queued; no SMID run is planned. |
+| `Llama-L` | Queue | Done | Queue | Queue | Queue | SMID done; text is still queued. |
+| `Gemma-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 recovery line. |
+| `Gemma-M` | Queue | Done | Queue | Queue | Queue | SMID done; text is queued behind Gemma-L. |
+| `Gemma-L` | Done | Done | Done | Done | Live | UniMoral, SMID, Value, and CCD are done; Denevil is live. |
 
 The same matrix is also saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv).
 
@@ -116,6 +119,22 @@ Only benchmarks with a directly comparable accuracy metric are shown below. `CCD
 The underlying table is saved as [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv).
 
 ![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
+
+_Figure 0. Benchmark-level accuracy comparison across the currently completed comparable lines._
+
+## Figure Gallery
+
+![Accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)
+
+_Figure 1. Task-level accuracy heatmap for the frozen Option 1 slice._
+
+![Coverage matrix](figures/release/option1_coverage_matrix.svg)
+
+_Figure 2. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._
+
+![Sample volume by benchmark](figures/release/option1_sample_volume.svg)
+
+_Figure 3. Sample volume by benchmark, with paper-setup and proxy samples separated for readability._
 
 ## Reproducibility
 

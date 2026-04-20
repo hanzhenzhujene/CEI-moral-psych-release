@@ -28,10 +28,10 @@ REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
 REPORT_CURRENT_COST = "$35"
 REPORT_STATUS_NOTE = (
-    "This repo was updated on April 20, 2026. "
-    "The frozen public snapshot remains Option 1 from April 19, 2026. "
-    "The family-size image queue has completed, the active text queue is currently on the Gemma-L Denevil proxy task, "
-    "and the Qwen-L SMID recovery route is now prepared with qwen2.5-vl-72b plus a non-Alibaba provider allowlist."
+    "Updated April 20, 2026. "
+    "The frozen public snapshot is still Option 1 from April 19. "
+    "The image queue is complete, Gemma-L is running the Denevil proxy task, "
+    "and Qwen-L SMID recovery is prepared on qwen2.5-vl-72b with a non-Alibaba provider allowlist."
 )
 CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 CI_RUN_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
@@ -302,7 +302,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Text route is queued. No medium vision route is locked for SMID yet.",
+        "summary_note": "Text queued; no medium SMID route is fixed yet.",
     },
     {
         "family": "Qwen",
@@ -315,7 +315,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Large text route is still queued. The first Qwen-L SMID attempt failed quickly on Alibaba moderation, and a safer qwen2.5-vl-72b recovery route is now prepared with non-Alibaba provider routing.",
+        "summary_note": "Text queued; SMID recovery is prepared on qwen2.5-vl-72b after the Alibaba moderation failure.",
     },
     {
         "family": "MiniMax",
@@ -328,7 +328,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "error",
         "ccd_bench": "error",
         "denevil": "error",
-        "summary_note": "Formal small-model run was attempted, but the line hit OpenRouter key-limit errors and is not counted as complete.",
+        "summary_note": "Attempted, but key-limit failures made the line unusable.",
     },
     {
         "family": "MiniMax",
@@ -341,7 +341,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Text route is queued. Separate medium vision route is not fixed yet.",
+        "summary_note": "Text queued; no medium SMID route is fixed yet.",
     },
     {
         "family": "MiniMax",
@@ -354,7 +354,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Text route is queued. Separate large vision route is not fixed yet.",
+        "summary_note": "Text queued; no large SMID route is fixed yet.",
     },
     {
         "family": "DeepSeek",
@@ -367,7 +367,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "tbd",
         "ccd_bench": "tbd",
         "denevil": "tbd",
-        "summary_note": "A smaller DeepSeek baseline has not been frozen yet. No vision route is in scope.",
+        "summary_note": "Small baseline not frozen; no vision route is in scope.",
     },
     {
         "family": "DeepSeek",
@@ -380,7 +380,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Medium text route is queued. No vision route is in scope.",
+        "summary_note": "Text queued; no vision route is in scope.",
     },
     {
         "family": "DeepSeek",
@@ -393,7 +393,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "done",
         "ccd_bench": "done",
         "denevil": "proxy",
-        "summary_note": "Frozen Option 1 large-class text line. No SMID vision route was included.",
+        "summary_note": "Frozen large text line; no SMID route was included.",
     },
     {
         "family": "Llama",
@@ -406,7 +406,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "done",
         "ccd_bench": "done",
         "denevil": "proxy",
-        "summary_note": "Complete locally across all five papers, but not folded into the frozen Option 1 counts.",
+        "summary_note": "Complete locally across all five papers.",
     },
     {
         "family": "Llama",
@@ -419,7 +419,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Text-only medium route is queued. No SMID run is planned on this line.",
+        "summary_note": "Text queued; no SMID run is planned.",
     },
     {
         "family": "Llama",
@@ -432,7 +432,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Large Llama SMID is complete. The text route is still queued.",
+        "summary_note": "SMID done; text is still queued.",
     },
     {
         "family": "Gemma",
@@ -458,7 +458,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Gemma-M SMID is complete. The text route is still queued behind the active Gemma-L run.",
+        "summary_note": "SMID done; text is queued behind Gemma-L.",
     },
     {
         "family": "Gemma",
@@ -471,7 +471,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "done",
         "ccd_bench": "done",
         "denevil": "live",
-        "summary_note": "Large Gemma has finished UniMoral, SMID, Value Kaleidoscope, and CCD-Bench. Only the Denevil proxy task is still live.",
+        "summary_note": "UniMoral, SMID, Value, and CCD are done; Denevil is live.",
     },
 ]
 
@@ -513,13 +513,13 @@ SUPPLEMENTARY_COMPARISON_LINES = [
 ]
 
 STATUS_DISPLAY = {
-    "done": "done",
-    "proxy": "proxy",
-    "live": "live",
-    "error": "error",
-    "queue": "queue",
-    "prep": "prep",
-    "tbd": "tbd",
+    "done": "Done",
+    "proxy": "Proxy",
+    "live": "Live",
+    "error": "Error",
+    "queue": "Queue",
+    "prep": "Prep",
+    "tbd": "TBD",
     "-": "-",
 }
 
@@ -791,6 +791,21 @@ def hex_to_rgb(color: str) -> tuple[int, int, int]:
     return int(color[0:2], 16), int(color[2:4], 16), int(color[4:6], 16)
 
 
+def relative_luminance(color: str) -> float:
+    def linearize(channel: int) -> float:
+        scaled = channel / 255
+        if scaled <= 0.03928:
+            return scaled / 12.92
+        return ((scaled + 0.055) / 1.055) ** 2.4
+
+    r, g, b = hex_to_rgb(color)
+    return 0.2126 * linearize(r) + 0.7152 * linearize(g) + 0.0722 * linearize(b)
+
+
+def text_classes_for_fill(color: str) -> tuple[str, str]:
+    return ("celltext", "cellsub") if relative_luminance(color) < 0.32 else ("celltext-dark", "cellsub-dark")
+
+
 
 def rgb_to_hex(rgb: tuple[int, int, int]) -> str:
     return "#" + "".join(f"{channel:02x}" for channel in rgb)
@@ -815,19 +830,24 @@ def svg_header(width: int, height: int) -> list[str]:
         ".axis { font: 600 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }",
         ".label { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }",
         ".celltext { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #ffffff; }",
+        ".celltext-dark { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #173042; }",
         ".cellsub { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: rgba(255,255,255,0.88); }",
+        ".cellsub-dark { font: 600 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #385062; }",
         ".body { font: 500 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }",
         ".small { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }",
         ".grid { fill: #ffffff; stroke: #d7dee6; stroke-width: 1.25; }",
         ".panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1.25; }",
+        ".subpanel { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }",
+        ".guide { stroke: #d7dee6; stroke-width: 1; stroke-dasharray: 4 6; }",
+        ".outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }",
         "</style>",
         "</defs>",
     ]
 
 
 def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
-    width, height = 1180, 520
-    left, top = 210, 120
+    width, height = 1180, 540
+    left, top = 210, 140
     cell_w, cell_h = 170, 74
     colors = {"benchmark_faithful": "#2f855a", "proxy": "#b7791f", "not_run": "#cbd5e1"}
 
@@ -836,6 +856,8 @@ def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
     lines.extend(
         [
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
+            "<title>Option 1 benchmark coverage matrix</title>",
+            "<desc>Coverage matrix for the frozen Option 1 release across Qwen, DeepSeek, and Gemma for the five benchmark lines.</desc>",
             '<text x="48" y="64" class="title">Option 1 Benchmark Coverage</text>',
             '<text x="48" y="88" class="subtitle">Green cells follow the paper setup. Amber cells are proxy-only. Gray cells were not part of the frozen release.</text>',
         ]
@@ -843,7 +865,7 @@ def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
 
     for index, benchmark in enumerate(BENCHMARK_ORDER):
         x = left + index * cell_w + cell_w / 2
-        lines.append(f'<text x="{x}" y="112" text-anchor="middle" class="axis">{escape_xml(benchmark)}</text>')
+        lines.append(f'<text x="{x}" y="124" text-anchor="middle" class="axis">{escape_xml(benchmark)}</text>')
 
     for row_index, model in enumerate(MODEL_ORDER):
         y = top + row_index * cell_h + cell_h / 2 + 6
@@ -853,17 +875,15 @@ def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
             y0 = top + row_index * cell_h
             cell = matrix[(model, benchmark)]
             color = colors[cell["status"]]
-            lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="{color}"/>')
+            lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="{color}" class="outline"/>')
             label_x = x + (cell_w - 14) / 2
-            lines.append(f'<text x="{label_x}" y="{y0 + 34}" text-anchor="middle" class="celltext">{escape_xml(cell["label"])}</text>')
-            detail = "paper setup" if cell["status"] == "benchmark_faithful" else ("proxy" if cell["status"] == "proxy" else "not in release")
-            text_color = "rgba(255,255,255,0.88)" if cell["status"] != "not_run" else "#415466"
-            lines.append(
-                f'<text x="{label_x}" y="{y0 + 54}" text-anchor="middle" style="font: 500 11px IBM Plex Sans, Helvetica Neue, Arial, sans-serif; fill: {text_color};">{escape_xml(detail)}</text>'
-            )
+            main_class, sub_class = ("celltext-dark", "cellsub-dark") if cell["status"] == "not_run" else ("celltext", "cellsub")
+            lines.append(f'<text x="{label_x}" y="{y0 + 34}" text-anchor="middle" class="{main_class}">{escape_xml(cell["label"])}</text>')
+            detail = "paper setup" if cell["status"] == "benchmark_faithful" else ("proxy only" if cell["status"] == "proxy" else "not in release")
+            lines.append(f'<text x="{label_x}" y="{y0 + 54}" text-anchor="middle" class="{sub_class}">{escape_xml(detail)}</text>')
 
     legend_y = height - 58
-    legend_items = [("#2f855a", "paper setup"), ("#b7791f", "proxy"), ("#cbd5e1", "not in release")]
+    legend_items = [("#2f855a", "Paper setup"), ("#b7791f", "Proxy only"), ("#cbd5e1", "Not in release")]
     for index, (color, label) in enumerate(legend_items):
         x = 48 + index * 210
         lines.append(f'<rect x="{x}" y="{legend_y - 14}" width="18" height="18" rx="4" fill="{color}"/>')
@@ -874,8 +894,8 @@ def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
 
 
 def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
-    width, height = 1180, 560
-    left, top = 210, 132
+    width, height = 1180, 600
+    left, top = 210, 148
     cell_w, cell_h = 170, 78
     scored = [row["accuracy"] for row in rows if row["accuracy"] is not None]
     min_acc = min(scored)
@@ -886,6 +906,8 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
     lines.extend(
         [
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
+            "<title>Option 1 accuracy heatmap</title>",
+            "<desc>Heatmap of comparable accuracy metrics across the frozen Option 1 model families and benchmark task scopes.</desc>",
             '<text x="48" y="64" class="title">Option 1 Accuracy Heatmap</text>',
             '<text x="48" y="88" class="subtitle">Only tasks with directly comparable accuracy metrics are shown. Missing cells indicate benchmarks not run in the current closed slice.</text>',
         ]
@@ -894,8 +916,8 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
     for index, (_, _, label) in enumerate(ACCURACY_SCOPE_ORDER):
         x = left + index * cell_w + cell_w / 2
         first, second = label.split("\n")
-        lines.append(f'<text x="{x}" y="110" text-anchor="middle" class="axis">{escape_xml(first)}</text>')
-        lines.append(f'<text x="{x}" y="128" text-anchor="middle" class="small">{escape_xml(second)}</text>')
+        lines.append(f'<text x="{x}" y="122" text-anchor="middle" class="axis">{escape_xml(first)}</text>')
+        lines.append(f'<text x="{x}" y="140" text-anchor="middle" class="small">{escape_xml(second)}</text>')
 
     for row_index, model in enumerate(MODEL_ORDER):
         y = top + row_index * cell_h + cell_h / 2 + 6
@@ -905,38 +927,41 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
             y0 = top + row_index * cell_h
             item = lookup.get((model, benchmark, scope))
             if item is None:
-                lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="#dbe4ee"/>')
-                lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 40}" text-anchor="middle" class="label">n/a</text>')
+                lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="#e7edf4" stroke="#d7dee6" stroke-width="1"/>')
+                lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 38}" text-anchor="middle" class="label">n/a</text>')
+                lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 58}" text-anchor="middle" class="small">not run</text>')
                 continue
             weight = 0.0 if math.isclose(max_acc, min_acc) else (item["accuracy"] - min_acc) / (max_acc - min_acc)
             color = interpolate_color("#f2e8cf", "#1f6f78", weight)
-            lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="{color}"/>')
-            lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 36}" text-anchor="middle" class="celltext">{item["accuracy"] * 100:.1f}%</text>')
-            lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 58}" text-anchor="middle" class="cellsub">stderr {item["stderr"]:.3f}</text>')
+            main_class, sub_class = text_classes_for_fill(color)
+            lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="{color}" stroke="#ffffff" stroke-width="1"/>')
+            lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 36}" text-anchor="middle" class="{main_class}">{item["accuracy"] * 100:.1f}%</text>')
+            lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 58}" text-anchor="middle" class="{sub_class}">stderr {item["stderr"]:.3f}</text>')
 
-    legend_x = 760
+    legend_x = 690
     legend_y = height - 76
-    legend_w = 290
-    for step in range(100):
-        weight = step / 99
+    legend_w = 360
+    legend_steps = 12
+    lines.append(f'<text x="{legend_x}" y="{legend_y - 18}" class="axis">Accuracy scale</text>')
+    lines.append(f'<text x="{legend_x}" y="{legend_y - 2}" class="small">Lighter cells mean lower accuracy; darker cells mean higher accuracy.</text>')
+    for step in range(legend_steps):
+        weight = step / (legend_steps - 1)
         color = interpolate_color("#f2e8cf", "#1f6f78", weight)
-        x = legend_x + step * (legend_w / 100)
-        lines.append(f'<rect x="{x:.2f}" y="{legend_y}" width="{legend_w / 100 + 0.8:.2f}" height="14" fill="{color}"/>')
-    lines.append(f'<text x="{legend_x}" y="{legend_y - 10}" class="small">Lower accuracy</text>')
-    lines.append(f'<text x="{legend_x + legend_w}" y="{legend_y - 10}" text-anchor="end" class="small">Higher accuracy</text>')
-    lines.append(f'<text x="{legend_x}" y="{legend_y + 34}" class="small">{min_acc * 100:.1f}%</text>')
-    lines.append(f'<text x="{legend_x + legend_w}" y="{legend_y + 34}" text-anchor="end" class="small">{max_acc * 100:.1f}%</text>')
+        x = legend_x + step * (legend_w / legend_steps)
+        lines.append(f'<rect x="{x:.2f}" y="{legend_y + 10}" width="{legend_w / legend_steps + 1:.2f}" height="16" fill="{color}" stroke="#ffffff" stroke-width="0.6"/>')
+    lines.append(f'<text x="{legend_x}" y="{legend_y + 44}" class="small">{min_acc * 100:.1f}%</text>')
+    lines.append(f'<text x="{legend_x + legend_w}" y="{legend_y + 44}" text-anchor="end" class="small">{max_acc * 100:.1f}%</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
 
 
 def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
-    width, height = 1140, 520
-    left, top = 270, 112
+    width, height = 1180, 610
+    left, top = 300, 126
     bar_w = 720
-    bar_h = 34
-    gap = 52
+    bar_h = 28
+    gap = 82
 
     benchmark_totals: dict[str, dict[str, int]] = {
         benchmark: {"benchmark_faithful": 0, "proxy": 0} for benchmark in SAMPLE_BAR_ORDER
@@ -952,6 +977,8 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
     lines.extend(
         [
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
+            "<title>Sample volume by benchmark</title>",
+            "<desc>Sample counts in the frozen Option 1 release, with paper-setup and proxy samples separated by benchmark.</desc>",
             '<text x="48" y="64" class="title">Sample Volume by Benchmark</text>',
             f'<text x="48" y="88" class="subtitle">The closed Option 1 release contains {total_samples:,} evaluated samples. Proxy volume appears only in Denevil.</text>',
         ]
@@ -964,17 +991,19 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
         total = faithful + proxy
         faithful_w = 0 if max_total == 0 else bar_w * faithful / max_total
         proxy_w = 0 if max_total == 0 else bar_w * proxy / max_total
-        lines.append(f'<text x="{left - 18}" y="{y + 22}" text-anchor="end" class="axis">{escape_xml(benchmark)}</text>')
-        lines.append(f'<rect x="{left}" y="{y}" width="{bar_w}" height="{bar_h}" rx="12" fill="#e2e8f0"/>')
+        lines.append(f'<text x="{left - 18}" y="{y + 18}" text-anchor="end" class="axis">{escape_xml(benchmark)}</text>')
+        lines.append(f'<rect x="{left}" y="{y}" width="{bar_w}" height="{bar_h}" rx="10" fill="#e2e8f0"/>')
         if faithful_w:
-            lines.append(f'<rect x="{left}" y="{y}" width="{faithful_w:.2f}" height="{bar_h}" rx="12" fill="#2f855a"/>')
+            lines.append(f'<rect x="{left}" y="{y}" width="{faithful_w:.2f}" height="{bar_h}" rx="10" fill="#2f855a"/>')
         if proxy_w:
-            lines.append(f'<rect x="{left + faithful_w:.2f}" y="{y}" width="{proxy_w:.2f}" height="{bar_h}" rx="12" fill="#b7791f"/>')
-        lines.append(f'<text x="{left + bar_w + 18}" y="{y + 22}" class="axis">{total:,}</text>')
+            lines.append(f'<rect x="{left + faithful_w:.2f}" y="{y}" width="{proxy_w:.2f}" height="{bar_h}" rx="10" fill="#b7791f"/>')
+        lines.append(f'<text x="{left + bar_w + 18}" y="{y + 18}" class="axis">{total:,}</text>')
         if faithful:
-            lines.append(f'<text x="{left + 10}" y="{y + 22}" class="cellsub">paper setup {faithful:,}</text>')
+            lines.append(f'<rect x="{left}" y="{y + 40}" width="10" height="10" rx="2.5" fill="#2f855a"/>')
+            lines.append(f'<text x="{left + 18}" y="{y + 49}" class="body">Paper setup: {faithful:,}</text>')
         if proxy:
-            lines.append(f'<text x="{left + faithful_w + 10:.2f}" y="{y + 22}" class="cellsub">proxy {proxy:,}</text>')
+            lines.append(f'<rect x="{left + 174}" y="{y + 40}" width="10" height="10" rx="2.5" fill="#b7791f"/>')
+            lines.append(f'<text x="{left + 192}" y="{y + 49}" class="body">Proxy: {proxy:,}</text>')
 
     legend_y = height - 66
     lines.append(f'<rect x="48" y="{legend_y - 14}" width="18" height="18" rx="4" fill="#2f855a"/>')
@@ -987,10 +1016,10 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
 
 
 def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
-    width, height = 1220, 760
-    panel_left, panel_width = 250, 860
+    width, height = 1220, 840
+    panel_left, panel_width = 280, 800
     bar_height, bar_gap = 28, 14
-    panel_top, panel_gap = 130, 190
+    panel_top, panel_gap = 190, 198
     tick_count = 5
     line_colors = {
         "Qwen-S": "#0f766e",
@@ -1020,21 +1049,33 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
     lines.extend(
         [
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
+            "<title>Comparable accuracy by benchmark</title>",
+            "<desc>Horizontal bar panels comparing completed family-size lines on benchmarks with directly comparable accuracy metrics.</desc>",
             '<text x="48" y="64" class="title">Comparable Accuracy by Benchmark</text>',
             '<text x="48" y="88" class="subtitle">Each panel compares the currently completed family-size lines that share the same accuracy-based benchmark metric.</text>',
         ]
     )
 
+    lines.append('<text x="48" y="122" class="axis">Comparable completed lines</text>')
+    for index, line_label in enumerate(COMPARABLE_RESULT_ORDER):
+        if line_label not in line_colors:
+            continue
+        x = 48 + index * 170
+        lines.append(f'<rect x="{x}" y="138" width="18" height="18" rx="4" fill="{line_colors[line_label]}"/>')
+        lines.append(f'<text x="{x + 28}" y="152" class="label">{escape_xml(line_label)}</text>')
+
     for panel_index, (field, benchmark_label, scope_label) in enumerate(metric_specs):
         panel_y = panel_top + panel_index * panel_gap
+        lines.append(f'<rect x="42" y="{panel_y - 24}" width="{width - 84}" height="166" rx="18" class="subpanel"/>')
         lines.append(f'<text x="48" y="{panel_y}" class="axis">{escape_xml(benchmark_label)}</text>')
         lines.append(f'<text x="48" y="{panel_y + 20}" class="subtitle">{escape_xml(scope_label)}</text>')
+        lines.append(f'<text x="{panel_left + panel_width}" y="{panel_y}" text-anchor="end" class="small">Accuracy</text>')
 
         tick_y = panel_y + 34
         for tick_index in range(tick_count):
             ratio = tick_index / (tick_count - 1)
             x = panel_left + ratio * panel_width
-            lines.append(f'<line x1="{x:.2f}" y1="{tick_y}" x2="{x:.2f}" y2="{tick_y + 136}" stroke="#d7dee6" stroke-width="1"/>')
+            lines.append(f'<line x1="{x:.2f}" y1="{tick_y}" x2="{x:.2f}" y2="{tick_y + 136}" class="guide"/>')
             lines.append(f'<text x="{x:.2f}" y="{tick_y - 8}" text-anchor="middle" class="small">{ratio * 100:.0f}%</text>')
 
         visible_rows = [row for row in rows if row[field] is not None]
@@ -1046,17 +1087,11 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
             lines.append(
                 f'<rect x="{panel_left}" y="{y}" width="{width_px:.2f}" height="{bar_height}" rx="10" fill="{line_colors.get(row["line_label"], "#475569")}"/>'
             )
+            label_x = min(panel_left + width_px + 10, panel_left + panel_width - 4)
+            label_anchor = "start" if label_x < panel_left + panel_width - 4 else "end"
             lines.append(
-                f'<text x="{panel_left + width_px + 10:.2f}" y="{y + 19}" class="label">{row[field] * 100:.1f}%</text>'
+                f'<text x="{label_x:.2f}" y="{y + 19}" text-anchor="{label_anchor}" class="label">{row[field] * 100:.1f}%</text>'
             )
-
-    legend_y = height - 64
-    for index, line_label in enumerate(COMPARABLE_RESULT_ORDER):
-        if line_label not in line_colors:
-            continue
-        x = 48 + index * 170
-        lines.append(f'<rect x="{x}" y="{legend_y - 14}" width="18" height="18" rx="4" fill="{line_colors[line_label]}"/>')
-        lines.append(f'<text x="{x + 28}" y="{legend_y}" class="label">{escape_xml(line_label)}</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -1105,7 +1140,7 @@ def append_family_size_progress_table(lines: list[str], rows: list[dict[str, Any
     lines.extend(
         [
             "| Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | Note |",
-            "| --- | --- | --- | --- | --- | --- | --- |",
+            "| :--- | :---: | :---: | :---: | :---: | :---: | --- |",
         ]
     )
     for row in rows:
@@ -1120,7 +1155,7 @@ def append_benchmark_comparison_table(lines: list[str], rows: list[dict[str, Any
     lines.extend(
         [
             "| Line | UniMoral action | SMID average | Value Kaleidoscope average | Coverage note |",
-            "| --- | ---: | ---: | ---: | --- |",
+            "| :--- | ---: | ---: | ---: | --- |",
         ]
     )
     for row in rows:
@@ -1139,6 +1174,31 @@ def format_family_size_route(row: dict[str, Any]) -> str:
     if vision_route == text_route:
         return text_route
     return f"text: {text_route}; vision: {vision_route}"
+
+
+def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
+    lines.extend(
+        [
+            "## Figure Gallery",
+            "",
+            f"![Comparable accuracy bars]({figure_prefix}/option1_benchmark_accuracy_bars.svg)",
+            "",
+            "_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines._",
+            "",
+            f"![Accuracy heatmap]({figure_prefix}/option1_accuracy_heatmap.svg)",
+            "",
+            "_Figure 2. Task-level accuracy heatmap for the frozen Option 1 slice._",
+            "",
+            f"![Coverage matrix]({figure_prefix}/option1_coverage_matrix.svg)",
+            "",
+            "_Figure 3. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._",
+            "",
+            f"![Sample volume by benchmark]({figure_prefix}/option1_sample_volume.svg)",
+            "",
+            "_Figure 4. Sample volume by benchmark, with paper-setup and proxy samples separated for readability._",
+            "",
+        ]
+    )
 
 
 def build_family_route_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -1202,7 +1262,9 @@ def build_release_readme(
         "- `release-manifest.json`: machine-readable release index",
         f"- {markdown_link('how to read the results', '../../../docs/how-to-read-results.md')}: plain-language explanation of the report terms",
         f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: current cross-model benchmark comparison",
+        f"- {markdown_link('accuracy heatmap', '../../../figures/release/option1_accuracy_heatmap.svg')}: task-level view of comparable metrics",
         f"- {markdown_link('coverage matrix', '../../../figures/release/option1_coverage_matrix.svg')}: frozen Option 1 coverage only",
+        f"- {markdown_link('sample volume chart', '../../../figures/release/option1_sample_volume.svg')}: where the evaluated samples are concentrated",
         "",
         "## Progress Legend",
         "",
@@ -1248,15 +1310,14 @@ def build_release_readme(
         ]
     )
     append_benchmark_comparison_table(lines, benchmark_comparison)
+    lines.append("")
+    append_figure_gallery(lines, "../../../figures/release")
     lines.extend(
         [
-            "",
-            f"![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)",
-            "",
             "## Frozen Option 1 Model Summary",
             "",
             "| Model family | Paper-setup tasks | Proxy tasks | Samples | Paper-setup macro accuracy |",
-            "| --- | ---: | ---: | ---: | ---: |",
+            "| :--- | ---: | ---: | ---: | ---: |",
         ]
     )
     for row in model_summary:
@@ -1396,15 +1457,14 @@ def build_jenny_group_report(
         ]
     )
     append_benchmark_comparison_table(lines, benchmark_comparison)
+    lines.append("")
+    append_figure_gallery(lines, "../../../figures/release")
     lines.extend(
         [
-            "",
-            "![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)",
-            "",
             "## Frozen Option 1 Summary",
             "",
             "| Model family | Paper-setup tasks | Proxy tasks | Samples | Paper-setup macro accuracy |",
-            "| --- | ---: | ---: | ---: | ---: |",
+            "| :--- | ---: | ---: | ---: | ---: |",
         ]
     )
     for row in model_summary:

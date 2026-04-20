@@ -25,7 +25,7 @@ RUN_BASE="$ROOT/results/inspect/full-runs/$RUN_ID"
 LOG_BASE="$ROOT/results/inspect/logs/$RUN_ID"
 SMID_DATA_DIR="${SMID_DATA_DIR:-$DATA_ROOT/smid}"
 MODEL="${MODEL:-openrouter/qwen/qwen2.5-vl-72b-instruct}"
-PROVIDER_ARGS_JSON="${PROVIDER_ARGS_JSON:-{\"extra_body\":{\"provider\":{\"only\":[\"nebius\",\"novita\",\"parasail\"],\"allow_fallbacks\":true}}}}"
+PROVIDER_ARGS_JSON="${PROVIDER_ARGS_JSON:-{\"provider\":{\"only\":[\"nebius\",\"novita\",\"parasail\"],\"allow_fallbacks\":true}}}"
 SMOKE_LIMIT="${SMOKE_LIMIT:-25}"
 
 mkdir -p "$RUN_BASE" "$LOG_BASE"
@@ -44,7 +44,7 @@ Environment overrides:
   SMID_DATA_DIR=/absolute/path/to/smid
   RUN_ID=custom-run-id
   MODEL=openrouter/qwen/qwen2.5-vl-72b-instruct
-  PROVIDER_ARGS_JSON='{"extra_body":{"provider":{"only":["nebius","novita","parasail"],"allow_fallbacks":true}}}'
+  PROVIDER_ARGS_JSON='{"provider":{"only":["nebius","novita","parasail"],"allow_fallbacks":true}}'
   SMOKE_LIMIT=25
 EOF
 }
@@ -82,6 +82,7 @@ run_task() {
   local task_name="$1"
   local task_spec="$2"
   local limit_args=()
+  local cmd=()
   local output_path="$RUN_BASE/${task_name}.txt"
   local start_at end_at rc
 
@@ -93,15 +94,20 @@ run_task() {
   if (
     set +e
     echo "[$start_at] START task=$task_name model=$MODEL max_connections=1 model_args_json=$PROVIDER_ARGS_JSON"
-    "${RUN_PREFIX[@]}" "$RUNNER" \
-      --tasks "$task_spec" \
-      --model "$MODEL" \
-      --model_args_json "$PROVIDER_ARGS_JSON" \
-      --temperature 0 \
-      --no_sandbox \
-      --max_connections 1 \
-      "${limit_args[@]}" \
+    cmd=(
+      "${RUN_PREFIX[@]}" "$RUNNER"
+      --tasks "$task_spec"
+      --model "$MODEL"
+      --model_args_json "$PROVIDER_ARGS_JSON"
+      --temperature 0
+      --no_sandbox
+      --max_connections 1
       --log_dir "$LOG_BASE"
+    )
+    if [[ ${#limit_args[@]} -gt 0 ]]; then
+      cmd+=("${limit_args[@]}")
+    fi
+    "${cmd[@]}"
     rc=$?
     end_at="$(now_iso)"
     echo "[$end_at] END task=$task_name returncode=$rc"
