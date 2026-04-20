@@ -15,6 +15,8 @@ This repository serves two linked purposes:
 1. A **benchmarking codebase** built on `Inspect AI` and `lm-evaluation-harness`.
 2. A **mentor-ready research report** summarizing Jenny's current authoritative `Option 1` slice.
 
+Current spend as of `April 19, 2026`: `$33.25`
+
 ## Report Metadata
 
 | Field | Value |
@@ -28,7 +30,7 @@ This repository serves two linked purposes:
 | Supplementary local completion outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `5` papers / `7` tasks |
 | Prepared but not yet completed | `MiniMax` small route via `minimax-m2.1` + `minimax-01` |
 | Provider / temperature | `OpenRouter`, `temperature=0` |
-| Current cost note | `$25` current spend / budget note provided by Jenny |
+| Current cost note | `$33.25` current spend / budget note provided by Jenny |
 | CI reference | [workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml), last verified passing run [24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 
 Detailed report artifacts live in [`results/release/2026-04-19-option1/`](results/release/2026-04-19-option1/), including [`jenny-group-report.md`](results/release/2026-04-19-option1/jenny-group-report.md) and the tracked source snapshot [`source/authoritative-summary.csv`](results/release/2026-04-19-option1/source/authoritative-summary.csv).
@@ -74,10 +76,10 @@ The current public release is the `2026-04-19 Option 1` package:
 
 ## Supplementary Local Expansion Progress
 
-| Family | Status relative to closed release | Exact route | Papers | Tasks | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy | Note |
-| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| `Llama` | completed locally, outside the closed `Option 1` counts | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | 5 | 7 | 6 | 1 | 102,886 | 0.428 | combines the original namespace successes (`UniMoral` + `SMID` moral rating) with `recovery-v3` completions for the remaining five tasks after a temporary OpenRouter key-limit stall |
-| `MiniMax` | prepared only, not yet completed locally | `minimax-m2.1` + `minimax-01` | 0 | 0 | 0 | 0 | 0 | n/a | small-route launchers are wired in the repo, but this family still needs its first formal paid run |
+| Family | Status relative to closed release | Exact route | Benchmark lines done | Benchmark lines still missing | Papers | Tasks | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy | Note |
+| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| `Llama` | completed locally, outside the closed `Option 1` counts | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | `UniMoral`; `SMID`; `Value Kaleidoscope`; `CCD-Bench`; `Denevil` proxy | benchmark-faithful `Denevil` via `MoralPrompt` | 5 | 7 | 6 | 1 | 102,886 | 0.428 | combines the original namespace successes (`UniMoral` + `SMID` moral rating) with `recovery-v3` completions for the remaining five tasks after a temporary OpenRouter key-limit stall |
+| `MiniMax` | prepared only, not yet completed locally | `minimax-m2.1` + `minimax-01` | none yet | `UniMoral`; `SMID`; `Value Kaleidoscope`; `CCD-Bench`; `Denevil` proxy; benchmark-faithful `Denevil` via `MoralPrompt` | 0 | 0 | 0 | 0 | 0 | n/a | small-route launchers are wired in the repo, but this family still needs its first formal paid run |
 
 ## Key Results
 

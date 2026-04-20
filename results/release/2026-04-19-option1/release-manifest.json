@@ -8,7 +8,7 @@
     "purpose": "Group / mentor-facing report aligned to the April 14, 2026 moral-psych benchmark plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "cost_note": "$25 current spend / budget note provided by Jenny on April 19, 2026.",
+    "cost_note": "$33.25 current spend / budget note provided by Jenny on April 19, 2026.",
     "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml",
     "ci_last_verified_run_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
   },
@@ -103,6 +103,8 @@
       "tasks_completed": 7,
       "benchmark_faithful_tasks": 6,
       "proxy_tasks": 1,
+      "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
+      "missing_benchmark_lines": "Benchmark-faithful Denevil via MoralPrompt",
       "samples": 102886,
       "benchmark_faithful_macro_accuracy": 0.427602,
       "note": "Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall."
@@ -115,6 +117,8 @@
       "tasks_completed": 0,
       "benchmark_faithful_tasks": 0,
       "proxy_tasks": 0,
+      "completed_benchmark_lines": "None yet",
+      "missing_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy; Benchmark-faithful Denevil via MoralPrompt",
       "samples": 0,
       "benchmark_faithful_macro_accuracy": null,
       "note": "Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models."

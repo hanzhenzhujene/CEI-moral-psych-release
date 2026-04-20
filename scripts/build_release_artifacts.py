@@ -24,7 +24,7 @@ REPORT_DATE_ISO = "2026-04-19"
 REPORT_PURPOSE = "Group / mentor-facing report aligned to the April 14, 2026 moral-psych benchmark plan."
 REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
-REPORT_COST_NOTE = "$25 current spend / budget note provided by Jenny on April 19, 2026."
+REPORT_COST_NOTE = "$33.25 current spend / budget note provided by Jenny on April 19, 2026."
 CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 CI_RUN_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
 
@@ -203,6 +203,8 @@ SUPPLEMENTARY_MODEL_PROGRESS = [
         "proxy_tasks": 1,
         "samples": 102886,
         "benchmark_faithful_macro_accuracy": 0.427602,
+        "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
+        "missing_benchmark_lines": "Benchmark-faithful Denevil via MoralPrompt",
         "note": "Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall.",
     },
     {
@@ -215,6 +217,8 @@ SUPPLEMENTARY_MODEL_PROGRESS = [
         "proxy_tasks": 0,
         "samples": 0,
         "benchmark_faithful_macro_accuracy": None,
+        "completed_benchmark_lines": "None yet",
+        "missing_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy; Benchmark-faithful Denevil via MoralPrompt",
         "note": "Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models.",
     },
 ]
@@ -272,6 +276,8 @@ def serialize_supplementary_progress_row(row: dict[str, Any]) -> dict[str, Any]:
         "tasks_completed": row["tasks_completed"],
         "benchmark_faithful_tasks": row["benchmark_faithful_tasks"],
         "proxy_tasks": row["proxy_tasks"],
+        "completed_benchmark_lines": row["completed_benchmark_lines"],
+        "missing_benchmark_lines": row["missing_benchmark_lines"],
         "samples": row["samples"],
         "benchmark_faithful_macro_accuracy": None
         if row["benchmark_faithful_macro_accuracy"] is None
@@ -803,13 +809,13 @@ def build_release_readme(
             "",
             "## Supplementary Local Expansion Status",
             "",
-            "| Family | Status relative to closed release | Exact route | Papers | Tasks | Samples | Benchmark-faithful macro accuracy | Note |",
-            "| --- | --- | --- | ---: | ---: | ---: | ---: | --- |",
+            "| Family | Status relative to closed release | Exact route | Benchmark lines done | Benchmark lines still missing | Papers | Tasks | Samples | Benchmark-faithful macro accuracy | Note |",
+            "| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |",
         ]
     )
     for row in supplementary_model_progress:
         lines.append(
-            f"| `{row['family']}` | {row['status_relative_to_closed_release']} | `{row['exact_route']}` | {row['papers_covered']} | {row['tasks_completed']} | {row['samples']:,} | {fmt_float(row['benchmark_faithful_macro_accuracy']) or 'n/a'} | {row['note']} |"
+            f"| `{row['family']}` | {row['status_relative_to_closed_release']} | `{row['exact_route']}` | {row['completed_benchmark_lines']} | {row['missing_benchmark_lines']} | {row['papers_covered']} | {row['tasks_completed']} | {row['samples']:,} | {fmt_float(row['benchmark_faithful_macro_accuracy']) or 'n/a'} | {row['note']} |"
         )
     lines.extend(["", "## Benchmark Summary", "", "| Benchmark | Unique task types | Evaluated lines | Models covered | Samples | Modes |", "| --- | ---: | ---: | ---: | ---: | --- |"])
     for row in benchmark_summary:
@@ -941,13 +947,13 @@ def build_jenny_group_report(
             "",
             "## Supplementary Local Progress Outside The Closed Release",
             "",
-            "| Family | Status relative to closed release | Exact route | Papers | Tasks | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy | Note |",
-            "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
+            "| Family | Status relative to closed release | Exact route | Benchmark lines done | Benchmark lines still missing | Papers | Tasks | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy | Note |",
+            "| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
         ]
     )
     for row in supplementary_model_progress:
         lines.append(
-            f"| `{row['family']}` | {row['status_relative_to_closed_release']} | `{row['exact_route']}` | {row['papers_covered']} | {row['tasks_completed']} | {row['benchmark_faithful_tasks']} | {row['proxy_tasks']} | {row['samples']:,} | {fmt_float(row['benchmark_faithful_macro_accuracy']) or 'n/a'} | {row['note']} |"
+            f"| `{row['family']}` | {row['status_relative_to_closed_release']} | `{row['exact_route']}` | {row['completed_benchmark_lines']} | {row['missing_benchmark_lines']} | {row['papers_covered']} | {row['tasks_completed']} | {row['benchmark_faithful_tasks']} | {row['proxy_tasks']} | {row['samples']:,} | {fmt_float(row['benchmark_faithful_macro_accuracy']) or 'n/a'} | {row['note']} |"
         )
     lines.extend(
         [
@@ -1166,6 +1172,8 @@ def main() -> None:
             "family",
             "status_relative_to_closed_release",
             "exact_route",
+            "completed_benchmark_lines",
+            "missing_benchmark_lines",
             "papers_covered",
             "tasks_completed",
             "benchmark_faithful_tasks",

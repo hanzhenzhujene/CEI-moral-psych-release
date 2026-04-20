@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 import json
 import subprocess
 import sys
@@ -70,3 +71,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
     assert manifest["entry_points"]["report"].endswith("jenny-group-report.md")
     assert manifest["entry_points"]["supplementary_progress"].endswith("supplementary-model-progress.csv")
+
+    with (release_dir / "supplementary-model-progress.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames is not None
+        assert "completed_benchmark_lines" in reader.fieldnames
+        assert "missing_benchmark_lines" in reader.fieldnames

@@ -16,7 +16,7 @@ This report captures Jenny Zhu's current CEI moral-psych benchmarking deliverabl
 | Supplementary local completion outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `5` papers / `7` tasks |
 | Prepared but not yet completed | `MiniMax` small route via `minimax-m2.1 + minimax-01` |
 | Run provider / temperature | `OpenRouter`, `temperature=0` |
-| Current cost note | $25 current spend / budget note provided by Jenny on April 19, 2026. |
+| Current cost note | $33.25 current spend / budget note provided by Jenny on April 19, 2026. |
 | CI status reference | [CI workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); latest verified passing run: [24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 | Total evaluated samples in this release | `302,776` |
 
@@ -65,10 +65,10 @@ This report captures Jenny Zhu's current CEI moral-psych benchmarking deliverabl
 
 ## Supplementary Local Progress Outside The Closed Release
 
-| Family | Status relative to closed release | Exact route | Papers | Tasks | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy | Note |
-| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| `Llama` | Completed locally, outside the closed Option 1 counts | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | 5 | 7 | 6 | 1 | 102,886 | 0.428 | Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall. |
-| `MiniMax` | Prepared only, not yet completed locally | `minimax-m2.1 + minimax-01` | 0 | 0 | 0 | 0 | 0 | n/a | Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models. |
+| Family | Status relative to closed release | Exact route | Benchmark lines done | Benchmark lines still missing | Papers | Tasks | Benchmark-faithful tasks | Proxy tasks | Samples | Benchmark-faithful macro accuracy | Note |
+| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| `Llama` | Completed locally, outside the closed Option 1 counts | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy | Benchmark-faithful Denevil via MoralPrompt | 5 | 7 | 6 | 1 | 102,886 | 0.428 | Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall. |
+| `MiniMax` | Prepared only, not yet completed locally | `minimax-m2.1 + minimax-01` | None yet | UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy; Benchmark-faithful Denevil via MoralPrompt | 0 | 0 | 0 | 0 | 0 | n/a | Small-route launchers are wired in the repo, but this family still needs its first formal paid run before it can be compared against the closed release models. |
 
 ## Interpretation Notes
 
