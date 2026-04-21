@@ -1,15 +1,15 @@
 family,size_slot,line_label,text_route,vision_route,unimoral,smid,value_kaleidoscope,ccd_bench,denevil,summary_note
 Qwen,S,Qwen-S,openrouter/qwen/qwen3-8b,openrouter/qwen/qwen3-vl-8b-instruct,done,done,done,done,proxy,Frozen Option 1 line.
-Qwen,M,Qwen-M,openrouter/qwen/qwen3-14b,TBD,done,tbd,live,queue,queue,UniMoral and Value Kaleidoscope relevance are done; Value Kaleidoscope valence is actively running again after resume-safe recovery.
-Qwen,L,Qwen-L,openrouter/qwen/qwen3-32b,openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete),done,done,live,queue,queue,SMID and UniMoral are done; Value Kaleidoscope relevance is actively running again after resume-safe recovery.
+Qwen,M,Qwen-M,openrouter/qwen/qwen3-14b,TBD,done,tbd,live,queue,queue,"UniMoral and Value Kaleidoscope relevance are done; the restarted valence worker is still live with a 6,552 / 21,840 persisted checkpoint."
+Qwen,L,Qwen-L,openrouter/qwen/qwen3-32b,openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete),done,done,live,queue,queue,"SMID and UniMoral are done; the restarted relevance worker is still live with a 4,368 / 43,680 persisted checkpoint."
 MiniMax,S,MiniMax-S,openrouter/minimax/minimax-m2.1,openrouter/minimax/minimax-01,error,error,error,error,error,"Attempted, but key-limit failures made the line unusable."
 MiniMax,M,MiniMax-M,openrouter/minimax/minimax-m2.5,TBD,queue,tbd,queue,queue,queue,Text queued; no medium SMID route is fixed yet.
 MiniMax,L,MiniMax-L,openrouter/minimax/minimax-m2.7,TBD,queue,tbd,queue,queue,queue,Text queued; no large SMID route is fixed yet.
-DeepSeek,S,DeepSeek-S,TBD,-,tbd,-,tbd,tbd,tbd,Small baseline not frozen; no vision route is in scope.
-DeepSeek,M,DeepSeek-M,openrouter/deepseek/deepseek-r1-distill-qwen-32b,-,queue,-,queue,queue,queue,Text queued; no vision route is in scope.
+DeepSeek,S,DeepSeek-S,No distinct small OpenRouter route exposed,-,tbd,-,tbd,tbd,tbd,OpenRouter currently exposes 32B distill and larger DeepSeek routes only; no separate small line is fixed yet.
+DeepSeek,M,DeepSeek-M,openrouter/deepseek/deepseek-r1-distill-qwen-32b,-,queue,-,queue,queue,queue,No vision route is in scope. The chained watcher is armed and waiting for Llama-M to finish.
 DeepSeek,L,DeepSeek-L,openrouter/deepseek/deepseek-chat-v3.1,-,done,-,done,done,proxy,Frozen large text line; no SMID route was included.
 Llama,S,Llama-S,openrouter/meta-llama/llama-3.2-11b-vision-instruct,openrouter/meta-llama/llama-3.2-11b-vision-instruct,done,done,done,done,proxy,Complete locally across all five papers.
-Llama,M,Llama-M,openrouter/meta-llama/llama-3.3-70b-instruct,-,queue,-,queue,queue,queue,Text queued; no SMID run is planned.
+Llama,M,Llama-M,openrouter/meta-llama/llama-3.3-70b-instruct,-,queue,-,queue,queue,queue,No SMID run is planned. The watcher is armed and waiting for the first clean Qwen completion.
 Llama,L,Llama-L,openrouter/meta-llama/llama-4-maverick,openrouter/meta-llama/llama-4-maverick,queue,done,queue,queue,queue,SMID done; text is still queued.
 Gemma,S,Gemma-S,openrouter/google/gemma-3-4b-it,openrouter/google/gemma-3-4b-it,done,done,done,done,proxy,Frozen Option 1 recovery line.
 Gemma,M,Gemma-M,openrouter/google/gemma-3-12b-it,openrouter/google/gemma-3-12b-it,done,done,done,done,proxy,"Complete locally across all five papers, with Denevil covered through the same proxy route used elsewhere in this deliverable."

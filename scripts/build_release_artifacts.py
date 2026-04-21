@@ -30,8 +30,12 @@ REPORT_CURRENT_COST = "$40.73"
 REPORT_STATUS_NOTE = (
     "Updated April 21, 2026. "
     "The frozen public snapshot remains Option 1 from April 19. "
-    "Gemma-M and Gemma-L text are now complete locally, and active local Inspect processes are currently running for "
-    "Qwen-M value_prism_valence and Qwen-L value_prism_relevance after resume-safe recovery."
+    "Gemma-M and Gemma-L text are now complete locally. "
+    "The current live Qwen restart has Qwen-M value_prism_valence at 6,552 / 21,840 persisted samples (30.0%) "
+    "and Qwen-L value_prism_relevance at 4,368 / 43,680 persisted samples (10.0%); both workers are live and "
+    "still actively calling OpenRouter. "
+    "The Llama-M and DeepSeek-M watcher chain is armed and polling every three minutes for the first clean Qwen "
+    "completion."
 )
 CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 CI_RUN_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
@@ -180,10 +184,10 @@ FUTURE_MODEL_PLAN = [
         "family": "DeepSeek",
         "closed_release_status": "Included in Option 1",
         "current_route": "deepseek-chat-v3.1",
-        "small_candidate": "Closed release already uses a large-class DeepSeek route; a smaller baseline is still not frozen",
+        "small_candidate": "No distinct small DeepSeek route is currently exposed on OpenRouter; keep the S slot unassigned for now",
         "medium_candidate": "openrouter/deepseek/deepseek-r1-distill-qwen-32b scheduled for the non-image expansion run",
         "large_candidate": "openrouter/deepseek/deepseek-chat-v3.1 already complete in the closed release",
-        "next_step": "If the group wants a stricter S/M/L ladder, add a smaller DeepSeek distill route after the current medium run.",
+        "next_step": "Run the queued medium DeepSeek line next; only add a separate small line if a distinct smaller provider route becomes available.",
     },
     {
         "family": "Llama",
@@ -297,12 +301,22 @@ LOCAL_EXPANSION_CHECKPOINT = [
     {
         "line": "Qwen-M text batch",
         "status": "live",
-        "note": "UniMoral and Value Kaleidoscope relevance completed successfully. Value Kaleidoscope valence is running again locally after resume-safe recovery.",
+        "note": "UniMoral and Value Kaleidoscope relevance completed successfully. The restarted valence worker has flushed 6,552 / 21,840 persisted samples (30.0%) and is still actively running.",
     },
     {
         "line": "Qwen-L text batch",
         "status": "live",
-        "note": "UniMoral completed successfully. Value Kaleidoscope relevance is running again locally after resume-safe recovery.",
+        "note": "UniMoral completed successfully. The restarted relevance worker has flushed 4,368 / 43,680 persisted samples (10.0%) and is still actively running.",
+    },
+    {
+        "line": "Llama-M text batch",
+        "status": "prep",
+        "note": "The watcher is armed and polling every three minutes for the first clean Qwen completion.",
+    },
+    {
+        "line": "DeepSeek-M text batch",
+        "status": "prep",
+        "note": "The chained watcher is armed behind Llama-M and polling every three minutes.",
     },
     {
         "line": "Llama-L SMID",
@@ -312,7 +326,7 @@ LOCAL_EXPANSION_CHECKPOINT = [
     {
         "line": "Next queued text lines",
         "status": "queue",
-        "note": "Llama-M, Llama-L, MiniMax-M, DeepSeek-M, and MiniMax-L remain queued. Qwen-M and Qwen-L now have partial local progress rather than a clean queued state.",
+        "note": "Llama-L, MiniMax-M, and MiniMax-L remain fully queued. Qwen-M and Qwen-L are still live, and the Llama-M / DeepSeek-M auto-launch watchers are armed and polling.",
     },
 ]
 
@@ -341,7 +355,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "live",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "UniMoral and Value Kaleidoscope relevance are done; Value Kaleidoscope valence is actively running again after resume-safe recovery.",
+        "summary_note": "UniMoral and Value Kaleidoscope relevance are done; the restarted valence worker is still live with a 6,552 / 21,840 persisted checkpoint.",
     },
     {
         "family": "Qwen",
@@ -354,7 +368,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "live",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "SMID and UniMoral are done; Value Kaleidoscope relevance is actively running again after resume-safe recovery.",
+        "summary_note": "SMID and UniMoral are done; the restarted relevance worker is still live with a 4,368 / 43,680 persisted checkpoint.",
     },
     {
         "family": "MiniMax",
@@ -399,14 +413,14 @@ FAMILY_SIZE_PROGRESS = [
         "family": "DeepSeek",
         "size_slot": "S",
         "line_label": "DeepSeek-S",
-        "text_route": "TBD",
+        "text_route": "No distinct small OpenRouter route exposed",
         "vision_route": "-",
         "unimoral": "tbd",
         "smid": "-",
         "value_kaleidoscope": "tbd",
         "ccd_bench": "tbd",
         "denevil": "tbd",
-        "summary_note": "Small baseline not frozen; no vision route is in scope.",
+        "summary_note": "OpenRouter currently exposes 32B distill and larger DeepSeek routes only; no separate small line is fixed yet.",
     },
     {
         "family": "DeepSeek",
@@ -419,7 +433,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Text queued; no vision route is in scope.",
+        "summary_note": "No vision route is in scope. The chained watcher is armed and waiting for Llama-M to finish.",
     },
     {
         "family": "DeepSeek",
@@ -458,7 +472,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "queue",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Text queued; no SMID run is planned.",
+        "summary_note": "No SMID run is planned. The watcher is armed and waiting for the first clean Qwen completion.",
     },
     {
         "family": "Llama",
@@ -562,14 +576,14 @@ CURRENT_RESULT_LINES = [
         "scope": "Partial local line",
         "status": "partial",
         "coverage": "UniMoral and Value Kaleidoscope relevance done; Value Kaleidoscope valence live",
-        "note": "Resume-safe recovery is active locally.",
+        "note": "The underlying worker is still active; the stale signal came from an overwritten launcher PID file.",
     },
     {
         "line_label": "Qwen-L",
         "scope": "Partial local line",
         "status": "partial",
         "coverage": "SMID and UniMoral done; Value Kaleidoscope relevance live",
-        "note": "Resume-safe recovery is active locally.",
+        "note": "The underlying worker is still active; the stale signal came from an overwritten launcher PID file.",
     },
     {
         "line_label": "MiniMax-S",

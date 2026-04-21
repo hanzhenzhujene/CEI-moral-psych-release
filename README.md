@@ -24,8 +24,8 @@ This is the fastest way to understand the deliverable: which lines already have 
 | `Llama-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally, outside the frozen Option 1 counts. |
 | `Gemma-M` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
 | `Gemma-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
-| `Qwen-M` | Partial local line | Partial | UniMoral and Value Kaleidoscope relevance done; Value Kaleidoscope valence live | Resume-safe recovery is active locally. |
-| `Qwen-L` | Partial local line | Partial | SMID and UniMoral done; Value Kaleidoscope relevance live | Resume-safe recovery is active locally. |
+| `Qwen-M` | Partial local line | Partial | UniMoral and Value Kaleidoscope relevance done; Value Kaleidoscope valence live | The underlying worker is still active; the stale signal came from an overwritten launcher PID file. |
+| `Qwen-L` | Partial local line | Partial | SMID and UniMoral done; Value Kaleidoscope relevance live | The underlying worker is still active; the stale signal came from an overwritten launcher PID file. |
 | `MiniMax-S` | Attempted local line | Error | No usable benchmark line completed | OpenRouter key-limit failures interrupted both text and image paths. |
 
 ### Latest Family-Size Progress Snapshot
@@ -67,7 +67,7 @@ _Topline comparable-accuracy chart. Benchmark-level accuracy comparison across t
 | Extra completed local line | `Llama-S`, complete locally across `5` papers / `7` tasks |
 | MiniMax small status | formal attempt exists, but the current line failed and is not counted as complete |
 | Run setting | `OpenRouter`, `temperature=0` |
-| Current operations note | Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19. Gemma-M and Gemma-L text are now complete locally, and active local Inspect processes are currently running for Qwen-M value_prism_valence and Qwen-L value_prism_relevance after resume-safe recovery. |
+| Current operations note | Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19. Gemma-M and Gemma-L text are now complete locally. The current live Qwen restart has Qwen-M value_prism_valence at 6,552 / 21,840 persisted samples (30.0%) and Qwen-L value_prism_relevance at 4,368 / 43,680 persisted samples (10.0%); both workers are live and still actively calling OpenRouter. The Llama-M and DeepSeek-M watcher chain is armed and polling every three minutes for the first clean Qwen completion. |
 
 ## Start Here
 
@@ -96,10 +96,12 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `Qwen-L SMID recovery` | Done | Completed April 20, 2026 via openrouter/qwen/qwen2.5-vl-72b-instruct after the earlier qwen3-vl-32b moderation stop. |
 | `Gemma-L text batch` | Done | Completed April 21, 2026. UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy task all finished successfully. |
 | `Gemma-M text batch` | Done | Completed April 21, 2026. The medium text route now has a full local line across all five benchmark papers. |
-| `Qwen-M text batch` | Live | UniMoral and Value Kaleidoscope relevance completed successfully. Value Kaleidoscope valence is running again locally after resume-safe recovery. |
-| `Qwen-L text batch` | Live | UniMoral completed successfully. Value Kaleidoscope relevance is running again locally after resume-safe recovery. |
+| `Qwen-M text batch` | Live | UniMoral and Value Kaleidoscope relevance completed successfully. The restarted valence worker has flushed 6,552 / 21,840 persisted samples (30.0%) and is still actively running. |
+| `Qwen-L text batch` | Live | UniMoral completed successfully. The restarted relevance worker has flushed 4,368 / 43,680 persisted samples (10.0%) and is still actively running. |
+| `Llama-M text batch` | Prep | The watcher is armed and polling every three minutes for the first clean Qwen completion. |
+| `DeepSeek-M text batch` | Prep | The chained watcher is armed behind Llama-M and polling every three minutes. |
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
-| `Next queued text lines` | Queue | Llama-M, Llama-L, MiniMax-M, DeepSeek-M, and MiniMax-L remain queued. Qwen-M and Qwen-L now have partial local progress rather than a clean queued state. |
+| `Next queued text lines` | Queue | Llama-L, MiniMax-M, and MiniMax-L remain fully queued. Qwen-M and Qwen-L are still live, and the Llama-M / DeepSeek-M auto-launch watchers are armed and polling. |
 
 ## Status Key
 
@@ -121,16 +123,16 @@ This is the main repo-level status table for the full group plan.
 | Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | Note |
 | :--- | :---: | :---: | :---: | :---: | :---: | --- |
 | `Qwen-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 line. |
-| `Qwen-M` | Done | TBD | Live | Queue | Queue | UniMoral and Value Kaleidoscope relevance are done; Value Kaleidoscope valence is actively running again after resume-safe recovery. |
-| `Qwen-L` | Done | Done | Live | Queue | Queue | SMID and UniMoral are done; Value Kaleidoscope relevance is actively running again after resume-safe recovery. |
+| `Qwen-M` | Done | TBD | Live | Queue | Queue | UniMoral and Value Kaleidoscope relevance are done; the restarted valence worker is still live with a 6,552 / 21,840 persisted checkpoint. |
+| `Qwen-L` | Done | Done | Live | Queue | Queue | SMID and UniMoral are done; the restarted relevance worker is still live with a 4,368 / 43,680 persisted checkpoint. |
 | `MiniMax-S` | Error | Error | Error | Error | Error | Attempted, but key-limit failures made the line unusable. |
 | `MiniMax-M` | Queue | TBD | Queue | Queue | Queue | Text queued; no medium SMID route is fixed yet. |
 | `MiniMax-L` | Queue | TBD | Queue | Queue | Queue | Text queued; no large SMID route is fixed yet. |
-| `DeepSeek-S` | TBD | - | TBD | TBD | TBD | Small baseline not frozen; no vision route is in scope. |
-| `DeepSeek-M` | Queue | - | Queue | Queue | Queue | Text queued; no vision route is in scope. |
+| `DeepSeek-S` | TBD | - | TBD | TBD | TBD | OpenRouter currently exposes 32B distill and larger DeepSeek routes only; no separate small line is fixed yet. |
+| `DeepSeek-M` | Queue | - | Queue | Queue | Queue | No vision route is in scope. The chained watcher is armed and waiting for Llama-M to finish. |
 | `DeepSeek-L` | Done | - | Done | Done | Proxy | Frozen large text line; no SMID route was included. |
 | `Llama-S` | Done | Done | Done | Done | Proxy | Complete locally across all five papers. |
-| `Llama-M` | Queue | - | Queue | Queue | Queue | Text queued; no SMID run is planned. |
+| `Llama-M` | Queue | - | Queue | Queue | Queue | No SMID run is planned. The watcher is armed and waiting for the first clean Qwen completion. |
 | `Llama-L` | Queue | Done | Queue | Queue | Queue | SMID done; text is still queued. |
 | `Gemma-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 recovery line. |
 | `Gemma-M` | Done | Done | Done | Done | Proxy | Complete locally across all five papers, with Denevil covered through the same proxy route used elsewhere in this deliverable. |
@@ -154,7 +156,7 @@ The same matrix is also saved as [family-size-progress.csv](results/release/2026
 | --- | --- | --- | --- |
 | `Qwen` | `text: openrouter/qwen/qwen3-8b; vision: openrouter/qwen/qwen3-vl-8b-instruct` | `openrouter/qwen/qwen3-14b` | `text: openrouter/qwen/qwen3-32b; vision: openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete)` |
 | `MiniMax` | `text: openrouter/minimax/minimax-m2.1; vision: openrouter/minimax/minimax-01` | `openrouter/minimax/minimax-m2.5` | `openrouter/minimax/minimax-m2.7` |
-| `DeepSeek` | `TBD` | `openrouter/deepseek/deepseek-r1-distill-qwen-32b` | `openrouter/deepseek/deepseek-chat-v3.1` |
+| `DeepSeek` | `No distinct small OpenRouter route exposed` | `openrouter/deepseek/deepseek-r1-distill-qwen-32b` | `openrouter/deepseek/deepseek-chat-v3.1` |
 | `Llama` | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | `openrouter/meta-llama/llama-3.3-70b-instruct` | `openrouter/meta-llama/llama-4-maverick` |
 | `Gemma` | `openrouter/google/gemma-3-4b-it` | `openrouter/google/gemma-3-12b-it` | `openrouter/google/gemma-3-27b-it` |
 

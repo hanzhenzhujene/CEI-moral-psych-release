@@ -153,9 +153,31 @@ job_run_dir() {
   echo "$RUN_BASE/$job"
 }
 
+job_pid_file() {
+  local job="$1"
+  echo "$(job_run_dir "$job")/worker.pid"
+}
+
 is_running_pid() {
   local pid="$1"
   kill -0 "$pid" 2>/dev/null
+}
+
+find_live_job_pid() {
+  local job="$1"
+  local pid_file pid model
+
+  pid_file="$(job_pid_file "$job")"
+  if [[ -f "$pid_file" ]]; then
+    pid="$(cat "$pid_file")"
+    if [[ -n "$pid" ]] && is_running_pid "$pid"; then
+      echo "$pid"
+      return 0
+    fi
+  fi
+
+  model="$(job_model "$job")"
+  pgrep -f "src/inspect/run.py.*${model}" | head -n 1 || true
 }
 
 require_dir() {
@@ -292,12 +314,15 @@ run_task() {
 
 run_job() {
   local job="$1"
-  local run_dir model max_connections
+  local run_dir model max_connections worker_pid_file
   run_dir="$(job_run_dir "$job")"
   mkdir -p "$run_dir"
+  worker_pid_file="$(job_pid_file "$job")"
+  echo "$$" > "$worker_pid_file"
 
   if [[ "${SKIP_COMPLETED:-0}" == "1" && -f "$run_dir/job_done.txt" ]]; then
     echo "[$(now_iso)] SKIP job=$job reason=already_completed"
+    rm -f "$worker_pid_file"
     return 0
   fi
 
@@ -328,6 +353,7 @@ run_job() {
   run_or_skip_task "$job" "denevil_fulcra_proxy_generation" "src/inspect/evals/denevil.py::denevil_fulcra_proxy_generation" "$model" 1
 
   now_iso > "$run_dir/job_done.txt"
+  rm -f "$worker_pid_file"
 }
 
 selected_jobs() {
@@ -378,13 +404,24 @@ launch_master() {
 }
 
 show_status() {
-  local pid job run_dir status_file current_job
+  local pid job run_dir status_file current_job worker_pid pid_file
   echo "[master]"
   if [[ -f "$MASTER_PIDFILE" ]]; then
     pid="$(cat "$MASTER_PIDFILE")"
     if is_running_pid "$pid"; then
       echo "  state: running"
       echo "  pid: $pid"
+    elif [[ -f "$CURRENT_JOB_FILE" ]]; then
+      current_job="$(cat "$CURRENT_JOB_FILE")"
+      worker_pid="$(find_live_job_pid "$current_job")"
+      if [[ -n "$worker_pid" ]]; then
+        echo "  state: worker_running_no_master"
+        echo "  stale_master_pid: $pid"
+        echo "  worker_pid: $worker_pid"
+      else
+        echo "  state: stopped"
+        echo "  pid: $pid"
+      fi
     else
       echo "  state: stopped"
       echo "  pid: $pid"
@@ -406,7 +443,16 @@ show_status() {
     [[ -z "$job" ]] && continue
     run_dir="$(job_run_dir "$job")"
     status_file="$run_dir/task_status.csv"
+    pid_file="$(job_pid_file "$job")"
+    worker_pid="$(find_live_job_pid "$job")"
     echo "[$job]"
+    if [[ -n "$worker_pid" ]]; then
+      echo "  worker_state: running"
+      echo "  worker_pid: $worker_pid"
+    elif [[ -f "$pid_file" ]]; then
+      echo "  worker_state: stale_pid"
+      echo "  worker_pid: $(cat "$pid_file")"
+    fi
     if [[ -f "$status_file" ]]; then
       echo "  recent:"
       tail -n 5 "$status_file" | sed 's/^/    /'

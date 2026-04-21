@@ -10,7 +10,7 @@
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "operations_note": "Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19. Gemma-M and Gemma-L text are now complete locally, and active local Inspect processes are currently running for Qwen-M value_prism_valence and Qwen-L value_prism_relevance after resume-safe recovery.",
+    "operations_note": "Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19. Gemma-M and Gemma-L text are now complete locally. The current live Qwen restart has Qwen-M value_prism_valence at 6,552 / 21,840 persisted samples (30.0%) and Qwen-L value_prism_relevance at 4,368 / 43,680 persisted samples (10.0%); both workers are live and still actively calling OpenRouter. The Llama-M and DeepSeek-M watcher chain is armed and polling every three minutes for the first clean Qwen completion.",
     "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml",
     "ci_last_verified_run_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
   },
