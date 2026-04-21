@@ -4,7 +4,7 @@
 
 This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.
 
-> Current cost to date: `$35`
+> Current cost to date: `$40.73`
 
 It combines three things in one clean public surface:
 
