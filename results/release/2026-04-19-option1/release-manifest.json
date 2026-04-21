@@ -4,13 +4,13 @@
   "source_snapshot": "results/release/2026-04-19-option1/source/authoritative-summary.csv",
   "report_metadata": {
     "owner": "Jenny Zhu",
-    "date": "2026-04-20",
+    "date": "2026-04-21",
     "frozen_snapshot_date": "2026-04-19",
     "current_cost": "$35",
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "operations_note": "Updated April 20, 2026. The frozen public snapshot is still Option 1 from April 19. The image queue is complete, Qwen-L SMID recovery is complete on qwen2.5-vl-72b with a non-Alibaba provider allowlist, Gemma-L is still running the Denevil proxy task, and the Gemma-M / Qwen-M text batches are now live locally.",
+    "operations_note": "Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19, while the broader family-size expansion is tracked separately through the curated checkpoint table, the progress matrix, and the local run folders.",
     "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml",
     "ci_last_verified_run_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
   },

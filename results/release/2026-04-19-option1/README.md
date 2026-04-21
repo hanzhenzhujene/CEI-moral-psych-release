@@ -12,7 +12,7 @@ It separates two things clearly:
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `April 20, 2026` |
+| Repo update date | `April 21, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
 | Current cost to date | `$35` |
 | Intended use | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
@@ -23,10 +23,12 @@ It separates two things clearly:
 | Extra completed local line outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `5` papers / `7` tasks |
 | MiniMax small status | formal attempt exists, but the current run failed and is not counted as complete |
 | Provider / temperature | `OpenRouter`, `temperature=0` |
-| Current operations note | Updated April 20, 2026. The frozen public snapshot is still Option 1 from April 19. The image queue is complete, Qwen-L SMID recovery is complete on qwen2.5-vl-72b with a non-Alibaba provider allowlist, Gemma-L is still running the Denevil proxy task, and the Gemma-M / Qwen-M text batches are now live locally. |
+| Current operations note | Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19, while the broader family-size expansion is tracked separately through the curated checkpoint table, the progress matrix, and the local run folders. |
 | CI reference | [Workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); last verified successful run: [run 24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 
 ## Local Expansion Checkpoint
+
+This checkpoint summarizes the broader family-size expansion separately from the frozen Option 1 counts. It is a curated snapshot rather than a live dashboard.
 
 | Line or batch | Status | Note |
 | --- | --- | --- |
@@ -37,26 +39,33 @@ It separates two things clearly:
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
 | `Next queued text lines` | Queue | Qwen-L text, Llama-M, Llama-L, MiniMax-M, DeepSeek-M, and MiniMax-L remain queued after the active Gemma / Qwen medium batches. |
 
-## Open These First
+## Start Here
+
+### Reports
 
 - `jenny-group-report.md`: mentor-facing report with the benchmark list, progress matrix, model roster, and current results
 - `topline-summary.md`: shortest narrative summary of the frozen Option 1 snapshot
 - `release-manifest.json`: machine-readable release index
 - [how to read the results](../../../docs/how-to-read-results.md): plain-language explanation of the report terms
+
+### Figures
+
 - [grouped bar chart](../../../figures/release/option1_benchmark_accuracy_bars.svg): current cross-model benchmark comparison
 - [accuracy heatmap](../../../figures/release/option1_accuracy_heatmap.svg): task-level view of comparable metrics
 - [coverage matrix](../../../figures/release/option1_coverage_matrix.svg): frozen Option 1 coverage only
 - [sample volume chart](../../../figures/release/option1_sample_volume.svg): where the evaluated samples are concentrated
 
-## Progress Legend
+## Status Key
 
-- `done`: benchmark line finished with a usable result
-- `proxy`: finished, but only with a substitute proxy dataset instead of the paper's original setup
-- `live`: currently running
-- `error`: formal attempt exists, but the current result is not usable
-- `queue`: approved and queued next
-- `tbd`: family-size route is not frozen yet
-- `-`: no run is planned on that line right now
+| Mark | Meaning |
+| --- | --- |
+| `Done` | Finished with a usable result. |
+| `Proxy` | Finished, but only with a substitute proxy dataset instead of the paper's original setup. |
+| `Live` | Currently running locally. |
+| `Error` | A formal attempt exists, but the current result is not usable. |
+| `Queue` | Approved and queued next. |
+| `TBD` | The family-size route is not frozen yet. |
+| `-` | No run is planned on that line right now. |
 
 ## Family-Size Progress Matrix
 
@@ -101,15 +110,22 @@ Only benchmarks with directly comparable accuracy metrics are shown here. `CCD-B
 | `Llama-S` | 0.648 | 0.216 | 0.529 | Complete locally across all five papers, but still outside the frozen Option 1 snapshot counts. |
 | `Gemma-S` | 0.635 | 0.417 | 0.593 | Frozen Option 1 recovery line. |
 
-## Figure Gallery
+## Figures
+
+| Figure | Why it matters | File |
+| --- | --- | --- |
+| Figure 1 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | [option1_benchmark_accuracy_bars.svg](../../../figures/release/option1_benchmark_accuracy_bars.svg) |
+| Figure 2 | Task-level heatmap for the frozen comparable metrics, including unavailable-task treatment. | [option1_accuracy_heatmap.svg](../../../figures/release/option1_accuracy_heatmap.svg) |
+| Figure 3 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | [option1_coverage_matrix.svg](../../../figures/release/option1_coverage_matrix.svg) |
+| Figure 4 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | [option1_sample_volume.svg](../../../figures/release/option1_sample_volume.svg) |
 
 ![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
 
-_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines._
+_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._
 
 ![Accuracy heatmap](../../../figures/release/option1_accuracy_heatmap.svg)
 
-_Figure 2. Task-level accuracy heatmap for the frozen Option 1 slice._
+_Figure 2. Task-level accuracy heatmap for the frozen Option 1 slice, using a shared scale and a consistent unavailable-state treatment._
 
 ![Coverage matrix](../../../figures/release/option1_coverage_matrix.svg)
 
@@ -117,7 +133,7 @@ _Figure 3. Coverage matrix showing which benchmark lines are paper-setup, proxy-
 
 ![Sample volume by benchmark](../../../figures/release/option1_sample_volume.svg)
 
-_Figure 4. Sample volume by benchmark, with paper-setup and proxy samples separated for readability._
+_Figure 4. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._
 
 ## Frozen Option 1 Model Summary
 

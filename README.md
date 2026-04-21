@@ -1,6 +1,6 @@
 # CEI Moral-Psych Benchmark Suite
 
-[![CI](https://img.shields.io/github/actions/workflow/status/hanzhenzhujene/CEI-moral-psych-release/ci.yml?branch=main&label=CI)](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml)
+[![CI](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml)
 
 This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.
 
@@ -12,13 +12,19 @@ It combines three things in one clean public surface:
 2. a frozen `Option 1` snapshot for the first formal public release
 3. a clearly labeled progress matrix for the larger `5 benchmarks x 5 model families x 3 size slots` plan
 
-Quick links:
+## Start Here
+
+### Reports
 
 - [Jenny's group report](results/release/2026-04-19-option1/jenny-group-report.md)
 - [Release appendix](results/release/2026-04-19-option1/README.md)
 - [Frozen source snapshot](results/release/2026-04-19-option1/source/authoritative-summary.csv)
 - [How to read the results](docs/how-to-read-results.md)
 - [Reproducibility guide](docs/reproducibility.md)
+
+### Figures
+
+- [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
 - [Accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)
 - [Coverage matrix](figures/release/option1_coverage_matrix.svg)
 - [Sample volume chart](figures/release/option1_sample_volume.svg)
@@ -28,7 +34,7 @@ Quick links:
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `April 20, 2026` |
+| Repo update date | `April 21, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
 | Current cost to date | `$35` |
 | Group plan target | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
@@ -41,6 +47,8 @@ Quick links:
 
 ## Live Local Expansion Status
 
+This checkpoint summarizes the broader family-size expansion separately from the frozen Option 1 counts. It is a curated snapshot rather than a live dashboard.
+
 | Line or batch | Status | Note |
 | --- | --- | --- |
 | `Qwen-L SMID recovery` | Done | Completed on `April 20, 2026` via `openrouter/qwen/qwen2.5-vl-72b-instruct` after the earlier `qwen3-vl-32b` moderation stop. |
@@ -50,15 +58,17 @@ Quick links:
 | `Llama-L SMID` | Done | The large `Llama` vision line is complete locally. |
 | `Next queued text lines` | Queue | `Qwen-L` text, `Llama-M`, `Llama-L`, `MiniMax-M`, `DeepSeek-M`, and `MiniMax-L` remain queued after the active `Gemma-M` and `Qwen-M` batches. |
 
-## Progress Legend
+## Status Key
 
-- `Done`: benchmark line finished with a usable result
-- `Proxy`: finished, but only with a substitute proxy dataset instead of the paper's original setup
-- `Live`: currently running
-- `Error`: formal attempt exists, but the current result is not usable
-- `Queue`: approved and queued next
-- `TBD`: family-size route is not frozen yet
-- `-`: no run is planned on that line right now
+| Mark | Meaning |
+| --- | --- |
+| `Done` | Finished with a usable result. |
+| `Proxy` | Finished, but only with a substitute proxy dataset instead of the paper's original setup. |
+| `Live` | Currently running locally. |
+| `Error` | A formal attempt exists, but the current result is not usable. |
+| `Queue` | Approved and queued next. |
+| `TBD` | The family-size route is not frozen yet. |
+| `-` | No run is planned on that line right now. |
 
 ## Family-Size Progress Matrix
 
@@ -121,19 +131,25 @@ The underlying table is saved as [benchmark-comparison.csv](results/release/2026
 
 _Figure 0. Benchmark-level accuracy comparison across the currently completed comparable lines._
 
-## Figure Gallery
+## Figures
+
+| Figure | Why it matters | File |
+| --- | --- | --- |
+| Accuracy heatmap | Task-level heatmap for the frozen comparable metrics, including unavailable-task treatment. | [option1_accuracy_heatmap.svg](figures/release/option1_accuracy_heatmap.svg) |
+| Coverage matrix | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | [option1_coverage_matrix.svg](figures/release/option1_coverage_matrix.svg) |
+| Sample volume | Sample concentration by benchmark with paper-setup versus proxy volume separated. | [option1_sample_volume.svg](figures/release/option1_sample_volume.svg) |
 
 ![Accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)
 
-_Figure 1. Task-level accuracy heatmap for the frozen Option 1 slice._
+_Accuracy heatmap. Task-level accuracy view for the frozen Option 1 slice, using a shared scale and a consistent unavailable-state treatment._
 
 ![Coverage matrix](figures/release/option1_coverage_matrix.svg)
 
-_Figure 2. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._
+_Coverage matrix. Benchmark-line coverage view showing paper-setup, proxy-only, and excluded cells._
 
 ![Sample volume by benchmark](figures/release/option1_sample_volume.svg)
 
-_Figure 3. Sample volume by benchmark, with paper-setup and proxy samples separated for readability._
+_Sample volume. Benchmark sample concentration with paper-setup and proxy volume separated on a shared axis._
 
 ## Reproducibility
 

@@ -1,37 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="600" viewBox="0 0 1180 600" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="630" viewBox="0 0 1220 630" role="img">
 <defs>
+<linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffffff"/>
+<stop offset="100%" stop-color="#f8fafc"/>
+</linearGradient>
+<pattern id="diagonalHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+<line x1="0" y1="0" x2="0" y2="8" stroke="#cdd6e1" stroke-width="3"/>
+</pattern>
+<filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+<feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#9fb0c2" flood-opacity="0.18"/>
+</filter>
 <style>
+.canvas { fill: #f3f6fa; }
 .title { font: 700 26px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
 .subtitle { font: 400 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
 .axis { font: 600 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
 .label { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.metric { font: 700 20px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
 .celltext { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #ffffff; }
 .celltext-dark { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #173042; }
 .cellsub { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: rgba(255,255,255,0.88); }
 .cellsub-dark { font: 600 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #385062; }
 .body { font: 500 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
 .small { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.tiny { font: 600 10px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #6b7c8f; letter-spacing: 0.04em; }
 .grid { fill: #ffffff; stroke: #d7dee6; stroke-width: 1.25; }
-.panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1.25; }
+.panel { fill: url(#panelGradient); stroke: #dbe4ee; stroke-width: 1.25; filter: url(#softShadow); }
 .subpanel { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }
+.legend-card { fill: #ffffff; stroke: #dbe4ee; stroke-width: 1; }
 .guide { stroke: #d7dee6; stroke-width: 1; stroke-dasharray: 4 6; }
+.baseline { stroke: #aab7c6; stroke-width: 1.1; }
+.muted-cell { fill: #eef2f7; stroke: #d7dee6; stroke-width: 1; }
+.muted-bar { fill: #ecf1f6; stroke: #d7dee6; stroke-width: 1; }
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="24" y="24" width="1132" height="552" rx="22" class="panel"/>
+<rect x="0" y="0" width="1220" height="630" class="canvas"/>
+<rect x="24" y="24" width="1172" height="582" rx="22" class="panel"/>
 <title>Option 1 accuracy heatmap</title>
 <desc>Heatmap of comparable accuracy metrics across the frozen Option 1 model families and benchmark task scopes.</desc>
 <text x="48" y="64" class="title">Option 1 Accuracy Heatmap</text>
-<text x="48" y="88" class="subtitle">Only tasks with directly comparable accuracy metrics are shown. Missing cells indicate benchmarks not run in the current closed slice.</text>
+<text x="48" y="88" class="subtitle">Only tasks with directly comparable accuracy metrics are shown. Hatched cells mark tasks that were not part of the frozen closed slice.</text>
 <text x="295.0" y="122" text-anchor="middle" class="axis">UniMoral</text>
 <text x="295.0" y="140" text-anchor="middle" class="small">action</text>
 <text x="465.0" y="122" text-anchor="middle" class="axis">SMID</text>
 <text x="465.0" y="140" text-anchor="middle" class="small">rating</text>
 <text x="635.0" y="122" text-anchor="middle" class="axis">SMID</text>
 <text x="635.0" y="140" text-anchor="middle" class="small">foundation</text>
-<text x="805.0" y="122" text-anchor="middle" class="axis">Value</text>
+<text x="805.0" y="122" text-anchor="middle" class="axis">Value Kaleidoscope</text>
 <text x="805.0" y="140" text-anchor="middle" class="small">relevance</text>
-<text x="975.0" y="122" text-anchor="middle" class="axis">Value</text>
+<text x="975.0" y="122" text-anchor="middle" class="axis">Value Kaleidoscope</text>
 <text x="975.0" y="140" text-anchor="middle" class="small">valence</text>
 <text x="186" y="193.0" text-anchor="end" class="axis">Qwen</text>
 <rect x="210" y="148" width="156" height="64" rx="16" fill="#377d82" stroke="#ffffff" stroke-width="1"/>
@@ -53,12 +71,14 @@
 <rect x="210" y="226" width="156" height="64" rx="16" fill="#26737b" stroke="#ffffff" stroke-width="1"/>
 <text x="288.0" y="262" text-anchor="middle" class="celltext">68.4%</text>
 <text x="288.0" y="284" text-anchor="middle" class="cellsub">stderr 0.005</text>
-<rect x="380" y="226" width="156" height="64" rx="16" fill="#e7edf4" stroke="#d7dee6" stroke-width="1"/>
-<text x="458.0" y="264" text-anchor="middle" class="label">n/a</text>
-<text x="458.0" y="284" text-anchor="middle" class="small">not run</text>
-<rect x="550" y="226" width="156" height="64" rx="16" fill="#e7edf4" stroke="#d7dee6" stroke-width="1"/>
-<text x="628.0" y="264" text-anchor="middle" class="label">n/a</text>
-<text x="628.0" y="284" text-anchor="middle" class="small">not run</text>
+<rect x="380" y="226" width="156" height="64" rx="16" class="muted-cell"/>
+<rect x="380" y="226" width="156" height="64" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="458.0" y="262" text-anchor="middle" class="label">n/a</text>
+<text x="458.0" y="284" text-anchor="middle" class="small">not in slice</text>
+<rect x="550" y="226" width="156" height="64" rx="16" class="muted-cell"/>
+<rect x="550" y="226" width="156" height="64" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="628.0" y="262" text-anchor="middle" class="label">n/a</text>
+<text x="628.0" y="284" text-anchor="middle" class="small">not in slice</text>
 <rect x="720" y="226" width="156" height="64" rx="16" fill="#2c767d" stroke="#ffffff" stroke-width="1"/>
 <text x="798.0" y="262" text-anchor="middle" class="celltext">67.1%</text>
 <text x="798.0" y="284" text-anchor="middle" class="cellsub">stderr 0.002</text>
@@ -81,20 +101,24 @@
 <rect x="890" y="304" width="156" height="64" rx="16" fill="#58908f" stroke="#ffffff" stroke-width="1"/>
 <text x="968.0" y="340" text-anchor="middle" class="celltext">57.9%</text>
 <text x="968.0" y="362" text-anchor="middle" class="cellsub">stderr 0.003</text>
-<text x="690" y="506" class="axis">Accuracy scale</text>
-<text x="690" y="522" class="small">Lighter cells mean lower accuracy; darker cells mean higher accuracy.</text>
-<rect x="690.00" y="534" width="31.00" height="16" fill="#f2e8cf" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="720.00" y="534" width="31.00" height="16" fill="#dfddc7" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="750.00" y="534" width="31.00" height="16" fill="#ccd2bf" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="780.00" y="534" width="31.00" height="16" fill="#b8c7b7" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="810.00" y="534" width="31.00" height="16" fill="#a5bcaf" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="840.00" y="534" width="31.00" height="16" fill="#92b1a7" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="870.00" y="534" width="31.00" height="16" fill="#7fa6a0" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="900.00" y="534" width="31.00" height="16" fill="#6c9b98" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="930.00" y="534" width="31.00" height="16" fill="#599090" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="960.00" y="534" width="31.00" height="16" fill="#458588" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="990.00" y="534" width="31.00" height="16" fill="#327a80" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="1020.00" y="534" width="31.00" height="16" fill="#1f6f78" stroke="#ffffff" stroke-width="0.6"/>
-<text x="690" y="568" class="small">25.8%</text>
-<text x="1050" y="568" text-anchor="end" class="small">69.8%</text>
+<rect x="650" y="502" width="446" height="86" rx="16" class="legend-card"/>
+<text x="670" y="520" class="axis">Accuracy scale</text>
+<text x="670" y="536" class="small">Lighter cells mean lower accuracy; darker cells mean higher accuracy.</text>
+<rect x="670.00" y="548" width="31.00" height="16" fill="#f2e8cf" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="700.00" y="548" width="31.00" height="16" fill="#dfddc7" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="730.00" y="548" width="31.00" height="16" fill="#ccd2bf" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="760.00" y="548" width="31.00" height="16" fill="#b8c7b7" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="790.00" y="548" width="31.00" height="16" fill="#a5bcaf" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="820.00" y="548" width="31.00" height="16" fill="#92b1a7" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="850.00" y="548" width="31.00" height="16" fill="#7fa6a0" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="880.00" y="548" width="31.00" height="16" fill="#6c9b98" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="910.00" y="548" width="31.00" height="16" fill="#599090" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="940.00" y="548" width="31.00" height="16" fill="#458588" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="970.00" y="548" width="31.00" height="16" fill="#327a80" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="1000.00" y="548" width="31.00" height="16" fill="#1f6f78" stroke="#ffffff" stroke-width="0.6"/>
+<text x="670" y="582" class="small">25.8%</text>
+<text x="1030" y="582" text-anchor="end" class="small">69.8%</text>
+<rect x="1052" y="544" width="24" height="24" rx="6" class="muted-cell"/>
+<rect x="1052" y="544" width="24" height="24" rx="6" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="1086" y="562" class="small">not in slice</text>
 </svg>

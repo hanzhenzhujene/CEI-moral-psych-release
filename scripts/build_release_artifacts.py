@@ -19,8 +19,8 @@ DEFAULT_FIGURE_DIR = ROOT / "figures" / "release"
 RELEASE_ID = "2026-04-19-option1"
 RELEASE_TITLE = "CEI Moral-Psych Benchmark Suite: Jenny Zhu Option 1 Report"
 REPORT_OWNER = "Jenny Zhu"
-REPORT_DATE_LONG = "April 20, 2026"
-REPORT_DATE_ISO = "2026-04-20"
+REPORT_DATE_LONG = "April 21, 2026"
+REPORT_DATE_ISO = "2026-04-21"
 SNAPSHOT_DATE_LONG = "April 19, 2026"
 SNAPSHOT_DATE_ISO = "2026-04-19"
 REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan."
@@ -28,10 +28,9 @@ REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
 REPORT_CURRENT_COST = "$35"
 REPORT_STATUS_NOTE = (
-    "Updated April 20, 2026. "
-    "The frozen public snapshot is still Option 1 from April 19. "
-    "The image queue is complete, Qwen-L SMID recovery is complete on qwen2.5-vl-72b with a non-Alibaba provider allowlist, "
-    "Gemma-L is still running the Denevil proxy task, and the Gemma-M / Qwen-M text batches are now live locally."
+    "Updated April 21, 2026. "
+    "The frozen public snapshot remains Option 1 from April 19, while the broader family-size expansion is tracked separately "
+    "through the curated checkpoint table, the progress matrix, and the local run folders."
 )
 CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 CI_RUN_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
@@ -52,8 +51,8 @@ ACCURACY_SCOPE_ORDER = [
     ("UniMoral", "Option 1 action prediction", "UniMoral\naction"),
     ("SMID", "Moral rating", "SMID\nrating"),
     ("SMID", "Foundation classification", "SMID\nfoundation"),
-    ("Value Kaleidoscope", "Relevance", "Value\nrelevance"),
-    ("Value Kaleidoscope", "Valence", "Value\nvalence"),
+    ("Value Kaleidoscope", "Relevance", "Value Kaleidoscope\nrelevance"),
+    ("Value Kaleidoscope", "Valence", "Value Kaleidoscope\nvalence"),
 ]
 SAMPLE_BAR_ORDER = ["Value Kaleidoscope", "Denevil", "UniMoral", "SMID", "CCD-Bench"]
 COMPARABLE_RESULT_ORDER = ["Qwen-S", "DeepSeek-L", "Llama-S", "Gemma-S"]
@@ -556,6 +555,16 @@ STATUS_DISPLAY = {
     "-": "-",
 }
 
+STATUS_LEGEND = [
+    ("Done", "Finished with a usable result."),
+    ("Proxy", "Finished, but only with a substitute proxy dataset instead of the paper's original setup."),
+    ("Live", "Currently running locally."),
+    ("Error", "A formal attempt exists, but the current result is not usable."),
+    ("Queue", "Approved and queued next."),
+    ("TBD", "The family-size route is not frozen yet."),
+    ("-", "No run is planned on that line right now."),
+]
+
 
 def read_rows(path: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
@@ -863,26 +872,69 @@ def interpolate_color(start: str, end: str, weight: float) -> str:
     return rgb_to_hex(mixed)
 
 
+def nice_tick_step(max_value: int, target_ticks: int = 4) -> int:
+    if max_value <= 0:
+        return 1
+
+    raw_step = max_value / target_ticks
+    magnitude = 10 ** math.floor(math.log10(raw_step))
+    normalized = raw_step / magnitude
+
+    if normalized <= 1:
+        nice = 1
+    elif normalized <= 2:
+        nice = 2
+    elif normalized <= 2.5:
+        nice = 2.5
+    elif normalized <= 5:
+        nice = 5
+    else:
+        nice = 10
+    return int(nice * magnitude)
+
+
+def build_axis_ticks(max_value: int, target_ticks: int = 4) -> tuple[list[int], int]:
+    step = nice_tick_step(max_value, target_ticks=target_ticks)
+    upper = int(math.ceil(max_value / step) * step)
+    return [step * index for index in range(target_ticks + 1)], upper
+
 
 def svg_header(width: int, height: int) -> list[str]:
     return [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">',
         "<defs>",
+        '<linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">',
+        '<stop offset="0%" stop-color="#ffffff"/>',
+        '<stop offset="100%" stop-color="#f8fafc"/>',
+        "</linearGradient>",
+        '<pattern id="diagonalHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">',
+        '<line x1="0" y1="0" x2="0" y2="8" stroke="#cdd6e1" stroke-width="3"/>',
+        "</pattern>",
+        '<filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">',
+        '<feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#9fb0c2" flood-opacity="0.18"/>',
+        "</filter>",
         "<style>",
+        ".canvas { fill: #f3f6fa; }",
         ".title { font: 700 26px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }",
         ".subtitle { font: 400 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }",
         ".axis { font: 600 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }",
         ".label { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }",
+        ".metric { font: 700 20px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }",
         ".celltext { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #ffffff; }",
         ".celltext-dark { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #173042; }",
         ".cellsub { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: rgba(255,255,255,0.88); }",
         ".cellsub-dark { font: 600 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #385062; }",
         ".body { font: 500 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }",
         ".small { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }",
+        ".tiny { font: 600 10px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #6b7c8f; letter-spacing: 0.04em; }",
         ".grid { fill: #ffffff; stroke: #d7dee6; stroke-width: 1.25; }",
-        ".panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1.25; }",
+        ".panel { fill: url(#panelGradient); stroke: #dbe4ee; stroke-width: 1.25; filter: url(#softShadow); }",
         ".subpanel { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }",
+        ".legend-card { fill: #ffffff; stroke: #dbe4ee; stroke-width: 1; }",
         ".guide { stroke: #d7dee6; stroke-width: 1; stroke-dasharray: 4 6; }",
+        ".baseline { stroke: #aab7c6; stroke-width: 1.1; }",
+        ".muted-cell { fill: #eef2f7; stroke: #d7dee6; stroke-width: 1; }",
+        ".muted-bar { fill: #ecf1f6; stroke: #d7dee6; stroke-width: 1; }",
         ".outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }",
         "</style>",
         "</defs>",
@@ -890,26 +942,31 @@ def svg_header(width: int, height: int) -> list[str]:
 
 
 def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
-    width, height = 1180, 540
-    left, top = 210, 140
-    cell_w, cell_h = 170, 74
+    width, height = 1220, 590
+    left, top = 220, 156
+    cell_w, cell_h = 176, 82
     colors = {"benchmark_faithful": "#2f855a", "proxy": "#b7791f", "not_run": "#cbd5e1"}
 
     matrix = {(row["model_family"], row["benchmark"]): row for row in rows}
+    status_counts = {
+        status: sum(row["status"] == status for row in rows)
+        for status in ("benchmark_faithful", "proxy", "not_run")
+    }
     lines = svg_header(width, height)
     lines.extend(
         [
+            f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Option 1 benchmark coverage matrix</title>",
             "<desc>Coverage matrix for the frozen Option 1 release across Qwen, DeepSeek, and Gemma for the five benchmark lines.</desc>",
             '<text x="48" y="64" class="title">Option 1 Benchmark Coverage</text>',
-            '<text x="48" y="88" class="subtitle">Green cells follow the paper setup. Amber cells are proxy-only. Gray cells were not part of the frozen release.</text>',
+            '<text x="48" y="88" class="subtitle">Green cells follow the paper setup. Amber cells are proxy-only. Hatched gray cells were not part of the frozen release.</text>',
         ]
     )
 
     for index, benchmark in enumerate(BENCHMARK_ORDER):
         x = left + index * cell_w + cell_w / 2
-        lines.append(f'<text x="{x}" y="124" text-anchor="middle" class="axis">{escape_xml(benchmark)}</text>')
+        lines.append(f'<text x="{x}" y="136" text-anchor="middle" class="axis">{escape_xml(benchmark)}</text>')
 
     for row_index, model in enumerate(MODEL_ORDER):
         y = top + row_index * cell_h + cell_h / 2 + 6
@@ -919,18 +976,30 @@ def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
             y0 = top + row_index * cell_h
             cell = matrix[(model, benchmark)]
             color = colors[cell["status"]]
-            lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="{color}" class="outline"/>')
+            lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="18" fill="{color}" class="outline"/>')
+            if cell["status"] == "not_run":
+                lines.append(
+                    f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="18" fill="url(#diagonalHatch)" opacity="0.7"/>'
+                )
             label_x = x + (cell_w - 14) / 2
             main_class, sub_class = ("celltext-dark", "cellsub-dark") if cell["status"] == "not_run" else ("celltext", "cellsub")
-            lines.append(f'<text x="{label_x}" y="{y0 + 34}" text-anchor="middle" class="{main_class}">{escape_xml(cell["label"])}</text>')
+            lines.append(f'<text x="{label_x}" y="{y0 + 36}" text-anchor="middle" class="{main_class}">{escape_xml(cell["label"])}</text>')
             detail = "paper setup" if cell["status"] == "benchmark_faithful" else ("proxy only" if cell["status"] == "proxy" else "not in release")
-            lines.append(f'<text x="{label_x}" y="{y0 + 54}" text-anchor="middle" class="{sub_class}">{escape_xml(detail)}</text>')
+            lines.append(f'<text x="{label_x}" y="{y0 + 58}" text-anchor="middle" class="{sub_class}">{escape_xml(detail)}</text>')
 
-    legend_y = height - 58
+    lines.append('<rect x="846" y="446" width="326" height="76" rx="16" class="legend-card"/>')
+    lines.append('<text x="872" y="470" class="tiny">SLICE SUMMARY</text>')
+    lines.append(f'<text x="872" y="491" class="body">Paper setup: {status_counts["benchmark_faithful"]} cells</text>')
+    lines.append(f'<text x="872" y="509" class="body">Proxy only: {status_counts["proxy"]} cells</text>')
+    lines.append(f'<text x="872" y="527" class="body">Not in release: {status_counts["not_run"]} cell</text>')
+
+    legend_y = height - 64
     legend_items = [("#2f855a", "Paper setup"), ("#b7791f", "Proxy only"), ("#cbd5e1", "Not in release")]
     for index, (color, label) in enumerate(legend_items):
         x = 48 + index * 210
         lines.append(f'<rect x="{x}" y="{legend_y - 14}" width="18" height="18" rx="4" fill="{color}"/>')
+        if label == "Not in release":
+            lines.append(f'<rect x="{x}" y="{legend_y - 14}" width="18" height="18" rx="4" fill="url(#diagonalHatch)" opacity="0.7"/>')
         lines.append(f'<text x="{x + 28}" y="{legend_y}" class="label">{escape_xml(label)}</text>')
 
     lines.append("</svg>")
@@ -938,7 +1007,7 @@ def render_coverage_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
 
 
 def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
-    width, height = 1180, 600
+    width, height = 1220, 630
     left, top = 210, 148
     cell_w, cell_h = 170, 78
     scored = [row["accuracy"] for row in rows if row["accuracy"] is not None]
@@ -949,11 +1018,12 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
     lines = svg_header(width, height)
     lines.extend(
         [
+            f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Option 1 accuracy heatmap</title>",
             "<desc>Heatmap of comparable accuracy metrics across the frozen Option 1 model families and benchmark task scopes.</desc>",
             '<text x="48" y="64" class="title">Option 1 Accuracy Heatmap</text>',
-            '<text x="48" y="88" class="subtitle">Only tasks with directly comparable accuracy metrics are shown. Missing cells indicate benchmarks not run in the current closed slice.</text>',
+            '<text x="48" y="88" class="subtitle">Only tasks with directly comparable accuracy metrics are shown. Hatched cells mark tasks that were not part of the frozen closed slice.</text>',
         ]
     )
 
@@ -971,9 +1041,10 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
             y0 = top + row_index * cell_h
             item = lookup.get((model, benchmark, scope))
             if item is None:
-                lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="#e7edf4" stroke="#d7dee6" stroke-width="1"/>')
-                lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 38}" text-anchor="middle" class="label">n/a</text>')
-                lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 58}" text-anchor="middle" class="small">not run</text>')
+                lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" class="muted-cell"/>')
+                lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>')
+                lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 36}" text-anchor="middle" class="label">n/a</text>')
+                lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 58}" text-anchor="middle" class="small">not in slice</text>')
                 continue
             weight = 0.0 if math.isclose(max_acc, min_acc) else (item["accuracy"] - min_acc) / (max_acc - min_acc)
             color = interpolate_color("#f2e8cf", "#1f6f78", weight)
@@ -982,10 +1053,11 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
             lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 36}" text-anchor="middle" class="{main_class}">{item["accuracy"] * 100:.1f}%</text>')
             lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 58}" text-anchor="middle" class="{sub_class}">stderr {item["stderr"]:.3f}</text>')
 
-    legend_x = 690
-    legend_y = height - 76
+    legend_x = 670
+    legend_y = height - 92
     legend_w = 360
     legend_steps = 12
+    lines.append(f'<rect x="{legend_x - 20}" y="{legend_y - 36}" width="446" height="86" rx="16" class="legend-card"/>')
     lines.append(f'<text x="{legend_x}" y="{legend_y - 18}" class="axis">Accuracy scale</text>')
     lines.append(f'<text x="{legend_x}" y="{legend_y - 2}" class="small">Lighter cells mean lower accuracy; darker cells mean higher accuracy.</text>')
     for step in range(legend_steps):
@@ -995,17 +1067,21 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
         lines.append(f'<rect x="{x:.2f}" y="{legend_y + 10}" width="{legend_w / legend_steps + 1:.2f}" height="16" fill="{color}" stroke="#ffffff" stroke-width="0.6"/>')
     lines.append(f'<text x="{legend_x}" y="{legend_y + 44}" class="small">{min_acc * 100:.1f}%</text>')
     lines.append(f'<text x="{legend_x + legend_w}" y="{legend_y + 44}" text-anchor="end" class="small">{max_acc * 100:.1f}%</text>')
+    lines.append(f'<rect x="{legend_x + 382}" y="{legend_y + 6}" width="24" height="24" rx="6" class="muted-cell"/>')
+    lines.append(f'<rect x="{legend_x + 382}" y="{legend_y + 6}" width="24" height="24" rx="6" fill="url(#diagonalHatch)" opacity="0.8"/>')
+    lines.append(f'<text x="{legend_x + 416}" y="{legend_y + 24}" class="small">not in slice</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
 
 
 def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
-    width, height = 1180, 610
-    left, top = 300, 126
-    bar_w = 720
-    bar_h = 28
-    gap = 82
+    width, height = 1220, 670
+    left, top = 280, 184
+    bar_w = 520
+    bar_h = 26
+    gap = 86
+    breakdown_x = 888
 
     benchmark_totals: dict[str, dict[str, int]] = {
         benchmark: {"benchmark_faithful": 0, "proxy": 0} for benchmark in SAMPLE_BAR_ORDER
@@ -1016,40 +1092,53 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
 
     max_total = max(sum(parts.values()) for parts in benchmark_totals.values())
     total_samples = sum(row["total_samples"] for row in rows)
+    ticks, axis_max = build_axis_ticks(max_total, target_ticks=4)
 
     lines = svg_header(width, height)
     lines.extend(
         [
+            f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Sample volume by benchmark</title>",
             "<desc>Sample counts in the frozen Option 1 release, with paper-setup and proxy samples separated by benchmark.</desc>",
             '<text x="48" y="64" class="title">Sample Volume by Benchmark</text>',
-            f'<text x="48" y="88" class="subtitle">The closed Option 1 release contains {total_samples:,} evaluated samples. Proxy volume appears only in Denevil.</text>',
+            f'<text x="48" y="88" class="subtitle">The closed Option 1 release contains {total_samples:,} evaluated samples. Bars show each benchmark share on a common scale, with the paper-setup and proxy split preserved.</text>',
+            f'<text x="{left}" y="146" class="tiny">COMMON SAMPLE SCALE</text>',
+            f'<text x="{breakdown_x}" y="146" class="tiny">BREAKDOWN</text>',
         ]
     )
+
+    axis_top = top - 10
+    axis_bottom = top + (len(SAMPLE_BAR_ORDER) - 1) * gap + bar_h + 8
+    for tick in ticks:
+        x = left + (bar_w * tick / axis_max if axis_max else 0)
+        lines.append(f'<line x1="{x:.2f}" y1="{axis_top}" x2="{x:.2f}" y2="{axis_bottom}" class="guide"/>')
+        lines.append(f'<text x="{x:.2f}" y="{axis_top - 10}" text-anchor="middle" class="small">{tick:,}</text>')
 
     for index, benchmark in enumerate(SAMPLE_BAR_ORDER):
         y = top + index * gap
         faithful = benchmark_totals[benchmark]["benchmark_faithful"]
         proxy = benchmark_totals[benchmark]["proxy"]
         total = faithful + proxy
-        faithful_w = 0 if max_total == 0 else bar_w * faithful / max_total
-        proxy_w = 0 if max_total == 0 else bar_w * proxy / max_total
-        lines.append(f'<text x="{left - 18}" y="{y + 18}" text-anchor="end" class="axis">{escape_xml(benchmark)}</text>')
+        share_pct = 0 if total_samples == 0 else total / total_samples
+        faithful_w = 0 if axis_max == 0 else bar_w * faithful / axis_max
+        proxy_w = 0 if axis_max == 0 else bar_w * proxy / axis_max
+        label_x = breakdown_x - 18
+        lines.append(f'<text x="{left - 20}" y="{y + 18}" text-anchor="end" class="axis">{escape_xml(benchmark)}</text>')
         lines.append(f'<rect x="{left}" y="{y}" width="{bar_w}" height="{bar_h}" rx="10" fill="#e2e8f0"/>')
         if faithful_w:
             lines.append(f'<rect x="{left}" y="{y}" width="{faithful_w:.2f}" height="{bar_h}" rx="10" fill="#2f855a"/>')
         if proxy_w:
             lines.append(f'<rect x="{left + faithful_w:.2f}" y="{y}" width="{proxy_w:.2f}" height="{bar_h}" rx="10" fill="#b7791f"/>')
-        lines.append(f'<text x="{left + bar_w + 18}" y="{y + 18}" class="axis">{total:,}</text>')
-        if faithful:
-            lines.append(f'<rect x="{left}" y="{y + 40}" width="10" height="10" rx="2.5" fill="#2f855a"/>')
-            lines.append(f'<text x="{left + 18}" y="{y + 49}" class="body">Paper setup: {faithful:,}</text>')
-        if proxy:
-            lines.append(f'<rect x="{left + 174}" y="{y + 40}" width="10" height="10" rx="2.5" fill="#b7791f"/>')
-            lines.append(f'<text x="{left + 192}" y="{y + 49}" class="body">Proxy: {proxy:,}</text>')
+        lines.append(f'<text x="{label_x}" y="{y + 17}" text-anchor="end" class="metric">{total:,}</text>')
+        lines.append(f'<text x="{label_x}" y="{y + 35}" text-anchor="end" class="small">{share_pct * 100:.1f}% of release</text>')
+        lines.append(f'<rect x="{breakdown_x}" y="{y - 8}" width="250" height="52" rx="14" class="subpanel"/>')
+        lines.append(f'<rect x="{breakdown_x + 16}" y="{y + 6}" width="10" height="10" rx="2.5" fill="#2f855a"/>')
+        lines.append(f'<text x="{breakdown_x + 36}" y="{y + 15}" class="body">Paper setup: {faithful:,}</text>')
+        lines.append(f'<rect x="{breakdown_x + 16}" y="{y + 27}" width="10" height="10" rx="2.5" fill="#b7791f"/>')
+        lines.append(f'<text x="{breakdown_x + 36}" y="{y + 36}" class="body">Proxy: {proxy:,}</text>')
 
-    legend_y = height - 66
+    legend_y = height - 78
     lines.append(f'<rect x="48" y="{legend_y - 14}" width="18" height="18" rx="4" fill="#2f855a"/>')
     lines.append(f'<text x="76" y="{legend_y}" class="label">paper-setup samples</text>')
     lines.append(f'<rect x="286" y="{legend_y - 14}" width="18" height="18" rx="4" fill="#b7791f"/>')
@@ -1060,15 +1149,15 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
 
 
 def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
-    width, height = 1220, 840
+    width, height = 1220, 960
     panel_left, panel_width = 280, 800
     bar_height, bar_gap = 28, 14
-    panel_top, panel_gap = 190, 198
+    panel_top, panel_gap = 192, 238
     tick_count = 5
     line_colors = {
         "Qwen-S": "#0f766e",
-        "DeepSeek-L": "#1d4ed8",
-        "Llama-S": "#b45309",
+        "DeepSeek-L": "#2563eb",
+        "Llama-S": "#c2410c",
         "Gemma-S": "#7c3aed",
     }
     metric_specs = [
@@ -1092,11 +1181,12 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
     lines = svg_header(width, height)
     lines.extend(
         [
+            f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Comparable accuracy by benchmark</title>",
             "<desc>Horizontal bar panels comparing completed family-size lines on benchmarks with directly comparable accuracy metrics.</desc>",
             '<text x="48" y="64" class="title">Comparable Accuracy by Benchmark</text>',
-            '<text x="48" y="88" class="subtitle">Each panel compares the currently completed family-size lines that share the same accuracy-based benchmark metric.</text>',
+            '<text x="48" y="88" class="subtitle">Each panel keeps the same completed lines in the same order. Hatched rows mark lines without a comparable run for that benchmark.</text>',
         ]
     )
 
@@ -1110,7 +1200,7 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
 
     for panel_index, (field, benchmark_label, scope_label) in enumerate(metric_specs):
         panel_y = panel_top + panel_index * panel_gap
-        lines.append(f'<rect x="42" y="{panel_y - 24}" width="{width - 84}" height="166" rx="18" class="subpanel"/>')
+        lines.append(f'<rect x="42" y="{panel_y - 28}" width="{width - 84}" height="212" rx="18" class="subpanel"/>')
         lines.append(f'<text x="48" y="{panel_y}" class="axis">{escape_xml(benchmark_label)}</text>')
         lines.append(f'<text x="48" y="{panel_y + 20}" class="subtitle">{escape_xml(scope_label)}</text>')
         lines.append(f'<text x="{panel_left + panel_width}" y="{panel_y}" text-anchor="end" class="small">Accuracy</text>')
@@ -1119,23 +1209,32 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
         for tick_index in range(tick_count):
             ratio = tick_index / (tick_count - 1)
             x = panel_left + ratio * panel_width
-            lines.append(f'<line x1="{x:.2f}" y1="{tick_y}" x2="{x:.2f}" y2="{tick_y + 136}" class="guide"/>')
+            lines.append(f'<line x1="{x:.2f}" y1="{tick_y}" x2="{x:.2f}" y2="{tick_y + 182}" class="guide"/>')
             lines.append(f'<text x="{x:.2f}" y="{tick_y - 8}" text-anchor="middle" class="small">{ratio * 100:.0f}%</text>')
 
-        visible_rows = [row for row in rows if row[field] is not None]
-        for row_index, row in enumerate(visible_rows):
+        row_lookup = {row["line_label"]: row for row in rows}
+        for row_index, line_label in enumerate(COMPARABLE_RESULT_ORDER):
             y = panel_y + 46 + row_index * (bar_height + bar_gap)
-            width_px = panel_width * row[field]
-            lines.append(f'<text x="{panel_left - 16}" y="{y + 19}" text-anchor="end" class="label">{escape_xml(row["line_label"])}</text>')
+            row = row_lookup.get(line_label)
+            value = None if row is None else row[field]
+            lines.append(f'<text x="{panel_left - 16}" y="{y + 19}" text-anchor="end" class="label">{escape_xml(line_label)}</text>')
             lines.append(f'<rect x="{panel_left}" y="{y}" width="{panel_width}" height="{bar_height}" rx="10" fill="#e2e8f0"/>')
+            if value is None:
+                lines.append(f'<rect x="{panel_left}" y="{y}" width="{panel_width}" height="{bar_height}" rx="10" class="muted-bar"/>')
+                lines.append(
+                    f'<rect x="{panel_left}" y="{y}" width="{panel_width}" height="{bar_height}" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>'
+                )
+                lines.append(
+                    f'<text x="{panel_left + panel_width - 10}" y="{y + 19}" text-anchor="end" class="small">not run for this benchmark</text>'
+                )
+                continue
+            width_px = panel_width * value
             lines.append(
-                f'<rect x="{panel_left}" y="{y}" width="{width_px:.2f}" height="{bar_height}" rx="10" fill="{line_colors.get(row["line_label"], "#475569")}"/>'
+                f'<rect x="{panel_left}" y="{y}" width="{width_px:.2f}" height="{bar_height}" rx="10" fill="{line_colors.get(line_label, "#475569")}"/>'
             )
             label_x = min(panel_left + width_px + 10, panel_left + panel_width - 4)
             label_anchor = "start" if label_x < panel_left + panel_width - 4 else "end"
-            lines.append(
-                f'<text x="{label_x:.2f}" y="{y + 19}" text-anchor="{label_anchor}" class="label">{row[field] * 100:.1f}%</text>'
-            )
+            lines.append(f'<text x="{label_x:.2f}" y="{y + 19}" text-anchor="{label_anchor}" class="label">{value * 100:.1f}%</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -1210,6 +1309,17 @@ def append_benchmark_comparison_table(lines: list[str], rows: list[dict[str, Any
         )
 
 
+def append_status_key(lines: list[str]) -> None:
+    lines.extend(
+        [
+            "| Mark | Meaning |",
+            "| --- | --- |",
+        ]
+    )
+    for label, meaning in STATUS_LEGEND:
+        lines.append(f"| `{label}` | {meaning} |")
+
+
 def format_family_size_route(row: dict[str, Any]) -> str:
     text_route = row["text_route"]
     vision_route = row["vision_route"]
@@ -1223,15 +1333,22 @@ def format_family_size_route(row: dict[str, Any]) -> str:
 def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
     lines.extend(
         [
-            "## Figure Gallery",
+            "## Figures",
+            "",
+            "| Figure | Why it matters | File |",
+            "| --- | --- | --- |",
+            f"| Figure 1 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | {markdown_link('option1_benchmark_accuracy_bars.svg', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')} |",
+            f"| Figure 2 | Task-level heatmap for the frozen comparable metrics, including unavailable-task treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
+            f"| Figure 3 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
+            f"| Figure 4 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | {markdown_link('option1_sample_volume.svg', f'{figure_prefix}/option1_sample_volume.svg')} |",
             "",
             f"![Comparable accuracy bars]({figure_prefix}/option1_benchmark_accuracy_bars.svg)",
             "",
-            "_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines._",
+            "_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._",
             "",
             f"![Accuracy heatmap]({figure_prefix}/option1_accuracy_heatmap.svg)",
             "",
-            "_Figure 2. Task-level accuracy heatmap for the frozen Option 1 slice._",
+            "_Figure 2. Task-level accuracy heatmap for the frozen Option 1 slice, using a shared scale and a consistent unavailable-state treatment._",
             "",
             f"![Coverage matrix]({figure_prefix}/option1_coverage_matrix.svg)",
             "",
@@ -1239,7 +1356,7 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             "",
             f"![Sample volume by benchmark]({figure_prefix}/option1_sample_volume.svg)",
             "",
-            "_Figure 4. Sample volume by benchmark, with paper-setup and proxy samples separated for readability._",
+            "_Figure 4. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._",
             "",
         ]
     )
@@ -1301,31 +1418,36 @@ def build_release_readme(
         "",
         "## Local Expansion Checkpoint",
         "",
+        "This checkpoint summarizes the broader family-size expansion separately from the frozen Option 1 counts. It is a curated snapshot rather than a live dashboard.",
+        "",
     ]
     append_local_expansion_checkpoint_table(lines)
     lines.extend(
         [
             "",
-            "## Open These First",
+            "## Start Here",
+            "",
+            "### Reports",
             "",
             "- `jenny-group-report.md`: mentor-facing report with the benchmark list, progress matrix, model roster, and current results",
             "- `topline-summary.md`: shortest narrative summary of the frozen Option 1 snapshot",
             "- `release-manifest.json`: machine-readable release index",
             f"- {markdown_link('how to read the results', '../../../docs/how-to-read-results.md')}: plain-language explanation of the report terms",
+            "",
+            "### Figures",
+            "",
             f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: current cross-model benchmark comparison",
             f"- {markdown_link('accuracy heatmap', '../../../figures/release/option1_accuracy_heatmap.svg')}: task-level view of comparable metrics",
             f"- {markdown_link('coverage matrix', '../../../figures/release/option1_coverage_matrix.svg')}: frozen Option 1 coverage only",
             f"- {markdown_link('sample volume chart', '../../../figures/release/option1_sample_volume.svg')}: where the evaluated samples are concentrated",
             "",
-            "## Progress Legend",
+            "## Status Key",
             "",
-            "- `done`: benchmark line finished with a usable result",
-            "- `proxy`: finished, but only with a substitute proxy dataset instead of the paper's original setup",
-            "- `live`: currently running",
-            "- `error`: formal attempt exists, but the current result is not usable",
-            "- `queue`: approved and queued next",
-            "- `tbd`: family-size route is not frozen yet",
-            "- `-`: no run is planned on that line right now",
+        ]
+    )
+    append_status_key(lines)
+    lines.extend(
+        [
             "",
             "## Family-Size Progress Matrix",
             "",
@@ -1456,6 +1578,8 @@ def build_jenny_group_report(
         "",
         "## Local Expansion Checkpoint",
         "",
+        "This checkpoint summarizes the broader family-size expansion separately from the frozen Option 1 counts. It is a curated snapshot rather than a live dashboard.",
+        "",
     ]
     append_local_expansion_checkpoint_table(lines)
     lines.extend(
@@ -1463,15 +1587,13 @@ def build_jenny_group_report(
             "",
             "Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-results.md)",
             "",
-            "## Progress Legend",
+            "## Status Key",
             "",
-            "- `done`: benchmark line finished with a usable result",
-            "- `proxy`: finished, but only with a substitute proxy dataset instead of the paper's original setup",
-            "- `live`: currently running",
-            "- `error`: formal attempt exists, but the current result is not usable",
-            "- `queue`: approved and queued next",
-            "- `tbd`: family-size route is not frozen yet",
-            "- `-`: no run is planned on that line right now",
+        ]
+    )
+    append_status_key(lines)
+    lines.extend(
+        [
             "",
             "## The Five Papers / Benchmarks Under Test",
             "",

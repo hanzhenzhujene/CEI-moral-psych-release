@@ -109,22 +109,30 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     report_text = (release_dir / "jenny-group-report.md").read_text(encoding="utf-8")
     assert "qwen2.5-vl-72b-instruct" in report_text
-    assert "non-Alibaba provider allowlist" in report_text
     assert "## Local Expansion Checkpoint" in report_text
-    assert "## Figure Gallery" in report_text
+    assert "curated snapshot rather than a live dashboard" in report_text
+    assert "## Status Key" in report_text
+    assert "## Figures" in report_text
     assert "![Coverage matrix]" in report_text
     assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" in report_text
 
     release_readme = (release_dir / "README.md").read_text(encoding="utf-8")
     assert "## Local Expansion Checkpoint" in release_readme
     assert "sample volume chart" in release_readme
-    assert "## Figure Gallery" in release_readme
+    assert "## Start Here" in release_readme
+    assert "## Status Key" in release_readme
+    assert "## Figures" in release_readme
     assert "Done" in release_readme
 
     heatmap_svg = (figure_dir / "option1_accuracy_heatmap.svg").read_text(encoding="utf-8")
     assert "celltext-dark" in heatmap_svg
     assert "Accuracy scale" in heatmap_svg
+    assert "not in slice" in heatmap_svg
+
+    benchmark_bar_svg = (figure_dir / "option1_benchmark_accuracy_bars.svg").read_text(encoding="utf-8")
+    assert "not run for this benchmark" in benchmark_bar_svg
 
     sample_volume_svg = (figure_dir / "option1_sample_volume.svg").read_text(encoding="utf-8")
     assert "Paper setup:" in sample_volume_svg
     assert "Proxy:" in sample_volume_svg
+    assert "% of release" in sample_volume_svg
