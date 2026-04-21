@@ -10,7 +10,7 @@
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "operations_note": "Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19. Gemma-M and Gemma-L text are now complete locally, Qwen-M and Qwen-L text both have partial progress on disk, and no active local Inspect process was detected at this snapshot.",
+    "operations_note": "Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19. Gemma-M and Gemma-L text are now complete locally, and active local Inspect processes are currently running for Qwen-M value_prism_valence and Qwen-L value_prism_relevance after resume-safe recovery.",
     "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml",
     "ci_last_verified_run_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
   },
@@ -140,6 +140,7 @@
     "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
     "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
     "benchmark_comparison": "results/release/2026-04-19-option1/benchmark-comparison.csv",
+    "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
     "coverage_figure": "figures/release/option1_coverage_matrix.svg",
     "accuracy_figure": "figures/release/option1_accuracy_heatmap.svg",
     "benchmark_bar_figure": "figures/release/option1_benchmark_accuracy_bars.svg",
@@ -163,6 +164,7 @@
     "coverage-matrix.csv"
   ],
   "figures": [
+    "figures/release/option1_family_size_progress_overview.svg",
     "figures/release/option1_coverage_matrix.svg",
     "figures/release/option1_accuracy_heatmap.svg",
     "figures/release/option1_benchmark_accuracy_bars.svg",

@@ -1,7 +1,7 @@
 family,size_slot,line_label,text_route,vision_route,unimoral,smid,value_kaleidoscope,ccd_bench,denevil,summary_note
 Qwen,S,Qwen-S,openrouter/qwen/qwen3-8b,openrouter/qwen/qwen3-vl-8b-instruct,done,done,done,done,proxy,Frozen Option 1 line.
-Qwen,M,Qwen-M,openrouter/qwen/qwen3-14b,TBD,done,tbd,partial,queue,queue,"UniMoral is done, Value Kaleidoscope started but did not finish, and no active medium Qwen text process is currently running."
-Qwen,L,Qwen-L,openrouter/qwen/qwen3-32b,openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete),done,done,partial,queue,queue,"SMID and UniMoral are done, Value Kaleidoscope started but did not finish, and no active large Qwen text process is currently running."
+Qwen,M,Qwen-M,openrouter/qwen/qwen3-14b,TBD,done,tbd,live,queue,queue,UniMoral and Value Kaleidoscope relevance are done; Value Kaleidoscope valence is actively running again after resume-safe recovery.
+Qwen,L,Qwen-L,openrouter/qwen/qwen3-32b,openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete),done,done,live,queue,queue,SMID and UniMoral are done; Value Kaleidoscope relevance is actively running again after resume-safe recovery.
 MiniMax,S,MiniMax-S,openrouter/minimax/minimax-m2.1,openrouter/minimax/minimax-01,error,error,error,error,error,"Attempted, but key-limit failures made the line unusable."
 MiniMax,M,MiniMax-M,openrouter/minimax/minimax-m2.5,TBD,queue,tbd,queue,queue,queue,Text queued; no medium SMID route is fixed yet.
 MiniMax,L,MiniMax-L,openrouter/minimax/minimax-m2.7,TBD,queue,tbd,queue,queue,queue,Text queued; no large SMID route is fixed yet.

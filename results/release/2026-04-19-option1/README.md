@@ -19,9 +19,17 @@ This is the fastest way to read the deliverable: which lines already have usable
 | `Llama-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally, outside the frozen Option 1 counts. |
 | `Gemma-M` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
 | `Gemma-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
-| `Qwen-M` | Partial local line | Partial | UniMoral done; Value Kaleidoscope partially completed | No active process detected at this snapshot. |
-| `Qwen-L` | Partial local line | Partial | SMID and UniMoral done; Value Kaleidoscope partially completed | No active process detected at this snapshot. |
+| `Qwen-M` | Partial local line | Partial | UniMoral and Value Kaleidoscope relevance done; Value Kaleidoscope valence live | Resume-safe recovery is active locally. |
+| `Qwen-L` | Partial local line | Partial | SMID and UniMoral done; Value Kaleidoscope relevance live | Resume-safe recovery is active locally. |
 | `MiniMax-S` | Attempted local line | Error | No usable benchmark line completed | OpenRouter key-limit failures interrupted both text and image paths. |
+
+### Latest Family-Size Progress Snapshot
+
+This stacked overview is the quickest visual read on the current 15-line plan: complete lines, active resumptions, and still-queued gaps.
+
+![Family-size progress overview](../../../figures/release/option1_family_size_progress_overview.svg)
+
+_Latest family-size progress overview. Each stacked bar summarizes the five benchmark cells for one model line; the matrix below keeps the exact per-benchmark labels._
 
 ### Current Comparable Accuracy Snapshot
 
@@ -36,7 +44,7 @@ Only benchmarks with directly comparable accuracy metrics are shown here. `CCD-B
 
 ![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
 
-_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._
+_Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._
 
 ## Snapshot
 
@@ -54,7 +62,7 @@ _Figure 1. Benchmark-level accuracy comparison across the currently completed co
 | Extra completed local line outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `5` papers / `7` tasks |
 | MiniMax small status | formal attempt exists, but the current run failed and is not counted as complete |
 | Provider / temperature | `OpenRouter`, `temperature=0` |
-| Current operations note | Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19. Gemma-M and Gemma-L text are now complete locally, Qwen-M and Qwen-L text both have partial progress on disk, and no active local Inspect process was detected at this snapshot. |
+| Current operations note | Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19. Gemma-M and Gemma-L text are now complete locally, and active local Inspect processes are currently running for Qwen-M value_prism_valence and Qwen-L value_prism_relevance after resume-safe recovery. |
 | CI reference | [Workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); last verified successful run: [run 24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 
 ## Local Expansion Checkpoint
@@ -66,8 +74,8 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `Qwen-L SMID recovery` | Done | Completed April 20, 2026 via openrouter/qwen/qwen2.5-vl-72b-instruct after the earlier qwen3-vl-32b moderation stop. |
 | `Gemma-L text batch` | Done | Completed April 21, 2026. UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy task all finished successfully. |
 | `Gemma-M text batch` | Done | Completed April 21, 2026. The medium text route now has a full local line across all five benchmark papers. |
-| `Qwen-M text batch` | Partial | UniMoral and Value Kaleidoscope relevance completed successfully. Value Kaleidoscope valence started, but no active process is running now. |
-| `Qwen-L text batch` | Partial | UniMoral completed successfully. Value Kaleidoscope relevance started, but no active process is running now. |
+| `Qwen-M text batch` | Live | UniMoral and Value Kaleidoscope relevance completed successfully. Value Kaleidoscope valence is running again locally after resume-safe recovery. |
+| `Qwen-L text batch` | Live | UniMoral completed successfully. Value Kaleidoscope relevance is running again locally after resume-safe recovery. |
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
 | `Next queued text lines` | Queue | Llama-M, Llama-L, MiniMax-M, DeepSeek-M, and MiniMax-L remain queued. Qwen-M and Qwen-L now have partial local progress rather than a clean queued state. |
 
@@ -82,6 +90,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 
 ### Figures
 
+- [family-size progress overview](../../../figures/release/option1_family_size_progress_overview.svg): latest line-level status across the full 15-line plan
 - [grouped bar chart](../../../figures/release/option1_benchmark_accuracy_bars.svg): current cross-model benchmark comparison
 - [accuracy heatmap](../../../figures/release/option1_accuracy_heatmap.svg): task-level view of comparable metrics
 - [coverage matrix](../../../figures/release/option1_coverage_matrix.svg): frozen Option 1 coverage only
@@ -107,8 +116,8 @@ This is the cleanest repo-level summary of where the full `5 x 5 x 3` plan stand
 | Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | Note |
 | :--- | :---: | :---: | :---: | :---: | :---: | --- |
 | `Qwen-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 line. |
-| `Qwen-M` | Done | TBD | Partial | Queue | Queue | UniMoral is done, Value Kaleidoscope started but did not finish, and no active medium Qwen text process is currently running. |
-| `Qwen-L` | Done | Done | Partial | Queue | Queue | SMID and UniMoral are done, Value Kaleidoscope started but did not finish, and no active large Qwen text process is currently running. |
+| `Qwen-M` | Done | TBD | Live | Queue | Queue | UniMoral and Value Kaleidoscope relevance are done; Value Kaleidoscope valence is actively running again after resume-safe recovery. |
+| `Qwen-L` | Done | Done | Live | Queue | Queue | SMID and UniMoral are done; Value Kaleidoscope relevance is actively running again after resume-safe recovery. |
 | `MiniMax-S` | Error | Error | Error | Error | Error | Attempted, but key-limit failures made the line unusable. |
 | `MiniMax-M` | Queue | TBD | Queue | Queue | Queue | Text queued; no medium SMID route is fixed yet. |
 | `MiniMax-L` | Queue | TBD | Queue | Queue | Queue | Text queued; no large SMID route is fixed yet. |
@@ -136,22 +145,27 @@ This is the cleanest repo-level summary of where the full `5 x 5 x 3` plan stand
 
 | Figure | Why it matters | File |
 | --- | --- | --- |
-| Figure 1 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | [option1_benchmark_accuracy_bars.svg](../../../figures/release/option1_benchmark_accuracy_bars.svg) |
-| Figure 2 | Task-level heatmap for the frozen comparable metrics, including unavailable-task treatment. | [option1_accuracy_heatmap.svg](../../../figures/release/option1_accuracy_heatmap.svg) |
-| Figure 3 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | [option1_coverage_matrix.svg](../../../figures/release/option1_coverage_matrix.svg) |
-| Figure 4 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | [option1_sample_volume.svg](../../../figures/release/option1_sample_volume.svg) |
+| Figure 1 | Latest line-level progress across the full five-family by three-size plan. | [option1_family_size_progress_overview.svg](../../../figures/release/option1_family_size_progress_overview.svg) |
+| Figure 2 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | [option1_benchmark_accuracy_bars.svg](../../../figures/release/option1_benchmark_accuracy_bars.svg) |
+| Figure 3 | Task-level heatmap for the frozen comparable metrics, including unavailable-task treatment. | [option1_accuracy_heatmap.svg](../../../figures/release/option1_accuracy_heatmap.svg) |
+| Figure 4 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | [option1_coverage_matrix.svg](../../../figures/release/option1_coverage_matrix.svg) |
+| Figure 5 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | [option1_sample_volume.svg](../../../figures/release/option1_sample_volume.svg) |
+
+![Family-size progress overview](../../../figures/release/option1_family_size_progress_overview.svg)
+
+_Figure 1. Latest family-size progress overview. Each stacked bar summarizes the five benchmark cells for one model line; use the table below for the exact per-benchmark labels._
 
 ![Accuracy heatmap](../../../figures/release/option1_accuracy_heatmap.svg)
 
-_Figure 2. Task-level accuracy heatmap for the frozen Option 1 slice, using a shared scale and a consistent unavailable-state treatment._
+_Figure 3. Task-level accuracy heatmap for the frozen Option 1 slice, using a shared scale and a consistent unavailable-state treatment._
 
 ![Coverage matrix](../../../figures/release/option1_coverage_matrix.svg)
 
-_Figure 3. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._
+_Figure 4. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._
 
 ![Sample volume by benchmark](../../../figures/release/option1_sample_volume.svg)
 
-_Figure 4. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._
+_Figure 5. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._
 
 ## Frozen Option 1 Model Summary
 

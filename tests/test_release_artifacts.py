@@ -59,6 +59,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert expected_release_files.issubset(actual_release_files)
 
     expected_figures = {
+        "option1_family_size_progress_overview.svg",
         "option1_accuracy_heatmap.svg",
         "option1_benchmark_accuracy_bars.svg",
         "option1_coverage_matrix.svg",
@@ -116,36 +117,47 @@ def test_release_builder_emits_expected_files(tmp_path):
         row["line_label"] == "Qwen-L"
         and row["unimoral"] == "done"
         and row["smid"] == "done"
-        and row["value_kaleidoscope"] == "partial"
+        and row["value_kaleidoscope"] == "live"
         for row in rows
     )
     assert any(
         row["line_label"] == "Qwen-M"
         and row["unimoral"] == "done"
-        and row["value_kaleidoscope"] == "partial"
+        and row["value_kaleidoscope"] == "live"
         for row in rows
     )
 
     report_text = (release_dir / "jenny-group-report.md").read_text(encoding="utf-8")
     assert "## Results First" in report_text
+    assert "### Latest Family-Size Progress Snapshot" in report_text
     assert "qwen2.5-vl-72b-instruct" in report_text
     assert "## Local Expansion Checkpoint" in report_text
     assert "curated snapshot rather than a live dashboard" in report_text
     assert "## Status Key" in report_text
     assert "## Supporting Figures" in report_text
+    assert "option1_family_size_progress_overview.svg" in report_text
     assert "Partial" in report_text
+    assert "Live" in report_text
     assert "![Coverage matrix]" in report_text
     assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" in report_text
 
     release_readme = (release_dir / "README.md").read_text(encoding="utf-8")
     assert "## Results First" in release_readme
+    assert "### Latest Family-Size Progress Snapshot" in release_readme
     assert "## Local Expansion Checkpoint" in release_readme
     assert "sample volume chart" in release_readme
     assert "## Start Here" in release_readme
     assert "## Status Key" in release_readme
     assert "## Supporting Figures" in release_readme
+    assert "option1_family_size_progress_overview.svg" in release_readme
     assert "Partial" in release_readme
+    assert "Live" in release_readme
     assert "Done" in release_readme
+
+    progress_overview_svg = (figure_dir / "option1_family_size_progress_overview.svg").read_text(encoding="utf-8")
+    assert "Family-Size Progress Overview" in progress_overview_svg
+    assert "usable now" in progress_overview_svg
+    assert "Pending / TBD / not planned" in progress_overview_svg
 
     heatmap_svg = (figure_dir / "option1_accuracy_heatmap.svg").read_text(encoding="utf-8")
     assert "celltext-dark" in heatmap_svg

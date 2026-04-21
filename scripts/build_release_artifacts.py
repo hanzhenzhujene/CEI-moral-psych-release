@@ -30,8 +30,8 @@ REPORT_CURRENT_COST = "$35"
 REPORT_STATUS_NOTE = (
     "Updated April 21, 2026. "
     "The frozen public snapshot remains Option 1 from April 19. "
-    "Gemma-M and Gemma-L text are now complete locally, Qwen-M and Qwen-L text both have partial progress on disk, "
-    "and no active local Inspect process was detected at this snapshot."
+    "Gemma-M and Gemma-L text are now complete locally, and active local Inspect processes are currently running for "
+    "Qwen-M value_prism_valence and Qwen-L value_prism_relevance after resume-safe recovery."
 )
 CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 CI_RUN_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
@@ -41,6 +41,7 @@ IMAGE_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-ima
 MODEL_ORDER = ["Qwen", "DeepSeek", "Gemma"]
 FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"]
 BENCHMARK_ORDER = ["UniMoral", "SMID", "Value Kaleidoscope", "CCD-Bench", "Denevil"]
+FAMILY_SIZE_STATUS_COLUMNS = ["unimoral", "smid", "value_kaleidoscope", "ccd_bench", "denevil"]
 BENCHMARK_TASK_COUNTS = {
     "UniMoral": 1,
     "SMID": 2,
@@ -295,13 +296,13 @@ LOCAL_EXPANSION_CHECKPOINT = [
     },
     {
         "line": "Qwen-M text batch",
-        "status": "partial",
-        "note": "UniMoral and Value Kaleidoscope relevance completed successfully. Value Kaleidoscope valence started, but no active process is running now.",
+        "status": "live",
+        "note": "UniMoral and Value Kaleidoscope relevance completed successfully. Value Kaleidoscope valence is running again locally after resume-safe recovery.",
     },
     {
         "line": "Qwen-L text batch",
-        "status": "partial",
-        "note": "UniMoral completed successfully. Value Kaleidoscope relevance started, but no active process is running now.",
+        "status": "live",
+        "note": "UniMoral completed successfully. Value Kaleidoscope relevance is running again locally after resume-safe recovery.",
     },
     {
         "line": "Llama-L SMID",
@@ -337,10 +338,10 @@ FAMILY_SIZE_PROGRESS = [
         "vision_route": "TBD",
         "unimoral": "done",
         "smid": "tbd",
-        "value_kaleidoscope": "partial",
+        "value_kaleidoscope": "live",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "UniMoral is done, Value Kaleidoscope started but did not finish, and no active medium Qwen text process is currently running.",
+        "summary_note": "UniMoral and Value Kaleidoscope relevance are done; Value Kaleidoscope valence is actively running again after resume-safe recovery.",
     },
     {
         "family": "Qwen",
@@ -350,10 +351,10 @@ FAMILY_SIZE_PROGRESS = [
         "vision_route": "openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete)",
         "unimoral": "done",
         "smid": "done",
-        "value_kaleidoscope": "partial",
+        "value_kaleidoscope": "live",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "SMID and UniMoral are done, Value Kaleidoscope started but did not finish, and no active large Qwen text process is currently running.",
+        "summary_note": "SMID and UniMoral are done; Value Kaleidoscope relevance is actively running again after resume-safe recovery.",
     },
     {
         "family": "MiniMax",
@@ -560,15 +561,15 @@ CURRENT_RESULT_LINES = [
         "line_label": "Qwen-M",
         "scope": "Partial local line",
         "status": "partial",
-        "coverage": "UniMoral done; Value Kaleidoscope partially completed",
-        "note": "No active process detected at this snapshot.",
+        "coverage": "UniMoral and Value Kaleidoscope relevance done; Value Kaleidoscope valence live",
+        "note": "Resume-safe recovery is active locally.",
     },
     {
         "line_label": "Qwen-L",
         "scope": "Partial local line",
         "status": "partial",
-        "coverage": "SMID and UniMoral done; Value Kaleidoscope partially completed",
-        "note": "No active process detected at this snapshot.",
+        "coverage": "SMID and UniMoral done; Value Kaleidoscope relevance live",
+        "note": "Resume-safe recovery is active locally.",
     },
     {
         "line_label": "MiniMax-S",
@@ -812,6 +813,40 @@ def build_supplementary_model_progress() -> list[dict[str, Any]]:
 
 def build_family_size_progress() -> list[dict[str, Any]]:
     return list(FAMILY_SIZE_PROGRESS)
+
+
+def summarize_family_size_progress(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    output: list[dict[str, Any]] = []
+    for row in rows:
+        counts = {
+            "done": 0,
+            "proxy": 0,
+            "live": 0,
+            "error": 0,
+            "pending": 0,
+        }
+        for column in FAMILY_SIZE_STATUS_COLUMNS:
+            status = row[column]
+            if status == "done":
+                counts["done"] += 1
+            elif status == "proxy":
+                counts["proxy"] += 1
+            elif status in {"live", "partial"}:
+                counts["live"] += 1
+            elif status == "error":
+                counts["error"] += 1
+            else:
+                counts["pending"] += 1
+
+        output.append(
+            {
+                "family": row["family"],
+                "line_label": row["line_label"],
+                **counts,
+                "usable_now": counts["done"] + counts["proxy"],
+            }
+        )
+    return output
 
 
 def append_local_expansion_checkpoint_table(lines: list[str]) -> None:
@@ -1314,6 +1349,102 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
     write_text(output_path, "\n".join(lines) + "\n")
 
 
+def render_family_size_progress_overview_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
+    width, height = 1280, 1040
+    bar_left, bar_width = 340, 540
+    row_top = 216
+    row_height = 28
+    row_gap = 18
+    right_text_x = 910
+    segment_width = bar_width / 5
+    bucket_specs = [
+        ("done", "Paper-setup done", "#2f855a"),
+        ("proxy", "Proxy done", "#b7791f"),
+        ("live", "Running now", "#2563eb"),
+        ("error", "Error", "#dc2626"),
+        ("pending", "Pending / TBD / not planned", "#cbd5e1"),
+    ]
+
+    summary_rows = summarize_family_size_progress(rows)
+    completed_lines = sum(row["usable_now"] == 5 for row in summary_rows)
+    active_lines = sum(row["live"] > 0 for row in summary_rows)
+    error_lines = sum(row["error"] > 0 for row in summary_rows)
+    error_phrase = "attempted line is" if error_lines == 1 else "attempted lines are"
+
+    lines = svg_header(width, height)
+    lines.extend(
+        [
+            f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
+            f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
+            "<title>Family-size progress overview</title>",
+            "<desc>Stacked bar overview of the current five-benchmark progress state for each model family and size line.</desc>",
+            '<text x="48" y="64" class="title">Family-Size Progress Overview</text>',
+            (
+                f'<text x="48" y="88" class="subtitle">Each stacked bar summarizes the five benchmark cells for one model line. '
+                f'{completed_lines} lines are fully complete, {active_lines} lines are currently running, and {error_lines} {error_phrase} currently unusable.</text>'
+            ),
+            '<text x="48" y="110" class="subtitle">Green means paper-setup done, amber means proxy done, blue means running now, red means error, and gray combines queue, TBD, and not-planned cells for a cleaner snapshot.</text>',
+            f'<text x="{bar_left}" y="158" class="tiny">FIVE BENCHMARK CELLS PER LINE</text>',
+        ]
+    )
+
+    axis_y = 184
+    for tick in range(6):
+        x = bar_left + tick * segment_width
+        lines.append(f'<line x1="{x:.2f}" y1="{axis_y}" x2="{x:.2f}" y2="{height - 132}" class="guide"/>')
+        label_x = x if tick < 5 else bar_left + bar_width
+        anchor = "middle" if tick < 5 else "end"
+        lines.append(f'<text x="{label_x:.2f}" y="{axis_y - 10}" text-anchor="{anchor}" class="small">{tick}</text>')
+    lines.append(f'<text x="{bar_left + bar_width}" y="{axis_y - 10}" text-anchor="end" class="small">5</text>')
+
+    previous_family = ""
+    for index, row in enumerate(summary_rows):
+        y = row_top + index * (row_height + row_gap)
+        if row["family"] != previous_family:
+            if previous_family:
+                separator_y = y - 16
+                lines.append(f'<line x1="48" y1="{separator_y}" x2="{width - 48}" y2="{separator_y}" class="guide"/>')
+            lines.append(f'<text x="48" y="{y - 10}" class="tiny">{escape_xml(row["family"]).upper()}</text>')
+            previous_family = row["family"]
+
+        lines.append(f'<text x="{bar_left - 18}" y="{y + 19}" text-anchor="end" class="label">{escape_xml(row["line_label"])}</text>')
+        lines.append(f'<rect x="{bar_left}" y="{y}" width="{bar_width}" height="{row_height}" rx="10" fill="#e2e8f0"/>')
+
+        current_x = bar_left
+        for bucket_key, _, color in bucket_specs:
+            count = row[bucket_key]
+            if count <= 0:
+                continue
+            seg_width = count * segment_width
+            lines.append(
+                f'<rect x="{current_x:.2f}" y="{y}" width="{seg_width:.2f}" height="{row_height}" fill="{color}" stroke="#ffffff" stroke-width="1"/>'
+            )
+            main_class, _ = text_classes_for_fill(color)
+            lines.append(
+                f'<text x="{current_x + seg_width / 2:.2f}" y="{y + 19}" text-anchor="middle" class="{main_class}">{count}</text>'
+            )
+            current_x += seg_width
+
+        detail_parts = [f"usable now {row['usable_now']}/5"]
+        if row["live"]:
+            detail_parts.append(f"live {row['live']}")
+        if row["error"]:
+            detail_parts.append(f"error {row['error']}")
+        lines.append(f'<text x="{right_text_x}" y="{y + 19}" class="label">{escape_xml(" | ".join(detail_parts))}</text>')
+
+    legend_y = height - 90
+    for index, (_, label, color) in enumerate(bucket_specs):
+        x = 48 + index * 230
+        lines.append(f'<rect x="{x}" y="{legend_y - 14}" width="18" height="18" rx="4" fill="{color}"/>')
+        lines.append(f'<text x="{x + 28}" y="{legend_y}" class="label">{escape_xml(label)}</text>')
+    lines.append(
+        '<text x="48" y="974" class="small">See the family-size progress table in the README below for the exact per-benchmark status labels.</text>'
+    )
+
+    lines.append("</svg>")
+    write_text(output_path, "\n".join(lines) + "\n")
+
+
 def build_topline_summary(
     rows: list[dict[str, Any]],
     model_summary: list[dict[str, Any]],
@@ -1468,22 +1599,27 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             "",
             "| Figure | Why it matters | File |",
             "| --- | --- | --- |",
-            f"| Figure 1 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | {markdown_link('option1_benchmark_accuracy_bars.svg', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')} |",
-            f"| Figure 2 | Task-level heatmap for the frozen comparable metrics, including unavailable-task treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
-            f"| Figure 3 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
-            f"| Figure 4 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | {markdown_link('option1_sample_volume.svg', f'{figure_prefix}/option1_sample_volume.svg')} |",
+            f"| Figure 1 | Latest line-level progress across the full five-family by three-size plan. | {markdown_link('option1_family_size_progress_overview.svg', f'{figure_prefix}/option1_family_size_progress_overview.svg')} |",
+            f"| Figure 2 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | {markdown_link('option1_benchmark_accuracy_bars.svg', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')} |",
+            f"| Figure 3 | Task-level heatmap for the frozen comparable metrics, including unavailable-task treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
+            f"| Figure 4 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
+            f"| Figure 5 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | {markdown_link('option1_sample_volume.svg', f'{figure_prefix}/option1_sample_volume.svg')} |",
+            "",
+            f"![Family-size progress overview]({figure_prefix}/option1_family_size_progress_overview.svg)",
+            "",
+            "_Figure 1. Latest family-size progress overview. Each stacked bar summarizes the five benchmark cells for one model line; use the table below for the exact per-benchmark labels._",
             "",
             f"![Accuracy heatmap]({figure_prefix}/option1_accuracy_heatmap.svg)",
             "",
-            "_Figure 2. Task-level accuracy heatmap for the frozen Option 1 slice, using a shared scale and a consistent unavailable-state treatment._",
+            "_Figure 3. Task-level accuracy heatmap for the frozen Option 1 slice, using a shared scale and a consistent unavailable-state treatment._",
             "",
             f"![Coverage matrix]({figure_prefix}/option1_coverage_matrix.svg)",
             "",
-            "_Figure 3. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._",
+            "_Figure 4. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._",
             "",
             f"![Sample volume by benchmark]({figure_prefix}/option1_sample_volume.svg)",
             "",
-            "_Figure 4. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._",
+            "_Figure 5. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._",
             "",
         ]
     )
@@ -1537,6 +1673,14 @@ def build_repo_readme(
     lines.extend(
         [
             "",
+            "### Latest Family-Size Progress Snapshot",
+            "",
+            "This stacked overview is the quickest visual read on the current 15-line plan: complete lines, active resumptions, and still-queued gaps.",
+            "",
+            "![Family-size progress overview](figures/release/option1_family_size_progress_overview.svg)",
+            "",
+            "_Latest family-size progress overview. Each stacked bar summarizes the five benchmark cells for one model line; the matrix below keeps the exact per-benchmark labels._",
+            "",
             "### Current Comparable Accuracy Snapshot",
             "",
             "Only benchmarks with directly comparable accuracy metrics are shown below. `CCD-Bench` and `Denevil` are intentionally excluded because they do not share the same target metric across lines.",
@@ -1549,7 +1693,7 @@ def build_repo_readme(
             "",
             "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)",
             "",
-            "_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._",
+            "_Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._",
             "",
             "## Snapshot",
             "",
@@ -1581,6 +1725,7 @@ def build_repo_readme(
             "",
             "### Figures",
             "",
+            "- [Family-size progress overview](figures/release/option1_family_size_progress_overview.svg)",
             "- [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)",
             "- [Accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)",
             "- [Coverage matrix](figures/release/option1_coverage_matrix.svg)",
@@ -1669,6 +1814,7 @@ def build_repo_readme(
             "- `results/release/2026-04-19-option1/family-size-progress.csv`",
             "- `results/release/2026-04-19-option1/benchmark-comparison.csv`",
             "- `results/release/2026-04-19-option1/release-manifest.json`",
+            "- `figures/release/option1_family_size_progress_overview.svg`",
             "- `figures/release/option1_benchmark_accuracy_bars.svg`",
             "- `figures/release/option1_coverage_matrix.svg`",
             "",
@@ -1715,6 +1861,14 @@ def build_release_readme(
     lines.extend(
         [
             "",
+            "### Latest Family-Size Progress Snapshot",
+            "",
+            "This stacked overview is the quickest visual read on the current 15-line plan: complete lines, active resumptions, and still-queued gaps.",
+            "",
+            "![Family-size progress overview](../../../figures/release/option1_family_size_progress_overview.svg)",
+            "",
+            "_Latest family-size progress overview. Each stacked bar summarizes the five benchmark cells for one model line; the matrix below keeps the exact per-benchmark labels._",
+            "",
             "### Current Comparable Accuracy Snapshot",
             "",
             "Only benchmarks with directly comparable accuracy metrics are shown here. `CCD-Bench` and `Denevil` are excluded because they do not share the same target metric across lines.",
@@ -1727,7 +1881,7 @@ def build_release_readme(
             "",
             "![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)",
             "",
-            "_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._",
+            "_Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._",
             "",
             "## Snapshot",
             "",
@@ -1773,6 +1927,7 @@ def build_release_readme(
             "",
             "### Figures",
             "",
+            f"- {markdown_link('family-size progress overview', '../../../figures/release/option1_family_size_progress_overview.svg')}: latest line-level status across the full 15-line plan",
             f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: current cross-model benchmark comparison",
             f"- {markdown_link('accuracy heatmap', '../../../figures/release/option1_accuracy_heatmap.svg')}: task-level view of comparable metrics",
             f"- {markdown_link('coverage matrix', '../../../figures/release/option1_coverage_matrix.svg')}: frozen Option 1 coverage only",
@@ -1886,6 +2041,14 @@ def build_jenny_group_report(
     lines.extend(
         [
             "",
+            "### Latest Family-Size Progress Snapshot",
+            "",
+            "This stacked overview is the quickest visual read on the current 15-line plan: complete lines, active resumptions, and still-queued gaps.",
+            "",
+            "![Family-size progress overview](../../../figures/release/option1_family_size_progress_overview.svg)",
+            "",
+            "_Latest family-size progress overview. Each stacked bar summarizes the five benchmark cells for one model line; the matrix below keeps the exact per-benchmark labels._",
+            "",
             "### Current Comparable Accuracy Snapshot",
             "",
             "Only benchmarks with a directly comparable accuracy metric are shown below. `CCD-Bench` and `Denevil` are excluded because they do not share the same accuracy target across lines.",
@@ -1898,7 +2061,7 @@ def build_jenny_group_report(
             "",
             "![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)",
             "",
-            "_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._",
+            "_Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._",
             "",
             "## Report Snapshot",
             "",
@@ -2084,6 +2247,7 @@ def build_release_manifest(
             "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
             "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
             "benchmark_comparison": "results/release/2026-04-19-option1/benchmark-comparison.csv",
+            "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
             "coverage_figure": "figures/release/option1_coverage_matrix.svg",
             "accuracy_figure": "figures/release/option1_accuracy_heatmap.svg",
             "benchmark_bar_figure": "figures/release/option1_benchmark_accuracy_bars.svg",
@@ -2107,6 +2271,7 @@ def build_release_manifest(
             "coverage-matrix.csv",
         ],
         "figures": [
+            "figures/release/option1_family_size_progress_overview.svg",
             "figures/release/option1_coverage_matrix.svg",
             "figures/release/option1_accuracy_heatmap.svg",
             "figures/release/option1_benchmark_accuracy_bars.svg",
@@ -2352,6 +2517,7 @@ def main() -> None:
         + "\n",
     )
 
+    render_family_size_progress_overview_svg(family_size_progress, args.figure_dir / "option1_family_size_progress_overview.svg")
     render_coverage_svg(coverage_matrix, args.figure_dir / "option1_coverage_matrix.svg")
     render_accuracy_svg(rows, args.figure_dir / "option1_accuracy_heatmap.svg")
     render_benchmark_accuracy_bars_svg(benchmark_comparison, args.figure_dir / "option1_benchmark_accuracy_bars.svg")
@@ -2378,6 +2544,7 @@ def main() -> None:
             "README.md",
         ],
         "figures": [
+            "option1_family_size_progress_overview.svg",
             "option1_coverage_matrix.svg",
             "option1_accuracy_heatmap.svg",
             "option1_benchmark_accuracy_bars.svg",

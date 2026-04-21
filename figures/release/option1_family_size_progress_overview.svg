@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1040" viewBox="0 0 1280 1040" role="img">
+<defs>
+<linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffffff"/>
+<stop offset="100%" stop-color="#f8fafc"/>
+</linearGradient>
+<pattern id="diagonalHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+<line x1="0" y1="0" x2="0" y2="8" stroke="#cdd6e1" stroke-width="3"/>
+</pattern>
+<filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+<feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#9fb0c2" flood-opacity="0.18"/>
+</filter>
+<style>
+.canvas { fill: #f3f6fa; }
+.title { font: 700 26px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.subtitle { font: 400 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.axis { font: 600 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.label { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.metric { font: 700 20px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.celltext { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #ffffff; }
+.celltext-dark { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #173042; }
+.cellsub { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: rgba(255,255,255,0.88); }
+.cellsub-dark { font: 600 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #385062; }
+.body { font: 500 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.small { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.tiny { font: 600 10px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #6b7c8f; letter-spacing: 0.04em; }
+.grid { fill: #ffffff; stroke: #d7dee6; stroke-width: 1.25; }
+.panel { fill: url(#panelGradient); stroke: #dbe4ee; stroke-width: 1.25; filter: url(#softShadow); }
+.subpanel { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }
+.legend-card { fill: #ffffff; stroke: #dbe4ee; stroke-width: 1; }
+.guide { stroke: #d7dee6; stroke-width: 1; stroke-dasharray: 4 6; }
+.baseline { stroke: #aab7c6; stroke-width: 1.1; }
+.muted-cell { fill: #eef2f7; stroke: #d7dee6; stroke-width: 1; }
+.muted-bar { fill: #ecf1f6; stroke: #d7dee6; stroke-width: 1; }
+.outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
+</style>
+</defs>
+<rect x="0" y="0" width="1280" height="1040" class="canvas"/>
+<rect x="24" y="24" width="1232" height="992" rx="22" class="panel"/>
+<title>Family-size progress overview</title>
+<desc>Stacked bar overview of the current five-benchmark progress state for each model family and size line.</desc>
+<text x="48" y="64" class="title">Family-Size Progress Overview</text>
+<text x="48" y="88" class="subtitle">Each stacked bar summarizes the five benchmark cells for one model line. 5 lines are fully complete, 2 lines are currently running, and 1 attempted line is currently unusable.</text>
+<text x="48" y="110" class="subtitle">Green means paper-setup done, amber means proxy done, blue means running now, red means error, and gray combines queue, TBD, and not-planned cells for a cleaner snapshot.</text>
+<text x="340" y="158" class="tiny">FIVE BENCHMARK CELLS PER LINE</text>
+<line x1="340.00" y1="184" x2="340.00" y2="908" class="guide"/>
+<text x="340.00" y="174" text-anchor="middle" class="small">0</text>
+<line x1="448.00" y1="184" x2="448.00" y2="908" class="guide"/>
+<text x="448.00" y="174" text-anchor="middle" class="small">1</text>
+<line x1="556.00" y1="184" x2="556.00" y2="908" class="guide"/>
+<text x="556.00" y="174" text-anchor="middle" class="small">2</text>
+<line x1="664.00" y1="184" x2="664.00" y2="908" class="guide"/>
+<text x="664.00" y="174" text-anchor="middle" class="small">3</text>
+<line x1="772.00" y1="184" x2="772.00" y2="908" class="guide"/>
+<text x="772.00" y="174" text-anchor="middle" class="small">4</text>
+<line x1="880.00" y1="184" x2="880.00" y2="908" class="guide"/>
+<text x="880.00" y="174" text-anchor="end" class="small">5</text>
+<text x="880" y="174" text-anchor="end" class="small">5</text>
+<text x="48" y="206" class="tiny">QWEN</text>
+<text x="322" y="235" text-anchor="end" class="label">Qwen-S</text>
+<rect x="340" y="216" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="216" width="432.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="556.00" y="235" text-anchor="middle" class="celltext">4</text>
+<rect x="772.00" y="216" width="108.00" height="28" fill="#b7791f" stroke="#ffffff" stroke-width="1"/>
+<text x="826.00" y="235" text-anchor="middle" class="celltext">1</text>
+<text x="910" y="235" class="label">usable now 5/5</text>
+<text x="322" y="281" text-anchor="end" class="label">Qwen-M</text>
+<rect x="340" y="262" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="262" width="108.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="394.00" y="281" text-anchor="middle" class="celltext">1</text>
+<rect x="448.00" y="262" width="108.00" height="28" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
+<text x="502.00" y="281" text-anchor="middle" class="celltext">1</text>
+<rect x="556.00" y="262" width="324.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="718.00" y="281" text-anchor="middle" class="celltext-dark">3</text>
+<text x="910" y="281" class="label">usable now 1/5 | live 1</text>
+<text x="322" y="327" text-anchor="end" class="label">Qwen-L</text>
+<rect x="340" y="308" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="308" width="216.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="448.00" y="327" text-anchor="middle" class="celltext">2</text>
+<rect x="556.00" y="308" width="108.00" height="28" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
+<text x="610.00" y="327" text-anchor="middle" class="celltext">1</text>
+<rect x="664.00" y="308" width="216.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="772.00" y="327" text-anchor="middle" class="celltext-dark">2</text>
+<text x="910" y="327" class="label">usable now 2/5 | live 1</text>
+<line x1="48" y1="338" x2="1232" y2="338" class="guide"/>
+<text x="48" y="344" class="tiny">MINIMAX</text>
+<text x="322" y="373" text-anchor="end" class="label">MiniMax-S</text>
+<rect x="340" y="354" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="354" width="540.00" height="28" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+<text x="610.00" y="373" text-anchor="middle" class="celltext">5</text>
+<text x="910" y="373" class="label">usable now 0/5 | error 5</text>
+<text x="322" y="419" text-anchor="end" class="label">MiniMax-M</text>
+<rect x="340" y="400" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="400" width="540.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="610.00" y="419" text-anchor="middle" class="celltext-dark">5</text>
+<text x="910" y="419" class="label">usable now 0/5</text>
+<text x="322" y="465" text-anchor="end" class="label">MiniMax-L</text>
+<rect x="340" y="446" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="446" width="540.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="610.00" y="465" text-anchor="middle" class="celltext-dark">5</text>
+<text x="910" y="465" class="label">usable now 0/5</text>
+<line x1="48" y1="476" x2="1232" y2="476" class="guide"/>
+<text x="48" y="482" class="tiny">DEEPSEEK</text>
+<text x="322" y="511" text-anchor="end" class="label">DeepSeek-S</text>
+<rect x="340" y="492" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="492" width="540.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="610.00" y="511" text-anchor="middle" class="celltext-dark">5</text>
+<text x="910" y="511" class="label">usable now 0/5</text>
+<text x="322" y="557" text-anchor="end" class="label">DeepSeek-M</text>
+<rect x="340" y="538" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="538" width="540.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="610.00" y="557" text-anchor="middle" class="celltext-dark">5</text>
+<text x="910" y="557" class="label">usable now 0/5</text>
+<text x="322" y="603" text-anchor="end" class="label">DeepSeek-L</text>
+<rect x="340" y="584" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="584" width="324.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="502.00" y="603" text-anchor="middle" class="celltext">3</text>
+<rect x="664.00" y="584" width="108.00" height="28" fill="#b7791f" stroke="#ffffff" stroke-width="1"/>
+<text x="718.00" y="603" text-anchor="middle" class="celltext">1</text>
+<rect x="772.00" y="584" width="108.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="826.00" y="603" text-anchor="middle" class="celltext-dark">1</text>
+<text x="910" y="603" class="label">usable now 4/5</text>
+<line x1="48" y1="614" x2="1232" y2="614" class="guide"/>
+<text x="48" y="620" class="tiny">LLAMA</text>
+<text x="322" y="649" text-anchor="end" class="label">Llama-S</text>
+<rect x="340" y="630" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="630" width="432.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="556.00" y="649" text-anchor="middle" class="celltext">4</text>
+<rect x="772.00" y="630" width="108.00" height="28" fill="#b7791f" stroke="#ffffff" stroke-width="1"/>
+<text x="826.00" y="649" text-anchor="middle" class="celltext">1</text>
+<text x="910" y="649" class="label">usable now 5/5</text>
+<text x="322" y="695" text-anchor="end" class="label">Llama-M</text>
+<rect x="340" y="676" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="676" width="540.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="610.00" y="695" text-anchor="middle" class="celltext-dark">5</text>
+<text x="910" y="695" class="label">usable now 0/5</text>
+<text x="322" y="741" text-anchor="end" class="label">Llama-L</text>
+<rect x="340" y="722" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="722" width="108.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="394.00" y="741" text-anchor="middle" class="celltext">1</text>
+<rect x="448.00" y="722" width="432.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="664.00" y="741" text-anchor="middle" class="celltext-dark">4</text>
+<text x="910" y="741" class="label">usable now 1/5</text>
+<line x1="48" y1="752" x2="1232" y2="752" class="guide"/>
+<text x="48" y="758" class="tiny">GEMMA</text>
+<text x="322" y="787" text-anchor="end" class="label">Gemma-S</text>
+<rect x="340" y="768" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="768" width="432.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="556.00" y="787" text-anchor="middle" class="celltext">4</text>
+<rect x="772.00" y="768" width="108.00" height="28" fill="#b7791f" stroke="#ffffff" stroke-width="1"/>
+<text x="826.00" y="787" text-anchor="middle" class="celltext">1</text>
+<text x="910" y="787" class="label">usable now 5/5</text>
+<text x="322" y="833" text-anchor="end" class="label">Gemma-M</text>
+<rect x="340" y="814" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="814" width="432.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="556.00" y="833" text-anchor="middle" class="celltext">4</text>
+<rect x="772.00" y="814" width="108.00" height="28" fill="#b7791f" stroke="#ffffff" stroke-width="1"/>
+<text x="826.00" y="833" text-anchor="middle" class="celltext">1</text>
+<text x="910" y="833" class="label">usable now 5/5</text>
+<text x="322" y="879" text-anchor="end" class="label">Gemma-L</text>
+<rect x="340" y="860" width="540" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="340.00" y="860" width="432.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="556.00" y="879" text-anchor="middle" class="celltext">4</text>
+<rect x="772.00" y="860" width="108.00" height="28" fill="#b7791f" stroke="#ffffff" stroke-width="1"/>
+<text x="826.00" y="879" text-anchor="middle" class="celltext">1</text>
+<text x="910" y="879" class="label">usable now 5/5</text>
+<rect x="48" y="936" width="18" height="18" rx="4" fill="#2f855a"/>
+<text x="76" y="950" class="label">Paper-setup done</text>
+<rect x="278" y="936" width="18" height="18" rx="4" fill="#b7791f"/>
+<text x="306" y="950" class="label">Proxy done</text>
+<rect x="508" y="936" width="18" height="18" rx="4" fill="#2563eb"/>
+<text x="536" y="950" class="label">Running now</text>
+<rect x="738" y="936" width="18" height="18" rx="4" fill="#dc2626"/>
+<text x="766" y="950" class="label">Error</text>
+<rect x="968" y="936" width="18" height="18" rx="4" fill="#cbd5e1"/>
+<text x="996" y="950" class="label">Pending / TBD / not planned</text>
+<text x="48" y="974" class="small">See the family-size progress table in the README below for the exact per-benchmark status labels.</text>
+</svg>
