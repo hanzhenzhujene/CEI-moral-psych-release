@@ -26,7 +26,7 @@ SNAPSHOT_DATE_ISO = "2026-04-19"
 REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan."
 REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
-REPORT_CURRENT_COST = "$35"
+REPORT_CURRENT_COST = "$40.73"
 REPORT_STATUS_NOTE = (
     "Updated April 21, 2026. "
     "The frozen public snapshot remains Option 1 from April 19. "

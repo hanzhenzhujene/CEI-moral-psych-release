@@ -4,7 +4,7 @@
 - paper-setup tasks: `16`
 - proxy tasks: `3`
 - total evaluated samples: `302,776`
-- current cost to date: `$35`
+- current cost to date: `$40.73`
 - closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`
 - key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup
 - extra local progress outside the frozen snapshot: `Llama` small is complete across `5` papers / `7` tasks and is intentionally excluded from the frozen `19 / 19` totals

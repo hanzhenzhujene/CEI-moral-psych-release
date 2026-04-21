@@ -52,7 +52,7 @@ _Topline comparable-accuracy chart. Benchmark-level accuracy comparison across t
 | Report owner | `Jenny Zhu` |
 | Repo update date | `April 21, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
-| Current cost to date | `$35` |
+| Current cost to date | `$40.73` |
 | Purpose | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
 | Full target matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
 | Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |

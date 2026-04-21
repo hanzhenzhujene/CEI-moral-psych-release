@@ -73,7 +73,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_cost"] == "$35"
+    assert manifest["report_metadata"]["current_cost"] == "$40.73"
     assert manifest["target_matrix"]["family_size_benchmark_cells"] == 75
     assert manifest["entry_points"]["report"].endswith("jenny-group-report.md")
     assert manifest["entry_points"]["supplementary_progress"].endswith("supplementary-model-progress.csv")
