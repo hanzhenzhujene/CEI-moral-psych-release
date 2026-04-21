@@ -17,6 +17,7 @@ cp .env.example .env
 ```
 
 If `uv` is installed outside your shell `PATH`, use `make UV=/absolute/path/to/uv <target>`.
+If `uv` is not on `PATH` but the checked-in `.venv` already exists, `make test`, `make release`, `make refresh-authoritative`, `make smoke`, and `make audit` will fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If the fallback interpreter lives somewhere else, pass `VENV_PYTHON=/absolute/path/to/python`. If neither runner is available, the Makefile now stops immediately with a clear setup error instead of a raw shell failure.
 
 Fill in `.env` with:
 
@@ -54,6 +55,7 @@ make release
 ```
 
 This target regenerates the public release package from the tracked authoritative snapshot committed under `results/release/2026-04-19-option1/source/`.
+In environments like this desktop workspace, that command now works even when `uv` itself is not on `PATH`, as long as `.venv/bin/python` is present.
 
 ### Expected Outputs
 

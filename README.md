@@ -145,6 +145,7 @@ cp .env.example .env
 ```
 
 Populate `.env` with API keys such as `OPENROUTER_API_KEY` and local benchmark paths such as `UNIMORAL_DATA_DIR` and `SMID_DATA_DIR`.
+If `uv` is not on `PATH` but the repo `.venv` already exists, `make test`, `make release`, and `make audit` now fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If neither runner is available, those targets now fail early with a clear setup error; you can also override the fallback path with `VENV_PYTHON=/absolute/path/to/python`.
 
 ### 2. Verify the repo
 

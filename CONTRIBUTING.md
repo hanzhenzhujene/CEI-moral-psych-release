@@ -17,14 +17,22 @@ If `uv` is installed outside your shell `PATH`, use:
 make UV=/absolute/path/to/uv test
 ```
 
+If `uv` is not on `PATH` but the repo `.venv` already exists, `make test`,
+`make release`, `make refresh-authoritative`, `make smoke`, and `make audit`
+fall back to `.venv/bin/python` automatically. `make setup` still requires
+`uv`. If the fallback interpreter lives elsewhere, pass
+`VENV_PYTHON=/absolute/path/to/python`.
+
 ## Before Opening a PR
 
 Run:
 
 ```bash
-make test
-make release
+make audit
 ```
+
+That is equivalent to running `make test` followed by `make release`, and it is
+the fastest public QA gate to use before a PR.
 
 Use `make refresh-authoritative` only if you have the original local raw
 `results/inspect/full-runs/` directories and intend to update the tracked
