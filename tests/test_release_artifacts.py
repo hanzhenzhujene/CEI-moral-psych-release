@@ -99,29 +99,52 @@ def test_release_builder_emits_expected_files(tmp_path):
         and row["smid"] == "done"
         and row["value_kaleidoscope"] == "done"
         and row["ccd_bench"] == "done"
-        and row["denevil"] == "live"
+        and row["denevil"] == "proxy"
         for row in rows
     )
-    assert any(row["line_label"] == "Gemma-M" and row["unimoral"] == "live" and row["smid"] == "done" for row in rows)
+    assert any(
+        row["line_label"] == "Gemma-M"
+        and row["unimoral"] == "done"
+        and row["smid"] == "done"
+        and row["value_kaleidoscope"] == "done"
+        and row["ccd_bench"] == "done"
+        and row["denevil"] == "proxy"
+        for row in rows
+    )
     assert any(row["line_label"] == "Llama-L" and row["smid"] == "done" for row in rows)
-    assert any(row["line_label"] == "Qwen-L" and row["smid"] == "done" for row in rows)
-    assert any(row["line_label"] == "Qwen-M" and row["unimoral"] == "live" for row in rows)
+    assert any(
+        row["line_label"] == "Qwen-L"
+        and row["unimoral"] == "done"
+        and row["smid"] == "done"
+        and row["value_kaleidoscope"] == "partial"
+        for row in rows
+    )
+    assert any(
+        row["line_label"] == "Qwen-M"
+        and row["unimoral"] == "done"
+        and row["value_kaleidoscope"] == "partial"
+        for row in rows
+    )
 
     report_text = (release_dir / "jenny-group-report.md").read_text(encoding="utf-8")
+    assert "## Results First" in report_text
     assert "qwen2.5-vl-72b-instruct" in report_text
     assert "## Local Expansion Checkpoint" in report_text
     assert "curated snapshot rather than a live dashboard" in report_text
     assert "## Status Key" in report_text
-    assert "## Figures" in report_text
+    assert "## Supporting Figures" in report_text
+    assert "Partial" in report_text
     assert "![Coverage matrix]" in report_text
     assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" in report_text
 
     release_readme = (release_dir / "README.md").read_text(encoding="utf-8")
+    assert "## Results First" in release_readme
     assert "## Local Expansion Checkpoint" in release_readme
     assert "sample volume chart" in release_readme
     assert "## Start Here" in release_readme
     assert "## Status Key" in release_readme
-    assert "## Figures" in release_readme
+    assert "## Supporting Figures" in release_readme
+    assert "Partial" in release_readme
     assert "Done" in release_readme
 
     heatmap_svg = (figure_dir / "option1_accuracy_heatmap.svg").read_text(encoding="utf-8")

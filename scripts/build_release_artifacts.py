@@ -29,8 +29,9 @@ REPORT_TEMPERATURE = "0"
 REPORT_CURRENT_COST = "$35"
 REPORT_STATUS_NOTE = (
     "Updated April 21, 2026. "
-    "The frozen public snapshot remains Option 1 from April 19, while the broader family-size expansion is tracked separately "
-    "through the curated checkpoint table, the progress matrix, and the local run folders."
+    "The frozen public snapshot remains Option 1 from April 19. "
+    "Gemma-M and Gemma-L text are now complete locally, Qwen-M and Qwen-L text both have partial progress on disk, "
+    "and no active local Inspect process was detected at this snapshot."
 )
 CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 CI_RUN_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
@@ -284,18 +285,23 @@ LOCAL_EXPANSION_CHECKPOINT = [
     },
     {
         "line": "Gemma-L text batch",
-        "status": "live",
-        "note": "UniMoral, Value Kaleidoscope, and CCD-Bench are done; Denevil proxy generation is still running locally.",
+        "status": "done",
+        "note": "Completed April 21, 2026. UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy task all finished successfully.",
     },
     {
         "line": "Gemma-M text batch",
-        "status": "live",
-        "note": "The medium non-image batch is live locally and started from UniMoral; the Gemma-M SMID line was already complete.",
+        "status": "done",
+        "note": "Completed April 21, 2026. The medium text route now has a full local line across all five benchmark papers.",
     },
     {
         "line": "Qwen-M text batch",
-        "status": "live",
-        "note": "The medium non-image batch is live locally and started from UniMoral; the Qwen-M SMID route is still TBD.",
+        "status": "partial",
+        "note": "UniMoral and Value Kaleidoscope relevance completed successfully. Value Kaleidoscope valence started, but no active process is running now.",
+    },
+    {
+        "line": "Qwen-L text batch",
+        "status": "partial",
+        "note": "UniMoral completed successfully. Value Kaleidoscope relevance started, but no active process is running now.",
     },
     {
         "line": "Llama-L SMID",
@@ -305,7 +311,7 @@ LOCAL_EXPANSION_CHECKPOINT = [
     {
         "line": "Next queued text lines",
         "status": "queue",
-        "note": "Qwen-L text, Llama-M, Llama-L, MiniMax-M, DeepSeek-M, and MiniMax-L remain queued after the active Gemma / Qwen medium batches.",
+        "note": "Llama-M, Llama-L, MiniMax-M, DeepSeek-M, and MiniMax-L remain queued. Qwen-M and Qwen-L now have partial local progress rather than a clean queued state.",
     },
 ]
 
@@ -329,12 +335,12 @@ FAMILY_SIZE_PROGRESS = [
         "line_label": "Qwen-M",
         "text_route": "openrouter/qwen/qwen3-14b",
         "vision_route": "TBD",
-        "unimoral": "live",
+        "unimoral": "done",
         "smid": "tbd",
-        "value_kaleidoscope": "queue",
+        "value_kaleidoscope": "partial",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "Text batch is live locally; UniMoral is in progress and no medium SMID route is fixed yet.",
+        "summary_note": "UniMoral is done, Value Kaleidoscope started but did not finish, and no active medium Qwen text process is currently running.",
     },
     {
         "family": "Qwen",
@@ -342,12 +348,12 @@ FAMILY_SIZE_PROGRESS = [
         "line_label": "Qwen-L",
         "text_route": "openrouter/qwen/qwen3-32b",
         "vision_route": "openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete)",
-        "unimoral": "queue",
+        "unimoral": "done",
         "smid": "done",
-        "value_kaleidoscope": "queue",
+        "value_kaleidoscope": "partial",
         "ccd_bench": "queue",
         "denevil": "queue",
-        "summary_note": "SMID recovery is complete on qwen2.5-vl-72b; the large text line is still queued.",
+        "summary_note": "SMID and UniMoral are done, Value Kaleidoscope started but did not finish, and no active large Qwen text process is currently running.",
     },
     {
         "family": "MiniMax",
@@ -485,12 +491,12 @@ FAMILY_SIZE_PROGRESS = [
         "line_label": "Gemma-M",
         "text_route": "openrouter/google/gemma-3-12b-it",
         "vision_route": "openrouter/google/gemma-3-12b-it",
-        "unimoral": "live",
+        "unimoral": "done",
         "smid": "done",
-        "value_kaleidoscope": "queue",
-        "ccd_bench": "queue",
-        "denevil": "queue",
-        "summary_note": "Text batch is live locally; UniMoral is in progress and SMID is already complete.",
+        "value_kaleidoscope": "done",
+        "ccd_bench": "done",
+        "denevil": "proxy",
+        "summary_note": "Complete locally across all five papers, with Denevil covered through the same proxy route used elsewhere in this deliverable.",
     },
     {
         "family": "Gemma",
@@ -502,8 +508,74 @@ FAMILY_SIZE_PROGRESS = [
         "smid": "done",
         "value_kaleidoscope": "done",
         "ccd_bench": "done",
-        "denevil": "live",
-        "summary_note": "UniMoral, SMID, Value, and CCD are done; Denevil is live.",
+        "denevil": "proxy",
+        "summary_note": "Complete locally across all five papers, with Denevil covered through the same proxy route used elsewhere in this deliverable.",
+    },
+]
+
+CURRENT_RESULT_LINES = [
+    {
+        "line_label": "Qwen-S",
+        "scope": "Frozen Option 1",
+        "status": "done",
+        "coverage": "5 benchmark lines complete (`Denevil` via proxy)",
+        "note": "Primary small Qwen release line.",
+    },
+    {
+        "line_label": "DeepSeek-L",
+        "scope": "Frozen Option 1",
+        "status": "done",
+        "coverage": "4 benchmark lines plus `Denevil` proxy; no SMID route",
+        "note": "Primary large DeepSeek release line.",
+    },
+    {
+        "line_label": "Gemma-S",
+        "scope": "Frozen Option 1",
+        "status": "done",
+        "coverage": "5 benchmark lines complete (`Denevil` via proxy)",
+        "note": "Primary small Gemma release line.",
+    },
+    {
+        "line_label": "Llama-S",
+        "scope": "Complete local line",
+        "status": "done",
+        "coverage": "5 benchmark lines complete (`Denevil` via proxy)",
+        "note": "Finished locally, outside the frozen Option 1 counts.",
+    },
+    {
+        "line_label": "Gemma-M",
+        "scope": "Complete local line",
+        "status": "done",
+        "coverage": "5 benchmark lines complete (`Denevil` via proxy)",
+        "note": "Finished locally on April 21, 2026.",
+    },
+    {
+        "line_label": "Gemma-L",
+        "scope": "Complete local line",
+        "status": "done",
+        "coverage": "5 benchmark lines complete (`Denevil` via proxy)",
+        "note": "Finished locally on April 21, 2026.",
+    },
+    {
+        "line_label": "Qwen-M",
+        "scope": "Partial local line",
+        "status": "partial",
+        "coverage": "UniMoral done; Value Kaleidoscope partially completed",
+        "note": "No active process detected at this snapshot.",
+    },
+    {
+        "line_label": "Qwen-L",
+        "scope": "Partial local line",
+        "status": "partial",
+        "coverage": "SMID and UniMoral done; Value Kaleidoscope partially completed",
+        "note": "No active process detected at this snapshot.",
+    },
+    {
+        "line_label": "MiniMax-S",
+        "scope": "Attempted local line",
+        "status": "error",
+        "coverage": "No usable benchmark line completed",
+        "note": "OpenRouter key-limit failures interrupted both text and image paths.",
     },
 ]
 
@@ -548,6 +620,7 @@ STATUS_DISPLAY = {
     "done": "Done",
     "proxy": "Proxy",
     "live": "Live",
+    "partial": "Partial",
     "error": "Error",
     "queue": "Queue",
     "prep": "Prep",
@@ -559,6 +632,7 @@ STATUS_LEGEND = [
     ("Done", "Finished with a usable result."),
     ("Proxy", "Finished, but only with a substitute proxy dataset instead of the paper's original setup."),
     ("Live", "Currently running locally."),
+    ("Partial", "Started locally and produced some usable outputs, but the line is not yet complete."),
     ("Error", "A formal attempt exists, but the current result is not usable."),
     ("Queue", "Approved and queued next."),
     ("TBD", "The family-size route is not frozen yet."),
@@ -1309,6 +1383,19 @@ def append_benchmark_comparison_table(lines: list[str], rows: list[dict[str, Any
         )
 
 
+def append_current_result_lines_table(lines: list[str]) -> None:
+    lines.extend(
+        [
+            "| Line | Scope | Status | Coverage | Note |",
+            "| --- | --- | --- | --- | --- |",
+        ]
+    )
+    for row in CURRENT_RESULT_LINES:
+        lines.append(
+            f"| `{row['line_label']}` | {row['scope']} | {STATUS_DISPLAY[row['status']]} | {row['coverage']} | {row['note']} |"
+        )
+
+
 def append_status_key(lines: list[str]) -> None:
     lines.extend(
         [
@@ -1318,6 +1405,50 @@ def append_status_key(lines: list[str]) -> None:
     )
     for label, meaning in STATUS_LEGEND:
         lines.append(f"| `{label}` | {meaning} |")
+
+
+def append_benchmark_catalog_table(lines: list[str], rows: list[dict[str, Any]], include_citation_column: bool) -> None:
+    if include_citation_column:
+        lines.extend(
+            [
+                "| Benchmark | Citation | Paper link | Dataset / access link | Modality | What this repo tests now |",
+                "| --- | --- | --- | --- | --- | --- |",
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                "| Benchmark | Paper | Dataset / access | Modality | What this repo tests now |",
+                "| --- | --- | --- | --- | --- |",
+            ]
+        )
+
+    for row in rows:
+        dataset_cell = row["dataset_label"]
+        if row["dataset_url"]:
+            dataset_cell = markdown_link(row["dataset_label"], row["dataset_url"])
+        if row["dataset_alt_url"]:
+            dataset_cell = f"{dataset_cell}; {markdown_link('JSON', row['dataset_alt_url'])}"
+
+        if include_citation_column:
+            lines.append(
+                f"| `{row['benchmark']}` | {row['citation']} | {markdown_link('paper', row['paper_url'])} | {dataset_cell} | {row['modality']} | {row['current_release_scope']} |"
+            )
+        else:
+            lines.append(
+                f"| `{row['benchmark']}` | {markdown_link(row['citation'], row['paper_url'])} | {dataset_cell} | {row['modality']} | {row['current_release_scope']} |"
+            )
+
+
+def append_family_route_summary_table(lines: list[str], rows: list[dict[str, Any]]) -> None:
+    lines.extend(
+        [
+            "| Family | Small route | Medium route | Large route |",
+            "| --- | --- | --- | --- |",
+        ]
+    )
+    for row in rows:
+        lines.append(f"| `{row['family']}` | `{row['small_route']}` | `{row['medium_route']}` | `{row['large_route']}` |")
 
 
 def format_family_size_route(row: dict[str, Any]) -> str:
@@ -1333,7 +1464,7 @@ def format_family_size_route(row: dict[str, Any]) -> str:
 def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
     lines.extend(
         [
-            "## Figures",
+            "## Supporting Figures",
             "",
             "| Figure | Why it matters | File |",
             "| --- | --- | --- |",
@@ -1341,10 +1472,6 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             f"| Figure 2 | Task-level heatmap for the frozen comparable metrics, including unavailable-task treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
             f"| Figure 3 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
             f"| Figure 4 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | {markdown_link('option1_sample_volume.svg', f'{figure_prefix}/option1_sample_volume.svg')} |",
-            "",
-            f"![Comparable accuracy bars]({figure_prefix}/option1_benchmark_accuracy_bars.svg)",
-            "",
-            "_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._",
             "",
             f"![Accuracy heatmap]({figure_prefix}/option1_accuracy_heatmap.svg)",
             "",
@@ -1377,6 +1504,188 @@ def build_family_route_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any
     return summary
 
 
+def build_repo_readme(
+    model_summary: list[dict[str, Any]],
+    benchmark_catalog: list[dict[str, Any]],
+    supplementary_model_progress: list[dict[str, Any]],
+    family_size_progress: list[dict[str, Any]],
+    benchmark_comparison: list[dict[str, Any]],
+) -> str:
+    llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
+    route_summary = build_family_route_summary(family_size_progress)
+    lines = [
+        "# CEI Moral-Psych Benchmark Suite",
+        "",
+        f"[![CI]({CI_WORKFLOW_URL}/badge.svg?branch=main)]({CI_WORKFLOW_URL})",
+        "",
+        "This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.",
+        "",
+        f"> Current cost to date: `{REPORT_CURRENT_COST}`",
+        "",
+        "It combines three things in one clean public surface:",
+        "",
+        "1. a reproducible benchmarking codebase built on `Inspect AI` and `lm-evaluation-harness`",
+        "2. a frozen `Option 1` snapshot for the first formal public release",
+        "3. a clearly labeled progress matrix for the larger `5 benchmarks x 5 model families x 3 size slots` plan",
+        "",
+        "## Results First",
+        "",
+        "This is the fastest way to understand the deliverable: which lines already have usable results, what is directly comparable now, and which family-size expansions are complete versus partial.",
+        "",
+    ]
+    append_current_result_lines_table(lines)
+    lines.extend(
+        [
+            "",
+            "### Current Comparable Accuracy Snapshot",
+            "",
+            "Only benchmarks with directly comparable accuracy metrics are shown below. `CCD-Bench` and `Denevil` are intentionally excluded because they do not share the same target metric across lines.",
+            "",
+        ]
+    )
+    append_benchmark_comparison_table(lines, benchmark_comparison)
+    lines.extend(
+        [
+            "",
+            "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)",
+            "",
+            "_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._",
+            "",
+            "## Snapshot",
+            "",
+            "| Field | Value |",
+            "| --- | --- |",
+            f"| Report owner | `{REPORT_OWNER}` |",
+            f"| Repo update date | `{REPORT_DATE_LONG}` |",
+            f"| Frozen public snapshot | `Option 1`, `{SNAPSHOT_DATE_LONG}` |",
+            f"| Current cost to date | `{REPORT_CURRENT_COST}` |",
+            "| Intended use | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |",
+            "| Group plan target | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |",
+            "| Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |",
+            "| Model families in scope | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |",
+            "| Frozen families already in Option 1 | `Qwen`, `DeepSeek`, `Gemma` |",
+            f"| Extra completed local line | `Llama-S`, complete locally across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
+            "| MiniMax small status | formal attempt exists, but the current line failed and is not counted as complete |",
+            "| Run setting | `OpenRouter`, `temperature=0` |",
+            f"| Current operations note | {REPORT_STATUS_NOTE} |",
+            "",
+            "## Start Here",
+            "",
+            "### Reports",
+            "",
+            "- [Jenny's group report](results/release/2026-04-19-option1/jenny-group-report.md)",
+            "- [Release appendix](results/release/2026-04-19-option1/README.md)",
+            "- [Frozen source snapshot](results/release/2026-04-19-option1/source/authoritative-summary.csv)",
+            "- [How to read the results](docs/how-to-read-results.md)",
+            "- [Reproducibility guide](docs/reproducibility.md)",
+            "",
+            "### Figures",
+            "",
+            "- [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)",
+            "- [Accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)",
+            "- [Coverage matrix](figures/release/option1_coverage_matrix.svg)",
+            "- [Sample volume chart](figures/release/option1_sample_volume.svg)",
+            "",
+            "## Local Expansion Checkpoint",
+            "",
+            "This checkpoint summarizes the broader family-size expansion separately from the frozen Option 1 counts. It is a curated snapshot rather than a live dashboard.",
+            "",
+        ]
+    )
+    append_local_expansion_checkpoint_table(lines)
+    lines.extend(
+        [
+            "",
+            "## Status Key",
+            "",
+        ]
+    )
+    append_status_key(lines)
+    lines.extend(
+        [
+            "",
+            "## Family-Size Progress Matrix",
+            "",
+            "This is the main repo-level status table for the full group plan.",
+            "",
+        ]
+    )
+    append_family_size_progress_table(lines, family_size_progress)
+    lines.extend(
+        [
+            "",
+            "The same matrix is also saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv).",
+            "",
+            "## The Five Benchmark Papers",
+            "",
+        ]
+    )
+    append_benchmark_catalog_table(lines, benchmark_catalog, include_citation_column=False)
+    lines.extend(
+        [
+            "",
+            "## Model Families And Size Routes",
+            "",
+        ]
+    )
+    append_family_route_summary_table(lines, route_summary)
+    lines.extend(
+        [
+            "",
+        ]
+    )
+    append_figure_gallery(lines, "figures/release")
+    lines.extend(
+        [
+            "## Reproducibility",
+            "",
+            "### 1. Setup",
+            "",
+            "```bash",
+            "make setup",
+            "cp .env.example .env",
+            "```",
+            "",
+            "Populate `.env` with API keys such as `OPENROUTER_API_KEY` and local benchmark paths such as `UNIMORAL_DATA_DIR` and `SMID_DATA_DIR`.",
+            "If `uv` is not on `PATH` but the repo `.venv` already exists, `make test`, `make release`, and `make audit` now fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If neither runner is available, those targets fail early with a clear setup error; you can also override the fallback path with `VENV_PYTHON=/absolute/path/to/python`.",
+            "",
+            "### 2. Verify the repo",
+            "",
+            "```bash",
+            "make test",
+            "```",
+            "",
+            "### 3. Rebuild the public package",
+            "",
+            "```bash",
+            "make release",
+            "```",
+            "",
+            "This regenerates the tracked release package from the frozen source snapshot under `results/release/2026-04-19-option1/source/`.",
+            "",
+            "Expected high-level outputs:",
+            "",
+            "- `results/release/2026-04-19-option1/jenny-group-report.md`",
+            "- `results/release/2026-04-19-option1/family-size-progress.csv`",
+            "- `results/release/2026-04-19-option1/benchmark-comparison.csv`",
+            "- `results/release/2026-04-19-option1/release-manifest.json`",
+            "- `figures/release/option1_benchmark_accuracy_bars.svg`",
+            "- `figures/release/option1_coverage_matrix.svg`",
+            "",
+            "For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibility.md).",
+            "",
+            "## Important Notes",
+            "",
+            "- The full `5 x 5 x 3` matrix is the target plan, not a claim that all 75 cells are already complete.",
+            "- `Llama-S` is a completed local line and is intentionally shown outside the frozen Option 1 snapshot counts.",
+            "- `MiniMax-S` should currently be reported as a failed formal attempt, not as a completed comparison point.",
+            "- `Denevil` is still proxy-only in the public release because the original paper-faithful `MoralPrompt` export is not available locally.",
+            "- The detailed appendix lives in [results/release/2026-04-19-option1/](results/release/2026-04-19-option1/).",
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
 def build_release_readme(
     model_summary: list[dict[str, Any]],
     benchmark_summary: list[dict[str, Any]],
@@ -1397,30 +1706,58 @@ def build_release_readme(
         "1. the frozen `Option 1` public snapshot from `April 19, 2026`, and",
         "2. the wider `5 benchmarks x 5 model families x 3 size slots` progress matrix that is still being filled in.",
         "",
-        "## Snapshot",
+        "## Results First",
         "",
-        "| Field | Value |",
-        "| --- | --- |",
-        f"| Report owner | `{REPORT_OWNER}` |",
-        f"| Repo update date | `{REPORT_DATE_LONG}` |",
-        f"| Frozen public snapshot | `Option 1`, `{SNAPSHOT_DATE_LONG}` |",
-        f"| Current cost to date | `{REPORT_CURRENT_COST}` |",
-        f"| Intended use | {REPORT_PURPOSE} |",
-        "| Agreed target matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |",
-        "| Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |",
-        "| Agreed model families | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |",
-        "| Frozen families already in Option 1 | `Qwen`, `DeepSeek`, `Gemma` |",
-        f"| Extra completed local line outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
-        "| MiniMax small status | formal attempt exists, but the current run failed and is not counted as complete |",
-        "| Provider / temperature | `OpenRouter`, `temperature=0` |",
-        f"| Current operations note | {REPORT_STATUS_NOTE} |",
-        f"| CI reference | {markdown_link('Workflow', CI_WORKFLOW_URL)}; last verified successful run: {markdown_link('run 24634450927', CI_RUN_URL)} |",
-        "",
-        "## Local Expansion Checkpoint",
-        "",
-        "This checkpoint summarizes the broader family-size expansion separately from the frozen Option 1 counts. It is a curated snapshot rather than a live dashboard.",
+        "This is the fastest way to read the deliverable: which lines already have usable results, what is directly comparable now, and where the current release snapshot stops.",
         "",
     ]
+    append_current_result_lines_table(lines)
+    lines.extend(
+        [
+            "",
+            "### Current Comparable Accuracy Snapshot",
+            "",
+            "Only benchmarks with directly comparable accuracy metrics are shown here. `CCD-Bench` and `Denevil` are excluded because they do not share the same target metric across lines.",
+            "",
+        ]
+    )
+    append_benchmark_comparison_table(lines, benchmark_comparison)
+    lines.extend(
+        [
+            "",
+            "![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)",
+            "",
+            "_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._",
+            "",
+            "## Snapshot",
+            "",
+        ]
+    )
+    lines.extend(
+        [
+            "| Field | Value |",
+            "| --- | --- |",
+            f"| Report owner | `{REPORT_OWNER}` |",
+            f"| Repo update date | `{REPORT_DATE_LONG}` |",
+            f"| Frozen public snapshot | `Option 1`, `{SNAPSHOT_DATE_LONG}` |",
+            f"| Current cost to date | `{REPORT_CURRENT_COST}` |",
+            f"| Intended use | {REPORT_PURPOSE} |",
+            "| Agreed target matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |",
+            "| Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |",
+            "| Agreed model families | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |",
+            "| Frozen families already in Option 1 | `Qwen`, `DeepSeek`, `Gemma` |",
+            f"| Extra completed local line outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
+            "| MiniMax small status | formal attempt exists, but the current run failed and is not counted as complete |",
+            "| Provider / temperature | `OpenRouter`, `temperature=0` |",
+            f"| Current operations note | {REPORT_STATUS_NOTE} |",
+            f"| CI reference | {markdown_link('Workflow', CI_WORKFLOW_URL)}; last verified successful run: {markdown_link('run 24634450927', CI_RUN_URL)} |",
+            "",
+            "## Local Expansion Checkpoint",
+            "",
+            "This checkpoint summarizes the broader family-size expansion separately from the frozen Option 1 counts. It is a curated snapshot rather than a live dashboard.",
+            "",
+        ]
+    )
     append_local_expansion_checkpoint_table(lines)
     lines.extend(
         [
@@ -1461,30 +1798,14 @@ def build_release_readme(
             "",
             "## Benchmark List",
             "",
-            "| Benchmark | Paper | Dataset / access | Modality | What this repo tests now |",
-            "| --- | --- | --- | --- | --- |",
         ]
     )
-    for row in benchmark_catalog:
-        dataset_cell = row["dataset_label"]
-        if row["dataset_url"]:
-            dataset_cell = markdown_link(row["dataset_label"], row["dataset_url"])
-        if row["dataset_alt_url"]:
-            dataset_cell = f"{dataset_cell}; {markdown_link('JSON', row['dataset_alt_url'])}"
-        lines.append(
-            f"| `{row['benchmark']}` | {markdown_link(row['citation'], row['paper_url'])} | {dataset_cell} | {row['modality']} | {row['current_release_scope']} |"
-        )
+    append_benchmark_catalog_table(lines, benchmark_catalog, include_citation_column=False)
     lines.extend(
         [
             "",
-            "## Current Comparable Accuracy Snapshot",
-            "",
-            "Only benchmarks with directly comparable accuracy metrics are shown here. `CCD-Bench` and `Denevil` are excluded from this table because they do not share the same target metric across lines.",
-            "",
         ]
     )
-    append_benchmark_comparison_table(lines, benchmark_comparison)
-    lines.append("")
     append_figure_gallery(lines, "../../../figures/release")
     lines.extend(
         [
@@ -1556,31 +1877,59 @@ def build_jenny_group_report(
         "",
         "This report covers Jenny Zhu's five assigned moral-psych benchmark papers under the April 14, 2026 group plan. It separates the frozen public snapshot from the broader family-size expansion work that is still being filled in.",
         "",
-        "## Report Snapshot",
+        "## Results First",
         "",
-        "| Field | Value |",
-        "| --- | --- |",
-        f"| Report owner | `{REPORT_OWNER}` |",
-        f"| Repo update date | `{REPORT_DATE_LONG}` |",
-        f"| Frozen public snapshot | `Option 1`, `{SNAPSHOT_DATE_LONG}` |",
-        f"| Current cost to date | `{REPORT_CURRENT_COST}` |",
-        f"| Purpose | {REPORT_PURPOSE} |",
-        "| Full target matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |",
-        "| Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |",
-        "| Agreed model families | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |",
-        "| What the frozen snapshot actually covers | one closed `Option 1` slice across `Qwen`, `DeepSeek`, and `Gemma` |",
-        f"| Extra completed local line outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
-        "| MiniMax small status | formal attempt exists, but the current line failed and is not counted as complete |",
-        "| Run provider / temperature | `OpenRouter`, `temperature=0` |",
-        f"| Current operations note | {REPORT_STATUS_NOTE} |",
-        f"| CI status reference | {markdown_link('CI workflow', CI_WORKFLOW_URL)}; latest verified passing run: {markdown_link('24634450927', CI_RUN_URL)} |",
-        f"| Total evaluated samples in this release | `{total_samples:,}` |",
-        "",
-        "## Local Expansion Checkpoint",
-        "",
-        "This checkpoint summarizes the broader family-size expansion separately from the frozen Option 1 counts. It is a curated snapshot rather than a live dashboard.",
+        "This section is the fastest summary for a mentor or collaborator: which lines already have usable results, what is directly comparable now, and which local expansions are complete versus partial.",
         "",
     ]
+    append_current_result_lines_table(lines)
+    lines.extend(
+        [
+            "",
+            "### Current Comparable Accuracy Snapshot",
+            "",
+            "Only benchmarks with a directly comparable accuracy metric are shown below. `CCD-Bench` and `Denevil` are excluded because they do not share the same accuracy target across lines.",
+            "",
+        ]
+    )
+    append_benchmark_comparison_table(lines, benchmark_comparison)
+    lines.extend(
+        [
+            "",
+            "![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)",
+            "",
+            "_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._",
+            "",
+            "## Report Snapshot",
+            "",
+        ]
+    )
+    lines.extend(
+        [
+            "| Field | Value |",
+            "| --- | --- |",
+            f"| Report owner | `{REPORT_OWNER}` |",
+            f"| Repo update date | `{REPORT_DATE_LONG}` |",
+            f"| Frozen public snapshot | `Option 1`, `{SNAPSHOT_DATE_LONG}` |",
+            f"| Current cost to date | `{REPORT_CURRENT_COST}` |",
+            f"| Purpose | {REPORT_PURPOSE} |",
+            "| Full target matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |",
+            "| Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |",
+            "| Agreed model families | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |",
+            "| What the frozen snapshot actually covers | one closed `Option 1` slice across `Qwen`, `DeepSeek`, and `Gemma` |",
+            f"| Extra completed local line outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks |",
+            "| MiniMax small status | formal attempt exists, but the current line failed and is not counted as complete |",
+            "| Run provider / temperature | `OpenRouter`, `temperature=0` |",
+            f"| Current operations note | {REPORT_STATUS_NOTE} |",
+            f"| CI status reference | {markdown_link('CI workflow', CI_WORKFLOW_URL)}; latest verified passing run: {markdown_link('24634450927', CI_RUN_URL)} |",
+            f"| Total evaluated samples in this release | `{total_samples:,}` |",
+            "",
+            "## Local Expansion Checkpoint",
+            "",
+            "This checkpoint summarizes the broader family-size expansion separately from the frozen Option 1 counts. It is a curated snapshot rather than a live dashboard.",
+            "",
+        ]
+    )
     append_local_expansion_checkpoint_table(lines)
     lines.extend(
         [
@@ -1597,30 +1946,17 @@ def build_jenny_group_report(
             "",
             "## The Five Papers / Benchmarks Under Test",
             "",
-            "| Benchmark | Citation | Paper link | Dataset / access link | Modality | What this repo tests now |",
-            "| --- | --- | --- | --- | --- | --- |",
         ]
     )
-    for row in benchmark_catalog:
-        dataset_cell = row["dataset_label"]
-        if row["dataset_url"]:
-            dataset_cell = markdown_link(row["dataset_label"], row["dataset_url"])
-        if row["dataset_alt_url"]:
-            dataset_cell = f"{dataset_cell}; {markdown_link('JSON', row['dataset_alt_url'])}"
-        lines.append(
-            f"| `{row['benchmark']}` | {row['citation']} | {markdown_link('paper', row['paper_url'])} | {dataset_cell} | {row['modality']} | {row['current_release_scope']} |"
-        )
+    append_benchmark_catalog_table(lines, benchmark_catalog, include_citation_column=True)
     lines.extend(
         [
             "",
             "## Model Families And Size Routes",
             "",
-            "| Family | Small route | Medium route | Large route |",
-            "| --- | --- | --- | --- |",
         ]
     )
-    for row in route_summary:
-        lines.append(f"| `{row['family']}` | `{row['small_route']}` | `{row['medium_route']}` | `{row['large_route']}` |")
+    append_family_route_summary_table(lines, route_summary)
     lines.extend(
         [
             "",
@@ -1632,14 +1968,8 @@ def build_jenny_group_report(
     lines.extend(
         [
             "",
-            "## Current Comparable Accuracy Snapshot",
-            "",
-            "Only benchmarks with a directly comparable accuracy metric are shown below. `CCD-Bench` and `Denevil` are excluded because they do not share the same accuracy target across lines.",
-            "",
         ]
     )
-    append_benchmark_comparison_table(lines, benchmark_comparison)
-    lines.append("")
     append_figure_gallery(lines, "../../../figures/release")
     lines.extend(
         [
@@ -1954,6 +2284,17 @@ def main() -> None:
             benchmark_comparison,
         ),
     )
+    if args.release_dir.resolve() == DEFAULT_RELEASE_DIR.resolve() and args.figure_dir.resolve() == DEFAULT_FIGURE_DIR.resolve():
+        write_text(
+            ROOT / "README.md",
+            build_repo_readme(
+                model_summary,
+                benchmark_catalog,
+                supplementary_model_progress,
+                family_size_progress,
+                benchmark_comparison,
+            ),
+        )
     write_text(
         args.release_dir / "jenny-group-report.md",
         build_jenny_group_report(

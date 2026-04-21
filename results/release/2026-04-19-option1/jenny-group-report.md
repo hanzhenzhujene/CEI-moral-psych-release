@@ -6,6 +6,37 @@ Frozen public snapshot referenced here: `Option 1`, `April 19, 2026`
 
 This report covers Jenny Zhu's five assigned moral-psych benchmark papers under the April 14, 2026 group plan. It separates the frozen public snapshot from the broader family-size expansion work that is still being filled in.
 
+## Results First
+
+This section is the fastest summary for a mentor or collaborator: which lines already have usable results, what is directly comparable now, and which local expansions are complete versus partial.
+
+| Line | Scope | Status | Coverage | Note |
+| --- | --- | --- | --- | --- |
+| `Qwen-S` | Frozen Option 1 | Done | 5 benchmark lines complete (`Denevil` via proxy) | Primary small Qwen release line. |
+| `DeepSeek-L` | Frozen Option 1 | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Primary large DeepSeek release line. |
+| `Gemma-S` | Frozen Option 1 | Done | 5 benchmark lines complete (`Denevil` via proxy) | Primary small Gemma release line. |
+| `Llama-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally, outside the frozen Option 1 counts. |
+| `Gemma-M` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
+| `Gemma-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
+| `Qwen-M` | Partial local line | Partial | UniMoral done; Value Kaleidoscope partially completed | No active process detected at this snapshot. |
+| `Qwen-L` | Partial local line | Partial | SMID and UniMoral done; Value Kaleidoscope partially completed | No active process detected at this snapshot. |
+| `MiniMax-S` | Attempted local line | Error | No usable benchmark line completed | OpenRouter key-limit failures interrupted both text and image paths. |
+
+### Current Comparable Accuracy Snapshot
+
+Only benchmarks with a directly comparable accuracy metric are shown below. `CCD-Bench` and `Denevil` are excluded because they do not share the same accuracy target across lines.
+
+| Line | UniMoral action | SMID average | Value Kaleidoscope average | Coverage note |
+| :--- | ---: | ---: | ---: | --- |
+| `Qwen-S` | 0.647 | 0.368 | 0.682 | Frozen Option 1 line. |
+| `DeepSeek-L` | 0.684 | n/a | 0.635 | Frozen large-class text line. No SMID vision route was included. |
+| `Llama-S` | 0.648 | 0.216 | 0.529 | Complete locally across all five papers, but still outside the frozen Option 1 snapshot counts. |
+| `Gemma-S` | 0.635 | 0.417 | 0.593 | Frozen Option 1 recovery line. |
+
+![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
+
+_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._
+
 ## Report Snapshot
 
 | Field | Value |
@@ -22,7 +53,7 @@ This report covers Jenny Zhu's five assigned moral-psych benchmark papers under 
 | Extra completed local line outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `5` papers / `7` tasks |
 | MiniMax small status | formal attempt exists, but the current line failed and is not counted as complete |
 | Run provider / temperature | `OpenRouter`, `temperature=0` |
-| Current operations note | Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19, while the broader family-size expansion is tracked separately through the curated checkpoint table, the progress matrix, and the local run folders. |
+| Current operations note | Updated April 21, 2026. The frozen public snapshot remains Option 1 from April 19. Gemma-M and Gemma-L text are now complete locally, Qwen-M and Qwen-L text both have partial progress on disk, and no active local Inspect process was detected at this snapshot. |
 | CI status reference | [CI workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); latest verified passing run: [24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 | Total evaluated samples in this release | `302,776` |
 
@@ -33,11 +64,12 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | Line or batch | Status | Note |
 | --- | --- | --- |
 | `Qwen-L SMID recovery` | Done | Completed April 20, 2026 via openrouter/qwen/qwen2.5-vl-72b-instruct after the earlier qwen3-vl-32b moderation stop. |
-| `Gemma-L text batch` | Live | UniMoral, Value Kaleidoscope, and CCD-Bench are done; Denevil proxy generation is still running locally. |
-| `Gemma-M text batch` | Live | The medium non-image batch is live locally and started from UniMoral; the Gemma-M SMID line was already complete. |
-| `Qwen-M text batch` | Live | The medium non-image batch is live locally and started from UniMoral; the Qwen-M SMID route is still TBD. |
+| `Gemma-L text batch` | Done | Completed April 21, 2026. UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy task all finished successfully. |
+| `Gemma-M text batch` | Done | Completed April 21, 2026. The medium text route now has a full local line across all five benchmark papers. |
+| `Qwen-M text batch` | Partial | UniMoral and Value Kaleidoscope relevance completed successfully. Value Kaleidoscope valence started, but no active process is running now. |
+| `Qwen-L text batch` | Partial | UniMoral completed successfully. Value Kaleidoscope relevance started, but no active process is running now. |
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
-| `Next queued text lines` | Queue | Qwen-L text, Llama-M, Llama-L, MiniMax-M, DeepSeek-M, and MiniMax-L remain queued after the active Gemma / Qwen medium batches. |
+| `Next queued text lines` | Queue | Llama-M, Llama-L, MiniMax-M, DeepSeek-M, and MiniMax-L remain queued. Qwen-M and Qwen-L now have partial local progress rather than a clean queued state. |
 
 Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-results.md)
 
@@ -48,6 +80,7 @@ Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-
 | `Done` | Finished with a usable result. |
 | `Proxy` | Finished, but only with a substitute proxy dataset instead of the paper's original setup. |
 | `Live` | Currently running locally. |
+| `Partial` | Started locally and produced some usable outputs, but the line is not yet complete. |
 | `Error` | A formal attempt exists, but the current result is not usable. |
 | `Queue` | Approved and queued next. |
 | `TBD` | The family-size route is not frozen yet. |
@@ -78,8 +111,8 @@ Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-
 | Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | Note |
 | :--- | :---: | :---: | :---: | :---: | :---: | --- |
 | `Qwen-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 line. |
-| `Qwen-M` | Live | TBD | Queue | Queue | Queue | Text batch is live locally; UniMoral is in progress and no medium SMID route is fixed yet. |
-| `Qwen-L` | Queue | Done | Queue | Queue | Queue | SMID recovery is complete on qwen2.5-vl-72b; the large text line is still queued. |
+| `Qwen-M` | Done | TBD | Partial | Queue | Queue | UniMoral is done, Value Kaleidoscope started but did not finish, and no active medium Qwen text process is currently running. |
+| `Qwen-L` | Done | Done | Partial | Queue | Queue | SMID and UniMoral are done, Value Kaleidoscope started but did not finish, and no active large Qwen text process is currently running. |
 | `MiniMax-S` | Error | Error | Error | Error | Error | Attempted, but key-limit failures made the line unusable. |
 | `MiniMax-M` | Queue | TBD | Queue | Queue | Queue | Text queued; no medium SMID route is fixed yet. |
 | `MiniMax-L` | Queue | TBD | Queue | Queue | Queue | Text queued; no large SMID route is fixed yet. |
@@ -90,21 +123,10 @@ Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-
 | `Llama-M` | Queue | - | Queue | Queue | Queue | Text queued; no SMID run is planned. |
 | `Llama-L` | Queue | Done | Queue | Queue | Queue | SMID done; text is still queued. |
 | `Gemma-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 recovery line. |
-| `Gemma-M` | Live | Done | Queue | Queue | Queue | Text batch is live locally; UniMoral is in progress and SMID is already complete. |
-| `Gemma-L` | Done | Done | Done | Done | Live | UniMoral, SMID, Value, and CCD are done; Denevil is live. |
+| `Gemma-M` | Done | Done | Done | Done | Proxy | Complete locally across all five papers, with Denevil covered through the same proxy route used elsewhere in this deliverable. |
+| `Gemma-L` | Done | Done | Done | Done | Proxy | Complete locally across all five papers, with Denevil covered through the same proxy route used elsewhere in this deliverable. |
 
-## Current Comparable Accuracy Snapshot
-
-Only benchmarks with a directly comparable accuracy metric are shown below. `CCD-Bench` and `Denevil` are excluded because they do not share the same accuracy target across lines.
-
-| Line | UniMoral action | SMID average | Value Kaleidoscope average | Coverage note |
-| :--- | ---: | ---: | ---: | --- |
-| `Qwen-S` | 0.647 | 0.368 | 0.682 | Frozen Option 1 line. |
-| `DeepSeek-L` | 0.684 | n/a | 0.635 | Frozen large-class text line. No SMID vision route was included. |
-| `Llama-S` | 0.648 | 0.216 | 0.529 | Complete locally across all five papers, but still outside the frozen Option 1 snapshot counts. |
-| `Gemma-S` | 0.635 | 0.417 | 0.593 | Frozen Option 1 recovery line. |
-
-## Figures
+## Supporting Figures
 
 | Figure | Why it matters | File |
 | --- | --- | --- |
@@ -112,10 +134,6 @@ Only benchmarks with a directly comparable accuracy metric are shown below. `CCD
 | Figure 2 | Task-level heatmap for the frozen comparable metrics, including unavailable-task treatment. | [option1_accuracy_heatmap.svg](../../../figures/release/option1_accuracy_heatmap.svg) |
 | Figure 3 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | [option1_coverage_matrix.svg](../../../figures/release/option1_coverage_matrix.svg) |
 | Figure 4 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | [option1_sample_volume.svg](../../../figures/release/option1_sample_volume.svg) |
-
-![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
-
-_Figure 1. Benchmark-level accuracy comparison across the currently completed comparable lines, with unavailable benchmark-line pairs shown explicitly._
 
 ![Accuracy heatmap](../../../figures/release/option1_accuracy_heatmap.svg)
 

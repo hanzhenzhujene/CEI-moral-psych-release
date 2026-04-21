@@ -191,6 +191,35 @@ record_status() {
   echo "$task_name,$start_at,$end_at,$returncode,$output_path" >> "$status_file"
 }
 
+task_completed_successfully() {
+  local job="$1"
+  local task_name="$2"
+  local status_file
+  status_file="$(job_run_dir "$job")/task_status.csv"
+
+  [[ -f "$status_file" ]] || return 1
+
+  awk -F, -v task="$task_name" '
+    $1 == task && $4 == 0 { found = 1 }
+    END { exit found ? 0 : 1 }
+  ' "$status_file"
+}
+
+run_or_skip_task() {
+  local job="$1"
+  local task_name="$2"
+  local task_spec="$3"
+  local model="$4"
+  local max_connections="$5"
+
+  if task_completed_successfully "$job" "$task_name"; then
+    echo "[$(now_iso)] SKIP job=$job task=$task_name reason=already_completed"
+    return 0
+  fi
+
+  run_task "$job" "$task_name" "$task_spec" "$model" "$max_connections"
+}
+
 job_model() {
   local job="$1"
   case "$job" in
@@ -292,11 +321,11 @@ run_job() {
   echo "$job" > "$CURRENT_JOB_FILE"
   echo "running:$job:$(now_iso)" > "$MASTER_STATUS_FILE"
 
-  run_task "$job" "unimoral_action_prediction" "src/inspect/evals/unimoral.py::unimoral_action_prediction" "$model" "$max_connections"
-  run_task "$job" "value_prism_relevance" "src/inspect/evals/value_kaleidoscope.py::value_prism_relevance" "$model" "$max_connections"
-  run_task "$job" "value_prism_valence" "src/inspect/evals/value_kaleidoscope.py::value_prism_valence" "$model" "$max_connections"
-  run_task "$job" "ccd_bench_selection" "src/inspect/evals/ccd_bench.py::ccd_bench_selection" "$model" "$max_connections"
-  run_task "$job" "denevil_fulcra_proxy_generation" "src/inspect/evals/denevil.py::denevil_fulcra_proxy_generation" "$model" 1
+  run_or_skip_task "$job" "unimoral_action_prediction" "src/inspect/evals/unimoral.py::unimoral_action_prediction" "$model" "$max_connections"
+  run_or_skip_task "$job" "value_prism_relevance" "src/inspect/evals/value_kaleidoscope.py::value_prism_relevance" "$model" "$max_connections"
+  run_or_skip_task "$job" "value_prism_valence" "src/inspect/evals/value_kaleidoscope.py::value_prism_valence" "$model" "$max_connections"
+  run_or_skip_task "$job" "ccd_bench_selection" "src/inspect/evals/ccd_bench.py::ccd_bench_selection" "$model" "$max_connections"
+  run_or_skip_task "$job" "denevil_fulcra_proxy_generation" "src/inspect/evals/denevil.py::denevil_fulcra_proxy_generation" "$model" 1
 
   now_iso > "$run_dir/job_done.txt"
 }
