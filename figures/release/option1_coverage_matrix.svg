@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="590" viewBox="0 0 1220 590" role="img">
+<defs>
+<linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffffff"/>
+<stop offset="100%" stop-color="#f8fafc"/>
+</linearGradient>
+<pattern id="diagonalHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+<line x1="0" y1="0" x2="0" y2="8" stroke="#cdd6e1" stroke-width="3"/>
+</pattern>
+<filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+<feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#9fb0c2" flood-opacity="0.18"/>
+</filter>
+<style>
+.canvas { fill: #f3f6fa; }
+.title { font: 700 26px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.subtitle { font: 400 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.axis { font: 600 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.label { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.metric { font: 700 20px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.celltext { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #ffffff; }
+.celltext-dark { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #173042; }
+.cellsub { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: rgba(255,255,255,0.88); }
+.cellsub-dark { font: 600 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #385062; }
+.body { font: 500 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.small { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.tiny { font: 600 10px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #6b7c8f; letter-spacing: 0.04em; }
+.grid { fill: #ffffff; stroke: #d7dee6; stroke-width: 1.25; }
+.panel { fill: url(#panelGradient); stroke: #dbe4ee; stroke-width: 1.25; filter: url(#softShadow); }
+.subpanel { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }
+.legend-card { fill: #ffffff; stroke: #dbe4ee; stroke-width: 1; }
+.guide { stroke: #d7dee6; stroke-width: 1; stroke-dasharray: 4 6; }
+.baseline { stroke: #aab7c6; stroke-width: 1.1; }
+.muted-cell { fill: #eef2f7; stroke: #d7dee6; stroke-width: 1; }
+.muted-bar { fill: #ecf1f6; stroke: #d7dee6; stroke-width: 1; }
+.outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
+</style>
+</defs>
+<rect x="0" y="0" width="1220" height="590" class="canvas"/>
+<rect x="24" y="24" width="1172" height="542" rx="22" class="panel"/>
+<title>Option 1 benchmark coverage matrix</title>
+<desc>Coverage matrix for the frozen Option 1 release across Qwen, DeepSeek, and Gemma for the five benchmark lines.</desc>
+<text x="48" y="64" class="title">Option 1 Benchmark Coverage</text>
+<text x="48" y="88" class="subtitle">Green cells follow the paper setup. Amber cells are proxy-only. Hatched gray cells were not part of the frozen release.</text>
+<text x="308.0" y="136" text-anchor="middle" class="axis">UniMoral</text>
+<text x="484.0" y="136" text-anchor="middle" class="axis">SMID</text>
+<text x="660.0" y="136" text-anchor="middle" class="axis">Value Kaleidoscope</text>
+<text x="836.0" y="136" text-anchor="middle" class="axis">CCD-Bench</text>
+<text x="1012.0" y="136" text-anchor="middle" class="axis">Denevil</text>
+<text x="196" y="203.0" text-anchor="end" class="axis">Qwen</text>
+<rect x="220" y="156" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
+<text x="301.0" y="192" text-anchor="middle" class="celltext">1/1</text>
+<text x="301.0" y="214" text-anchor="middle" class="cellsub">paper setup</text>
+<rect x="396" y="156" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
+<text x="477.0" y="192" text-anchor="middle" class="celltext">2/2</text>
+<text x="477.0" y="214" text-anchor="middle" class="cellsub">paper setup</text>
+<rect x="572" y="156" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
+<text x="653.0" y="192" text-anchor="middle" class="celltext">2/2</text>
+<text x="653.0" y="214" text-anchor="middle" class="cellsub">paper setup</text>
+<rect x="748" y="156" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
+<text x="829.0" y="192" text-anchor="middle" class="celltext">1/1</text>
+<text x="829.0" y="214" text-anchor="middle" class="cellsub">paper setup</text>
+<rect x="924" y="156" width="162" height="68" rx="18" fill="#b7791f" class="outline"/>
+<text x="1005.0" y="192" text-anchor="middle" class="celltext">proxy</text>
+<text x="1005.0" y="214" text-anchor="middle" class="cellsub">proxy only</text>
+<text x="196" y="285.0" text-anchor="end" class="axis">DeepSeek</text>
+<rect x="220" y="238" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
+<text x="301.0" y="274" text-anchor="middle" class="celltext">1/1</text>
+<text x="301.0" y="296" text-anchor="middle" class="cellsub">paper setup</text>
+<rect x="396" y="238" width="162" height="68" rx="18" fill="#cbd5e1" class="outline"/>
+<rect x="396" y="238" width="162" height="68" rx="18" fill="url(#diagonalHatch)" opacity="0.7"/>
+<text x="477.0" y="274" text-anchor="middle" class="celltext-dark">-</text>
+<text x="477.0" y="296" text-anchor="middle" class="cellsub-dark">not in release</text>
+<rect x="572" y="238" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
+<text x="653.0" y="274" text-anchor="middle" class="celltext">2/2</text>
+<text x="653.0" y="296" text-anchor="middle" class="cellsub">paper setup</text>
+<rect x="748" y="238" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
+<text x="829.0" y="274" text-anchor="middle" class="celltext">1/1</text>
+<text x="829.0" y="296" text-anchor="middle" class="cellsub">paper setup</text>
+<rect x="924" y="238" width="162" height="68" rx="18" fill="#b7791f" class="outline"/>
+<text x="1005.0" y="274" text-anchor="middle" class="celltext">proxy</text>
+<text x="1005.0" y="296" text-anchor="middle" class="cellsub">proxy only</text>
+<text x="196" y="367.0" text-anchor="end" class="axis">Gemma</text>
+<rect x="220" y="320" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
+<text x="301.0" y="356" text-anchor="middle" class="celltext">1/1</text>
+<text x="301.0" y="378" text-anchor="middle" class="cellsub">paper setup</text>
+<rect x="396" y="320" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
+<text x="477.0" y="356" text-anchor="middle" class="celltext">2/2</text>
+<text x="477.0" y="378" text-anchor="middle" class="cellsub">paper setup</text>
+<rect x="572" y="320" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
+<text x="653.0" y="356" text-anchor="middle" class="celltext">2/2</text>
+<text x="653.0" y="378" text-anchor="middle" class="cellsub">paper setup</text>
+<rect x="748" y="320" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
+<text x="829.0" y="356" text-anchor="middle" class="celltext">1/1</text>
+<text x="829.0" y="378" text-anchor="middle" class="cellsub">paper setup</text>
+<rect x="924" y="320" width="162" height="68" rx="18" fill="#b7791f" class="outline"/>
+<text x="1005.0" y="356" text-anchor="middle" class="celltext">proxy</text>
+<text x="1005.0" y="378" text-anchor="middle" class="cellsub">proxy only</text>
+<rect x="846" y="446" width="326" height="76" rx="16" class="legend-card"/>
+<text x="872" y="470" class="tiny">SLICE SUMMARY</text>
+<text x="872" y="491" class="body">Paper setup: 11 cells</text>
+<text x="872" y="509" class="body">Proxy only: 3 cells</text>
+<text x="872" y="527" class="body">Not in release: 1 cell</text>
+<rect x="48" y="512" width="18" height="18" rx="4" fill="#2f855a"/>
+<text x="76" y="526" class="label">Paper setup</text>
+<rect x="258" y="512" width="18" height="18" rx="4" fill="#b7791f"/>
+<text x="286" y="526" class="label">Proxy only</text>
+<rect x="468" y="512" width="18" height="18" rx="4" fill="#cbd5e1"/>
+<rect x="468" y="512" width="18" height="18" rx="4" fill="url(#diagonalHatch)" opacity="0.7"/>
+<text x="496" y="526" class="label">Not in release</text>
+</svg>

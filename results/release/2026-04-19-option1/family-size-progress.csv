@@ -1,0 +1,13 @@
+family,size_slot,line_label,text_route,vision_route,unimoral,smid,value_kaleidoscope,ccd_bench,denevil,summary_note
+Qwen,S,Qwen-S,openrouter/qwen/qwen3-8b,openrouter/qwen/qwen3-vl-8b-instruct,done,done,done,done,proxy,Frozen Option 1 line.
+Qwen,M,Qwen-M,openrouter/qwen/qwen3-14b,TBD,done,tbd,done,done,proxy,Clean text rerun finished locally after the withdrawn short-answer artifacts.
+Qwen,L,Qwen-L,openrouter/qwen/qwen3-32b,openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete),done,done,done,done,proxy,SMID recovery complete; clean text rerun finished locally.
+DeepSeek,S,DeepSeek-S,No distinct small OpenRouter route exposed,-,tbd,-,tbd,tbd,tbd,No distinct small DeepSeek route is fixed yet.
+DeepSeek,M,DeepSeek-M,openrouter/deepseek/deepseek-r1-distill-qwen-32b,-,partial,-,partial,partial,partial,No vision route; downstream attempt is currently blocked because OpenRouter credits are exhausted.
+DeepSeek,L,DeepSeek-L,openrouter/deepseek/deepseek-chat-v3.1,-,done,-,done,done,proxy,Frozen large text line; no SMID route was included.
+Llama,S,Llama-S,openrouter/meta-llama/llama-3.2-11b-vision-instruct,openrouter/meta-llama/llama-3.2-11b-vision-instruct,done,done,done,done,proxy,Complete locally across all five papers.
+Llama,M,Llama-M,openrouter/meta-llama/llama-3.3-70b-instruct,-,done,-,done,done,proxy,"No SMID route; medium text line completed locally on April 22, 2026."
+Llama,L,Llama-L,openrouter/meta-llama/llama-4-maverick,openrouter/meta-llama/llama-4-maverick,done,done,partial,done,partial,SMID complete; text rerun is paused because OpenRouter credits are exhausted after a 99.3% Value Prism Relevance checkpoint.
+Gemma,S,Gemma-S,openrouter/google/gemma-3-4b-it,openrouter/google/gemma-3-4b-it,done,done,done,done,proxy,Frozen Option 1 recovery line.
+Gemma,M,Gemma-M,openrouter/google/gemma-3-12b-it,openrouter/google/gemma-3-12b-it,done,done,done,done,proxy,Complete local line across all five papers.
+Gemma,L,Gemma-L,openrouter/google/gemma-3-27b-it,openrouter/google/gemma-3-27b-it,done,done,done,done,proxy,Complete local line across all five papers.

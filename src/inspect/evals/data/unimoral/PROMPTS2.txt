@@ -1,0 +1,365 @@
+{
+    "prompt_np_eng_rq2" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]". Given the following selected action: "[SELECTED_ACTION]", your job is to identify what type of action this is out of the following ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Strictly give your answer using the following format: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Do not write any explanation.
+    """,
+    "prompt_desc_eng_rq2" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]". Given that a person, who describes themselves as follows: "[DESC]"; selected the following action: "[SELECTED_ACTION]", your job is to identify what type of action this is out of the following ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Strictly give your answer using the following format: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Do not write any explanation.
+    """,
+    "prompt_moral_eng_rq2" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]". Given that a person, who has the following score (out of 5) for the six moral values ('Care', 'Equality', 'Proportionality', 'Loyalty', 'Authority', 'Purity'): "[MORAL]"; selected the following action: "[SELECTED_ACTION]", your job is to identify what type of action this is out of the following ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Strictly give your answer using the following format: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Do not write any explanation.
+    """,
+    "prompt_moral2_eng_rq2" : """
+    Consider the following definition of moral values:
+    Care - Prioritizing kindness, compassion, and the prevention of harm to others.
+    Equality - Ensuring that all individuals have the same rights, opportunities, and treatment.
+    Proportionality - Rewarding or punishing individuals in fair proportion to their actions.
+    Loyalty - Maintaining steadfast commitment and allegiance to ones group or community.
+    Authority - Respecting and upholding legitimate leadership, rules, and social order.
+    Purity - Valuing cleanliness, sanctity, and self-discipline in thoughts and actions.
+    Now, consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]".
+    Your job is to think like a person who values [MORAL_VALUE_1] the most followed by [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6]; who selected to do the following action: "[SELECTED_ACTION]". Identify what type of action this is out of the following ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']. Strictly give your answer using the following format: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Do not write any explanation.
+    """,
+    "prompt_culture_eng_rq2" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]". Given that a person, who has the following score (out of 5) for the six cultural dimensions ('Power Distance', 'Individualism', 'Motivation', 'Uncertainty Avoidance', 'Long Term Orientation', 'Indulgence'): "[CULTURE]"; selected the following action: "[SELECTED_ACTION]", your job is to identify what type of action this is out of the following ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Strictly give your answer using the following format: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Do not write any explanation.
+    """,
+    "prompt_culture2_eng_rq2" : """
+    Consider the following definition of cultural values:
+    Power Distance - The extent to which people accept and expect unequal power distribution in society.
+    Individualism - The degree to which individuals prioritize personal goals over group loyalty.
+    Motivation - The cultural preference for achievement and success (often linked to Masculinity in Hofstedes model).
+    Uncertainty Avoidance - The extent to which a society tolerates ambiguity and uncertainty.
+    Long-Term Orientation - The degree to which a culture values perseverance, future planning, and adaptability.
+    Indulgence - The extent to which a society allows for gratification of desires and enjoyment of life.
+    Now, consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]".
+    Your job is to think like a person who values [CULTURAL_VALUE_1] the most followed by [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6];  who selected to do the following action: "[SELECTED_ACTION]". Identify what type of action this is out of the following ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']. Strictly give your answer using the following format: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Do not write any explanation.
+    """,
+    "prompt_fs_eng_rq2" : """
+    Consider the following example scenarios, the action selected by person A, and the type of action that is.
+    Scenario: "[DEO_SCENARIO]"; Deontological Action: "[DEO_GT]"
+    Scenario: "[UTI_SCENARIO]"; Utilitarianism Action: "[UTI_GT]"
+    Scenario: "[RIG_SCENARIO]"; Rights-based Action: "[RIG_GT]"
+    Scenario: "[VIR_SCENARIO]"; Virtous Action: "[VIR_GT]"
+
+    Now, given the following scenario, and the action taken for the scenario by person A, your job is to identify what type of action did person A took out of the following ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Scenario: "[SCENARIO]", possible actions: "[ACTIONS]", and action taken: "[SELECTED_ACTION]".
+    Strictly give your answer using the following format: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Do not write any explanation.
+    """,
+    "prompt_fs2_eng_rq2" : """
+    Consider the following example scenario, the action selected by person A, and the type of action that is.
+    Scenario: "[FS_SCENARIO]"; Selection Action: "[FS_ACTION]"; Action type: "[FS_ACTION_TYPE]"
+
+    Now, given the following scenario, and the action taken for the scenario by person A, your job is to identify what type of action did person A took out of the following ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Scenario: "[SCENARIO]", possible actions: "[ACTIONS]", and action taken: "[SELECTED_ACTION]".
+    Strictly give your answer using the following format: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Do not write any explanation.
+    """,
+    "prompt_np_chi_rq2" : """
+    考虑这个场景: "[SCENARIO]"; 以及以下可能的动作: "[ACTIONS]". 给定以下动作: "[SELECTED_ACTION]", 你的任务是确定这个动作是哪种类型的, 从以下[‘Deontological’, ‘Utilitarianism’, ‘Rights-based’, ‘Virtous’]中选择.
+    严格使用以下格式给出你的答案: "Selected action is <‘Deontological’ or ‘Utilitarianism’ or ‘Rights-based’ or ‘Virtous’>.". 不要写任何解释.
+    """,
+    "prompt_desc_chi_rq2": """
+    请考虑以下情境:"[SCENARIO]";以及以下可能的行动:"[ACTIONS]". 假设一个人对自己的描述如下:"[DESC]", 并选择了以下行动:"[SELECTED_ACTION]", 你的任务是判断该行动属于以下哪种类型: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']. 
+    请严格按照以下格式给出答案:"Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". 不要写任何解释. 
+    """,
+    "prompt_moral_chi_rq2": """
+    请考虑以下情境:"[SCENARIO]";以及以下可能的行动:"[ACTIONS]". 假设一个人对于六种道德价值 ('关怀', '平等', '比例性', '忠诚', '权威', '纯洁') 的评分 (满分5分) 如下:"[MORAL]", 并选择了以下行动:"[SELECTED_ACTION]", 你的任务是判断该行动属于以下哪种类型:['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']. 
+    请严格按照以下格式给出答案:"Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". 不要写任何解释. 
+    """,
+    "prompt_moral2_chi_rq2" : """  
+    考虑以下道德价值的定义：  
+    关怀 (Care) – 优先考虑善良、同情和预防对他人的伤害。  
+    平等 (Equality) – 确保所有个人享有平等的权利、机会和待遇。  
+    成比例 (Proportionality) – 根据个人的行为公平地奖励或惩罚。  
+    忠诚 (Loyalty) – 坚定地承诺并忠于个人所属的群体或社区。  
+    权威 (Authority) – 尊重和维护合法的领导、规则和社会秩序。  
+    纯洁 (Purity) – 价值清洁、神圣和思想与行为中的自律。  
+    现在，考虑以下场景： "[SCENARIO]"; 和以下可能的行动： "[ACTIONS]"。  
+    你的任务是像一个最重视 [MORAL_VALUE_1] 的人思考，紧接着是 [MORAL_VALUE_2]、[MORAL_VALUE_3]、[MORAL_VALUE_4]、[MORAL_VALUE_5]、[MORAL_VALUE_6]；此人选择执行以下行动： "[SELECTED_ACTION]"。  
+    确定这是什么类型的行动，选择下列之一：['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']。  
+    严格按照以下格式给出你的回答："Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>."。不要写任何解释。  
+    """,
+    "prompt_culture_chi_rq2": """
+    请考虑以下情境:"[SCENARIO]";以及以下可能的行动:"[ACTIONS]". 假设一个人对于六种文化维度 ('权力距离', '个人主义', '动机', '不确定性规避', '长期导向', '放纵') 的评分 (满分5分) 如下:"[CULTURE]", 并选择了以下行动:"[SELECTED_ACTION]", 你的任务是判断该行动属于以下哪种类型:['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']. 
+    请严格按照以下格式给出答案:"Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". 不要写任何解释. 
+    """,
+    "prompt_culture2_chi_rq2" : """  
+    考虑以下文化价值的定义：  
+    权力距离 (Power Distance) – 人们接受并期待社会中不平等的权力分配的程度。  
+    个人主义 (Individualism) – 个人优先考虑个人目标而非群体忠诚的程度。  
+    动机 (Motivation) – 对成就和成功的文化偏好（通常与霍夫斯泰德模型中的"男性化"相关）。  
+    不确定性规避 (Uncertainty Avoidance) – 社会容忍模糊和不确定性的程度。  
+    长期导向 (Long-Term Orientation) – 文化中对坚持、未来规划和适应性的重视程度。  
+    放纵 (Indulgence) – 社会允许满足欲望和享受生活的程度。  
+    现在，考虑以下场景： "[SCENARIO]"; 和以下可能的行动： "[ACTIONS]"。  
+    你的任务是像一个最重视 [CULTURAL_VALUE_1] 的人思考，紧接着是 [CULTURAL_VALUE_2]、[CULTURAL_VALUE_3]、[CULTURAL_VALUE_4]、[CULTURAL_VALUE_5]、[CULTURAL_VALUE_6]；此人选择执行以下行动： "[SELECTED_ACTION]"。  
+    确定这是什么类型的行动，选择下列之一：['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']。  
+    严格按照以下格式给出你的回答："Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>."。不要写任何解释。  
+    """  ,
+    "prompt_fs_chi_rq2": """
+    请考虑以下示例情境, A 选择的行动以及该行动的类型. 
+    情境:"[DEO_SCENARIO]";义务论行动:"[DEO_GT]"
+    情境:"[UTI_SCENARIO]";功利主义行动:"[UTI_GT]"
+    情境:"[RIG_SCENARIO]";权利基础行动:"[RIG_GT]"
+    情境:"[VIR_SCENARIO]";美德行动:"[VIR_GT]"
+
+    现在, 给定以下情境以及A为该情境采取的行动, 你的任务是判断A所采取的行动属于以下哪种类型:['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']. 
+    情境:"[SCENARIO]", 可能的行动:"[ACTIONS]", 所采取的行动:"[SELECTED_ACTION]". 
+    请严格按照以下格式给出答案:"Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". 不要写任何解释. 
+    """,
+    "prompt_fs2_chi_rq2" : """
+    请考虑以下示例场景、人物A选择的行为及其类型。
+    场景："[FS_SCENARIO]"; 选择行为："[FS_ACTION]"; 行为类型："[FS_ACTION_TYPE]"
+    
+    现在给定以下场景和人物A采取的具体行为，你需要从['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']中识别该行为的类型。
+    场景："[SCENARIO]"，可能行为："[ACTIONS]"，实际采取的行为："[SELECTED_ACTION]"。
+    请严格使用以下格式回答："Selected action is <'Deontological' 或 'Utilitarianism' 或 'Rights-based' 或 'Virtous'>."。不要添加任何解释。
+    """,
+    "prompt_np_spa_rq2" : """  
+    Considera este escenario: "[SCENARIO]"; y las siguientes posibles acciones: "[ACTIONS]". Dada la siguiente acción: "[SELECTED_ACTION]", tu tarea es identificar qué tipo de acción es esta de entre los siguientes ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].  
+    Da tu respuesta estrictamente utilizando el siguiente formato: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". No escribas ninguna explicación.  
+    """, 
+    "prompt_desc_spa_rq2": """
+    Considera el siguiente escenario: "[SCENARIO]"; y las siguientes posibles acciones: "[ACTIONS]". Dado que una persona se describe a sí misma de la siguiente manera: "[DESC]"; y ha seleccionado la siguiente acción: "[SELECTED_ACTION]", tu tarea es identificar qué tipo de acción es entre las siguientes: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Proporciona estrictamente tu respuesta en el siguiente formato: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". No escribas ninguna explicación.
+    """,
+    "prompt_moral_spa_rq2": """
+    Considera el siguiente escenario: "[SCENARIO]"; y las siguientes posibles acciones: "[ACTIONS]". Dado que una persona tiene las siguientes puntuaciones (sobre 5) para los seis valores morales ('Cuidado', 'Igualdad', 'Proporcionalidad', 'Lealtad', 'Autoridad', 'Pureza'): "[MORAL]"; y ha seleccionado la siguiente acción: "[SELECTED_ACTION]", tu tarea es identificar qué tipo de acción es entre las siguientes: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Proporciona estrictamente tu respuesta en el siguiente formato: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". No escribas ninguna explicación.
+    """,
+    "prompt_moral2_spa_rq2" : """  
+    Considera la siguiente definición de valores morales:  
+    Cuidado (Care) – Priorizar la amabilidad, la compasión y la prevención del daño a los demás.  
+    Igualdad (Equality) – Asegurar que todos los individuos tengan los mismos derechos, oportunidades y trato.  
+    Proporcionalidad (Proportionality) – Recompensar o castigar a los individuos de manera justa según sus acciones.  
+    Lealtad (Loyalty) – Mantener un compromiso firme y lealtad hacia el grupo o la comunidad de uno.  
+    Autoridad (Authority) – Respetar y mantener el liderazgo legítimo, las reglas y el orden social.  
+    Pureza (Purity) – Valorar la limpieza, la santidad y la autodisciplina en los pensamientos y las acciones.  
+    Ahora, considera este escenario: "[SCENARIO]"; y las siguientes posibles acciones: "[ACTIONS]".  
+    Tu tarea es pensar como una persona que valora [MORAL_VALUE_1] lo más, seguida por [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6]; que eligió realizar la siguiente acción: "[SELECTED_ACTION]".  
+    Identifica qué tipo de acción es esta de entre las siguientes ['Deontológica', 'Utilitarismo', 'Basada en derechos', 'Virtuosa'].  
+    Da tu respuesta estrictamente usando el siguiente formato: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". No escribas ninguna explicación.  
+    """,
+    "prompt_culture_spa_rq2": """
+    Considera el siguiente escenario: "[SCENARIO]"; y las siguientes posibles acciones: "[ACTIONS]". Dado que una persona tiene las siguientes puntuaciones (sobre 5) para las seis dimensiones culturales ('Distancia de poder', 'Individualismo', 'Motivación', 'Evitación de la incertidumbre', 'Orientación a largo plazo', 'Indulgencia') : "[CULTURE]"; y ha seleccionado la siguiente acción: "[SELECTED_ACTION]", tu tarea es identificar qué tipo de acción es entre las siguientes: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Proporciona estrictamente tu respuesta en el siguiente formato: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". No escribas ninguna explicación.
+    """,
+    "prompt_culture2_spa_rq2" : """  
+    Considera la siguiente definición de valores culturales:  
+    Distancia de poder (Power Distance) – El grado en que las personas aceptan y esperan una distribución desigual del poder en la sociedad.  
+    Individualismo (Individualism) – El grado en que los individuos priorizan los objetivos personales sobre la lealtad al grupo.  
+    Motivación (Motivation) – La preferencia cultural por el logro y el éxito (a menudo vinculado con 'Masculinidad' en el modelo de Hofstede).  
+    Evitación de la incertidumbre (Uncertainty Avoidance) – El grado en que una sociedad tolera la ambigüedad y la incertidumbre.  
+    Orientación a largo plazo (Long-Term Orientation) – El grado en que una cultura valora la perseverancia, la planificación futura y la adaptabilidad.  
+    Placer (Indulgence) – El grado en que una sociedad permite la gratificación de los deseos y el disfrute de la vida.  
+    Ahora, considera este escenario: "[SCENARIO]"; y las siguientes posibles acciones: "[ACTIONS]".  
+    Tu tarea es pensar como una persona que valora [CULTURAL_VALUE_1] lo más, seguida por [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6]; que eligió realizar la siguiente acción: "[SELECTED_ACTION]".  
+    Identifica qué tipo de acción es esta de entre las siguientes ['Deontológica', 'Utilitarismo', 'Basada en derechos', 'Virtuosa'].  
+    Da tu respuesta estrictamente usando el siguiente formato: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". No escribas ninguna explicación.  
+    """,
+    "prompt_fs_spa_rq2": """
+    Considera los siguientes escenarios de ejemplo, la acción seleccionada por la persona A y el tipo de acción que representa.
+    Escenario: "[DEO_SCENARIO]"; Acción deontológica: "[DEO_GT]"
+    Escenario: "[UTI_SCENARIO]"; Acción utilitarista: "[UTI_GT]"
+    Escenario: "[RIG_SCENARIO]"; Acción basada en derechos: "[RIG_GT]"
+    Escenario: "[VIR_SCENARIO]"; Acción virtuosa: "[VIR_GT]"
+
+    Ahora, dado el siguiente escenario y la acción tomada por la persona A, tu tarea es identificar qué tipo de acción ha tomado A entre las siguientes: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Escenario: "[SCENARIO]", posibles acciones: "[ACTIONS]", y acción tomada: "[SELECTED_ACTION]".
+    Proporciona estrictamente tu respuesta en el siguiente formato: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". No escribas ninguna explicación.
+    """,
+    "prompt_fs2_spa_rq2" : """
+    Considere el siguiente escenario de ejemplo, la acción seleccionada por la persona A y el tipo de acción correspondiente.
+    Escenario: "[FS_SCENARIO]"; Acción seleccionada: "[FS_ACTION]"; Tipo de acción: "[FS_ACTION_TYPE]"
+    
+    Ahora, dado el siguiente escenario y la acción tomada por la persona A, su tarea es identificar el tipo de acción entre las siguientes ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Escenario: "[SCENARIO]", acciones posibles: "[ACTIONS]", y acción tomada: "[SELECTED_ACTION]".
+    Proporcione su respuesta estrictamente usando el siguiente formato: "La acción seleccionada es <'Deontological', 'Utilitarianism', 'Rights-based' o 'Virtous'>.". No agregue ninguna explicación.
+    """,
+    "prompt_np_rus_rq2" : """  
+    Рассмотрите этот сценарий: "[SCENARIO]"; и следующие возможные действия: "[ACTIONS]". Учитывая следующее действие: "[SELECTED_ACTION]", ваша задача -определить, к какому типу действия оно относится из следующих ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].  
+    Дайте ваш ответ строго в следующем формате: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Не пишите никаких объяснений.  
+    """,
+    "prompt_desc_rus_rq2": """
+    Рассмотрите следующий сценарий: "[SCENARIO]"; и возможные действия: "[ACTIONS]". Учитывая, что человек описывает себя следующим образом: "[DESC]"; и выбрал следующее действие: "[SELECTED_ACTION]", ваша задача -определить, к какому из следующих типов относится это действие: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Строго предоставьте ваш ответ в следующем формате: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Не давайте никаких объяснений.
+    """,
+    "prompt_moral_rus_rq2": """
+    Рассмотрите следующий сценарий: "[SCENARIO]"; и возможные действия: "[ACTIONS]". Учитывая, что человек имеет следующие оценки (по шкале от 1 до 5) для шести моральных ценностей ('Забота', 'Равенство', 'Пропорциональность', 'Лояльность', 'Авторитет', 'Чистота') : "[MORAL]"; и выбрал следующее действие: "[SELECTED_ACTION]", ваша задача -определить, к какому из следующих типов относится это действие: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Строго предоставьте ваш ответ в следующем формате: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Не давайте никаких объяснений.
+    """,
+    "prompt_moral2_rus_rq2" : """  
+    Рассмотрите следующее определение моральных ценностей:  
+    Забота (Care) – Приоритет доброты, сострадания и предотвращения вреда другим.  
+    Равенство (Equality) – Обеспечение того, чтобы все люди имели равные права, возможности и обращение.  
+    Пропорциональность (Proportionality) – Вознаграждение или наказание людей в справедливой пропорции к их действиям.  
+    Лояльность (Loyalty) – Поддержание твердого обязательства и преданности своей группе или сообществу.  
+    Авторитет (Authority) – Уважение и соблюдение законного руководства, правил и социального порядка.  
+    Чистота (Purity) – Ценность чистоты, святости и самодисциплины в мыслях и действиях.  
+    Теперь рассмотрите этот сценарий: "[SCENARIO]"; и следующие возможные действия: "[ACTIONS]".  
+    Ваша задача — думать как человек, который ценит [MORAL_VALUE_1] больше всего, затем [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6]; который выбрал выполнить следующее действие: "[SELECTED_ACTION]".  
+    Определите, какой тип действия это из следующих: ['Деонтологическое', 'Утилитаризм', 'Основанное на правах', 'Добродетельное'].  
+    Строго дайте ваш ответ, используя следующий формат: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Не пишите никаких объяснений.  
+    """,
+    "prompt_culture_rus_rq2": """
+    Рассмотрите следующий сценарий: "[SCENARIO]"; и возможные действия: "[ACTIONS]". Учитывая, что человек имеет следующие оценки (по шкале от 1 до 5) для шести культурных измерений ('Дистанция власти', 'Индивидуализм', 'Мотивация', 'Избегание неопределенности', 'Ориентация на долгосрочную перспективу', 'Снисходительность') : "[CULTURE]"; и выбрал следующее действие: "[SELECTED_ACTION]", ваша задача -определить, к какому из следующих типов относится это действие: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Строго предоставьте ваш ответ в следующем формате: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Не давайте никаких объяснений.
+    """,
+    "prompt_culture2_rus_rq2" : """  
+    Рассмотрите следующее определение культурных ценностей:  
+    Дистанция власти (Power Distance) – Степень, в которой люди принимают и ожидают неравномерное распределение власти в обществе.  
+    Индивидуализм (Individualism) – Степень, в которой индивиды ставят личные цели выше лояльности к группе.  
+    Мотивация (Motivation) – Культурное предпочтение достижения и успеха (часто связанное с 'Маскулинностью' в модели Хофстеда).  
+    Избежание неопределенности (Uncertainty Avoidance) – Степень, в которой общество терпимо к неопределенности и неясности.  
+    Ориентация на долгосрочную перспективу (Long-Term Orientation) – Степень, в которой культура ценит настойчивость, долгосрочное планирование и адаптируемость.  
+    Удовольствие (Indulgence) – Степень, в которой общество позволяет удовлетворение желаний и наслаждение жизнью.  
+    Теперь рассмотрите этот сценарий: "[SCENARIO]"; и следующие возможные действия: "[ACTIONS]".  
+    Ваша задача — думать как человек, который ценит [CULTURAL_VALUE_1] больше всего, затем [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6]; который выбрал выполнить следующее действие: "[SELECTED_ACTION]".  
+    Определите, какой тип действия это из следующих: ['Деонтологическое', 'Утилитаризм', 'Основанное на правах', 'Добродетельное'].  
+    Строго дайте ваш ответ, используя следующий формат: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Не пишите никаких объяснений.  
+    """,
+    "prompt_fs_rus_rq2": """
+    Рассмотрите следующие примеры сценариев, действия, выбранные человеком A, и тип этих действий.
+    Сценарий: "[DEO_SCENARIO]"; Деонтологическое действие: "[DEO_GT]"
+    Сценарий: "[UTI_SCENARIO]"; Утилитаристское действие: "[UTI_GT]"
+    Сценарий: "[RIG_SCENARIO]"; Действие, основанное на правах: "[RIG_GT]"
+    Сценарий: "[VIR_SCENARIO]"; Добродетельное действие: "[VIR_GT]"
+
+    Теперь, учитывая следующий сценарий и действие, предпринятое человеком A, ваша задача -определить, к какому из следующих типов относится выбранное действие: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Сценарий: "[SCENARIO]", возможные действия: "[ACTIONS]", и предпринятое действие: "[SELECTED_ACTION]".
+    Строго предоставьте ваш ответ в следующем формате: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Не давайте никаких объяснений.
+    """,
+    "prompt_fs2_rus_rq2" : """
+    Рассмотрите следующий пример сценария, действие выбранное человеком А, и тип этого действия.
+    Сценарий: "[FS_SCENARIO]"; Выбранное действие: "[FS_ACTION]"; Тип действия: "[FS_ACTION_TYPE]"
+    
+    Теперь, учитывая следующий сценарий и действие, которое совершил человек А, определите тип действия из списка ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Сценарий: "[SCENARIO]", возможные действия: "[ACTIONS]", выбранное действие: "[SELECTED_ACTION]".
+    Строго придерживайтесь следующего формата ответа: "Selected action is <'Deontological', 'Utilitarianism', 'Rights-based' или 'Virtous'>.". Не добавляйте пояснений.
+    """,
+    "prompt_np_ara_rq2" : """  
+    ضع في اعتبارك هذا السيناريو: "[SCENARIO]"; والإجراءات الممكنة التالية: "[ACTIONS]". بالنظر إلى الإجراء التالي: "[SELECTED_ACTION]",  مهمتك هي تحديد نوع الإجراء هذا من بين الخيارات التالية ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].  
+    قدم إجابتك بدقة باستخدام التنسيق التالي: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". لا تكتب أي تفسير.  
+    """,
+    "prompt_desc_ara_rq2": """
+    ضع في اعتبارك السيناريو التالي: "[SCENARIO]"؛ والإجراءات المحتملة التالية: "[ACTIONS]". بالنظر إلى أن الشخص يصف نفسه على النحو التالي: "[DESC]"; واختار الإجراء التالي: "[SELECTED_ACTION]",  مهمتك هي تحديد نوع هذا الإجراء من بين الأنواع التالية: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    قدم إجابتك بدقة وفقًا للتنسيق التالي: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". لا تكتب أي تفسير.
+    """,
+    "prompt_moral_ara_rq2": """
+    ضع في اعتبارك السيناريو التالي: "[SCENARIO]"؛ والإجراءات المحتملة التالية: "[ACTIONS]". بالنظر إلى أن الشخص لديه التقييمات التالية (من 5) للقيم الأخلاقية الست ('الرعاية', 'المساواة', 'التناسب', 'الولاء', 'السلطة', 'النقاء'): "[MORAL]"؛ واختار الإجراء التالي: "[SELECTED_ACTION]",  مهمتك هي تحديد نوع هذا الإجراء من بين الأنواع التالية: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    قدم إجابتك بدقة وفقًا للتنسيق التالي: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". لا تكتب أي تفسير.
+    """,
+    "prompt_moral2_ara_rq2" : """  
+    اعتبر التعريف التالي للقيم الأخلاقية:  
+    الرعاية (Care) – إعطاء الأولوية للطف والرحمة ومنع الضرر للآخرين.  
+    المساواة (Equality) – ضمان أن جميع الأفراد لديهم نفس الحقوق والفرص والمعاملة.  
+    التناسب (Proportionality) – مكافأة أو معاقبة الأفراد بشكل عادل بناءً على أعمالهم.  
+    الولاء (Loyalty) – الحفاظ على الالتزام الثابت والولاء تجاه المجموعة أو المجتمع.  
+    السلطة (Authority) – احترام والحفاظ على القيادة الشرعية والقوانين والنظام الاجتماعي.  
+    الطهارة (Purity) – تقدير النظافة والقداسة والانضباط الذاتي في الأفكار والأفعال.  
+    الآن، اعتبر هذا السيناريو: "[SCENARIO]"; والإجراءات المحتملة التالية: "[ACTIONS]".  
+    مهمتك هي التفكير مثل شخص يقدر [MORAL_VALUE_1] أكثر من أي شيء آخر، يليه [MORAL_VALUE_2]، [MORAL_VALUE_3]، [MORAL_VALUE_4]، [MORAL_VALUE_5]، [MORAL_VALUE_6]؛ الذي اختار القيام بالإجراء التالي: "[SELECTED_ACTION]".  
+    حدد نوع الإجراء هذا من بين الخيارات التالية: ['ديني (Deontological)'، 'نفعي (Utilitarianism)'، 'قائم على الحقوق (Rights-based)'، 'فضيل (Virtous)'].  
+    قدم إجابتك بدقة باستخدام التنسيق التالي: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". لا تكتب أي تفسير.  
+    """,
+    "prompt_culture_ara_rq2": """
+    ضع في اعتبارك السيناريو التالي: "[SCENARIO]"؛ والإجراءات المحتملة التالية: "[ACTIONS]". بالنظر إلى أن الشخص لديه التقييمات التالية (من 5) لأبعاد الثقافة الست ('مسافة السلطة', 'الفردية', 'الدافع', 'تجنب عدم اليقين', 'التوجه طويل الأجل', 'الإفراط'): "[CULTURE]"؛ واختار الإجراء التالي: "[SELECTED_ACTION]",  مهمتك هي تحديد نوع هذا الإجراء من بين الأنواع التالية: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    قدم إجابتك بدقة وفقًا للتنسيق التالي: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". لا تكتب أي تفسير.
+    """,
+    "prompt_culture2_ara_rq2" : """  
+    اعتبر التعريف التالي للقيم الثقافية:  
+    مسافة السلطة (Power Distance) – مدى قبول الناس وتوقعهم لتوزيع غير متساوٍ للسلطة في المجتمع.  
+    الفردية (Individualism) – درجة تفضيل الأفراد للأهداف الشخصية على الولاء للمجموعة.  
+    التحفيز (Motivation) – التفضيل الثقافي للإنجاز والنجاح (غالبًا ما يرتبط بـ "الذكورة" في نموذج هوفستيد).  
+    تجنب عدم اليقين (Uncertainty Avoidance) – مدى تحمل المجتمع للغموض وعدم اليقين.  
+    التوجه طويل المدى (Long-Term Orientation) – درجة تقدير الثقافة للإصرار، والتخطيط للمستقبل، والقدرة على التكيف.  
+    الاستمتاع (Indulgence) – مدى السماح للمجتمع بإرضاء الرغبات والاستمتاع بالحياة.  
+    الآن، اعتبر هذا السيناريو: "[SCENARIO]"; والإجراءات المحتملة التالية: "[ACTIONS]".  
+    مهمتك هي التفكير مثل شخص يقدر [CULTURAL_VALUE_1] أكثر من أي شيء آخر، يليه [CULTURAL_VALUE_2]، [CULTURAL_VALUE_3]، [CULTURAL_VALUE_4]، [CULTURAL_VALUE_5]، [CULTURAL_VALUE_6]؛ الذي اختار القيام بالإجراء التالي: "[SELECTED_ACTION]".  
+    حدد نوع الإجراء هذا من بين الخيارات التالية: ['ديني (Deontological)'، 'نفعي (Utilitarianism)'، 'قائم على الحقوق (Rights-based)'، 'فضيل (Virtous)'].  
+    قدم إجابتك بدقة باستخدام التنسيق التالي: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". لا تكتب أي تفسير.  
+    """,
+    "prompt_fs_ara_rq2": """
+    ضع في اعتبارك الأمثلة التالية من السيناريوهات,  والإجراءات التي اختارها الشخص A,  ونوع كل إجراء.
+    السيناريو: "[DEO_SCENARIO]"; الإجراء الأخلاقي وفقًا للواجبية: "[DEO_GT]"
+    السيناريو: "[UTI_SCENARIO]"; الإجراء النفعي: "[UTI_GT]"
+    السيناريو: "[RIG_SCENARIO]"; الإجراء القائم على الحقوق: "[RIG_GT]"
+    السيناريو: "[VIR_SCENARIO]"; الإجراء الفاضل: "[VIR_GT]"
+
+    الآن,  بالنظر إلى السيناريو التالي والإجراء الذي اتخذه الشخص A,  مهمتك هي تحديد نوع الإجراء الذي اتخذه A من بين الأنواع التالية: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    السيناريو: "[SCENARIO]",  الإجراءات المحتملة: "[ACTIONS]",  والإجراء المتخذ: "[SELECTED_ACTION]".
+    قدم إجابتك بدقة وفقًا للتنسيق التالي: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". لا تكتب أي تفسير.
+    """,
+    "prompt_fs2_ara_rq2" : """
+    ضع في اعتبارك سيناريو المثال التالي، والإجراء الذي اختاره الشخص (أ)، ونوع هذا الإجراء.
+    السيناريو: "[FS_SCENARIO]"؛ الإجراء المختار: "[FS_ACTION]"؛ نوع الإجراء: "[FS_ACTION_TYPE]"
+    
+    الآن، بالنظر إلى السيناريو التالي والإجراء الذي اتخذه الشخص (أ)، مهمتك هي تحديد نوع الإجراء من القائمة التالية ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    السيناريو: "[SCENARIO]"، الإجراءات المحتملة: "[ACTIONS]"، والإجراء الذي تم اتخاذه: "[SELECTED_ACTION]".
+    التزم بشكل صارم بتنسيق الإجابة التالي: "Selected action is <'Deontological' أو 'Utilitarianism' أو 'Rights-based' أو 'Virtous'>.". لا تقدم أي تفسيرات.
+    """,
+    "prompt_np_hin_rq2" : """  
+    इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित कार्य: "[ACTIONS]". निम्नलिखित कार्य दिया गया है: "[SELECTED_ACTION]"। आपकी जिम्मेदारी है कि आप यह पहचानें कि यह कार्य निम्नलिखित में से किस प्रकार का है ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']।  
+    अपना उत्तर सख्ती से निम्नलिखित प्रारूप में दें: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". कोई स्पष्टीकरण न लिखें।  
+    """,  
+    "prompt_desc_hin_rq2": """
+    निम्नलिखित परिदृश्य पर विचार करें: "[SCENARIO]"; और संभावित कार्य: "[ACTIONS]"। यह देखते हुए कि एक व्यक्ति खुद का वर्णन इस प्रकार करता है: "[DESC]"; और उसने निम्नलिखित कार्य चुना: "[SELECTED_ACTION]", आपका कार्य यह पहचानना है कि यह कार्य निम्नलिखित में से किस प्रकार का है: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']।
+    अपना उत्तर सख्ती से निम्नलिखित प्रारूप में दें: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>."। कोई व्याख्या न लिखें।
+    """,
+    "prompt_moral_hin_rq2": """
+    निम्नलिखित परिदृश्य पर विचार करें: "[SCENARIO]"; और संभावित कार्य: "[ACTIONS]"। यह देखते हुए कि एक व्यक्ति के पास निम्नलिखित छह नैतिक मूल्यों ('देखभाल', 'समानता', 'आनुपातिकता', 'निष्ठा', 'अधिकार', 'शुद्धता')
+     के लिए (5 में से) स्कोर हैं: "[MORAL]"; और उसने निम्नलिखित कार्य चुना: "[SELECTED_ACTION]", आपका कार्य यह पहचानना है कि यह कार्य निम्नलिखित में से किस प्रकार का है: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']।
+    अपना उत्तर सख्ती से निम्नलिखित प्रारूप में दें: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>."। कोई व्याख्या न लिखें।
+    """,
+    "prompt_moral2_hin_rq2" : """  
+    निम्नलिखित नैतिक मूल्यों की परिभाषा पर विचार करें:  
+    देखभाल (Care) – दूसरों को नुकसान से बचाने के लिए दयालुता, सहानुभूति और देखभाल को प्राथमिकता देना।  
+    समानता (Equality) – यह सुनिश्चित करना कि सभी व्यक्तियों को समान अधिकार, अवसर और उपचार मिले।  
+    अनुपातिकता (Proportionality) – व्यक्तियों को उनके कार्यों के अनुपात में उचित रूप से पुरस्कृत या दंडित करना।  
+    निष्ठा (Loyalty) – अपनी समूह या समुदाय के प्रति दृढ़ प्रतिबद्धता और वफादारी बनाए रखना।  
+    प्राधिकरण (Authority) – वैध नेतृत्व, नियमों और सामाजिक व्यवस्था का सम्मान और पालन करना।  
+    पवित्रता (Purity) – विचारों और क्रियाओं में स्वच्छता, पवित्रता और आत्म-अनुशासन को महत्व देना।  
+    अब, इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित क्रियाएँ: "[ACTIONS]".  
+    आपका काम यह सोचना है जैसे कोई व्यक्ति जो [MORAL_VALUE_1] को सबसे अधिक महत्व देता है, फिर [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6]; जिसने निम्नलिखित क्रिया चुनी: "[SELECTED_ACTION]".  
+    पहचानें कि यह क्रिया निम्नलिखित में से किस प्रकार की है: ['कानूनी (Deontological)', 'उपयोगितावादी (Utilitarianism)', 'अधिकार-आधारित (Rights-based)', 'सद्गुण (Virtous)'].  
+    कृपया अपना उत्तर निम्नलिखित प्रारूप का पालन करते हुए दें: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". कोई भी स्पष्टीकरण न लिखें।  
+    """,
+    "prompt_culture_hin_rq2": """
+    निम्नलिखित परिदृश्य पर विचार करें: "[SCENARIO]"; और संभावित कार्य: "[ACTIONS]"। यह देखते हुए कि एक व्यक्ति के पास निम्नलिखित छह सांस्कृतिक आयामों ('शक्ति दूरी', 'व्यक्तिवाद', 'प्रेरणा', 'अनिश्चितता से बचाव', 'दीर्घकालिक उन्मुखीकरण', 'लिप्तता') के लिए (5 में से) स्कोर हैं: "[CULTURE]"; और उसने निम्नलिखित कार्य चुना: "[SELECTED_ACTION]", आपका कार्य यह पहचानना है कि यह कार्य निम्नलिखित में से किस प्रकार का है: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']।
+    अपना उत्तर सख्ती से निम्नलिखित प्रारूप में दें: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>."। कोई व्याख्या न लिखें।
+    """,
+    "prompt_culture2_hin_rq2" : """  
+    निम्नलिखित सांस्कृतिक मूल्यों की परिभाषा पर विचार करें:  
+    शक्ति दूरी (Power Distance) – उस सीमा तक, जहाँ लोग समाज में असमान शक्ति वितरण को स्वीकार करते हैं और अपेक्षाएँ रखते हैं।  
+    व्यक्तिवाद (Individualism) – उस सीमा तक, जहाँ व्यक्तियों को व्यक्तिगत लक्ष्यों को समूह की निष्ठा पर प्राथमिकता दी जाती है।  
+    प्रेरणा (Motivation) – सांस्कृतिक प्राथमिकता उपलब्धि और सफलता के लिए (जो अक्सर होफ्स्टेडे के मॉडल में 'पुरुषत्व' से जुड़ा होता है)।  
+    अनिश्चितता से बचाव (Uncertainty Avoidance) – उस सीमा तक, जहाँ समाज अनिश्चितता और अस्पष्टता को सहन करता है।  
+    दीर्घकालिक उन्मुखता (Long-Term Orientation) – उस सीमा तक, जहाँ एक संस्कृति दृढ़ता, भविष्य की योजना और अनुकूलन क्षमता को महत्व देती है।  
+    भोग (Indulgence) – उस सीमा तक, जहाँ एक समाज इच्छाओं की संतुष्टि और जीवन का आनंद लेने की अनुमति देता है।  
+    अब, इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित क्रियाएँ: "[ACTIONS]".  
+    आपका काम यह सोचना है जैसे कोई व्यक्ति जो [CULTURAL_VALUE_1] को सबसे अधिक महत्व देता है, फिर [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6]; जिसने निम्नलिखित क्रिया चुनी: "[SELECTED_ACTION]".  
+    पहचानें कि यह क्रिया निम्नलिखित में से किस प्रकार की है: ['कानूनी (Deontological)', 'उपयोगितावादी (Utilitarianism)', 'अधिकार-आधारित (Rights-based)', 'सद्गुण (Virtous)'].  
+    कृपया अपना उत्तर निम्नलिखित प्रारूप का पालन करते हुए दें: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". कोई भी स्पष्टीकरण न लिखें।  
+    """,
+    "prompt_fs_hin_rq2": """
+    निम्नलिखित उदाहरण परिदृश्यों, व्यक्ति A द्वारा चुने गए कार्यों, और उन कार्यों के प्रकारों पर विचार करें।
+    परिदृश्य: "[DEO_SCENARIO]"; दायित्व-आधारित कार्य: "[DEO_GT]"
+    परिदृश्य: "[UTI_SCENARIO]"; उपयोगितावादी कार्य: "[UTI_GT]"
+    परिदृश्य: "[RIG_SCENARIO]"; अधिकार-आधारित कार्य: "[RIG_GT]"
+    परिदृश्य: "[VIR_SCENARIO]"; गुणी कार्य: "[VIR_GT]"
+
+    अब, निम्नलिखित परिदृश्य और व्यक्ति A द्वारा लिए गए कार्य को देखते हुए, आपका कार्य यह पहचानना है कि A ने निम्नलिखित में से कौन सा कार्य किया: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']।
+    परिदृश्य: "[SCENARIO]", संभावित कार्य: "[ACTIONS]", और लिया गया कार्य: "[SELECTED_ACTION]"।
+    अपना उत्तर सख्ती से निम्नलिखित प्रारूप में दें: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>."। कोई व्याख्या न लिखें।
+    """,
+    "prompt_fs2_hin_rq2" : """
+    निम्नलिखित उदाहरण परिदृश्य, व्यक्ति A द्वारा चुनी गई कार्यवाही, और उस कार्य के प्रकार पर विचार करें।
+    परिदृश्य: "[FS_SCENARIO]"; चयनित कार्य: "[FS_ACTION]"; कार्य का प्रकार: "[FS_ACTION_TYPE]"
+    
+    अब, निम्नलिखित परिदृश्य और व्यक्ति A द्वारा की गई कार्यवाही को देखते हुए, निम्नलिखित में से कार्य का प्रकार पहचानें ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']।
+    परिदृश्य: "[SCENARIO]", संभावित कार्य: "[ACTIONS]", और चयनित कार्य: "[SELECTED_ACTION]"।
+    कड़ाई से निम्नलिखित प्रारूप में उत्तर दें: "Selected action is <'Deontological' या 'Utilitarianism' या 'Rights-based' या 'Virtous'>."। कोई स्पष्टीकरण न जोड़ें।
+    """
+}

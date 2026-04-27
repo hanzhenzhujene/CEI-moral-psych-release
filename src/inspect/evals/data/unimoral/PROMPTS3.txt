@@ -1,0 +1,369 @@
+{
+    "prompt_np_eng_rq3" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]". Given that a person selected the following action: "[SELECTED_ACTION]", your job is to identify the most important factor that contributed in the person's decision making out of the following ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Strictly give your answer using the following format: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Do not write any explanation.
+    """,
+    "prompt_desc_eng_rq3" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]". Given that a person, who describes themselves as follows: "[DESC]"; selected the following action: "[SELECTED_ACTION]", your job is to identify the most important factor that contributed in the person's decision making out of the following ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Strictly give your answer using the following format: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Do not write any explanation.
+    """,
+    "prompt_moral_eng_rq3" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]". Given that a person, who has the following score (out of 5) for the six moral values ('Care', 'Equality', 'Proportionality', 'Loyalty', 'Authority', 'Purity'): "[MORAL]"; selected the following action: "[SELECTED_ACTION]", your job is to identify the most important factor that contributed in the person's decision making out of the following ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Strictly give your answer using the following format: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Do not write any explanation.
+    """,
+    "prompt_moral2_eng_rq3" : """
+    Consider the following definition of moral values:
+    Care – Prioritizing kindness, compassion, and the prevention of harm to others.
+    Equality – Ensuring that all individuals have the same rights, opportunities, and treatment.
+    Proportionality – Rewarding or punishing individuals in fair proportion to their actions.
+    Loyalty – Maintaining steadfast commitment and allegiance to one's group or community.
+    Authority – Respecting and upholding legitimate leadership, rules, and social order.
+    Purity – Valuing cleanliness, sanctity, and self-discipline in thoughts and actions.
+    Now, consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]".
+    Your job is to think like a person who values [MORAL_VALUE_1] the most followed by [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6]; who selected to do the following action: "[SELECTED_ACTION]". Identify the most important factor that contributed in the person's decision making out of the following ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Strictly give your answer using the following format: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Do not write any explanation.
+    """,
+    "prompt_culture_eng_rq3" : """
+    Consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]". Given that a person, who has the following score (out of 5) for the six cultural dimensions ('Power Distance', 'Individualism', 'Motivation', 'Uncertainty Avoidance', 'Long Term Orientation', 'Indulgence'): "[CULTURE]"; selected the following action: "[SELECTED_ACTION]", your job is to identify the most important factor that contributed in the person's decision making out of the following ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Strictly give your answer using the following format: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Do not write any explanation.
+    """,
+    "prompt_culture2_eng_rq3" : """
+    Consider the following definition of cultural values:
+    Power Distance – The extent to which people accept and expect unequal power distribution in society.
+    Individualism – The degree to which individuals prioritize personal goals over group loyalty.
+    Motivation – The cultural preference for achievement and success (often linked to 'Masculinity' in Hofstede’s model).
+    Uncertainty Avoidance – The extent to which a society tolerates ambiguity and uncertainty.
+    Long-Term Orientation – The degree to which a culture values perseverance, future planning, and adaptability.
+    Indulgence – The extent to which a society allows for gratification of desires and enjoyment of life.
+    Now, consider this scenario: "[SCENARIO]"; and the following possible actions: "[ACTIONS]".
+    Your job is to think like a person who values [CULTURAL_VALUE_1] the most followed by [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6];  who selected to do the following action: "[SELECTED_ACTION]". Identify the most important factor that contributed in the person's decision making out of the following ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Strictly give your answer using the following format: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Do not write any explanation.
+    """,
+    "prompt_fs_eng_rq3" : """
+    Consider the following example scenarios, the action selected by person A, and the most important decision making factor.
+    Scenario: "[EMO_SCENARIO]"; Emotion influenced Action: "[EMO_GT]"
+    Scenario: "[MOR_SCENARIO]"; Moral influenced Action: "[MOR_GT]"
+    Scenario: "[CUL_SCENARIO]"; Culture influenced Action: "[CUL_GT]"
+    Scenario: "[RES_SCENARIO]"; Responsibility influenced Action: "[RES_GT]"
+    Scenario: "[REL_SCENARIO]"; Relationship influenced Action: "[REL_GT]"
+    Scenario: "[LEG_SCENARIO]"; Legality influenced Action: "[LEG_GT]"
+    Scenario: "[POL_SCENARIO]"; Politeness influenced Action: "[POL_GT]"
+    Scenario: "[SAC_SCENARIO]"; Sacred values influenced Action: "[SAC_GT]"
+
+    Now, given the following scenario, and the action taken for the scenario by person A, your job is to identify the most important factor that contributed in the person's decision making out of the following ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Strictly give your answer using the following format: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Do not write any explanation.
+    """,
+    "prompt_fs2_eng_rq3" : """
+    Consider the following example scenario, the action selected by person A, and the contributing factor this action was influenced by.
+    Scenario: "[FS_SCENARIO]"; Selection Action: "[FS_ACTION]"; Action type: "[FS_CONTRIBUTING_FACTOR]"
+
+    Now, given the following scenario, and the action taken for the scenario by person A, your job is to identify the most important factor that contributed in the person's decision making out of the following ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Strictly give your answer using the following format: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Do not write any explanation.
+    """,
+    "prompt_np_chi_rq3" : """
+    请考虑以下场景："[SCENARIO]"，以及可能的行动选项："[ACTIONS]"。已知某人选择了以下行动："[SELECTED_ACTION]"，你需要从['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']中识别影响其决策的最关键因素。
+    请严格使用以下格式回答："Selected action is <'Emotions'、'Moral'、'Culture'、'Responsibilities'、'Relationships'、'Legality'、'Politeness'或'Sacred values'>."。不要添加任何解释。
+    """,
+    "prompt_desc_chi_rq3" : """
+    考虑以下情境: "[SCENARIO]"; 以及以下可能的行动: "[ACTIONS]". 假设一个人自我描述如下: "[DESC]"; 选择了以下行动: "[SELECTED_ACTION]", 你的任务是从以下因素中确定最重要的决定因素: ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']. 
+    严格按照以下格式回答: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". 不要写任何解释. 
+    """,
+    "prompt_moral_chi_rq3" : """
+    考虑以下情境: "[SCENARIO]"; 以及以下可能的行动: "[ACTIONS]". 假设一个人对六种道德价值 ('关怀', '平等', '比例性', '忠诚', '权威', '纯洁') 的评分 (满分5分) 如下: "[MORAL]"; 选择了以下行动: "[SELECTED_ACTION]", 你的任务是从以下因素中确定最重要的决定因素: ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']. 
+    严格按照以下格式回答: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". 不要写任何解释. 
+    """,
+    "prompt_moral2_chi_rq3" : """
+    请考虑以下道德价值观的定义：
+    关怀 (Care) – 优先考虑善良、同情和预防对他人的伤害。
+    平等 (Equality) – 确保所有个人拥有同样的权利、机会和待遇。
+    比例 (Proportionality) – 公平地奖励或惩罚个人与他们的行为成比例。
+    忠诚 (Loyalty) – 对自己的群体或社区保持坚定的承诺和忠诚。
+    权威 (Authority) – 尊重和维护合法的领导、规则和社会秩序。
+    纯洁 (Purity) – 重视思想和行为的清洁、神圣性和自律。
+    现在，考虑以下情境: "[SCENARIO]"; 以及以下可能的行动: "[ACTIONS]"。
+    你的任务是像一个最重视 [MORAL_VALUE_1]，其次是 [MORAL_VALUE_2]， [MORAL_VALUE_3]， [MORAL_VALUE_4]， [MORAL_VALUE_5]， [MORAL_VALUE_6] 的人一样思考；选择了进行以下行动: "[SELECTED_ACTION]"。在 ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'] 中，识别出对这个人决策贡献最大的因素。
+    严格按照以下格式给出你的回答: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>."。不要写任何解释。
+    """,
+    "prompt_culture_chi_rq3" : """
+    考虑以下情境: "[SCENARIO]"; 以及以下可能的行动: "[ACTIONS]". 假设一个人对六种文化维度 ('权力距离', '个人主义', '动机', '不确定性规避', '长期导向', '放纵') 的评分 (满分5分) 如下: "[CULTURE]"; 选择了以下行动: "[SELECTED_ACTION]", 你的任务是从以下因素中确定最重要的决定因素: ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']. 
+    严格按照以下格式回答: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". 不要写任何解释. 
+    """,
+    "prompt_culture2_chi_rq3" : """
+    请考虑以下文化价值观的定义：
+    权力距离（Power Distance） – 人们在多大程度上接受和期望社会中的不平等权力分配。
+    个体主义（Individualism） – 个人在多大程度上优先考虑个人目标而非群体忠诚。
+    动机（Motivation） – 文化上对成就和成功的偏好（在霍夫斯泰德的模型中通常与‘男性气质’相关）。
+    不确定性规避（Uncertainty Avoidance） – 社会在多大程度上能够容忍模糊性和不确定性。
+    长期导向（Long-Term Orientation） – 一个文化在多大程度上重视毅力、未来规划和适应性。
+    享乐（Indulgence） – 一个社会在多大程度上允许欲望的满足和生活的享受。
+    现在，考虑以下情境: "[SCENARIO]"; 以及以下可能的行动: "[ACTIONS]"。
+    你的任务是像一个最重视 [CULTURAL_VALUE_1]，其次是 [CULTURAL_VALUE_2]，[CULTURAL_VALUE_3]，[CULTURAL_VALUE_4]，[CULTURAL_VALUE_5]，[CULTURAL_VALUE_6] 的人一样思考；选择了进行以下行动: "[SELECTED_ACTION]"。在 ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'] 中，识别对这个人决策贡献最大的因素。
+    严格按照以下格式给出你的回答: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>."。不要写任何解释。
+    """,
+    "prompt_fs_chi_rq3" : """
+    考虑以下示例情境, A 选择的行动以及最重要的决定因素. 
+    情境: "[EMO_SCENARIO]"; 受情感影响的行动: "[EMO_GT]"
+    情境: "[MOR_SCENARIO]"; 受道德影响的行动: "[MOR_GT]"
+    情境: "[CUL_SCENARIO]"; 受文化影响的行动: "[CUL_GT]"
+    情境: "[RES_SCENARIO]"; 受责任影响的行动: "[RES_GT]"
+    情境: "[REL_SCENARIO]"; 受关系影响的行动: "[REL_GT]"
+    情境: "[LEG_SCENARIO]"; 受法律影响的行动: "[LEG_GT]"
+    情境: "[POL_SCENARIO]"; 受礼貌影响的行动: "[POL_GT]"
+    情境: "[SAC_SCENARIO]"; 受神圣价值观影响的行动: "[SAC_GT]"
+
+    现在, 鉴于以下情境以及 A 选择的行动, 你的任务是从以下因素中确定最重要的决定因素: ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']. 
+    严格按照以下格式回答: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". 不要写任何解释. 
+    """,
+    "prompt_fs2_chi_rq3" : """
+    考虑以下示例场景，A 选择的操作，以及对该操作产生影响的因素。
+    场景: "[FS_SCENARIO]"; 选择的操作: "[FS_ACTION]"; 操作类型: "[FS_CONTRIBUTING_FACTOR]"
+
+    现在，给定以下场景，以及 A 在场景中采取的行动，你的任务是从以下 ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'] 中识别出对该人决策最重要的影响因素。
+    严格按照以下格式给出答案: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>."。不要写任何解释。
+    """,
+    "prompt_np_rus_rq3" : """
+    Рассмотрите сценарий: "[SCENARIO]"; и возможные действия: "[ACTIONS]". Учитывая, что человек выбрал действие: "[SELECTED_ACTION]", определите наиболее важный фактор принятия решения из списка ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Строго используйте формат: "Selected action is <'Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness' или 'Sacred values'>.". Не давайте никаких объяснений.
+    """,
+    "prompt_desc_rus_rq3" : """
+    Рассмотрите следующий сценарий: "[SCENARIO]"; и возможные действия: "[ACTIONS]". Предположим, что человек, который описывает себя так: "[DESC]"; выбрал следующее действие: "[SELECTED_ACTION]". Ваша задача -определить наиболее важный фактор, повлиявший на принятие решения, из следующих: ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Дайте ответ строго в следующем формате: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Не давайте никаких объяснений.
+    """,
+    "prompt_moral_rus_rq3" : """
+    Рассмотрите следующий сценарий: "[SCENARIO]"; и возможные действия: "[ACTIONS]". Предположим, что человек имеет следующие оценки (из 5) по шести моральным ценностям ('Забота', 'Равенство', 'Пропорциональность', 'Лояльность', 'Авторитет', 'Чистота'):
+     "[MORAL]"; выбрал следующее действие: "[SELECTED_ACTION]". Ваша задача -определить наиболее важный фактор, повлиявший на принятие решения, из следующих: ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Дайте ответ строго в следующем формате: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Не давайте никаких объяснений.
+    """,
+    "prompt_moral2_rus_rq3" : """
+    Рассмотрите следующие определения моральных ценностей:
+    Забота (Care) – Приоритизация доброты, сострадания и предотвращения вреда другим.
+    Равенство (Equality) – Обеспечение одинаковых прав, возможностей и отношения ко всем людям.
+    Пропорциональность (Proportionality) – Справедливое вознаграждение или наказание людей в соответствии с их действиями.
+    Лояльность (Loyalty) – Поддержание твердой приверженности и верности своей группе или сообществу.
+    Власть (Authority) – Уважение и поддержание легитимного руководства, правил и общественного порядка.
+    Чистота (Purity) – Ценность чистоты, святости и самодисциплины в мыслях и действиях.
+    Теперь рассмотрите эту ситуацию: "[SCENARIO]"; и следующие возможные действия: "[ACTIONS]".
+    Ваша задача — мыслить как человек, который ценит [MORAL_VALUE_1] больше всего, затем [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6]; который выбрал следующее действие: "[SELECTED_ACTION]". Определите самый важный фактор, который повлиял на принятие решения этим человеком из следующих ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Строго дайте свой ответ, используя следующий формат: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Не пишите никаких объяснений.
+    """,
+    "prompt_culture_rus_rq3" : """
+    Рассмотрите следующий сценарий: "[SCENARIO]"; и возможные действия: "[ACTIONS]". Предположим, что человек имеет следующие оценки (из 5) по шести культурным измерениям ('Дистанция власти', 'Индивидуализм', 'Мотивация', 'Избегание неопределенности', 'Долгосрочная ориентация', 'Снисходительность'): "[CULTURE]"; выбрал следующее действие: "[SELECTED_ACTION]". Ваша задача -определить наиболее важный фактор, повлиявший на принятие решения, из следующих: ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Дайте ответ строго в следующем формате: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Не давайте никаких объяснений.
+    """,
+    "prompt_culture2_rus_rq3" : """
+    Рассмотрите следующие определения культурных ценностей:
+    Дистанция власти (Power Distance) – Степень, в которой люди принимают и ожидают неравномерное распределение власти в обществе.
+    Индивидуализм (Individualism) – Степень, в которой люди ставят личные цели выше лояльности к группе.
+    Мотивация (Motivation) – Культурное предпочтение достижения и успеха (часто связано с 'Мужественностью' в модели Хофстеде).
+    Избегание неопределенности (Uncertainty Avoidance) – Степень, в которой общество терпит неоднозначность и неопределенность.
+    Долгосрочная ориентация (Long-Term Orientation) – Степень, в которой культура ценит настойчивость, планирование на будущее и адаптивность.
+    Снисходительность (Indulgence) – Степень, в которой общество позволяет удовлетворение желаний и наслаждение жизнью.
+    Теперь рассмотрите этот сценарий: "[SCENARIO]"; и следующие возможные действия: "[ACTIONS]".
+    Ваша задача — мыслить как человек, который ценит [CULTURAL_VALUE_1] больше всего, затем [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6]; который выбрал следующее действие: "[SELECTED_ACTION]". Определите самый важный фактор, который повлиял на принятие решения этим человеком из следующих ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Строго дайте свой ответ, используя следующий формат: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Не пишите никаких объяснений.
+    """,
+    "prompt_fs_rus_rq3" : """
+    Рассмотрите следующие примеры сценариев, выбранные человеком A действия и наиболее важный фактор принятия решения.
+    Сценарий: "[EMO_SCENARIO]"; Действие, обусловленное эмоциями: "[EMO_GT]"
+    Сценарий: "[MOR_SCENARIO]"; Действие, обусловленное моралью: "[MOR_GT]"
+    Сценарий: "[CUL_SCENARIO]"; Действие, обусловленное культурой: "[CUL_GT]"
+    Сценарий: "[RES_SCENARIO]"; Действие, обусловленное ответственностью: "[RES_GT]"
+    Сценарий: "[REL_SCENARIO]"; Действие, обусловленное отношениями: "[REL_GT]"
+    Сценарий: "[LEG_SCENARIO]"; Действие, обусловленное законностью: "[LEG_GT]"
+    Сценарий: "[POL_SCENARIO]"; Действие, обусловленное вежливостью: "[POL_GT]"
+    Сценарий: "[SAC_SCENARIO]"; Действие, обусловленное священными ценностями: "[SAC_GT]"
+
+    Теперь, учитывая следующий сценарий и действие, выбранное человеком A, ваша задача -определить наиболее важный фактор, повлиявший на принятие решения, из следующих: ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Дайте ответ строго в следующем формате: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Не давайте никаких объяснений.
+    """,
+    "prompt_fs2_rus_rq3" : """
+    Рассмотрите следующий пример сценария, действие, выбранное человеком A, и фактор, повлиявший на это действие.
+    Сценарий: "[FS_SCENARIO]"; Выбранное действие: "[FS_ACTION]"; Тип действия: "[FS_CONTRIBUTING_FACTOR]"
+
+    Теперь, учитывая следующий сценарий и действие, предпринятое человеком A, ваша задача — определить самый важный фактор, который повлиял на принятие решения человеком из следующих ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Строго дайте ваш ответ в следующем формате: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Не пишите никаких объяснений.
+    """,
+    "prompt_np_spa_rq3" : """
+    Considere este escenario: "[SCENARIO]"; y las siguientes acciones posibles: "[ACTIONS]". Dado que una persona seleccionó esta acción: "[SELECTED_ACTION]", identifique el factor más importante en su decisión entre ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Proporcione su respuesta estrictamente usando este formato: "Selected action is <'Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness' o 'Sacred values'>.". Sin explicaciones.
+    """,
+    "prompt_desc_spa_rq3" : """
+    Considera este escenario: "[SCENARIO]"; y las siguientes acciones posibles: "[ACTIONS]". Dado que una persona, que se describe de la siguiente manera: "[DESC]"; seleccionó la siguiente acción: "[SELECTED_ACTION]", tu tarea es identificar el factor más importante que contribuyó en la toma de decisión de la persona entre los siguientes ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Estrictamente da tu respuesta usando el siguiente formato: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". No escribas ninguna explicación.
+    """,
+    "prompt_moral_spa_rq3" : """
+    Considera este escenario: "[SCENARIO]"; y las siguientes acciones posibles: "[ACTIONS]". Dado que una persona, que tiene la siguiente puntuación (de 5) para los seis valores morales ('Cuidado', 'Igualdad', 'Proporcionalidad', 'Lealtad', 'Autoridad', 'Pureza'): "[MORAL]"; seleccionó la siguiente acción: "[SELECTED_ACTION]", tu tarea es identificar el factor más importante que contribuyó en la toma de decisión de la persona entre los siguientes ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Estrictamente da tu respuesta usando el siguiente formato: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". No escribas ninguna explicación.
+    """,
+    "prompt_moral2_spa_rq3" : """
+    Considera las siguientes definiciones de valores morales:
+    Cuidado (Care) – Priorizar la bondad, la compasión y la prevención del daño a otros.
+    Igualdad (Equality) – Asegurar que todos los individuos tengan los mismos derechos, oportunidades y trato.
+    Proporcionalidad (Proportionality) – Recompensar o castigar a las personas de manera justa en proporción a sus acciones.
+    Lealtad (Loyalty) – Mantener un firme compromiso y lealtad hacia el propio grupo o comunidad.
+    Autoridad (Authority) – Respetar y mantener un liderazgo legítimo, las reglas y el orden social.
+    Pureza (Purity) – Valorar la limpieza, la santidad y la autodisciplina en pensamientos y acciones.
+    Ahora, considera este escenario: "[SCENARIO]"; y las siguientes posibles acciones: "[ACTIONS]".
+    Tu tarea es pensar como una persona que valora primero [MORAL_VALUE_1], seguido de [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6]; y que eligió realizar la siguiente acción: "[SELECTED_ACTION]". Identifica el factor más importante que contribuyó a la toma de decisiones de la persona de entre los siguientes ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Da tu respuesta estrictamente usando el siguiente formato: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". No escribas ninguna explicación.
+    """,
+    "prompt_culture_spa_rq3" : """
+    Considera este escenario: "[SCENARIO]"; y las siguientes acciones posibles: "[ACTIONS]". Dado que una persona, que tiene la siguiente puntuación (de 5) para las seis dimensiones culturales ('Distancia de poder', 'Individualismo', 'Motivación', 'Evasión de la incertidumbre', 'Orientación a largo plazo', 'Indulgencia'): "[CULTURE]"; seleccionó la siguiente acción: "[SELECTED_ACTION]", tu tarea es identificar el factor más importante que contribuyó en la toma de decisión de la persona entre los siguientes ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Estrictamente da tu respuesta usando el siguiente formato: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". No escribas ninguna explicación.
+    """,
+    "prompt_culture2_spa_rq3" : """
+    Considera las siguientes definiciones de valores culturales:
+    Distancia de poder (Power Distance) – El grado en el que las personas aceptan y esperan una distribución desigual del poder en la sociedad.
+    Individualismo (Individualism) – El grado en el que los individuos priorizan metas personales sobre la lealtad al grupo.
+    Motivación (Motivation) – La preferencia cultural por el logro y el éxito (a menudo relacionado con 'Masculinidad' en el modelo de Hofstede).
+    Evitación de la incertidumbre (Uncertainty Avoidance) – El grado en el que una sociedad tolera la ambigüedad e incertidumbre.
+    Orientación a largo plazo (Long-Term Orientation) – El grado en el que una cultura valora la perseverancia, la planificación futura y la adaptabilidad.
+    Indulgencia (Indulgence) – El grado en el que una sociedad permite la gratificación de deseos y el disfrute de la vida.
+    Ahora, considera este escenario: "[SCENARIO]"; y las siguientes posibles acciones: "[ACTIONS]".
+    Tu tarea es pensar como una persona que valora primero [CULTURAL_VALUE_1], seguido de [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6]; y que eligió realizar la siguiente acción: "[SELECTED_ACTION]". Identifica el factor más importante que contribuyó a la toma de decisiones de la persona de entre los siguientes ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Da tu respuesta estrictamente usando el siguiente formato: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". No escribas ninguna explicación.
+    """,
+    "prompt_fs_spa_rq3" : """
+    Considera los siguientes escenarios de ejemplo, la acción seleccionada por la persona A, y el factor más importante en la toma de decisión.
+    Escenario: "[EMO_SCENARIO]"; Acción influenciada por Emoción: "[EMO_GT]"
+    Escenario: "[MOR_SCENARIO]"; Acción influenciada por Moral: "[MOR_GT]"
+    Escenario: "[CUL_SCENARIO]"; Acción influenciada por Cultura: "[CUL_GT]"
+    Escenario: "[RES_SCENARIO]"; Acción influenciada por Responsabilidad: "[RES_GT]"
+    Escenario: "[REL_SCENARIO]"; Acción influenciada por Relaciones: "[REL_GT]"
+    Escenario: "[LEG_SCENARIO]"; Acción influenciada por Legalidad: "[LEG_GT]"
+    Escenario: "[POL_SCENARIO]"; Acción influenciada por Cortesía: "[POL_GT]"
+    Escenario: "[SAC_SCENARIO]"; Acción influenciada por Valores Sagrados: "[SAC_GT]"
+
+    Ahora, dado el siguiente escenario y la acción tomada por la persona A, tu tarea es identificar el factor más importante que contribuyó en la toma de decisión de la persona entre los siguientes ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Estrictamente da tu respuesta usando el siguiente formato: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". No escribas ninguna explicación.
+    """,
+    "prompt_fs2_spa_rq3" : """
+    Considera el siguiente ejemplo de escenario, la acción seleccionada por la persona A y el factor contribuyente que influyó en esta acción.
+    Escenario: "[FS_SCENARIO]"; Acción seleccionada: "[FS_ACTION]"; Tipo de acción: "[FS_CONTRIBUTING_FACTOR]"
+
+    Ahora, dado el siguiente escenario y la acción tomada para el escenario por la persona A, tu tarea es identificar el factor más importante que contribuyó en la toma de decisiones de la persona de entre los siguientes ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Da estrictamente tu respuesta usando el siguiente formato: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". No escribas ninguna explicación.
+    """,
+    "prompt_np_ara_rq3" : """
+    ضع في اعتبارك هذا السيناريو: "[SCENARIO]"؛ والإجراءات الممكنة: "[ACTIONS]". نظرًا لأن الشخص اختار الإجراء التالي: "[SELECTED_ACTION]"، مهمتك هي تحديد العامل الأكثر تأثيرًا في قراره من القائمة ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    اتبع بدقة تنسيق الإجابة التالي: "Selected action is <'Emotions' أو 'Moral' أو 'Culture' أو 'Responsibilities' أو 'Relationships' أو 'Legality' أو 'Politeness' أو 'Sacred values'>.". لا تقدم أي تفسيرات.
+    """,
+    "prompt_desc_ara_rq3" : """
+    ضع في الاعتبار هذا السيناريو: "[SCENARIO]"؛ والإجراءات المحتملة التالية: "[ACTIONS]". بالنظر إلى أن شخصًا,  يصف نفسه على النحو التالي: "[DESC]"؛ قام باختيار الإجراء التالي: "[SELECTED_ACTION]",  مهمتك هي تحديد العامل الأكثر أهمية الذي ساهم في اتخاذ قراره من بين العوامل التالية ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    قدم إجابتك بشكل صارم باستخدام التنسيق التالي: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". لا تكتب أي تفسير.
+    """,
+    "prompt_moral_ara_rq3" : """
+    ضع في الاعتبار هذا السيناريو: "[SCENARIO]"؛ والإجراءات المحتملة التالية: "[ACTIONS]". بالنظر إلى أن شخصًا,  لديه النقاط التالية (من 5) للقيم الأخلاقية الست ('الرعاية', 'المساواة', 'التناسب', 'الولاء', 'السلطة', 'النقاء'): "[MORAL]"؛ قام باختيار الإجراء التالي: "[SELECTED_ACTION]",  مهمتك هي تحديد العامل الأكثر أهمية الذي ساهم في اتخاذ قراره من بين العوامل التالية ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    قدم إجابتك بشكل صارم باستخدام التنسيق التالي: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". لا تكتب أي تفسير.
+    """,
+    "prompt_moral2_ara_rq3" : """
+    ضع في اعتبارك التعاريف التالية للقيم الأخلاقية:
+    الرعاية (Care) – إعطاء الأولوية للطيبة والرحمة ومنع الأذى للآخرين.
+    المساواة (Equality) – ضمان أن جميع الأفراد لديهم نفس الحقوق والفرص والمعاملة.
+    التناسب (Proportionality) – مكافأة أو معاقبة الأفراد بشكل عادل يتناسب مع أفعالهم.
+    الولاء (Loyalty) – الحفاظ على الالتزام steadfast والانتماء للمجموعة أو المجتمع الخاص بالفرد.
+    السلطة (Authority) – احترام ودعم القيادة الشرعية والقواعد والنظام الاجتماعي.
+    الطهارة (Purity) – تقدير النظافة والقداسة والانضباط الذاتي في الأفكار والأفعال.
+    الآن، ضع في اعتبارك السيناريو التالي: "[SCENARIO]"; والإجراءات المحتملة التالية: "[ACTIONS]".
+    وظيفتك هي التفكير مثل شخص يُقيم [MORAL_VALUE_1] في المقام الأول، يتبعه [MORAL_VALUE_2]، [MORAL_VALUE_3]، [MORAL_VALUE_4]، [MORAL_VALUE_5]، [MORAL_VALUE_6]؛ الذي اختار القيام بالإجراء التالي: "[SELECTED_ACTION]". حدد العامل الأكثر أهمية الذي ساهم في اتخاذ القرار من بين ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    قدم إجابتك بدقة باستخدام الصيغة التالية: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". لا تكتب أي تفسير.
+    """,
+    "prompt_culture_ara_rq3" : """
+    ضع في الاعتبار هذا السيناريو: "[SCENARIO]"؛ والإجراءات المحتملة التالية: "[ACTIONS]". بالنظر إلى أن شخصًا,  لديه النقاط التالية (من 5) للأبعاد الثقافية الست ('مسافة السلطة', 'الفردية', 'الدافع', 'تجنب عدم اليقين', 'التوجه طويل الأجل', 'الإفراط'): "[CULTURE]"؛ قام باختيار الإجراء التالي: "[SELECTED_ACTION]",  مهمتك هي تحديد العامل الأكثر أهمية الذي ساهم في اتخاذ قراره من بين العوامل التالية ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    قدم إجابتك بشكل صارم باستخدام التنسيق التالي: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". لا تكتب أي تفسير.
+    """,
+    "prompt_culture2_ara_rq3" : """
+    ضع في اعتبارك التعاريف التالية للقيم الثقافية:
+    مسافة السلطة (Power Distance) – المدى الذي يقبل به الناس ويتوقعون توزيع السلطة بشكل غير متكافئ في المجتمع.
+    الفردية (Individualism) – الدرجة التي يعطي فيها الأفراد الأولوية للأهداف الشخصية على الولاء للمجموعة.
+    الدافع (Motivation) – التفضيل الثقافي لتحقيق النجاح (غالبًا ما يرتبط بـ 'الذكورة' في نموذج هوفستيد).
+    تجنب عدم اليقين (Uncertainty Avoidance) – المدى الذي يتسامح فيه المجتمع مع الغموض وعدم اليقين.
+    التوجه على المدى البعيد (Long-Term Orientation) – الدرجة التي تقدر فيها الثقافة المثابرة والتخطيط للمستقبل والقدرة على التكيف.
+    التساهل (Indulgence) – المدى الذي يسمح فيه المجتمع بإشباع الرغبات والتمتع بالحياة.
+    الآن، ضع في اعتبارك السيناريو التالي: "[SCENARIO]"; والإجراءات المحتملة التالية: "[ACTIONS]".
+    وظيفتك هي التفكير مثل شخص يُقيم [CULTURAL_VALUE_1] في المقام الأول، يتبعه [CULTURAL_VALUE_2]، [CULTURAL_VALUE_3]، [CULTURAL_VALUE_4]، [CULTURAL_VALUE_5]، [CULTURAL_VALUE_6]; الذي اختار القيام بالإجراء التالي: "[SELECTED_ACTION]". حدد العامل الأكثر أهمية الذي ساهم في اتخاذ القرار من بين ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    قدم إجابتك بدقة باستخدام الصيغة التالية: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". لا تكتب أي تفسير.
+    """,
+    "prompt_fs_ara_rq3" : """
+    ضع في الاعتبار سيناريوهات المثال التالية,  والإجراء الذي اختارته الشخصية أ,  والعامل الأكثر أهمية في اتخاذ القرار.
+    السيناريو: "[EMO_SCENARIO]"؛ الإجراء المتأثر بالعاطفة: "[EMO_GT]"
+    السيناريو: "[MOR_SCENARIO]"؛ الإجراء المتأثر بالأخلاق: "[MOR_GT]"
+    السيناريو: "[CUL_SCENARIO]"؛ الإجراء المتأثر بالثقافة: "[CUL_GT]"
+    السيناريو: "[RES_SCENARIO]"؛ الإجراء المتأثر بالمسؤوليات: "[RES_GT]"
+    السيناريو: "[REL_SCENARIO]"؛ الإجراء المتأثر بالعلاقات: "[REL_GT]"
+    السيناريو: "[LEG_SCENARIO]"؛ الإجراء المتأثر بالقانونية: "[LEG_GT]"
+    السيناريو: "[POL_SCENARIO]"؛ الإجراء المتأثر بالأدب: "[POL_GT]"
+    السيناريو: "[SAC_SCENARIO]"؛ الإجراء المتأثر بالقيم المقدسة: "[SAC_GT]"
+
+    الآن,  بالنظر إلى السيناريو التالي والإجراء الذي اتخذته الشخصية أ,  مهمتك هي تحديد العامل الأكثر أهمية الذي ساهم في اتخاذ قرارها من بين العوامل التالية ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    قدم إجابتك بشكل صارم باستخدام التنسيق التالي: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". لا تكتب أي تفسير.
+    """,
+    "prompt_fs2_ara_rq3" : """
+    اعتبر السيناريو المثالي التالي، الفعل الذي اختاره الشخص A، والعامل المساهم الذي أثر على هذا الفعل.
+    السيناريو: "[FS_SCENARIO]"; الفعل المختار: "[FS_ACTION]"; نوع الفعل: "[FS_CONTRIBUTING_FACTOR]"
+
+    الآن، بالنظر إلى السيناريو التالي، والفعل الذي اتخذه الشخص A للسيناريو، مهمتك هي تحديد العامل الأكثر أهمية الذي ساهم في اتخاذ الشخص للقرار من بين العوامل التالية ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    قدّم إجابتك بصرامة باستخدام التنسيق التالي: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". لا تكتب أي تفسير.
+    """,
+    "prompt_np_hin_rq3" : """
+    निम्नलिखित परिदृश्य पर विचार करें: "[SCENARIO]"; और संभावित कार्यों को देखें: "[ACTIONS]". चूंकि व्यक्ति ने यह कार्य चुना है: "[SELECTED_ACTION]", आपका कार्य ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'] में से निर्णय में सबसे महत्वपूर्ण कारक की पहचान करना है।
+    कड़ाई से निम्नलिखित प्रारूप का उपयोग करके उत्तर दें: "Selected action is <'Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness' या 'Sacred values'>."। कोई स्पष्टीकरण न दें।
+    """,
+    "prompt_desc_hin_rq3" : """
+    इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित कार्य: "[ACTIONS]"। यह देखते हुए कि एक व्यक्ति, जो अपने बारे में इस प्रकार वर्णन करता है: "[DESC]"; ने निम्नलिखित कार्य चुना: "[SELECTED_ACTION]", आपका कार्य यह पहचानना है कि व्यक्ति के निर्णय लेने में सबसे महत्वपूर्ण कारक क्या था, निम्नलिखित में से ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']।
+    सख्ती से निम्नलिखित प्रारूप में अपना उत्तर दें: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>।" कोई स्पष्टीकरण न लिखें।
+    """,
+    "prompt_moral_hin_rq3" : """
+    इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित कार्य: "[ACTIONS]"। यह देखते हुए कि एक व्यक्ति, जिसके पास छह नैतिक मूल्यों ('देखभाल', 'समानता', 'आनुपातिकता', 'निष्ठा', 'अधिकार', 'शुद्धता') के लिए निम्नलिखित स्कोर (5 में से) है: "[MORAL]"; ने निम्नलिखित कार्य चुना: "[SELECTED_ACTION]", आपका कार्य यह पहचानना है कि व्यक्ति के निर्णय लेने में सबसे महत्वपूर्ण कारक क्या था, निम्नलिखित में से ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']।
+    सख्ती से निम्नलिखित प्रारूप में अपना उत्तर दें: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>।" कोई स्पष्टीकरण न लिखें।
+    """,
+    "prompt_moral2_hin_rq3" : """
+    निम्नलिखित नैतिक मूल्यों की परिभाषा पर विचार करें:
+    देखभाल (Care) – दया, करुणा और अन्य लोगों को नुकसान से बचाने को प्राथमिकता देना।
+    समानता (Equality) – सुनिश्चित करना कि सभी व्यक्तियों के पास समान अधिकार, अवसर और व्यवहार हो।
+    अनुपातिकता (Proportionality) – लोगों को उनके कार्यों के अनुरूप निष्पक्षता से पुरस्कृत या दंडित करना।
+    निष्ठा (Loyalty) – अपने समूह या समुदाय के प्रति दृढ़ प्रतिबद्धता और वफादारी बनाए रखना।
+    अधिकार (Authority) – वैध नेतृत्व, नियमों और सामाजिक व्यवस्था का सम्मान और पालन करना।
+    पवित्रता (Purity) – विचारों और कार्यों में स्वच्छता, पवित्रता और आत्म-अनुशासन का मूल्यांकन करना।
+    अब, इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित कार्रवाइयाँ: "[ACTIONS]"।
+    आपका कार्य एक ऐसे व्यक्ति की तरह सोचना है, जिसने [MORAL_VALUE_1] को सबसे अधिक महत्व दिया है, उसके बाद [MORAL_VALUE_2], [MORAL_VALUE_3], [MORAL_VALUE_4], [MORAL_VALUE_5], [MORAL_VALUE_6]; जिसने निम्नलिखित कार्रवाई करने के लिए चुना है: "[SELECTED_ACTION]"। ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'] में से उस सबसे महत्वपूर्ण कारण की पहचान करें जिसने व्यक्ति के निर्णय को प्रभावित किया।
+    अपने उत्तर को निम्नलिखित प्रारूप का उपयोग करके सख्ती से दें: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". कोई स्पष्टीकरण न लिखें।
+    """,
+    "prompt_culture_hin_rq3" : """
+    इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित कार्य: "[ACTIONS]"। यह देखते हुए कि एक व्यक्ति, जिसके पास छह सांस्कृतिक आयामों ('शक्ति दूरी', 'व्यक्तिवाद', 'प्रेरणा', 'अनिश्चितता से बचाव', 'दीर्घकालिक उन्मुखीकरण', 'लिप्तता') के लिए निम्नलिखित स्कोर (5 में से) है: "[CULTURE]"; ने निम्नलिखित कार्य चुना: "[SELECTED_ACTION]", आपका कार्य यह पहचानना है कि व्यक्ति के निर्णय लेने में सबसे महत्वपूर्ण कारक क्या था, निम्नलिखित में से ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']।
+    सख्ती से निम्नलिखित प्रारूप में अपना उत्तर दें: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>।" कोई स्पष्टीकरण न लिखें।
+    """,
+    "prompt_culture2_hin_rq3" : """
+    निम्नलिखित सांस्कृतिक मूल्यों की परिभाषा पर विचार करें:
+    शक्ति दूरी (Power Distance) – जिस हद तक लोग समाज में असमान शक्ति वितरण को स्वीकार करते हैं और अपेक्षा करते हैं।
+    व्यक्तिवाद (Individualism) – जिस हद तक व्यक्ति व्यक्तिगत लक्ष्यों को समूह की निष्ठा से ऊपर प्राथमिकता देते हैं।
+    प्रेरणा (Motivation) – उपलब्धि और सफलता के लिए सांस्कृतिक प्राथमिकता (अक्सर होफस्टेड के मॉडल में 'पुरुषत्व' से जुड़ी होती है)।
+    अनिश्चितता से बचना (Uncertainty Avoidance) – जिस हद तक समाज अस्पष्टता और अनिश्चितता को सहन करता है।
+    दीर्घकालिक अभिविन्यास (Long-Term Orientation) – जिस हद तक एक संस्कृति धैर्य, भविष्य की योजना और अनुकूलनशीलता को महत्व देती है।
+    भोग (Indulgence) – जिस हद तक एक समाज इच्छाओं की तृप्ति और जीवन के आनंद की अनुमति देता है।
+    अब, इस परिदृश्य पर विचार करें: "[SCENARIO]"; और निम्नलिखित संभावित कार्रवाइयाँ: "[ACTIONS]"।
+    आपका कार्य एक ऐसे व्यक्ति की तरह सोचना है, जिसने [CULTURAL_VALUE_1] को सबसे अधिक महत्व दिया है, उसके बाद [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6]; जिसने निम्नलिखित कार्रवाई करने के लिए चुना है: "[SELECTED_ACTION]"। ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'] में से उस सबसे महत्वपूर्ण कारण की पहचान करें जिसने व्यक्ति के निर्णय को प्रभावित किया।
+    अपने उत्तर को निम्नलिखित प्रारूप का उपयोग करके सख्ती से दें: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". कोई स्पष्टीकरण न लिखें।
+    """,
+    "prompt_fs_hin_rq3" : """
+    निम्नलिखित उदाहरण परिदृश्यों, व्यक्ति A द्वारा चुने गए कार्य, और निर्णय लेने में सबसे महत्वपूर्ण कारक पर विचार करें।
+    परिदृश्य: "[EMO_SCENARIO]"; भावना से प्रभावित कार्य: "[EMO_GT]"
+    परिदृश्य: "[MOR_SCENARIO]"; नैतिकता से प्रभावित कार्य: "[MOR_GT]"
+    परिदृश्य: "[CUL_SCENARIO]"; संस्कृति से प्रभावित कार्य: "[CUL_GT]"
+    परिदृश्य: "[RES_SCENARIO]"; जिम्मेदारी से प्रभावित कार्य: "[RES_GT]"
+    परिदृश्य: "[REL_SCENARIO]"; रिश्तों से प्रभावित कार्य: "[REL_GT]"
+    परिदृश्य: "[LEG_SCENARIO]"; कानूनीता से प्रभावित कार्य: "[LEG_GT]"
+    परिदृश्य: "[POL_SCENARIO]"; शिष्टाचार से प्रभावित कार्य: "[POL_GT]"
+    परिदृश्य: "[SAC_SCENARIO]"; पवित्र मूल्यों से प्रभावित कार्य: "[SAC_GT]"
+
+    अब, निम्नलिखित परिदृश्य और व्यक्ति A द्वारा इस परिदृश्य के लिए किए गए कार्य को देखते हुए, आपका कार्य यह पहचानना है कि व्यक्ति के निर्णय लेने में सबसे महत्वपूर्ण कारक क्या था, निम्नलिखित में से ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']।
+    सख्ती से निम्नलिखित प्रारूप में अपना उत्तर दें: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>।" कोई स्पष्टीकरण न लिखें।
+    """,
+    "prompt_fs2_hin_rq3" : """
+    निम्नलिखित उदाहरण परिदृश्य, व्यक्ति A द्वारा चयनित क्रिया, और उस क्रिया को प्रभावित करने वाले सहयोगी कारक पर विचार करें।
+    परिदृश्य: "[FS_SCENARIO]"; चयनित क्रिया: "[FS_ACTION]"; क्रिया का प्रकार: "[FS_CONTRIBUTING_FACTOR]"
+
+    अब, दिए गए परिदृश्य और व्यक्ति A द्वारा परिदृश्य के लिए की गई क्रिया के आधार पर, आपका कार्य यह पहचानना है कि निम्नलिखित में से कौन सा कारक व्यक्ति के निर्णय लेने में सबसे महत्वपूर्ण भूमिका निभाता है ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']।
+    अपना उत्तर सख्ती से निम्नलिखित प्रारूप का उपयोग करके दें: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". कोई स्पष्टीकरण न लिखें।
+    """
+}

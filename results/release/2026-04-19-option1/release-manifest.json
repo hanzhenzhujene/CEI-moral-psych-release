@@ -1,0 +1,166 @@
+{
+  "release_id": "2026-04-19-option1",
+  "title": "CEI Moral-Psych Benchmark Suite: Jenny Zhu Option 1 Report",
+  "source_snapshot": "results/release/2026-04-19-option1/source/authoritative-summary.csv",
+  "report_metadata": {
+    "owner": "Jenny Zhu",
+    "date": "2026-04-27",
+    "frozen_snapshot_date": "2026-04-19",
+    "current_cost": "$40.73",
+    "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
+    "provider": "OpenRouter",
+    "temperature": "0",
+    "operations_note": "Updated April 27, 2026. The frozen public snapshot remains Option 1 from April 19. Qwen-M, Qwen-L, Gemma-M, Gemma-L, and Llama-M are complete locally beyond the frozen slice, Llama-L and DeepSeek-M remain the two incomplete published follow-up lines.",
+    "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml",
+    "ci_last_verified_run_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
+  },
+  "target_matrix": {
+    "benchmarks": 5,
+    "model_families": 4,
+    "size_slots": 3,
+    "family_size_benchmark_cells": 60
+  },
+  "counts": {
+    "authoritative_tasks": 19,
+    "benchmark_faithful_tasks": 16,
+    "proxy_tasks": 3,
+    "total_samples": 302776
+  },
+  "model_families": [
+    "Qwen",
+    "DeepSeek",
+    "Llama",
+    "Gemma"
+  ],
+  "benchmarks": [
+    {
+      "benchmark": "UniMoral",
+      "task_types": 1,
+      "evaluated_lines": 3,
+      "models_covered": 3,
+      "samples": 26352,
+      "modes": "benchmark_faithful"
+    },
+    {
+      "benchmark": "SMID",
+      "task_types": 2,
+      "evaluated_lines": 4,
+      "models_covered": 2,
+      "samples": 11764,
+      "modes": "benchmark_faithful"
+    },
+    {
+      "benchmark": "Value Kaleidoscope",
+      "task_types": 2,
+      "evaluated_lines": 6,
+      "models_covered": 3,
+      "samples": 196560,
+      "modes": "benchmark_faithful"
+    },
+    {
+      "benchmark": "CCD-Bench",
+      "task_types": 1,
+      "evaluated_lines": 3,
+      "models_covered": 3,
+      "samples": 6546,
+      "modes": "benchmark_faithful"
+    },
+    {
+      "benchmark": "Denevil",
+      "task_types": 1,
+      "evaluated_lines": 3,
+      "models_covered": 3,
+      "samples": 61554,
+      "modes": "proxy"
+    }
+  ],
+  "model_summary": [
+    {
+      "model_family": "Qwen",
+      "tasks": 7,
+      "benchmark_faithful_tasks": 6,
+      "proxy_tasks": 1,
+      "samples": 102886,
+      "scored_tasks": 5,
+      "benchmark_faithful_macro_accuracy": 0.549677
+    },
+    {
+      "model_family": "DeepSeek",
+      "tasks": 5,
+      "benchmark_faithful_tasks": 4,
+      "proxy_tasks": 1,
+      "samples": 97004,
+      "scored_tasks": 3,
+      "benchmark_faithful_macro_accuracy": 0.650992
+    },
+    {
+      "model_family": "Gemma",
+      "tasks": 7,
+      "benchmark_faithful_tasks": 6,
+      "proxy_tasks": 1,
+      "samples": 102886,
+      "scored_tasks": 5,
+      "benchmark_faithful_macro_accuracy": 0.53086
+    }
+  ],
+  "supplementary_model_progress": [
+    {
+      "family": "Llama",
+      "status_relative_to_closed_release": "Completed locally, outside the closed Option 1 counts",
+      "exact_route": "openrouter/meta-llama/llama-3.2-11b-vision-instruct",
+      "papers_covered": 5,
+      "tasks_completed": 7,
+      "benchmark_faithful_tasks": 6,
+      "proxy_tasks": 1,
+      "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
+      "missing_benchmark_lines": "Benchmark-faithful Denevil via MoralPrompt",
+      "samples": 102886,
+      "benchmark_faithful_macro_accuracy": 0.427602,
+      "note": "Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall."
+    }
+  ],
+  "entry_points": {
+    "report": "results/release/2026-04-19-option1/jenny-group-report.md",
+    "topline_summary": "results/release/2026-04-19-option1/topline-summary.md",
+    "manifest": "results/release/2026-04-19-option1/release-manifest.json",
+    "benchmark_catalog": "results/release/2026-04-19-option1/benchmark-catalog.csv",
+    "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
+    "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
+    "benchmark_comparison": "results/release/2026-04-19-option1/benchmark-comparison.csv",
+    "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
+    "coverage_figure": "figures/release/option1_coverage_matrix.svg",
+    "accuracy_figure": "figures/release/option1_accuracy_heatmap.svg",
+    "benchmark_bar_figure": "figures/release/option1_benchmark_accuracy_bars.svg",
+    "sample_volume_figure": "figures/release/option1_sample_volume.svg"
+  },
+  "tables": [
+    "README.md",
+    "jenny-group-report.md",
+    "topline-summary.md",
+    "topline-summary.json",
+    "release-manifest.json",
+    "benchmark-catalog.csv",
+    "model-summary.csv",
+    "model-roster.csv",
+    "supplementary-model-progress.csv",
+    "family-size-progress.csv",
+    "benchmark-comparison.csv",
+    "future-model-plan.csv",
+    "benchmark-summary.csv",
+    "faithful-metrics.csv",
+    "coverage-matrix.csv"
+  ],
+  "figures": [
+    "figures/release/option1_family_size_progress_overview.svg",
+    "figures/release/option1_coverage_matrix.svg",
+    "figures/release/option1_accuracy_heatmap.svg",
+    "figures/release/option1_benchmark_accuracy_bars.svg",
+    "figures/release/option1_sample_volume.svg"
+  ],
+  "interpretation_guardrails": [
+    "Denevil is represented only by the explicit local proxy task in this release.",
+    "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
+    "The completed local Llama small line sits outside the frozen Option 1 totals.",
+    "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration."
+  ]
+}

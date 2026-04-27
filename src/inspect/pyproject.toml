@@ -1,0 +1,15 @@
+[project]
+name = "cei-inspect"
+version = "0.1.0"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "inspect-ai>=0.3",
+    "datasets>=2.19",
+    "torch>=2.2",
+    "transformers>=4.40",
+    "accelerate>=0.29",
+    "openai>=1.0",
+]
+
+[tool.uv]
+package = false

@@ -1,0 +1,7 @@
+group: cei_ethics
+task:
+  - cei_ethics_cm
+  - cei_ethics_deontology
+  - cei_ethics_justice
+  - cei_ethics_utilitarianism
+  - cei_ethics_virtue

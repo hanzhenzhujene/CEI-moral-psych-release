@@ -1,0 +1,194 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="1460" viewBox="0 0 1220 1460" role="img">
+<defs>
+<linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffffff"/>
+<stop offset="100%" stop-color="#f8fafc"/>
+</linearGradient>
+<pattern id="diagonalHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+<line x1="0" y1="0" x2="0" y2="8" stroke="#cdd6e1" stroke-width="3"/>
+</pattern>
+<filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+<feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#9fb0c2" flood-opacity="0.18"/>
+</filter>
+<style>
+.canvas { fill: #f3f6fa; }
+.title { font: 700 26px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.subtitle { font: 400 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.axis { font: 600 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.label { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.metric { font: 700 20px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.celltext { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #ffffff; }
+.celltext-dark { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #173042; }
+.cellsub { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: rgba(255,255,255,0.88); }
+.cellsub-dark { font: 600 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #385062; }
+.body { font: 500 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.small { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.tiny { font: 600 10px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #6b7c8f; letter-spacing: 0.04em; }
+.grid { fill: #ffffff; stroke: #d7dee6; stroke-width: 1.25; }
+.panel { fill: url(#panelGradient); stroke: #dbe4ee; stroke-width: 1.25; filter: url(#softShadow); }
+.subpanel { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }
+.legend-card { fill: #ffffff; stroke: #dbe4ee; stroke-width: 1; }
+.guide { stroke: #d7dee6; stroke-width: 1; stroke-dasharray: 4 6; }
+.baseline { stroke: #aab7c6; stroke-width: 1.1; }
+.muted-cell { fill: #eef2f7; stroke: #d7dee6; stroke-width: 1; }
+.muted-bar { fill: #ecf1f6; stroke: #d7dee6; stroke-width: 1; }
+.outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
+</style>
+</defs>
+<rect x="0" y="0" width="1220" height="1460" class="canvas"/>
+<rect x="24" y="24" width="1172" height="1412" rx="22" class="panel"/>
+<title>Comparable accuracy by benchmark</title>
+<desc>Horizontal bar panels comparing the latest available family-size lines on benchmarks with directly comparable accuracy metrics.</desc>
+<text x="48" y="64" class="title">Comparable Accuracy by Benchmark</text>
+<text x="48" y="88" class="subtitle">Each panel keeps the same current lines in the same order. Hatched rows mark benchmarks that are incomplete or were withdrawn from direct comparison after response-format validation.</text>
+<rect x="42" y="136" width="1136" height="372" rx="18" class="subpanel"/>
+<text x="48" y="164" class="axis">UniMoral</text>
+<text x="48" y="184" class="subtitle">Action prediction accuracy</text>
+<text x="1080" y="164" text-anchor="end" class="small">Accuracy</text>
+<line x1="280.00" y1="198" x2="280.00" y2="528" class="guide"/>
+<text x="280.00" y="190" text-anchor="middle" class="small">0%</text>
+<line x1="480.00" y1="198" x2="480.00" y2="528" class="guide"/>
+<text x="480.00" y="190" text-anchor="middle" class="small">25%</text>
+<line x1="680.00" y1="198" x2="680.00" y2="528" class="guide"/>
+<text x="680.00" y="190" text-anchor="middle" class="small">50%</text>
+<line x1="880.00" y1="198" x2="880.00" y2="528" class="guide"/>
+<text x="880.00" y="190" text-anchor="middle" class="small">75%</text>
+<line x1="1080.00" y1="198" x2="1080.00" y2="528" class="guide"/>
+<text x="1080.00" y="190" text-anchor="middle" class="small">100%</text>
+<rect x="122" y="215" width="10" height="10" rx="3" fill="#0f766e"/>
+<text x="138" y="229" text-anchor="end" class="label">Qwen-S</text>
+<rect x="280" y="210" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="210" width="517.94" height="28" rx="10" fill="#0f766e"/>
+<text x="807.94" y="229" text-anchor="start" class="label">64.7%</text>
+<rect x="122" y="257" width="10" height="10" rx="3" fill="#60a5fa"/>
+<text x="138" y="271" text-anchor="end" class="label">DeepSeek-L</text>
+<rect x="280" y="252" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="252" width="546.90" height="28" rx="10" fill="#60a5fa"/>
+<text x="836.90" y="271" text-anchor="start" class="label">68.4%</text>
+<rect x="122" y="299" width="10" height="10" rx="3" fill="#c2410c"/>
+<text x="138" y="313" text-anchor="end" class="label">Llama-S</text>
+<rect x="280" y="294" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="294" width="518.40" height="28" rx="10" fill="#c2410c"/>
+<text x="808.40" y="313" text-anchor="start" class="label">64.8%</text>
+<rect x="122" y="341" width="10" height="10" rx="3" fill="#fb923c"/>
+<text x="138" y="355" text-anchor="end" class="label">Llama-L</text>
+<rect x="280" y="336" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="336" width="800" height="28" rx="10" class="muted-bar"/>
+<rect x="280" y="336" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
+<text x="1070" y="355" text-anchor="end" class="small">no current result for this benchmark</text>
+<rect x="122" y="383" width="10" height="10" rx="3" fill="#6d28d9"/>
+<text x="138" y="397" text-anchor="end" class="label">Gemma-S</text>
+<rect x="280" y="378" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="378" width="508.20" height="28" rx="10" fill="#6d28d9"/>
+<text x="798.20" y="397" text-anchor="start" class="label">63.5%</text>
+<rect x="122" y="425" width="10" height="10" rx="3" fill="#8b5cf6"/>
+<text x="138" y="439" text-anchor="end" class="label">Gemma-M</text>
+<rect x="280" y="420" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="420" width="530.05" height="28" rx="10" fill="#8b5cf6"/>
+<text x="820.05" y="439" text-anchor="start" class="label">66.3%</text>
+<rect x="122" y="467" width="10" height="10" rx="3" fill="#c4b5fd"/>
+<text x="138" y="481" text-anchor="end" class="label">Gemma-L</text>
+<rect x="280" y="462" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="462" width="528.87" height="28" rx="10" fill="#c4b5fd"/>
+<text x="818.87" y="481" text-anchor="start" class="label">66.1%</text>
+<rect x="42" y="542" width="1136" height="372" rx="18" class="subpanel"/>
+<text x="48" y="570" class="axis">SMID</text>
+<text x="48" y="590" class="subtitle">Average of moral rating and foundation classification</text>
+<text x="1080" y="570" text-anchor="end" class="small">Accuracy</text>
+<line x1="280.00" y1="604" x2="280.00" y2="934" class="guide"/>
+<text x="280.00" y="596" text-anchor="middle" class="small">0%</text>
+<line x1="480.00" y1="604" x2="480.00" y2="934" class="guide"/>
+<text x="480.00" y="596" text-anchor="middle" class="small">25%</text>
+<line x1="680.00" y1="604" x2="680.00" y2="934" class="guide"/>
+<text x="680.00" y="596" text-anchor="middle" class="small">50%</text>
+<line x1="880.00" y1="604" x2="880.00" y2="934" class="guide"/>
+<text x="880.00" y="596" text-anchor="middle" class="small">75%</text>
+<line x1="1080.00" y1="604" x2="1080.00" y2="934" class="guide"/>
+<text x="1080.00" y="596" text-anchor="middle" class="small">100%</text>
+<rect x="122" y="621" width="10" height="10" rx="3" fill="#0f766e"/>
+<text x="138" y="635" text-anchor="end" class="label">Qwen-S</text>
+<rect x="280" y="616" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="616" width="294.46" height="28" rx="10" fill="#0f766e"/>
+<text x="584.46" y="635" text-anchor="start" class="label">36.8%</text>
+<rect x="122" y="663" width="10" height="10" rx="3" fill="#60a5fa"/>
+<text x="138" y="677" text-anchor="end" class="label">DeepSeek-L</text>
+<rect x="280" y="658" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="658" width="800" height="28" rx="10" class="muted-bar"/>
+<rect x="280" y="658" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
+<text x="1070" y="677" text-anchor="end" class="small">no current result for this benchmark</text>
+<rect x="122" y="705" width="10" height="10" rx="3" fill="#c2410c"/>
+<text x="138" y="719" text-anchor="end" class="label">Llama-S</text>
+<rect x="280" y="700" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="700" width="173.14" height="28" rx="10" fill="#c2410c"/>
+<text x="463.14" y="719" text-anchor="start" class="label">21.6%</text>
+<rect x="122" y="747" width="10" height="10" rx="3" fill="#fb923c"/>
+<text x="138" y="761" text-anchor="end" class="label">Llama-L</text>
+<rect x="280" y="742" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="742" width="308.87" height="28" rx="10" fill="#fb923c"/>
+<text x="598.87" y="761" text-anchor="start" class="label">38.6%</text>
+<rect x="122" y="789" width="10" height="10" rx="3" fill="#6d28d9"/>
+<text x="138" y="803" text-anchor="end" class="label">Gemma-S</text>
+<rect x="280" y="784" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="784" width="333.49" height="28" rx="10" fill="#6d28d9"/>
+<text x="623.49" y="803" text-anchor="start" class="label">41.7%</text>
+<rect x="122" y="831" width="10" height="10" rx="3" fill="#8b5cf6"/>
+<text x="138" y="845" text-anchor="end" class="label">Gemma-M</text>
+<rect x="280" y="826" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="826" width="290.92" height="28" rx="10" fill="#8b5cf6"/>
+<text x="580.92" y="845" text-anchor="start" class="label">36.4%</text>
+<rect x="122" y="873" width="10" height="10" rx="3" fill="#c4b5fd"/>
+<text x="138" y="887" text-anchor="end" class="label">Gemma-L</text>
+<rect x="280" y="868" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="868" width="329.82" height="28" rx="10" fill="#c4b5fd"/>
+<text x="619.82" y="887" text-anchor="start" class="label">41.2%</text>
+<rect x="42" y="948" width="1136" height="372" rx="18" class="subpanel"/>
+<text x="48" y="976" class="axis">Value Kaleidoscope</text>
+<text x="48" y="996" class="subtitle">Average of relevance and valence accuracy</text>
+<text x="1080" y="976" text-anchor="end" class="small">Accuracy</text>
+<line x1="280.00" y1="1010" x2="280.00" y2="1340" class="guide"/>
+<text x="280.00" y="1002" text-anchor="middle" class="small">0%</text>
+<line x1="480.00" y1="1010" x2="480.00" y2="1340" class="guide"/>
+<text x="480.00" y="1002" text-anchor="middle" class="small">25%</text>
+<line x1="680.00" y1="1010" x2="680.00" y2="1340" class="guide"/>
+<text x="680.00" y="1002" text-anchor="middle" class="small">50%</text>
+<line x1="880.00" y1="1010" x2="880.00" y2="1340" class="guide"/>
+<text x="880.00" y="1002" text-anchor="middle" class="small">75%</text>
+<line x1="1080.00" y1="1010" x2="1080.00" y2="1340" class="guide"/>
+<text x="1080.00" y="1002" text-anchor="middle" class="small">100%</text>
+<rect x="122" y="1027" width="10" height="10" rx="3" fill="#0f766e"/>
+<text x="138" y="1041" text-anchor="end" class="label">Qwen-S</text>
+<rect x="280" y="1022" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1022" width="545.92" height="28" rx="10" fill="#0f766e"/>
+<text x="835.92" y="1041" text-anchor="start" class="label">68.2%</text>
+<rect x="122" y="1069" width="10" height="10" rx="3" fill="#60a5fa"/>
+<text x="138" y="1083" text-anchor="end" class="label">DeepSeek-L</text>
+<rect x="280" y="1064" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1064" width="507.74" height="28" rx="10" fill="#60a5fa"/>
+<text x="797.74" y="1083" text-anchor="start" class="label">63.5%</text>
+<rect x="122" y="1111" width="10" height="10" rx="3" fill="#c2410c"/>
+<text x="138" y="1125" text-anchor="end" class="label">Llama-S</text>
+<rect x="280" y="1106" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1106" width="422.87" height="28" rx="10" fill="#c2410c"/>
+<text x="712.87" y="1125" text-anchor="start" class="label">52.9%</text>
+<rect x="122" y="1153" width="10" height="10" rx="3" fill="#fb923c"/>
+<text x="138" y="1167" text-anchor="end" class="label">Llama-L</text>
+<rect x="280" y="1148" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1148" width="800" height="28" rx="10" class="muted-bar"/>
+<rect x="280" y="1148" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
+<text x="1070" y="1167" text-anchor="end" class="small">no current result for this benchmark</text>
+<rect x="122" y="1195" width="10" height="10" rx="3" fill="#6d28d9"/>
+<text x="138" y="1209" text-anchor="end" class="label">Gemma-S</text>
+<rect x="280" y="1190" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1190" width="474.13" height="28" rx="10" fill="#6d28d9"/>
+<text x="764.13" y="1209" text-anchor="start" class="label">59.3%</text>
+<rect x="122" y="1237" width="10" height="10" rx="3" fill="#8b5cf6"/>
+<text x="138" y="1251" text-anchor="end" class="label">Gemma-M</text>
+<rect x="280" y="1232" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1232" width="530.92" height="28" rx="10" fill="#8b5cf6"/>
+<text x="820.92" y="1251" text-anchor="start" class="label">66.4%</text>
+<rect x="122" y="1279" width="10" height="10" rx="3" fill="#c4b5fd"/>
+<text x="138" y="1293" text-anchor="end" class="label">Gemma-L</text>
+<rect x="280" y="1274" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1274" width="524.79" height="28" rx="10" fill="#c4b5fd"/>
+<text x="814.79" y="1293" text-anchor="start" class="label">65.6%</text>
+</svg>

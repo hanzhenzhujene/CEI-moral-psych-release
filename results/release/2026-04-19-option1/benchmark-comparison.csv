@@ -1,0 +1,8 @@
+line_label,family,size_slot,route,unimoral_action_accuracy,smid_average_accuracy,value_average_accuracy,coverage_note
+Qwen-S,Qwen,S,openrouter/qwen/qwen3-8b + openrouter/qwen/qwen3-vl-8b-instruct,0.647427,0.368072,0.682406,Frozen Option 1 line.
+DeepSeek-L,DeepSeek,L,openrouter/deepseek/deepseek-chat-v3.1,0.683629,,0.634673,Frozen large-class text line. No SMID vision route was included.
+Llama-S,Llama,S,openrouter/meta-llama/llama-3.2-11b-vision-instruct,0.647996,0.216423,0.528583,"Complete locally across all five papers, but still outside the frozen Option 1 snapshot counts. SMID splits to 0.099 moral rating / 0.334 foundation classification, so the low average is a real task result."
+Llama-L,Llama,L,vision: openrouter/meta-llama/llama-4-maverick,,0.386093,,"SMID is complete locally, and the latest text attempt later reached a 27.4% Denevil proxy checkpoint before stalling."
+Gemma-S,Gemma,S,openrouter/google/gemma-3-4b-it,0.635246,0.416865,0.592663,Frozen Option 1 recovery line.
+Gemma-M,Gemma,M,text: openrouter/google/gemma-3-12b-it; vision: openrouter/google/gemma-3-12b-it,0.662568,0.363652,0.663656,Complete local medium line with both text and SMID image results finished.
+Gemma-L,Gemma,L,text: openrouter/google/gemma-3-27b-it; vision: openrouter/google/gemma-3-27b-it,0.661088,0.412275,0.655987,Complete local large line with both text and SMID image results finished.
