@@ -217,9 +217,9 @@ FUTURE_MODEL_PLAN = [
         "closed_release_status": "Included in Option 1",
         "current_route": "deepseek-chat-v3.1",
         "small_candidate": "No distinct small DeepSeek route is currently exposed on OpenRouter; keep the S slot unassigned for now",
-        "medium_candidate": "openrouter/deepseek/deepseek-r1-distill-qwen-32b scheduled for the non-image expansion run",
+        "medium_candidate": "openrouter/deepseek/deepseek-r1-distill-llama-70b relaunched on a DeepInfra-pinned recovery path",
         "large_candidate": "openrouter/deepseek/deepseek-chat-v3.1 already complete in the closed release",
-        "next_step": "Run the queued medium DeepSeek line next; only add a separate small line if a distinct smaller provider route becomes available.",
+        "next_step": "Keep the relaunched medium DeepSeek line healthy on the current DeepInfra-backed route; only add a separate small line if a distinct smaller provider route becomes available.",
     },
     {
         "family": "Llama",
@@ -560,7 +560,7 @@ FAMILY_SIZE_PROGRESS = [
         "family": "DeepSeek",
         "size_slot": "M",
         "line_label": "DeepSeek-M",
-        "text_route": "openrouter/deepseek/deepseek-r1-distill-qwen-32b",
+        "text_route": "openrouter/deepseek/deepseek-r1-distill-llama-70b (DeepInfra-pinned recovery route)",
         "vision_route": "-",
         "unimoral": "queue",
         "smid": "-",
@@ -1955,9 +1955,16 @@ def _apply_live_monitor_snapshot() -> None:
     deepseek_current_status = "live"
     deepseek_local_checkpoint_status = "live"
     if deepseek_launched:
-        deepseek_current_note = "Downstream text run active; detailed checkpoints are summarized in Snapshot."
-        deepseek_progress_summary = "No vision route; launched after the Llama-M completion."
-        deepseek_current_coverage = "No vision route; downstream text run launched after the Llama-M completion"
+        deepseek_current_note = (
+            "Downstream text run is active again on the relaunched DeepInfra-backed distill route; "
+            "detailed checkpoints are summarized in Snapshot."
+        )
+        deepseek_progress_summary = (
+            "No vision route; downstream text run is active again on the relaunched DeepInfra-backed distill route."
+        )
+        deepseek_current_coverage = (
+            "No vision route; downstream text run is active again on the relaunched DeepInfra-backed distill route"
+        )
         if deepseek_unimoral is not None and deepseek_unimoral["status"] != "success":
             deepseek_stage_note = (
                 " DeepSeek-M already launched; the first UniMoral attempt ended with "

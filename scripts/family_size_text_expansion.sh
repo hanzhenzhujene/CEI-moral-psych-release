@@ -453,7 +453,10 @@ job_model() {
     llama_70b_medium) echo "openrouter/meta-llama/llama-3.3-70b-instruct" ;;
     llama_4_maverick_large) echo "openrouter/meta-llama/llama-4-maverick" ;;
     minimax_m2_5_medium) echo "openrouter/minimax/minimax-m2.5" ;;
-    deepseek_r1_qwen_32b_medium) echo "openrouter/deepseek/deepseek-r1-distill-qwen-32b" ;;
+    # The original 32B Qwen-distill route is currently single-homed on NextBit
+    # and repeatedly falls into provider-error backoff. Use the more stable
+    # 70B Llama-distill route for the medium DeepSeek line instead.
+    deepseek_r1_qwen_32b_medium) echo "openrouter/deepseek/deepseek-r1-distill-llama-70b" ;;
     minimax_m2_7_large) echo "openrouter/minimax/minimax-m2.7" ;;
     *)
       echo "Unknown job for model lookup: $job" >&2
@@ -520,6 +523,9 @@ job_model_args_json() {
   case "$job" in
     llama_4_maverick_large)
       echo '{"provider":{"ignore":["novita"],"allow_fallbacks":true}}'
+      ;;
+    deepseek_r1_qwen_32b_medium)
+      echo '{"provider":{"order":["deepinfra"],"allow_fallbacks":false}}'
       ;;
     *)
       echo ""

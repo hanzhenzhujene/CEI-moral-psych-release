@@ -23,7 +23,7 @@ This is the fastest way to read the deliverable: which lines already have usable
 | `Qwen-L` | Complete local line | Done | SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | SMID recovery complete; clean text rerun finished locally. |
 | `Llama-M` | Complete local line | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Completed locally on April 22, 2026. |
 | `Llama-L` | Live local rerun | Live | SMID complete; UniMoral done; the best saved Value Prism Relevance checkpoint still holds at a 99.3% persisted checkpoint while the rerun is active again. | SMID complete; best saved Value Prism Relevance checkpoint still stands at 99.3%, and the current text rerun is active again. |
-| `DeepSeek-M` | Live local rerun | Live | No vision route; downstream text run is active, but live retries are oscillating between small partial checkpoints and upstream 429 / provider-error backoff | Downstream text run is active, but the current provider path is intermittently hitting NextBit upstream rate limits and provider errors; detailed checkpoints are summarized in Snapshot. |
+| `DeepSeek-M` | Live local rerun | Live | No vision route; launched after the Llama-M completion; UniMoral logged a partial interrupted attempt | Downstream text run is active again on the relaunched DeepInfra-backed distill route; detailed checkpoints are summarized in Snapshot. |
 
 ### Latest Family-Size Progress Snapshot
 
@@ -75,7 +75,7 @@ _Topline comparable-accuracy chart. Benchmark-level accuracy comparison across t
 
 This compact block sits between the topline tables and the detailed progress matrix so the live state stays readable.
 
-- Active open-source reruns: `Llama-L` (SMID complete; best saved Value Prism Relevance checkpoint still stands at 99.3%, and the current text rerun is active again) and `DeepSeek-M` (Downstream text run is active, but the current provider path is intermittently hitting NextBit upstream rate limits and provider errors; detailed checkpoints are summarized in Snapshot).
+- Active open-source reruns: `Llama-L` (SMID complete; best saved Value Prism Relevance checkpoint still stands at 99.3%, and the current text rerun is active again) and `DeepSeek-M` (Downstream text run is active again on the relaunched DeepInfra-backed distill route; detailed checkpoints are summarized in Snapshot).
 - Stalled or queued follow-up work: no published partial line is waiting right now.
 - Complete local lines beyond the frozen `Option 1` slice: `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, and `Llama-M`.
 - Release guardrails: Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables.
@@ -90,7 +90,7 @@ This is the quick lookup table for each family-size slot: the exact route name, 
 | `Qwen` | `M (Medium)` | `openrouter/qwen/qwen3-14b` | `14B` | `TBD` | `TBD` | Text benchmarks only |
 | `Qwen` | `L (Large)` | `openrouter/qwen/qwen3-32b` | `32B` | `openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete)` | `72B` | Text benchmarks + SMID |
 | `DeepSeek` | `S (Small)` | `No distinct small OpenRouter route exposed` | `n/a` | `-` | `-` | Text benchmarks only |
-| `DeepSeek` | `M (Medium)` | `openrouter/deepseek/deepseek-r1-distill-qwen-32b` | `32B` | `-` | `-` | Text benchmarks only |
+| `DeepSeek` | `M (Medium)` | `openrouter/deepseek/deepseek-r1-distill-llama-70b (DeepInfra-pinned recovery route)` | `70B` | `-` | `-` | Text benchmarks only |
 | `DeepSeek` | `L (Large)` | `openrouter/deepseek/deepseek-chat-v3.1` | `Undisclosed` | `-` | `-` | Text benchmarks only |
 | `Llama` | `S (Small)` | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | `11B` | `same as text route` | `11B` | Text benchmarks + SMID |
 | `Llama` | `M (Medium)` | `openrouter/meta-llama/llama-3.3-70b-instruct` | `70B` | `-` | `-` | Text benchmarks only |
@@ -113,7 +113,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `Qwen-M text batch` | Done | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
 | `Qwen-L text batch` | Done | SMID recovery complete; clean text rerun finished locally. |
 | `Llama-M text batch` | Done | Completed April 22 with a full medium text line. |
-| `DeepSeek-M text batch` | Live | Downstream text run is active, but the current provider path is intermittently hitting NextBit upstream rate limits and provider errors; detailed checkpoints are summarized in Snapshot. |
+| `DeepSeek-M text batch` | Live | Downstream text run is active again on the relaunched DeepInfra-backed distill route; detailed checkpoints are summarized in Snapshot. |
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
 | `Next queued text lines` | Queue | Keep the current published reruns healthy while `DeepSeek-M` remains the next visible follow-up. |
 
@@ -157,7 +157,7 @@ This is the cleanest public-facing summary of the current published matrix.
 | `Qwen-M` | Done | TBD | Done | Done | Proxy | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
 | `Qwen-L` | Done | Done | Done | Done | Proxy | SMID recovery complete; clean text rerun finished locally. |
 | `DeepSeek-S` | TBD | - | TBD | TBD | TBD | No distinct small DeepSeek route is fixed yet. |
-| `DeepSeek-M` | Partial | - | Live | Live | Queue | No vision route; downstream text run is active, but the current provider path is intermittently hitting NextBit upstream rate limits and provider errors. |
+| `DeepSeek-M` | Partial | - | Live | Live | Queue | No vision route; launched after the Llama-M completion. The first UniMoral attempt was interrupted. |
 | `DeepSeek-L` | Done | - | Done | Done | Proxy | Frozen large text line; no SMID route was included. |
 | `Llama-S` | Done | Done | Done | Done | Proxy | Complete locally across all five papers. |
 | `Llama-M` | Done | - | Done | Done | Proxy | No SMID route; medium text line completed locally on April 22, 2026. |

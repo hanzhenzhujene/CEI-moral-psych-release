@@ -226,6 +226,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         "No vision route; queued behind the live Llama-M rerun.",
         "No vision route; downstream attempt is currently blocked because OpenRouter credits are exhausted.",
         "No vision route; downstream text run is active, but the current provider path is intermittently hitting NextBit upstream rate limits and provider errors.",
+        "No vision route; launched after the Llama-M completion. The first UniMoral attempt was interrupted.",
+        "Downstream text run is active again on the relaunched DeepInfra-backed distill route; detailed checkpoints are summarized in Snapshot.",
     }
 
     with (release_dir / "benchmark-comparison.csv").open(newline="", encoding="utf-8") as handle:
