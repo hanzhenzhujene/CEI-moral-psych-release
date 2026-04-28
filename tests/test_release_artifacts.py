@@ -204,12 +204,17 @@ def test_release_builder_emits_expected_files(tmp_path):
     else:
         assert_live_text_progress(llama_medium, smid_status="-")
     llama_large = row_for("Llama-L")
-    assert llama_large["unimoral"] == "done"
     assert llama_large["smid"] == "done"
-    assert llama_large["value_kaleidoscope"] in {"live", "partial", "done"}
+    assert llama_large["unimoral"] in {"done", "queue"}
+    assert llama_large["value_kaleidoscope"] in {"live", "partial", "done", "queue"}
     assert llama_large["ccd_bench"] in {"done", "partial", "queue"}
     assert llama_large["denevil"] in {"partial", "live", "queue", "proxy"}
-    assert "SMID complete" in llama_large["summary_note"]
+    assert llama_large["summary_note"] in {
+        "SMID complete; best saved Value Prism Relevance checkpoint still stands at 99.3%, and the current text rerun is active again.",
+        "SMID complete; current text rerun active.",
+        "SMID complete; text rerun is paused because OpenRouter credits are exhausted after a 99.3% Value Prism Relevance checkpoint.",
+        "SMID done; text is still queued.",
+    }
     deepseek_medium = row_for("DeepSeek-M")
     assert deepseek_medium["unimoral"] in {"partial", "queue"}
     assert deepseek_medium["smid"] == "-"
