@@ -22,8 +22,8 @@ This is the fastest way to read the deliverable: which lines already have usable
 | `Qwen-M` | Complete local line | Done | Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
 | `Qwen-L` | Complete local line | Done | SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | SMID recovery complete; clean text rerun finished locally. |
 | `Llama-M` | Complete local line | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Completed locally on April 22, 2026. |
-| `Llama-L` | Attempted local line | Partial | SMID complete; UniMoral done; Value Prism Relevance preserved a 99.3% checkpoint before the run stalled. | SMID complete; text rerun is paused because OpenRouter credits are exhausted after a 99.3% Value Prism Relevance checkpoint. |
-| `DeepSeek-M` | Attempted local line | Partial | No vision route; downstream attempt preserved earlier partial checkpoints, but the latest retry stopped immediately on OpenRouter credit exhaustion | Downstream attempt is currently blocked because OpenRouter credits are exhausted. |
+| `Llama-L` | Live local rerun | Live | SMID complete; UniMoral done; the best saved Value Prism Relevance checkpoint still holds at a 99.3% persisted checkpoint while the rerun is active again. | SMID complete; best saved Value Prism Relevance checkpoint still stands at 99.3%, and the current text rerun is active again. |
+| `DeepSeek-M` | Live local rerun | Live | No vision route; downstream text run is active, but live retries are oscillating between small partial checkpoints and upstream 429 / provider-error backoff | Downstream text run is active, but the current provider path is intermittently hitting NextBit upstream rate limits and provider errors; detailed checkpoints are summarized in Snapshot. |
 
 ### Latest Family-Size Progress Snapshot
 
@@ -42,7 +42,7 @@ Only benchmarks with directly comparable accuracy metrics are shown here. `CCD-B
 | `Qwen-S` | 0.647 | 0.368 | 0.682 | Frozen Option 1 line. |
 | `DeepSeek-L` | 0.684 | n/a | 0.635 | Frozen large-class text line. No SMID vision route was included. |
 | `Llama-S` | 0.648 | 0.216 | 0.529 | Complete locally across all five papers, but still outside the frozen Option 1 snapshot counts. SMID splits to 0.099 moral rating / 0.334 foundation classification, so the low average is a real task result. |
-| `Llama-L` | n/a | 0.386 | n/a | SMID is complete locally, and the latest text attempt later reached a 27.4% Denevil proxy checkpoint before stalling. |
+| `Llama-L` | n/a | 0.386 | n/a | SMID is complete locally, the best saved Value Prism Relevance checkpoint still stands at 99.3%, and the restarted text rerun is active again. |
 | `Gemma-S` | 0.635 | 0.417 | 0.593 | Frozen Option 1 recovery line. |
 | `Gemma-M` | 0.663 | 0.364 | 0.664 | Complete local medium line with both text and SMID image results finished. |
 | `Gemma-L` | 0.661 | 0.412 | 0.656 | Complete local large line with both text and SMID image results finished. |
@@ -56,7 +56,7 @@ _Topline comparable-accuracy chart. Benchmark-level accuracy comparison across t
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `April 27, 2026` |
+| Repo update date | `April 28, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
 | Current cost to date | `$40.73` |
 | Intended use | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
@@ -66,8 +66,8 @@ _Topline comparable-accuracy chart. Benchmark-level accuracy comparison across t
 | Frozen families already in Option 1 | `Qwen`, `DeepSeek`, `Gemma` |
 | Extra completed local line outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `5` papers / `7` tasks |
 | Provider / temperature | `OpenRouter`, `temperature=0` |
-| Current live reruns | No currently published line is still running locally. |
-| Next restart focus | Add OpenRouter credits, then relaunch `Llama-L`. |
+| Current live reruns | `Llama-L` and `DeepSeek-M` |
+| Next restart focus | Keep the active published reruns healthy. |
 | Release guardrail | Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables. |
 | CI reference | [Workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); last verified successful run: [run 24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
 
@@ -75,8 +75,8 @@ _Topline comparable-accuracy chart. Benchmark-level accuracy comparison across t
 
 This compact block sits between the topline tables and the detailed progress matrix so the live state stays readable.
 
-- Active open-source reruns: none are currently shown in the published matrix.
-- Stalled or queued follow-up work: `Llama-L` (SMID complete; text rerun is paused because OpenRouter credits are exhausted after a 99.3% Value Prism Relevance checkpoint) and `DeepSeek-M` (Downstream attempt is currently blocked because OpenRouter credits are exhausted).
+- Active open-source reruns: `Llama-L` (SMID complete; best saved Value Prism Relevance checkpoint still stands at 99.3%, and the current text rerun is active again) and `DeepSeek-M` (Downstream text run is active, but the current provider path is intermittently hitting NextBit upstream rate limits and provider errors; detailed checkpoints are summarized in Snapshot).
+- Stalled or queued follow-up work: no published partial line is waiting right now.
 - Complete local lines beyond the frozen `Option 1` slice: `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, and `Llama-M`.
 - Release guardrails: Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables.
 
@@ -113,9 +113,9 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `Qwen-M text batch` | Done | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
 | `Qwen-L text batch` | Done | SMID recovery complete; clean text rerun finished locally. |
 | `Llama-M text batch` | Done | Completed April 22 with a full medium text line. |
-| `DeepSeek-M text batch` | Partial | Downstream attempt is currently blocked because OpenRouter credits are exhausted. |
+| `DeepSeek-M text batch` | Live | Downstream text run is active, but the current provider path is intermittently hitting NextBit upstream rate limits and provider errors; detailed checkpoints are summarized in Snapshot. |
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
-| `Next queued text lines` | Queue | `Llama-L` remains the next visible follow-up. |
+| `Next queued text lines` | Queue | Keep the current published reruns healthy while `DeepSeek-M` remains the next visible follow-up. |
 
 ## Start Here
 
@@ -157,11 +157,11 @@ This is the cleanest public-facing summary of the current published matrix.
 | `Qwen-M` | Done | TBD | Done | Done | Proxy | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
 | `Qwen-L` | Done | Done | Done | Done | Proxy | SMID recovery complete; clean text rerun finished locally. |
 | `DeepSeek-S` | TBD | - | TBD | TBD | TBD | No distinct small DeepSeek route is fixed yet. |
-| `DeepSeek-M` | Partial | - | Partial | Partial | Partial | No vision route; downstream attempt is currently blocked because OpenRouter credits are exhausted. |
+| `DeepSeek-M` | Partial | - | Live | Live | Queue | No vision route; downstream text run is active, but the current provider path is intermittently hitting NextBit upstream rate limits and provider errors. |
 | `DeepSeek-L` | Done | - | Done | Done | Proxy | Frozen large text line; no SMID route was included. |
 | `Llama-S` | Done | Done | Done | Done | Proxy | Complete locally across all five papers. |
 | `Llama-M` | Done | - | Done | Done | Proxy | No SMID route; medium text line completed locally on April 22, 2026. |
-| `Llama-L` | Done | Done | Partial | Done | Partial | SMID complete; text rerun is paused because OpenRouter credits are exhausted after a 99.3% Value Prism Relevance checkpoint. |
+| `Llama-L` | Done | Done | Live | Done | Partial | SMID complete; best saved Value Prism Relevance checkpoint still stands at 99.3%, and the current text rerun is active again. |
 | `Gemma-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 recovery line. |
 | `Gemma-M` | Done | Done | Done | Done | Proxy | Complete local line across all five papers. |
 | `Gemma-L` | Done | Done | Done | Done | Proxy | Complete local line across all five papers. |

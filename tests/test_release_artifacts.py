@@ -213,13 +213,14 @@ def test_release_builder_emits_expected_files(tmp_path):
     deepseek_medium = row_for("DeepSeek-M")
     assert deepseek_medium["unimoral"] in {"partial", "queue"}
     assert deepseek_medium["smid"] == "-"
-    assert deepseek_medium["value_kaleidoscope"] in {"partial", "queue"}
-    assert deepseek_medium["ccd_bench"] in {"queue", "partial"}
-    assert deepseek_medium["denevil"] in {"queue", "partial"}
+    assert deepseek_medium["value_kaleidoscope"] in {"live", "partial", "queue"}
+    assert deepseek_medium["ccd_bench"] in {"queue", "partial", "live"}
+    assert deepseek_medium["denevil"] in {"queue", "partial", "live"}
     assert deepseek_medium["summary_note"] in {
         "No vision route; downstream attempt is currently stalled after partial text checkpoints.",
         "No vision route; queued behind the live Llama-M rerun.",
         "No vision route; downstream attempt is currently blocked because OpenRouter credits are exhausted.",
+        "No vision route; downstream text run is active, but the current provider path is intermittently hitting NextBit upstream rate limits and provider errors.",
     }
 
     with (release_dir / "benchmark-comparison.csv").open(newline="", encoding="utf-8") as handle:

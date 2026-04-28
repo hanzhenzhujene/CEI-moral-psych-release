@@ -962,6 +962,35 @@ def _latest_trace_retry_seconds(trace_dir: Path) -> int | None:
     return None
 
 
+def _latest_trace_contains_any(trace_dir: Path, needles: Iterable[str], max_lines: int = 120) -> bool:
+    haystack = "".join(_latest_trace_tail(trace_dir, max_lines=max_lines)).lower()
+    if not haystack:
+        return False
+    return any(needle.lower() in haystack for needle in needles)
+
+
+def _latest_trace_has_upstream_rate_limit(trace_dir: Path) -> bool:
+    return _latest_trace_contains_any(
+        trace_dir,
+        (
+            "temporarily rate-limited upstream",
+            "429 too many requests",
+            '"code": 429',
+        ),
+    )
+
+
+def _latest_trace_has_provider_error(trace_dir: Path) -> bool:
+    return _latest_trace_contains_any(
+        trace_dir,
+        (
+            "provider returned error",
+            "error 524",
+            "server_error",
+        ),
+    )
+
+
 def _format_backoff_duration(seconds: int) -> str:
     minutes, remainder = divmod(seconds, 60)
     if remainder == 0 and minutes:
@@ -1353,6 +1382,8 @@ def _apply_live_monitor_snapshot() -> None:
         DEEPSEEK_MEDIUM_EVAL_DIR,
         task_name="denevil_fulcra_proxy_generation",
     )
+    deepseek_upstream_rate_limited = _latest_trace_has_upstream_rate_limit(DEEPSEEK_MEDIUM_TRACE_DIR)
+    deepseek_provider_erroring = _latest_trace_has_provider_error(DEEPSEEK_MEDIUM_TRACE_DIR)
     deepseek_live_rerun = (
         _live_worker_pid(
             deepseek_job_dir / "worker.pid",
@@ -1956,7 +1987,36 @@ def _apply_live_monitor_snapshot() -> None:
                     f"{deepseek_stage_note} DeepSeek-M has already moved into Value Prism Relevance, but no persisted "
                     "sample checkpoint is on disk there yet."
                 ).strip()
-        if deepseek_job_failed:
+        if deepseek_live_rerun and (deepseek_upstream_rate_limited or deepseek_provider_erroring):
+            deepseek_current_scope = "Live local rerun"
+            deepseek_current_status = "live"
+            deepseek_local_checkpoint_status = "live"
+            deepseek_current_note = (
+                "Downstream text run is active, but the current provider path is intermittently hitting NextBit "
+                "upstream rate limits and provider errors; detailed checkpoints are summarized in Snapshot."
+            )
+            deepseek_progress_summary = (
+                "No vision route; downstream text run is active, but the current provider path is intermittently "
+                "hitting NextBit upstream rate limits and provider errors."
+            )
+            deepseek_current_coverage = (
+                "No vision route; downstream text run is active, but live retries are oscillating between small "
+                "partial checkpoints and upstream 429 / provider-error backoff"
+            )
+            if deepseek_value_relevance is not None and deepseek_value_relevance["completed"] > 0:
+                deepseek_stage_note = (
+                    f"DeepSeek-M has already preserved {_checkpoint_task_phrase(deepseek_unimoral)} and "
+                    f"{_checkpoint_task_phrase(deepseek_value_relevance)} earlier. The current live retry is still "
+                    "running, but the latest trace tail shows NextBit upstream rate limits and provider-returned "
+                    "errors rather than a clean uninterrupted pass."
+                )
+            else:
+                deepseek_stage_note = (
+                    "DeepSeek-M has preserved only small partial checkpoints so far. The current live retry is still "
+                    "running, but the latest trace tail shows NextBit upstream rate limits and provider-returned "
+                    "errors rather than a clean uninterrupted pass."
+                )
+        elif deepseek_job_failed:
             deepseek_current_scope = "Attempted local line"
             deepseek_current_status = "partial"
             deepseek_local_checkpoint_status = "partial"
@@ -2409,8 +2469,8 @@ def _apply_live_monitor_snapshot() -> None:
         llama_large_progress["denevil"] = "proxy" if llama_large_denevil["status"] == "success" else "partial"
     if llama_large_active_rerun and llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
         llama_large_progress["summary_note"] = (
-            "SMID complete; current text rerun active with a "
-            f"{llama_large_value_relevance['progress_pct']:.1f}% Value Prism Relevance checkpoint."
+            "SMID complete; best saved Value Prism Relevance checkpoint still stands at "
+            f"{llama_large_value_relevance['progress_pct']:.1f}%, and the current text rerun is active again."
         )
     elif llama_large_active_rerun:
         llama_large_progress["summary_note"] = "SMID complete; current text rerun active."
@@ -2524,12 +2584,12 @@ def _apply_live_monitor_snapshot() -> None:
         llama_large_coverage = "SMID complete; UniMoral done; text rerun active."
     if llama_large_active_rerun and llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
         llama_large_note = (
-            "SMID complete; current text rerun active with a "
-            f"{llama_large_value_relevance['progress_pct']:.1f}% Value Prism Relevance checkpoint."
+            "SMID complete; best saved Value Prism Relevance checkpoint still stands at "
+            f"{llama_large_value_relevance['progress_pct']:.1f}%, and the current text rerun is active again."
         )
         llama_large_coverage = (
-            "SMID complete; UniMoral done; Value Prism Relevance holds a "
-            f"{llama_large_value_relevance['progress_pct']:.1f}% persisted checkpoint."
+            "SMID complete; UniMoral done; the best saved Value Prism Relevance checkpoint still holds at a "
+            f"{llama_large_value_relevance['progress_pct']:.1f}% persisted checkpoint while the rerun is active again."
         )
     elif llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
         if llama_large_credit_exhausted:
@@ -2607,8 +2667,8 @@ def _apply_live_monitor_snapshot() -> None:
             continue
         if llama_large_active_rerun and llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
             comparison_row["coverage_note"] = (
-                "SMID is complete locally, and the restarted text rerun now holds a "
-                f"{llama_large_value_relevance['progress_pct']:.1f}% Value Prism Relevance checkpoint."
+                "SMID is complete locally, the best saved Value Prism Relevance checkpoint still stands at "
+                f"{llama_large_value_relevance['progress_pct']:.1f}%, and the restarted text rerun is active again."
             )
         elif llama_large_active_rerun:
             comparison_row["coverage_note"] = (
