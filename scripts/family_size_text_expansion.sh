@@ -471,6 +471,12 @@ job_max_connections() {
     qwen_32b_large)
       echo "${QWEN_32B_LARGE_MAX_CONNECTIONS:-2}"
       ;;
+    llama_4_maverick_large)
+      echo "${LLAMA_4_MAVERICK_LARGE_MAX_CONNECTIONS:-8}"
+      ;;
+    deepseek_r1_qwen_32b_medium)
+      echo "${DEEPSEEK_R1_QWEN_32B_MEDIUM_MAX_CONNECTIONS:-16}"
+      ;;
     gemma_27b_large|gemma_12b_medium|qwen_14b_medium|llama_70b_medium)
       echo 2
       ;;
