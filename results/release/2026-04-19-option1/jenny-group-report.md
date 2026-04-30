@@ -119,7 +119,7 @@ _Figure 4. Size-slot trajectories for the currently comparable rows. Missing poi
 | Report owner | `Jenny Zhu` |
 | Repo update date | `April 30, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
-| Current project cost estimate | `$70.00` |
+| Current project cost estimate | `$84.02` |
 | Cost scope | User-updated project total across the frozen release work and the later tracked reruns completed in this repo. |
 | Purpose | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
 | Current public matrix | `5 benchmarks x 4 model families x 3 size slots = 60 family-size-benchmark cells` |

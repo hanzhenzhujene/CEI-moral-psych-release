@@ -78,7 +78,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_cost_estimate"] == "$70.00"
+    assert manifest["report_metadata"]["current_cost_estimate"] == "$84.02"
     assert "later tracked reruns completed in this repo" in manifest["report_metadata"]["current_cost_scope"]
     assert manifest["report_metadata"]["ci_workflow_url"].endswith("/actions/workflows/ci.yml")
     assert manifest["target_matrix"]["family_size_benchmark_cells"] == 60

@@ -34,7 +34,7 @@ SNAPSHOT_DATE_ISO = "2026-04-19"
 REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan."
 REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
-REPORT_CURRENT_COST_ESTIMATE = "$70.00"
+REPORT_CURRENT_COST_ESTIMATE = "$84.02"
 REPORT_CURRENT_COST_SCOPE = (
     "User-updated project total across the frozen release work and the later tracked reruns completed in this repo."
 )
