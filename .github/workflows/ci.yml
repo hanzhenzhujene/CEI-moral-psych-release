@@ -24,11 +24,5 @@ jobs:
       - name: Set up uv
         uses: astral-sh/setup-uv@v5
 
-      - name: Install dependencies
-        run: make setup
-
-      - name: Run tests
-        run: make test
-
-      - name: Rebuild public release package
-        run: make release
+      - name: Public QA bootstrap
+        run: make bootstrap

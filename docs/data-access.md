@@ -29,8 +29,13 @@ Use `scripts/check_denevil_dataset.py` before launching a formal run if the sche
 cp .env.example .env
 ```
 
-Populate only the paths needed for the benchmarks you want to run. Missing data
-paths should block only the corresponding task, not the whole repository.
+Populate only the paths needed for the benchmarks you want to run. This file is
+for live benchmark tasks such as `make smoke` or the historical launchers under
+`scripts/`; it is not required for public release regeneration via `make
+bootstrap` or `make release`.
+
+Missing data paths should block only the corresponding task, not the whole
+repository.
 
 ## Release Interpretation
 

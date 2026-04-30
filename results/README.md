@@ -33,6 +33,5 @@ Large local artifacts are intentionally treated as ephemeral:
 - `results/inspect/logs/`
 - `results/inspect/full-runs/`
 - `results/inspect/smoke-batch/`
-- `results/cache/`
 
 Those directories are useful for local monitoring and debugging, but they are not the primary public deliverable for this repo.

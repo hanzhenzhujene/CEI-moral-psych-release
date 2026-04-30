@@ -1,4 +1,4 @@
-.PHONY: help setup ensure-runner test release refresh-authoritative smoke audit clean-release
+.PHONY: help bootstrap setup ensure-runner test release refresh-authoritative smoke audit clean-release
 
 RELEASE_DIR := results/release/2026-04-19-option1
 RELEASE_SOURCE := $(RELEASE_DIR)/source/authoritative-summary.csv
@@ -20,6 +20,7 @@ endif
 
 help:
 	@echo "Available targets:"
+	@echo "  make bootstrap     Public QA: install deps when uv is available, then run tests and rebuild the release package"
 	@echo "  make setup         Install the pinned uv environment (requires uv)"
 	@echo "  make test          Run the test suite (runner: $(RUNNER_NOTE))"
 	@echo "  make release       Build public release artifacts from the tracked source snapshot (runner: $(RUNNER_NOTE))"
@@ -27,6 +28,17 @@ help:
 	@echo "  make smoke         Run a 2-sample UniMoral smoke test (runner: $(RUNNER_NOTE))"
 	@echo "  make audit         Run the public QA gate (tests + release rebuild)"
 	@echo "  make clean-release Remove generated release tables and figures"
+
+bootstrap:
+	@if command -v $(UV) >/dev/null 2>&1; then \
+		$(MAKE) setup UV=$(UV) VENV_PYTHON=$(VENV_PYTHON); \
+	elif [ -x "$(VENV_PYTHON)" ]; then \
+		echo "uv not found; reusing $(VENV_PYTHON) for bootstrap."; \
+	else \
+		echo "Could not resolve either '$(UV)' on PATH or executable '$(VENV_PYTHON)'. Install uv, run 'make setup', or pass VENV_PYTHON=/absolute/path/to/python." >&2; \
+		exit 1; \
+	fi
+	$(MAKE) audit UV=$(UV) VENV_PYTHON=$(VENV_PYTHON)
 
 setup:
 	@if ! command -v $(UV) >/dev/null 2>&1; then \

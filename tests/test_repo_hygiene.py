@@ -53,3 +53,15 @@ def test_public_files_do_not_embed_workstation_specific_paths():
 def test_gitignore_covers_env_local():
     content = (ROOT / ".gitignore").read_text(encoding="utf-8")
     assert ".env.local" in content
+
+
+def test_env_example_exists_and_documents_core_inputs():
+    env_example = ROOT / ".env.example"
+    assert env_example.exists()
+    content = env_example.read_text(encoding="utf-8")
+    assert "OPENROUTER_API_KEY=" in content
+    assert "UNIMORAL_DATA_DIR=" in content
+    assert "SMID_DATA_DIR=" in content
+    assert "VALUEPRISM_RELEVANCE_FILE=" in content
+    assert "CCD_BENCH_DATA_FILE=" in content
+    assert "DENEVIL_DATA_FILE=" in content

@@ -5,6 +5,22 @@ This document describes both:
 1. how to recreate the **public release artifacts**, and
 2. how to run a small **benchmark smoke test** with the harness.
 
+## Public QA First
+
+For a clean-checkout verification of the public deliverable, run:
+
+```bash
+make bootstrap
+```
+
+This is the shortest trustworthy path for reviewers and collaborators. It:
+
+- installs the pinned environment from `uv.lock`
+- runs the full test suite
+- rebuilds the tracked release package from the committed authoritative snapshot
+
+It does **not** require API keys or local benchmark datasets.
+
 ## Environment
 
 The canonical environment is the checked-in `uv.lock` file.
@@ -13,13 +29,18 @@ The canonical environment is the checked-in `uv.lock` file.
 
 ```bash
 make setup
-cp .env.example .env
 ```
 
 If `uv` is installed outside your shell `PATH`, use `make UV=/absolute/path/to/uv <target>`.
 If `uv` is not on `PATH` but the checked-in `.venv` already exists, `make test`, `make release`, `make refresh-authoritative`, `make smoke`, and `make audit` will fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If the fallback interpreter lives somewhere else, pass `VENV_PYTHON=/absolute/path/to/python`. If neither runner is available, the Makefile now stops immediately with a clear setup error instead of a raw shell failure.
 
-Fill in `.env` with:
+If you want to run a live benchmark task rather than just regenerate the public release, create `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Fill in only the values you need, such as:
 
 - model API keys such as `OPENROUTER_API_KEY`
 - local dataset paths such as `UNIMORAL_DATA_DIR` and `SMID_DATA_DIR`
@@ -78,6 +99,9 @@ Release tables:
 
 Figures:
 
+- `figures/release/option1_family_size_progress_overview.svg`
+- `figures/release/option1_benchmark_difficulty_profile.svg`
+- `figures/release/option1_family_scaling_profile.svg`
 - `figures/release/option1_coverage_matrix.svg`
 - `figures/release/option1_accuracy_heatmap.svg`
 - `figures/release/option1_benchmark_accuracy_bars.svg`
@@ -97,6 +121,8 @@ This step depends on local raw files under `results/inspect/full-runs/` and is t
 ## Run a Minimal Harness Smoke Test
 
 ```bash
+make setup
+cp .env.example .env
 make smoke
 ```
 

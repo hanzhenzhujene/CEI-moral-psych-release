@@ -8,7 +8,6 @@ three layers differently.
 
 ```bash
 make setup
-cp .env.example .env
 ```
 
 If `uv` is installed outside your shell `PATH`, use:
@@ -23,16 +22,30 @@ fall back to `.venv/bin/python` automatically. `make setup` still requires
 `uv`. If the fallback interpreter lives elsewhere, pass
 `VENV_PYTHON=/absolute/path/to/python`.
 
+For the public release surface, the preferred clean-checkout check is:
+
+```bash
+make bootstrap
+```
+
+That one command installs the pinned environment, runs the tests, and rebuilds
+the curated release package. Create `.env` only if you plan to run live
+benchmark tasks:
+
+```bash
+cp .env.example .env
+```
+
 ## Before Opening a PR
 
 Run:
 
 ```bash
-make audit
+make bootstrap
 ```
 
-That is equivalent to running `make test` followed by `make release`, and it is
-the fastest public QA gate to use before a PR.
+That is the fastest public QA gate to use before a PR. It is equivalent to
+running `make setup` followed by `make audit`.
 
 Use `make refresh-authoritative` only if you have the original local raw
 `results/inspect/full-runs/` directories and intend to update the tracked
