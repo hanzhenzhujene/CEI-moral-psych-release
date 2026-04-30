@@ -121,6 +121,9 @@ BENCHMARK_METADATA = {
         ],
         "current_release_scope": "Action prediction only",
         "dataset_note": "This repo still expects a local export path via UNIMORAL_DATA_DIR.",
+        "paper_focus": "A unified multilingual moral-reasoning resource spanning action choice, typology, factor attribution, and consequence generation under culturally varied dilemmas.",
+        "repo_readout": "The public release currently scores action prediction only: given a dilemma and two candidate actions, select the crowd-endorsed action.",
+        "release_interpretation": "A high UniMoral score means the model tracks consensus action choices across multilingual moral dilemmas. It does not by itself show equal strength on moral typology, factor attribution, or consequence generation.",
     },
     "SMID": {
         "paper_title": "The Socio-Moral Image Database (SMID): A Novel Stimulus Set for the Study of Social, Moral, and Affective Processes",
@@ -135,11 +138,14 @@ BENCHMARK_METADATA = {
         ],
         "current_release_scope": "Moral rating + foundation classification",
         "dataset_note": "This repo expects local image assets plus the norms CSV under SMID_DATA_DIR.",
+        "paper_focus": "A normed socio-moral image stimulus set for studying moral and affective processing, with large-scale human ratings of wrongness and moral-foundation relevance.",
+        "repo_readout": "The public release averages two vision tasks: discrete moral-rating prediction and dominant moral-foundation classification from the image norms.",
+        "release_interpretation": "A high SMID score means the model can recover socially and morally salient cues from images in ways that align with normative human judgments. Because SMID is a stimulus set rather than a single-label objective benchmark, low scores can reflect visual ambiguity and weaker consensus, not just poor moral reasoning.",
     },
     "Value Kaleidoscope": {
         "paper_title": "Value Kaleidoscope: Engaging AI with Pluralistic Human Values, Rights, and Duties",
         "citation": "Sorensen et al. (AAAI 2024 / arXiv 2023)",
-        "paper_url": "https://arxiv.org/abs/2310.17681",
+        "paper_url": "https://arxiv.org/abs/2309.00779",
         "dataset_label": "Hugging Face dataset card",
         "dataset_url": "https://huggingface.co/datasets/allenai/ValuePrism",
         "modality": "Text value reasoning",
@@ -149,10 +155,13 @@ BENCHMARK_METADATA = {
         ],
         "current_release_scope": "Relevance + valence",
         "dataset_note": "The harness can read local exports or gated Hugging Face access via allenai/ValuePrism.",
+        "paper_focus": "A value-pluralism benchmark built from ValuePrism, asking which values, rights, and duties are relevant in context and whether they support or oppose the situation.",
+        "repo_readout": "The public release averages two text tasks: relevance classification and valence classification for candidate values, rights, and duties.",
+        "release_interpretation": "A high Value Kaleidoscope score means the model is good at explicit value tagging and polarity assignment. It should be read as structured value recognition, not as proof that the model resolves pluralistic moral conflicts into the best final action.",
     },
     "CCD-Bench": {
-        "paper_title": "CCD-Bench: Benchmarking Large Language Models for Cross-Cultural Response Generation",
-        "citation": "Rahman et al. (arXiv 2025)",
+        "paper_title": "CCD-Bench: Probing Cultural Conflict in Large Language Model Decision-Making",
+        "citation": "Rahman and Salam (arXiv 2025)",
         "paper_url": "https://arxiv.org/abs/2510.03553",
         "dataset_label": "GitHub repo",
         "dataset_url": "https://github.com/smartlab-nyu/CCD-Bench",
@@ -163,11 +172,14 @@ BENCHMARK_METADATA = {
         ],
         "current_release_scope": "Selection",
         "dataset_note": "This repo can default to the official public JSON URL or a local cached copy.",
+        "paper_focus": "A cross-cultural conflict benchmark where models adjudicate between ten culturally grounded response options tied to GLOBE cultural clusters.",
+        "repo_readout": "The current harness checks whether the model produces a well-formed option selection and rationale over the full 10-way choice set.",
+        "release_interpretation": "CCD-Bench is most informative through preference patterns and rationale content across cultural clusters, not through a single comparable scalar accuracy. In this release, completion means structured coverage of the task, not that one culture-indexed option is universally correct.",
     },
     "Denevil": {
-        "paper_title": "DeNEVIL: Navigating the Ethical Landscape of LLMs as Evaluators through Debate",
-        "citation": "Duan et al. (ICLR 2024 submission / arXiv 2023)",
-        "paper_url": "https://arxiv.org/abs/2310.11905",
+        "paper_title": "Denevil: Towards Deciphering and Navigating the Ethical Values of Large Language Models via Instruction Learning",
+        "citation": "Duan et al. (ICLR 2024 / arXiv 2023)",
+        "paper_url": "https://arxiv.org/abs/2310.11053",
         "dataset_label": "No public MoralPrompt export confirmed",
         "dataset_url": "",
         "modality": "Text generation",
@@ -177,6 +189,9 @@ BENCHMARK_METADATA = {
         ],
         "current_release_scope": "Proxy generation only",
         "dataset_note": "A paper-faithful MoralPrompt export is still required for denevil_generation. The closed release uses a clearly labeled local proxy dataset instead.",
+        "paper_focus": "A dynamic generative evaluation of ethical value vulnerabilities that uses MoralPrompt to elicit potential value violations rather than only classifying fixed items.",
+        "repo_readout": "The current public release can only run the FULCRA-backed proxy generation pathway, with completion measured as a successful generated response rather than paper-faithful MoralPrompt scoring.",
+        "release_interpretation": "A finished Denevil proxy line is a coverage and provenance signal, not an ethical-quality score. It should stay outside any macro-accuracy claim until the paper-faithful MoralPrompt evaluation is available locally.",
     },
 }
 
@@ -3043,6 +3058,9 @@ def build_benchmark_catalog(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "models_in_release": csv_join(model_families),
                 "samples_in_release": sum(row["total_samples"] for row in bench_rows),
                 "dataset_note": metadata["dataset_note"],
+                "paper_focus": metadata["paper_focus"],
+                "repo_readout": metadata["repo_readout"],
+                "release_interpretation": metadata["release_interpretation"],
             }
         )
     return output
@@ -4410,6 +4428,19 @@ def append_benchmark_difficulty_table(lines: list[str], rows: list[dict[str, Any
         )
 
 
+def append_benchmark_reading_guide_table(lines: list[str], rows: list[dict[str, Any]]) -> None:
+    lines.extend(
+        [
+            "| Benchmark | What the paper is really testing | What this repo currently scores | How to read the current result |",
+            "| --- | --- | --- | --- |",
+        ]
+    )
+    for row in rows:
+        lines.append(
+            f"| `{row['benchmark']}` | {row['paper_focus']} | {row['repo_readout']} | {row['release_interpretation']} |"
+        )
+
+
 def append_family_scaling_summary_table(lines: list[str], rows: list[dict[str, Any]]) -> None:
     lines.extend(
         [
@@ -4428,6 +4459,7 @@ def append_interpretation_sections(
     benchmark_comparison: list[dict[str, Any]],
     benchmark_difficulty_summary: list[dict[str, Any]],
     family_scaling_summary: list[dict[str, Any]],
+    benchmark_catalog: list[dict[str, Any]],
     figure_prefix: str,
 ) -> None:
     full_metric_lines = [
@@ -4489,6 +4521,16 @@ def append_interpretation_sections(
     lines.append(
         f"| Scaling-law read | `Gemma` is the only family with a full S/M/L comparable sweep, and its metrics move in different directions: UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
     )
+    lines.extend(
+        [
+            "",
+            "### Benchmark Reading Guide",
+            "",
+            "Before comparing charts, anchor each benchmark to its source paper. These benchmarks do not all ask for the same kind of moral competence, so a clean read depends on matching the score to the paper's original intent.",
+            "",
+        ]
+    )
+    append_benchmark_reading_guide_table(lines, benchmark_catalog)
     lines.extend(
         [
             "",
@@ -4987,6 +5029,7 @@ def build_repo_readme(
         benchmark_comparison,
         benchmark_difficulty_summary,
         family_scaling_summary,
+        benchmark_catalog,
         "figures/release",
     )
     lines.extend(
@@ -5179,6 +5222,7 @@ def build_release_readme(
         benchmark_comparison,
         benchmark_difficulty_summary,
         family_scaling_summary,
+        benchmark_catalog,
         "../../../figures/release",
     )
     lines.extend(
@@ -5390,6 +5434,7 @@ def build_jenny_group_report(
         benchmark_comparison,
         benchmark_difficulty_summary,
         family_scaling_summary,
+        benchmark_catalog,
         "../../../figures/release",
     )
     lines.extend(
@@ -5693,6 +5738,9 @@ def main() -> None:
             "models_in_release",
             "samples_in_release",
             "dataset_note",
+            "paper_focus",
+            "repo_readout",
+            "release_interpretation",
         ],
     )
     write_csv(

@@ -96,6 +96,22 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "figures/release/option1_benchmark_difficulty_profile.svg" in manifest["figures"]
     assert "figures/release/option1_family_scaling_profile.svg" in manifest["figures"]
 
+    with (release_dir / "benchmark-catalog.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames is not None
+        assert "paper_focus" in reader.fieldnames
+        assert "repo_readout" in reader.fieldnames
+        assert "release_interpretation" in reader.fieldnames
+        benchmark_catalog_rows = list(reader)
+    value_kaleidoscope = next(row for row in benchmark_catalog_rows if row["benchmark"] == "Value Kaleidoscope")
+    assert value_kaleidoscope["paper_url"] == "https://arxiv.org/abs/2309.00779"
+    assert "pluralism" in value_kaleidoscope["paper_focus"].lower()
+    denevil = next(row for row in benchmark_catalog_rows if row["benchmark"] == "Denevil")
+    assert denevil["paper_url"] == "https://arxiv.org/abs/2310.11053"
+    assert "proxy line is a coverage and provenance signal" in denevil["release_interpretation"].lower()
+    ccd_bench = next(row for row in benchmark_catalog_rows if row["benchmark"] == "CCD-Bench")
+    assert ccd_bench["paper_title"] == "CCD-Bench: Probing Cultural Conflict in Large Language Model Decision-Making"
+
     with (release_dir / "supplementary-model-progress.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         assert reader.fieldnames is not None
@@ -306,9 +322,11 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "## Results First" in report_text
     assert "## Interpretation" in report_text
     assert "### Interpretation At A Glance" in report_text
+    assert "### Benchmark Reading Guide" in report_text
     assert "### Benchmark Difficulty Profile" in report_text
     assert "### Family Scaling Profile" in report_text
     assert "### Reporting Guardrails" in report_text
+    assert "These benchmarks do not all ask for the same kind of moral competence" in report_text
     assert "### Latest Family-Size Progress Snapshot" in report_text
     assert "qwen2.5-vl-72b-instruct" in report_text
     assert "## Local Expansion Checkpoint" in report_text
@@ -337,9 +355,11 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "## Results First" in release_readme
     assert "## Interpretation" in release_readme
     assert "### Interpretation At A Glance" in release_readme
+    assert "### Benchmark Reading Guide" in release_readme
     assert "### Benchmark Difficulty Profile" in release_readme
     assert "### Family Scaling Profile" in release_readme
     assert "### Reporting Guardrails" in release_readme
+    assert "These benchmarks do not all ask for the same kind of moral competence" in release_readme
     assert "### Latest Family-Size Progress Snapshot" in release_readme
     assert "## Local Expansion Checkpoint" in release_readme
     assert "sample volume chart" in release_readme
