@@ -34,10 +34,9 @@ SNAPSHOT_DATE_ISO = "2026-04-19"
 REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan."
 REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
-REPORT_TRACKED_COST_FLOOR = "$40.73"
-REPORT_TRACKED_COST_SCOPE = (
-    "Frozen-snapshot plus tracked public-release bookkeeping only; later local reruns are intentionally excluded "
-    "from this static cost field."
+REPORT_CURRENT_COST_ESTIMATE = "$70.00"
+REPORT_CURRENT_COST_SCOPE = (
+    "User-updated project total across the frozen release work and the later tracked reruns completed in this repo."
 )
 REPORT_STATUS_NOTE = (
     f"Updated {REPORT_DATE_LONG}. "
@@ -4347,7 +4346,7 @@ def build_topline_summary(
         f"- paper-setup tasks: `{faithful_tasks}`",
         f"- proxy tasks: `{proxy_tasks}`",
         f"- total evaluated samples: `{total_samples:,}`",
-        f"- tracked published-cost floor: `{REPORT_TRACKED_COST_FLOOR}`",
+        f"- current project cost estimate: `{REPORT_CURRENT_COST_ESTIMATE}`",
         "- closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`",
         "- key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup",
         f"- extra local progress outside the frozen snapshot: `Llama` small is complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks and is intentionally excluded from the frozen `19 / 19` totals",
@@ -4975,7 +4974,7 @@ def build_repo_readme(
         "",
         "This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.",
         "",
-        f"> Tracked published-cost floor: `{REPORT_TRACKED_COST_FLOOR}`",
+        f"> Current project cost estimate: `{REPORT_CURRENT_COST_ESTIMATE}`",
         "",
         "It combines three things in one clean public surface:",
         "",
@@ -5044,8 +5043,8 @@ def build_repo_readme(
             ("Report owner", f"`{REPORT_OWNER}`"),
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
-            ("Tracked published-cost floor", f"`{REPORT_TRACKED_COST_FLOOR}`"),
-            ("Cost scope", REPORT_TRACKED_COST_SCOPE),
+            ("Current project cost estimate", f"`{REPORT_CURRENT_COST_ESTIMATE}`"),
+            ("Cost scope", REPORT_CURRENT_COST_SCOPE),
             ("Intended use", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
             ("Benchmarks in scope", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
@@ -5237,8 +5236,8 @@ def build_release_readme(
             ("Report owner", f"`{REPORT_OWNER}`"),
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
-            ("Tracked published-cost floor", f"`{REPORT_TRACKED_COST_FLOOR}`"),
-            ("Cost scope", REPORT_TRACKED_COST_SCOPE),
+            ("Current project cost estimate", f"`{REPORT_CURRENT_COST_ESTIMATE}`"),
+            ("Cost scope", REPORT_CURRENT_COST_SCOPE),
             ("Intended use", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
             ("Benchmarks in scope", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
@@ -5449,8 +5448,8 @@ def build_jenny_group_report(
             ("Report owner", f"`{REPORT_OWNER}`"),
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
-            ("Tracked published-cost floor", f"`{REPORT_TRACKED_COST_FLOOR}`"),
-            ("Cost scope", REPORT_TRACKED_COST_SCOPE),
+            ("Current project cost estimate", f"`{REPORT_CURRENT_COST_ESTIMATE}`"),
+            ("Cost scope", REPORT_CURRENT_COST_SCOPE),
             ("Purpose", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
             ("Benchmarks being tracked", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
@@ -5579,8 +5578,8 @@ def build_release_manifest(
             "owner": REPORT_OWNER,
             "date": REPORT_DATE_ISO,
             "frozen_snapshot_date": SNAPSHOT_DATE_ISO,
-            "tracked_cost_floor": REPORT_TRACKED_COST_FLOOR,
-            "tracked_cost_scope": REPORT_TRACKED_COST_SCOPE,
+            "current_cost_estimate": REPORT_CURRENT_COST_ESTIMATE,
+            "current_cost_scope": REPORT_CURRENT_COST_SCOPE,
             "purpose": REPORT_PURPOSE,
             "provider": REPORT_PROVIDER,
             "temperature": REPORT_TEMPERATURE,

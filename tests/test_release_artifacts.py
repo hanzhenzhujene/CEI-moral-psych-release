@@ -78,8 +78,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["tracked_cost_floor"] == "$40.73"
-    assert "later local reruns are intentionally excluded" in manifest["report_metadata"]["tracked_cost_scope"]
+    assert manifest["report_metadata"]["current_cost_estimate"] == "$70.00"
+    assert "later tracked reruns completed in this repo" in manifest["report_metadata"]["current_cost_scope"]
     assert manifest["report_metadata"]["ci_workflow_url"].endswith("/actions/workflows/ci.yml")
     assert manifest["target_matrix"]["family_size_benchmark_cells"] == 60
     assert manifest["target_matrix"]["model_families"] == 4
@@ -340,7 +340,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Model families in scope" in report_text
     assert "## Safe One-Sentence Framing" in report_text
     assert "## Interpretation Notes" not in report_text
-    assert "Tracked published-cost floor" in report_text
+    assert "Current project cost estimate" in report_text
     assert "Cost scope" in report_text
     assert "Current cost to date" not in report_text
     assert "24634450927" not in report_text
@@ -374,7 +374,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Partial" in release_readme
     assert "Model families in scope" in release_readme
     assert "## Interpretation Notes" not in release_readme
-    assert "Tracked published-cost floor" in release_readme
+    assert "Current project cost estimate" in release_readme
     assert "Cost scope" in release_readme
     assert "Current cost to date" not in release_readme
     assert "24634450927" not in release_readme
