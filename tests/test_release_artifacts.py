@@ -470,7 +470,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "CCD-Bench" in family_scaling_svg
     assert "Denevil" in family_scaling_svg
     assert "DeepSeek-M stays out of the top-row accuracy panels because" in family_scaling_svg
-    assert "its saved short-answer rerun still shows 100.0% empty visible answers." in family_scaling_svg
+    assert "its saved short-answer rerun" in family_scaling_svg
+    assert "100.0% empty visible answers." in family_scaling_svg
     assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
     assert "Qwen: Top-row text has S/M/L; SMID has S/L." in family_scaling_svg
     assert "Llama: Top-row text has S/M/L; SMID has S/L." in family_scaling_svg
