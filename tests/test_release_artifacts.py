@@ -360,6 +360,12 @@ def test_release_builder_emits_expected_files(tmp_path):
         and "non-monotonic" in row["interpretation"]
         for row in scaling_rows
     )
+    assert any(
+        row["family"] == "DeepSeek"
+        and "Only the large line remains accuracy-comparable" in row["evidence_scope"]
+        and "cannot support a trustworthy accuracy size curve" in row["interpretation"]
+        for row in scaling_rows
+    )
 
     report_text = (release_dir / "jenny-group-report.md").read_text(encoding="utf-8")
     assert "## Results First" in report_text
@@ -373,7 +379,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "### Latest Family-Size Progress Snapshot" in report_text
     assert "Strongest fully observed comparable line | `Qwen-L` averages 0.600" in report_text
     assert "Strongest text-only comparable line | `Llama-M` reaches UniMoral 0.670 and Value 0.724" in report_text
-    assert "Keep `DeepSeek-M` out of the comparable accuracy charts" in report_text
+    assert "Keep `DeepSeek-M` out of the top-row comparable accuracy charts" in report_text
     assert "qwen2.5-vl-72b-instruct" in report_text
     assert "## Local Expansion Checkpoint" in report_text
     assert "| `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |" in report_text
@@ -431,6 +437,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "| `MiniMax-M` |" not in release_readme
     assert "| `MiniMax-L` |" not in release_readme
     assert "Done" in release_readme
+    assert "Keep `DeepSeek-M` out of the top-row comparable accuracy charts" in release_readme
 
     progress_overview_svg = (figure_dir / "option1_family_size_progress_overview.svg").read_text(encoding="utf-8")
     assert "Family-Size Progress Overview" in progress_overview_svg
@@ -458,10 +465,16 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     family_scaling_svg = (figure_dir / "option1_family_scaling_profile.svg").read_text(encoding="utf-8")
     assert "Family Scaling Profile" in family_scaling_svg
-    assert "Sparse panels are evidence boundaries, not zeros." in family_scaling_svg
+    assert "Top row: scored benchmarks only (`UniMoral`, `SMID`, `Value Kaleidoscope`)." in family_scaling_svg
+    assert "Bottom row: CCD-Bench and Denevil coverage panels" in family_scaling_svg
+    assert "CCD-Bench" in family_scaling_svg
+    assert "Denevil" in family_scaling_svg
+    assert "DeepSeek-M stays out of the top-row accuracy panels because" in family_scaling_svg
+    assert "its saved short-answer rerun still shows 100.0% empty visible answers." in family_scaling_svg
     assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
-    assert "Qwen: Text has S/M/L comparable points; SMID has S/L." in family_scaling_svg
-    assert "Llama: Text has S/M/L comparable points; SMID has S/L." in family_scaling_svg
+    assert "Qwen: Top-row text has S/M/L; SMID has S/L." in family_scaling_svg
+    assert "Llama: Top-row text has S/M/L; SMID has S/L." in family_scaling_svg
+    assert "DeepSeek: Top-row only L is scored; M is completion-only; S has no route." in family_scaling_svg
     assert "Only the small line is currently comparable." not in family_scaling_svg
 
     sample_volume_svg = (figure_dir / "option1_sample_volume.svg").read_text(encoding="utf-8")
