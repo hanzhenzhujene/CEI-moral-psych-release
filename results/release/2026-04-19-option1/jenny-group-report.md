@@ -157,7 +157,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `Llama-M text batch` | Done | Completed April 22 with a full medium text line. |
 | `DeepSeek-M text batch` | Done | Local text rerun finished successfully on April 29, 2026 through the Denevil proxy task. |
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
-| `Next queued text lines` | Queue | No currently published line remains queued behind an active rerun. |
+| `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |
 
 Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-results.md)
 

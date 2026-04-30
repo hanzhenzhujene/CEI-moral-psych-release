@@ -376,6 +376,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Keep `DeepSeek-M` out of the comparable accuracy charts" in report_text
     assert "qwen2.5-vl-72b-instruct" in report_text
     assert "## Local Expansion Checkpoint" in report_text
+    assert "| `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |" in report_text
     assert "curated snapshot rather than a live dashboard" in report_text
     assert "## Status Key" in report_text
     assert "## Supporting Figures" in report_text
@@ -408,6 +409,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "These benchmarks do not all ask for the same kind of moral competence" in release_readme
     assert "### Latest Family-Size Progress Snapshot" in release_readme
     assert "## Local Expansion Checkpoint" in release_readme
+    assert "| `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |" in release_readme
     assert "sample volume chart" in release_readme
     assert "benchmark difficulty profile" in release_readme
     assert "family scaling profile" in release_readme

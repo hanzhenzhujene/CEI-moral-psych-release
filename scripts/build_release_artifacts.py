@@ -40,12 +40,8 @@ REPORT_CURRENT_COST_SCOPE = (
 )
 REPORT_STATUS_NOTE = (
     f"Updated {REPORT_DATE_LONG}. "
-    "The frozen public snapshot remains Option 1 from April 19. "
-    "Gemma-M and Gemma-L text remain complete locally. "
-    "The earlier Qwen-M and Qwen-L text checkpoints were withdrawn from the public comparable snapshot after a "
-    "verification pass showed that Qwen-3 reasoning tokens were exhausting the visible output budget on short-answer "
-    "tasks. When the local rerun artifacts are available, this operations note is refreshed from the latest on-disk "
-    "checkpoints, trace logs, and watcher logs at build time."
+    "The frozen public snapshot remains Option 1 from April 19, and this report is regenerated from the latest "
+    "trusted local release artifacts at build time."
 )
 REPORT_LIVE_RERUNS_SUMMARY = "Pending refresh from the on-disk rerun monitor."
 REPORT_NEXT_ACTION_SUMMARY = "Pending refresh from the on-disk rerun monitor."
@@ -3171,6 +3167,8 @@ def public_local_expansion_checkpoint_rows() -> list[dict[str, Any]]:
     for row in rows:
         if row.get("line") == "Next queued text lines":
             row["note"] = PUBLIC_NEXT_QUEUED_NOTE
+            if row["note"] == "No currently published line remains queued behind an active rerun.":
+                row["status"] = "done"
     return rows
 
 
