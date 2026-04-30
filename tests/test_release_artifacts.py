@@ -467,9 +467,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Family Scaling Profile" in family_scaling_svg
     assert 'preserveAspectRatio="xMidYMin meet"' in family_scaling_svg
     assert 'style="max-width:100%;height:auto"' in family_scaling_svg
-    assert "Five benchmark panels: three scored accuracy panels plus two coverage-only benchmark panels." in family_scaling_svg
+    assert "Five benchmark panels: three scored accuracy charts plus two coverage-status charts." in family_scaling_svg
     assert "Top row: scored benchmarks only (`UniMoral`, `SMID`, `Value Kaleidoscope`)." in family_scaling_svg
-    assert "Bottom row: CCD-Bench and Denevil coverage panels" in family_scaling_svg
+    assert "Bottom row: `CCD-Bench` and `Denevil` are shown as status curves" in family_scaling_svg
     assert "CCD-Bench" in family_scaling_svg
     assert "Denevil" in family_scaling_svg
     assert "DeepSeek-M stays out of the top-row accuracy panels because" in family_scaling_svg
@@ -477,11 +477,13 @@ def test_release_builder_emits_expected_files(tmp_path):
         "its saved short-answer rerun is not trustworthy yet." in family_scaling_svg
         or "its saved short-answer rerun still shows 100.0% empty visible answers." in family_scaling_svg
     )
-    assert "appears in the lower completion panels but not as a scored point in the upper accuracy panels." in family_scaling_svg
+    assert "Panels 4-5 are status curves, not accuracy curves." in family_scaling_svg
+    assert "All five benchmarks now appear as chart panels." in family_scaling_svg
     assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
-    assert "Qwen: Top-row text has S/M/L; SMID has S/L." in family_scaling_svg
-    assert "Llama: Top-row text has S/M/L; SMID has S/L." in family_scaling_svg
-    assert "DeepSeek: Top-row only L is scored; M is completion-only; S has no route." in family_scaling_svg
+    assert "Qwen: text scored at S/M/L; SMID has S/L." in family_scaling_svg
+    assert "Llama: text scored at S/M/L; SMID has S/L." in family_scaling_svg
+    assert "DeepSeek: only L is scored up top; bottom status curves still show M." in family_scaling_svg
+    assert "Gemma: full S/M/L scored sweep." in family_scaling_svg
     assert "Only the small line is currently comparable." not in family_scaling_svg
 
     sample_volume_svg = (figure_dir / "option1_sample_volume.svg").read_text(encoding="utf-8")

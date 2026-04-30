@@ -3675,7 +3675,7 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
         )
     if family == "DeepSeek":
         return (
-            "Only the large line remains accuracy-comparable in the top-row panels, there is still no public SMID route, and the medium line appears only in the CCD-Bench / Denevil completion panels.",
+            "Only the large line remains accuracy-comparable in the top-row panels, there is still no public SMID route, and the medium line appears only in the CCD-Bench / Denevil status-curve panels.",
             "DeepSeek remains a useful large-line text comparison point, but the finished medium rerun still cannot support a trustworthy accuracy size curve because its saved short-answer artifacts collapse into empty answers.",
         )
     available_metrics = sum(1 for points in metric_points.values() if points)
@@ -4252,9 +4252,9 @@ def render_family_scaling_profile_svg(
     progress_rows: list[dict[str, Any]],
     output_path: Path,
 ) -> None:
-    width, height = 1040, 960
-    top_panel_left, top_panel_width = 55, 286
-    top_panel_gap = 18
+    width, height = 1040, 1060
+    top_panel_left, top_panel_width = 55, 288
+    top_panel_gap = 16
     top_panel_top, top_panel_height = 182, 304
     bottom_panel_left, bottom_panel_width = 79, 402
     bottom_panel_gap = 42
@@ -4263,17 +4263,6 @@ def render_family_scaling_profile_svg(
     chart_top_pad, chart_bottom_pad = 46, 46
     y_min, y_max = 0.2, 0.75
     family_order = ["Qwen", "DeepSeek", "Llama", "Gemma"]
-    status_colors = {
-        "done": "#2f855a",
-        "proxy": "#b7791f",
-        "partial": "#60a5fa",
-        "live": "#2563eb",
-        "error": "#dc2626",
-        "queue": "#94a3b8",
-        "prep": "#a78bfa",
-        "tbd": "#e2e8f0",
-        "-": "#eef2f7",
-    }
     rows_by_benchmark: dict[str, list[dict[str, Any]]] = {}
     for benchmark, field, _ in COMPARABLE_METRIC_SPECS:
         rows_by_benchmark[benchmark] = [row for row in rows if row[field] is not None]
@@ -4293,12 +4282,13 @@ def render_family_scaling_profile_svg(
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Family scaling profile by benchmark</title>",
-            "<desc>Five-panel family view across all benchmark lines. The top row plots only trustworthy comparable accuracy for UniMoral, SMID, and Value Kaleidoscope. The bottom row shows CCD-Bench completion coverage and Denevil proxy completion coverage.</desc>",
+            "<desc>Five-panel family view across all benchmark lines. The top row plots only trustworthy comparable accuracy for UniMoral, SMID, and Value Kaleidoscope. The bottom row shows CCD-Bench and Denevil as status-curve panels so all five benchmarks appear as chart panels while preserving the non-comparable coverage meaning of those benchmarks.</desc>",
             '<text x="48" y="64" class="title">Family Scaling Profile</text>',
-            '<text x="48" y="88" class="subtitle">Five benchmark panels: three scored accuracy panels plus two coverage-only benchmark panels.</text>',
+            '<text x="48" y="88" class="subtitle">Five benchmark panels: three scored accuracy charts plus two coverage-status charts.</text>',
             '<text x="48" y="108" class="subtitle">Top row: scored benchmarks only (`UniMoral`, `SMID`, `Value Kaleidoscope`).</text>',
-            '<text x="48" y="128" class="subtitle">Bottom row: CCD-Bench and Denevil coverage panels, because those benchmarks do not share one public scalar accuracy target across lines.</text>',
-            '<text x="48" y="148" class="subtitle">Missing top-row points are evidence limits or withheld accuracy cells, not zeroes.</text>',
+            '<text x="48" y="128" class="subtitle">Bottom row: `CCD-Bench` and `Denevil` are shown as status curves</text>',
+            '<text x="48" y="148" class="subtitle">because the public package tracks completion / proxy coverage there rather than one shared accuracy scalar.</text>',
+            '<text x="48" y="168" class="subtitle">Missing top-row points are evidence limits or withheld accuracy cells, not zeroes.</text>',
         ]
     )
 
@@ -4310,13 +4300,14 @@ def render_family_scaling_profile_svg(
         chart_top = panel_y + chart_top_pad
         chart_bottom = panel_y + top_panel_height - chart_bottom_pad
         x_positions: dict[str, float] = {}
+        pill_x = panel_x + top_panel_width - 88
+        pill_y = panel_y + 16
 
         lines.append(f'<rect x="{panel_x}" y="{panel_y}" width="{top_panel_width}" height="{top_panel_height}" rx="20" class="subpanel"/>')
-        lines.append(f'<rect x="{panel_x + top_panel_width - 52}" y="{panel_y + 16}" width="30" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>')
-        lines.append(f'<text x="{panel_x + top_panel_width - 37}" y="{panel_y + 30}" text-anchor="middle" class="tiny">#{panel_index + 1}</text>')
-        lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 30}" class="axis">{escape_xml(benchmark)}</text>')
+        lines.append(f'<rect x="{pill_x}" y="{pill_y}" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>')
+        lines.append(f'<text x="{pill_x + 33}" y="{pill_y + 14}" text-anchor="middle" class="tiny">SCORED</text>')
+        lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 30}" class="axis">#{panel_index + 1} {escape_xml(benchmark)}</text>')
         lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 50}" class="small">{escape_xml(scope_label)}</text>')
-        lines.append(f'<text x="{panel_x + top_panel_width - 24}" y="{panel_y + 30}" text-anchor="end" class="tiny">ACCURACY PANEL</text>')
 
         for tick_value in (0.2, 0.35, 0.5, 0.65, 0.75):
             y = y_for(panel_y, tick_value)
@@ -4355,102 +4346,122 @@ def render_family_scaling_profile_svg(
         )
 
     status_panel_specs = [
-        ("CCD-Bench", "ccd_bench", "Completion coverage only"),
-        ("Denevil", "denevil", "Proxy completion only"),
+        (
+            "CCD-Bench",
+            "ccd_bench",
+            "Completion-status curve",
+            { "-": 0, "tbd": 1, "queue": 2, "prep": 2, "live": 2, "partial": 2, "error": 2, "done": 3, "proxy": 3 },
+            ["Done", "In progress", "TBD", "No route"],
+            "Higher bands mean more complete public coverage, not higher accuracy.",
+        ),
+        (
+            "Denevil",
+            "denevil",
+            "Proxy-status curve",
+            { "-": 0, "tbd": 1, "queue": 2, "prep": 2, "live": 2, "partial": 2, "error": 2, "proxy": 3, "done": 3 },
+            ["Proxy", "In progress", "TBD", "No route"],
+            "Top band means proxy-complete coverage, not benchmark-faithful accuracy.",
+        ),
     ]
-    for panel_index, (benchmark, field_name, scope_label) in enumerate(status_panel_specs):
+    status_family_offsets = {
+        "Qwen": -9,
+        "DeepSeek": -3,
+        "Llama": 3,
+        "Gemma": 9,
+    }
+
+    for panel_index, (benchmark, field_name, scope_label, status_to_level, band_labels, footer_note) in enumerate(status_panel_specs):
         panel_x = bottom_panel_left + panel_index * (bottom_panel_width + bottom_panel_gap)
         panel_y = bottom_panel_top
         panel_right = panel_x + bottom_panel_width
-        label_x = panel_x + 72
-        chart_left = panel_x + 146
-        chart_right = panel_right - 24
-        cell_width = 72
-        cell_height = 28
-        row_top = panel_y + 66
-        row_gap = 8
-        column_centers = {
+        chart_left = panel_x + 88
+        chart_right = panel_right - 26
+        chart_top = panel_y + 74
+        chart_bottom = panel_y + bottom_panel_height - 50
+        x_positions = {
             slot: chart_left + (chart_right - chart_left) * SIZE_SLOT_INDEX[slot] / (len(SIZE_SLOT_ORDER) - 1)
             for slot in SIZE_SLOT_ORDER
         }
+        pill_x = panel_right - 96
+        pill_y = panel_y + 16
+
+        def status_y(level: int) -> float:
+            usable_h = chart_bottom - chart_top
+            return chart_bottom - usable_h * level / 3
 
         lines.append(f'<rect x="{panel_x}" y="{panel_y}" width="{bottom_panel_width}" height="{bottom_panel_height}" rx="20" class="subpanel"/>')
-        lines.append(f'<rect x="{panel_right - 52}" y="{panel_y + 16}" width="30" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>')
-        lines.append(f'<text x="{panel_right - 37}" y="{panel_y + 30}" text-anchor="middle" class="tiny">#{panel_index + 4}</text>')
-        lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 30}" class="axis">{escape_xml(benchmark)}</text>')
+        lines.append(f'<rect x="{pill_x}" y="{pill_y}" width="82" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>')
+        lines.append(f'<text x="{pill_x + 41}" y="{pill_y + 14}" text-anchor="middle" class="tiny">STATUS CURVE</text>')
+        lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 30}" class="axis">#{panel_index + 4} {escape_xml(benchmark)}</text>')
         lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 50}" class="small">{escape_xml(scope_label)}</text>')
-        lines.append(f'<text x="{panel_right - 24}" y="{panel_y + 30}" text-anchor="end" class="tiny">COVERAGE PANEL</text>')
 
         for slot in SIZE_SLOT_ORDER:
-            x = column_centers[slot]
-            lines.append(f'<text x="{x:.2f}" y="{panel_y + 68}" text-anchor="middle" class="axis">{slot}</text>')
+            x = x_positions[slot]
+            lines.append(f'<line x1="{x:.2f}" y1="{chart_top}" x2="{x:.2f}" y2="{chart_bottom}" class="guide"/>')
+            lines.append(f'<text x="{x:.2f}" y="{chart_bottom + 24}" text-anchor="middle" class="axis">{slot}</text>')
 
-        for row_index, family in enumerate(family_order):
-            baseline_y = row_top + row_index * (cell_height + row_gap) + 22
-            lines.append(f'<text x="{label_x}" y="{baseline_y}" text-anchor="end" class="axis">{escape_xml(family)}</text>')
+        for level, label in zip((3, 2, 1, 0), band_labels):
+            y = status_y(level)
+            lines.append(f'<line x1="{chart_left}" y1="{y:.2f}" x2="{chart_right}" y2="{y:.2f}" class="guide"/>')
+            lines.append(f'<text x="{chart_left - 12}" y="{y + 4:.2f}" text-anchor="end" class="small">{escape_xml(label)}</text>')
+
+        for family in family_order:
+            color = family_base_color(family)
+            points: list[tuple[float, float]] = []
             for slot in SIZE_SLOT_ORDER:
                 progress_row = progress_lookup.get((family, slot))
                 status = "-" if progress_row is None else str(progress_row.get(field_name, "-"))
-                fill = status_colors.get(status, "#eef2f7")
-                text_main = STATUS_DISPLAY.get(status, status.upper())
-                x = column_centers[slot] - cell_width / 2
-                y = row_top + row_index * (cell_height + row_gap)
-                lines.append(f'<rect x="{x:.2f}" y="{y:.2f}" width="{cell_width}" height="{cell_height}" rx="12" fill="{fill}" stroke="#d7dee6" stroke-width="1"/>')
-                if status in {"tbd", "-"}:
-                    lines.append(
-                        f'<rect x="{x:.2f}" y="{y:.2f}" width="{cell_width}" height="{cell_height}" rx="12" fill="url(#diagonalHatch)" opacity="0.65"/>'
-                    )
-                main_class, _ = text_classes_for_fill(fill)
-                lines.append(
-                    f'<text x="{column_centers[slot]:.2f}" y="{y + 21:.2f}" text-anchor="middle" class="{main_class}">{escape_xml(text_main)}</text>'
-                )
+                level = status_to_level.get(status, 0)
+                x = x_positions[slot]
+                y = status_y(level) + status_family_offsets[family]
+                points.append((x, y))
 
-        footer_note = "Completion-only coverage." if benchmark == "CCD-Bench" else "Proxy-only coverage."
+            for (x1, y1), (x2, y2) in zip(points, points[1:]):
+                lines.append(
+                    f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" stroke="{color}" stroke-width="3.2" stroke-linecap="round"/>'
+                )
+            for x, y in points:
+                lines.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="7" fill="#ffffff" stroke="{color}" stroke-width="3"/>')
+                lines.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="3.5" fill="{color}"/>')
+
         lines.append(f'<text x="{panel_x + 18}" y="{panel_y + bottom_panel_height - 14}" class="small">{escape_xml(footer_note)}</text>')
 
-    lines.append('<rect x="48" y="764" width="944" height="148" rx="18" class="legend-card"/>')
+    lines.append('<rect x="48" y="764" width="944" height="250" rx="18" class="legend-card"/>')
     lines.append('<text x="72" y="790" class="tiny">HOW TO READ THIS FIGURE</text>')
-    lines.append('<text x="72" y="814" class="body">Panels 1-3 plot trustworthy comparable accuracy for `UniMoral`, `SMID`, and `Value Kaleidoscope`.</text>')
-    lines.append('<text x="72" y="836" class="body">Panels 4-5 show benchmark coverage for `CCD-Bench` and `Denevil`, where one shared public accuracy scalar is not available.</text>')
+    lines.append('<line x1="532" y1="790" x2="532" y2="998" class="guide"/>')
+    lines.append('<text x="72" y="814" class="body">Panels 1-3 plot trustworthy comparable accuracy</text>')
+    lines.append('<text x="72" y="836" class="body">for `UniMoral`, `SMID`, and `Value Kaleidoscope`.</text>')
+    lines.append('<text x="72" y="862" class="body">Panels 4-5 are status curves, not accuracy curves.</text>')
+    lines.append('<text x="72" y="884" class="body">Higher bands mean more complete publication state,</text>')
+    lines.append('<text x="72" y="906" class="body">and family traces are slightly offset for readability.</text>')
     deepseek_guardrail = deepseek_medium_accuracy_guardrail_summary()
     if " because " in deepseek_guardrail:
         deepseek_guardrail_prefix, deepseek_guardrail_suffix = deepseek_guardrail.split(" because ", 1)
-        lines.append(f'<text x="72" y="862" class="body">{escape_xml(deepseek_guardrail_prefix)} because</text>')
-        lines.append(f'<text x="72" y="882" class="body">{escape_xml(deepseek_guardrail_suffix)}</text>')
+        lines.append(f'<text x="72" y="936" class="body">{escape_xml(deepseek_guardrail_prefix)} because</text>')
+        lines.append(f'<text x="72" y="958" class="body">{escape_xml(deepseek_guardrail_suffix)}</text>')
     else:
-        lines.append(f'<text x="72" y="862" class="body">{escape_xml(deepseek_guardrail)}</text>')
-    lines.append('<text x="72" y="900" class="small">That is why `DeepSeek-M` appears in the lower completion panels but not as a scored point in the upper accuracy panels.</text>')
+        lines.append(f'<text x="72" y="936" class="body">{escape_xml(deepseek_guardrail)}</text>')
 
     lines.append('<text x="560" y="790" class="tiny">FAMILY READ</text>')
     legend_items = [
-        ("Qwen", "Top-row text has S/M/L; SMID has S/L."),
-        ("DeepSeek", "Top-row only L is scored; M is completion-only; S has no route."),
-        ("Llama", "Top-row text has S/M/L; SMID has S/L."),
-        ("Gemma", "Full S/M/L sweep on all three scored metrics."),
+        ("Qwen", "text scored at S/M/L; SMID has S/L."),
+        ("DeepSeek", "only L is scored up top; bottom status curves still show M."),
+        ("Llama", "text scored at S/M/L; SMID has S/L."),
+        ("Gemma", "full S/M/L scored sweep."),
     ]
     for index, (family, note) in enumerate(legend_items):
         x = 560
         y = 814 + index * 24
         color = family_base_color(family)
         lines.append(f'<rect x="{x}" y="{y - 12}" width="14" height="14" rx="4" fill="{color}"/>')
-        lines.append(f'<text x="{x + 24}" y="{y - 1}" class="body">{escape_xml(family)}: {escape_xml(note)}</text>')
+        lines.append(f'<text x="{x + 24}" y="{y - 1}" class="small">{escape_xml(family)}: {escape_xml(note)}</text>')
 
-    status_legend_items = [
-        ("done", "Done"),
-        ("proxy", "Proxy"),
-        ("tbd", "TBD / no fixed route"),
-        ("-", "No route in scope"),
-    ]
-    for index, (status, label) in enumerate(status_legend_items):
-        x = 560 + (index % 2) * 186
-        y = 924 + (index // 2) * 26
-        fill = status_colors[status]
-        lines.append(f'<rect x="{x}" y="{y - 12}" width="14" height="14" rx="4" fill="{fill}" stroke="#d7dee6" stroke-width="1"/>')
-        if status in {"tbd", "-"}:
-            lines.append(f'<rect x="{x}" y="{y - 12}" width="14" height="14" rx="4" fill="url(#diagonalHatch)" opacity="0.65"/>')
-        lines.append(f'<text x="{x + 24}" y="{y - 1}" class="body">{escape_xml(label)}</text>')
+    lines.append('<text x="560" y="918" class="tiny">WHY FIVE CHARTS</text>')
+    lines.append('<text x="560" y="942" class="body">All five benchmarks now appear as chart panels.</text>')
+    lines.append('<text x="560" y="964" class="body">Bottom status curves keep `CCD-Bench` and `Denevil` visible</text>')
+    lines.append('<text x="560" y="986" class="body">without implying a shared directly comparable accuracy scalar.</text>')
 
-    lines.append('<text x="72" y="940" class="small">Takeaway: current evidence supports task-specific scaling statements, not a single universal size law across all families and benchmarks.</text>')
+    lines.append('<text x="72" y="996" class="small">Takeaway: current evidence supports task-specific scaling statements, not a single universal size law across all families and benchmarks.</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -4794,7 +4805,7 @@ def append_interpretation_sections(
             "",
             f"![Family scaling profile]({figure_prefix}/option1_family_scaling_profile.svg)",
             "",
-            "_Figure 4. Five-panel family view: the top row shows the three accuracy-comparable benchmarks, while the bottom row shows CCD-Bench and Denevil completion coverage. Missing top-row points are missing or withheld evidence, not zeroes._",
+            "_Figure 4. Five-panel family view: the top row shows the three accuracy-comparable benchmarks, while the bottom row renders CCD-Bench and Denevil as status curves. Missing top-row points are missing or withheld evidence, not zeroes._",
             "",
         ]
     )
@@ -4944,7 +4955,7 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             f"| Figure 1 | Latest line-level progress across the current published family-size matrix. | {markdown_link('option1_family_size_progress_overview.svg', f'{figure_prefix}/option1_family_size_progress_overview.svg')} |",
             f"| Figure 2 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | {markdown_link('option1_benchmark_accuracy_bars.svg', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')} |",
             f"| Figure 3 | Benchmark-level difficulty and spread across the current comparable slice. | {markdown_link('option1_benchmark_difficulty_profile.svg', f'{figure_prefix}/option1_benchmark_difficulty_profile.svg')} |",
-            f"| Figure 4 | Five-panel family scaling view with three accuracy panels plus CCD-Bench and Denevil coverage panels. | {markdown_link('option1_family_scaling_profile.svg', f'{figure_prefix}/option1_family_scaling_profile.svg')} |",
+            f"| Figure 4 | Five-panel family scaling view with three accuracy charts plus two status-curve panels for CCD-Bench and Denevil. | {markdown_link('option1_family_scaling_profile.svg', f'{figure_prefix}/option1_family_scaling_profile.svg')} |",
             f"| Figure 5 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
             f"| Figure 6 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
             f"| Figure 7 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | {markdown_link('option1_sample_volume.svg', f'{figure_prefix}/option1_sample_volume.svg')} |",
@@ -5569,7 +5580,7 @@ def build_release_readme(
             f"- {markdown_link('family-size progress overview', '../../../figures/release/option1_family_size_progress_overview.svg')}: latest line-level status across the current published matrix",
             f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: current cross-model benchmark comparison",
             f"- {markdown_link('benchmark difficulty profile', '../../../figures/release/option1_benchmark_difficulty_profile.svg')}: mean and spread for the directly comparable benchmark groups",
-            f"- {markdown_link('family scaling profile', '../../../figures/release/option1_family_scaling_profile.svg')}: five-panel family view with three accuracy trajectories plus CCD-Bench and Denevil coverage panels",
+            f"- {markdown_link('family scaling profile', '../../../figures/release/option1_family_scaling_profile.svg')}: five-panel family view with three accuracy trajectories plus two status-curve panels for CCD-Bench and Denevil",
             f"- {markdown_link('accuracy heatmap', '../../../figures/release/option1_accuracy_heatmap.svg')}: task-level view of comparable metrics",
             f"- {markdown_link('coverage matrix', '../../../figures/release/option1_coverage_matrix.svg')}: frozen Option 1 coverage only",
             f"- {markdown_link('sample volume chart', '../../../figures/release/option1_sample_volume.svg')}: where the evaluated samples are concentrated",

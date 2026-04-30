@@ -95,12 +95,12 @@ _Figure 3. Mean, low, and high accuracy for the three directly comparable benchm
 
 ![Family scaling profile](../../../figures/release/option1_family_scaling_profile.svg)
 
-_Figure 4. Five-panel family view: the top row shows the three accuracy-comparable benchmarks, while the bottom row shows CCD-Bench and Denevil completion coverage. Missing top-row points are missing or withheld evidence, not zeroes._
+_Figure 4. Five-panel family view: the top row shows the three accuracy-comparable benchmarks, while the bottom row renders CCD-Bench and Denevil as status curves. Missing top-row points are missing or withheld evidence, not zeroes._
 
 | Family | Evidence scope | Numeric pattern | Cautious interpretation |
 | --- | --- | --- | --- |
 | `Qwen` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence after the recovered large line. | UniMoral: S 0.647 -> M 0.665 -> L 0.665<br/>SMID: S 0.368 -> L 0.483<br/>Value Kaleidoscope: S 0.682 -> M 0.675 -> L 0.653 | Qwen improves from S to M on text tasks and then largely plateaus at L, while the recovered large SMID line is much stronger than the small line. That supports task-specific scaling, not a single monotonic curve. |
-| `DeepSeek` | Only the large line remains accuracy-comparable in the top-row panels, there is still no public SMID route, and the medium line appears only in the CCD-Bench / Denevil completion panels. | UniMoral: L 0.684<br/>Value Kaleidoscope: L 0.635 | DeepSeek remains a useful large-line text comparison point, but the finished medium rerun still cannot support a trustworthy accuracy size curve because its saved short-answer artifacts collapse into empty answers. |
+| `DeepSeek` | Only the large line remains accuracy-comparable in the top-row panels, there is still no public SMID route, and the medium line appears only in the CCD-Bench / Denevil status-curve panels. | UniMoral: L 0.684<br/>Value Kaleidoscope: L 0.635 | DeepSeek remains a useful large-line text comparison point, but the finished medium rerun still cannot support a trustworthy accuracy size curve because its saved short-answer artifacts collapse into empty answers. |
 | `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic. |
 | `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic. |
 
@@ -219,7 +219,7 @@ Figures 1 through 4 are already embedded above in context; this gallery keeps th
 | Figure 1 | Latest line-level progress across the current published family-size matrix. | [option1_family_size_progress_overview.svg](../../../figures/release/option1_family_size_progress_overview.svg) |
 | Figure 2 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | [option1_benchmark_accuracy_bars.svg](../../../figures/release/option1_benchmark_accuracy_bars.svg) |
 | Figure 3 | Benchmark-level difficulty and spread across the current comparable slice. | [option1_benchmark_difficulty_profile.svg](../../../figures/release/option1_benchmark_difficulty_profile.svg) |
-| Figure 4 | Five-panel family scaling view with three accuracy panels plus CCD-Bench and Denevil coverage panels. | [option1_family_scaling_profile.svg](../../../figures/release/option1_family_scaling_profile.svg) |
+| Figure 4 | Five-panel family scaling view with three accuracy charts plus two status-curve panels for CCD-Bench and Denevil. | [option1_family_scaling_profile.svg](../../../figures/release/option1_family_scaling_profile.svg) |
 | Figure 5 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | [option1_accuracy_heatmap.svg](../../../figures/release/option1_accuracy_heatmap.svg) |
 | Figure 6 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | [option1_coverage_matrix.svg](../../../figures/release/option1_coverage_matrix.svg) |
 | Figure 7 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | [option1_sample_volume.svg](../../../figures/release/option1_sample_volume.svg) |
