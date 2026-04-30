@@ -486,6 +486,27 @@ job_max_connections() {
   esac
 }
 
+job_denevil_max_connections() {
+  local job="$1"
+  case "$job" in
+    qwen_32b_large)
+      echo "${QWEN_32B_LARGE_DENEVIL_MAX_CONNECTIONS:-4}"
+      ;;
+    llama_4_maverick_large)
+      echo "${LLAMA_4_MAVERICK_LARGE_DENEVIL_MAX_CONNECTIONS:-8}"
+      ;;
+    deepseek_r1_qwen_32b_medium)
+      echo "${DEEPSEEK_R1_QWEN_32B_MEDIUM_DENEVIL_MAX_CONNECTIONS:-16}"
+      ;;
+    gemma_27b_large|gemma_12b_medium|qwen_14b_medium|llama_70b_medium)
+      echo 2
+      ;;
+    *)
+      echo 1
+      ;;
+  esac
+}
+
 job_reasoning_effort() {
   local job="$1"
   case "$job" in
@@ -658,7 +679,7 @@ run_task() {
 
 run_job() {
   local job="$1"
-  local run_dir model max_connections worker_pid_file job_failed existing_worker_pid
+  local run_dir model max_connections denevil_max_connections worker_pid_file job_failed existing_worker_pid
   run_dir="$(job_run_dir "$job")"
   mkdir -p "$run_dir"
   worker_pid_file="$(job_pid_file "$job")"
@@ -684,6 +705,7 @@ run_job() {
 
   model="$(job_model "$job")"
   max_connections="$(job_max_connections "$job")"
+  denevil_max_connections="$(job_denevil_max_connections "$job")"
 
   require_dir UNIMORAL_DATA_DIR
   require_file CCD_BENCH_DATA_FILE
@@ -706,7 +728,7 @@ run_job() {
   run_or_skip_task "$job" "value_prism_relevance" "src/inspect/evals/value_kaleidoscope.py::value_prism_relevance" "$model" "$max_connections" || job_failed=1
   run_or_skip_task "$job" "value_prism_valence" "src/inspect/evals/value_kaleidoscope.py::value_prism_valence" "$model" "$max_connections" || job_failed=1
   run_or_skip_task "$job" "ccd_bench_selection" "src/inspect/evals/ccd_bench.py::ccd_bench_selection" "$model" "$max_connections" || job_failed=1
-  run_or_skip_task "$job" "denevil_fulcra_proxy_generation" "src/inspect/evals/denevil.py::denevil_fulcra_proxy_generation" "$model" 1 || job_failed=1
+  run_or_skip_task "$job" "denevil_fulcra_proxy_generation" "src/inspect/evals/denevil.py::denevil_fulcra_proxy_generation" "$model" "$denevil_max_connections" || job_failed=1
 
   if [[ "$job_failed" == "0" ]]; then
     now_iso > "$run_dir/job_done.txt"

@@ -41,7 +41,7 @@
 <desc>Stacked bar overview of the current public five-benchmark progress state for each published model family and size line.</desc>
 <text x="48" y="64" class="title">Family-Size Progress Overview</text>
 <text x="48" y="88" class="subtitle">Each stacked bar summarizes the five benchmark cells for one published model line.</text>
-<text x="48" y="108" class="subtitle">6 lines are fully complete, 2 lines have partial checkpoints, 2 lines are currently running, and 0 attempted lines are currently unusable.</text>
+<text x="48" y="108" class="subtitle">7 lines are fully complete, 0 lines have partial checkpoints, 0 lines are currently running, and 0 attempted lines are currently unusable.</text>
 <text x="48" y="128" class="subtitle">This public figure shows the four-family matrix currently published in the release package.</text>
 <text x="340" y="172" class="tiny">FIVE BENCHMARK CELLS PER LINE</text>
 <line x1="340.00" y1="198" x2="340.00" y2="908" class="guide"/>
@@ -89,13 +89,13 @@
 <text x="910" y="387" class="label">usable now 0/5</text>
 <text x="322" y="433" text-anchor="end" class="label">DeepSeek-M</text>
 <rect x="340" y="414" width="540" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="340.00" y="414" width="108.00" height="28" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
-<text x="394.00" y="433" text-anchor="middle" class="celltext-dark">1</text>
-<rect x="448.00" y="414" width="216.00" height="28" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
-<text x="556.00" y="433" text-anchor="middle" class="celltext">2</text>
-<rect x="664.00" y="414" width="216.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
-<text x="772.00" y="433" text-anchor="middle" class="celltext-dark">2</text>
-<text x="910" y="433" class="label">usable now 0/5 | partial 1 | live 2</text>
+<rect x="340.00" y="414" width="324.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="502.00" y="433" text-anchor="middle" class="celltext">3</text>
+<rect x="664.00" y="414" width="108.00" height="28" fill="#b7791f" stroke="#ffffff" stroke-width="1"/>
+<text x="718.00" y="433" text-anchor="middle" class="celltext">1</text>
+<rect x="772.00" y="414" width="108.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="826.00" y="433" text-anchor="middle" class="celltext-dark">1</text>
+<text x="910" y="433" class="label">usable now 4/5</text>
 <text x="322" y="479" text-anchor="end" class="label">DeepSeek-L</text>
 <rect x="340" y="460" width="540" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="340.00" y="460" width="324.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
@@ -125,13 +125,11 @@
 <text x="910" y="571" class="label">usable now 4/5</text>
 <text x="322" y="617" text-anchor="end" class="label">Llama-L</text>
 <rect x="340" y="598" width="540" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="340.00" y="598" width="324.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
-<text x="502.00" y="617" text-anchor="middle" class="celltext">3</text>
-<rect x="664.00" y="598" width="108.00" height="28" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
-<text x="718.00" y="617" text-anchor="middle" class="celltext-dark">1</text>
-<rect x="772.00" y="598" width="108.00" height="28" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
+<rect x="340.00" y="598" width="432.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="556.00" y="617" text-anchor="middle" class="celltext">4</text>
+<rect x="772.00" y="598" width="108.00" height="28" fill="#b7791f" stroke="#ffffff" stroke-width="1"/>
 <text x="826.00" y="617" text-anchor="middle" class="celltext">1</text>
-<text x="910" y="617" class="label">usable now 3/5 | partial 1 | live 1</text>
+<text x="910" y="617" class="label">usable now 5/5</text>
 <line x1="48" y1="628" x2="1232" y2="628" class="guide"/>
 <text x="48" y="634" class="tiny">GEMMA</text>
 <text x="322" y="663" text-anchor="end" class="label">Gemma-S</text>

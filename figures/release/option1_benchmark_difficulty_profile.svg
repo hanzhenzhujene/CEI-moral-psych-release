@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="620" viewBox="0 0 1220 620" role="img">
+<defs>
+<linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffffff"/>
+<stop offset="100%" stop-color="#f8fafc"/>
+</linearGradient>
+<pattern id="diagonalHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+<line x1="0" y1="0" x2="0" y2="8" stroke="#cdd6e1" stroke-width="3"/>
+</pattern>
+<filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+<feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#9fb0c2" flood-opacity="0.18"/>
+</filter>
+<style>
+.canvas { fill: #f3f6fa; }
+.title { font: 700 26px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.subtitle { font: 400 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.axis { font: 600 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.label { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.metric { font: 700 20px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.celltext { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #ffffff; }
+.celltext-dark { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #173042; }
+.cellsub { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: rgba(255,255,255,0.88); }
+.cellsub-dark { font: 600 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #385062; }
+.body { font: 500 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.small { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.tiny { font: 600 10px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #6b7c8f; letter-spacing: 0.04em; }
+.grid { fill: #ffffff; stroke: #d7dee6; stroke-width: 1.25; }
+.panel { fill: url(#panelGradient); stroke: #dbe4ee; stroke-width: 1.25; filter: url(#softShadow); }
+.subpanel { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }
+.legend-card { fill: #ffffff; stroke: #dbe4ee; stroke-width: 1; }
+.guide { stroke: #d7dee6; stroke-width: 1; stroke-dasharray: 4 6; }
+.baseline { stroke: #aab7c6; stroke-width: 1.1; }
+.muted-cell { fill: #eef2f7; stroke: #d7dee6; stroke-width: 1; }
+.muted-bar { fill: #ecf1f6; stroke: #d7dee6; stroke-width: 1; }
+.outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
+</style>
+</defs>
+<rect x="0" y="0" width="1220" height="620" class="canvas"/>
+<rect x="24" y="24" width="1172" height="572" rx="22" class="panel"/>
+<title>Benchmark difficulty and spread</title>
+<desc>Mean, minimum, and maximum comparable accuracy for UniMoral, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>
+<text x="48" y="64" class="title">Benchmark Difficulty And Spread</text>
+<text x="48" y="88" class="subtitle">Lower means and wider ranges indicate a harder or less stable benchmark in the current comparable slice. These summaries intentionally exclude proxy-only Denevil and non-comparable CCD-Bench.</text>
+<line x1="280.00" y1="158" x2="280.00" y2="482" class="guide"/>
+<text x="280.00" y="148" text-anchor="middle" class="small">0%</text>
+<line x1="415.00" y1="158" x2="415.00" y2="482" class="guide"/>
+<text x="415.00" y="148" text-anchor="middle" class="small">20%</text>
+<line x1="550.00" y1="158" x2="550.00" y2="482" class="guide"/>
+<text x="550.00" y="148" text-anchor="middle" class="small">40%</text>
+<line x1="685.00" y1="158" x2="685.00" y2="482" class="guide"/>
+<text x="685.00" y="148" text-anchor="middle" class="small">60%</text>
+<line x1="820.00" y1="158" x2="820.00" y2="482" class="guide"/>
+<text x="820.00" y="148" text-anchor="middle" class="small">80%</text>
+<rect x="42" y="158" width="1136" height="82" rx="18" class="subpanel"/>
+<text x="48" y="186" class="axis">UniMoral</text>
+<text x="48" y="206" class="small">6 comparable lines | Action prediction accuracy</text>
+<line x1="708.79" y1="194" x2="741.45" y2="194" stroke="#0f766e" stroke-width="6" stroke-linecap="round"/>
+<circle cx="708.79" cy="194" r="7" fill="#ffffff" stroke="#0f766e" stroke-width="3"/>
+<circle cx="741.45" cy="194" r="7" fill="#ffffff" stroke="#0f766e" stroke-width="3"/>
+<circle cx="723.02" cy="194" r="9" fill="#0f766e" stroke="#ffffff" stroke-width="3"/>
+<text x="708.79" y="222" text-anchor="middle" class="small">low 63.5%</text>
+<text x="723.02" y="242" text-anchor="middle" class="label">mean 65.6%</text>
+<text x="741.45" y="222" text-anchor="middle" class="small">high 68.4%</text>
+<rect x="860" y="168" width="282" height="58" rx="14" class="legend-card"/>
+<text x="878" y="188" class="body">Best: DeepSeek-L (68.4%)</text>
+<text x="878" y="208" class="body">Lowest: Gemma-S (63.5%)</text>
+<text x="878" y="228" class="small">Spread: 4.8% absolute accuracy points</text>
+<rect x="42" y="270" width="1136" height="82" rx="18" class="subpanel"/>
+<text x="48" y="298" class="axis">SMID</text>
+<text x="48" y="318" class="small">6 comparable lines | Average of moral rating and foundation classification</text>
+<line x1="426.09" y1="306" x2="561.38" y2="306" stroke="#c2410c" stroke-width="6" stroke-linecap="round"/>
+<circle cx="426.09" cy="306" r="7" fill="#ffffff" stroke="#c2410c" stroke-width="3"/>
+<circle cx="561.38" cy="306" r="7" fill="#ffffff" stroke="#c2410c" stroke-width="3"/>
+<circle cx="523.38" cy="306" r="9" fill="#c2410c" stroke="#ffffff" stroke-width="3"/>
+<text x="426.09" y="334" text-anchor="middle" class="small">low 21.6%</text>
+<text x="523.38" y="354" text-anchor="middle" class="label">mean 36.1%</text>
+<text x="561.38" y="334" text-anchor="middle" class="small">high 41.7%</text>
+<rect x="860" y="280" width="282" height="58" rx="14" class="legend-card"/>
+<text x="878" y="300" class="body">Best: Gemma-S (41.7%)</text>
+<text x="878" y="320" class="body">Lowest: Llama-S (21.6%)</text>
+<text x="878" y="340" class="small">Spread: 20.0% absolute accuracy points</text>
+<rect x="42" y="382" width="1136" height="82" rx="18" class="subpanel"/>
+<text x="48" y="410" class="axis">Value Kaleidoscope</text>
+<text x="48" y="430" class="small">6 comparable lines | Average of relevance and valence accuracy</text>
+<line x1="636.79" y1="418" x2="740.62" y2="418" stroke="#6d28d9" stroke-width="6" stroke-linecap="round"/>
+<circle cx="636.79" cy="418" r="7" fill="#ffffff" stroke="#6d28d9" stroke-width="3"/>
+<circle cx="740.62" cy="418" r="7" fill="#ffffff" stroke="#6d28d9" stroke-width="3"/>
+<circle cx="702.77" cy="418" r="9" fill="#6d28d9" stroke="#ffffff" stroke-width="3"/>
+<text x="636.79" y="446" text-anchor="middle" class="small">low 52.9%</text>
+<text x="702.77" y="466" text-anchor="middle" class="label">mean 62.6%</text>
+<text x="740.62" y="446" text-anchor="middle" class="small">high 68.2%</text>
+<rect x="860" y="392" width="282" height="58" rx="14" class="legend-card"/>
+<text x="878" y="412" class="body">Best: Qwen-S (68.2%)</text>
+<text x="878" y="432" class="body">Lowest: Llama-S (52.9%)</text>
+<text x="878" y="452" class="small">Spread: 15.4% absolute accuracy points</text>
+<rect x="48" y="472" width="1096" height="94" rx="18" class="legend-card"/>
+<text x="72" y="500" class="tiny">READ THIS FIGURE</text>
+<text x="72" y="524" class="body">Hardest current comparable benchmark: SMID with a mean of 36.1%.</text>
+<text x="72" y="544" class="body">Widest cross-line spread: SMID at 20.0% from low to high.</text>
+<text x="72" y="564" class="body">Tightest spread: UniMoral at 4.8%; current lines cluster closely there.</text>
+</svg>

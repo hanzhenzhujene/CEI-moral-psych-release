@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="860" viewBox="0 0 1280 860" role="img">
+<defs>
+<linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffffff"/>
+<stop offset="100%" stop-color="#f8fafc"/>
+</linearGradient>
+<pattern id="diagonalHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+<line x1="0" y1="0" x2="0" y2="8" stroke="#cdd6e1" stroke-width="3"/>
+</pattern>
+<filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+<feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#9fb0c2" flood-opacity="0.18"/>
+</filter>
+<style>
+.canvas { fill: #f3f6fa; }
+.title { font: 700 26px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.subtitle { font: 400 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.axis { font: 600 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.label { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.metric { font: 700 20px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.celltext { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #ffffff; }
+.celltext-dark { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #173042; }
+.cellsub { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: rgba(255,255,255,0.88); }
+.cellsub-dark { font: 600 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #385062; }
+.body { font: 500 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.small { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.tiny { font: 600 10px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #6b7c8f; letter-spacing: 0.04em; }
+.grid { fill: #ffffff; stroke: #d7dee6; stroke-width: 1.25; }
+.panel { fill: url(#panelGradient); stroke: #dbe4ee; stroke-width: 1.25; filter: url(#softShadow); }
+.subpanel { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }
+.legend-card { fill: #ffffff; stroke: #dbe4ee; stroke-width: 1; }
+.guide { stroke: #d7dee6; stroke-width: 1; stroke-dasharray: 4 6; }
+.baseline { stroke: #aab7c6; stroke-width: 1.1; }
+.muted-cell { fill: #eef2f7; stroke: #d7dee6; stroke-width: 1; }
+.muted-bar { fill: #ecf1f6; stroke: #d7dee6; stroke-width: 1; }
+.outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
+</style>
+</defs>
+<rect x="0" y="0" width="1280" height="860" class="canvas"/>
+<rect x="24" y="24" width="1232" height="812" rx="22" class="panel"/>
+<title>Family scaling profile by benchmark</title>
+<desc>Small-multiple view of how currently comparable benchmark accuracy changes by family and size slot. Missing points reflect unavailable or intentionally withheld comparable cells.</desc>
+<text x="48" y="64" class="title">Family Scaling Profile</text>
+<text x="48" y="88" class="subtitle">This figure asks a narrow question: when a family has trustworthy comparable points, how do those points move from small to medium to large? Sparse panels are evidence boundaries, not zeros.</text>
+<rect x="90" y="182" width="344" height="430" rx="20" class="subpanel"/>
+<text x="112" y="212" class="axis">UniMoral</text>
+<text x="112" y="232" class="small">Action prediction accuracy</text>
+<line x1="134" y1="558.00" x2="400" y2="558.00" class="guide"/>
+<text x="122" y="562.00" text-anchor="end" class="small">20%</text>
+<line x1="134" y1="470.73" x2="400" y2="470.73" class="guide"/>
+<text x="122" y="474.73" text-anchor="end" class="small">35%</text>
+<line x1="134" y1="383.45" x2="400" y2="383.45" class="guide"/>
+<text x="122" y="387.45" text-anchor="end" class="small">50%</text>
+<line x1="134" y1="296.18" x2="400" y2="296.18" class="guide"/>
+<text x="122" y="300.18" text-anchor="end" class="small">65%</text>
+<line x1="134" y1="238.00" x2="400" y2="238.00" class="guide"/>
+<text x="122" y="242.00" text-anchor="end" class="small">75%</text>
+<line x1="134.00" y1="238" x2="134.00" y2="558" class="guide"/>
+<text x="134.00" y="582" text-anchor="middle" class="axis">S</text>
+<line x1="267.00" y1="238" x2="267.00" y2="558" class="guide"/>
+<text x="267.00" y="582" text-anchor="middle" class="axis">M</text>
+<line x1="400.00" y1="238" x2="400.00" y2="558" class="guide"/>
+<text x="400.00" y="582" text-anchor="middle" class="axis">L</text>
+<circle cx="134.00" cy="297.68" r="7" fill="#ffffff" stroke="#0d9488" stroke-width="3"/>
+<circle cx="134.00" cy="297.68" r="3.5" fill="#0d9488"/>
+<circle cx="400.00" cy="276.62" r="7" fill="#ffffff" stroke="#2563eb" stroke-width="3"/>
+<circle cx="400.00" cy="276.62" r="3.5" fill="#2563eb"/>
+<circle cx="134.00" cy="297.35" r="7" fill="#ffffff" stroke="#ea580c" stroke-width="3"/>
+<circle cx="134.00" cy="297.35" r="3.5" fill="#ea580c"/>
+<line x1="134.00" y1="304.77" x2="267.00" y2="288.87" stroke="#8b5cf6" stroke-width="3.2" stroke-linecap="round"/>
+<line x1="267.00" y1="288.87" x2="400.00" y2="289.73" stroke="#8b5cf6" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="134.00" cy="304.77" r="7" fill="#ffffff" stroke="#8b5cf6" stroke-width="3"/>
+<circle cx="134.00" cy="304.77" r="3.5" fill="#8b5cf6"/>
+<circle cx="267.00" cy="288.87" r="7" fill="#ffffff" stroke="#8b5cf6" stroke-width="3"/>
+<circle cx="267.00" cy="288.87" r="3.5" fill="#8b5cf6"/>
+<circle cx="400.00" cy="289.73" r="7" fill="#ffffff" stroke="#8b5cf6" stroke-width="3"/>
+<circle cx="400.00" cy="289.73" r="3.5" fill="#8b5cf6"/>
+<text x="112" y="598" class="small">Dashed connectors skip missing size slots.</text>
+<rect x="468" y="182" width="344" height="430" rx="20" class="subpanel"/>
+<text x="490" y="212" class="axis">SMID</text>
+<text x="490" y="232" class="small">Average of moral rating and foundation classification</text>
+<line x1="512" y1="558.00" x2="778" y2="558.00" class="guide"/>
+<text x="500" y="562.00" text-anchor="end" class="small">20%</text>
+<line x1="512" y1="470.73" x2="778" y2="470.73" class="guide"/>
+<text x="500" y="474.73" text-anchor="end" class="small">35%</text>
+<line x1="512" y1="383.45" x2="778" y2="383.45" class="guide"/>
+<text x="500" y="387.45" text-anchor="end" class="small">50%</text>
+<line x1="512" y1="296.18" x2="778" y2="296.18" class="guide"/>
+<text x="500" y="300.18" text-anchor="end" class="small">65%</text>
+<line x1="512" y1="238.00" x2="778" y2="238.00" class="guide"/>
+<text x="500" y="242.00" text-anchor="end" class="small">75%</text>
+<line x1="512.00" y1="238" x2="512.00" y2="558" class="guide"/>
+<text x="512.00" y="582" text-anchor="middle" class="axis">S</text>
+<line x1="645.00" y1="238" x2="645.00" y2="558" class="guide"/>
+<text x="645.00" y="582" text-anchor="middle" class="axis">M</text>
+<line x1="778.00" y1="238" x2="778.00" y2="558" class="guide"/>
+<text x="778.00" y="582" text-anchor="middle" class="axis">L</text>
+<circle cx="512.00" cy="460.21" r="7" fill="#ffffff" stroke="#0d9488" stroke-width="3"/>
+<circle cx="512.00" cy="460.21" r="3.5" fill="#0d9488"/>
+<line x1="512.00" y1="548.44" x2="778.00" y2="449.73" stroke="#ea580c" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="7 6"/>
+<circle cx="512.00" cy="548.44" r="7" fill="#ffffff" stroke="#ea580c" stroke-width="3"/>
+<circle cx="512.00" cy="548.44" r="3.5" fill="#ea580c"/>
+<circle cx="778.00" cy="449.73" r="7" fill="#ffffff" stroke="#ea580c" stroke-width="3"/>
+<circle cx="778.00" cy="449.73" r="3.5" fill="#ea580c"/>
+<line x1="512.00" y1="431.82" x2="645.00" y2="462.78" stroke="#8b5cf6" stroke-width="3.2" stroke-linecap="round"/>
+<line x1="645.00" y1="462.78" x2="778.00" y2="434.49" stroke="#8b5cf6" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="512.00" cy="431.82" r="7" fill="#ffffff" stroke="#8b5cf6" stroke-width="3"/>
+<circle cx="512.00" cy="431.82" r="3.5" fill="#8b5cf6"/>
+<circle cx="645.00" cy="462.78" r="7" fill="#ffffff" stroke="#8b5cf6" stroke-width="3"/>
+<circle cx="645.00" cy="462.78" r="3.5" fill="#8b5cf6"/>
+<circle cx="778.00" cy="434.49" r="7" fill="#ffffff" stroke="#8b5cf6" stroke-width="3"/>
+<circle cx="778.00" cy="434.49" r="3.5" fill="#8b5cf6"/>
+<text x="490" y="598" class="small">Dashed connectors skip missing size slots.</text>
+<rect x="846" y="182" width="344" height="430" rx="20" class="subpanel"/>
+<text x="868" y="212" class="axis">Value Kaleidoscope</text>
+<text x="868" y="232" class="small">Average of relevance and valence accuracy</text>
+<line x1="890" y1="558.00" x2="1156" y2="558.00" class="guide"/>
+<text x="878" y="562.00" text-anchor="end" class="small">20%</text>
+<line x1="890" y1="470.73" x2="1156" y2="470.73" class="guide"/>
+<text x="878" y="474.73" text-anchor="end" class="small">35%</text>
+<line x1="890" y1="383.45" x2="1156" y2="383.45" class="guide"/>
+<text x="878" y="387.45" text-anchor="end" class="small">50%</text>
+<line x1="890" y1="296.18" x2="1156" y2="296.18" class="guide"/>
+<text x="878" y="300.18" text-anchor="end" class="small">65%</text>
+<line x1="890" y1="238.00" x2="1156" y2="238.00" class="guide"/>
+<text x="878" y="242.00" text-anchor="end" class="small">75%</text>
+<line x1="890.00" y1="238" x2="890.00" y2="558" class="guide"/>
+<text x="890.00" y="582" text-anchor="middle" class="axis">S</text>
+<line x1="1023.00" y1="238" x2="1023.00" y2="558" class="guide"/>
+<text x="1023.00" y="582" text-anchor="middle" class="axis">M</text>
+<line x1="1156.00" y1="238" x2="1156.00" y2="558" class="guide"/>
+<text x="1156.00" y="582" text-anchor="middle" class="axis">L</text>
+<circle cx="890.00" cy="277.33" r="7" fill="#ffffff" stroke="#0d9488" stroke-width="3"/>
+<circle cx="890.00" cy="277.33" r="3.5" fill="#0d9488"/>
+<circle cx="1156.00" cy="305.10" r="7" fill="#ffffff" stroke="#2563eb" stroke-width="3"/>
+<circle cx="1156.00" cy="305.10" r="3.5" fill="#2563eb"/>
+<circle cx="890.00" cy="366.82" r="7" fill="#ffffff" stroke="#ea580c" stroke-width="3"/>
+<circle cx="890.00" cy="366.82" r="3.5" fill="#ea580c"/>
+<line x1="890.00" y1="329.54" x2="1023.00" y2="288.24" stroke="#8b5cf6" stroke-width="3.2" stroke-linecap="round"/>
+<line x1="1023.00" y1="288.24" x2="1156.00" y2="292.70" stroke="#8b5cf6" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="890.00" cy="329.54" r="7" fill="#ffffff" stroke="#8b5cf6" stroke-width="3"/>
+<circle cx="890.00" cy="329.54" r="3.5" fill="#8b5cf6"/>
+<circle cx="1023.00" cy="288.24" r="7" fill="#ffffff" stroke="#8b5cf6" stroke-width="3"/>
+<circle cx="1023.00" cy="288.24" r="3.5" fill="#8b5cf6"/>
+<circle cx="1156.00" cy="292.70" r="7" fill="#ffffff" stroke="#8b5cf6" stroke-width="3"/>
+<circle cx="1156.00" cy="292.70" r="3.5" fill="#8b5cf6"/>
+<text x="868" y="598" class="small">Dashed connectors skip missing size slots.</text>
+<rect x="48" y="646" width="1184" height="152" rx="18" class="legend-card"/>
+<text x="72" y="674" class="tiny">WHAT THIS FIGURE SUPPORTS</text>
+<rect x="72" y="690" width="14" height="14" rx="4" fill="#0d9488"/>
+<text x="96" y="701" class="body">Qwen: Only the small line is currently comparable.</text>
+<rect x="72" y="724" width="14" height="14" rx="4" fill="#2563eb"/>
+<text x="96" y="735" class="body">DeepSeek: Only the large text line is currently comparable.</text>
+<rect x="634" y="690" width="14" height="14" rx="4" fill="#ea580c"/>
+<text x="658" y="701" class="body">Llama: Only SMID has both small and large comparable points.</text>
+<rect x="634" y="724" width="14" height="14" rx="4" fill="#8b5cf6"/>
+<text x="658" y="735" class="body">Gemma: The only family with a full S/M/L comparable sweep on all three benchmarks.</text>
+<text x="72" y="780" class="small">Takeaway: current evidence supports task-specific scaling statements, not a single universal size law across all families and benchmarks.</text>
+</svg>

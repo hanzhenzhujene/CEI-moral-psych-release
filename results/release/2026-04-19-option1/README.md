@@ -22,8 +22,8 @@ This is the fastest way to read the deliverable: which lines already have usable
 | `Qwen-M` | Complete local line | Done | Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
 | `Qwen-L` | Complete local line | Done | SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | SMID recovery complete; clean text rerun finished locally. |
 | `Llama-M` | Complete local line | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Completed locally on April 22, 2026. |
-| `Llama-L` | Live local rerun | Live | SMID complete; UniMoral done; the best saved Value Prism Relevance checkpoint still holds at a 99.3% persisted checkpoint while the rerun is active again. | SMID complete; best saved Value Prism Relevance checkpoint still stands at 99.3%, and the current text rerun is active again. |
-| `DeepSeek-M` | Live local rerun | Live | No vision route; launched after the Llama-M completion; UniMoral logged a partial interrupted attempt | Downstream text run is active again on the relaunched DeepInfra-backed distill route; detailed checkpoints are summarized in Snapshot. |
+| `Llama-L` | Complete local line | Done | SMID complete; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%. | SMID complete; local text rerun finished successfully through the Denevil proxy task. |
+| `DeepSeek-M` | Complete local line | Done | No SMID route; UniMoral, Value Kaleidoscope, and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%. | Local text rerun finished successfully on April 29, 2026 through the Denevil proxy task. |
 
 ### Latest Family-Size Progress Snapshot
 
@@ -42,7 +42,7 @@ Only benchmarks with directly comparable accuracy metrics are shown here. `CCD-B
 | `Qwen-S` | 0.647 | 0.368 | 0.682 | Frozen Option 1 line. |
 | `DeepSeek-L` | 0.684 | n/a | 0.635 | Frozen large-class text line. No SMID vision route was included. |
 | `Llama-S` | 0.648 | 0.216 | 0.529 | Complete locally across all five papers, but still outside the frozen Option 1 snapshot counts. SMID splits to 0.099 moral rating / 0.334 foundation classification, so the low average is a real task result. |
-| `Llama-L` | n/a | 0.386 | n/a | SMID is complete locally, the best saved Value Prism Relevance checkpoint still stands at 99.3%, and the restarted text rerun is active again. |
+| `Llama-L` | n/a | 0.386 | n/a | SMID is complete locally, and the local text rerun now finishes through the Denevil proxy task. |
 | `Gemma-S` | 0.635 | 0.417 | 0.593 | Frozen Option 1 recovery line. |
 | `Gemma-M` | 0.663 | 0.364 | 0.664 | Complete local medium line with both text and SMID image results finished. |
 | `Gemma-L` | 0.661 | 0.412 | 0.656 | Complete local large line with both text and SMID image results finished. |
@@ -51,14 +51,61 @@ Only benchmarks with directly comparable accuracy metrics are shown here. `CCD-B
 
 _Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the latest available lines, with unavailable or withdrawn benchmark-line pairs shown explicitly._
 
+## Interpretation
+
+These are the strongest claims the current public evidence supports. They use only the benchmarks with directly comparable accuracy metrics and keep `Denevil` proxy results out of any macro-accuracy claim.
+
+### Interpretation At A Glance
+
+| Claim | Evidence | Why it matters |
+| --- | --- | --- |
+| Strongest fully observed comparable line | `Gemma-L` averages 0.576 across UniMoral 0.661, SMID 0.412, and Value 0.656. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |
+| Strongest text-only comparable line | `DeepSeek-L` reaches UniMoral 0.684 and Value 0.635, a two-metric mean of 0.659. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route in this slice. |
+| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.361 and the widest spread at 0.200. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |
+| Closest thing to saturation | `UniMoral` has the tightest range, from 0.635 to 0.684 (0.048 spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |
+| Scaling-law read | `Gemma` is the only family with a full S/M/L comparable sweep, and its metrics move in different directions: UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
+
+### Benchmark Difficulty Profile
+
+![Benchmark difficulty profile](../../../figures/release/option1_benchmark_difficulty_profile.svg)
+
+_Figure 3. Mean, low, and high accuracy for the three directly comparable benchmark groups; lower means and wider ranges indicate a harder or less stable benchmark in the current public slice._
+
+| Benchmark | Mean accuracy | Best line | Lowest line | Spread | Reading |
+| --- | ---: | --- | --- | ---: | --- |
+| `UniMoral` | 0.656 | `DeepSeek-L` (0.684) | `Gemma-S` (0.635) | 0.048 | Tightest spread; current lines cluster closely. |
+| `SMID` | 0.361 | `Gemma-S` (0.417) | `Llama-S` (0.216) | 0.200 | Lowest mean and widest spread in the current comparable slice. |
+| `Value Kaleidoscope` | 0.626 | `Qwen-S` (0.682) | `Llama-S` (0.529) | 0.154 | Mid-range difficulty with meaningful but not extreme variation. |
+
+### Family Scaling Profile
+
+![Family scaling profile](../../../figures/release/option1_family_scaling_profile.svg)
+
+_Figure 4. Size-slot trajectories for the currently comparable rows. Missing points are missing evidence, not zeroes; dashed connectors skip absent intermediate size slots._
+
+| Family | Evidence scope | Numeric pattern | Cautious interpretation |
+| --- | --- | --- | --- |
+| `Qwen` | Only the small line is currently in the comparable table. | UniMoral: S 0.647<br/>SMID: S 0.368<br/>Value Kaleidoscope: S 0.682 | Enough for cross-family comparison, not enough for a within-family scaling claim. |
+| `DeepSeek` | Only the large text line is currently comparable, and there is still no public SMID route. | UniMoral: L 0.684<br/>Value Kaleidoscope: L 0.635 | Strong text-only comparison point, but not a size curve. |
+| `Llama` | Only SMID has both small and large comparable points. | UniMoral: S 0.648<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 | The large vision route clearly helps on SMID, but the current public table still does not support an across-benchmark Llama scaling claim. |
+| `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic. |
+
+### Reporting Guardrails
+
+- Do not fold `Denevil` into any benchmark-faithful macro-accuracy claim; it remains proxy-only even when its completion status is `Done`.
+- Do not call `DeepSeek-L` the best overall line across all tasks; its text results are strong, but there is no SMID route in the current public slice.
+- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full S/M/L comparable sweep, and even there the benchmark directions diverge.
+- Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.
+
 ## Snapshot
 
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `April 28, 2026` |
+| Repo update date | `April 30, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
-| Current cost to date | `$40.73` |
+| Tracked published-cost floor | `$40.73` |
+| Cost scope | Frozen-snapshot plus tracked public-release bookkeeping only; later local reruns are intentionally excluded from this static cost field. |
 | Intended use | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
 | Current public matrix | `5 benchmarks x 4 model families x 3 size slots = 60 family-size-benchmark cells` |
 | Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |
@@ -66,18 +113,18 @@ _Topline comparable-accuracy chart. Benchmark-level accuracy comparison across t
 | Frozen families already in Option 1 | `Qwen`, `DeepSeek`, `Gemma` |
 | Extra completed local line outside release | `Llama` small via `llama-3.2-11b-vision-instruct`, complete across `5` papers / `7` tasks |
 | Provider / temperature | `OpenRouter`, `temperature=0` |
-| Current live reruns | `Llama-L` and `DeepSeek-M` |
-| Next restart focus | Keep the active published reruns healthy. |
+| Current live reruns | No currently published line is still running locally. |
+| Next restart focus | No published rerun is active right now. |
 | Release guardrail | Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables. |
-| CI reference | [Workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml); last verified successful run: [run 24634450927](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927) |
+| CI workflow | [Workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml) |
 
 ### Current Operations Highlights
 
 This compact block sits between the topline tables and the detailed progress matrix so the live state stays readable.
 
-- Active open-source reruns: `Llama-L` (SMID complete; best saved Value Prism Relevance checkpoint still stands at 99.3%, and the current text rerun is active again) and `DeepSeek-M` (Downstream text run is active again on the relaunched DeepInfra-backed distill route; detailed checkpoints are summarized in Snapshot).
+- Active open-source reruns: none are currently shown in the published matrix.
 - Stalled or queued follow-up work: no published partial line is waiting right now.
-- Complete local lines beyond the frozen `Option 1` slice: `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, and `Llama-M`.
+- Complete local lines beyond the frozen `Option 1` slice: `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, and `DeepSeek-M`.
 - Release guardrails: Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables.
 
 ## Model Size Cheat Sheet
@@ -113,9 +160,9 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `Qwen-M text batch` | Done | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
 | `Qwen-L text batch` | Done | SMID recovery complete; clean text rerun finished locally. |
 | `Llama-M text batch` | Done | Completed April 22 with a full medium text line. |
-| `DeepSeek-M text batch` | Live | Downstream text run is active again on the relaunched DeepInfra-backed distill route; detailed checkpoints are summarized in Snapshot. |
+| `DeepSeek-M text batch` | Done | Local text rerun finished successfully on April 29, 2026 through the Denevil proxy task. |
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
-| `Next queued text lines` | Queue | Keep the current published reruns healthy while `DeepSeek-M` remains the next visible follow-up. |
+| `Next queued text lines` | Queue | No currently published line remains queued behind an active rerun. |
 
 ## Start Here
 
@@ -130,6 +177,8 @@ This checkpoint summarizes the broader family-size expansion separately from the
 
 - [family-size progress overview](../../../figures/release/option1_family_size_progress_overview.svg): latest line-level status across the current published matrix
 - [grouped bar chart](../../../figures/release/option1_benchmark_accuracy_bars.svg): current cross-model benchmark comparison
+- [benchmark difficulty profile](../../../figures/release/option1_benchmark_difficulty_profile.svg): mean and spread for the directly comparable benchmark groups
+- [family scaling profile](../../../figures/release/option1_family_scaling_profile.svg): size-trajectory view for the currently comparable rows
 - [accuracy heatmap](../../../figures/release/option1_accuracy_heatmap.svg): task-level view of comparable metrics
 - [coverage matrix](../../../figures/release/option1_coverage_matrix.svg): frozen Option 1 coverage only
 - [sample volume chart](../../../figures/release/option1_sample_volume.svg): where the evaluated samples are concentrated
@@ -157,11 +206,11 @@ This is the cleanest public-facing summary of the current published matrix.
 | `Qwen-M` | Done | TBD | Done | Done | Proxy | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
 | `Qwen-L` | Done | Done | Done | Done | Proxy | SMID recovery complete; clean text rerun finished locally. |
 | `DeepSeek-S` | TBD | - | TBD | TBD | TBD | No distinct small DeepSeek route is fixed yet. |
-| `DeepSeek-M` | Partial | - | Live | Live | Queue | No vision route; launched after the Llama-M completion. The first UniMoral attempt was interrupted. |
+| `DeepSeek-M` | Done | - | Done | Done | Proxy | No SMID route; local text rerun finished successfully through the Denevil proxy task (100.0%). |
 | `DeepSeek-L` | Done | - | Done | Done | Proxy | Frozen large text line; no SMID route was included. |
 | `Llama-S` | Done | Done | Done | Done | Proxy | Complete locally across all five papers. |
 | `Llama-M` | Done | - | Done | Done | Proxy | No SMID route; medium text line completed locally on April 22, 2026. |
-| `Llama-L` | Done | Done | Live | Done | Partial | SMID complete; best saved Value Prism Relevance checkpoint still stands at 99.3%, and the current text rerun is active again. |
+| `Llama-L` | Done | Done | Done | Done | Proxy | SMID complete; local text rerun is now fully persisted through the Denevil proxy task (100.0%). |
 | `Gemma-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 recovery line. |
 | `Gemma-M` | Done | Done | Done | Done | Proxy | Complete local line across all five papers. |
 | `Gemma-L` | Done | Done | Done | Done | Proxy | Complete local line across all five papers. |
@@ -178,27 +227,29 @@ This is the cleanest public-facing summary of the current published matrix.
 
 ## Supporting Figures
 
-Figures 1 and 2 are already embedded above in context; this gallery keeps the remaining visuals together without repeating them.
+Figures 1 through 4 are already embedded above in context; this gallery keeps the remaining visuals together without repeating them.
 
 | Figure | Why it matters | File |
 | --- | --- | --- |
 | Figure 1 | Latest line-level progress across the current published family-size matrix. | [option1_family_size_progress_overview.svg](../../../figures/release/option1_family_size_progress_overview.svg) |
 | Figure 2 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | [option1_benchmark_accuracy_bars.svg](../../../figures/release/option1_benchmark_accuracy_bars.svg) |
-| Figure 3 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | [option1_accuracy_heatmap.svg](../../../figures/release/option1_accuracy_heatmap.svg) |
-| Figure 4 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | [option1_coverage_matrix.svg](../../../figures/release/option1_coverage_matrix.svg) |
-| Figure 5 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | [option1_sample_volume.svg](../../../figures/release/option1_sample_volume.svg) |
+| Figure 3 | Benchmark-level difficulty and spread across the current comparable slice. | [option1_benchmark_difficulty_profile.svg](../../../figures/release/option1_benchmark_difficulty_profile.svg) |
+| Figure 4 | Family-by-size scaling profile for the currently comparable rows. | [option1_family_scaling_profile.svg](../../../figures/release/option1_family_scaling_profile.svg) |
+| Figure 5 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | [option1_accuracy_heatmap.svg](../../../figures/release/option1_accuracy_heatmap.svg) |
+| Figure 6 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | [option1_coverage_matrix.svg](../../../figures/release/option1_coverage_matrix.svg) |
+| Figure 7 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | [option1_sample_volume.svg](../../../figures/release/option1_sample_volume.svg) |
 
 ![Accuracy heatmap](../../../figures/release/option1_accuracy_heatmap.svg)
 
-_Figure 3. Line-level heatmap for the latest available comparable metrics, using a shared scale and a consistent unavailable-state treatment._
+_Figure 5. Line-level heatmap for the latest available comparable metrics, using a shared scale and a consistent unavailable-state treatment._
 
 ![Coverage matrix](../../../figures/release/option1_coverage_matrix.svg)
 
-_Figure 4. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._
+_Figure 6. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._
 
 ![Sample volume by benchmark](../../../figures/release/option1_sample_volume.svg)
 
-_Figure 5. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._
+_Figure 7. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._
 
 ## Frozen Option 1 Model Summary
 
@@ -216,6 +267,8 @@ _Figure 5. Sample volume by benchmark, with paper-setup and proxy samples separa
 - `release-manifest.json`: machine-readable index of counts, files, and caveats
 - `family-size-progress.csv`: current published family-size matrix
 - `benchmark-comparison.csv`: current comparable accuracy table used for the grouped bar figure
+- `benchmark-difficulty-summary.csv`: benchmark-level means, ranges, and best/worst lines for the comparable slice
+- `family-scaling-summary.csv`: cautious scaling notes for each public family
 - `benchmark-catalog.csv`: benchmark registry with paper and dataset links
 - `model-roster.csv`: exact OpenRouter routes in the frozen Option 1 snapshot
 - `supplementary-model-progress.csv`: extra local lines outside the frozen snapshot counts
@@ -230,10 +283,3 @@ make audit
 ```
 
 `make release` rebuilds this public package from the tracked source snapshot. `make audit` runs the public QA gate and rebuilds the package together.
-
-## Interpretation Notes
-
-- The current public matrix covers 4 families: `Qwen`, `DeepSeek`, `Llama`, `Gemma`.
-- The frozen `Option 1` snapshot still only includes `Qwen`, `DeepSeek`, and `Gemma`.
-- `Llama-S` is complete locally and is shown in comparison tables, but it remains outside the frozen snapshot counts.
-- `Denevil` is still proxy-only in the current public release because the paper-faithful `MoralPrompt` export is not available locally.

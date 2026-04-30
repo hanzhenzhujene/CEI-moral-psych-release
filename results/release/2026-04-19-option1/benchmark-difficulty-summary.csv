@@ -1,0 +1,4 @@
+benchmark,scope_label,comparable_lines,mean_accuracy,min_accuracy,max_accuracy,spread,best_line,weakest_line
+UniMoral,Action prediction accuracy,6,0.656326,0.635246,0.683629,0.048383,DeepSeek-L,Gemma-S
+SMID,Average of moral rating and foundation classification,6,0.360563,0.216423,0.416865,0.200442,Gemma-S,Llama-S
+Value Kaleidoscope,Average of relevance and valence accuracy,6,0.626328,0.528583,0.682406,0.153823,Qwen-S,Llama-S

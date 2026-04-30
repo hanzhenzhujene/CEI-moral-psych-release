@@ -4,15 +4,15 @@
   "source_snapshot": "results/release/2026-04-19-option1/source/authoritative-summary.csv",
   "report_metadata": {
     "owner": "Jenny Zhu",
-    "date": "2026-04-28",
+    "date": "2026-04-30",
     "frozen_snapshot_date": "2026-04-19",
-    "current_cost": "$40.73",
+    "tracked_cost_floor": "$40.73",
+    "tracked_cost_scope": "Frozen-snapshot plus tracked public-release bookkeeping only; later local reruns are intentionally excluded from this static cost field.",
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "operations_note": "Updated April 28, 2026. The frozen public snapshot remains Option 1 from April 19. Qwen-M, Qwen-L, Gemma-M, Gemma-L, and Llama-M are complete locally beyond the frozen slice, Llama-L and DeepSeek-M remain the two incomplete published follow-up lines.",
-    "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml",
-    "ci_last_verified_run_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
+    "operations_note": "Updated April 30, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, and `DeepSeek-M`, and no published follow-up line is still live.",
+    "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
   },
   "target_matrix": {
     "benchmarks": 5,
@@ -127,10 +127,14 @@
     "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
     "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
     "benchmark_comparison": "results/release/2026-04-19-option1/benchmark-comparison.csv",
+    "benchmark_difficulty_summary": "results/release/2026-04-19-option1/benchmark-difficulty-summary.csv",
+    "family_scaling_summary": "results/release/2026-04-19-option1/family-scaling-summary.csv",
     "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
     "coverage_figure": "figures/release/option1_coverage_matrix.svg",
     "accuracy_figure": "figures/release/option1_accuracy_heatmap.svg",
     "benchmark_bar_figure": "figures/release/option1_benchmark_accuracy_bars.svg",
+    "benchmark_difficulty_figure": "figures/release/option1_benchmark_difficulty_profile.svg",
+    "family_scaling_figure": "figures/release/option1_family_scaling_profile.svg",
     "sample_volume_figure": "figures/release/option1_sample_volume.svg"
   },
   "tables": [
@@ -145,6 +149,8 @@
     "supplementary-model-progress.csv",
     "family-size-progress.csv",
     "benchmark-comparison.csv",
+    "benchmark-difficulty-summary.csv",
+    "family-scaling-summary.csv",
     "future-model-plan.csv",
     "benchmark-summary.csv",
     "faithful-metrics.csv",
@@ -155,6 +161,8 @@
     "figures/release/option1_coverage_matrix.svg",
     "figures/release/option1_accuracy_heatmap.svg",
     "figures/release/option1_benchmark_accuracy_bars.svg",
+    "figures/release/option1_benchmark_difficulty_profile.svg",
+    "figures/release/option1_family_scaling_profile.svg",
     "figures/release/option1_sample_volume.svg"
   ],
   "interpretation_guardrails": [

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -37,8 +38,10 @@ def test_release_builder_emits_expected_files(tmp_path):
         "README.md",
         "benchmark-catalog.csv",
         "benchmark-comparison.csv",
+        "benchmark-difficulty-summary.csv",
         "benchmark-summary.csv",
         "coverage-matrix.csv",
+        "family-scaling-summary.csv",
         "family-size-progress.csv",
         "faithful-metrics.csv",
         "future-model-plan.csv",
@@ -62,7 +65,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         "option1_family_size_progress_overview.svg",
         "option1_accuracy_heatmap.svg",
         "option1_benchmark_accuracy_bars.svg",
+        "option1_benchmark_difficulty_profile.svg",
         "option1_coverage_matrix.svg",
+        "option1_family_scaling_profile.svg",
         "option1_sample_volume.svg",
     }
     actual_figures = {path.name for path in figure_dir.glob("*.svg")}
@@ -73,13 +78,23 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_cost"] == "$40.73"
+    assert manifest["report_metadata"]["tracked_cost_floor"] == "$40.73"
+    assert "later local reruns are intentionally excluded" in manifest["report_metadata"]["tracked_cost_scope"]
+    assert manifest["report_metadata"]["ci_workflow_url"].endswith("/actions/workflows/ci.yml")
     assert manifest["target_matrix"]["family_size_benchmark_cells"] == 60
     assert manifest["target_matrix"]["model_families"] == 4
     assert manifest["model_families"] == ["Qwen", "DeepSeek", "Llama", "Gemma"]
     assert manifest["entry_points"]["report"].endswith("jenny-group-report.md")
     assert manifest["entry_points"]["supplementary_progress"].endswith("supplementary-model-progress.csv")
     assert manifest["entry_points"]["family_size_progress"].endswith("family-size-progress.csv")
+    assert manifest["entry_points"]["benchmark_difficulty_summary"].endswith("benchmark-difficulty-summary.csv")
+    assert manifest["entry_points"]["family_scaling_summary"].endswith("family-scaling-summary.csv")
+    assert manifest["entry_points"]["benchmark_difficulty_figure"].endswith("option1_benchmark_difficulty_profile.svg")
+    assert manifest["entry_points"]["family_scaling_figure"].endswith("option1_family_scaling_profile.svg")
+    assert "benchmark-difficulty-summary.csv" in manifest["tables"]
+    assert "family-scaling-summary.csv" in manifest["tables"]
+    assert "figures/release/option1_benchmark_difficulty_profile.svg" in manifest["figures"]
+    assert "figures/release/option1_family_scaling_profile.svg" in manifest["figures"]
 
     with (release_dir / "supplementary-model-progress.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -211,24 +226,36 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert llama_large["denevil"] in {"partial", "live", "queue", "proxy"}
     assert llama_large["summary_note"] in {
         "SMID complete; best saved Value Prism Relevance checkpoint still stands at 99.3%, and the current text rerun is active again.",
+        "SMID complete; best saved Value Prism Relevance checkpoint still stands at 100.0%, and the current text rerun is active again.",
         "SMID complete; current text rerun active.",
+        "SMID complete; local text rerun is now fully persisted through the Denevil proxy task (100.0%).",
         "SMID complete; text rerun is paused because OpenRouter credits are exhausted after a 99.3% Value Prism Relevance checkpoint.",
         "SMID done; text is still queued.",
     }
     deepseek_medium = row_for("DeepSeek-M")
-    assert deepseek_medium["unimoral"] in {"partial", "queue"}
+    assert deepseek_medium["unimoral"] in {"done", "partial", "queue"}
     assert deepseek_medium["smid"] == "-"
-    assert deepseek_medium["value_kaleidoscope"] in {"live", "partial", "queue"}
-    assert deepseek_medium["ccd_bench"] in {"queue", "partial", "live"}
-    assert deepseek_medium["denevil"] in {"queue", "partial", "live"}
-    assert deepseek_medium["summary_note"] in {
+    assert deepseek_medium["value_kaleidoscope"] in {"done", "live", "partial", "queue"}
+    assert deepseek_medium["ccd_bench"] in {"done", "queue", "partial", "live"}
+    assert deepseek_medium["denevil"] in {"queue", "partial", "live", "proxy"}
+    allowed_deepseek_notes = {
         "No vision route; downstream attempt is currently stalled after partial text checkpoints.",
         "No vision route; queued behind the live Llama-M rerun.",
         "No vision route; downstream attempt is currently blocked because OpenRouter credits are exhausted.",
         "No vision route; downstream text run is active, but the current provider path is intermittently hitting NextBit upstream rate limits and provider errors.",
         "No vision route; launched after the Llama-M completion. The first UniMoral attempt was interrupted.",
         "Downstream text run is active again on the relaunched DeepInfra-backed distill route; detailed checkpoints are summarized in Snapshot.",
+        "No vision route; downstream text run is active again on the relaunched DeepInfra-backed distill route.",
     }
+    dynamic_deepseek_note_patterns = [
+        r"Downstream text run is active again on the relaunched DeepInfra-backed distill route; the current Denevil proxy archive has already reached \d+\.\d%\.",
+        r"No vision route; downstream text run is active again on the relaunched DeepInfra-backed distill route, and Denevil proxy has already reached \d+\.\d% persisted coverage\.",
+        r"No SMID route; local text rerun finished successfully through the Denevil proxy task \(\d+\.\d%\)\.",
+    ]
+    assert deepseek_medium["summary_note"] in allowed_deepseek_notes or any(
+        re.fullmatch(pattern, deepseek_medium["summary_note"])
+        for pattern in dynamic_deepseek_note_patterns
+    )
 
     with (release_dir / "benchmark-comparison.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -250,8 +277,38 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     assert not any(row["line_label"] in {"Qwen-M", "Qwen-L"} for row in rows)
 
+    with (release_dir / "benchmark-difficulty-summary.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        difficulty_rows = list(reader)
+    assert [row["benchmark"] for row in difficulty_rows] == ["UniMoral", "SMID", "Value Kaleidoscope"]
+    assert any(
+        row["benchmark"] == "SMID"
+        and row["mean_accuracy"] == "0.360563"
+        and row["spread"] == "0.200442"
+        and row["best_line"] == "Gemma-S"
+        and row["weakest_line"] == "Llama-S"
+        for row in difficulty_rows
+    )
+
+    with (release_dir / "family-scaling-summary.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        scaling_rows = list(reader)
+    assert [row["family"] for row in scaling_rows] == ["Qwen", "DeepSeek", "Llama", "Gemma"]
+    assert any(
+        row["family"] == "Gemma"
+        and "Full S/M/L comparable sweep" in row["evidence_scope"]
+        and "SMID: S 0.417 -> M 0.364 -> L 0.412" in row["numeric_pattern"]
+        and "non-monotonic" in row["interpretation"]
+        for row in scaling_rows
+    )
+
     report_text = (release_dir / "jenny-group-report.md").read_text(encoding="utf-8")
     assert "## Results First" in report_text
+    assert "## Interpretation" in report_text
+    assert "### Interpretation At A Glance" in report_text
+    assert "### Benchmark Difficulty Profile" in report_text
+    assert "### Family Scaling Profile" in report_text
+    assert "### Reporting Guardrails" in report_text
     assert "### Latest Family-Size Progress Snapshot" in report_text
     assert "qwen2.5-vl-72b-instruct" in report_text
     assert "## Local Expansion Checkpoint" in report_text
@@ -259,8 +316,16 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "## Status Key" in report_text
     assert "## Supporting Figures" in report_text
     assert "option1_family_size_progress_overview.svg" in report_text
+    assert "option1_benchmark_difficulty_profile.svg" in report_text
+    assert "option1_family_scaling_profile.svg" in report_text
     assert "Partial" in report_text
     assert "Model families in scope" in report_text
+    assert "## Safe One-Sentence Framing" in report_text
+    assert "## Interpretation Notes" not in report_text
+    assert "Tracked published-cost floor" in report_text
+    assert "Cost scope" in report_text
+    assert "Current cost to date" not in report_text
+    assert "24634450927" not in report_text
     assert "`MiniMax`" not in report_text
     assert "| `MiniMax-S` |" not in report_text
     assert "| `MiniMax-M` |" not in report_text
@@ -270,15 +335,29 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     release_readme = (release_dir / "README.md").read_text(encoding="utf-8")
     assert "## Results First" in release_readme
+    assert "## Interpretation" in release_readme
+    assert "### Interpretation At A Glance" in release_readme
+    assert "### Benchmark Difficulty Profile" in release_readme
+    assert "### Family Scaling Profile" in release_readme
+    assert "### Reporting Guardrails" in release_readme
     assert "### Latest Family-Size Progress Snapshot" in release_readme
     assert "## Local Expansion Checkpoint" in release_readme
     assert "sample volume chart" in release_readme
+    assert "benchmark difficulty profile" in release_readme
+    assert "family scaling profile" in release_readme
     assert "## Start Here" in release_readme
     assert "## Status Key" in release_readme
     assert "## Supporting Figures" in release_readme
     assert "option1_family_size_progress_overview.svg" in release_readme
+    assert "option1_benchmark_difficulty_profile.svg" in release_readme
+    assert "option1_family_scaling_profile.svg" in release_readme
     assert "Partial" in release_readme
     assert "Model families in scope" in release_readme
+    assert "## Interpretation Notes" not in release_readme
+    assert "Tracked published-cost floor" in release_readme
+    assert "Cost scope" in release_readme
+    assert "Current cost to date" not in release_readme
+    assert "24634450927" not in release_readme
     assert "`MiniMax`" not in release_readme
     assert "| `MiniMax-S` |" not in release_readme
     assert "| `MiniMax-M` |" not in release_readme
@@ -303,6 +382,16 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "no current result for this benchmark" in benchmark_bar_svg
     assert "Gemma-L" in benchmark_bar_svg
     assert "withdrawn from direct comparison" in benchmark_bar_svg
+
+    benchmark_difficulty_svg = (figure_dir / "option1_benchmark_difficulty_profile.svg").read_text(encoding="utf-8")
+    assert "Benchmark Difficulty And Spread" in benchmark_difficulty_svg
+    assert "Hardest current comparable benchmark" in benchmark_difficulty_svg
+    assert "Widest cross-line spread" in benchmark_difficulty_svg
+
+    family_scaling_svg = (figure_dir / "option1_family_scaling_profile.svg").read_text(encoding="utf-8")
+    assert "Family Scaling Profile" in family_scaling_svg
+    assert "Sparse panels are evidence boundaries, not zeros." in family_scaling_svg
+    assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
 
     sample_volume_svg = (figure_dir / "option1_sample_volume.svg").read_text(encoding="utf-8")
     assert "Paper setup:" in sample_volume_svg

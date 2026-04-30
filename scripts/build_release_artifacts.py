@@ -34,7 +34,11 @@ SNAPSHOT_DATE_ISO = "2026-04-19"
 REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan."
 REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
-REPORT_CURRENT_COST = "$40.73"
+REPORT_TRACKED_COST_FLOOR = "$40.73"
+REPORT_TRACKED_COST_SCOPE = (
+    "Frozen-snapshot plus tracked public-release bookkeeping only; later local reruns are intentionally excluded "
+    "from this static cost field."
+)
 REPORT_STATUS_NOTE = (
     f"Updated {REPORT_DATE_LONG}. "
     "The frozen public snapshot remains Option 1 from April 19. "
@@ -69,7 +73,6 @@ PUBLIC_WITHHELD_FAMILY_STATUS = ""
 PUBLIC_WITHHELD_FAMILY_NOTE = ""
 PUBLIC_NEXT_QUEUED_NOTE = "Pending refresh from the on-disk rerun monitor."
 CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
-CI_RUN_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/runs/24634450927"
 TEXT_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-text-expansion"
 IMAGE_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-image-expansion"
 
@@ -91,6 +94,13 @@ ACCURACY_SCOPE_ORDER = [
     ("Value Kaleidoscope", "Relevance", "Value Kaleidoscope\nrelevance"),
     ("Value Kaleidoscope", "Valence", "Value Kaleidoscope\nvalence"),
 ]
+COMPARABLE_METRIC_SPECS = [
+    ("UniMoral", "unimoral_action_accuracy", "Action prediction accuracy"),
+    ("SMID", "smid_average_accuracy", "Average of moral rating and foundation classification"),
+    ("Value Kaleidoscope", "value_average_accuracy", "Average of relevance and valence accuracy"),
+]
+SIZE_SLOT_ORDER = ["S", "M", "L"]
+SIZE_SLOT_INDEX = {slot: index for index, slot in enumerate(SIZE_SLOT_ORDER)}
 SAMPLE_BAR_ORDER = ["Value Kaleidoscope", "Denevil", "UniMoral", "SMID", "CCD-Bench"]
 MODEL_SIZE_PATTERN = re.compile(r"(?<!\d)(\d+(?:\.\d+)?)b\b", re.IGNORECASE)
 TRACE_RETRY_PATTERN = re.compile(r"retry(?:ing)? in ([0-9,]+) seconds", re.IGNORECASE)
@@ -1382,6 +1392,11 @@ def _apply_live_monitor_snapshot() -> None:
         DEEPSEEK_MEDIUM_EVAL_DIR,
         task_name="denevil_fulcra_proxy_generation",
     )
+    deepseek_completion_date = (
+        _format_monitor_date(deepseek_master_status_path.stat().st_mtime)
+        if deepseek_completed and deepseek_master_status_path.exists()
+        else None
+    )
     deepseek_upstream_rate_limited = _latest_trace_has_upstream_rate_limit(DEEPSEEK_MEDIUM_TRACE_DIR)
     deepseek_provider_erroring = _latest_trace_has_provider_error(DEEPSEEK_MEDIUM_TRACE_DIR)
     deepseek_live_rerun = (
@@ -1423,6 +1438,12 @@ def _apply_live_monitor_snapshot() -> None:
     llama_large_denevil = _best_eval_checkpoint(
         LLAMA_LARGE_EVAL_DIR,
         task_name="denevil_fulcra_proxy_generation",
+    )
+    llama_large_completed = bool(
+        (llama_large_job_dir / "job_done.txt").exists()
+        and llama_large_denevil is not None
+        and llama_large_denevil["status"] == "success"
+        and llama_large_denevil["completed"] == llama_large_denevil["total"]
     )
     minimax_medium_job_dir = MINIMAX_MEDIUM_FULL_RUN_DIR / "minimax_m2_5_medium"
     minimax_medium_active_rerun = (
@@ -1994,6 +2015,25 @@ def _apply_live_monitor_snapshot() -> None:
                     f"{deepseek_stage_note} DeepSeek-M has already moved into Value Prism Relevance, but no persisted "
                     "sample checkpoint is on disk there yet."
                 ).strip()
+        if deepseek_latest is not None and deepseek_latest["task"] == "denevil_fulcra_proxy_generation":
+            if deepseek_denevil is not None and deepseek_denevil["completed"] > 0:
+                deepseek_current_note = (
+                    "Downstream text run is active again on the relaunched DeepInfra-backed distill route; "
+                    f"the current Denevil proxy archive has already reached {deepseek_denevil['progress_pct']:.1f}%."
+                )
+                deepseek_progress_summary = (
+                    "No vision route; downstream text run is active again on the relaunched DeepInfra-backed distill route, "
+                    f"and Denevil proxy has already reached {deepseek_denevil['progress_pct']:.1f}% persisted coverage."
+                )
+                deepseek_current_coverage = (
+                    "No vision route; UniMoral, Value Kaleidoscope, and CCD-Bench are fully persisted; "
+                    f"Denevil proxy holds a {deepseek_denevil['progress_pct']:.1f}% persisted checkpoint"
+                )
+            else:
+                deepseek_current_note = (
+                    "Downstream text run is active again on the relaunched DeepInfra-backed distill route; "
+                    "the Denevil proxy task is live, but the current archive has not flushed its first persisted block yet."
+                )
         if deepseek_live_rerun and (deepseek_upstream_rate_limited or deepseek_provider_erroring):
             deepseek_current_scope = "Live local rerun"
             deepseek_current_status = "live"
@@ -2067,9 +2107,33 @@ def _apply_live_monitor_snapshot() -> None:
             deepseek_current_scope = "Complete local line"
             deepseek_current_status = "done"
             deepseek_local_checkpoint_status = "done"
-            deepseek_current_coverage = "4 benchmark lines plus `Denevil` proxy; no SMID route"
-            deepseek_current_note = "Completed locally on April 22, 2026."
-            deepseek_progress_summary = "No SMID route; medium text line completed locally on April 22, 2026."
+            if deepseek_denevil is not None and deepseek_denevil["completed"] > 0:
+                deepseek_current_coverage = (
+                    "No SMID route; UniMoral, Value Kaleidoscope, and CCD-Bench are fully persisted; "
+                    f"Denevil proxy finished at {deepseek_denevil['progress_pct']:.1f}%."
+                )
+                deepseek_current_note = (
+                    f"Local text rerun finished successfully on {deepseek_completion_date} through the "
+                    "Denevil proxy task."
+                    if deepseek_completion_date
+                    else "Local text rerun finished successfully through the Denevil proxy task."
+                )
+                deepseek_progress_summary = (
+                    "No SMID route; local text rerun finished successfully through the Denevil proxy task "
+                    f"({deepseek_denevil['progress_pct']:.1f}%)."
+                )
+            else:
+                deepseek_current_coverage = "4 benchmark lines plus `Denevil` proxy; no SMID route"
+                deepseek_current_note = (
+                    f"Completed locally on {deepseek_completion_date}."
+                    if deepseek_completion_date
+                    else "Completed locally."
+                )
+                deepseek_progress_summary = (
+                    f"No SMID route; medium text line completed locally on {deepseek_completion_date}."
+                    if deepseek_completion_date
+                    else "No SMID route; medium text line completed locally."
+                )
         elif not deepseek_live_rerun:
             deepseek_current_scope = "Attempted local line"
             deepseek_current_status = "partial"
@@ -2359,6 +2423,8 @@ def _apply_live_monitor_snapshot() -> None:
             else "Llama-L, MiniMax-M, and MiniMax-L remain queued while DeepSeek-M, Qwen-M, Qwen-L, and "
             "MiniMax-S all need fresh retries after the OpenRouter limit resets."
         )
+    elif deepseek_completed and not active_text_labels:
+        next_queued_note = "No currently published text line remains queued behind an active rerun."
     elif deepseek_launched:
         next_queued_note = "Llama-L, MiniMax-M, and MiniMax-L are waiting on the active Qwen and DeepSeek reruns."
     else:
@@ -2474,7 +2540,12 @@ def _apply_live_monitor_snapshot() -> None:
         llama_large_progress["ccd_bench"] = "done" if llama_large_ccd["status"] == "success" else "partial"
     if llama_large_denevil is not None and llama_large_denevil["completed"] > 0:
         llama_large_progress["denevil"] = "proxy" if llama_large_denevil["status"] == "success" else "partial"
-    if llama_large_active_rerun and llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
+    if llama_large_completed and llama_large_denevil is not None:
+        llama_large_progress["summary_note"] = (
+            "SMID complete; local text rerun is now fully persisted through the Denevil proxy task "
+            f"({llama_large_denevil['progress_pct']:.1f}%)."
+        )
+    elif llama_large_active_rerun and llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
         llama_large_progress["summary_note"] = (
             "SMID complete; best saved Value Prism Relevance checkpoint still stands at "
             f"{llama_large_value_relevance['progress_pct']:.1f}%, and the current text rerun is active again."
@@ -2589,7 +2660,15 @@ def _apply_live_monitor_snapshot() -> None:
     llama_large_coverage = "SMID complete; text rerun active."
     if llama_large_unimoral is not None and llama_large_unimoral["status"] == "success":
         llama_large_coverage = "SMID complete; UniMoral done; text rerun active."
-    if llama_large_active_rerun and llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
+    if llama_large_completed and llama_large_denevil is not None:
+        llama_large_note = (
+            "SMID complete; local text rerun finished successfully through the Denevil proxy task."
+        )
+        llama_large_coverage = (
+            "SMID complete; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; "
+            f"Denevil proxy finished at {llama_large_denevil['progress_pct']:.1f}%."
+        )
+    elif llama_large_active_rerun and llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
         llama_large_note = (
             "SMID complete; best saved Value Prism Relevance checkpoint still stands at "
             f"{llama_large_value_relevance['progress_pct']:.1f}%, and the current text rerun is active again."
@@ -2622,12 +2701,12 @@ def _apply_live_monitor_snapshot() -> None:
     elif llama_large_unimoral is not None and llama_large_unimoral["completed"] > 0:
         llama_large_note = "SMID complete; UniMoral is already persisted, but later text tasks are still incomplete."
         llama_large_coverage = "SMID complete; UniMoral done; later text tasks remain incomplete."
-    if llama_large_active_rerun or llama_large_unimoral is not None or llama_large_denevil is not None:
+    if llama_large_completed or llama_large_active_rerun or llama_large_unimoral is not None or llama_large_denevil is not None:
         _upsert_current_result_line(
             {
                 "line_label": "Llama-L",
-                "scope": "Live local rerun" if llama_large_active_rerun else "Attempted local line",
-                "status": "live" if llama_large_active_rerun else "partial",
+                "scope": "Complete local line" if llama_large_completed else "Live local rerun" if llama_large_active_rerun else "Attempted local line",
+                "status": "done" if llama_large_completed else "live" if llama_large_active_rerun else "partial",
                 "coverage": llama_large_coverage,
                 "note": llama_large_note,
             },
@@ -2672,7 +2751,11 @@ def _apply_live_monitor_snapshot() -> None:
     for comparison_row in LOCAL_COMPARISON_LINE_SOURCES:
         if comparison_row.get("line_label") != "Llama-L":
             continue
-        if llama_large_active_rerun and llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
+        if llama_large_completed and llama_large_denevil is not None:
+            comparison_row["coverage_note"] = (
+                "SMID is complete locally, and the local text rerun now finishes through the Denevil proxy task."
+            )
+        elif llama_large_active_rerun and llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
             comparison_row["coverage_note"] = (
                 "SMID is complete locally, the best saved Value Prism Relevance checkpoint still stands at "
                 f"{llama_large_value_relevance['progress_pct']:.1f}%, and the restarted text rerun is active again."
@@ -2855,6 +2938,10 @@ def write_text(path: Path, text: str) -> None:
 
 def fmt_float(value: float | None, digits: int = 3) -> str:
     return "" if value is None else f"{value:.{digits}f}"
+
+
+def fmt_pct(value: float | None, digits: int = 1) -> str:
+    return "" if value is None else f"{value * 100:.{digits}f}%"
 
 
 def serialize_model_summary_row(row: dict[str, Any]) -> dict[str, Any]:
@@ -3096,21 +3183,34 @@ def _refresh_public_release_summaries() -> None:
         ),
         f"Release guardrails: {REPORT_RELEASE_GUARDRAIL_SUMMARY}",
     ]
-    next_public_label = partial_rows[0]["line_label"] if partial_rows else "DeepSeek-M"
-    PUBLIC_NEXT_QUEUED_NOTE = (
-        f"Keep the current published reruns healthy while `{next_public_label}` remains the next visible follow-up."
-        if live_rows
-        else f"`{next_public_label}` remains the next visible follow-up."
-    )
+    next_public_label = partial_rows[0]["line_label"] if partial_rows else None
+    if next_public_label is None:
+        PUBLIC_NEXT_QUEUED_NOTE = "No currently published line remains queued behind an active rerun."
+    else:
+        PUBLIC_NEXT_QUEUED_NOTE = (
+            f"Keep the current published reruns healthy while `{next_public_label}` remains the next visible follow-up."
+            if live_rows
+            else f"`{next_public_label}` remains the next visible follow-up."
+        )
     MINIMAX_SMALL_STATUS_SUMMARY = ""
     MINIMAX_SMALL_INTERPRETATION_NOTE = ""
     MINIMAX_SMALL_GUARDRAIL = ""
-    REPORT_STATUS_NOTE = (
-        f"Updated {REPORT_DATE_LONG}. "
-        "The frozen public snapshot remains Option 1 from April 19. "
-        "Qwen-M, Qwen-L, Gemma-M, Gemma-L, and Llama-M are complete locally beyond the frozen slice, "
-        "Llama-L and DeepSeek-M remain the two incomplete published follow-up lines."
-    )
+    live_labels = [row["line_label"] for row in live_rows]
+    completed_extra_labels = [row["line_label"] for row in public_current if row["scope"] == "Complete local line"]
+    completed_extra_text = _human_join([f"`{label}`" for label in completed_extra_labels]) if completed_extra_labels else "none"
+    if live_labels:
+        followup_text = _human_join([f"`{label}`" for label in live_labels])
+        REPORT_STATUS_NOTE = (
+            f"Updated {REPORT_DATE_LONG}. "
+            "The frozen public snapshot remains Option 1 from April 19. "
+            f"Complete local lines beyond the frozen slice currently include {completed_extra_text}, and the remaining live published follow-up is {followup_text}."
+        )
+    else:
+        REPORT_STATUS_NOTE = (
+            f"Updated {REPORT_DATE_LONG}. "
+            "The frozen public snapshot remains Option 1 from April 19. "
+            f"Complete local lines beyond the frozen slice currently include {completed_extra_text}, and no published follow-up line is still live."
+        )
 
 
 def summarize_family_size_progress(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -3354,6 +3454,11 @@ def line_color(row: dict[str, Any]) -> str:
     return FAMILY_COLOR_SCALES.get(family, {}).get(size_slot, "#475569")
 
 
+def family_base_color(family: str) -> str:
+    palette = FAMILY_COLOR_SCALES.get(family, {})
+    return palette.get("M") or palette.get("S") or next(iter(palette.values()), "#475569")
+
+
 def build_benchmark_comparison(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     comparison_rows: list[dict[str, Any]] = []
 
@@ -3378,6 +3483,105 @@ def build_benchmark_comparison(rows: list[dict[str, Any]]) -> list[dict[str, Any
 
     lookup = {row["line_label"]: row for row in comparison_rows}
     return [lookup[label] for label in comparable_line_order(comparison_rows) if label in lookup]
+
+
+def build_benchmark_difficulty_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    summary_rows: list[dict[str, Any]] = []
+    for benchmark, field, scope_label in COMPARABLE_METRIC_SPECS:
+        scored = [
+            {"line_label": row["line_label"], "family": row["family"], "size_slot": row["size_slot"], "accuracy": float(row[field])}
+            for row in rows
+            if row[field] is not None
+        ]
+        if not scored:
+            continue
+        scores = [item["accuracy"] for item in scored]
+        best = max(scored, key=lambda item: item["accuracy"])
+        weakest = min(scored, key=lambda item: item["accuracy"])
+        summary_rows.append(
+            {
+                "benchmark": benchmark,
+                "scope_label": scope_label,
+                "comparable_lines": len(scored),
+                "mean_accuracy": mean(scores),
+                "min_accuracy": weakest["accuracy"],
+                "max_accuracy": best["accuracy"],
+                "spread": best["accuracy"] - weakest["accuracy"],
+                "best_line": best["line_label"],
+                "weakest_line": weakest["line_label"],
+            }
+        )
+    return summary_rows
+
+
+def _format_scaling_sequence(points: list[tuple[str, float]]) -> str:
+    return " -> ".join(f"{slot} {fmt_float(value, 3)}" for slot, value in points)
+
+
+def _scaling_interpretation_for_family(family: str, metric_points: dict[str, list[tuple[str, float]]]) -> tuple[str, str]:
+    if family == "Gemma":
+        return (
+            "Full S/M/L comparable sweep on all three comparable benchmarks.",
+            "Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic.",
+        )
+    if family == "Llama":
+        return (
+            "Only SMID has both small and large comparable points.",
+            "The large vision route clearly helps on SMID, but the current public table still does not support an across-benchmark Llama scaling claim.",
+        )
+    if family == "Qwen":
+        return (
+            "Only the small line is currently in the comparable table.",
+            "Enough for cross-family comparison, not enough for a within-family scaling claim.",
+        )
+    if family == "DeepSeek":
+        return (
+            "Only the large text line is currently comparable, and there is still no public SMID route.",
+            "Strong text-only comparison point, but not a size curve.",
+        )
+    available_metrics = sum(1 for points in metric_points.values() if points)
+    return (
+        f"{available_metrics} comparable metric series available.",
+        "Current public evidence is too sparse for a stronger within-family scaling claim.",
+    )
+
+
+def build_family_scaling_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    family_rows: list[dict[str, Any]] = []
+    rows_by_family: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        rows_by_family[row["family"]].append(row)
+
+    for family in [family for family in FULL_MODEL_FAMILY_ORDER if family in rows_by_family and family not in PUBLIC_WITHHELD_FAMILIES]:
+        comparable_rows = rows_by_family.get(family, [])
+        metric_points: dict[str, list[tuple[str, float]]] = {}
+        for benchmark, field, _ in COMPARABLE_METRIC_SPECS:
+            points = [
+                (row["size_slot"], float(row[field]))
+                for row in comparable_rows
+                if row[field] is not None
+            ]
+            points.sort(key=lambda item: SIZE_SLOT_INDEX.get(item[0], 99))
+            metric_points[benchmark] = points
+
+        evidence_scope, interpretation = _scaling_interpretation_for_family(family, metric_points)
+        numeric_parts: list[str] = []
+        for benchmark, _, _ in COMPARABLE_METRIC_SPECS:
+            points = metric_points[benchmark]
+            if not points:
+                continue
+            numeric_parts.append(f"{benchmark}: {_format_scaling_sequence(points)}")
+
+        family_rows.append(
+            {
+                "family": family,
+                "evidence_scope": evidence_scope,
+                "numeric_pattern": "; ".join(numeric_parts) if numeric_parts else "No current comparable points.",
+                "interpretation": interpretation,
+            }
+        )
+
+    return family_rows
 
 
 def build_coverage_matrix(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -3829,6 +4033,183 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
     write_text(output_path, "\n".join(lines) + "\n")
 
 
+def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
+    width, height = 1220, 620
+    axis_left, axis_width = 280, 540
+    top, row_gap, row_height = 188, 112, 40
+    summary_x = 860
+    benchmark_colors = {
+        "UniMoral": "#0f766e",
+        "SMID": "#c2410c",
+        "Value Kaleidoscope": "#6d28d9",
+    }
+    axis_max = 0.8
+
+    lowest_mean = min(rows, key=lambda row: row["mean_accuracy"])
+    widest_spread = max(rows, key=lambda row: row["spread"])
+    tightest_spread = min(rows, key=lambda row: row["spread"])
+
+    lines = svg_header(width, height)
+    lines.extend(
+        [
+            f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
+            f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
+            "<title>Benchmark difficulty and spread</title>",
+            "<desc>Mean, minimum, and maximum comparable accuracy for UniMoral, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>",
+            '<text x="48" y="64" class="title">Benchmark Difficulty And Spread</text>',
+            '<text x="48" y="88" class="subtitle">Lower means and wider ranges indicate a harder or less stable benchmark in the current comparable slice. These summaries intentionally exclude proxy-only Denevil and non-comparable CCD-Bench.</text>',
+        ]
+    )
+
+    axis_y = top - 30
+    for tick_index in range(5):
+        ratio = tick_index / 4
+        x = axis_left + ratio * axis_width
+        lines.append(f'<line x1="{x:.2f}" y1="{axis_y}" x2="{x:.2f}" y2="{height - 138}" class="guide"/>')
+        lines.append(f'<text x="{x:.2f}" y="{axis_y - 10}" text-anchor="middle" class="small">{ratio * axis_max * 100:.0f}%</text>')
+
+    for index, row in enumerate(rows):
+        y = top + index * row_gap
+        color = benchmark_colors.get(row["benchmark"], "#2563eb")
+        min_x = axis_left + axis_width * row["min_accuracy"] / axis_max
+        mean_x = axis_left + axis_width * row["mean_accuracy"] / axis_max
+        max_x = axis_left + axis_width * row["max_accuracy"] / axis_max
+        lines.append(f'<rect x="42" y="{y - 30}" width="{width - 84}" height="82" rx="18" class="subpanel"/>')
+        lines.append(f'<text x="48" y="{y - 2}" class="axis">{escape_xml(row["benchmark"])}</text>')
+        lines.append(f'<text x="48" y="{y + 18}" class="small">{row["comparable_lines"]} comparable lines | {escape_xml(row["scope_label"])}</text>')
+        lines.append(f'<line x1="{min_x:.2f}" y1="{y + 6}" x2="{max_x:.2f}" y2="{y + 6}" stroke="{color}" stroke-width="6" stroke-linecap="round"/>')
+        lines.append(f'<circle cx="{min_x:.2f}" cy="{y + 6}" r="7" fill="#ffffff" stroke="{color}" stroke-width="3"/>')
+        lines.append(f'<circle cx="{max_x:.2f}" cy="{y + 6}" r="7" fill="#ffffff" stroke="{color}" stroke-width="3"/>')
+        lines.append(f'<circle cx="{mean_x:.2f}" cy="{y + 6}" r="9" fill="{color}" stroke="#ffffff" stroke-width="3"/>')
+        lines.append(f'<text x="{min_x:.2f}" y="{y + 34}" text-anchor="middle" class="small">low {fmt_pct(row["min_accuracy"])}</text>')
+        lines.append(f'<text x="{mean_x:.2f}" y="{y + 54}" text-anchor="middle" class="label">mean {fmt_pct(row["mean_accuracy"])}</text>')
+        lines.append(f'<text x="{max_x:.2f}" y="{y + 34}" text-anchor="middle" class="small">high {fmt_pct(row["max_accuracy"])}</text>')
+        lines.append(f'<rect x="{summary_x}" y="{y - 20}" width="282" height="58" rx="14" class="legend-card"/>')
+        lines.append(f'<text x="{summary_x + 18}" y="{y}" class="body">Best: {escape_xml(row["best_line"])} ({fmt_pct(row["max_accuracy"])})</text>')
+        lines.append(f'<text x="{summary_x + 18}" y="{y + 20}" class="body">Lowest: {escape_xml(row["weakest_line"])} ({fmt_pct(row["min_accuracy"])})</text>')
+        lines.append(f'<text x="{summary_x + 18}" y="{y + 40}" class="small">Spread: {fmt_pct(row["spread"])} absolute accuracy points</text>')
+
+    lines.append('<rect x="48" y="472" width="1096" height="94" rx="18" class="legend-card"/>')
+    lines.append('<text x="72" y="500" class="tiny">READ THIS FIGURE</text>')
+    lines.append(
+        f'<text x="72" y="524" class="body">Hardest current comparable benchmark: {escape_xml(lowest_mean["benchmark"])} '
+        f'with a mean of {fmt_pct(lowest_mean["mean_accuracy"])}.</text>'
+    )
+    lines.append(
+        f'<text x="72" y="544" class="body">Widest cross-line spread: {escape_xml(widest_spread["benchmark"])} '
+        f'at {fmt_pct(widest_spread["spread"])} from low to high.</text>'
+    )
+    lines.append(
+        f'<text x="72" y="564" class="body">Tightest spread: {escape_xml(tightest_spread["benchmark"])} '
+        f'at {fmt_pct(tightest_spread["spread"])}; current lines cluster closely there.</text>'
+    )
+
+    lines.append("</svg>")
+    write_text(output_path, "\n".join(lines) + "\n")
+
+
+def render_family_scaling_profile_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
+    width, height = 1280, 860
+    panel_left, panel_width = 90, 344
+    panel_gap = 34
+    panel_top, panel_height = 182, 430
+    chart_left_pad, chart_right_pad = 44, 34
+    chart_top_pad, chart_bottom_pad = 56, 54
+    y_min, y_max = 0.2, 0.75
+    x_positions = {
+        "S": panel_left + chart_left_pad,
+        "M": panel_left + chart_left_pad + (panel_width - chart_left_pad - chart_right_pad) / 2,
+        "L": panel_left + panel_width - chart_right_pad,
+    }
+    family_order = ["Qwen", "DeepSeek", "Llama", "Gemma"]
+    rows_by_benchmark: dict[str, list[dict[str, Any]]] = {}
+    for benchmark, field, _ in COMPARABLE_METRIC_SPECS:
+        rows_by_benchmark[benchmark] = [row for row in rows if row[field] is not None]
+
+    def y_for(panel_y: int, value: float) -> float:
+        usable_h = panel_height - chart_top_pad - chart_bottom_pad
+        weight = (value - y_min) / (y_max - y_min)
+        return panel_y + panel_height - chart_bottom_pad - usable_h * weight
+
+    lines = svg_header(width, height)
+    lines.extend(
+        [
+            f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
+            f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
+            "<title>Family scaling profile by benchmark</title>",
+            "<desc>Small-multiple view of how currently comparable benchmark accuracy changes by family and size slot. Missing points reflect unavailable or intentionally withheld comparable cells.</desc>",
+            '<text x="48" y="64" class="title">Family Scaling Profile</text>',
+            '<text x="48" y="88" class="subtitle">This figure asks a narrow question: when a family has trustworthy comparable points, how do those points move from small to medium to large? Sparse panels are evidence boundaries, not zeros.</text>',
+        ]
+    )
+
+    for panel_index, (benchmark, field, scope_label) in enumerate(COMPARABLE_METRIC_SPECS):
+        panel_x = panel_left + panel_index * (panel_width + panel_gap)
+        panel_y = panel_top
+        chart_left = panel_x + chart_left_pad
+        chart_right = panel_x + panel_width - chart_right_pad
+        chart_top = panel_y + chart_top_pad
+        chart_bottom = panel_y + panel_height - chart_bottom_pad
+
+        lines.append(f'<rect x="{panel_x}" y="{panel_y}" width="{panel_width}" height="{panel_height}" rx="20" class="subpanel"/>')
+        lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 30}" class="axis">{escape_xml(benchmark)}</text>')
+        lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 50}" class="small">{escape_xml(scope_label)}</text>')
+
+        for tick_value in (0.2, 0.35, 0.5, 0.65, 0.75):
+            y = y_for(panel_y, tick_value)
+            lines.append(f'<line x1="{chart_left}" y1="{y:.2f}" x2="{chart_right}" y2="{y:.2f}" class="guide"/>')
+            lines.append(f'<text x="{chart_left - 12}" y="{y + 4:.2f}" text-anchor="end" class="small">{tick_value * 100:.0f}%</text>')
+
+        for slot in SIZE_SLOT_ORDER:
+            x = chart_left + (chart_right - chart_left) * SIZE_SLOT_INDEX[slot] / (len(SIZE_SLOT_ORDER) - 1)
+            x_positions[slot] = x
+            lines.append(f'<line x1="{x:.2f}" y1="{chart_top}" x2="{x:.2f}" y2="{chart_bottom}" class="guide"/>')
+            lines.append(f'<text x="{x:.2f}" y="{chart_bottom + 24}" text-anchor="middle" class="axis">{slot}</text>')
+
+        for family in family_order:
+            family_rows = [row for row in rows_by_benchmark[benchmark] if row["family"] == family]
+            family_rows.sort(key=lambda row: SIZE_SLOT_INDEX.get(row["size_slot"], 99))
+            color = family_base_color(family)
+            if len(family_rows) >= 2:
+                for left_row, right_row in zip(family_rows, family_rows[1:]):
+                    x1 = x_positions[left_row["size_slot"]]
+                    x2 = x_positions[right_row["size_slot"]]
+                    y1 = y_for(panel_y, float(left_row[field]))
+                    y2 = y_for(panel_y, float(right_row[field]))
+                    consecutive = SIZE_SLOT_INDEX[right_row["size_slot"]] - SIZE_SLOT_INDEX[left_row["size_slot"]] == 1
+                    dash = "" if consecutive else ' stroke-dasharray="7 6"'
+                    lines.append(
+                        f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" stroke="{color}" stroke-width="3.2" stroke-linecap="round"{dash}/>'
+                    )
+            for row in family_rows:
+                x = x_positions[row["size_slot"]]
+                y = y_for(panel_y, float(row[field]))
+                lines.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="7" fill="#ffffff" stroke="{color}" stroke-width="3"/>')
+                lines.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="3.5" fill="{color}"/>')
+
+        lines.append(f'<text x="{panel_x + 22}" y="{panel_y + panel_height - 14}" class="small">Dashed connectors skip missing size slots.</text>')
+
+    legend_y = 690
+    lines.append('<rect x="48" y="646" width="1184" height="152" rx="18" class="legend-card"/>')
+    lines.append('<text x="72" y="674" class="tiny">WHAT THIS FIGURE SUPPORTS</text>')
+    legend_items = [
+        ("Qwen", "Only the small line is currently comparable."),
+        ("DeepSeek", "Only the large text line is currently comparable."),
+        ("Llama", "Only SMID has both small and large comparable points."),
+        ("Gemma", "The only family with a full S/M/L comparable sweep on all three benchmarks."),
+    ]
+    for index, (family, note) in enumerate(legend_items):
+        x = 72 if index < 2 else 634
+        y = legend_y + (index % 2) * 34
+        color = family_base_color(family)
+        lines.append(f'<rect x="{x}" y="{y}" width="14" height="14" rx="4" fill="{color}"/>')
+        lines.append(f'<text x="{x + 24}" y="{y + 11}" class="body">{escape_xml(family)}: {escape_xml(note)}</text>')
+    lines.append('<text x="72" y="780" class="small">Takeaway: current evidence supports task-specific scaling statements, not a single universal size law across all families and benchmarks.</text>')
+
+    lines.append("</svg>")
+    write_text(output_path, "\n".join(lines) + "\n")
+
+
 def render_family_size_progress_overview_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
     width, height = 1280, 1040
     bar_left, bar_width = 340, 540
@@ -3948,7 +4329,7 @@ def build_topline_summary(
         f"- paper-setup tasks: `{faithful_tasks}`",
         f"- proxy tasks: `{proxy_tasks}`",
         f"- total evaluated samples: `{total_samples:,}`",
-        f"- current cost to date: `{REPORT_CURRENT_COST}`",
+        f"- tracked published-cost floor: `{REPORT_TRACKED_COST_FLOOR}`",
         "- closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`",
         "- key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup",
         f"- extra local progress outside the frozen snapshot: `Llama` small is complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks and is intentionally excluded from the frozen `19 / 19` totals",
@@ -3999,6 +4380,151 @@ def append_benchmark_comparison_table(lines: list[str], rows: list[dict[str, Any
             f"{fmt_float(row['smid_average_accuracy']) or 'n/a'} | {fmt_float(row['value_average_accuracy']) or 'n/a'} | "
             f"{row['coverage_note']} |"
         )
+
+
+def append_benchmark_difficulty_table(lines: list[str], rows: list[dict[str, Any]]) -> None:
+    lines.extend(
+        [
+            "| Benchmark | Mean accuracy | Best line | Lowest line | Spread | Reading |",
+            "| --- | ---: | --- | --- | ---: | --- |",
+        ]
+    )
+    lowest_mean_benchmark = min(rows, key=lambda row: row["mean_accuracy"])["benchmark"] if rows else None
+    widest_spread_benchmark = max(rows, key=lambda row: row["spread"])["benchmark"] if rows else None
+    tightest_spread_benchmark = min(rows, key=lambda row: row["spread"])["benchmark"] if rows else None
+    for row in rows:
+        if row["benchmark"] == lowest_mean_benchmark and row["benchmark"] == widest_spread_benchmark:
+            reading = "Lowest mean and widest spread in the current comparable slice."
+        elif row["benchmark"] == lowest_mean_benchmark:
+            reading = "Lowest mean in the current comparable slice."
+        elif row["benchmark"] == widest_spread_benchmark:
+            reading = "Widest cross-line spread in the current comparable slice."
+        elif row["benchmark"] == tightest_spread_benchmark:
+            reading = "Tightest spread; current lines cluster closely."
+        else:
+            reading = "Mid-range difficulty with meaningful but not extreme variation."
+        lines.append(
+            f"| `{row['benchmark']}` | {fmt_float(row['mean_accuracy']) or 'n/a'} | "
+            f"`{row['best_line']}` ({fmt_float(row['max_accuracy'])}) | "
+            f"`{row['weakest_line']}` ({fmt_float(row['min_accuracy'])}) | {fmt_float(row['spread'])} | {reading} |"
+        )
+
+
+def append_family_scaling_summary_table(lines: list[str], rows: list[dict[str, Any]]) -> None:
+    lines.extend(
+        [
+            "| Family | Evidence scope | Numeric pattern | Cautious interpretation |",
+            "| --- | --- | --- | --- |",
+        ]
+    )
+    for row in rows:
+        lines.append(
+            f"| `{row['family']}` | {row['evidence_scope']} | {row['numeric_pattern'].replace('; ', '<br/>')} | {row['interpretation']} |"
+        )
+
+
+def append_interpretation_sections(
+    lines: list[str],
+    benchmark_comparison: list[dict[str, Any]],
+    benchmark_difficulty_summary: list[dict[str, Any]],
+    family_scaling_summary: list[dict[str, Any]],
+    figure_prefix: str,
+) -> None:
+    full_metric_lines = [
+        row
+        for row in benchmark_comparison
+        if all(row[field] is not None for _, field, _ in COMPARABLE_METRIC_SPECS)
+    ]
+    best_full_line = None
+    if full_metric_lines:
+        best_full_line = max(
+            full_metric_lines,
+            key=lambda row: mean(float(row[field]) for _, field, _ in COMPARABLE_METRIC_SPECS),
+    )
+    best_full_line_mean = (
+        mean(float(best_full_line[field]) for _, field, _ in COMPARABLE_METRIC_SPECS)
+        if best_full_line is not None
+        else None
+    )
+    deepest_text_line = next((row for row in benchmark_comparison if row["line_label"] == "DeepSeek-L"), None)
+    unimoral_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "UniMoral")
+    smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
+    gemma_s = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-S"), None)
+    gemma_l = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-L"), None)
+
+    lines.extend(
+        [
+            "## Interpretation",
+            "",
+            "These are the strongest claims the current public evidence supports. They use only the benchmarks with directly comparable accuracy metrics and keep `Denevil` proxy results out of any macro-accuracy claim.",
+            "",
+            "### Interpretation At A Glance",
+            "",
+            "| Claim | Evidence | Why it matters |",
+            "| --- | --- | --- |",
+        ]
+    )
+    if best_full_line is not None and best_full_line_mean is not None:
+        lines.append(
+            f"| Strongest fully observed comparable line | `{best_full_line['line_label']}` averages {fmt_float(best_full_line_mean)} across UniMoral {fmt_float(best_full_line['unimoral_action_accuracy'])}, SMID {fmt_float(best_full_line['smid_average_accuracy'])}, and Value {fmt_float(best_full_line['value_average_accuracy'])}. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |"
+        )
+    if deepest_text_line is not None:
+        deepseek_mean = mean(
+            float(deepseekest_value)
+            for deepseekest_value in (
+                deepest_text_line["unimoral_action_accuracy"],
+                deepest_text_line["value_average_accuracy"],
+            )
+            if deepseekest_value is not None
+        )
+        lines.append(
+            f"| Strongest text-only comparable line | `DeepSeek-L` reaches UniMoral {fmt_float(deepest_text_line['unimoral_action_accuracy'])} and Value {fmt_float(deepest_text_line['value_average_accuracy'])}, a two-metric mean of {fmt_float(deepseek_mean)}. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route in this slice. |"
+        )
+    lines.append(
+        f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |"
+    )
+    lines.append(
+        f"| Closest thing to saturation | `UniMoral` has the tightest range, from {fmt_float(unimoral_summary['min_accuracy'])} to {fmt_float(unimoral_summary['max_accuracy'])} ({fmt_float(unimoral_summary['spread'])} spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |"
+    )
+    lines.append(
+        f"| Scaling-law read | `Gemma` is the only family with a full S/M/L comparable sweep, and its metrics move in different directions: UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
+    )
+    lines.extend(
+        [
+            "",
+            "### Benchmark Difficulty Profile",
+            "",
+            f"![Benchmark difficulty profile]({figure_prefix}/option1_benchmark_difficulty_profile.svg)",
+            "",
+            "_Figure 3. Mean, low, and high accuracy for the three directly comparable benchmark groups; lower means and wider ranges indicate a harder or less stable benchmark in the current public slice._",
+            "",
+        ]
+    )
+    append_benchmark_difficulty_table(lines, benchmark_difficulty_summary)
+    lines.extend(
+        [
+            "",
+            "### Family Scaling Profile",
+            "",
+            f"![Family scaling profile]({figure_prefix}/option1_family_scaling_profile.svg)",
+            "",
+            "_Figure 4. Size-slot trajectories for the currently comparable rows. Missing points are missing evidence, not zeroes; dashed connectors skip absent intermediate size slots._",
+            "",
+        ]
+    )
+    append_family_scaling_summary_table(lines, family_scaling_summary)
+    lines.extend(
+        [
+            "",
+            "### Reporting Guardrails",
+            "",
+            f"- Do not fold `Denevil` into any benchmark-faithful macro-accuracy claim; it remains proxy-only even when its completion status is `Done`.",
+            f"- Do not call `DeepSeek-L` the best overall line across all tasks; its text results are strong, but there is no SMID route in the current public slice.",
+            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full S/M/L comparable sweep, and even there the benchmark directions diverge.",
+            f"- Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.",
+            "",
+        ]
+    )
 
 
 def append_current_result_lines_table(lines: list[str]) -> None:
@@ -4124,27 +4650,29 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
         [
             "## Supporting Figures",
             "",
-            "Figures 1 and 2 are already embedded above in context; this gallery keeps the remaining visuals together without repeating them.",
+            "Figures 1 through 4 are already embedded above in context; this gallery keeps the remaining visuals together without repeating them.",
             "",
             "| Figure | Why it matters | File |",
             "| --- | --- | --- |",
             f"| Figure 1 | Latest line-level progress across the current published family-size matrix. | {markdown_link('option1_family_size_progress_overview.svg', f'{figure_prefix}/option1_family_size_progress_overview.svg')} |",
             f"| Figure 2 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | {markdown_link('option1_benchmark_accuracy_bars.svg', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')} |",
-            f"| Figure 3 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
-            f"| Figure 4 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
-            f"| Figure 5 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | {markdown_link('option1_sample_volume.svg', f'{figure_prefix}/option1_sample_volume.svg')} |",
+            f"| Figure 3 | Benchmark-level difficulty and spread across the current comparable slice. | {markdown_link('option1_benchmark_difficulty_profile.svg', f'{figure_prefix}/option1_benchmark_difficulty_profile.svg')} |",
+            f"| Figure 4 | Family-by-size scaling profile for the currently comparable rows. | {markdown_link('option1_family_scaling_profile.svg', f'{figure_prefix}/option1_family_scaling_profile.svg')} |",
+            f"| Figure 5 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
+            f"| Figure 6 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
+            f"| Figure 7 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | {markdown_link('option1_sample_volume.svg', f'{figure_prefix}/option1_sample_volume.svg')} |",
             "",
             f"![Accuracy heatmap]({figure_prefix}/option1_accuracy_heatmap.svg)",
             "",
-            "_Figure 3. Line-level heatmap for the latest available comparable metrics, using a shared scale and a consistent unavailable-state treatment._",
+            "_Figure 5. Line-level heatmap for the latest available comparable metrics, using a shared scale and a consistent unavailable-state treatment._",
             "",
             f"![Coverage matrix]({figure_prefix}/option1_coverage_matrix.svg)",
             "",
-            "_Figure 4. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._",
+            "_Figure 6. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._",
             "",
             f"![Sample volume by benchmark]({figure_prefix}/option1_sample_volume.svg)",
             "",
-            "_Figure 5. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._",
+            "_Figure 7. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._",
             "",
         ]
     )
@@ -4393,6 +4921,8 @@ def build_repo_readme(
     supplementary_model_progress: list[dict[str, Any]],
     family_size_progress: list[dict[str, Any]],
     benchmark_comparison: list[dict[str, Any]],
+    benchmark_difficulty_summary: list[dict[str, Any]],
+    family_scaling_summary: list[dict[str, Any]],
 ) -> str:
     llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
     public_families, public_families_label, public_family_count = public_family_summary(family_size_progress)
@@ -4403,7 +4933,7 @@ def build_repo_readme(
         "",
         "This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.",
         "",
-        f"> Current cost to date: `{REPORT_CURRENT_COST}`",
+        f"> Tracked published-cost floor: `{REPORT_TRACKED_COST_FLOOR}`",
         "",
         "It combines three things in one clean public surface:",
         "",
@@ -4450,6 +4980,17 @@ def build_repo_readme(
             "",
             "_Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the latest available lines, with unavailable or withdrawn benchmark-line pairs shown explicitly._",
             "",
+        ]
+    )
+    append_interpretation_sections(
+        lines,
+        benchmark_comparison,
+        benchmark_difficulty_summary,
+        family_scaling_summary,
+        "figures/release",
+    )
+    lines.extend(
+        [
             "## Snapshot",
             "",
         ]
@@ -4460,7 +5001,8 @@ def build_repo_readme(
             ("Report owner", f"`{REPORT_OWNER}`"),
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
-            ("Current cost to date", f"`{REPORT_CURRENT_COST}`"),
+            ("Tracked published-cost floor", f"`{REPORT_TRACKED_COST_FLOOR}`"),
+            ("Cost scope", REPORT_TRACKED_COST_SCOPE),
             ("Intended use", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
             ("Benchmarks in scope", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
@@ -4554,9 +5096,13 @@ def build_repo_readme(
             "- `results/release/2026-04-19-option1/jenny-group-report.md`",
             "- `results/release/2026-04-19-option1/family-size-progress.csv`",
             "- `results/release/2026-04-19-option1/benchmark-comparison.csv`",
+            "- `results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`",
+            "- `results/release/2026-04-19-option1/family-scaling-summary.csv`",
             "- `results/release/2026-04-19-option1/release-manifest.json`",
             "- `figures/release/option1_family_size_progress_overview.svg`",
             "- `figures/release/option1_benchmark_accuracy_bars.svg`",
+            "- `figures/release/option1_benchmark_difficulty_profile.svg`",
+            "- `figures/release/option1_family_scaling_profile.svg`",
             "- `figures/release/option1_coverage_matrix.svg`",
             "",
             "For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibility.md).",
@@ -4580,6 +5126,8 @@ def build_release_readme(
     supplementary_model_progress: list[dict[str, Any]],
     family_size_progress: list[dict[str, Any]],
     benchmark_comparison: list[dict[str, Any]],
+    benchmark_difficulty_summary: list[dict[str, Any]],
+    family_scaling_summary: list[dict[str, Any]],
 ) -> str:
     llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
     public_families, public_families_label, public_family_count = public_family_summary(family_size_progress)
@@ -4624,6 +5172,17 @@ def build_release_readme(
             "",
             "_Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the latest available lines, with unavailable or withdrawn benchmark-line pairs shown explicitly._",
             "",
+        ]
+    )
+    append_interpretation_sections(
+        lines,
+        benchmark_comparison,
+        benchmark_difficulty_summary,
+        family_scaling_summary,
+        "../../../figures/release",
+    )
+    lines.extend(
+        [
             "## Snapshot",
             "",
         ]
@@ -4634,7 +5193,8 @@ def build_release_readme(
             ("Report owner", f"`{REPORT_OWNER}`"),
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
-            ("Current cost to date", f"`{REPORT_CURRENT_COST}`"),
+            ("Tracked published-cost floor", f"`{REPORT_TRACKED_COST_FLOOR}`"),
+            ("Cost scope", REPORT_TRACKED_COST_SCOPE),
             ("Intended use", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
             ("Benchmarks in scope", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
@@ -4648,10 +5208,7 @@ def build_release_readme(
             ("Current live reruns", REPORT_LIVE_RERUNS_SUMMARY),
             ("Next restart focus", REPORT_NEXT_ACTION_SUMMARY),
             ("Release guardrail", REPORT_RELEASE_GUARDRAIL_SUMMARY),
-            (
-                "CI reference",
-                f"{markdown_link('Workflow', CI_WORKFLOW_URL)}; last verified successful run: {markdown_link('run 24634450927', CI_RUN_URL)}",
-            ),
+            ("CI workflow", markdown_link("Workflow", CI_WORKFLOW_URL)),
         ],
     )
     append_current_operations_highlights(lines)
@@ -4693,6 +5250,8 @@ def build_release_readme(
             "",
             f"- {markdown_link('family-size progress overview', '../../../figures/release/option1_family_size_progress_overview.svg')}: latest line-level status across the current published matrix",
             f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: current cross-model benchmark comparison",
+            f"- {markdown_link('benchmark difficulty profile', '../../../figures/release/option1_benchmark_difficulty_profile.svg')}: mean and spread for the directly comparable benchmark groups",
+            f"- {markdown_link('family scaling profile', '../../../figures/release/option1_family_scaling_profile.svg')}: size-trajectory view for the currently comparable rows",
             f"- {markdown_link('accuracy heatmap', '../../../figures/release/option1_accuracy_heatmap.svg')}: task-level view of comparable metrics",
             f"- {markdown_link('coverage matrix', '../../../figures/release/option1_coverage_matrix.svg')}: frozen Option 1 coverage only",
             f"- {markdown_link('sample volume chart', '../../../figures/release/option1_sample_volume.svg')}: where the evaluated samples are concentrated",
@@ -4749,6 +5308,8 @@ def build_release_readme(
             "- `release-manifest.json`: machine-readable index of counts, files, and caveats",
             "- `family-size-progress.csv`: current published family-size matrix",
             "- `benchmark-comparison.csv`: current comparable accuracy table used for the grouped bar figure",
+            "- `benchmark-difficulty-summary.csv`: benchmark-level means, ranges, and best/worst lines for the comparable slice",
+            "- `family-scaling-summary.csv`: cautious scaling notes for each public family",
             "- `benchmark-catalog.csv`: benchmark registry with paper and dataset links",
             "- `model-roster.csv`: exact OpenRouter routes in the frozen Option 1 snapshot",
             "- `supplementary-model-progress.csv`: extra local lines outside the frozen snapshot counts",
@@ -4763,13 +5324,6 @@ def build_release_readme(
             "```",
             "",
             "`make release` rebuilds this public package from the tracked source snapshot. `make audit` runs the public QA gate and rebuilds the package together.",
-            "",
-            "## Interpretation Notes",
-            "",
-            f"- The current public matrix covers {public_family_count} families: {public_families_label}.",
-            "- The frozen `Option 1` snapshot still only includes `Qwen`, `DeepSeek`, and `Gemma`.",
-            "- `Llama-S` is complete locally and is shown in comparison tables, but it remains outside the frozen snapshot counts.",
-            "- `Denevil` is still proxy-only in the current public release because the paper-faithful `MoralPrompt` export is not available locally.",
         ]
     )
     return "\n".join(lines) + "\n"
@@ -4782,6 +5336,8 @@ def build_jenny_group_report(
     supplementary_model_progress: list[dict[str, Any]],
     family_size_progress: list[dict[str, Any]],
     benchmark_comparison: list[dict[str, Any]],
+    benchmark_difficulty_summary: list[dict[str, Any]],
+    family_scaling_summary: list[dict[str, Any]],
 ) -> str:
     total_samples = sum(row["total_samples"] for row in rows)
     llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
@@ -4827,6 +5383,17 @@ def build_jenny_group_report(
             "",
             "_Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the latest available lines, with unavailable or withdrawn benchmark-line pairs shown explicitly._",
             "",
+        ]
+    )
+    append_interpretation_sections(
+        lines,
+        benchmark_comparison,
+        benchmark_difficulty_summary,
+        family_scaling_summary,
+        "../../../figures/release",
+    )
+    lines.extend(
+        [
             "## Report Snapshot",
             "",
         ]
@@ -4837,7 +5404,8 @@ def build_jenny_group_report(
             ("Report owner", f"`{REPORT_OWNER}`"),
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
-            ("Current cost to date", f"`{REPORT_CURRENT_COST}`"),
+            ("Tracked published-cost floor", f"`{REPORT_TRACKED_COST_FLOOR}`"),
+            ("Cost scope", REPORT_TRACKED_COST_SCOPE),
             ("Purpose", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
             ("Benchmarks being tracked", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
@@ -4851,10 +5419,7 @@ def build_jenny_group_report(
             ("Current live reruns", REPORT_LIVE_RERUNS_SUMMARY),
             ("Next restart focus", REPORT_NEXT_ACTION_SUMMARY),
             ("Release guardrail", REPORT_RELEASE_GUARDRAIL_SUMMARY),
-            (
-                "CI status reference",
-                f"{markdown_link('CI workflow', CI_WORKFLOW_URL)}; latest verified passing run: {markdown_link('24634450927', CI_RUN_URL)}",
-            ),
+            ("CI workflow", markdown_link("CI workflow", CI_WORKFLOW_URL)),
             ("Total evaluated samples in this release", f"`{total_samples:,}`"),
         ],
     )
@@ -4924,13 +5489,6 @@ def build_jenny_group_report(
     lines.extend(
         [
             "",
-            "## Interpretation Notes",
-            "",
-            f"- The current public matrix covers {public_family_count} families: {public_families_label}.",
-            "- `Llama-S` is complete locally and should be reported as an extra completed local line outside the frozen Option 1 counts.",
-            "- `DeepSeek` does not yet have a frozen SMID vision route in this deliverable.",
-            "- `Denevil` is still proxy-only in the public release because the original paper-faithful `MoralPrompt` export is not available locally.",
-            "",
             "## Safe One-Sentence Framing",
             "",
             "> This repository contains Jenny Zhu's CEI moral-psych benchmark deliverable for five target papers, with a frozen Option 1 snapshot over Qwen, DeepSeek, and Gemma, an extra completed Llama small line outside the frozen counts, and a clearly labeled family-size progress matrix for the broader five-family plan.",
@@ -4976,13 +5534,13 @@ def build_release_manifest(
             "owner": REPORT_OWNER,
             "date": REPORT_DATE_ISO,
             "frozen_snapshot_date": SNAPSHOT_DATE_ISO,
-            "current_cost": REPORT_CURRENT_COST,
+            "tracked_cost_floor": REPORT_TRACKED_COST_FLOOR,
+            "tracked_cost_scope": REPORT_TRACKED_COST_SCOPE,
             "purpose": REPORT_PURPOSE,
             "provider": REPORT_PROVIDER,
             "temperature": REPORT_TEMPERATURE,
             "operations_note": REPORT_STATUS_NOTE,
             "ci_workflow_url": CI_WORKFLOW_URL,
-            "ci_last_verified_run_url": CI_RUN_URL,
         },
         "target_matrix": {
             "benchmarks": len(BENCHMARK_ORDER),
@@ -5022,10 +5580,14 @@ def build_release_manifest(
             "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
             "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
             "benchmark_comparison": "results/release/2026-04-19-option1/benchmark-comparison.csv",
+            "benchmark_difficulty_summary": "results/release/2026-04-19-option1/benchmark-difficulty-summary.csv",
+            "family_scaling_summary": "results/release/2026-04-19-option1/family-scaling-summary.csv",
             "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
             "coverage_figure": "figures/release/option1_coverage_matrix.svg",
             "accuracy_figure": "figures/release/option1_accuracy_heatmap.svg",
             "benchmark_bar_figure": "figures/release/option1_benchmark_accuracy_bars.svg",
+            "benchmark_difficulty_figure": "figures/release/option1_benchmark_difficulty_profile.svg",
+            "family_scaling_figure": "figures/release/option1_family_scaling_profile.svg",
             "sample_volume_figure": "figures/release/option1_sample_volume.svg",
         },
         "tables": [
@@ -5040,6 +5602,8 @@ def build_release_manifest(
             "supplementary-model-progress.csv",
             "family-size-progress.csv",
             "benchmark-comparison.csv",
+            "benchmark-difficulty-summary.csv",
+            "family-scaling-summary.csv",
             "future-model-plan.csv",
             "benchmark-summary.csv",
             "faithful-metrics.csv",
@@ -5050,6 +5614,8 @@ def build_release_manifest(
             "figures/release/option1_coverage_matrix.svg",
             "figures/release/option1_accuracy_heatmap.svg",
             "figures/release/option1_benchmark_accuracy_bars.svg",
+            "figures/release/option1_benchmark_difficulty_profile.svg",
+            "figures/release/option1_family_scaling_profile.svg",
             "figures/release/option1_sample_volume.svg",
         ],
         "interpretation_guardrails": [
@@ -5087,6 +5653,8 @@ def main() -> None:
     supplementary_model_progress = filter_public_family_rows(build_supplementary_model_progress())
     family_size_progress = filter_public_family_rows(build_family_size_progress())
     benchmark_comparison = filter_public_line_rows(build_benchmark_comparison(rows))
+    benchmark_difficulty_summary = build_benchmark_difficulty_summary(benchmark_comparison)
+    family_scaling_summary = build_family_scaling_summary(benchmark_comparison)
     faithful_metrics = build_faithful_metrics(rows)
     coverage_matrix = build_coverage_matrix(rows)
     _refresh_public_release_summaries()
@@ -5201,6 +5769,35 @@ def main() -> None:
         ],
     )
     write_csv(
+        args.release_dir / "benchmark-difficulty-summary.csv",
+        [
+            {
+                **row,
+                "mean_accuracy": fmt_float(row["mean_accuracy"], 6),
+                "min_accuracy": fmt_float(row["min_accuracy"], 6),
+                "max_accuracy": fmt_float(row["max_accuracy"], 6),
+                "spread": fmt_float(row["spread"], 6),
+            }
+            for row in benchmark_difficulty_summary
+        ],
+        [
+            "benchmark",
+            "scope_label",
+            "comparable_lines",
+            "mean_accuracy",
+            "min_accuracy",
+            "max_accuracy",
+            "spread",
+            "best_line",
+            "weakest_line",
+        ],
+    )
+    write_csv(
+        args.release_dir / "family-scaling-summary.csv",
+        family_scaling_summary,
+        ["family", "evidence_scope", "numeric_pattern", "interpretation"],
+    )
+    write_csv(
         args.release_dir / "faithful-metrics.csv",
         faithful_metrics,
         ["benchmark", "benchmark_scope", "model_family", "task", "model", "accuracy", "stderr", "samples", "status"],
@@ -5223,6 +5820,8 @@ def main() -> None:
             supplementary_model_progress,
             family_size_progress,
             benchmark_comparison,
+            benchmark_difficulty_summary,
+            family_scaling_summary,
         ),
     )
     if args.release_dir.resolve() == DEFAULT_RELEASE_DIR.resolve() and args.figure_dir.resolve() == DEFAULT_FIGURE_DIR.resolve():
@@ -5234,6 +5833,8 @@ def main() -> None:
                 supplementary_model_progress,
                 family_size_progress,
                 benchmark_comparison,
+                benchmark_difficulty_summary,
+                family_scaling_summary,
             ),
         )
     write_text(
@@ -5245,6 +5846,8 @@ def main() -> None:
             supplementary_model_progress,
             family_size_progress,
             benchmark_comparison,
+            benchmark_difficulty_summary,
+            family_scaling_summary,
         ),
     )
     write_text(args.release_dir / "source" / "README.md", build_source_readme())
@@ -5297,6 +5900,8 @@ def main() -> None:
     render_coverage_svg(coverage_matrix, args.figure_dir / "option1_coverage_matrix.svg")
     render_accuracy_svg(benchmark_comparison, args.figure_dir / "option1_accuracy_heatmap.svg")
     render_benchmark_accuracy_bars_svg(benchmark_comparison, args.figure_dir / "option1_benchmark_accuracy_bars.svg")
+    render_benchmark_difficulty_profile_svg(benchmark_difficulty_summary, args.figure_dir / "option1_benchmark_difficulty_profile.svg")
+    render_family_scaling_profile_svg(benchmark_comparison, args.figure_dir / "option1_family_scaling_profile.svg")
     render_sample_volume_svg(rows, args.figure_dir / "option1_sample_volume.svg")
 
     print(json.dumps({
@@ -5309,6 +5914,8 @@ def main() -> None:
             "supplementary-model-progress.csv",
             "family-size-progress.csv",
             "benchmark-comparison.csv",
+            "benchmark-difficulty-summary.csv",
+            "family-scaling-summary.csv",
             "future-model-plan.csv",
             "benchmark-summary.csv",
             "faithful-metrics.csv",
@@ -5324,6 +5931,8 @@ def main() -> None:
             "option1_coverage_matrix.svg",
             "option1_accuracy_heatmap.svg",
             "option1_benchmark_accuracy_bars.svg",
+            "option1_benchmark_difficulty_profile.svg",
+            "option1_family_scaling_profile.svg",
             "option1_sample_volume.svg",
         ],
     }, indent=2))
