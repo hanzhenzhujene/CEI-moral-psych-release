@@ -800,6 +800,8 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         "size_slot": "M",
         "route": "text: openrouter/qwen/qwen3-14b",
         "coverage_note": "Clean text rerun finished locally after the withdrawn short-answer artifacts. No medium SMID route is fixed in this public slice.",
+        "unimoral_action_accuracy": 0.6645036429872495,
+        "value_average_accuracy": 0.6747138278388278,
         "task_sources": {
             "unimoral_action_prediction": ROOT / "results" / "inspect" / "logs" / "2026-04-21-qwen-medium-text-rerun-v1" / "qwen_14b_medium",
             "value_prism_relevance": ROOT / "results" / "inspect" / "logs" / "2026-04-21-qwen-medium-text-rerun-v1" / "qwen_14b_medium",
@@ -812,6 +814,9 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         "size_slot": "L",
         "route": "text: openrouter/qwen/qwen3-32b; vision: openrouter/qwen/qwen2.5-vl-72b-instruct",
         "coverage_note": "SMID recovery and clean text rerun both finished locally, so the large Qwen line is fully comparable again.",
+        "unimoral_action_accuracy": 0.6653005464480874,
+        "smid_average_accuracy": 0.4828289697381843,
+        "value_average_accuracy": 0.6531593406593406,
         "task_sources": {
             "unimoral_action_prediction": ROOT / "results" / "inspect" / "logs" / "2026-04-23-qwen-large-text-rerun-v2" / "qwen_32b_large",
             "value_prism_relevance": ROOT / "results" / "inspect" / "logs" / "2026-04-23-qwen-large-text-rerun-v2" / "qwen_32b_large",
@@ -858,6 +863,8 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         "size_slot": "M",
         "route": "text: openrouter/meta-llama/llama-3.3-70b-instruct",
         "coverage_note": "No SMID route; medium text line completed locally on April 22, 2026 and is now a trustworthy text-only comparison point.",
+        "unimoral_action_accuracy": 0.6698542805100182,
+        "value_average_accuracy": 0.7236378205128204,
         "task_sources": {
             "unimoral_action_prediction": ROOT / "results" / "inspect" / "logs" / "2026-04-21-llama-medium-text-v1" / "llama_70b_medium",
             "value_prism_relevance": ROOT / "results" / "inspect" / "logs" / "2026-04-21-llama-medium-text-v1" / "llama_70b_medium",
@@ -870,6 +877,9 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         "size_slot": "L",
         "route": "text: openrouter/meta-llama/llama-4-maverick; vision: openrouter/meta-llama/llama-4-maverick",
         "coverage_note": "Latest large multimodal line. SMID is complete, and the local text rerun now also finishes through the Denevil proxy task.",
+        "unimoral_action_accuracy": 0.6598360655737705,
+        "smid_average_accuracy": 0.3860931655899354,
+        "value_average_accuracy": 0.6923191391941391,
         "task_sources": {
             "unimoral_action_prediction": ROOT / "results" / "inspect" / "logs" / "2026-04-23-llama-large-text-rerun-v3" / "llama_4_maverick_large",
             "value_prism_relevance": ROOT / "results" / "inspect" / "logs" / "2026-04-23-llama-large-text-rerun-v3" / "llama_4_maverick_large",
