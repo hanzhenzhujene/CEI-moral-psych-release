@@ -3831,7 +3831,7 @@ def build_axis_ticks(max_value: int, target_ticks: int = 4) -> tuple[list[int], 
 
 def svg_header(width: int, height: int) -> list[str]:
     return [
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">',
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">',
         "<defs>",
         '<linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">',
         '<stop offset="0%" stop-color="#ffffff"/>',
@@ -4252,15 +4252,15 @@ def render_family_scaling_profile_svg(
     progress_rows: list[dict[str, Any]],
     output_path: Path,
 ) -> None:
-    width, height = 1280, 1180
-    top_panel_left, top_panel_width = 90, 344
-    top_panel_gap = 34
-    top_panel_top, top_panel_height = 184, 352
-    bottom_panel_left, bottom_panel_width = 90, 528
-    bottom_panel_gap = 44
-    bottom_panel_top, bottom_panel_height = 560, 264
-    chart_left_pad, chart_right_pad = 44, 34
-    chart_top_pad, chart_bottom_pad = 56, 56
+    width, height = 1040, 960
+    top_panel_left, top_panel_width = 55, 286
+    top_panel_gap = 18
+    top_panel_top, top_panel_height = 182, 304
+    bottom_panel_left, bottom_panel_width = 79, 402
+    bottom_panel_gap = 42
+    bottom_panel_top, bottom_panel_height = 512, 226
+    chart_left_pad, chart_right_pad = 36, 28
+    chart_top_pad, chart_bottom_pad = 46, 46
     y_min, y_max = 0.2, 0.75
     family_order = ["Qwen", "DeepSeek", "Llama", "Gemma"]
     status_colors = {
@@ -4295,9 +4295,10 @@ def render_family_scaling_profile_svg(
             "<title>Family scaling profile by benchmark</title>",
             "<desc>Five-panel family view across all benchmark lines. The top row plots only trustworthy comparable accuracy for UniMoral, SMID, and Value Kaleidoscope. The bottom row shows CCD-Bench completion coverage and Denevil proxy completion coverage.</desc>",
             '<text x="48" y="64" class="title">Family Scaling Profile</text>',
-            '<text x="48" y="88" class="subtitle">Top row: scored benchmarks only (`UniMoral`, `SMID`, `Value Kaleidoscope`).</text>',
-            '<text x="48" y="108" class="subtitle">Bottom row: CCD-Bench and Denevil coverage panels, because those benchmarks do not share one public scalar accuracy target across lines.</text>',
-            '<text x="48" y="128" class="subtitle">Missing top-row points are evidence limits or withheld accuracy cells, not zeroes.</text>',
+            '<text x="48" y="88" class="subtitle">Five benchmark panels: three scored accuracy panels plus two coverage-only benchmark panels.</text>',
+            '<text x="48" y="108" class="subtitle">Top row: scored benchmarks only (`UniMoral`, `SMID`, `Value Kaleidoscope`).</text>',
+            '<text x="48" y="128" class="subtitle">Bottom row: CCD-Bench and Denevil coverage panels, because those benchmarks do not share one public scalar accuracy target across lines.</text>',
+            '<text x="48" y="148" class="subtitle">Missing top-row points are evidence limits or withheld accuracy cells, not zeroes.</text>',
         ]
     )
 
@@ -4311,6 +4312,8 @@ def render_family_scaling_profile_svg(
         x_positions: dict[str, float] = {}
 
         lines.append(f'<rect x="{panel_x}" y="{panel_y}" width="{top_panel_width}" height="{top_panel_height}" rx="20" class="subpanel"/>')
+        lines.append(f'<rect x="{panel_x + top_panel_width - 52}" y="{panel_y + 16}" width="30" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>')
+        lines.append(f'<text x="{panel_x + top_panel_width - 37}" y="{panel_y + 30}" text-anchor="middle" class="tiny">#{panel_index + 1}</text>')
         lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 30}" class="axis">{escape_xml(benchmark)}</text>')
         lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 50}" class="small">{escape_xml(scope_label)}</text>')
         lines.append(f'<text x="{panel_x + top_panel_width - 24}" y="{panel_y + 30}" text-anchor="end" class="tiny">ACCURACY PANEL</text>')
@@ -4348,7 +4351,7 @@ def render_family_scaling_profile_svg(
                 lines.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="3.5" fill="{color}"/>')
 
         lines.append(
-            f'<text x="{panel_x + 22}" y="{panel_y + top_panel_height - 14}" class="small">Dashed connectors skip missing size slots; no point means no public comparable score.</text>'
+            f'<text x="{panel_x + 18}" y="{panel_y + top_panel_height - 14}" class="small">Dashed connectors skip missing size slots; no point means no public comparable score.</text>'
         )
 
     status_panel_specs = [
@@ -4359,19 +4362,21 @@ def render_family_scaling_profile_svg(
         panel_x = bottom_panel_left + panel_index * (bottom_panel_width + bottom_panel_gap)
         panel_y = bottom_panel_top
         panel_right = panel_x + bottom_panel_width
-        label_x = panel_x + 86
-        chart_left = panel_x + 166
-        chart_right = panel_right - 28
-        cell_width = 90
-        cell_height = 34
-        row_top = panel_y + 72
-        row_gap = 14
+        label_x = panel_x + 72
+        chart_left = panel_x + 146
+        chart_right = panel_right - 24
+        cell_width = 72
+        cell_height = 28
+        row_top = panel_y + 66
+        row_gap = 8
         column_centers = {
             slot: chart_left + (chart_right - chart_left) * SIZE_SLOT_INDEX[slot] / (len(SIZE_SLOT_ORDER) - 1)
             for slot in SIZE_SLOT_ORDER
         }
 
         lines.append(f'<rect x="{panel_x}" y="{panel_y}" width="{bottom_panel_width}" height="{bottom_panel_height}" rx="20" class="subpanel"/>')
+        lines.append(f'<rect x="{panel_right - 52}" y="{panel_y + 16}" width="30" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>')
+        lines.append(f'<text x="{panel_right - 37}" y="{panel_y + 30}" text-anchor="middle" class="tiny">#{panel_index + 4}</text>')
         lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 30}" class="axis">{escape_xml(benchmark)}</text>')
         lines.append(f'<text x="{panel_x + 22}" y="{panel_y + 50}" class="small">{escape_xml(scope_label)}</text>')
         lines.append(f'<text x="{panel_right - 24}" y="{panel_y + 30}" text-anchor="end" class="tiny">COVERAGE PANEL</text>')
@@ -4401,24 +4406,22 @@ def render_family_scaling_profile_svg(
                 )
 
         footer_note = "Completion-only coverage." if benchmark == "CCD-Bench" else "Proxy-only coverage."
-        lines.append(f'<text x="{panel_x + 22}" y="{panel_y + bottom_panel_height - 14}" class="small">{escape_xml(footer_note)}</text>')
+        lines.append(f'<text x="{panel_x + 18}" y="{panel_y + bottom_panel_height - 14}" class="small">{escape_xml(footer_note)}</text>')
 
-    lines.append('<rect x="48" y="860" width="1184" height="270" rx="18" class="legend-card"/>')
-    lines.append('<text x="72" y="888" class="tiny">HOW TO READ THIS FIGURE</text>')
-    lines.append('<text x="72" y="914" class="body">Accuracy panels plot only trustworthy comparable scores for</text>')
-    lines.append('<text x="72" y="934" class="body">`UniMoral`, `SMID`, and `Value Kaleidoscope`.</text>')
-    lines.append('<text x="72" y="958" class="body">Coverage panels show completion state for `CCD-Bench` and `Denevil` because</text>')
-    lines.append('<text x="72" y="978" class="body">those benchmarks do not share one public scalar accuracy target across lines.</text>')
+    lines.append('<rect x="48" y="764" width="944" height="148" rx="18" class="legend-card"/>')
+    lines.append('<text x="72" y="790" class="tiny">HOW TO READ THIS FIGURE</text>')
+    lines.append('<text x="72" y="814" class="body">Panels 1-3 plot trustworthy comparable accuracy for `UniMoral`, `SMID`, and `Value Kaleidoscope`.</text>')
+    lines.append('<text x="72" y="836" class="body">Panels 4-5 show benchmark coverage for `CCD-Bench` and `Denevil`, where one shared public accuracy scalar is not available.</text>')
     deepseek_guardrail = deepseek_medium_accuracy_guardrail_summary()
     if " because " in deepseek_guardrail:
         deepseek_guardrail_prefix, deepseek_guardrail_suffix = deepseek_guardrail.split(" because ", 1)
-        lines.append(f'<text x="72" y="1004" class="body">{escape_xml(deepseek_guardrail_prefix)} because</text>')
-        lines.append(f'<text x="72" y="1024" class="body">{escape_xml(deepseek_guardrail_suffix)}</text>')
+        lines.append(f'<text x="72" y="862" class="body">{escape_xml(deepseek_guardrail_prefix)} because</text>')
+        lines.append(f'<text x="72" y="882" class="body">{escape_xml(deepseek_guardrail_suffix)}</text>')
     else:
-        lines.append(f'<text x="72" y="1004" class="body">{escape_xml(deepseek_guardrail)}</text>')
-    lines.append('<text x="72" y="1046" class="small">That is why `DeepSeek-M` appears in the lower completion panels but not as a scored point in the upper accuracy panels.</text>')
+        lines.append(f'<text x="72" y="862" class="body">{escape_xml(deepseek_guardrail)}</text>')
+    lines.append('<text x="72" y="900" class="small">That is why `DeepSeek-M` appears in the lower completion panels but not as a scored point in the upper accuracy panels.</text>')
 
-    lines.append('<text x="690" y="888" class="tiny">FAMILY READ</text>')
+    lines.append('<text x="560" y="790" class="tiny">FAMILY READ</text>')
     legend_items = [
         ("Qwen", "Top-row text has S/M/L; SMID has S/L."),
         ("DeepSeek", "Top-row only L is scored; M is completion-only; S has no route."),
@@ -4426,8 +4429,8 @@ def render_family_scaling_profile_svg(
         ("Gemma", "Full S/M/L sweep on all three scored metrics."),
     ]
     for index, (family, note) in enumerate(legend_items):
-        x = 690
-        y = 914 + index * 30
+        x = 560
+        y = 814 + index * 24
         color = family_base_color(family)
         lines.append(f'<rect x="{x}" y="{y - 12}" width="14" height="14" rx="4" fill="{color}"/>')
         lines.append(f'<text x="{x + 24}" y="{y - 1}" class="body">{escape_xml(family)}: {escape_xml(note)}</text>')
@@ -4439,15 +4442,15 @@ def render_family_scaling_profile_svg(
         ("-", "No route in scope"),
     ]
     for index, (status, label) in enumerate(status_legend_items):
-        x = 690 + (index % 2) * 228
-        y = 1060 + (index // 2) * 34
+        x = 560 + (index % 2) * 186
+        y = 924 + (index // 2) * 26
         fill = status_colors[status]
         lines.append(f'<rect x="{x}" y="{y - 12}" width="14" height="14" rx="4" fill="{fill}" stroke="#d7dee6" stroke-width="1"/>')
         if status in {"tbd", "-"}:
             lines.append(f'<rect x="{x}" y="{y - 12}" width="14" height="14" rx="4" fill="url(#diagonalHatch)" opacity="0.65"/>')
         lines.append(f'<text x="{x + 24}" y="{y - 1}" class="body">{escape_xml(label)}</text>')
 
-    lines.append('<text x="72" y="1104" class="small">Takeaway: current evidence supports task-specific scaling statements, not a single universal size law across all families and benchmarks.</text>')
+    lines.append('<text x="72" y="940" class="small">Takeaway: current evidence supports task-specific scaling statements, not a single universal size law across all families and benchmarks.</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -4972,6 +4975,7 @@ def append_repo_navigation(lines: list[str]) -> None:
             "| Read the shortest mentor-facing report | [Jenny's group report](results/release/2026-04-19-option1/jenny-group-report.md) |",
             "| Open the frozen release appendix | [Release appendix](results/release/2026-04-19-option1/README.md) |",
             "| See the model lineup | [Models](#models) |",
+            "| Understand which files are frozen, generated, or local-only | [Repo Architecture](docs/repo-architecture.md) |",
             "| Understand how raw runs become public artifacts | [Data Flow](#data-flow) |",
             "| Jump straight to the live summary | [Results First](#results-first) |",
             "| Check the exact full-matrix status | [Family-Size Progress Matrix](#family-size-progress-matrix) |",
@@ -5000,6 +5004,26 @@ def append_repo_layout(lines: list[str]) -> None:
             "├── Makefile                                # setup, test, release, and audit entry points",
             "└── pyproject.toml                          # project metadata and Python tooling",
             "```",
+            "",
+            "If you want the shortest explanation of which files are generated, frozen, or intentionally local-only, start with [docs/repo-architecture.md](docs/repo-architecture.md).",
+            "",
+        ]
+    )
+
+
+def append_public_quickstart(lines: list[str]) -> None:
+    lines.extend(
+        [
+            "## Public Quickstart",
+            "",
+            "This repo has two distinct entrypoints:",
+            "",
+            "| Goal | Command | Requires secrets or local datasets? |",
+            "| --- | --- | --- |",
+            "| Verify the public deliverable end to end | `make bootstrap` | No |",
+            "| Run a live benchmark smoke test | `make setup && cp .env.example .env && make smoke` | Yes |",
+            "",
+            "`make bootstrap` is the reviewer-safe path. It rebuilds the tracked release package and runs the full QA gate from a clean checkout without requiring `OPENROUTER_API_KEY` or local benchmark data.",
             "",
         ]
     )
@@ -5226,6 +5250,7 @@ def build_repo_readme(
         f"3. a clearly labeled progress matrix for the current `{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} public model families x 3 size slots` plan",
         "",
     ]
+    append_public_quickstart(lines)
     append_repo_navigation(lines)
     append_repo_layout(lines)
     append_models_section(lines, family_size_progress)
@@ -5352,29 +5377,36 @@ def build_repo_readme(
         [
             "## Reproducibility",
             "",
-            "### 1. Setup",
+            "This repo exposes two reproducibility layers on purpose: a public no-secret verification path for reviewers, and a live-run path for contributors who have API keys plus local datasets.",
+            "",
+            "### 1. Public verification first",
+            "",
+            "```bash",
+            "make bootstrap",
+            "```",
+            "",
+            "This is the default reproducibility path for the research deliverable. It installs the pinned environment, runs the full test suite, and rebuilds the tracked release artifacts from the committed authoritative snapshot.",
+            "",
+            "It does **not** require `.env`, API keys, or local benchmark datasets.",
+            "",
+            "### 2. Live benchmark smoke test",
             "",
             "```bash",
             "make setup",
             "cp .env.example .env",
+            "make smoke",
             "```",
             "",
-            "Populate `.env` with API keys such as `OPENROUTER_API_KEY` and local benchmark paths such as `UNIMORAL_DATA_DIR` and `SMID_DATA_DIR`.",
-            "If `uv` is not on `PATH` but the repo `.venv` already exists, `make test`, `make release`, and `make audit` now fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If neither runner is available, those targets fail early with a clear setup error; you can also override the fallback path with `VENV_PYTHON=/absolute/path/to/python`.",
+            "Populate `.env` only with the API keys and dataset paths needed for the benchmarks you want to run, such as `OPENROUTER_API_KEY`, `UNIMORAL_DATA_DIR`, and `SMID_DATA_DIR`.",
+            "If `uv` is not on `PATH` but the repo `.venv` already exists, `make test`, `make release`, `make audit`, and `make bootstrap` fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If neither runner is available, those targets fail early with a clear setup error; you can also override the fallback path with `VENV_PYTHON=/absolute/path/to/python`.",
             "",
-            "### 2. Verify the repo",
-            "",
-            "```bash",
-            "make test",
-            "```",
-            "",
-            "### 3. Rebuild the public package",
+            "### 3. Rebuild the public package directly",
             "",
             "```bash",
             "make release",
             "```",
             "",
-            "This regenerates the tracked release package from the frozen source snapshot under `results/release/2026-04-19-option1/source/`.",
+            "This regenerates the tracked release package from the frozen source snapshot under `results/release/2026-04-19-option1/source/`. For the full public QA gate, use `make bootstrap` rather than stitching together `make test` and `make release` by hand.",
             "",
             "Expected high-level outputs:",
             "",
@@ -5390,7 +5422,7 @@ def build_repo_readme(
             "- `figures/release/option1_family_scaling_profile.svg`",
             "- `figures/release/option1_coverage_matrix.svg`",
             "",
-            "For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibility.md).",
+            "For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibility.md). For the repo layer map, see [docs/repo-architecture.md](docs/repo-architecture.md).",
             "",
             "## Important Notes",
             "",

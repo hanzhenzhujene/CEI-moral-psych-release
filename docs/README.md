@@ -2,6 +2,7 @@
 
 ## Public Docs
 
+- [`repo-architecture.md`](repo-architecture.md): the shortest explanation of the repo's three layers: frozen release, tracked regeneration source, and local raw run provenance.
 - [`reproducibility.md`](reproducibility.md): the main public quickstart, including `make bootstrap`, setup notes, release regeneration, and benchmark run instructions.
 - [`how-to-read-results.md`](how-to-read-results.md): plain-language guide to the report terms and progress labels.
 - [`data-access.md`](data-access.md): benchmark-by-benchmark dataset and environment-variable requirements.

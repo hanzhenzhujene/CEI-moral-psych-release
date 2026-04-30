@@ -12,6 +12,17 @@ It combines three things in one clean public surface:
 2. a frozen `Option 1` snapshot for the first formal public release
 3. a clearly labeled progress matrix for the current `5 benchmarks x 4 public model families x 3 size slots` plan
 
+## Public Quickstart
+
+This repo has two distinct entrypoints:
+
+| Goal | Command | Requires secrets or local datasets? |
+| --- | --- | --- |
+| Verify the public deliverable end to end | `make bootstrap` | No |
+| Run a live benchmark smoke test | `make setup && cp .env.example .env && make smoke` | Yes |
+
+`make bootstrap` is the reviewer-safe path. It rebuilds the tracked release package and runs the full QA gate from a clean checkout without requiring `OPENROUTER_API_KEY` or local benchmark data.
+
 ## Navigate This Repo
 
 | If you want to... | Start here |
@@ -19,6 +30,7 @@ It combines three things in one clean public surface:
 | Read the shortest mentor-facing report | [Jenny's group report](results/release/2026-04-19-option1/jenny-group-report.md) |
 | Open the frozen release appendix | [Release appendix](results/release/2026-04-19-option1/README.md) |
 | See the model lineup | [Models](#models) |
+| Understand which files are frozen, generated, or local-only | [Repo Architecture](docs/repo-architecture.md) |
 | Understand how raw runs become public artifacts | [Data Flow](#data-flow) |
 | Jump straight to the live summary | [Results First](#results-first) |
 | Check the exact full-matrix status | [Family-Size Progress Matrix](#family-size-progress-matrix) |
@@ -40,6 +52,8 @@ CEI/
 ├── Makefile                                # setup, test, release, and audit entry points
 └── pyproject.toml                          # project metadata and Python tooling
 ```
+
+If you want the shortest explanation of which files are generated, frozen, or intentionally local-only, start with [docs/repo-architecture.md](docs/repo-architecture.md).
 
 ## Models
 
@@ -320,29 +334,36 @@ _Figure 7. Sample volume by benchmark, with paper-setup and proxy samples separa
 
 ## Reproducibility
 
-### 1. Setup
+This repo exposes two reproducibility layers on purpose: a public no-secret verification path for reviewers, and a live-run path for contributors who have API keys plus local datasets.
+
+### 1. Public verification first
+
+```bash
+make bootstrap
+```
+
+This is the default reproducibility path for the research deliverable. It installs the pinned environment, runs the full test suite, and rebuilds the tracked release artifacts from the committed authoritative snapshot.
+
+It does **not** require `.env`, API keys, or local benchmark datasets.
+
+### 2. Live benchmark smoke test
 
 ```bash
 make setup
 cp .env.example .env
+make smoke
 ```
 
-Populate `.env` with API keys such as `OPENROUTER_API_KEY` and local benchmark paths such as `UNIMORAL_DATA_DIR` and `SMID_DATA_DIR`.
-If `uv` is not on `PATH` but the repo `.venv` already exists, `make test`, `make release`, and `make audit` now fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If neither runner is available, those targets fail early with a clear setup error; you can also override the fallback path with `VENV_PYTHON=/absolute/path/to/python`.
+Populate `.env` only with the API keys and dataset paths needed for the benchmarks you want to run, such as `OPENROUTER_API_KEY`, `UNIMORAL_DATA_DIR`, and `SMID_DATA_DIR`.
+If `uv` is not on `PATH` but the repo `.venv` already exists, `make test`, `make release`, `make audit`, and `make bootstrap` fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If neither runner is available, those targets fail early with a clear setup error; you can also override the fallback path with `VENV_PYTHON=/absolute/path/to/python`.
 
-### 2. Verify the repo
-
-```bash
-make test
-```
-
-### 3. Rebuild the public package
+### 3. Rebuild the public package directly
 
 ```bash
 make release
 ```
 
-This regenerates the tracked release package from the frozen source snapshot under `results/release/2026-04-19-option1/source/`.
+This regenerates the tracked release package from the frozen source snapshot under `results/release/2026-04-19-option1/source/`. For the full public QA gate, use `make bootstrap` rather than stitching together `make test` and `make release` by hand.
 
 Expected high-level outputs:
 
@@ -358,7 +379,7 @@ Expected high-level outputs:
 - `figures/release/option1_family_scaling_profile.svg`
 - `figures/release/option1_coverage_matrix.svg`
 
-For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibility.md).
+For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibility.md). For the repo layer map, see [docs/repo-architecture.md](docs/repo-architecture.md).
 
 ## Important Notes
 

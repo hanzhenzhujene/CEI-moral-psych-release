@@ -465,6 +465,9 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     family_scaling_svg = (figure_dir / "option1_family_scaling_profile.svg").read_text(encoding="utf-8")
     assert "Family Scaling Profile" in family_scaling_svg
+    assert 'preserveAspectRatio="xMidYMin meet"' in family_scaling_svg
+    assert 'style="max-width:100%;height:auto"' in family_scaling_svg
+    assert "Five benchmark panels: three scored accuracy panels plus two coverage-only benchmark panels." in family_scaling_svg
     assert "Top row: scored benchmarks only (`UniMoral`, `SMID`, `Value Kaleidoscope`)." in family_scaling_svg
     assert "Bottom row: CCD-Bench and Denevil coverage panels" in family_scaling_svg
     assert "CCD-Bench" in family_scaling_svg

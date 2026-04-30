@@ -1,3 +1,5 @@
+"""Task-builder regression checks for the moral-psych Inspect modules."""
+
 import csv
 import json
 import os

@@ -1,3 +1,11 @@
+"""Helper functions for the retained lm-evaluation-harness ETHICS tasks.
+
+The CEI public release is centered on the Inspect AI moral-psych suite, but the
+repo still keeps a small lm-eval baseline path for Hendrycks ETHICS regression
+coverage. These helpers normalize the utilitarianism and virtue subsets for the
+YAML task wrappers under `src/lm-evaluation-harness/tasks/`.
+"""
+
 import random
 
 

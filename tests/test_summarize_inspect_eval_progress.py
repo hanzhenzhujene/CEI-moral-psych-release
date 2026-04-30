@@ -1,3 +1,5 @@
+"""Regression checks for the Inspect eval progress summarizer."""
+
 from __future__ import annotations
 
 import importlib.util

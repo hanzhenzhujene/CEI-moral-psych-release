@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 from pathlib import Path
 
 
@@ -65,3 +66,30 @@ def test_env_example_exists_and_documents_core_inputs():
     assert "VALUEPRISM_RELEVANCE_FILE=" in content
     assert "CCD_BENCH_DATA_FILE=" in content
     assert "DENEVIL_DATA_FILE=" in content
+
+
+def test_root_readme_prefers_public_bootstrap_before_live_setup():
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "## Public Quickstart" in readme
+    assert "`make bootstrap`" in readme
+    assert "reviewer-safe path" in readme
+    assert "does **not** require `.env`, API keys, or local benchmark datasets" in readme
+    assert "make setup && cp .env.example .env && make smoke" in readme
+
+
+def test_docs_index_mentions_repo_architecture():
+    docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
+    assert "repo-architecture.md" in docs_index
+
+
+def test_core_python_modules_have_module_docstrings():
+    checked: list[Path] = []
+    for pattern in ("scripts/*.py", "src/**/*.py"):
+        for path in ROOT.glob(pattern):
+            if path.is_dir():
+                continue
+            module = ast.parse(path.read_text(encoding="utf-8"))
+            checked.append(path)
+            assert ast.get_docstring(module), f"Missing module docstring: {path}"
+
+    assert checked, "Expected to scan at least one core Python module."
