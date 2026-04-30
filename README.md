@@ -130,9 +130,12 @@ Only benchmarks with directly comparable accuracy metrics are shown below. `CCD-
 | Line | UniMoral action | SMID average | Value Kaleidoscope average | Coverage note |
 | :--- | ---: | ---: | ---: | --- |
 | `Qwen-S` | 0.647 | 0.368 | 0.682 | Frozen Option 1 line. |
+| `Qwen-M` | 0.665 | n/a | 0.675 | Clean text rerun finished locally after the withdrawn short-answer artifacts. No medium SMID route is fixed in this public slice. |
+| `Qwen-L` | 0.665 | 0.483 | 0.653 | SMID recovery and clean text rerun both finished locally, so the large Qwen line is fully comparable again. |
 | `DeepSeek-L` | 0.684 | n/a | 0.635 | Frozen large-class text line. No SMID vision route was included. |
 | `Llama-S` | 0.648 | 0.216 | 0.529 | Complete locally across all five papers, but still outside the frozen Option 1 snapshot counts. SMID splits to 0.099 moral rating / 0.334 foundation classification, so the low average is a real task result. |
-| `Llama-L` | n/a | 0.386 | n/a | SMID is complete locally, and the local text rerun now finishes through the Denevil proxy task. |
+| `Llama-M` | 0.670 | n/a | 0.724 | No SMID route; medium text line completed locally on April 22, 2026 and is now a trustworthy text-only comparison point. |
+| `Llama-L` | 0.660 | 0.386 | 0.692 | SMID is complete locally, and the local text rerun now finishes through the Denevil proxy task. |
 | `Gemma-S` | 0.635 | 0.417 | 0.593 | Frozen Option 1 recovery line. |
 | `Gemma-M` | 0.663 | 0.364 | 0.664 | Complete local medium line with both text and SMID image results finished. |
 | `Gemma-L` | 0.661 | 0.412 | 0.656 | Complete local large line with both text and SMID image results finished. |
@@ -149,11 +152,11 @@ These are the strongest claims the current public evidence supports. They use on
 
 | Claim | Evidence | Why it matters |
 | --- | --- | --- |
-| Strongest fully observed comparable line | `Gemma-L` averages 0.576 across UniMoral 0.661, SMID 0.412, and Value 0.656. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |
-| Strongest text-only comparable line | `DeepSeek-L` reaches UniMoral 0.684 and Value 0.635, a two-metric mean of 0.659. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route in this slice. |
-| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.361 and the widest spread at 0.200. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |
+| Strongest fully observed comparable line | `Qwen-L` averages 0.600 across UniMoral 0.665, SMID 0.483, and Value 0.653. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |
+| Strongest text-only comparable line | `Llama-M` reaches UniMoral 0.670 and Value 0.724, a two-metric mean of 0.697. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |
+| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.378 and the widest spread at 0.266. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |
 | Closest thing to saturation | `UniMoral` has the tightest range, from 0.635 to 0.684 (0.048 spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |
-| Scaling-law read | `Gemma` is the only family with a full S/M/L comparable sweep, and its metrics move in different directions: UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
+| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen` and `Llama` now add broader text-side size curves. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
 
 ### Benchmark Reading Guide
 
@@ -175,9 +178,9 @@ _Figure 3. Mean, low, and high accuracy for the three directly comparable benchm
 
 | Benchmark | Mean accuracy | Best line | Lowest line | Spread | Reading |
 | --- | ---: | --- | --- | ---: | --- |
-| `UniMoral` | 0.656 | `DeepSeek-L` (0.684) | `Gemma-S` (0.635) | 0.048 | Tightest spread; current lines cluster closely. |
-| `SMID` | 0.361 | `Gemma-S` (0.417) | `Llama-S` (0.216) | 0.200 | Lowest mean and widest spread in the current comparable slice. |
-| `Value Kaleidoscope` | 0.626 | `Qwen-S` (0.682) | `Llama-S` (0.529) | 0.154 | Mid-range difficulty with meaningful but not extreme variation. |
+| `UniMoral` | 0.660 | `DeepSeek-L` (0.684) | `Gemma-S` (0.635) | 0.048 | Tightest spread; current lines cluster closely. |
+| `SMID` | 0.378 | `Qwen-L` (0.483) | `Llama-S` (0.216) | 0.266 | Lowest mean and widest spread in the current comparable slice. |
+| `Value Kaleidoscope` | 0.650 | `Llama-M` (0.724) | `Llama-S` (0.529) | 0.195 | Mid-range difficulty with meaningful but not extreme variation. |
 
 ### Family Scaling Profile
 
@@ -187,16 +190,17 @@ _Figure 4. Size-slot trajectories for the currently comparable rows. Missing poi
 
 | Family | Evidence scope | Numeric pattern | Cautious interpretation |
 | --- | --- | --- | --- |
-| `Qwen` | Only the small line is currently in the comparable table. | UniMoral: S 0.647<br/>SMID: S 0.368<br/>Value Kaleidoscope: S 0.682 | Enough for cross-family comparison, not enough for a within-family scaling claim. |
-| `DeepSeek` | Only the large text line is currently comparable, and there is still no public SMID route. | UniMoral: L 0.684<br/>Value Kaleidoscope: L 0.635 | Strong text-only comparison point, but not a size curve. |
-| `Llama` | Only SMID has both small and large comparable points. | UniMoral: S 0.648<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 | The large vision route clearly helps on SMID, but the current public table still does not support an across-benchmark Llama scaling claim. |
+| `Qwen` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence after the recovered large line. | UniMoral: S 0.647 -> M 0.665 -> L 0.665<br/>SMID: S 0.368 -> L 0.483<br/>Value Kaleidoscope: S 0.682 -> M 0.675 -> L 0.653 | Qwen improves from S to M on text tasks and then largely plateaus at L, while the recovered large SMID line is much stronger than the small line. That supports task-specific scaling, not a single monotonic curve. |
+| `DeepSeek` | Only the large text line is currently comparable, and there is still no public SMID route. | UniMoral: L 0.684<br/>Value Kaleidoscope: L 0.635 | DeepSeek remains a useful large-line text comparison point, but the finished medium rerun still cannot support a trustworthy size curve because its saved short-answer artifacts collapse into empty answers. |
+| `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic. |
 | `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic. |
 
 ### Reporting Guardrails
 
 - Do not fold `Denevil` into any benchmark-faithful macro-accuracy claim; it remains proxy-only even when its completion status is `Done`.
-- Do not call `DeepSeek-L` the best overall line across all tasks; its text results are strong, but there is no SMID route in the current public slice.
-- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full S/M/L comparable sweep, and even there the benchmark directions diverge.
+- Do not call `Llama-M` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
+- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, and the broader `Qwen` / `Llama` curves still move in mixed directions across benchmarks.
+- Keep `DeepSeek-M` out of the comparable accuracy charts until its saved short-answer rerun artifacts stop collapsing into empty visible answers.
 - Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.
 
 ## Snapshot

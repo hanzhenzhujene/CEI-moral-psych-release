@@ -276,7 +276,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     with (release_dir / "benchmark-comparison.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         rows = list(reader)
-    assert len(rows) == 7
+    assert len(rows) == 10
     assert not any(row["line_label"].startswith("MiniMax-") for row in rows)
     assert any(
         row["line_label"] == "Gemma-L"
@@ -288,10 +288,32 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert any(
         row["line_label"] == "Llama-L"
         and row["smid_average_accuracy"] == "0.386093"
-        and row["unimoral_action_accuracy"] == ""
+        and row["unimoral_action_accuracy"] == "0.659836"
+        and row["value_average_accuracy"] == "0.692319"
         for row in rows
     )
-    assert not any(row["line_label"] in {"Qwen-M", "Qwen-L"} for row in rows)
+    assert any(
+        row["line_label"] == "Qwen-M"
+        and row["unimoral_action_accuracy"] == "0.664504"
+        and row["smid_average_accuracy"] == ""
+        and row["value_average_accuracy"] == "0.674714"
+        for row in rows
+    )
+    assert any(
+        row["line_label"] == "Qwen-L"
+        and row["unimoral_action_accuracy"] == "0.665301"
+        and row["smid_average_accuracy"] == "0.482829"
+        and row["value_average_accuracy"] == "0.653159"
+        for row in rows
+    )
+    assert any(
+        row["line_label"] == "Llama-M"
+        and row["unimoral_action_accuracy"] == "0.669854"
+        and row["smid_average_accuracy"] == ""
+        and row["value_average_accuracy"] == "0.723638"
+        for row in rows
+    )
+    assert not any(row["line_label"] == "DeepSeek-M" for row in rows)
 
     with (release_dir / "benchmark-difficulty-summary.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -299,9 +321,16 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert [row["benchmark"] for row in difficulty_rows] == ["UniMoral", "SMID", "Value Kaleidoscope"]
     assert any(
         row["benchmark"] == "SMID"
-        and row["mean_accuracy"] == "0.360563"
-        and row["spread"] == "0.200442"
-        and row["best_line"] == "Gemma-S"
+        and row["mean_accuracy"] == "0.378030"
+        and row["spread"] == "0.266406"
+        and row["best_line"] == "Qwen-L"
+        and row["weakest_line"] == "Llama-S"
+        for row in difficulty_rows
+    )
+    assert any(
+        row["benchmark"] == "Value Kaleidoscope"
+        and row["mean_accuracy"] == "0.650180"
+        and row["best_line"] == "Llama-M"
         and row["weakest_line"] == "Llama-S"
         for row in difficulty_rows
     )
@@ -310,6 +339,20 @@ def test_release_builder_emits_expected_files(tmp_path):
         reader = csv.DictReader(handle)
         scaling_rows = list(reader)
     assert [row["family"] for row in scaling_rows] == ["Qwen", "DeepSeek", "Llama", "Gemma"]
+    assert any(
+        row["family"] == "Qwen"
+        and "Text benchmarks now have S/M/L comparable points" in row["evidence_scope"]
+        and "UniMoral: S 0.647 -> M 0.665 -> L 0.665" in row["numeric_pattern"]
+        and "SMID: S 0.368 -> L 0.483" in row["numeric_pattern"]
+        for row in scaling_rows
+    )
+    assert any(
+        row["family"] == "Llama"
+        and "Text benchmarks now have S/M/L comparable points" in row["evidence_scope"]
+        and "Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692" in row["numeric_pattern"]
+        and "medium text line still beats the large line" in row["interpretation"]
+        for row in scaling_rows
+    )
     assert any(
         row["family"] == "Gemma"
         and "Full S/M/L comparable sweep" in row["evidence_scope"]
@@ -328,6 +371,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "### Reporting Guardrails" in report_text
     assert "These benchmarks do not all ask for the same kind of moral competence" in report_text
     assert "### Latest Family-Size Progress Snapshot" in report_text
+    assert "Strongest fully observed comparable line | `Qwen-L` averages 0.600" in report_text
+    assert "Strongest text-only comparable line | `Llama-M` reaches UniMoral 0.670 and Value 0.724" in report_text
+    assert "Keep `DeepSeek-M` out of the comparable accuracy charts" in report_text
     assert "qwen2.5-vl-72b-instruct" in report_text
     assert "## Local Expansion Checkpoint" in report_text
     assert "curated snapshot rather than a live dashboard" in report_text
@@ -412,6 +458,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Family Scaling Profile" in family_scaling_svg
     assert "Sparse panels are evidence boundaries, not zeros." in family_scaling_svg
     assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
+    assert "Qwen: Text has S/M/L comparable points; SMID has S/L." in family_scaling_svg
+    assert "Llama: Text has S/M/L comparable points; SMID has S/L." in family_scaling_svg
+    assert "Only the small line is currently comparable." not in family_scaling_svg
 
     sample_volume_svg = (figure_dir / "option1_sample_volume.svg").read_text(encoding="utf-8")
     assert "Paper setup:" in sample_volume_svg

@@ -799,6 +799,32 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         },
     },
     {
+        "line_label": "Qwen-M",
+        "family": "Qwen",
+        "size_slot": "M",
+        "route": "text: openrouter/qwen/qwen3-14b",
+        "coverage_note": "Clean text rerun finished locally after the withdrawn short-answer artifacts. No medium SMID route is fixed in this public slice.",
+        "task_sources": {
+            "unimoral_action_prediction": ROOT / "results" / "inspect" / "logs" / "2026-04-21-qwen-medium-text-rerun-v1" / "qwen_14b_medium",
+            "value_prism_relevance": ROOT / "results" / "inspect" / "logs" / "2026-04-21-qwen-medium-text-rerun-v1" / "qwen_14b_medium",
+            "value_prism_valence": ROOT / "results" / "inspect" / "logs" / "2026-04-21-qwen-medium-text-rerun-v1" / "qwen_14b_medium",
+        },
+    },
+    {
+        "line_label": "Qwen-L",
+        "family": "Qwen",
+        "size_slot": "L",
+        "route": "text: openrouter/qwen/qwen3-32b; vision: openrouter/qwen/qwen2.5-vl-72b-instruct",
+        "coverage_note": "SMID recovery and clean text rerun both finished locally, so the large Qwen line is fully comparable again.",
+        "task_sources": {
+            "unimoral_action_prediction": ROOT / "results" / "inspect" / "logs" / "2026-04-23-qwen-large-text-rerun-v2" / "qwen_32b_large",
+            "value_prism_relevance": ROOT / "results" / "inspect" / "logs" / "2026-04-23-qwen-large-text-rerun-v2" / "qwen_32b_large",
+            "value_prism_valence": ROOT / "results" / "inspect" / "logs" / "2026-04-23-qwen-large-text-rerun-v2" / "qwen_32b_large",
+            "smid_moral_rating": ROOT / "results" / "inspect" / "logs" / "2026-04-20-qwen-large-smid-recovery-full-v2",
+            "smid_foundation_classification": ROOT / "results" / "inspect" / "logs" / "2026-04-20-qwen-large-smid-recovery-full-v2",
+        },
+    },
+    {
         "line_label": "Llama-S",
         "family": "Llama",
         "size_slot": "S",
@@ -831,17 +857,41 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         },
     },
     {
+        "line_label": "Llama-M",
+        "family": "Llama",
+        "size_slot": "M",
+        "route": "text: openrouter/meta-llama/llama-3.3-70b-instruct",
+        "coverage_note": "No SMID route; medium text line completed locally on April 22, 2026 and is now a trustworthy text-only comparison point.",
+        "task_sources": {
+            "unimoral_action_prediction": ROOT / "results" / "inspect" / "logs" / "2026-04-21-llama-medium-text-v1" / "llama_70b_medium",
+            "value_prism_relevance": ROOT / "results" / "inspect" / "logs" / "2026-04-21-llama-medium-text-v1" / "llama_70b_medium",
+            "value_prism_valence": ROOT / "results" / "inspect" / "logs" / "2026-04-21-llama-medium-text-v1" / "llama_70b_medium",
+        },
+    },
+    {
         "line_label": "Llama-L",
         "family": "Llama",
         "size_slot": "L",
-        "route": "vision: openrouter/meta-llama/llama-4-maverick",
-        "coverage_note": "Latest large vision line. SMID is complete, while the matching text tasks are still queued.",
-        "unimoral_action_accuracy": None,
-        "smid_average_accuracy": 0.3860931655899354,
-        "value_average_accuracy": None,
+        "route": "text: openrouter/meta-llama/llama-4-maverick; vision: openrouter/meta-llama/llama-4-maverick",
+        "coverage_note": "Latest large multimodal line. SMID is complete, and the local text rerun now also finishes through the Denevil proxy task.",
         "task_sources": {
+            "unimoral_action_prediction": ROOT / "results" / "inspect" / "logs" / "2026-04-23-llama-large-text-rerun-v3" / "llama_4_maverick_large",
+            "value_prism_relevance": ROOT / "results" / "inspect" / "logs" / "2026-04-23-llama-large-text-rerun-v3" / "llama_4_maverick_large",
+            "value_prism_valence": ROOT / "results" / "inspect" / "logs" / "2026-04-23-llama-large-text-rerun-v3" / "llama_4_maverick_large",
             "smid_moral_rating": ROOT / "results" / "inspect" / "logs" / "2026-04-19-family-size-image-expansion" / "llama_4_maverick_large_smid",
             "smid_foundation_classification": ROOT / "results" / "inspect" / "logs" / "2026-04-19-family-size-image-expansion" / "llama_4_maverick_large_smid",
+        },
+    },
+    {
+        "line_label": "DeepSeek-M",
+        "family": "DeepSeek",
+        "size_slot": "M",
+        "route": "text: openrouter/deepseek/deepseek-r1-distill-llama-70b (DeepInfra-pinned recovery route)",
+        "coverage_note": "No SMID route; the local text rerun finished operationally, but the saved short-answer artifacts still need response-format validation before they can enter the public comparable snapshot.",
+        "task_sources": {
+            "unimoral_action_prediction": ROOT / "results" / "inspect" / "logs" / "2026-04-23-deepseek-medium-text-rerun-v3" / "deepseek_r1_qwen_32b_medium",
+            "value_prism_relevance": ROOT / "results" / "inspect" / "logs" / "2026-04-23-deepseek-medium-text-rerun-v3" / "deepseek_r1_qwen_32b_medium",
+            "value_prism_valence": ROOT / "results" / "inspect" / "logs" / "2026-04-23-deepseek-medium-text-rerun-v3" / "deepseek_r1_qwen_32b_medium",
         },
     },
     {
@@ -3426,6 +3476,35 @@ def build_local_comparison_row(config: dict[str, Any]) -> dict[str, Any] | None:
             f"{coverage_note.rstrip('.')}. SMID splits to {smid_moral['accuracy']:.3f} moral rating / "
             f"{smid_foundation['accuracy']:.3f} foundation classification, so the low average is a real task result."
         )
+    elif config["line_label"] == "DeepSeek-M":
+        guardrailed_metrics: list[str] = []
+        max_empty_answer_rate = 0.0
+        for task_name, metric_label in (
+            ("unimoral_action_prediction", "UniMoral"),
+            ("value_prism_relevance", "Value Kaleidoscope relevance"),
+            ("value_prism_valence", "Value Kaleidoscope valence"),
+        ):
+            parsed = tasks.get(task_name)
+            if parsed is None:
+                continue
+            guardrail = inspect_empty_answer_rate(parsed["eval_path"])
+            if guardrail is None or guardrail["empty_answer_rate"] < 0.95:
+                continue
+            max_empty_answer_rate = max(max_empty_answer_rate, float(guardrail["empty_answer_rate"]))
+            guardrailed_metrics.append(metric_label)
+            if task_name == "unimoral_action_prediction":
+                unimoral = None
+            elif task_name == "value_prism_relevance":
+                value_relevance = None
+            elif task_name == "value_prism_valence":
+                value_valence = None
+        if guardrailed_metrics:
+            coverage_note = (
+                "No SMID route; the local text rerun finished through the Denevil proxy task, but the saved short-answer "
+                "artifacts stay out of the public comparable snapshot because "
+                f"{max_empty_answer_rate * 100:.1f}% of scored answers were empty on "
+                f"{_human_join([f'`{label}`' for label in guardrailed_metrics])}."
+            )
 
     row = {
         "line_label": config["line_label"],
@@ -3543,18 +3622,18 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
         )
     if family == "Llama":
         return (
-            "Only SMID has both small and large comparable points.",
-            "The large vision route clearly helps on SMID, but the current public table still does not support an across-benchmark Llama scaling claim.",
+            "Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence.",
+            "Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic.",
         )
     if family == "Qwen":
         return (
-            "Only the small line is currently in the comparable table.",
-            "Enough for cross-family comparison, not enough for a within-family scaling claim.",
+            "Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence after the recovered large line.",
+            "Qwen improves from S to M on text tasks and then largely plateaus at L, while the recovered large SMID line is much stronger than the small line. That supports task-specific scaling, not a single monotonic curve.",
         )
     if family == "DeepSeek":
         return (
             "Only the large text line is currently comparable, and there is still no public SMID route.",
-            "Strong text-only comparison point, but not a size curve.",
+            "DeepSeek remains a useful large-line text comparison point, but the finished medium rerun still cannot support a trustworthy size curve because its saved short-answer artifacts collapse into empty answers.",
         )
     available_metrics = sum(1 for points in metric_points.values() if points)
     return (
@@ -4210,10 +4289,10 @@ def render_family_scaling_profile_svg(rows: list[dict[str, Any]], output_path: P
     lines.append('<rect x="48" y="646" width="1184" height="152" rx="18" class="legend-card"/>')
     lines.append('<text x="72" y="674" class="tiny">WHAT THIS FIGURE SUPPORTS</text>')
     legend_items = [
-        ("Qwen", "Only the small line is currently comparable."),
-        ("DeepSeek", "Only the large text line is currently comparable."),
-        ("Llama", "Only SMID has both small and large comparable points."),
-        ("Gemma", "The only family with a full S/M/L comparable sweep on all three benchmarks."),
+        ("Qwen", "Text has S/M/L comparable points; SMID has S/L."),
+        ("DeepSeek", "Only the L text line is comparable; the M text rerun stays withheld."),
+        ("Llama", "Text has S/M/L comparable points; SMID has S/L."),
+        ("Gemma", "Only family with a full three-metric S/M/L comparable sweep."),
     ]
     for index, (family, note) in enumerate(legend_items):
         x = 72 if index < 2 else 634
@@ -4466,18 +4545,34 @@ def append_interpretation_sections(
         for row in benchmark_comparison
         if all(row[field] is not None for _, field, _ in COMPARABLE_METRIC_SPECS)
     ]
+    text_only_lines = [
+        row
+        for row in benchmark_comparison
+        if row["smid_average_accuracy"] is None
+        and row["unimoral_action_accuracy"] is not None
+        and row["value_average_accuracy"] is not None
+    ]
     best_full_line = None
     if full_metric_lines:
         best_full_line = max(
             full_metric_lines,
             key=lambda row: mean(float(row[field]) for _, field, _ in COMPARABLE_METRIC_SPECS),
-    )
+        )
     best_full_line_mean = (
         mean(float(best_full_line[field]) for _, field, _ in COMPARABLE_METRIC_SPECS)
         if best_full_line is not None
         else None
     )
-    deepest_text_line = next((row for row in benchmark_comparison if row["line_label"] == "DeepSeek-L"), None)
+    best_text_only_line = None
+    if text_only_lines:
+        best_text_only_line = max(
+            text_only_lines,
+            key=lambda row: mean(
+                float(value)
+                for value in (row["unimoral_action_accuracy"], row["value_average_accuracy"])
+                if value is not None
+            ),
+        )
     unimoral_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "UniMoral")
     smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
     gemma_s = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-S"), None)
@@ -4499,17 +4594,17 @@ def append_interpretation_sections(
         lines.append(
             f"| Strongest fully observed comparable line | `{best_full_line['line_label']}` averages {fmt_float(best_full_line_mean)} across UniMoral {fmt_float(best_full_line['unimoral_action_accuracy'])}, SMID {fmt_float(best_full_line['smid_average_accuracy'])}, and Value {fmt_float(best_full_line['value_average_accuracy'])}. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |"
         )
-    if deepest_text_line is not None:
-        deepseek_mean = mean(
-            float(deepseekest_value)
-            for deepseekest_value in (
-                deepest_text_line["unimoral_action_accuracy"],
-                deepest_text_line["value_average_accuracy"],
+    if best_text_only_line is not None:
+        best_text_only_mean = mean(
+            float(text_only_value)
+            for text_only_value in (
+                best_text_only_line["unimoral_action_accuracy"],
+                best_text_only_line["value_average_accuracy"],
             )
-            if deepseekest_value is not None
+            if text_only_value is not None
         )
         lines.append(
-            f"| Strongest text-only comparable line | `DeepSeek-L` reaches UniMoral {fmt_float(deepest_text_line['unimoral_action_accuracy'])} and Value {fmt_float(deepest_text_line['value_average_accuracy'])}, a two-metric mean of {fmt_float(deepseek_mean)}. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route in this slice. |"
+            f"| Strongest text-only comparable line | `{best_text_only_line['line_label']}` reaches UniMoral {fmt_float(best_text_only_line['unimoral_action_accuracy'])} and Value {fmt_float(best_text_only_line['value_average_accuracy'])}, a two-metric mean of {fmt_float(best_text_only_mean)}. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |"
         )
     lines.append(
         f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |"
@@ -4518,7 +4613,7 @@ def append_interpretation_sections(
         f"| Closest thing to saturation | `UniMoral` has the tightest range, from {fmt_float(unimoral_summary['min_accuracy'])} to {fmt_float(unimoral_summary['max_accuracy'])} ({fmt_float(unimoral_summary['spread'])} spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |"
     )
     lines.append(
-        f"| Scaling-law read | `Gemma` is the only family with a full S/M/L comparable sweep, and its metrics move in different directions: UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
+        f"| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen` and `Llama` now add broader text-side size curves. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
     )
     lines.extend(
         [
@@ -4560,8 +4655,9 @@ def append_interpretation_sections(
             "### Reporting Guardrails",
             "",
             f"- Do not fold `Denevil` into any benchmark-faithful macro-accuracy claim; it remains proxy-only even when its completion status is `Done`.",
-            f"- Do not call `DeepSeek-L` the best overall line across all tasks; its text results are strong, but there is no SMID route in the current public slice.",
-            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full S/M/L comparable sweep, and even there the benchmark directions diverge.",
+            f"- Do not call `{best_text_only_line['line_label']}` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line." if best_text_only_line is not None else "- Do not promote any text-only line into an all-around winner claim without a matching SMID route.",
+            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, and the broader `Qwen` / `Llama` curves still move in mixed directions across benchmarks.",
+            f"- Keep `DeepSeek-M` out of the comparable accuracy charts until its saved short-answer rerun artifacts stop collapsing into empty visible answers.",
             f"- Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.",
             "",
         ]
