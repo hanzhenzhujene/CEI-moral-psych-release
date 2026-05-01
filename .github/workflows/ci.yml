@@ -6,7 +6,6 @@ name: CI
       - main
   pull_request:
 
-env:
 jobs:
   test:
     runs-on: ubuntu-latest
