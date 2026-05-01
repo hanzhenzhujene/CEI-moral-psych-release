@@ -42,6 +42,42 @@ The release follows one consistent evaluation logic:
 3. `DeNEVIL` is reported as proxy behavioral evidence from released traces because local `MoralPrompt` scoring is unavailable; it is therefore excluded from macro-accuracy claims by design.
 4. Every public table, report, and SVG is regenerated from a tracked authoritative snapshot through one builder, so the repo publishes a coherent frozen release rather than a hand-edited dashboard.
 
+## Benchmark Result Visuals
+
+If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
+
+### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy
+
+![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
+
+_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks._
+
+### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling
+
+![Family scaling profile](figures/release/option1_family_scaling_profile.svg)
+
+_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence._
+
+### 3. CCD-Bench: cultural-cluster choice behavior
+
+![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)
+
+_This is the main CCD-Bench result: deviation from the 10% uniform baseline across the ten canonical cultural clusters._
+
+### 4. CCD-Bench: dominant-option concentration
+
+![CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)
+
+_This is the compact CCD-Bench summary: how much each line collapses onto one dominant cluster, and how broadly it still spreads across the option set._
+
+### 5. DeNEVIL: proxy behavioral outcomes
+
+![DeNEVIL proxy behavioral outcomes](figures/release/option1_denevil_behavior_outcomes.svg)
+
+_This is the main DeNEVIL result surface: auditable behavioral categories from proxy traces, not benchmark-faithful accuracy._
+
+Secondary benchmark-specific visuals still appear later in the deliverable, including the benchmark difficulty profile, the DeNEVIL prompt-family heatmap, and the appendix QA / provenance figures.
+
 ## Public Quickstart
 
 This repo has two distinct entrypoints:
@@ -64,6 +100,7 @@ This repo has two distinct entrypoints:
 | Understand which metrics are accuracy, coverage, or proxy-only | [Evaluation Methodology](docs/evaluation-methodology.md) |
 | Cite the repo as a software artifact | [CITATION.cff](CITATION.cff) |
 | Understand how raw runs become public artifacts | [Data Flow](#data-flow) |
+| Go straight to the five benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |
 | Jump straight to the live summary | [Results First](#results-first) |
 | Check the exact full-matrix status | [Family-Size Progress Matrix](#family-size-progress-matrix) |
 | Browse only the charts and figures | [Supporting Figures](#supporting-figures) |

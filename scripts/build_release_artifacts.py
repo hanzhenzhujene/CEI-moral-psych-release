@@ -7148,6 +7148,49 @@ def append_tldr_section(
     lines.extend(["", ""])
 
 
+def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str) -> None:
+    lines.extend(
+        [
+            "## Benchmark Result Visuals",
+            "",
+            "If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.",
+            "",
+            "### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy",
+            "",
+            f"![Comparable accuracy bars]({figure_prefix}/option1_benchmark_accuracy_bars.svg)",
+            "",
+            "_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks._",
+            "",
+            "### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling",
+            "",
+            f"![Family scaling profile]({figure_prefix}/option1_family_scaling_profile.svg)",
+            "",
+            "_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence._",
+            "",
+            "### 3. CCD-Bench: cultural-cluster choice behavior",
+            "",
+            f"![CCD choice distribution]({figure_prefix}/option1_ccd_choice_distribution.svg)",
+            "",
+            "_This is the main CCD-Bench result: deviation from the 10% uniform baseline across the ten canonical cultural clusters._",
+            "",
+            "### 4. CCD-Bench: dominant-option concentration",
+            "",
+            f"![CCD dominant-option share]({figure_prefix}/option1_ccd_dominant_option_share.svg)",
+            "",
+            "_This is the compact CCD-Bench summary: how much each line collapses onto one dominant cluster, and how broadly it still spreads across the option set._",
+            "",
+            "### 5. DeNEVIL: proxy behavioral outcomes",
+            "",
+            f"![DeNEVIL proxy behavioral outcomes]({figure_prefix}/option1_denevil_behavior_outcomes.svg)",
+            "",
+            "_This is the main DeNEVIL result surface: auditable behavioral categories from proxy traces, not benchmark-faithful accuracy._",
+            "",
+            "Secondary benchmark-specific visuals still appear later in the deliverable, including the benchmark difficulty profile, the DeNEVIL prompt-family heatmap, and the appendix QA / provenance figures.",
+            "",
+        ]
+    )
+
+
 def append_interpretation_sections(
     lines: list[str],
     benchmark_comparison: list[dict[str, Any]],
@@ -7575,6 +7618,7 @@ def append_repo_navigation(lines: list[str]) -> None:
             "| Understand which metrics are accuracy, coverage, or proxy-only | [Evaluation Methodology](docs/evaluation-methodology.md) |",
             "| Cite the repo as a software artifact | [CITATION.cff](CITATION.cff) |",
             "| Understand how raw runs become public artifacts | [Data Flow](#data-flow) |",
+            "| Go straight to the five benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |",
             "| Jump straight to the live summary | [Results First](#results-first) |",
             "| Check the exact full-matrix status | [Family-Size Progress Matrix](#family-size-progress-matrix) |",
             "| Browse only the charts and figures | [Supporting Figures](#supporting-figures) |",
@@ -7882,6 +7926,7 @@ def build_repo_readme(
             "",
         ]
     )
+    append_benchmark_result_visuals_section(lines, "figures/release")
     append_public_quickstart(lines)
     append_repo_navigation(lines)
     append_repo_layout(lines)
@@ -8128,6 +8173,7 @@ def build_release_readme(
         ccd_choice_distribution,
         denevil_behavior_summary,
     )
+    append_benchmark_result_visuals_section(lines, "../../../figures/release")
     lines.extend(
         [
         "## Results First",
@@ -8378,6 +8424,7 @@ def build_jenny_group_report(
         ccd_choice_distribution,
         denevil_behavior_summary,
     )
+    append_benchmark_result_visuals_section(lines, "../../../figures/release")
     lines.extend(
         [
             "## Results First",

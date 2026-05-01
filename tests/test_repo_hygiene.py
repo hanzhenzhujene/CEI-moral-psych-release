@@ -80,6 +80,15 @@ def test_root_readme_prefers_public_bootstrap_before_live_setup():
     assert "There is no universal scaling law" in readme
     assert "CCD-Bench shows cultural choice style, not accuracy." in readme
     assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring." in readme
+    assert "## Benchmark Result Visuals" in readme
+    assert "### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy" in readme
+    assert "### 3. CCD-Bench: cultural-cluster choice behavior" in readme
+    assert "### 5. DeNEVIL: proxy behavioral outcomes" in readme
+    assert "option1_benchmark_accuracy_bars.svg" in readme
+    assert "option1_family_scaling_profile.svg" in readme
+    assert "option1_ccd_choice_distribution.svg" in readme
+    assert "option1_ccd_dominant_option_share.svg" in readme
+    assert "option1_denevil_behavior_outcomes.svg" in readme
     assert "## Public Quickstart" in readme
     assert "`make bootstrap`" in readme
     assert "reviewer-safe path" in readme
@@ -138,6 +147,7 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
 def test_root_readme_links_evaluation_methodology():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "docs/evaluation-methodology.md" in readme
+    assert "[Benchmark Result Visuals](#benchmark-result-visuals)" in readme
 
 
 def test_root_readme_frames_denevil_as_proxy_only_evidence():
