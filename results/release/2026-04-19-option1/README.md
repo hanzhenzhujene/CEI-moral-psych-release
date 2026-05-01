@@ -101,9 +101,7 @@ Metric definition version: `2026-04-30`. The visible-answer parsing rules behind
 | `Gemma-M` | 0.663 | 0.364 | 0.664 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Gemma-L` | 0.661 | 0.412 | 0.656 | Comparable on all three benchmark-faithful accuracy panels. |
 
-![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
-
-_Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the latest available lines, with unavailable or withdrawn benchmark-line pairs shown explicitly._
+_The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._
 
 ## Interpretation
 
@@ -145,9 +143,7 @@ _Figure 3. Mean, low, and high accuracy for the three directly comparable benchm
 
 ### Family Scaling Profile
 
-![Family scaling profile](../../../figures/release/option1_family_scaling_profile.svg)
-
-_Figure 4. Family-size scaling across the three directly comparable accuracy panels only: `UniMoral`, `SMID`, and `Value Kaleidoscope`. `CCD-Bench` and `Denevil` are intentionally excluded from this line chart because the public release treats them as coverage / proxy evidence rather than benchmark-faithful accuracy. Missing points are missing or withheld evidence, not zeroes._
+_The headline family-scaling figure already appears above in **Benchmark Result Visuals**. The summary table below keeps the size-by-family takeaways inline here without re-embedding the same chart._
 
 | Family | Evidence scope | Numeric pattern | Cautious interpretation |
 | --- | --- | --- | --- |
@@ -162,13 +158,7 @@ CCD-Bench should not be flattened into a universal accuracy number. The paper as
 
 CCD option order follows the paper's canonical cluster IDs: 1 = Anglo; 2 = Eastern Europe; 3 = Latin America; 4 = Latin Europe; 5 = Confucian Asia; 6 = Nordic Europe; 7 = Sub Saharan Africa; 8 = Southern Asia; 9 = Germanic Europe; 10 = Middle East.
 
-![CCD choice distribution](../../../figures/release/option1_ccd_choice_distribution.svg)
-
-_Figure 5. Main CCD-Bench result surface. Each cell shows the percentage-point deviation from the 10% uniform baseline for one canonical cultural cluster, computed over valid visible selections only. Positive cells mean the line picked that cluster more often than uniform choice; negative cells mean under-indexing. This is a choice-distribution heatmap, not accuracy._
-
-![CCD dominant-option share](../../../figures/release/option1_ccd_dominant_option_share.svg)
-
-_Figure 6. Compact CCD summary. Dominant-cluster share shows how much of each line's valid visible choice behavior collapses onto its most frequent cluster, while the effective-cluster count tracks how broadly the line spreads its choices across the ten canonical options._
+_The two headline CCD figures already appear above in **Benchmark Result Visuals**. They remain the main result surfaces; the appendix coverage figure and compact table below provide QA context and inline numeric support without duplicating the same graphics._
 
 ![CCD valid-choice coverage](../../../figures/release/option1_ccd_valid_choice_coverage.svg)
 
@@ -199,9 +189,7 @@ The repo still lacks a stable local `MoralPrompt` export, so paper-aligned APV /
 
 The main DeNEVIL result surface is now the visible-behavior mix across the full released proxy archive. A secondary prompt-family heatmap asks how often safety-salient prompt families receive visibly protective responses. Route/model provenance, sample volume, completion state, timestamps, and visible-response coverage are still exported, but they now live in the appendix QA figures rather than the headline result story.
 
-![DeNEVIL proxy behavioral outcomes](../../../figures/release/option1_denevil_behavior_outcomes.svg)
-
-_Figure 8. Main DeNEVIL proxy result surface. Each stacked bar distributes the released proxy prompts across auditable behavioral categories. This is proxy behavioral evidence, not benchmark-faithful ethical-quality scoring._
+_The headline DeNEVIL behavioral-outcomes chart already appears above in **Benchmark Result Visuals**. This section keeps the explanatory framing, the secondary prompt-family breakdown, and the appendix provenance surfaces without re-embedding the same main chart._
 
 ![DeNEVIL prompt-family heatmap](../../../figures/release/option1_denevil_prompt_family_heatmap.svg)
 

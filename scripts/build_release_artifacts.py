@@ -7328,9 +7328,7 @@ def append_interpretation_sections(
             "",
             "### Family Scaling Profile",
             "",
-            f"![Family scaling profile]({figure_prefix}/option1_family_scaling_profile.svg)",
-            "",
-            "_Figure 4. Family-size scaling across the three directly comparable accuracy panels only: `UniMoral`, `SMID`, and `Value Kaleidoscope`. `CCD-Bench` and `Denevil` are intentionally excluded from this line chart because the public release treats them as coverage / proxy evidence rather than benchmark-faithful accuracy. Missing points are missing or withheld evidence, not zeroes._",
+            "_The headline family-scaling figure already appears above in **Benchmark Result Visuals**. The summary table below keeps the size-by-family takeaways inline here without re-embedding the same chart._",
             "",
         ]
     )
@@ -7344,13 +7342,7 @@ def append_interpretation_sections(
             "",
             ccd_cluster_order_note,
             "",
-            f"![CCD choice distribution]({figure_prefix}/option1_ccd_choice_distribution.svg)",
-            "",
-            "_Figure 5. Main CCD-Bench result surface. Each cell shows the percentage-point deviation from the 10% uniform baseline for one canonical cultural cluster, computed over valid visible selections only. Positive cells mean the line picked that cluster more often than uniform choice; negative cells mean under-indexing. This is a choice-distribution heatmap, not accuracy._",
-            "",
-            f"![CCD dominant-option share]({figure_prefix}/option1_ccd_dominant_option_share.svg)",
-            "",
-            "_Figure 6. Compact CCD summary. Dominant-cluster share shows how much of each line's valid visible choice behavior collapses onto its most frequent cluster, while the effective-cluster count tracks how broadly the line spreads its choices across the ten canonical options._",
+            "_The two headline CCD figures already appear above in **Benchmark Result Visuals**. They remain the main result surfaces; the appendix coverage figure and compact table below provide QA context and inline numeric support without duplicating the same graphics._",
             "",
             f"![CCD valid-choice coverage]({figure_prefix}/option1_ccd_valid_choice_coverage.svg)",
             "",
@@ -7372,9 +7364,7 @@ def append_interpretation_sections(
             "",
             "The main DeNEVIL result surface is now the visible-behavior mix across the full released proxy archive. A secondary prompt-family heatmap asks how often safety-salient prompt families receive visibly protective responses. Route/model provenance, sample volume, completion state, timestamps, and visible-response coverage are still exported, but they now live in the appendix QA figures rather than the headline result story.",
             "",
-            f"![DeNEVIL proxy behavioral outcomes]({figure_prefix}/option1_denevil_behavior_outcomes.svg)",
-            "",
-            "_Figure 8. Main DeNEVIL proxy result surface. Each stacked bar distributes the released proxy prompts across auditable behavioral categories. This is proxy behavioral evidence, not benchmark-faithful ethical-quality scoring._",
+            "_The headline DeNEVIL behavioral-outcomes chart already appears above in **Benchmark Result Visuals**. This section keeps the explanatory framing, the secondary prompt-family breakdown, and the appendix provenance surfaces without re-embedding the same main chart._",
             "",
             f"![DeNEVIL prompt-family heatmap]({figure_prefix}/option1_denevil_prompt_family_heatmap.svg)",
             "",
@@ -7964,9 +7954,7 @@ def build_repo_readme(
     lines.extend(
         [
             "",
-            "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)",
-            "",
-            "_Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the latest available lines, with unavailable or withdrawn benchmark-line pairs shown explicitly._",
+            "_The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._",
             "",
         ]
     )
@@ -8206,9 +8194,7 @@ def build_release_readme(
     lines.extend(
         [
             "",
-            "![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)",
-            "",
-            "_Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the latest available lines, with unavailable or withdrawn benchmark-line pairs shown explicitly._",
+            "_The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._",
             "",
         ]
     )
@@ -8457,9 +8443,7 @@ def build_jenny_group_report(
     lines.extend(
         [
             "",
-            "![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)",
-            "",
-            "_Topline comparable-accuracy chart. Benchmark-level accuracy comparison across the latest available lines, with unavailable or withdrawn benchmark-line pairs shown explicitly._",
+            "_The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._",
             "",
         ]
     )

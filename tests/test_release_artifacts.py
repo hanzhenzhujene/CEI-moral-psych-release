@@ -740,7 +740,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "CCD-Bench should not be flattened into a universal accuracy number." in text
         assert "The repo still lacks a stable local `MoralPrompt` export" in text
         assert "paper-aligned APV / EVR / MVP are `n/a`" in text
-        assert "Each stacked bar distributes the released proxy prompts across auditable behavioral categories." in text
+        assert "headline DeNEVIL behavioral-outcomes chart already appears above" in text
         assert "ccd-choice-distribution.csv" in text
         assert "option1_ccd_valid_choice_coverage.svg" in text
         assert "option1_ccd_choice_distribution.svg" in text
@@ -761,10 +761,17 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "| `MiniMax-S` |" not in text
         assert "| `MiniMax-M` |" not in text
         assert "| `MiniMax-L` |" not in text
-        assert "Family-size scaling across the three directly comparable accuracy panels only" in text
+        assert "headline family-scaling figure already appears above" in text
         assert "Read `CCD-Bench` in its dedicated choice-behavior figures" in text
         assert "Read `Denevil` only through the dedicated proxy evidence package." in text
         assert "## Interpretation Notes" not in text
+        assert text.count("![Comparable accuracy bars]") == 1
+        assert text.count("![Family scaling profile]") == 1
+        assert text.count("![CCD choice distribution]") == 1
+        assert text.count("![CCD dominant-option share]") == 1
+        assert text.count("![DeNEVIL proxy behavioral outcomes]") == 1
+        assert "without re-embedding the same chart" in text
+        assert "without duplicating the same graphics" in text
 
     assert "## Local Expansion Checkpoint" in report_text
     assert "| `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |" in report_text

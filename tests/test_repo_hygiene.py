@@ -94,6 +94,13 @@ def test_root_readme_prefers_public_bootstrap_before_live_setup():
     assert "reviewer-safe path" in readme
     assert "does **not** require `.env`, API keys, or local benchmark datasets" in readme
     assert "make setup && cp .env.example .env && make smoke" in readme
+    assert readme.count("![Comparable accuracy bars]") == 1
+    assert readme.count("![Family scaling profile]") == 1
+    assert readme.count("![CCD choice distribution]") == 1
+    assert readme.count("![CCD dominant-option share]") == 1
+    assert readme.count("![DeNEVIL proxy behavioral outcomes]") == 1
+    assert "without re-embedding the same chart" in readme
+    assert "without duplicating the same graphics" in readme
 
 
 def test_citation_metadata_exists_and_is_linked_from_root_readme():
