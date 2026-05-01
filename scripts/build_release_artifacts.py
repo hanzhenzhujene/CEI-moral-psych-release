@@ -5237,7 +5237,7 @@ def nice_tick_step(max_value: int, target_ticks: int = 4) -> int:
         nice = 5
     else:
         nice = 10
-    return int(nice * magnitude)
+    return max(1, int(math.ceil(nice * magnitude)))
 
 
 def build_axis_ticks(max_value: int, target_ticks: int = 4) -> tuple[list[int], int]:

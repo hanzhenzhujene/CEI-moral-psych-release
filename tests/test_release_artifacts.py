@@ -9,10 +9,19 @@ import subprocess
 import sys
 from pathlib import Path
 
+from scripts.build_release_artifacts import build_axis_ticks, nice_tick_step
+
 
 ROOT = Path(__file__).parent.parent
 SCRIPT = ROOT / "scripts" / "build_release_artifacts.py"
 SOURCE = ROOT / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
+
+
+def test_axis_tick_helpers_stay_nonzero_for_minimal_clean_state():
+    assert nice_tick_step(1, target_ticks=4) == 1
+    ticks, upper = build_axis_ticks(1, target_ticks=4)
+    assert ticks == [0, 1, 2, 3, 4]
+    assert upper == 1
 
 
 def test_release_builder_emits_expected_files(tmp_path):
