@@ -8,11 +8,11 @@ from typing import Any
 
 from inspect_ai import Task, task
 from inspect_ai.dataset import MemoryDataset, Sample
-from inspect_ai.scorer import pattern
 
 from evals._benchmark_utils import (
     MORAL_FOUNDATION_LABELS,
     as_float,
+    bounded_integer_scorer,
     build_vision_input,
     ensure_extracted_zip,
     env_str,
@@ -200,7 +200,7 @@ def _make_foundation_samples(limit: int | None = None) -> list[Sample]:
 
 @task
 def smid_moral_rating(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_rating_samples(limit=limit)), plan=generation_plan(max_tokens=24), scorer=pattern(r"\b([1-7])\b", ignore_case=False))
+    return Task(dataset=MemoryDataset(_make_rating_samples(limit=limit)), plan=generation_plan(max_tokens=24), scorer=bounded_integer_scorer(1, 7))
 
 
 @task

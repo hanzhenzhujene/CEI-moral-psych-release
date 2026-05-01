@@ -221,6 +221,29 @@ def test_makefile_bootstrap_reuses_fallback_python_when_uv_is_missing(tmp_path: 
     assert "fake-python invoked scripts/build_release_artifacts.py --input" in result.stdout
 
 
+def test_makefile_clean_release_covers_generated_release_tables_and_docs() -> None:
+    result = subprocess.run(
+        [
+            "make",
+            "-f",
+            str(MAKEFILE),
+            "-n",
+            "clean-release",
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0
+    assert "rm -f $(RELEASE_DIR)/*.csv" not in result.stdout
+    assert "results/release/2026-04-19-option1/*.csv" in result.stdout
+    assert "results/release/2026-04-19-option1/*.json" in result.stdout
+    assert "results/release/2026-04-19-option1/*.md" in result.stdout
+    assert "results/release/2026-04-19-option1/source/README.md" in result.stdout
+    assert "rm -rf figures/release" in result.stdout
+
+
 def test_makefile_smoke_uses_fallback_python_when_uv_is_missing(tmp_path: Path) -> None:
     fake_python = _write_fake_executable(
         tmp_path / "fake-python",

@@ -47,6 +47,7 @@ Fill in only the values you need, such as:
 
 For benchmark-by-benchmark data expectations, see [`data-access.md`](data-access.md).
 For plain-language report terms such as `proxy`, `live`, and `frozen snapshot`, see [`how-to-read-results.md`](how-to-read-results.md).
+For the comparison rules that separate accuracy metrics from coverage or proxy-only signals, see [`evaluation-methodology.md`](evaluation-methodology.md).
 
 ## Test Suite
 
@@ -87,10 +88,17 @@ Release tables:
 - `results/release/2026-04-19-option1/topline-summary.md`
 - `results/release/2026-04-19-option1/benchmark-catalog.csv`
 - `results/release/2026-04-19-option1/benchmark-comparison.csv`
+- `results/release/2026-04-19-option1/ccd-choice-distribution.csv`
+- `results/release/2026-04-19-option1/denevil-behavior-summary.csv`
+- `results/release/2026-04-19-option1/denevil-prompt-family-breakdown.csv`
+- `results/release/2026-04-19-option1/denevil-proxy-summary.csv`
+- `results/release/2026-04-19-option1/denevil-proxy-examples.csv`
 - `results/release/2026-04-19-option1/model-summary.csv`
 - `results/release/2026-04-19-option1/model-roster.csv`
 - `results/release/2026-04-19-option1/supplementary-model-progress.csv`
 - `results/release/2026-04-19-option1/family-size-progress.csv`
+- `results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`
+- `results/release/2026-04-19-option1/family-scaling-summary.csv`
 - `results/release/2026-04-19-option1/future-model-plan.csv`
 - `results/release/2026-04-19-option1/benchmark-summary.csv`
 - `results/release/2026-04-19-option1/faithful-metrics.csv`
@@ -100,12 +108,27 @@ Release tables:
 Figures:
 
 - `figures/release/option1_family_size_progress_overview.svg`
+- `figures/release/option1_benchmark_accuracy_bars.svg`
 - `figures/release/option1_benchmark_difficulty_profile.svg`
 - `figures/release/option1_family_scaling_profile.svg`
+- `figures/release/option1_ccd_choice_distribution.svg`
+- `figures/release/option1_ccd_dominant_option_share.svg`
+- `figures/release/option1_ccd_valid_choice_coverage.svg`
+- `figures/release/option1_denevil_behavior_outcomes.svg`
+- `figures/release/option1_denevil_prompt_family_heatmap.svg`
+- `figures/release/option1_denevil_proxy_status_matrix.svg`
+- `figures/release/option1_denevil_proxy_sample_volume.svg`
+- `figures/release/option1_denevil_proxy_valid_response_rate.svg`
+- `figures/release/option1_denevil_proxy_pipeline.svg`
 - `figures/release/option1_coverage_matrix.svg`
 - `figures/release/option1_accuracy_heatmap.svg`
-- `figures/release/option1_benchmark_accuracy_bars.svg`
 - `figures/release/option1_sample_volume.svg`
+
+Headline interpretation artifacts now include:
+
+- `ccd-choice-distribution.csv` + `option1_ccd_choice_distribution.svg` for CCD-Bench cultural-cluster behavior
+- `denevil-behavior-summary.csv` + `option1_denevil_behavior_outcomes.svg` for DeNEVIL proxy behavioral outcomes
+- appendix QA artifacts such as `denevil-proxy-summary.csv` and `option1_denevil_proxy_status_matrix.svg` for provenance, route, and visible-response diagnostics
 
 ## Refresh the Tracked Authoritative Snapshot
 

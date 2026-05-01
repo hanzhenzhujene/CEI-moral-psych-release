@@ -38,6 +38,11 @@ def test_release_builder_emits_expected_files(tmp_path):
         "README.md",
         "benchmark-catalog.csv",
         "benchmark-comparison.csv",
+        "ccd-choice-distribution.csv",
+        "denevil-behavior-summary.csv",
+        "denevil-prompt-family-breakdown.csv",
+        "denevil-proxy-summary.csv",
+        "denevil-proxy-examples.csv",
         "benchmark-difficulty-summary.csv",
         "benchmark-summary.csv",
         "coverage-matrix.csv",
@@ -68,10 +73,21 @@ def test_release_builder_emits_expected_files(tmp_path):
         "option1_benchmark_difficulty_profile.svg",
         "option1_coverage_matrix.svg",
         "option1_family_scaling_profile.svg",
+        "option1_ccd_valid_choice_coverage.svg",
+        "option1_ccd_choice_distribution.svg",
+        "option1_ccd_dominant_option_share.svg",
+        "option1_denevil_behavior_outcomes.svg",
+        "option1_denevil_prompt_family_heatmap.svg",
+        "option1_denevil_proxy_status_matrix.svg",
+        "option1_denevil_proxy_sample_volume.svg",
+        "option1_denevil_proxy_valid_response_rate.svg",
+        "option1_denevil_proxy_pipeline.svg",
         "option1_sample_volume.svg",
     }
     actual_figures = {path.name for path in figure_dir.glob("*.svg")}
     assert expected_figures == actual_figures
+    for figure_name in expected_figures:
+        assert (figure_dir / figure_name).stat().st_size > 0
 
     manifest = json.loads((release_dir / "release-manifest.json").read_text(encoding="utf-8"))
     assert manifest["counts"]["authoritative_tasks"] == 19
@@ -80,6 +96,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
     assert manifest["report_metadata"]["current_cost_estimate"] == "$84.02"
     assert "later tracked reruns completed in this repo" in manifest["report_metadata"]["current_cost_scope"]
+    assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"
+    assert "stricter visible-answer parsing" in manifest["report_metadata"]["metric_definition_summary"].lower()
     assert manifest["report_metadata"]["ci_workflow_url"].endswith("/actions/workflows/ci.yml")
     assert manifest["target_matrix"]["family_size_benchmark_cells"] == 60
     assert manifest["target_matrix"]["model_families"] == 4
@@ -89,12 +107,44 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["entry_points"]["family_size_progress"].endswith("family-size-progress.csv")
     assert manifest["entry_points"]["benchmark_difficulty_summary"].endswith("benchmark-difficulty-summary.csv")
     assert manifest["entry_points"]["family_scaling_summary"].endswith("family-scaling-summary.csv")
+    assert manifest["entry_points"]["ccd_choice_distribution"].endswith("ccd-choice-distribution.csv")
+    assert manifest["entry_points"]["denevil_proxy_summary"].endswith("denevil-proxy-summary.csv")
+    assert manifest["entry_points"]["denevil_behavior_summary"].endswith("denevil-behavior-summary.csv")
+    assert manifest["entry_points"]["denevil_prompt_family_breakdown"].endswith(
+        "denevil-prompt-family-breakdown.csv"
+    )
+    assert manifest["entry_points"]["denevil_proxy_examples"].endswith("denevil-proxy-examples.csv")
     assert manifest["entry_points"]["benchmark_difficulty_figure"].endswith("option1_benchmark_difficulty_profile.svg")
     assert manifest["entry_points"]["family_scaling_figure"].endswith("option1_family_scaling_profile.svg")
+    assert manifest["entry_points"]["ccd_valid_choice_coverage_figure"].endswith("option1_ccd_valid_choice_coverage.svg")
+    assert manifest["entry_points"]["ccd_choice_distribution_figure"].endswith("option1_ccd_choice_distribution.svg")
+    assert manifest["entry_points"]["ccd_dominant_option_share_figure"].endswith("option1_ccd_dominant_option_share.svg")
+    assert manifest["entry_points"]["denevil_behavior_figure"].endswith("option1_denevil_behavior_outcomes.svg")
+    assert manifest["entry_points"]["denevil_prompt_family_figure"].endswith(
+        "option1_denevil_prompt_family_heatmap.svg"
+    )
+    assert manifest["entry_points"]["denevil_proxy_status_figure"].endswith("option1_denevil_proxy_status_matrix.svg")
+    assert manifest["entry_points"]["denevil_proxy_sample_volume_figure"].endswith("option1_denevil_proxy_sample_volume.svg")
+    assert manifest["entry_points"]["denevil_proxy_valid_response_rate_figure"].endswith("option1_denevil_proxy_valid_response_rate.svg")
+    assert manifest["entry_points"]["denevil_proxy_pipeline_figure"].endswith("option1_denevil_proxy_pipeline.svg")
     assert "benchmark-difficulty-summary.csv" in manifest["tables"]
     assert "family-scaling-summary.csv" in manifest["tables"]
+    assert "ccd-choice-distribution.csv" in manifest["tables"]
+    assert "denevil-proxy-summary.csv" in manifest["tables"]
+    assert "denevil-behavior-summary.csv" in manifest["tables"]
+    assert "denevil-prompt-family-breakdown.csv" in manifest["tables"]
+    assert "denevil-proxy-examples.csv" in manifest["tables"]
     assert "figures/release/option1_benchmark_difficulty_profile.svg" in manifest["figures"]
     assert "figures/release/option1_family_scaling_profile.svg" in manifest["figures"]
+    assert "figures/release/option1_ccd_valid_choice_coverage.svg" in manifest["figures"]
+    assert "figures/release/option1_ccd_choice_distribution.svg" in manifest["figures"]
+    assert "figures/release/option1_ccd_dominant_option_share.svg" in manifest["figures"]
+    assert "figures/release/option1_denevil_behavior_outcomes.svg" in manifest["figures"]
+    assert "figures/release/option1_denevil_prompt_family_heatmap.svg" in manifest["figures"]
+    assert "figures/release/option1_denevil_proxy_status_matrix.svg" in manifest["figures"]
+    assert "figures/release/option1_denevil_proxy_sample_volume.svg" in manifest["figures"]
+    assert "figures/release/option1_denevil_proxy_valid_response_rate.svg" in manifest["figures"]
+    assert "figures/release/option1_denevil_proxy_pipeline.svg" in manifest["figures"]
 
     with (release_dir / "benchmark-catalog.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -108,9 +158,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "pluralism" in value_kaleidoscope["paper_focus"].lower()
     denevil = next(row for row in benchmark_catalog_rows if row["benchmark"] == "Denevil")
     assert denevil["paper_url"] == "https://arxiv.org/abs/2310.11053"
-    assert "proxy line is a coverage and provenance signal" in denevil["release_interpretation"].lower()
+    assert "proxy-only behavioral evidence and traceability support" in denevil["release_interpretation"].lower()
     ccd_bench = next(row for row in benchmark_catalog_rows if row["benchmark"] == "CCD-Bench")
     assert ccd_bench["paper_title"] == "CCD-Bench: Probing Cultural Conflict in Large Language Model Decision-Making"
+    assert "canonical cluster heatmap" in ccd_bench["release_interpretation"].lower()
 
     with (release_dir / "supplementary-model-progress.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -275,14 +326,26 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     with (release_dir / "benchmark-comparison.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
+        assert reader.fieldnames is not None
+        assert reader.fieldnames == [
+            "line_label",
+            "family",
+            "size_slot",
+            "route",
+            "unimoral_action_accuracy",
+            "smid_average_accuracy",
+            "value_average_accuracy",
+            "comparison_note",
+        ]
         rows = list(reader)
-    assert len(rows) == 10
+    assert len(rows) == 11
     assert not any(row["line_label"].startswith("MiniMax-") for row in rows)
     assert any(
         row["line_label"] == "Gemma-L"
         and row["unimoral_action_accuracy"] == "0.661088"
         and row["smid_average_accuracy"] == "0.412275"
         and row["value_average_accuracy"] == "0.655987"
+        and row["comparison_note"] == "Comparable on all three benchmark-faithful accuracy panels."
         for row in rows
     )
     assert any(
@@ -290,6 +353,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         and row["smid_average_accuracy"] == "0.386093"
         and row["unimoral_action_accuracy"] == "0.659836"
         and row["value_average_accuracy"] == "0.692319"
+        and row["comparison_note"] == "Comparable on all three benchmark-faithful accuracy panels."
         for row in rows
     )
     assert any(
@@ -297,6 +361,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         and row["unimoral_action_accuracy"] == "0.664504"
         and row["smid_average_accuracy"] == ""
         and row["value_average_accuracy"] == "0.674714"
+        and row["comparison_note"] == "Text-only comparable line; no public SMID route on this slot."
         for row in rows
     )
     assert any(
@@ -304,6 +369,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         and row["unimoral_action_accuracy"] == "0.665301"
         and row["smid_average_accuracy"] == "0.482829"
         and row["value_average_accuracy"] == "0.653159"
+        and row["comparison_note"] == "Comparable on all three benchmark-faithful accuracy panels."
         for row in rows
     )
     assert any(
@@ -311,9 +377,230 @@ def test_release_builder_emits_expected_files(tmp_path):
         and row["unimoral_action_accuracy"] == "0.669854"
         and row["smid_average_accuracy"] == ""
         and row["value_average_accuracy"] == "0.723638"
+        and row["comparison_note"] == "Text-only comparable line; no public SMID route on this slot."
         for row in rows
     )
-    assert not any(row["line_label"] == "DeepSeek-M" for row in rows)
+    assert any(
+        row["line_label"] == "DeepSeek-M"
+        and row["unimoral_action_accuracy"] == ""
+        and row["smid_average_accuracy"] == ""
+        and row["value_average_accuracy"] == ""
+        and row["comparison_note"] == "Coverage-only line; accuracy withheld after visible-answer validation."
+        for row in rows
+    )
+
+    with (release_dir / "ccd-choice-distribution.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames is not None
+        assert "option_1_pct" in reader.fieldnames
+        assert "option_10_pct" in reader.fieldnames
+        assert "dominant_option" in reader.fieldnames
+        assert "dominant_option_share" in reader.fieldnames
+        assert "distribution_status" in reader.fieldnames
+        ccd_distribution_rows = list(reader)
+    assert len(ccd_distribution_rows) == 12
+    for row in ccd_distribution_rows:
+        valid_rate = row["valid_selection_rate"]
+        if valid_rate == "n/a":
+            continue
+        if float(row["valid_selection_count"]) > 0:
+            option_total = sum(float(row[f"option_{cluster_id}_pct"]) for cluster_id in range(1, 11))
+            assert abs(option_total - 100.0) < 1e-5
+        else:
+            assert all(row[f"option_{cluster_id}_pct"] == "n/a" for cluster_id in range(1, 11))
+            assert all(row[f"option_{cluster_id}_delta_pp"] == "n/a" for cluster_id in range(1, 11))
+    assert any(
+        row["line_label"] == "DeepSeek-S"
+        and row["route"] == "No distinct small OpenRouter route exposed"
+        and row["valid_selection_count"] == "n/a"
+        and row["valid_selection_rate"] == "n/a"
+        and row["dominant_option"] == "n/a"
+        and row["distribution_status"] == "missing_route"
+        for row in ccd_distribution_rows
+    )
+    assert any(
+        row["line_label"] == "DeepSeek-M"
+        and row["valid_selection_count"] == "0"
+        and row["valid_selection_rate"] == "0.000000"
+        and row["dominant_option"] == "n/a"
+        and row["dominant_option_share"] == "n/a"
+        and row["effective_cluster_count"] == "n/a"
+        and row["distribution_status"] == "no_valid_visible_choices"
+        for row in ccd_distribution_rows
+    )
+    assert any(
+        row["line_label"] == "Llama-L"
+        and row["valid_selection_count"] == "2013"
+        and row["valid_selection_rate"] == "92.254812"
+        and row["option_6_pct"] == "23.546945"
+        and row["dominant_option"] == "option_6 (Nordic Europe)"
+        and row["dominant_option_share"] == "23.546945"
+        and row["distribution_status"] == "ok"
+        for row in ccd_distribution_rows
+    )
+    assert any(
+        row["line_label"] == "Qwen-S"
+        and row["valid_selection_count"] == "2182"
+        and row["valid_selection_rate"] == "100.000000"
+        and row["option_6_pct"] == "19.202566"
+        and row["dominant_option"] == "option_6 (Nordic Europe)"
+        for row in ccd_distribution_rows
+    )
+
+    with (release_dir / "denevil-proxy-summary.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames is not None
+        assert reader.fieldnames[:8] == [
+            "model_line",
+            "model_family",
+            "size_slot",
+            "proxy_status",
+            "total_proxy_samples",
+            "generated_response_count",
+            "valid_response_rate",
+            "persisted_checkpoint_pct",
+        ]
+        assert "route_model_name" in reader.fieldnames
+        assert "latest_successful_eval_created_at" in reader.fieldnames
+        assert "latest_proxy_artifact_updated_at" in reader.fieldnames
+        assert "limitation_flag" in reader.fieldnames
+        denevil_proxy_rows = list(reader)
+    assert len(denevil_proxy_rows) == 12
+    assert any(
+        row["model_line"] == "DeepSeek-S"
+        and row["proxy_status"] == "No route"
+        and row["total_proxy_samples"] == "n/a"
+        and row["generated_response_count"] == "n/a"
+        and row["valid_response_rate"] == "n/a"
+        and row["persisted_checkpoint_pct"] == "n/a"
+        and row["latest_successful_eval_created_at"] == "n/a"
+        and row["latest_proxy_artifact_updated_at"] == "n/a"
+        and row["route_short_label"] == "no-route"
+        and row["limitation_flag"] == "missing_route"
+        for row in denevil_proxy_rows
+    )
+    assert any(
+        row["model_line"] == "DeepSeek-M"
+        and row["proxy_status"] == "Proxy complete"
+        and row["total_proxy_samples"] == "20518"
+        and row["generated_response_count"] == "2863"
+        and row["valid_response_rate"] == "0.139536"
+        and row["persisted_checkpoint_pct"] == "100.000000"
+        and row["route_short_label"] == "deepseek-r1-distill-llama-70b"
+        and row["limitation_flag"] == "low_visible_response_rate"
+        and "saved-answer surfacing failure" in row["notes"].lower()
+        for row in denevil_proxy_rows
+    )
+    assert any(
+        row["model_line"] == "Qwen-S"
+        and row["generated_response_count"] == "20515"
+        and row["valid_response_rate"] == "0.999854"
+        and row["persisted_checkpoint_pct"] == "100.000000"
+        for row in denevil_proxy_rows
+    )
+
+    with (release_dir / "denevil-behavior-summary.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames is not None
+        assert reader.fieldnames[:6] == [
+            "model_line",
+            "model_family",
+            "size_slot",
+            "total_proxy_samples",
+            "protective_refusal_count",
+            "protective_refusal_rate",
+        ]
+        assert "potentially_risky_continuation_rate" in reader.fieldnames
+        assert "no_visible_answer_rate" in reader.fieldnames
+        assert "protective_response_rate" in reader.fieldnames
+        assert "dominant_behavior" in reader.fieldnames
+        assert "behavior_status" in reader.fieldnames
+        denevil_behavior_rows = list(reader)
+    assert len(denevil_behavior_rows) == 12
+    assert any(
+        row["model_line"] == "DeepSeek-S"
+        and row["behavior_status"] == "missing_route"
+        and row["dominant_behavior"] == "n/a"
+        and row["total_proxy_samples"] == "n/a"
+        and row["protective_refusal_count"] == "n/a"
+        and row["protective_refusal_rate"] == "n/a"
+        for row in denevil_behavior_rows
+    )
+    assert any(
+        row["model_line"] == "DeepSeek-M"
+        and row["total_proxy_samples"] == "20518"
+        and row["protective_response_rate"] == "12.793645"
+        and row["no_visible_answer_rate"] == "86.046398"
+        and row["potentially_risky_continuation_rate"] == "0.024369"
+        and row["dominant_behavior"] == "No visible answer"
+        and "incomplete surfacing rather than a low ethical-quality score" in row["limitation_note"].lower()
+        for row in denevil_behavior_rows
+    )
+    assert any(
+        row["model_line"] == "Llama-L"
+        and row["protective_refusal_rate"] == "22.882347"
+        and row["corrective_contextual_response_rate"] == "74.719758"
+        and row["potentially_risky_continuation_rate"] == "0.199825"
+        and row["dominant_behavior"] == "Corrective / contextual response"
+        for row in denevil_behavior_rows
+    )
+
+    with (release_dir / "denevil-prompt-family-breakdown.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames is not None
+        assert reader.fieldnames == [
+            "model_line",
+            "model_family",
+            "size_slot",
+            "prompt_family",
+            "prompt_count",
+            "protective_response_rate",
+            "risky_continuation_rate",
+            "empty_response_rate",
+            "dominant_behavior",
+        ]
+        denevil_prompt_family_rows = list(reader)
+    assert len(denevil_prompt_family_rows) == 72
+    assert any(
+        row["model_line"] == "DeepSeek-S"
+        and row["prompt_family"] == "Illicit access / sabotage"
+        and row["prompt_count"] == "n/a"
+        and row["protective_response_rate"] == "n/a"
+        and row["dominant_behavior"] == "n/a"
+        for row in denevil_prompt_family_rows
+    )
+    assert any(
+        row["model_line"] == "DeepSeek-M"
+        and row["prompt_family"] == "Loaded social / political judgment"
+        and row["protective_response_rate"] == "3.333333"
+        and row["empty_response_rate"] == "96.666667"
+        and row["dominant_behavior"] == "No visible answer"
+        for row in denevil_prompt_family_rows
+    )
+    assert any(
+        row["model_line"] == "Qwen-S"
+        and row["prompt_family"] == "Violence / physical harm"
+        and row["protective_response_rate"] == "99.342105"
+        and row["risky_continuation_rate"] == "0.493421"
+        for row in denevil_prompt_family_rows
+    )
+
+    with (release_dir / "denevil-proxy-examples.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames == [
+            "model_line",
+            "proxy_prompt_type",
+            "shortened_model_output_pattern",
+            "interpretable_signal",
+        ]
+        denevil_example_rows = list(reader)
+    assert len(denevil_example_rows) >= 3
+    assert any(
+        row["model_line"] == "DeepSeek-M"
+        and row["shortened_model_output_pattern"] == "No visible answer"
+        and "subset of traces that actually surface a visible public answer" in row["interpretable_signal"].lower()
+        for row in denevil_example_rows
+    )
 
     with (release_dir / "benchmark-difficulty-summary.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -344,12 +631,16 @@ def test_release_builder_emits_expected_files(tmp_path):
         and "Text benchmarks now have S/M/L comparable points" in row["evidence_scope"]
         and "UniMoral: S 0.647 -> M 0.665 -> L 0.665" in row["numeric_pattern"]
         and "SMID: S 0.368 -> L 0.483" in row["numeric_pattern"]
+        and "CCD-Bench" not in row["numeric_pattern"]
+        and "Denevil" not in row["numeric_pattern"]
         for row in scaling_rows
     )
     assert any(
         row["family"] == "Llama"
         and "Text benchmarks now have S/M/L comparable points" in row["evidence_scope"]
         and "Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692" in row["numeric_pattern"]
+        and "CCD-Bench" not in row["numeric_pattern"]
+        and "Denevil" not in row["numeric_pattern"]
         and "medium text line still beats the large line" in row["interpretation"]
         for row in scaling_rows
     )
@@ -362,25 +653,71 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     assert any(
         row["family"] == "DeepSeek"
-        and "Only the large line remains accuracy-comparable" in row["evidence_scope"]
+        and "Only the large line remains accuracy-comparable on the family scaling view" in row["evidence_scope"]
+        and "CCD-Bench" not in row["numeric_pattern"]
+        and "Denevil" not in row["numeric_pattern"]
         and "cannot support a trustworthy accuracy size curve" in row["interpretation"]
         for row in scaling_rows
     )
 
     report_text = (release_dir / "jenny-group-report.md").read_text(encoding="utf-8")
-    assert "## Results First" in report_text
-    assert "## Interpretation" in report_text
-    assert "### Interpretation At A Glance" in report_text
-    assert "### Benchmark Reading Guide" in report_text
-    assert "### Benchmark Difficulty Profile" in report_text
-    assert "### Family Scaling Profile" in report_text
-    assert "### Reporting Guardrails" in report_text
-    assert "These benchmarks do not all ask for the same kind of moral competence" in report_text
-    assert "### Latest Family-Size Progress Snapshot" in report_text
-    assert "Strongest fully observed comparable line | `Qwen-L` averages 0.600" in report_text
-    assert "Strongest text-only comparable line | `Llama-M` reaches UniMoral 0.670 and Value 0.724" in report_text
-    assert "Keep `DeepSeek-M` out of the top-row comparable accuracy charts" in report_text
-    assert "qwen2.5-vl-72b-instruct" in report_text
+    release_readme = (release_dir / "README.md").read_text(encoding="utf-8")
+    topline_summary = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
+    for text in (report_text, release_readme):
+        assert "## TL;DR" in text
+        assert "Best like-for-like line" in text
+        assert "Best text-only line" in text
+        assert "The hardest benchmark is SMID" in text
+        assert "There is no universal scaling law" in text
+        assert "CCD-Bench shows cultural choice style, not accuracy." in text
+        assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring." in text
+        assert "`Gemma-L` at 17.6% to `Llama-S` at 23.9%" in text
+        assert "92.4% to 99.5% protective response rate" in text
+        assert "86.0% of prompts surfaced no visible answer" in text
+        assert "## Results First" in text
+        assert "## Interpretation" in text
+        assert "### Interpretation At A Glance" in text
+        assert "### Benchmark Reading Guide" in text
+        assert "### Benchmark Difficulty Profile" in text
+        assert "### Family Scaling Profile" in text
+        assert "### CCD-Bench Choice Behavior" in text
+        assert "### DeNEVIL Proxy Behavioral Evidence" in text
+        assert "### DeNEVIL Appendix QA / Provenance" in text
+        assert "### Reporting Guardrails" in text
+        assert "These benchmarks do not all ask for the same kind of moral competence" in text
+        assert "### Latest Family-Size Progress Snapshot" in text
+        assert "Metric definition version: `2026-04-30`." in text
+        assert "Strongest fully observed comparable line | `Qwen-L` averages 0.600" in text
+        assert "Strongest text-only comparable line | `Llama-M` reaches UniMoral 0.670 and Value 0.724" in text
+        assert "Keep `DeepSeek-M` out of the top-row comparable accuracy charts" in text
+        assert "CCD-Bench should not be flattened into a universal accuracy number." in text
+        assert "The repo still lacks a stable local `MoralPrompt` export" in text
+        assert "paper-aligned APV / EVR / MVP are `n/a`" in text
+        assert "Each stacked bar distributes the released proxy prompts across auditable behavioral categories." in text
+        assert "ccd-choice-distribution.csv" in text
+        assert "option1_ccd_valid_choice_coverage.svg" in text
+        assert "option1_ccd_choice_distribution.svg" in text
+        assert "option1_ccd_dominant_option_share.svg" in text
+        assert "option1_denevil_behavior_outcomes.svg" in text
+        assert "option1_denevil_prompt_family_heatmap.svg" in text
+        assert "option1_denevil_proxy_status_matrix.svg" in text
+        assert "option1_denevil_proxy_sample_volume.svg" in text
+        assert "option1_denevil_proxy_valid_response_rate.svg" in text
+        assert "option1_denevil_proxy_pipeline.svg" in text
+        assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in text
+        assert "Current project cost estimate" in text
+        assert "Cost scope" in text
+        assert "Current cost to date" not in text
+        assert "24634450927" not in text
+        assert "`MiniMax`" not in text
+        assert "| `MiniMax-S` |" not in text
+        assert "| `MiniMax-M` |" not in text
+        assert "| `MiniMax-L` |" not in text
+        assert "Family-size scaling across the three directly comparable accuracy panels only" in text
+        assert "Read `CCD-Bench` in its dedicated choice-behavior figures" in text
+        assert "Read `Denevil` only through the dedicated proxy evidence package." in text
+        assert "## Interpretation Notes" not in text
+
     assert "## Local Expansion Checkpoint" in report_text
     assert "| `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |" in report_text
     assert "curated snapshot rather than a live dashboard" in report_text
@@ -392,28 +729,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Partial" in report_text
     assert "Model families in scope" in report_text
     assert "## Safe One-Sentence Framing" in report_text
-    assert "## Interpretation Notes" not in report_text
-    assert "Current project cost estimate" in report_text
-    assert "Cost scope" in report_text
-    assert "Current cost to date" not in report_text
-    assert "24634450927" not in report_text
-    assert "`MiniMax`" not in report_text
-    assert "| `MiniMax-S` |" not in report_text
-    assert "| `MiniMax-M` |" not in report_text
-    assert "| `MiniMax-L` |" not in report_text
     assert "![Coverage matrix]" in report_text
     assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" in report_text
 
-    release_readme = (release_dir / "README.md").read_text(encoding="utf-8")
-    assert "## Results First" in release_readme
-    assert "## Interpretation" in release_readme
-    assert "### Interpretation At A Glance" in release_readme
-    assert "### Benchmark Reading Guide" in release_readme
-    assert "### Benchmark Difficulty Profile" in release_readme
-    assert "### Family Scaling Profile" in release_readme
-    assert "### Reporting Guardrails" in release_readme
-    assert "These benchmarks do not all ask for the same kind of moral competence" in release_readme
-    assert "### Latest Family-Size Progress Snapshot" in release_readme
     assert "## Local Expansion Checkpoint" in release_readme
     assert "| `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |" in release_readme
     assert "sample volume chart" in release_readme
@@ -427,17 +745,18 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "option1_family_scaling_profile.svg" in release_readme
     assert "Partial" in release_readme
     assert "Model families in scope" in release_readme
-    assert "## Interpretation Notes" not in release_readme
-    assert "Current project cost estimate" in release_readme
-    assert "Cost scope" in release_readme
-    assert "Current cost to date" not in release_readme
-    assert "24634450927" not in release_readme
-    assert "`MiniMax`" not in release_readme
-    assert "| `MiniMax-S` |" not in release_readme
-    assert "| `MiniMax-M` |" not in release_readme
-    assert "| `MiniMax-L` |" not in release_readme
     assert "Done" in release_readme
-    assert "Keep `DeepSeek-M` out of the top-row comparable accuracy charts" in release_readme
+    assert "denevil-proxy-summary.csv" in release_readme
+    assert "denevil-behavior-summary.csv" in release_readme
+    assert "denevil-prompt-family-breakdown.csv" in release_readme
+    assert "denevil-proxy-examples.csv" in release_readme
+
+    assert "## TL;DR" in topline_summary
+    assert "## Frozen Snapshot Scope" in topline_summary
+    assert "Best like-for-like line" in topline_summary
+    assert "CCD-Bench shows cultural choice style, not accuracy." in topline_summary
+    assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring." in topline_summary
+    assert "For the full public package, move next to `README.md`" in topline_summary
 
     progress_overview_svg = (figure_dir / "option1_family_size_progress_overview.svg").read_text(encoding="utf-8")
     assert "Family-Size Progress Overview" in progress_overview_svg
@@ -467,24 +786,134 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Family Scaling Profile" in family_scaling_svg
     assert 'preserveAspectRatio="xMidYMin meet"' in family_scaling_svg
     assert 'style="max-width:100%;height:auto"' in family_scaling_svg
-    assert "Five benchmark panels: three scored accuracy charts plus two coverage-status charts." in family_scaling_svg
-    assert "Top row: scored benchmarks only (`UniMoral`, `SMID`, `Value Kaleidoscope`)." in family_scaling_svg
-    assert "Bottom row: `CCD-Bench` and `Denevil` are shown as status curves" in family_scaling_svg
-    assert "CCD-Bench" in family_scaling_svg
-    assert "Denevil" in family_scaling_svg
-    assert "DeepSeek-M stays out of the top-row accuracy panels because" in family_scaling_svg
-    assert (
-        "its saved short-answer rerun is not trustworthy yet." in family_scaling_svg
-        or "its saved short-answer rerun still shows 100.0% empty visible answers." in family_scaling_svg
-    )
-    assert "Panels 4-5 are status curves, not accuracy curves." in family_scaling_svg
-    assert "All five benchmarks now appear as chart panels." in family_scaling_svg
+    assert "Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope." in family_scaling_svg
+    assert "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence." in family_scaling_svg
+    assert "#4 CCD-Bench" not in family_scaling_svg
+    assert "#5 Denevil" not in family_scaling_svg
+    assert "100% coverage" not in family_scaling_svg
+    assert "67% coverage" not in family_scaling_svg
+    assert "33% coverage" not in family_scaling_svg
+    assert "0% coverage" not in family_scaling_svg
+    assert "Read CCD-Bench in Figures 5-7." in family_scaling_svg
+    assert "Read Denevil in Figures 8-11." in family_scaling_svg
+    assert "Proxy-only coverage and traceability evidence;" in family_scaling_svg
+    assert "MoralPrompt unavailable; not benchmark-faithful" in family_scaling_svg
+    assert "DeepSeek-L" in family_scaling_svg
     assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
-    assert "Qwen: text scored at S/M/L; SMID has S/L." in family_scaling_svg
-    assert "Llama: text scored at S/M/L; SMID has S/L." in family_scaling_svg
-    assert "DeepSeek: only L is scored up top; bottom status curves still show M." in family_scaling_svg
+    assert "Qwen: text scored at S/M/L; SMID at S/L." in family_scaling_svg
+    assert "Llama: text scored at S/M/L; SMID at S/L." in family_scaling_svg
+    assert "DeepSeek: only L is scored up top; M is read in CCD / Denevil figures." in family_scaling_svg
     assert "Gemma: full S/M/L scored sweep." in family_scaling_svg
     assert "Only the small line is currently comparable." not in family_scaling_svg
+
+    ccd_coverage_svg = (figure_dir / "option1_ccd_valid_choice_coverage.svg").read_text(encoding="utf-8")
+    assert "Appendix QA: CCD-Bench valid-choice coverage, not accuracy." in ccd_coverage_svg
+    assert "Appendix QA only." in ccd_coverage_svg
+    assert "parseable integer in 1-10" in ccd_coverage_svg
+    assert "Hatched rows are missing (`n/a`) rather than zero." in ccd_coverage_svg
+    assert "n/a — no released CCD route" in ccd_coverage_svg
+    assert "valid 0 / 2,182" in ccd_coverage_svg
+    assert "valid 2,013 / 2,182" in ccd_coverage_svg
+    assert "Coverage = (# saved visible answers with a parseable 1-10 CCD choice) / (# all CCD-Bench prompts)." in ccd_coverage_svg
+
+    ccd_distribution_svg = (figure_dir / "option1_ccd_choice_distribution.svg").read_text(encoding="utf-8")
+    assert "CCD-Bench cultural-cluster choice behavior, not accuracy" in ccd_distribution_svg
+    assert "Rows are grouped by family and ordered S → M → L" in ccd_distribution_svg
+    assert "FAMILY" in ccd_distribution_svg
+    assert "SIZE" in ccd_distribution_svg
+    assert "DeepSeek-S" in ccd_distribution_svg
+    assert "10% uniform baseline" in ccd_distribution_svg
+    assert "Coverage stays in the appendix QA figure." in ccd_distribution_svg
+    assert "Rows with no valid visible CCD selection stay hatched as `n/a`" in ccd_distribution_svg
+    assert "Top cluster share" in ccd_distribution_svg
+    assert "Effective clusters" in ccd_distribution_svg
+    assert "No explicit rationale tags are retained in the public archive" in ccd_distribution_svg
+    assert "Nordic Europe" in ccd_distribution_svg
+    assert "Germanic Europe" in ccd_distribution_svg
+    assert "Middle East" in ccd_distribution_svg
+    assert "line chart" not in ccd_distribution_svg.lower()
+
+    ccd_dominant_share_svg = (figure_dir / "option1_ccd_dominant_option_share.svg").read_text(encoding="utf-8")
+    assert "CCD-Bench choice-concentration summary, not accuracy" in ccd_dominant_share_svg
+    assert "Rows are grouped by family and ordered S → M → L" in ccd_dominant_share_svg
+    assert "DeepSeek-S" in ccd_dominant_share_svg
+    assert "Higher bars mean more concentration on one cluster." in ccd_dominant_share_svg
+    assert "option_6 (Nordic Europe)" in ccd_dominant_share_svg
+    assert "no valid visible CCD selections" in ccd_dominant_share_svg
+    assert "effective clusters" in ccd_dominant_share_svg.lower()
+    assert "line chart" not in ccd_dominant_share_svg.lower()
+
+    denevil_behavior_svg = (figure_dir / "option1_denevil_behavior_outcomes.svg").read_text(encoding="utf-8")
+    assert "DeNEVIL proxy behavioral outcomes, not accuracy" in denevil_behavior_svg
+    assert "Rows are grouped by family and ordered S → M → L for direct size comparisons." in denevil_behavior_svg
+    assert "DOMINANT / PROTECTIVE" in denevil_behavior_svg
+    assert "Each bar distributes all released proxy prompts across auditable visible-behavior categories." in denevil_behavior_svg
+    assert "Paper-aligned APV / EVR / MVP are `n/a`" in denevil_behavior_svg
+    assert "Protective refusal" in denevil_behavior_svg
+    assert "Protective redirect" in denevil_behavior_svg
+    assert "Corrective / contextual response" in denevil_behavior_svg
+    assert "Potentially risky continuation" in denevil_behavior_svg
+    assert "No visible answer" in denevil_behavior_svg
+    assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in denevil_behavior_svg
+    assert "line chart" not in denevil_behavior_svg.lower()
+
+    denevil_prompt_family_svg = (figure_dir / "option1_denevil_prompt_family_heatmap.svg").read_text(
+        encoding="utf-8"
+    )
+    assert "DeNEVIL proxy protective-response rate by prompt family, not accuracy" in denevil_prompt_family_svg
+    assert "Rows are grouped by family and ordered S → M → L." in denevil_prompt_family_svg
+    assert "FAMILY" in denevil_prompt_family_svg
+    assert "SIZE" in denevil_prompt_family_svg
+    assert "Loaded social /" in denevil_prompt_family_svg
+    assert "Prompt families are heuristic labels" in denevil_prompt_family_svg
+    assert "protective visible behaviors" in denevil_prompt_family_svg
+    assert "not paper-faithful foundations" in denevil_prompt_family_svg
+    assert "line chart" not in denevil_prompt_family_svg.lower()
+
+    denevil_status_matrix_svg = (figure_dir / "option1_denevil_proxy_status_matrix.svg").read_text(encoding="utf-8")
+    assert "Appendix QA: DeNEVIL proxy status matrix" in denevil_status_matrix_svg
+    assert "Appendix QA / provenance only." in denevil_status_matrix_svg
+    assert "Proxy complete" in denevil_status_matrix_svg
+    assert "No route" in denevil_status_matrix_svg
+    assert "SAMPLE COUNT" in denevil_status_matrix_svg
+    assert "GENERATED RESPONSES" in denevil_status_matrix_svg
+    assert "VALID RESPONSE RATE" in denevil_status_matrix_svg
+    assert "ROUTE / MODEL" in denevil_status_matrix_svg
+    assert "NOTES" in denevil_status_matrix_svg
+    assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in denevil_status_matrix_svg
+    assert "DeepSeek-M is the key cautionary row" in denevil_status_matrix_svg
+    assert "traceability / surfacing gap" in denevil_status_matrix_svg
+
+    denevil_sample_volume_svg = (figure_dir / "option1_denevil_proxy_sample_volume.svg").read_text(encoding="utf-8")
+    assert "Appendix QA: DeNEVIL proxy sample volume" in denevil_sample_volume_svg
+    assert "Appendix QA / provenance only." in denevil_sample_volume_svg
+    assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in denevil_sample_volume_svg
+    assert "visible 20,515 / 20,518" in denevil_sample_volume_svg
+    assert "visible 2,863 / 20,518" in denevil_sample_volume_svg
+    assert "n/a — no released Denevil proxy route" in denevil_sample_volume_svg
+
+    denevil_valid_rate_svg = (figure_dir / "option1_denevil_proxy_valid_response_rate.svg").read_text(encoding="utf-8")
+    assert "Appendix QA: DeNEVIL proxy visible-response coverage" in denevil_valid_rate_svg
+    assert "Appendix QA / provenance only." in denevil_valid_rate_svg
+    assert "High bars mean stronger public traceability coverage, not stronger benchmark-faithful ethical quality." in denevil_valid_rate_svg
+    assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in denevil_valid_rate_svg
+    assert "n/a — no released Denevil proxy route" in denevil_valid_rate_svg
+    assert "DeepSeek-M stays low not because the public release proved low ethical quality" in denevil_valid_rate_svg
+    assert "clearest cross-line comparison for the proxy package" not in denevil_valid_rate_svg
+
+    denevil_pipeline_svg = (figure_dir / "option1_denevil_proxy_pipeline.svg").read_text(encoding="utf-8")
+    assert "Appendix explanation: DeNEVIL proxy pipeline" in denevil_pipeline_svg
+    assert "Supporting appendix only." in denevil_pipeline_svg
+    assert "Denevil paper goal" in denevil_pipeline_svg
+    assert "Local limitation" in denevil_pipeline_svg
+    assert "Implemented release path" in denevil_pipeline_svg
+    assert "Observed public evidence" in denevil_pipeline_svg
+    assert "PI-facing deliverable" in denevil_pipeline_svg
+    assert (
+        "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; "
+        "not benchmark-faithful ethical-quality scoring."
+    ) in denevil_pipeline_svg
+    assert "coverage and provenance rather than ethical-quality accuracy" in denevil_pipeline_svg
 
     sample_volume_svg = (figure_dir / "option1_sample_volume.svg").read_text(encoding="utf-8")
     assert "Paper setup:" in sample_volume_svg

@@ -14,22 +14,14 @@ from inspect_ai.dataset import MemoryDataset, Sample
 from evals._benchmark_utils import (
     apply_prompt_prefix,
     as_float,
+    classify_valence_label,
+    classify_yes_no_label,
     env_str,
     first_matching_key,
     fuzzy_matching_key,
     generation_plan,
-    label_membership_scorer,
+    parsed_label_scorer,
 )
-
-YES_NO_PATTERNS = {
-    "Yes": [r"\byes\b", r"\brelevant\b"],
-    "No": [r"\bno\b", r"\birrelevant\b", r"not relevant"],
-}
-VALENCE_PATTERNS = {
-    "Supports": [r"\bsupports?\b", r"\bsupportive\b"],
-    "Opposes": [r"\bopposes?\b", r"\bagainst\b"],
-    "Either": [r"\beither\b", r"\bmixed\b", r"\bneutral\b"],
-}
 
 
 def _load_local_rows(path: Path) -> list[dict[str, Any]]:
@@ -224,9 +216,9 @@ def _make_valence_samples(limit: int | None = None) -> list[Sample]:
 
 @task
 def value_prism_relevance(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_relevance_samples(limit=limit)), plan=generation_plan(max_tokens=24), scorer=label_membership_scorer(YES_NO_PATTERNS))
+    return Task(dataset=MemoryDataset(_make_relevance_samples(limit=limit)), plan=generation_plan(max_tokens=24), scorer=parsed_label_scorer(classify_yes_no_label))
 
 
 @task
 def value_prism_valence(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_valence_samples(limit=limit)), plan=generation_plan(max_tokens=32), scorer=label_membership_scorer(VALENCE_PATTERNS))
+    return Task(dataset=MemoryDataset(_make_valence_samples(limit=limit)), plan=generation_plan(max_tokens=32), scorer=parsed_label_scorer(classify_valence_label))

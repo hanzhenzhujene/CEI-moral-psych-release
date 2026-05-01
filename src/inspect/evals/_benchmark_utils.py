@@ -149,6 +149,130 @@ def extract_first_int(text: str, *, minimum: int | None = None, maximum: int | N
     return None
 
 
+def extract_labeled_int(
+    text: str,
+    *,
+    labels: Sequence[str],
+    minimum: int | None = None,
+    maximum: int | None = None,
+) -> int | None:
+    for label in labels:
+        pattern = rf"(?:{label})\s*[:=\-]?\s*(\d+)\b"
+        match = re.search(pattern, text, flags=re.IGNORECASE)
+        if not match:
+            continue
+        value = int(match.group(1))
+        if minimum is not None and value < minimum:
+            continue
+        if maximum is not None and value > maximum:
+            continue
+        return value
+    return None
+
+
+def extract_single_bounded_int(text: str, *, minimum: int | None = None, maximum: int | None = None) -> int | None:
+    matches = []
+    for match in re.findall(r"\b\d+\b", text):
+        value = int(match)
+        if minimum is not None and value < minimum:
+            continue
+        if maximum is not None and value > maximum:
+            continue
+        matches.append(value)
+    if not matches:
+        return None
+    unique = set(matches)
+    return next(iter(unique)) if len(unique) == 1 else None
+
+
+def extract_structured_choice_int(text: str, *, minimum: int, maximum: int) -> int | None:
+    normalized = normalize_whitespace(text)
+    if not normalized:
+        return None
+    labeled = extract_labeled_int(
+        normalized,
+        labels=[
+            r"selected\s+option",
+            r"option\s+selected",
+            r"selected\s+choice",
+            r"choice",
+            r"answer",
+            r"option",
+        ],
+        minimum=minimum,
+        maximum=maximum,
+    )
+    if labeled is not None:
+        return labeled
+    exact = re.fullmatch(r"(\d+)", normalized)
+    if exact is not None:
+        value = int(exact.group(1))
+        if minimum <= value <= maximum:
+            return value
+    return extract_single_bounded_int(normalized, minimum=minimum, maximum=maximum)
+
+
+def extract_structured_rating_int(text: str, *, minimum: int, maximum: int) -> int | None:
+    normalized = normalize_whitespace(text)
+    if not normalized:
+        return None
+    labeled = extract_labeled_int(
+        normalized,
+        labels=[r"rating", r"score", r"answer"],
+        minimum=minimum,
+        maximum=maximum,
+    )
+    if labeled is not None:
+        return labeled
+    exact = re.fullmatch(r"(\d+)", normalized)
+    if exact is not None:
+        value = int(exact.group(1))
+        if minimum <= value <= maximum:
+            return value
+    return extract_single_bounded_int(normalized, minimum=minimum, maximum=maximum)
+
+
+def extract_action_choice(text: str) -> str | None:
+    normalized = normalize_whitespace(text)
+    if not normalized:
+        return None
+    patterns = [
+        (r"(?:selected\s+action|action\s+selected|answer|choice)\s*[:=\-]?\s*([ab])\b", "labeled"),
+        (r"(?:option)\s*([ab])\b", "option"),
+        (r"^([ab])$", "exact"),
+        (r"\(([ab])\)", "paren"),
+    ]
+    for pattern, _ in patterns:
+        match = re.search(pattern, normalized, flags=re.IGNORECASE)
+        if match:
+            return match.group(1).lower()
+    return None
+
+
+def classify_yes_no_label(text: str) -> str | None:
+    normalized = normalize_text(text)
+    if not normalized:
+        return None
+    if re.search(r"\b(not relevant|irrelevant|no)\b", normalized):
+        return "No"
+    if re.search(r"\b(yes|relevant)\b", normalized):
+        return "Yes"
+    return None
+
+
+def classify_valence_label(text: str) -> str | None:
+    normalized = normalize_text(text)
+    if not normalized:
+        return None
+    if re.search(r"\b(either|either way|mixed|neutral)\b", normalized):
+        return "Either"
+    if re.search(r"\b(opposes?|against)\b", normalized):
+        return "Opposes"
+    if re.search(r"\b(supports?|supportive)\b", normalized):
+        return "Supports"
+    return None
+
+
 def canonicalize_label(text: str, patterns: Mapping[str, Sequence[str]]) -> str | None:
     lowered = normalize_text(text)
     for canonical, regexes in patterns.items():
@@ -246,15 +370,45 @@ def label_membership_scorer(patterns: Mapping[str, Sequence[str]]):
     return score
 
 
+@scorer(metrics=[accuracy(), stderr()])
+def parsed_label_scorer(parser):
+    async def score(state: TaskState, target: Target) -> Score:
+        answer = parser(state.output.completion)
+        is_correct = answer is not None and answer in target.target
+        return Score(
+            value=1 if is_correct else 0,
+            answer=answer or "",
+            explanation=state.output.completion,
+        )
+
+    return score
+
+
 @scorer(metrics=[mean(), stderr()])
 def valid_choice_scorer(minimum: int, maximum: int):
     async def score(state: TaskState, target: Target) -> Score:
-        choice = extract_first_int(state.output.completion, minimum=minimum, maximum=maximum)
+        choice = extract_structured_choice_int(state.output.completion, minimum=minimum, maximum=maximum)
         return Score(
             value=1.0 if choice is not None else 0.0,
             answer="" if choice is None else str(choice),
             explanation=state.output.completion,
             metadata={"selected_option": choice},
+        )
+
+    return score
+
+
+@scorer(metrics=[accuracy(), stderr()])
+def bounded_integer_scorer(minimum: int, maximum: int):
+    async def score(state: TaskState, target: Target) -> Score:
+        rating = extract_structured_rating_int(state.output.completion, minimum=minimum, maximum=maximum)
+        answer = "" if rating is None else str(rating)
+        is_correct = answer != "" and answer in target.target
+        return Score(
+            value=1 if is_correct else 0,
+            answer=answer,
+            explanation=state.output.completion,
+            metadata={"selected_rating": rating},
         )
 
     return score

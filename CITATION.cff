@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite it using the metadata below."
+title: "CEI Moral-Psych Benchmark Suite"
+type: software
+version: "2026.04.30"
+date-released: 2026-04-30
+authors:
+  - family-names: Zhu
+    given-names: Hanzhen
+    alias: Jenny Zhu
+repository-code: "https://github.com/hanzhenzhujene/CEI-moral-psych-release"
+url: "https://github.com/hanzhenzhujene/CEI-moral-psych-release"
+abstract: >-
+  Public release package for five moral-psych benchmark papers, separating
+  benchmark-faithful comparable accuracy from CCD-Bench cultural-cluster choice
+  behavior and DeNEVIL proxy behavioral evidence.
+keywords:
+  - benchmark evaluation
+  - moral reasoning
+  - ethical AI
+  - open-source models
+  - multimodal evaluation

@@ -1,10 +1,22 @@
 # Jenny Zhu Moral-Psych Benchmark Report
 
-Updated: `April 30, 2026`
+Updated: `May 1, 2026`
 
 Frozen public snapshot referenced here: `Option 1`, `April 19, 2026`
 
 This report covers Jenny Zhu's five assigned moral-psych benchmark papers under the April 14, 2026 group plan. It separates the frozen public snapshot from the broader published family-size expansion work that is still being filled in.
+
+## TL;DR
+
+If you only read one section, read these six takeaways:
+
+- **Best like-for-like line:** `Qwen-L` is the strongest fully comparable line, averaging 0.600 across UniMoral 0.665, SMID 0.483, and Value 0.653. This is the cleanest overall topline because all three comparable metrics are observed on the same line.
+- **Best text-only line:** `Llama-M` is the strongest pure text line, reaching UniMoral 0.670 and Value 0.724. It should not be called the best all-around line because there is no public SMID route on that line.
+- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.378) and widest spread (0.266), while `UniMoral` is tightly clustered (0.048 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
+- **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
+- **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `Gemma-L` at 17.6% to `Llama-S` at 23.9%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
+- **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates (92.4% to 99.5% protective response rate). `DeepSeek-M` is the main caveat because 86.0% of prompts surfaced no visible answer, so that line should be read as a trace-surfacing failure rather than a harmful-behavior result.
+
 
 ## Results First
 
@@ -34,20 +46,23 @@ _Latest family-size progress overview. Each stacked bar summarizes the five benc
 
 ### Current Comparable Accuracy Snapshot
 
-Only benchmarks with a directly comparable accuracy metric are shown below. `CCD-Bench` and `Denevil` are excluded because they do not share the same accuracy target across lines. Rows include every line with at least one current comparable result; `n/a` marks benchmarks that are either incomplete on that line or intentionally withdrawn after response-format validation.
+The table below is intentionally limited to the three directly comparable accuracy metrics: `UniMoral`, `SMID`, and `Value Kaleidoscope`. `CCD-Bench` and `Denevil` are reported separately below as coverage / proxy evidence because neither benchmark currently supports a benchmark-faithful universal accuracy claim in this public release. `n/a` marks benchmarks that are route-missing, incomplete, or intentionally withheld after response-format validation.
 
-| Line | UniMoral action | SMID average | Value Kaleidoscope average | Coverage note |
+Metric definition version: `2026-04-30`. The visible-answer parsing rules behind these columns are versioned explicitly so later scorer changes do not silently rewrite the public story.
+
+| Line | UniMoral action | SMID average | Value Kaleidoscope average | Comparison note |
 | :--- | ---: | ---: | ---: | --- |
-| `Qwen-S` | 0.647 | 0.368 | 0.682 | Frozen Option 1 line. |
-| `Qwen-M` | 0.665 | n/a | 0.675 | Clean text rerun finished locally after the withdrawn short-answer artifacts. No medium SMID route is fixed in this public slice. |
-| `Qwen-L` | 0.665 | 0.483 | 0.653 | SMID recovery and clean text rerun both finished locally, so the large Qwen line is fully comparable again. |
-| `DeepSeek-L` | 0.684 | n/a | 0.635 | Frozen large-class text line. No SMID vision route was included. |
-| `Llama-S` | 0.648 | 0.216 | 0.529 | Complete locally across all five papers, but still outside the frozen Option 1 snapshot counts. SMID splits to 0.099 moral rating / 0.334 foundation classification, so the low average is a real task result. |
-| `Llama-M` | 0.670 | n/a | 0.724 | No SMID route; medium text line completed locally on April 22, 2026 and is now a trustworthy text-only comparison point. |
-| `Llama-L` | 0.660 | 0.386 | 0.692 | SMID is complete locally, and the local text rerun now finishes through the Denevil proxy task. |
-| `Gemma-S` | 0.635 | 0.417 | 0.593 | Frozen Option 1 recovery line. |
-| `Gemma-M` | 0.663 | 0.364 | 0.664 | Complete local medium line with both text and SMID image results finished. |
-| `Gemma-L` | 0.661 | 0.412 | 0.656 | Complete local large line with both text and SMID image results finished. |
+| `Qwen-S` | 0.647 | 0.368 | 0.682 | Comparable on all three benchmark-faithful accuracy panels. |
+| `Qwen-M` | 0.665 | n/a | 0.675 | Text-only comparable line; no public SMID route on this slot. |
+| `Qwen-L` | 0.665 | 0.483 | 0.653 | Comparable on all three benchmark-faithful accuracy panels. |
+| `DeepSeek-M` | n/a | n/a | n/a | Coverage-only line; accuracy withheld after visible-answer validation. |
+| `DeepSeek-L` | 0.684 | n/a | 0.635 | Text-only comparable line; no public SMID route on this slot. |
+| `Llama-S` | 0.648 | 0.216 | 0.529 | Comparable on all three benchmark-faithful accuracy panels. |
+| `Llama-M` | 0.670 | n/a | 0.724 | Text-only comparable line; no public SMID route on this slot. |
+| `Llama-L` | 0.660 | 0.386 | 0.692 | Comparable on all three benchmark-faithful accuracy panels. |
+| `Gemma-S` | 0.635 | 0.417 | 0.593 | Comparable on all three benchmark-faithful accuracy panels. |
+| `Gemma-M` | 0.663 | 0.364 | 0.664 | Comparable on all three benchmark-faithful accuracy panels. |
+| `Gemma-L` | 0.661 | 0.412 | 0.656 | Comparable on all three benchmark-faithful accuracy panels. |
 
 ![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
 
@@ -76,8 +91,8 @@ Before comparing charts, anchor each benchmark to its source paper. These benchm
 | `UniMoral` | A unified multilingual moral-reasoning resource spanning action choice, typology, factor attribution, and consequence generation under culturally varied dilemmas. | The public release currently scores action prediction only: given a dilemma and two candidate actions, select the crowd-endorsed action. | A high UniMoral score means the model tracks consensus action choices across multilingual moral dilemmas. It does not by itself show equal strength on moral typology, factor attribution, or consequence generation. |
 | `SMID` | A normed socio-moral image stimulus set for studying moral and affective processing, with large-scale human ratings of wrongness and moral-foundation relevance. | The public release averages two vision tasks: discrete moral-rating prediction and dominant moral-foundation classification from the image norms. | A high SMID score means the model can recover socially and morally salient cues from images in ways that align with normative human judgments. Because SMID is a stimulus set rather than a single-label objective benchmark, low scores can reflect visual ambiguity and weaker consensus, not just poor moral reasoning. |
 | `Value Kaleidoscope` | A value-pluralism benchmark built from ValuePrism, asking which values, rights, and duties are relevant in context and whether they support or oppose the situation. | The public release averages two text tasks: relevance classification and valence classification for candidate values, rights, and duties. | A high Value Kaleidoscope score means the model is good at explicit value tagging and polarity assignment. It should be read as structured value recognition, not as proof that the model resolves pluralistic moral conflicts into the best final action. |
-| `CCD-Bench` | A cross-cultural conflict benchmark where models adjudicate between ten culturally grounded response options tied to GLOBE cultural clusters. | The current harness checks whether the model produces a well-formed option selection and rationale over the full 10-way choice set. | CCD-Bench is most informative through preference patterns and rationale content across cultural clusters, not through a single comparable scalar accuracy. In this release, completion means structured coverage of the task, not that one culture-indexed option is universally correct. |
-| `Denevil` | A dynamic generative evaluation of ethical value vulnerabilities that uses MoralPrompt to elicit potential value violations rather than only classifying fixed items. | The current public release can only run the FULCRA-backed proxy generation pathway, with completion measured as a successful generated response rather than paper-faithful MoralPrompt scoring. | A finished Denevil proxy line is a coverage and provenance signal, not an ethical-quality score. It should stay outside any macro-accuracy claim until the paper-faithful MoralPrompt evaluation is available locally. |
+| `CCD-Bench` | A cross-cultural conflict benchmark where models adjudicate between ten culturally grounded response options tied to GLOBE cultural clusters. | The current harness checks whether the model produces a well-formed option selection and rationale over the full 10-way choice set. | CCD-Bench is most informative through choice behavior across cultural clusters, not through a single comparable scalar accuracy. This release therefore leads with a canonical cluster heatmap and a concentration summary, while valid-choice coverage is demoted to appendix QA. None of these CCD surfaces should be read as universal accuracy. |
+| `Denevil` | A dynamic generative evaluation of ethical value vulnerabilities that uses MoralPrompt to elicit potential value violations rather than only classifying fixed items. | The current public release can only run the FULCRA-backed proxy generation pathway, so headline DeNEVIL reporting is based on auditable visible behavioral outcomes rather than paper-faithful MoralPrompt scoring. | A finished DeNEVIL proxy line is proxy-only behavioral evidence and traceability support, not benchmark-faithful ethical-quality scoring. The public release therefore leads with visible behavior categories and a prompt-family breakdown, while route/sample/timestamp fields stay in appendix QA tables. It should stay outside any macro-accuracy claim until the paper-faithful MoralPrompt evaluation is available locally. |
 
 ### Benchmark Difficulty Profile
 
@@ -95,18 +110,135 @@ _Figure 3. Mean, low, and high accuracy for the three directly comparable benchm
 
 ![Family scaling profile](../../../figures/release/option1_family_scaling_profile.svg)
 
-_Figure 4. Five-panel family view: the top row shows the three accuracy-comparable benchmarks, while the bottom row renders CCD-Bench and Denevil as status curves. Missing top-row points are missing or withheld evidence, not zeroes._
+_Figure 4. Family-size scaling across the three directly comparable accuracy panels only: `UniMoral`, `SMID`, and `Value Kaleidoscope`. `CCD-Bench` and `Denevil` are intentionally excluded from this line chart because the public release treats them as coverage / proxy evidence rather than benchmark-faithful accuracy. Missing points are missing or withheld evidence, not zeroes._
 
 | Family | Evidence scope | Numeric pattern | Cautious interpretation |
 | --- | --- | --- | --- |
 | `Qwen` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence after the recovered large line. | UniMoral: S 0.647 -> M 0.665 -> L 0.665<br/>SMID: S 0.368 -> L 0.483<br/>Value Kaleidoscope: S 0.682 -> M 0.675 -> L 0.653 | Qwen improves from S to M on text tasks and then largely plateaus at L, while the recovered large SMID line is much stronger than the small line. That supports task-specific scaling, not a single monotonic curve. |
-| `DeepSeek` | Only the large line remains accuracy-comparable in the top-row panels, there is still no public SMID route, and the medium line appears only in the CCD-Bench / Denevil status-curve panels. | UniMoral: L 0.684<br/>Value Kaleidoscope: L 0.635 | DeepSeek remains a useful large-line text comparison point, but the finished medium rerun still cannot support a trustworthy accuracy size curve because its saved short-answer artifacts collapse into empty answers. |
+| `DeepSeek` | Only the large line remains accuracy-comparable on the family scaling view, and there is still no public SMID route. | UniMoral: L 0.684<br/>Value Kaleidoscope: L 0.635 | DeepSeek remains a useful large-line text comparison point, but the finished medium rerun still cannot support a trustworthy accuracy size curve because its saved short-answer artifacts collapse into empty answers. Read its CCD-Bench and Denevil outputs in the dedicated coverage / proxy figures instead of the comparable-accuracy panel. |
 | `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic. |
 | `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic. |
 
+### CCD-Bench Choice Behavior
+
+CCD-Bench should not be flattened into a universal accuracy number. The paper asks models to choose among ten culturally grounded options, so the public headline result is now choice behavior: which canonical clusters each line over-indexes or under-indexes relative to a uniform 10% baseline, and how concentrated that choice pattern becomes on its dominant cluster.
+
+CCD option order follows the paper's canonical cluster IDs: 1 = Anglo; 2 = Eastern Europe; 3 = Latin America; 4 = Latin Europe; 5 = Confucian Asia; 6 = Nordic Europe; 7 = Sub Saharan Africa; 8 = Southern Asia; 9 = Germanic Europe; 10 = Middle East.
+
+![CCD choice distribution](../../../figures/release/option1_ccd_choice_distribution.svg)
+
+_Figure 5. Main CCD-Bench result surface. Each cell shows the percentage-point deviation from the 10% uniform baseline for one canonical cultural cluster, computed over valid visible selections only. Positive cells mean the line picked that cluster more often than uniform choice; negative cells mean under-indexing. This is a choice-distribution heatmap, not accuracy._
+
+![CCD dominant-option share](../../../figures/release/option1_ccd_dominant_option_share.svg)
+
+_Figure 6. Compact CCD summary. Dominant-cluster share shows how much of each line's valid visible choice behavior collapses onto its most frequent cluster, while the effective-cluster count tracks how broadly the line spreads its choices across the ten canonical options._
+
+![CCD valid-choice coverage](../../../figures/release/option1_ccd_valid_choice_coverage.svg)
+
+_Figure 7. Appendix QA only. `CCD-Bench` valid-choice coverage = (# saved visible answers with a parseable 1-10 choice) / (# all CCD-Bench prompts). This figure is kept for provenance and parser auditing, not as the headline CCD result._
+
+The full ten-option numeric table is published in `results/release/2026-04-19-option1/ccd-choice-distribution.csv`; the compact table below keeps the most PI-facing CCD readouts inline without turning coverage into the headline claim.
+
+| Line | Dominant cluster | Top-cluster share | Effective clusters | Behavioral note |
+| --- | --- | ---: | ---: | --- |
+| `Qwen-S` | option_6 (Nordic Europe) | 19.2% | 8.91 | Compare against the heatmap above, not as scalar accuracy. |
+| `Qwen-M` | option_6 (Nordic Europe) | 21.9% | 8.29 | Compare against the heatmap above, not as scalar accuracy. |
+| `Qwen-L` | option_6 (Nordic Europe) | 23.4% | 7.97 | Compare against the heatmap above, not as scalar accuracy. |
+| `DeepSeek-S` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
+| `DeepSeek-M` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
+| `DeepSeek-L` | option_6 (Nordic Europe) | 22.6% | 7.99 | Compare against the heatmap above, not as scalar accuracy. |
+| `Llama-S` | option_6 (Nordic Europe) | 23.9% | 7.24 | Compare against the heatmap above, not as scalar accuracy. |
+| `Llama-M` | option_6 (Nordic Europe) | 20.6% | 8.03 | Compare against the heatmap above, not as scalar accuracy. |
+| `Llama-L` | option_6 (Nordic Europe) | 23.5% | 7.67 | Compare against the heatmap above, not as scalar accuracy. |
+| `Gemma-S` | option_6 (Nordic Europe) | 21.6% | 8.37 | Compare against the heatmap above, not as scalar accuracy. |
+| `Gemma-M` | option_6 (Nordic Europe) | 18.6% | 8.89 | Compare against the heatmap above, not as scalar accuracy. |
+| `Gemma-L` | option_6 (Nordic Europe) | 17.6% | 9.05 | Compare against the heatmap above, not as scalar accuracy. |
+
+### DeNEVIL Proxy Behavioral Evidence
+
+**Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.**
+
+The repo still lacks a stable local `MoralPrompt` export, so paper-aligned APV / EVR / MVP are `n/a` in this public package. Instead, the release now leads with auditable behavioral outcomes over the FULCRA-backed proxy traces: protective refusals, redirects, corrective/contextual responses, direct task answers, potentially risky continuations, ambiguous visible answers, and empty traces.
+
+The main DeNEVIL result surface is now the visible-behavior mix across the full released proxy archive. A secondary prompt-family heatmap asks how often safety-salient prompt families receive visibly protective responses. Route/model provenance, sample volume, completion state, timestamps, and visible-response coverage are still exported, but they now live in the appendix QA figures rather than the headline result story.
+
+![DeNEVIL proxy behavioral outcomes](../../../figures/release/option1_denevil_behavior_outcomes.svg)
+
+_Figure 8. Main DeNEVIL proxy result surface. Each stacked bar distributes the released proxy prompts across auditable behavioral categories. This is proxy behavioral evidence, not benchmark-faithful ethical-quality scoring._
+
+![DeNEVIL prompt-family heatmap](../../../figures/release/option1_denevil_prompt_family_heatmap.svg)
+
+_Figure 9. Secondary DeNEVIL breakdown. For the safety-salient proxy prompt families only, each cell shows the rate of visibly protective behavior (refusal, redirect, or corrective/contextual response). Prompt-family labels are heuristic and derived from the released source dialogue._
+
+The compact behavior table below is the quickest line-level read. Use it before dropping into the appendix provenance figures.
+
+| Line | Refusal | Redirect | Corrective/contextual | Direct answer | Risky continuation | Ambiguous | Empty | Dominant behavior |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| `Qwen-S` | 21.5% | 8.0% | 69.9% | 0.0% | 0.1% | 0.4% | 0.0% | Corrective / contextual response |
+| `Qwen-M` | 22.1% | 8.4% | 69.0% | 0.0% | 0.2% | 0.3% | 0.0% | Corrective / contextual response |
+| `Qwen-L` | 29.3% | 5.7% | 64.3% | 0.0% | 0.2% | 0.4% | 0.0% | Corrective / contextual response |
+| `DeepSeek-S` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
+| `DeepSeek-M` | 8.3% | 0.4% | 4.1% | 0.0% | 0.0% | 1.1% | 86.0% | No visible answer |
+| `DeepSeek-L` | 31.1% | 6.1% | 62.0% | 0.0% | 0.2% | 0.6% | 0.0% | Corrective / contextual response |
+| `Llama-S` | 41.0% | 1.3% | 56.5% | 0.0% | 0.1% | 1.2% | 0.0% | Corrective / contextual response |
+| `Llama-M` | 26.0% | 1.8% | 70.5% | 0.0% | 0.1% | 1.6% | 0.0% | Corrective / contextual response |
+| `Llama-L` | 22.9% | 1.4% | 74.7% | 0.0% | 0.2% | 0.8% | 0.0% | Corrective / contextual response |
+| `Gemma-S` | 36.1% | 12.4% | 48.7% | 0.0% | 0.1% | 2.7% | 0.0% | Corrective / contextual response |
+| `Gemma-M` | 43.3% | 4.1% | 44.9% | 0.0% | 0.0% | 7.6% | 0.0% | Corrective / contextual response |
+| `Gemma-L` | 40.4% | 8.9% | 49.0% | 0.0% | 0.1% | 1.6% | 0.0% | Corrective / contextual response |
+
+### DeNEVIL Appendix QA / Provenance
+
+These appendix artifacts stay public because a PI still needs to inspect what actually ran: route provenance, timestamps, sample volume, visible-response coverage, and a safe example table. They are intentionally no longer the headline DeNEVIL result surfaces.
+
+![Denevil proxy status matrix](../../../figures/release/option1_denevil_proxy_status_matrix.svg)
+
+_Figure 10. Appendix QA only. PI-facing proxy status matrix with route / model provenance, timestamps, sample counts, visible-response coverage, and concise limitation notes._
+
+![Denevil proxy sample volume](../../../figures/release/option1_denevil_proxy_sample_volume.svg)
+
+_Figure 11. Appendix QA only. Sample-volume view of the released DeNEVIL proxy archive._
+
+![Denevil proxy valid-response rate](../../../figures/release/option1_denevil_proxy_valid_response_rate.svg)
+
+_Figure 12. Appendix QA only. Visible-response coverage chart retained for provenance and debugging, not as the main DeNEVIL result._
+
+![Denevil proxy pipeline](../../../figures/release/option1_denevil_proxy_pipeline.svg)
+
+_Figure 13. Public contract for the proxy package: paper goal -> local limitation -> FULCRA-backed proxy path -> generated traces -> provenance deliverable rather than benchmark-faithful accuracy._
+
+The appendix table below records the available QA/provenance fields explicitly.
+
+| Line | Proxy status | Total proxy samples | Visible generated responses | Valid visible response rate | Proxy route | Note |
+| --- | --- | ---: | ---: | ---: | --- | --- |
+| `Qwen-S` | Proxy complete | 20,518 | 20,515 / 20,518 | 100.0% | `qwen3-8b` | Near-complete archive; 3 prompts lacked visible saved text. |
+| `Qwen-M` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `qwen3-14b` | Visible text surfaced for every proxy prompt. |
+| `Qwen-L` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `qwen3-32b` | Visible text surfaced for every proxy prompt. |
+| `DeepSeek-S` | No route | n/a | n/a | n/a | `no-route` | No released proxy route. |
+| `DeepSeek-M` | Proxy complete | 20,518 | 2,863 / 20,518 | 14.0% | `deepseek-r1-distill-llama-70b` | Only 14.0% of prompts surfaced visible text (2,863 / 20,518). |
+| `DeepSeek-L` | Proxy complete | 20,518 | 20,514 / 20,518 | 100.0% | `deepseek-chat-v3.1` | Near-complete archive; 4 prompts lacked visible saved text. |
+| `Llama-S` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `llama-3.2-11b-vision-instruct` | Visible text surfaced for every proxy prompt. |
+| `Llama-M` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `llama-3.3-70b-instruct` | Visible text surfaced for every proxy prompt. |
+| `Llama-L` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `llama-4-maverick` | Visible text surfaced for every proxy prompt. |
+| `Gemma-S` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `gemma-3-4b-it` | Visible text surfaced for every proxy prompt. |
+| `Gemma-M` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `gemma-3-12b-it` | Visible text surfaced for every proxy prompt. |
+| `Gemma-L` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `gemma-3-27b-it` | Visible text surfaced for every proxy prompt. |
+
+A few safe qualitative examples help clarify what the proxy traces actually look like in practice.
+
+| Model line | Proxy prompt type | Shortened model output pattern | Interpretable signal |
+| --- | --- | --- | --- |
+| `Qwen-S` | Loaded social / political judgment | Corrective / contextual response | The visible trace gives a corrective or contextual answer, which is useful proxy behavior evidence even though the release does not claim paper-faithful Denevil scoring. |
+| `Llama-L` | Illicit access / sabotage | Protective refusal | The visible trace refuses the request directly, which is a clear protective behavioral outcome in the proxy release. |
+| `DeepSeek-M` | Loaded social / political judgment | No visible answer | This sample shows why the proxy package separates completed archives from the subset of traces that actually surface a visible public answer. |
+
 ### Reporting Guardrails
 
-- Do not fold `Denevil` into any benchmark-faithful macro-accuracy claim; it remains proxy-only even when its completion status is `Done`.
+- Do not fold `Denevil` into any benchmark-faithful macro-accuracy claim; it remains proxy-only behavioral evidence and traceability support even when its completion status is `Done`.
+- Read `CCD-Bench` in its dedicated choice-behavior figures, not in the family scaling line chart. `CCD-Bench` valid-choice coverage stays appendix QA only; the headline result is the cluster-selection heatmap and concentration summary.
+- Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
+- Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.
+- Read `DeepSeek-M` as a visible-answer surfacing failure, not a hidden accuracy collapse: `CCD-Bench coverage = 0.0%` (0 / 2,182) means the saved visible CCD answer never exposed a parseable 1-10 choice, while `Denevil coverage = 14.0%` (2,863 / 20,518) means only that share of DeNEVIL proxy prompts surfaced any visible text.
 - Do not call `Llama-M` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
 - Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, and the broader `Qwen` / `Llama` curves still move in mixed directions across benchmarks.
 - Keep `DeepSeek-M` out of the top-row comparable accuracy charts until its saved short-answer rerun artifacts stop collapsing into empty visible answers.
@@ -117,7 +249,7 @@ _Figure 4. Five-panel family view: the top row shows the three accuracy-comparab
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `April 30, 2026` |
+| Repo update date | `May 1, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
 | Current project cost estimate | `$84.02` |
 | Cost scope | User-updated project total across the frozen release work and the later tracked reruns completed in this repo. |
@@ -212,29 +344,38 @@ Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-
 
 ## Supporting Figures
 
-Figures 1 through 4 are already embedded above in context; this gallery keeps the remaining visuals together without repeating them.
+Figures 1 through 13 are already embedded above in context; this gallery keeps the full set together without repeating the surrounding interpretation text.
 
 | Figure | Why it matters | File |
 | --- | --- | --- |
 | Figure 1 | Latest line-level progress across the current published family-size matrix. | [option1_family_size_progress_overview.svg](../../../figures/release/option1_family_size_progress_overview.svg) |
 | Figure 2 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | [option1_benchmark_accuracy_bars.svg](../../../figures/release/option1_benchmark_accuracy_bars.svg) |
 | Figure 3 | Benchmark-level difficulty and spread across the current comparable slice. | [option1_benchmark_difficulty_profile.svg](../../../figures/release/option1_benchmark_difficulty_profile.svg) |
-| Figure 4 | Five-panel family scaling view with three accuracy charts plus two status-curve panels for CCD-Bench and Denevil. | [option1_family_scaling_profile.svg](../../../figures/release/option1_family_scaling_profile.svg) |
-| Figure 5 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | [option1_accuracy_heatmap.svg](../../../figures/release/option1_accuracy_heatmap.svg) |
-| Figure 6 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | [option1_coverage_matrix.svg](../../../figures/release/option1_coverage_matrix.svg) |
-| Figure 7 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | [option1_sample_volume.svg](../../../figures/release/option1_sample_volume.svg) |
+| Figure 4 | Family-size scaling view for the three directly comparable accuracy benchmarks only. | [option1_family_scaling_profile.svg](../../../figures/release/option1_family_scaling_profile.svg) |
+| Figure 5 | Main CCD-Bench result: canonical cultural-cluster heatmap showing deviation from the 10% uniform baseline. | [option1_ccd_choice_distribution.svg](../../../figures/release/option1_ccd_choice_distribution.svg) |
+| Figure 6 | Compact CCD concentration summary: dominant-cluster share plus effective-cluster count. | [option1_ccd_dominant_option_share.svg](../../../figures/release/option1_ccd_dominant_option_share.svg) |
+| Figure 7 | Appendix QA for CCD only: parseable visible 1-10 choice coverage by model line. | [option1_ccd_valid_choice_coverage.svg](../../../figures/release/option1_ccd_valid_choice_coverage.svg) |
+| Figure 8 | Main DeNEVIL proxy result: visible-behavior outcome mix by model line. | [option1_denevil_behavior_outcomes.svg](../../../figures/release/option1_denevil_behavior_outcomes.svg) |
+| Figure 9 | Secondary DeNEVIL breakdown: protective-response rate by heuristic prompt family. | [option1_denevil_prompt_family_heatmap.svg](../../../figures/release/option1_denevil_prompt_family_heatmap.svg) |
+| Figure 10 | Appendix QA only: DeNEVIL proxy status matrix with route/model provenance and timestamps. | [option1_denevil_proxy_status_matrix.svg](../../../figures/release/option1_denevil_proxy_status_matrix.svg) |
+| Figure 11 | Appendix QA only: DeNEVIL proxy sample volume. | [option1_denevil_proxy_sample_volume.svg](../../../figures/release/option1_denevil_proxy_sample_volume.svg) |
+| Figure 12 | Appendix QA only: DeNEVIL visible-response coverage by model line. | [option1_denevil_proxy_valid_response_rate.svg](../../../figures/release/option1_denevil_proxy_valid_response_rate.svg) |
+| Figure 13 | Proxy pipeline diagram showing why the released DeNEVIL package is evidence/provenance rather than paper-faithful accuracy. | [option1_denevil_proxy_pipeline.svg](../../../figures/release/option1_denevil_proxy_pipeline.svg) |
+| Figure 14 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | [option1_accuracy_heatmap.svg](../../../figures/release/option1_accuracy_heatmap.svg) |
+| Figure 15 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | [option1_coverage_matrix.svg](../../../figures/release/option1_coverage_matrix.svg) |
+| Figure 16 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | [option1_sample_volume.svg](../../../figures/release/option1_sample_volume.svg) |
 
 ![Accuracy heatmap](../../../figures/release/option1_accuracy_heatmap.svg)
 
-_Figure 5. Line-level heatmap for the latest available comparable metrics, using a shared scale and a consistent unavailable-state treatment._
+_Figure 14. Line-level heatmap for the latest available comparable metrics, using a shared scale and a consistent unavailable-state treatment._
 
 ![Coverage matrix](../../../figures/release/option1_coverage_matrix.svg)
 
-_Figure 6. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._
+_Figure 15. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._
 
 ![Sample volume by benchmark](../../../figures/release/option1_sample_volume.svg)
 
-_Figure 7. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._
+_Figure 16. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._
 
 ## Frozen Option 1 Summary
 

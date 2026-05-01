@@ -12,9 +12,10 @@ from inspect_ai.dataset import MemoryDataset, Sample
 
 from evals._benchmark_utils import (
     apply_prompt_prefix,
+    extract_action_choice,
     format_ab_choices,
     generation_plan,
-    label_membership_scorer,
+    parsed_label_scorer,
     normalize_possible_actions,
     normalize_whitespace,
     selected_action_text,
@@ -31,7 +32,6 @@ LANGUAGE_CODES = {
     "Russian": "rus",
     "Spanish": "spa",
 }
-ACTION_PATTERNS = {"a": [r"selected action is\s*a\b", r"\boption\s*a\b", r"\b\(?a\)?\b"], "b": [r"selected action is\s*b\b", r"\boption\s*b\b", r"\b\(?b\)?\b"]}
 TYPOLOGY_PATTERNS = {
     "Deontological": [r"deontolog"],
     "Utilitarianism": [r"utilitarian"],
@@ -318,7 +318,7 @@ def _make_consequence_samples(limit: int | None = None) -> list[Sample]:
 
 @task
 def unimoral_action_prediction(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_action_prediction_samples(limit=limit)), plan=generation_plan(max_tokens=64), scorer=label_membership_scorer(ACTION_PATTERNS))
+    return Task(dataset=MemoryDataset(_make_action_prediction_samples(limit=limit)), plan=generation_plan(max_tokens=64), scorer=parsed_label_scorer(extract_action_choice))
 
 
 @task

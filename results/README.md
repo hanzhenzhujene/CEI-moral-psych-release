@@ -16,6 +16,18 @@ The most useful public entry points are:
 - `results/release/2026-04-19-option1/README.md`
 - `results/release/2026-04-19-option1/family-size-progress.csv`
 - `results/release/2026-04-19-option1/benchmark-comparison.csv`
+- `results/release/2026-04-19-option1/ccd-choice-distribution.csv`
+- `results/release/2026-04-19-option1/denevil-behavior-summary.csv`
+
+## Public Result Layers
+
+The current release separates three layers on purpose:
+
+- **Comparable accuracy:** `benchmark-comparison.csv` plus the main bar/heatmap/scaling figures for `UniMoral`, `SMID`, and `Value Kaleidoscope`
+- **Behavioral / distributional evidence:** `ccd-choice-distribution.csv` for CCD-Bench and `denevil-behavior-summary.csv` plus `denevil-prompt-family-breakdown.csv` for DeNEVIL
+- **Appendix QA / provenance:** `denevil-proxy-summary.csv`, `denevil-proxy-examples.csv`, and the QA-only coverage / status figures
+
+This split keeps the public package honest: coverage, parser health, route provenance, and timestamps remain inspectable, but they are not promoted into headline performance claims.
 
 ## Legacy Baseline Outputs
 

@@ -10,6 +10,7 @@ ROOT = Path(__file__).parent.parent
 
 PUBLIC_GLOBS = [
     "README.md",
+    "CITATION.cff",
     "Makefile",
     ".env.example",
     ".gitignore",
@@ -70,6 +71,15 @@ def test_env_example_exists_and_documents_core_inputs():
 
 def test_root_readme_prefers_public_bootstrap_before_live_setup():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "## TL;DR" in readme
+    assert "## Research Goal" in readme
+    assert "## Method Overview" in readme
+    assert "how far do current open-source model families get on five moral-psych benchmark papers" in readme
+    assert "Every public table, report, and SVG is regenerated from a tracked authoritative snapshot" in readme
+    assert "Best like-for-like line" in readme
+    assert "There is no universal scaling law" in readme
+    assert "CCD-Bench shows cultural choice style, not accuracy." in readme
+    assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring." in readme
     assert "## Public Quickstart" in readme
     assert "`make bootstrap`" in readme
     assert "reviewer-safe path" in readme
@@ -77,9 +87,80 @@ def test_root_readme_prefers_public_bootstrap_before_live_setup():
     assert "make setup && cp .env.example .env && make smoke" in readme
 
 
+def test_citation_metadata_exists_and_is_linked_from_root_readme():
+    citation = ROOT / "CITATION.cff"
+    assert citation.exists()
+    content = citation.read_text(encoding="utf-8")
+    assert "cff-version: 1.2.0" in content
+    assert 'title: "CEI Moral-Psych Benchmark Suite"' in content
+    assert 'repository-code: "https://github.com/hanzhenzhujene/CEI-moral-psych-release"' in content
+    assert 'alias: Jenny Zhu' in content
+
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "[CITATION.cff](CITATION.cff)" in readme
+    assert "## Citation" in readme
+
+
 def test_docs_index_mentions_repo_architecture():
     docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
     assert "repo-architecture.md" in docs_index
+    assert "evaluation-methodology.md" in docs_index
+
+
+def test_supporting_docs_track_current_release_artifacts_and_boundaries():
+    reproducibility = (ROOT / "docs" / "reproducibility.md").read_text(encoding="utf-8")
+    assert "ccd-choice-distribution.csv" in reproducibility
+    assert "denevil-behavior-summary.csv" in reproducibility
+    assert "denevil-proxy-summary.csv" in reproducibility
+    assert "option1_ccd_choice_distribution.svg" in reproducibility
+    assert "option1_denevil_behavior_outcomes.svg" in reproducibility
+    assert "appendix QA artifacts" in reproducibility
+
+    figures_readme = (ROOT / "figures" / "README.md").read_text(encoding="utf-8")
+    assert "## CCD-Bench figures" in figures_readme
+    assert "## DeNEVIL figures" in figures_readme
+    assert "option1_ccd_choice_distribution.svg" in figures_readme
+    assert "option1_denevil_behavior_outcomes.svg" in figures_readme
+    assert "appendix QA / provenance" in figures_readme
+
+    results_readme = (ROOT / "results" / "README.md").read_text(encoding="utf-8")
+    assert "## Public Result Layers" in results_readme
+    assert "ccd-choice-distribution.csv" in results_readme
+    assert "denevil-behavior-summary.csv" in results_readme
+    assert "Appendix QA / provenance" in results_readme
+
+    scripts_readme = (ROOT / "scripts" / "README.md").read_text(encoding="utf-8")
+    assert "one canonical reporting path" in scripts_readme
+    assert "build_release_artifacts.py" in scripts_readme
+    assert "DeNEVIL proxy evidence package" in scripts_readme
+
+
+def test_root_readme_links_evaluation_methodology():
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "docs/evaluation-methodology.md" in readme
+
+
+def test_root_readme_frames_denevil_as_proxy_only_evidence():
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "### DeNEVIL Proxy Behavioral Evidence" in readme
+    assert "### DeNEVIL Appendix QA / Provenance" in readme
+    assert "proxy-only behavioral evidence and traceability support" in readme
+    assert "not benchmark-faithful ethical-quality scoring" in readme
+    assert "denevil-proxy-summary.csv" in readme
+    assert "denevil-behavior-summary.csv" in readme
+    assert "denevil-prompt-family-breakdown.csv" in readme
+    assert "option1_denevil_behavior_outcomes.svg" in readme
+    assert "option1_denevil_prompt_family_heatmap.svg" in readme
+    assert "denevil-proxy-examples.csv" in readme
+    assert "option1_denevil_proxy_status_matrix.svg" in readme
+    assert "option1_denevil_proxy_pipeline.svg" in readme
+    assert "macro-accuracy claim" in readme
+
+
+def test_evaluation_methodology_versions_current_metric_definition():
+    methodology = (ROOT / "docs" / "evaluation-methodology.md").read_text(encoding="utf-8")
+    assert "Current public metric definition version" in methodology
+    assert "`2026-04-30`" in methodology
 
 
 def test_core_python_modules_have_module_docstrings():
