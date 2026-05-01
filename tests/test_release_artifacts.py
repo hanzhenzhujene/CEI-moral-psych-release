@@ -9,10 +9,12 @@ import subprocess
 import sys
 from pathlib import Path
 
+ROOT = Path(__file__).parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from scripts.build_release_artifacts import build_axis_ticks, nice_tick_step
 
-
-ROOT = Path(__file__).parent.parent
 SCRIPT = ROOT / "scripts" / "build_release_artifacts.py"
 SOURCE = ROOT / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
 
