@@ -116,6 +116,17 @@ def test_docs_index_mentions_repo_architecture():
     assert "evaluation-methodology.md" in docs_index
 
 
+def test_ci_workflow_uses_native_node24_action_releases() -> None:
+    workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert "FORCE_JAVASCRIPT_ACTIONS_TO_NODE24" not in workflow
+    assert "actions/checkout@v5" in workflow
+    assert "actions/setup-python@v6" in workflow
+    assert "astral-sh/setup-uv@v8.1.0" in workflow
+    assert "actions/checkout@v4" not in workflow
+    assert "actions/setup-python@v5" not in workflow
+    assert "astral-sh/setup-uv@v5" not in workflow
+
+
 def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     reproducibility = (ROOT / "docs" / "reproducibility.md").read_text(encoding="utf-8")
     assert "ccd-choice-distribution.csv" in reproducibility
