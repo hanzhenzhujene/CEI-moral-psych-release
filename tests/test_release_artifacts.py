@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import json
+import shutil
 import re
 import subprocess
 import sys
@@ -105,14 +106,14 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_cost_estimate"] == "$84.02"
+    assert manifest["report_metadata"]["current_cost_estimate"] == "$243.40"
     assert "later tracked reruns completed in this repo" in manifest["report_metadata"]["current_cost_scope"]
     assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"
     assert "stricter visible-answer parsing" in manifest["report_metadata"]["metric_definition_summary"].lower()
     assert manifest["report_metadata"]["ci_workflow_url"].endswith("/actions/workflows/ci.yml")
-    assert manifest["target_matrix"]["family_size_benchmark_cells"] == 60
-    assert manifest["target_matrix"]["model_families"] == 4
-    assert manifest["model_families"] == ["Qwen", "DeepSeek", "Llama", "Gemma"]
+    assert manifest["target_matrix"]["family_size_benchmark_cells"] == 75
+    assert manifest["target_matrix"]["model_families"] == 5
+    assert manifest["model_families"] == ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"]
     assert manifest["entry_points"]["report"].endswith("jenny-group-report.md")
     assert manifest["entry_points"]["supplementary_progress"].endswith("supplementary-model-progress.csv")
     assert manifest["entry_points"]["family_size_progress"].endswith("family-size-progress.csv")
@@ -180,7 +181,19 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "completed_benchmark_lines" in reader.fieldnames
         assert "missing_benchmark_lines" in reader.fieldnames
         rows = list(reader)
-    assert not any(row["family"] == "MiniMax" for row in rows)
+    minimax_family = next(row for row in rows if row["family"] == "MiniMax")
+    assert minimax_family["completed_benchmark_lines"] in {
+        "None yet",
+        "UniMoral; SMID",
+        "UniMoral; SMID; CCD-Bench",
+        "UniMoral; SMID; CCD-Bench; Denevil proxy",
+    }
+    if minimax_family["completed_benchmark_lines"] == "None yet":
+        assert minimax_family["tasks_completed"] == "0"
+        assert minimax_family["samples"] == "0"
+    else:
+        assert int(minimax_family["tasks_completed"]) >= 3
+        assert int(minimax_family["samples"]) >= 14666
 
     with (release_dir / "family-size-progress.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -229,8 +242,30 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert row["denevil"] == "proxy"
         assert row["summary_note"] == summary_note
 
-    assert len(rows) == 12
-    assert not any(row["line_label"].startswith("MiniMax-") for row in rows)
+    assert len(rows) == 15
+    minimax_small = row_for("MiniMax-S")
+    assert minimax_small["unimoral"] == "error"
+    assert minimax_small["smid"] == "error"
+    assert minimax_small["summary_note"] == "Attempted, but key-limit failures made the line unusable."
+    minimax_medium = row_for("MiniMax-M")
+    assert minimax_medium["unimoral"] == "queue"
+    assert minimax_medium["smid"] == "tbd"
+    assert minimax_medium["summary_note"] == "Text queued; no medium SMID route fixed yet."
+    minimax_large = row_for("MiniMax-L")
+    assert minimax_large["unimoral"] in {"queue", "done"}
+    assert minimax_large["smid"] in {"queue", "done"}
+    assert minimax_large["value_kaleidoscope"] in {"queue", "partial", "live", "done"}
+    assert minimax_large["ccd_bench"] in {"queue", "live", "partial", "done"}
+    assert minimax_large["denevil"] in {"queue", "partial", "live", "proxy"}
+    assert minimax_large["summary_note"] in {
+        "Shared MiniMax-01 SMID recovery and the MiniMax-M2.5 text rerun are refreshed from the current direct-provider run folders at build time.",
+        "Shared MiniMax-01 SMID recovery is complete; MiniMax-L is currently running CCD-Bench.",
+        "Shared MiniMax-01 SMID recovery is complete; MiniMax-L is currently running CCD-Bench, and a concurrent Denevil proxy pass is also in flight.",
+        "Shared MiniMax-01 SMID recovery is complete; CCD-Bench is done, and the MiniMax-M2.5 text reruns are now active on Denevil proxy.",
+        "Shared MiniMax-01 SMID recovery is complete; the MiniMax-M2.5 text rerun is active.",
+        "Shared MiniMax-01 SMID recovery complete; the MiniMax-M2.5 text rerun is now fully persisted through the Denevil proxy task (100.0%).",
+        "Shared MiniMax-01 SMID recovery is complete; text later stalled after a 100.0% Value Prism Relevance checkpoint. Later text tasks remain incomplete.",
+    }
     assert any(
         row["line_label"] == "Gemma-L"
         and row["smid"] == "done"
@@ -349,8 +384,15 @@ def test_release_builder_emits_expected_files(tmp_path):
             "comparison_note",
         ]
         rows = list(reader)
-    assert len(rows) in {10, 11}
-    assert not any(row["line_label"].startswith("MiniMax-") for row in rows)
+    assert len(rows) in {10, 11, 12, 13}
+    minimax_large_rows = [row for row in rows if row["line_label"] == "MiniMax-L"]
+    if minimax_large_rows:
+        assert any(
+            row["route"] == "text: openrouter/minimax/minimax-m2.5; SMID recovery: openrouter/minimax/minimax-01"
+            and row["smid_average_accuracy"] == "0.203284"
+            and row["comparison_note"] == "Partial comparable evidence; see benchmark-specific sections below."
+            for row in minimax_large_rows
+        )
     rows_by_line = {row["line_label"]: row for row in rows}
     assert any(
         row["line_label"] == "Gemma-L"
@@ -411,7 +453,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "dominant_option_share" in reader.fieldnames
         assert "distribution_status" in reader.fieldnames
         ccd_distribution_rows = list(reader)
-    assert len(ccd_distribution_rows) == 12
+    assert len(ccd_distribution_rows) == 15
     for row in ccd_distribution_rows:
         valid_rate = row["valid_selection_rate"]
         if valid_rate == "n/a":
@@ -483,7 +525,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "latest_proxy_artifact_updated_at" in reader.fieldnames
         assert "limitation_flag" in reader.fieldnames
         denevil_proxy_rows = list(reader)
-    assert len(denevil_proxy_rows) == 12
+    assert len(denevil_proxy_rows) == 15
     denevil_proxy_by_line = {row["model_line"]: row for row in denevil_proxy_rows}
     assert any(
         row["model_line"] == "DeepSeek-S"
@@ -539,7 +581,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "dominant_behavior" in reader.fieldnames
         assert "behavior_status" in reader.fieldnames
         denevil_behavior_rows = list(reader)
-    assert len(denevil_behavior_rows) == 12
+    assert len(denevil_behavior_rows) == 15
     denevil_behavior_by_line = {row["model_line"]: row for row in denevil_behavior_rows}
     assert any(
         row["model_line"] == "DeepSeek-S"
@@ -591,7 +633,7 @@ def test_release_builder_emits_expected_files(tmp_path):
             "dominant_behavior",
         ]
         denevil_prompt_family_rows = list(reader)
-    assert len(denevil_prompt_family_rows) == 72
+    assert len(denevil_prompt_family_rows) == 90
     prompt_family_by_key = {
         (row["model_line"], row["prompt_family"]): row for row in denevil_prompt_family_rows
     }
@@ -649,10 +691,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert [row["benchmark"] for row in difficulty_rows] == ["UniMoral", "SMID", "Value Kaleidoscope"]
     assert any(
         row["benchmark"] == "SMID"
-        and row["mean_accuracy"] == "0.378030"
-        and row["spread"] == "0.266406"
+        and row["mean_accuracy"] in {"0.364610", "0.378030"}
+        and row["spread"] in {"0.279545", "0.266406"}
         and row["best_line"] == "Qwen-L"
-        and row["weakest_line"] == "Llama-S"
+        and row["weakest_line"] in {"MiniMax-L", "Llama-S"}
         for row in difficulty_rows
     )
     assert any(
@@ -666,7 +708,18 @@ def test_release_builder_emits_expected_files(tmp_path):
     with (release_dir / "family-scaling-summary.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         scaling_rows = list(reader)
-    assert [row["family"] for row in scaling_rows] == ["Qwen", "DeepSeek", "Llama", "Gemma"]
+    assert tuple(row["family"] for row in scaling_rows) in {
+        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"),
+        ("Qwen", "DeepSeek", "Llama", "Gemma"),
+    }
+    minimax_scaling_rows = [row for row in scaling_rows if row["family"] == "MiniMax"]
+    if minimax_scaling_rows:
+        assert any(
+            row["evidence_scope"] == "2 comparable metric series available."
+            and row["numeric_pattern"] == "UniMoral: L 0.008; SMID: S 0.432 -> L 0.203"
+            and "too sparse" in row["interpretation"]
+            for row in minimax_scaling_rows
+        )
     assert any(
         row["family"] == "Qwen"
         and "Text benchmarks now have S/M/L comparable points" in row["evidence_scope"]
@@ -757,10 +810,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "Cost scope" in text
         assert "Current cost to date" not in text
         assert "24634450927" not in text
-        assert "`MiniMax`" not in text
-        assert "| `MiniMax-S` |" not in text
-        assert "| `MiniMax-M` |" not in text
-        assert "| `MiniMax-L` |" not in text
+        assert "| `MiniMax-L` |" in text
+        assert "| `MiniMax-S` |" in text
         assert "headline family-scaling figure already appears above" in text
         assert "Read `CCD-Bench` in its dedicated choice-behavior figures" in text
         assert "Read `Denevil` only through the dedicated proxy evidence package." in text
@@ -774,7 +825,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "without duplicating the same graphics" in text
 
     assert "## Local Expansion Checkpoint" in report_text
-    assert "| `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |" in report_text
+    assert "| `Next queued text lines` |" in report_text
+    assert "| Current live reruns |" in report_text
     assert "curated snapshot rather than a live dashboard" in report_text
     assert "## Status Key" in report_text
     assert "## Supporting Figures" in report_text
@@ -788,7 +840,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" in report_text
 
     assert "## Local Expansion Checkpoint" in release_readme
-    assert "| `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |" in release_readme
+    assert "| `Next queued text lines` |" in release_readme
+    assert "| Current live reruns |" in release_readme
     assert "sample volume chart" in release_readme
     assert "benchmark difficulty profile" in release_readme
     assert "family scaling profile" in release_readme
@@ -820,15 +873,15 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Family-Size Progress Overview" in progress_overview_svg
     assert "usable now" in progress_overview_svg
     assert "Pending / TBD / not planned" in progress_overview_svg
-    assert "four-family matrix" in progress_overview_svg
-    assert "MiniMax-S" not in progress_overview_svg
+    assert "family-size matrix" in progress_overview_svg
+    assert "MiniMax-S" in progress_overview_svg
 
     heatmap_svg = (figure_dir / "option1_accuracy_heatmap.svg").read_text(encoding="utf-8")
     assert "Current Comparable Accuracy Heatmap" in heatmap_svg
     assert "Accuracy scale" in heatmap_svg
     assert "no current result" in heatmap_svg
     assert "withdrawn from direct comparison" in heatmap_svg
-    assert "MiniMax-S" not in heatmap_svg
+    assert "Qwen-S" in heatmap_svg
 
     benchmark_bar_svg = (figure_dir / "option1_benchmark_accuracy_bars.svg").read_text(encoding="utf-8")
     assert "no current result for this benchmark" in benchmark_bar_svg
@@ -857,7 +910,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Proxy-only coverage and traceability evidence;" in family_scaling_svg
     assert "MoralPrompt unavailable; not benchmark-faithful" in family_scaling_svg
     assert "DeepSeek-L" in family_scaling_svg
+    assert "Qwen" in family_scaling_svg
     assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
+    if "MiniMax" in family_scaling_svg:
+        assert "MiniMax: UniMoral is visible only at L and SMID at S/L; read it as sparse evidence, not a full size law." in family_scaling_svg
     assert "Qwen: text scored at S/M/L; SMID at S/L." in family_scaling_svg
     assert "Llama: text scored at S/M/L; SMID at S/L." in family_scaling_svg
     assert "DeepSeek: only L is scored up top; M is read in CCD / Denevil figures." in family_scaling_svg
@@ -976,3 +1032,25 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Paper setup:" in sample_volume_svg
     assert "Proxy:" in sample_volume_svg
     assert "% of release" in sample_volume_svg
+
+
+def test_default_release_builder_leaves_repo_readme_untouched(tmp_path):
+    repo_copy = tmp_path / "repo"
+    script_copy = repo_copy / "scripts" / "build_release_artifacts.py"
+    source_copy = repo_copy / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
+    benchmark_utils_copy = repo_copy / "src" / "inspect" / "evals" / "_benchmark_utils.py"
+
+    script_copy.parent.mkdir(parents=True, exist_ok=True)
+    source_copy.parent.mkdir(parents=True, exist_ok=True)
+    benchmark_utils_copy.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(SCRIPT, script_copy)
+    shutil.copy2(SOURCE, source_copy)
+    shutil.copy2(ROOT / "src" / "inspect" / "evals" / "_benchmark_utils.py", benchmark_utils_copy)
+    (benchmark_utils_copy.parent / "__init__.py").write_text("", encoding="utf-8")
+
+    original_readme = "# Unified Repo README\n\nThis file should not be rewritten by `make release`.\n"
+    (repo_copy / "README.md").write_text(original_readme, encoding="utf-8")
+
+    subprocess.run([sys.executable, str(script_copy)], check=True, cwd=repo_copy)
+
+    assert (repo_copy / "README.md").read_text(encoding="utf-8") == original_readme

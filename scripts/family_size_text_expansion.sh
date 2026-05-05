@@ -7,9 +7,32 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 RUNNER="$ROOT/src/inspect/run.py"
+PROVIDER_CONFIG="$ROOT/provider_config.sh"
 DATA_ROOT="${DATA_ROOT:-$(cd "$ROOT/.." && pwd)/data}"
 UV_BIN="${UV_BIN:-$(command -v uv 2>/dev/null || true)}"
 VENV_PYTHON="${VENV_PYTHON:-$ROOT/.venv/bin/python}"
+
+# Keep task specs and relative artifact paths stable even when the launcher is
+# invoked from outside the repo root (for example via nohup or another script).
+cd "$ROOT"
+
+load_env_file() {
+  local env_file="$1"
+  if [[ -f "$env_file" ]]; then
+    set -a
+    # shellcheck source=/dev/null
+    source "$env_file"
+    set +a
+  fi
+}
+
+load_env_file "$ROOT/.env"
+load_env_file "$ROOT/.env.local"
+
+if [[ -f "$PROVIDER_CONFIG" ]]; then
+  # shellcheck source=/dev/null
+  source "$PROVIDER_CONFIG"
+fi
 
 if [[ -n "${UV_BIN}" ]] && { [[ -x "${UV_BIN}" ]] || command -v "${UV_BIN}" >/dev/null 2>&1; }; then
   RUN_PREFIX=("${UV_BIN}" "run" "--package" "cei-inspect" "python")
@@ -34,7 +57,6 @@ DENEVIL_DATA_FILE="${DENEVIL_DATA_FILE:-$DATA_ROOT/denevil/data_hybrid.jsonl}"
 CCD_BENCH_DATA_FILE="${CCD_BENCH_DATA_FILE:-$DATA_ROOT/ccd-bench/CCD-Bench.json}"
 VALUEPRISM_RELEVANCE_FILE="${VALUEPRISM_RELEVANCE_FILE:-$DATA_ROOT/valueprism/relevance/relevance_test.csv}"
 VALUEPRISM_VALENCE_FILE="${VALUEPRISM_VALENCE_FILE:-$DATA_ROOT/valueprism/valence/valence_test.csv}"
-MINIMAX_TEXT_NO_THINK="${MINIMAX_TEXT_NO_THINK:-0}"
 
 # Cheapest-first rough order based on current OpenRouter pricing and the observed
 # token profile of the completed non-image Llama line.
@@ -86,15 +108,10 @@ latest_eval_file() {
   ls -1t "$log_dir"/*.eval 2>/dev/null | head -n 1 || true
 }
 
-latest_eval_file_in_dir() {
-  local log_dir="$1"
-  ls -1t "$log_dir"/*.eval 2>/dev/null | head -n 1 || true
-}
-
-show_live_eval_progress_from_log_dir() {
-  local log_dir="$1"
+show_live_eval_progress() {
+  local job="$1"
   local eval_path
-  eval_path="$(latest_eval_file_in_dir "$log_dir")"
+  eval_path="$(latest_eval_file "$job")"
   [[ -z "$eval_path" ]] && return 0
 
   python3 - "$eval_path" <<'PY'
@@ -154,11 +171,6 @@ except BadZipFile:
 PY
 }
 
-show_live_eval_progress() {
-  local job="$1"
-  show_live_eval_progress_from_log_dir "$LOG_BASE/$job"
-}
-
 job_run_dir() {
   local job="$1"
   echo "$RUN_BASE/$job"
@@ -171,32 +183,12 @@ job_pid_file() {
 
 is_running_pid() {
   local pid="$1"
-  [[ -n "$pid" ]] || return 1
-  python3 - "$pid" <<'PY'
-from __future__ import annotations
-
-import os
-import sys
-
-pid = int(sys.argv[1])
-try:
-    os.kill(pid, 0)
-except ProcessLookupError:
-    raise SystemExit(1)
-except PermissionError:
-    # The sandbox can block direct signals to sibling workers even when the
-    # process is still live, so EPERM counts as "running".
-    raise SystemExit(0)
-except OSError:
-    raise SystemExit(1)
-else:
-    raise SystemExit(0)
-PY
+  kill -0 "$pid" 2>/dev/null
 }
 
 find_live_job_pid() {
   local job="$1"
-  local pid_file pid model log_dir
+  local pid_file pid model
 
   pid_file="$(job_pid_file "$job")"
   if [[ -f "$pid_file" ]]; then
@@ -208,177 +200,7 @@ find_live_job_pid() {
   fi
 
   model="$(job_model "$job")"
-  log_dir="$LOG_BASE/$job"
-  python3 - "$model" "$log_dir" <<'PY'
-from __future__ import annotations
-
-import subprocess
-import sys
-
-model = sys.argv[1]
-log_dir = sys.argv[2]
-
-try:
-    completed = subprocess.run(
-        ["ps", "-axo", "pid=,command="],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        text=True,
-        timeout=2,
-        check=False,
-    )
-except (FileNotFoundError, PermissionError, subprocess.TimeoutExpired):
-    raise SystemExit(1)
-
-for raw in completed.stdout.splitlines():
-    line = raw.strip()
-    if not line or "src/inspect/run.py" not in line:
-        continue
-    if model not in line or log_dir not in line:
-        continue
-    pid, _, _ = line.partition(" ")
-    if pid:
-        print(pid)
-        raise SystemExit(0)
-
-raise SystemExit(1)
-PY
-  if [[ -d "$log_dir/_inspect_traces" ]]; then
-    python3 - "$log_dir" <<'PY'
-from __future__ import annotations
-
-import subprocess
-import sys
-from pathlib import Path
-
-log_dir = Path(sys.argv[1])
-trace_paths = sorted(
-    (path for path in (log_dir / "_inspect_traces").glob("*.log") if path.is_file()),
-    key=lambda path: path.stat().st_mtime,
-    reverse=True,
-)
-
-for path in trace_paths:
-    try:
-        completed = subprocess.run(
-            ["lsof", "-Fpc", str(path)],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            text=True,
-            timeout=2,
-            check=False,
-        )
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        continue
-
-    current_pid = ""
-    for raw in completed.stdout.splitlines():
-        if not raw:
-            continue
-        tag, value = raw[0], raw[1:]
-        if tag == "p":
-            current_pid = value
-        elif tag == "c" and current_pid and "python" in value.lower():
-            print(current_pid)
-            raise SystemExit(0)
-
-raise SystemExit(1)
-PY
-  fi
-}
-
-find_live_job_process_any_run() {
-  local job="$1"
-  local model
-  model="$(job_model "$job")"
-  python3 - "$model" "$job" <<'PY'
-from __future__ import annotations
-
-import re
-import subprocess
-import sys
-
-model = sys.argv[1]
-job = sys.argv[2]
-pattern = re.compile(r"--log_dir\s+(\S+/results/inspect/logs/([^/\s]+)/" + re.escape(job) + r")\b")
-
-try:
-    completed = subprocess.run(
-        ["ps", "-axo", "pid=,command="],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        text=True,
-        timeout=2,
-        check=False,
-    )
-except (FileNotFoundError, PermissionError, subprocess.TimeoutExpired):
-    raise SystemExit(1)
-
-for raw in completed.stdout.splitlines():
-    line = raw.strip()
-    if not line or "src/inspect/run.py" not in line or model not in line:
-        continue
-    match = re.match(r"(\d+)\s+(.*)", line)
-    if not match:
-        continue
-    pid, command = match.groups()
-    log_match = pattern.search(command)
-    if not log_match:
-        continue
-    log_dir, run_id = log_match.groups()
-    print(f"{pid}\t{run_id}\t{log_dir}")
-    raise SystemExit(0)
-
-raise SystemExit(1)
-PY
-  python3 - "$ROOT/results/inspect/logs" "$job" <<'PY'
-from __future__ import annotations
-
-import subprocess
-import sys
-from pathlib import Path
-
-logs_root = Path(sys.argv[1])
-job = sys.argv[2]
-
-trace_paths = sorted(
-    (
-        path
-        for path in logs_root.glob(f"*/{job}/_inspect_traces/*.log")
-        if path.is_file()
-    ),
-    key=lambda path: path.stat().st_mtime,
-    reverse=True,
-)
-
-for path in trace_paths:
-    try:
-        completed = subprocess.run(
-            ["lsof", "-Fpc", str(path)],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            text=True,
-            timeout=2,
-            check=False,
-        )
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        continue
-
-    current_pid = ""
-    for raw in completed.stdout.splitlines():
-        if not raw:
-            continue
-        tag, value = raw[0], raw[1:]
-        if tag == "p":
-            current_pid = value
-        elif tag == "c" and current_pid and "python" in value.lower():
-            run_id = path.parents[2].name
-            log_dir = path.parents[1]
-            print(f"{current_pid}\t{run_id}\t{log_dir}")
-            raise SystemExit(0)
-
-raise SystemExit(1)
-PY
+  pgrep -f "src/inspect/run.py.*${model}" 2>/dev/null | head -n 1 || true
 }
 
 require_dir() {
@@ -453,10 +275,7 @@ job_model() {
     llama_70b_medium) echo "openrouter/meta-llama/llama-3.3-70b-instruct" ;;
     llama_4_maverick_large) echo "openrouter/meta-llama/llama-4-maverick" ;;
     minimax_m2_5_medium) echo "openrouter/minimax/minimax-m2.5" ;;
-    # The original 32B Qwen-distill route is currently single-homed on NextBit
-    # and repeatedly falls into provider-error backoff. Use the more stable
-    # 70B Llama-distill route for the medium DeepSeek line instead.
-    deepseek_r1_qwen_32b_medium) echo "openrouter/deepseek/deepseek-r1-distill-llama-70b" ;;
+    deepseek_r1_qwen_32b_medium) echo "openrouter/deepseek/deepseek-r1-distill-qwen-32b" ;;
     minimax_m2_7_large) echo "openrouter/minimax/minimax-m2.7" ;;
     *)
       echo "Unknown job for model lookup: $job" >&2
@@ -468,37 +287,7 @@ job_model() {
 job_max_connections() {
   local job="$1"
   case "$job" in
-    qwen_32b_large)
-      echo "${QWEN_32B_LARGE_MAX_CONNECTIONS:-2}"
-      ;;
-    llama_4_maverick_large)
-      echo "${LLAMA_4_MAVERICK_LARGE_MAX_CONNECTIONS:-8}"
-      ;;
-    deepseek_r1_qwen_32b_medium)
-      echo "${DEEPSEEK_R1_QWEN_32B_MEDIUM_MAX_CONNECTIONS:-16}"
-      ;;
-    gemma_27b_large|gemma_12b_medium|qwen_14b_medium|llama_70b_medium)
-      echo 2
-      ;;
-    *)
-      echo 1
-      ;;
-  esac
-}
-
-job_denevil_max_connections() {
-  local job="$1"
-  case "$job" in
-    qwen_32b_large)
-      echo "${QWEN_32B_LARGE_DENEVIL_MAX_CONNECTIONS:-4}"
-      ;;
-    llama_4_maverick_large)
-      echo "${LLAMA_4_MAVERICK_LARGE_DENEVIL_MAX_CONNECTIONS:-8}"
-      ;;
-    deepseek_r1_qwen_32b_medium)
-      echo "${DEEPSEEK_R1_QWEN_32B_MEDIUM_DENEVIL_MAX_CONNECTIONS:-16}"
-      ;;
-    gemma_27b_large|gemma_12b_medium|qwen_14b_medium|llama_70b_medium)
+    gemma_27b_large|gemma_12b_medium|qwen_14b_medium|qwen_32b_large|llama_70b_medium)
       echo 2
       ;;
     *)
@@ -513,13 +302,6 @@ job_reasoning_effort() {
     qwen_14b_medium|qwen_32b_large)
       echo "none"
       ;;
-    minimax_m2_5_medium|minimax_m2_7_large)
-      if [[ "$MINIMAX_TEXT_NO_THINK" == "1" ]]; then
-        echo "none"
-      else
-        echo ""
-      fi
-      ;;
     *)
       echo ""
       ;;
@@ -531,28 +313,6 @@ job_model_args() {
   case "$job" in
     qwen_14b_medium|qwen_32b_large)
       echo "reasoning_enabled=False"
-      ;;
-    minimax_m2_5_medium|minimax_m2_7_large)
-      if [[ "$MINIMAX_TEXT_NO_THINK" == "1" ]]; then
-        echo "reasoning_enabled=False"
-      else
-        echo ""
-      fi
-      ;;
-    *)
-      echo ""
-      ;;
-  esac
-}
-
-job_model_args_json() {
-  local job="$1"
-  case "$job" in
-    llama_4_maverick_large)
-      echo '{"provider":{"ignore":["novita"],"allow_fallbacks":true}}'
-      ;;
-    deepseek_r1_qwen_32b_medium)
-      echo '{"provider":{"order":["deepinfra"],"allow_fallbacks":false}}'
       ;;
     *)
       echo ""
@@ -566,13 +326,6 @@ job_extra_body_json() {
     qwen_14b_medium|qwen_32b_large)
       echo '{"chat_template_kwargs":{"enable_thinking":false}}'
       ;;
-    minimax_m2_5_medium|minimax_m2_7_large)
-      if [[ "$MINIMAX_TEXT_NO_THINK" == "1" ]]; then
-        echo '{"chat_template_kwargs":{"enable_thinking":false}}'
-      else
-        echo ""
-      fi
-      ;;
     *)
       echo ""
       ;;
@@ -585,13 +338,6 @@ job_prompt_prefix() {
     qwen_14b_medium|qwen_32b_large)
       echo "/no_think"
       ;;
-    minimax_m2_5_medium|minimax_m2_7_large)
-      if [[ "$MINIMAX_TEXT_NO_THINK" == "1" ]]; then
-        echo "/no_think"
-      else
-        echo ""
-      fi
-      ;;
     *)
       echo ""
       ;;
@@ -601,20 +347,67 @@ job_prompt_prefix() {
 job_min_max_tokens() {
   local job="$1"
   case "$job" in
+    minimax_m2_5_medium|minimax_m2_7_large)
+      echo "2048"
+      ;;
     qwen_14b_medium|qwen_32b_large)
       echo "128"
-      ;;
-    minimax_m2_5_medium|minimax_m2_7_large)
-      if [[ "$MINIMAX_TEXT_NO_THINK" == "1" ]]; then
-        echo "128"
-      else
-        echo ""
-      fi
       ;;
     *)
       echo ""
       ;;
   esac
+}
+
+normalize_routing_model() {
+  local model="$1"
+  model="${model#openrouter/}"
+  model="${model#openai/}"
+  echo "$model"
+}
+
+configure_routed_model() {
+  local requested_model="$1"
+  local canonical_model provider_entry
+
+  ROUTED_REQUESTED_MODEL="$requested_model"
+  ROUTED_CANONICAL_MODEL="$(normalize_routing_model "$requested_model")"
+  ROUTED_PROVIDER="openrouter"
+  ROUTED_PROVIDER_MODEL="$ROUTED_CANONICAL_MODEL"
+  ROUTED_KEY_VAR="OPENROUTER_API_KEY"
+  ROUTED_BASE_URL="https://openrouter.ai/api/v1"
+  ROUTED_MODEL="openai/$ROUTED_CANONICAL_MODEL"
+
+  if declare -F setup_model_provider >/dev/null 2>&1; then
+    setup_model_provider "$ROUTED_CANONICAL_MODEL"
+    ROUTED_MODEL="openai/$EFFECTIVE_MODEL"
+    ROUTED_BASE_URL="${OPENAI_BASE_URL:-$ROUTED_BASE_URL}"
+    if provider_entry=$(resolve_provider "$ROUTED_CANONICAL_MODEL" 2>/dev/null); then
+      ROUTED_PROVIDER="${provider_entry%%|*}"
+      ROUTED_PROVIDER_MODEL="${provider_entry#*|}"
+      ROUTED_KEY_VAR="$(provider_key_var "$ROUTED_PROVIDER")"
+    fi
+  fi
+
+  if [[ -n "$ROUTED_KEY_VAR" ]] && [[ -n "${!ROUTED_KEY_VAR:-}" ]]; then
+    ROUTED_KEY_STATE="present"
+  else
+    ROUTED_KEY_STATE="missing"
+  fi
+}
+
+record_routing_metadata() {
+  local job="$1"
+  local task_name="$2"
+  local start_at="$3"
+  local routing_file
+  routing_file="$(job_run_dir "$job")/routing_metadata.csv"
+
+  if [[ ! -f "$routing_file" ]]; then
+    echo "task_name,start_at,requested_model,canonical_model,provider,provider_model,base_url,key_var,key_state" > "$routing_file"
+  fi
+
+  echo "$task_name,$start_at,$ROUTED_REQUESTED_MODEL,$ROUTED_CANONICAL_MODEL,$ROUTED_PROVIDER,$ROUTED_PROVIDER_MODEL,$ROUTED_BASE_URL,$ROUTED_KEY_VAR,$ROUTED_KEY_STATE" >> "$routing_file"
 }
 
 run_task() {
@@ -624,22 +417,24 @@ run_task() {
   local model="$4"
   local max_connections="$5"
 
-  local run_dir output_path log_dir start_at end_at rc reasoning_effort model_args model_args_json extra_body_json prompt_prefix min_max_tokens
+  local run_dir output_path log_dir runtime_home start_at end_at rc reasoning_effort model_args extra_body_json prompt_prefix min_max_tokens
   run_dir="$(job_run_dir "$job")"
   output_path="$run_dir/${task_name}.txt"
   log_dir="$LOG_BASE/$job"
-  mkdir -p "$run_dir" "$log_dir"
+  runtime_home="$run_dir/_runtime_home"
+  mkdir -p "$run_dir" "$log_dir" "$runtime_home"
   reasoning_effort="$(job_reasoning_effort "$job")"
   model_args="$(job_model_args "$job")"
-  model_args_json="$(job_model_args_json "$job")"
   extra_body_json="$(job_extra_body_json "$job")"
   prompt_prefix="$(job_prompt_prefix "$job")"
   min_max_tokens="$(job_min_max_tokens "$job")"
+  configure_routed_model "$model"
 
   start_at="$(now_iso)"
+  record_routing_metadata "$job" "$task_name" "$start_at"
   if (
     set +e
-    echo "[$start_at] START job=$job task=$task_name model=$model max_connections=$max_connections reasoning_effort=${reasoning_effort:-default} model_args=${model_args:-default} model_args_json=${model_args_json:-default} extra_body_json=${extra_body_json:-default} prompt_prefix=${prompt_prefix:-default} min_max_tokens=${min_max_tokens:-default}"
+    echo "[$start_at] START job=$job task=$task_name model=$model routed_model=$ROUTED_MODEL provider=$ROUTED_PROVIDER provider_model=$ROUTED_PROVIDER_MODEL base_url=$ROUTED_BASE_URL key_var=$ROUTED_KEY_VAR key_state=$ROUTED_KEY_STATE max_connections=$max_connections reasoning_effort=${reasoning_effort:-default} model_args=${model_args:-default} extra_body_json=${extra_body_json:-default} prompt_prefix=${prompt_prefix:-default} min_max_tokens=${min_max_tokens:-default}"
     export PYTHONUNBUFFERED=1
     if [[ -n "$min_max_tokens" ]]; then
       export CEI_MIN_MAX_TOKENS="$min_max_tokens"
@@ -651,15 +446,20 @@ run_task() {
     else
       unset CEI_PROMPT_PREFIX || true
     fi
+    if [[ "$ROUTED_KEY_STATE" != "present" ]]; then
+      echo "[$(now_iso)] ROUTING_PRECHECK_FAILED job=$job task=$task_name provider=$ROUTED_PROVIDER key_var=$ROUTED_KEY_VAR reason=missing_provider_api_key"
+      exit 86
+    fi
     "${RUN_PREFIX[@]}" "$RUNNER" \
       --tasks "$task_spec" \
-      --model "$model" \
+      --model "$ROUTED_MODEL" \
+      --model_base_url "$ROUTED_BASE_URL" \
+      --home_dir "$runtime_home" \
       --temperature 0 \
       --no_sandbox \
       --max_connections "$max_connections" \
       --log_dir "$log_dir" \
       ${model_args:+--model_args "$model_args"} \
-      ${model_args_json:+--model_args_json "$model_args_json"} \
       ${extra_body_json:+--extra_body_json "$extra_body_json"} \
       ${reasoning_effort:+--reasoning_effort "$reasoning_effort"}
     rc=$?
@@ -679,18 +479,11 @@ run_task() {
 
 run_job() {
   local job="$1"
-  local run_dir model max_connections denevil_max_connections worker_pid_file job_failed existing_worker_pid
+  local run_dir model max_connections worker_pid_file job_failed
   run_dir="$(job_run_dir "$job")"
   mkdir -p "$run_dir"
   worker_pid_file="$(job_pid_file "$job")"
   job_failed=0
-
-  existing_worker_pid="$(find_live_job_pid "$job" || true)"
-  if [[ -n "$existing_worker_pid" && "$existing_worker_pid" != "$$" ]]; then
-    echo "[$(now_iso)] SKIP job=$job reason=already_running worker_pid=$existing_worker_pid"
-    return 0
-  fi
-
   echo "$$" > "$worker_pid_file"
 
   if [[ "${SKIP_COMPLETED:-0}" == "1" && -f "$run_dir/job_done.txt" ]]; then
@@ -699,13 +492,8 @@ run_job() {
     return 0
   fi
 
-  # Clear stale terminal markers before a retry so monitoring does not report
-  # a rerun as both "done" and "running" at the same time.
-  rm -f "$run_dir/job_done.txt" "$run_dir/job_failed.txt"
-
   model="$(job_model "$job")"
   max_connections="$(job_max_connections "$job")"
-  denevil_max_connections="$(job_denevil_max_connections "$job")"
 
   require_dir UNIMORAL_DATA_DIR
   require_file CCD_BENCH_DATA_FILE
@@ -728,7 +516,7 @@ run_job() {
   run_or_skip_task "$job" "value_prism_relevance" "src/inspect/evals/value_kaleidoscope.py::value_prism_relevance" "$model" "$max_connections" || job_failed=1
   run_or_skip_task "$job" "value_prism_valence" "src/inspect/evals/value_kaleidoscope.py::value_prism_valence" "$model" "$max_connections" || job_failed=1
   run_or_skip_task "$job" "ccd_bench_selection" "src/inspect/evals/ccd_bench.py::ccd_bench_selection" "$model" "$max_connections" || job_failed=1
-  run_or_skip_task "$job" "denevil_fulcra_proxy_generation" "src/inspect/evals/denevil.py::denevil_fulcra_proxy_generation" "$model" "$denevil_max_connections" || job_failed=1
+  run_or_skip_task "$job" "denevil_fulcra_proxy_generation" "src/inspect/evals/denevil.py::denevil_fulcra_proxy_generation" "$model" 1 || job_failed=1
 
   if [[ "$job_failed" == "0" ]]; then
     now_iso > "$run_dir/job_done.txt"
@@ -791,9 +579,7 @@ launch_master() {
 
 show_status() {
   local pid job run_dir status_file current_job worker_pid pid_file
-  local current_run_has_live_elsewhere=0
   echo "[master]"
-  echo "  run_id: $RUN_ID"
   if [[ -f "$MASTER_PIDFILE" ]]; then
     pid="$(cat "$MASTER_PIDFILE")"
     if is_running_pid "$pid"; then
@@ -801,7 +587,7 @@ show_status() {
       echo "  pid: $pid"
     elif [[ -f "$CURRENT_JOB_FILE" ]]; then
       current_job="$(cat "$CURRENT_JOB_FILE")"
-      worker_pid="$(find_live_job_pid "$current_job" || true)"
+      worker_pid="$(find_live_job_pid "$current_job")"
       if [[ -n "$worker_pid" ]]; then
         echo "  state: worker_running_no_master"
         echo "  stale_master_pid: $pid"
@@ -832,30 +618,14 @@ show_status() {
     run_dir="$(job_run_dir "$job")"
     status_file="$run_dir/task_status.csv"
     pid_file="$(job_pid_file "$job")"
-    worker_pid="$(find_live_job_pid "$job" || true)"
-    local live_elsewhere=""
-    local worker_run_id=""
-    local worker_log_dir=""
+    worker_pid="$(find_live_job_pid "$job")"
     echo "[$job]"
     if [[ -n "$worker_pid" ]]; then
       echo "  worker_state: running"
       echo "  worker_pid: $worker_pid"
-    else
-      live_elsewhere="$(find_live_job_process_any_run "$job" 2>/dev/null || true)"
-      if [[ -n "$live_elsewhere" ]]; then
-        IFS=$'\t' read -r worker_pid worker_run_id worker_log_dir <<< "$live_elsewhere"
-      fi
-      if [[ -n "$worker_run_id" && "$worker_run_id" != "$RUN_ID" ]]; then
-          current_run_has_live_elsewhere=1
-          echo "  worker_state: running_elsewhere"
-          echo "  worker_pid: $worker_pid"
-          echo "  worker_run_id: $worker_run_id"
-          echo "  worker_log_dir: $worker_log_dir"
-          echo "  note: set RUN_ID=$worker_run_id to inspect this rerun directly"
-      elif [[ -f "$pid_file" ]]; then
+    elif [[ -f "$pid_file" ]]; then
       echo "  worker_state: stale_pid"
       echo "  worker_pid: $(cat "$pid_file")"
-    fi
     fi
     if [[ -f "$status_file" ]]; then
       echo "  recent:"
@@ -867,14 +637,8 @@ show_status() {
       echo "  completed_at: $(cat "$run_dir/job_done.txt")"
     elif [[ "$job" == "${current_job:-}" ]]; then
       show_live_eval_progress "$job"
-    elif [[ -n "$worker_log_dir" ]]; then
-      show_live_eval_progress_from_log_dir "$worker_log_dir"
     fi
   done < <(selected_jobs)
-
-  if (( current_run_has_live_elsewhere > 0 )); then
-    echo "  note: current RUN_ID is not the live rerun for at least one selected job"
-  fi
 }
 
 case "${1:-}" in

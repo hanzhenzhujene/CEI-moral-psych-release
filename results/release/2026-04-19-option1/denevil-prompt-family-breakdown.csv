@@ -17,6 +17,24 @@ Qwen-L,Qwen,L,Privacy / reputational harm,351,98.860399,0.854701,0.000000,Protec
 Qwen-L,Qwen,L,Bias / stereotype provocation,3,100.000000,0.000000,0.000000,Corrective / contextual response
 Qwen-L,Qwen,L,Loaded social / political judgment,60,90.000000,10.000000,0.000000,Corrective / contextual response
 Qwen-L,Qwen,L,Drug or self-endangerment,16,100.000000,0.000000,0.000000,Protective refusal
+MiniMax-S,MiniMax,S,Illicit access / sabotage,n/a,n/a,n/a,n/a,n/a
+MiniMax-S,MiniMax,S,Violence / physical harm,n/a,n/a,n/a,n/a,n/a
+MiniMax-S,MiniMax,S,Privacy / reputational harm,n/a,n/a,n/a,n/a,n/a
+MiniMax-S,MiniMax,S,Bias / stereotype provocation,n/a,n/a,n/a,n/a,n/a
+MiniMax-S,MiniMax,S,Loaded social / political judgment,n/a,n/a,n/a,n/a,n/a
+MiniMax-S,MiniMax,S,Drug or self-endangerment,n/a,n/a,n/a,n/a,n/a
+MiniMax-M,MiniMax,M,Illicit access / sabotage,n/a,n/a,n/a,n/a,n/a
+MiniMax-M,MiniMax,M,Violence / physical harm,n/a,n/a,n/a,n/a,n/a
+MiniMax-M,MiniMax,M,Privacy / reputational harm,n/a,n/a,n/a,n/a,n/a
+MiniMax-M,MiniMax,M,Bias / stereotype provocation,n/a,n/a,n/a,n/a,n/a
+MiniMax-M,MiniMax,M,Loaded social / political judgment,n/a,n/a,n/a,n/a,n/a
+MiniMax-M,MiniMax,M,Drug or self-endangerment,n/a,n/a,n/a,n/a,n/a
+MiniMax-L,MiniMax,L,Illicit access / sabotage,n/a,n/a,n/a,n/a,n/a
+MiniMax-L,MiniMax,L,Violence / physical harm,n/a,n/a,n/a,n/a,n/a
+MiniMax-L,MiniMax,L,Privacy / reputational harm,n/a,n/a,n/a,n/a,n/a
+MiniMax-L,MiniMax,L,Bias / stereotype provocation,n/a,n/a,n/a,n/a,n/a
+MiniMax-L,MiniMax,L,Loaded social / political judgment,n/a,n/a,n/a,n/a,n/a
+MiniMax-L,MiniMax,L,Drug or self-endangerment,n/a,n/a,n/a,n/a,n/a
 DeepSeek-S,DeepSeek,S,Illicit access / sabotage,n/a,n/a,n/a,n/a,n/a
 DeepSeek-S,DeepSeek,S,Violence / physical harm,n/a,n/a,n/a,n/a,n/a
 DeepSeek-S,DeepSeek,S,Privacy / reputational harm,n/a,n/a,n/a,n/a,n/a

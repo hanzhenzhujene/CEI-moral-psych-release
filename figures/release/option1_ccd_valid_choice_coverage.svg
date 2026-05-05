@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 912" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1050" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,23 +35,23 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1440" height="912" class="canvas"/>
-<rect x="24" y="24" width="1392" height="864" rx="22" class="panel"/>
+<rect x="0" y="0" width="1440" height="1050" class="canvas"/>
+<rect x="24" y="24" width="1392" height="1002" rx="22" class="panel"/>
 <title>Appendix QA: CCD-Bench valid-choice coverage, not accuracy.</title>
 <desc>Appendix QA only. Horizontal bar chart comparing CCD-Bench valid-choice coverage across model lines. Coverage here means the share of CCD prompts whose saved visible answer exposed one parseable integer in 1-10. It is a formatting / surfaced-choice coverage metric, not benchmark-faithful accuracy.</desc>
 <text x="48" y="64" class="title">Appendix QA: CCD-Bench valid-choice coverage, not accuracy.</text>
 <text x="48" y="88" class="subtitle">Appendix QA only. Each bar shows the share of CCD-Bench prompts whose saved visible answer exposed one parseable integer in 1-10.</text>
 <text x="48" y="108" class="subtitle">This is the first CCD public check: did the line surface a valid visible choice at all? Hidden reasoning does not count until it reaches the saved answer field.</text>
 <text x="48" y="128" class="subtitle">Hatched rows are missing (`n/a`) rather than zero. Near-ceiling labels keep exact percentages so 99.8% does not get mistaken for 100.0%.</text>
-<line x1="310.00" y1="202" x2="310.00" y2="788" class="guide"/>
+<line x1="310.00" y1="202" x2="310.00" y2="926" class="guide"/>
 <text x="310.00" y="194" text-anchor="middle" class="small">0%</text>
-<line x1="500.00" y1="202" x2="500.00" y2="788" class="guide"/>
+<line x1="500.00" y1="202" x2="500.00" y2="926" class="guide"/>
 <text x="500.00" y="194" text-anchor="middle" class="small">25%</text>
-<line x1="690.00" y1="202" x2="690.00" y2="788" class="guide"/>
+<line x1="690.00" y1="202" x2="690.00" y2="926" class="guide"/>
 <text x="690.00" y="194" text-anchor="middle" class="small">50%</text>
-<line x1="880.00" y1="202" x2="880.00" y2="788" class="guide"/>
+<line x1="880.00" y1="202" x2="880.00" y2="926" class="guide"/>
 <text x="880.00" y="194" text-anchor="middle" class="small">75%</text>
-<line x1="1070.00" y1="202" x2="1070.00" y2="788" class="guide"/>
+<line x1="1070.00" y1="202" x2="1070.00" y2="926" class="guide"/>
 <text x="1070.00" y="194" text-anchor="middle" class="small">100%</text>
 <text x="292" y="231.00" text-anchor="end" class="label">Qwen-S</text>
 <rect x="310" y="212" width="760" height="28" rx="10" class="muted-bar"/>
@@ -68,50 +68,63 @@
 <rect x="310" y="304" width="760.00" height="28" rx="10" fill="#2dd4bf" stroke="#ffffff" stroke-width="1"/>
 <text x="1060.00" y="323.00" text-anchor="end" class="celltext-dark">100.0%</text>
 <text x="1092" y="323.00" class="label">valid 2,182 / 2,182</text>
-<text x="292" y="369.00" text-anchor="end" class="label">DeepSeek-S</text>
+<text x="292" y="369.00" text-anchor="end" class="label">MiniMax-S</text>
 <rect x="310" y="350" width="760" height="28" rx="10" class="muted-bar"/>
 <rect x="310" y="350" width="760" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
 <text x="690.00" y="369.00" text-anchor="middle" class="small">n/a — no released CCD route</text>
-<text x="292" y="415.00" text-anchor="end" class="label">DeepSeek-M</text>
+<text x="292" y="415.00" text-anchor="end" class="label">MiniMax-M</text>
 <rect x="310" y="396" width="760" height="28" rx="10" class="muted-bar"/>
-<text x="318.00" y="415.00" class="small">0.0%</text>
-<text x="1092" y="415.00" class="label">valid 0 / 2,182</text>
-<text x="292" y="461.00" text-anchor="end" class="label">DeepSeek-L</text>
+<rect x="310" y="396" width="760" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
+<text x="690.00" y="415.00" text-anchor="middle" class="small">n/a — no released CCD route</text>
+<text x="292" y="461.00" text-anchor="end" class="label">MiniMax-L</text>
 <rect x="310" y="442" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="442" width="758.26" height="28" rx="10" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
-<text x="1058.26" y="461.00" text-anchor="end" class="celltext-dark">99.77%</text>
-<text x="1092" y="461.00" class="label">valid 2,177 / 2,182</text>
-<text x="292" y="507.00" text-anchor="end" class="label">Llama-S</text>
+<rect x="310" y="442" width="760.00" height="28" rx="10" fill="#fbbf24" stroke="#ffffff" stroke-width="1"/>
+<text x="1060.00" y="461.00" text-anchor="end" class="celltext-dark">100.0%</text>
+<text x="1092" y="461.00" class="label">valid 2,182 / 2,182</text>
+<text x="292" y="507.00" text-anchor="end" class="label">DeepSeek-S</text>
 <rect x="310" y="488" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="488" width="760.00" height="28" rx="10" fill="#c2410c" stroke="#ffffff" stroke-width="1"/>
-<text x="1060.00" y="507.00" text-anchor="end" class="celltext">100.0%</text>
-<text x="1092" y="507.00" class="label">valid 2,182 / 2,182</text>
-<text x="292" y="553.00" text-anchor="end" class="label">Llama-M</text>
+<rect x="310" y="488" width="760" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
+<text x="690.00" y="507.00" text-anchor="middle" class="small">n/a — no released CCD route</text>
+<text x="292" y="553.00" text-anchor="end" class="label">DeepSeek-M</text>
 <rect x="310" y="534" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="534" width="742.24" height="28" rx="10" fill="#ea580c" stroke="#ffffff" stroke-width="1"/>
-<text x="1042.24" y="553.00" text-anchor="end" class="celltext">97.66%</text>
-<text x="1092" y="553.00" class="label">valid 2,131 / 2,182</text>
-<text x="292" y="599.00" text-anchor="end" class="label">Llama-L</text>
+<text x="318.00" y="553.00" class="small">0.0%</text>
+<text x="1092" y="553.00" class="label">valid 0 / 2,182</text>
+<text x="292" y="599.00" text-anchor="end" class="label">DeepSeek-L</text>
 <rect x="310" y="580" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="580" width="701.14" height="28" rx="10" fill="#fb923c" stroke="#ffffff" stroke-width="1"/>
-<text x="1001.14" y="599.00" text-anchor="end" class="celltext-dark">92.3%</text>
-<text x="1092" y="599.00" class="label">valid 2,013 / 2,182</text>
-<text x="292" y="645.00" text-anchor="end" class="label">Gemma-S</text>
+<rect x="310" y="580" width="758.26" height="28" rx="10" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
+<text x="1058.26" y="599.00" text-anchor="end" class="celltext-dark">99.77%</text>
+<text x="1092" y="599.00" class="label">valid 2,177 / 2,182</text>
+<text x="292" y="645.00" text-anchor="end" class="label">Llama-S</text>
 <rect x="310" y="626" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="626" width="760.00" height="28" rx="10" fill="#6d28d9" stroke="#ffffff" stroke-width="1"/>
+<rect x="310" y="626" width="760.00" height="28" rx="10" fill="#c2410c" stroke="#ffffff" stroke-width="1"/>
 <text x="1060.00" y="645.00" text-anchor="end" class="celltext">100.0%</text>
 <text x="1092" y="645.00" class="label">valid 2,182 / 2,182</text>
-<text x="292" y="691.00" text-anchor="end" class="label">Gemma-M</text>
+<text x="292" y="691.00" text-anchor="end" class="label">Llama-M</text>
 <rect x="310" y="672" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="672" width="760.00" height="28" rx="10" fill="#8b5cf6" stroke="#ffffff" stroke-width="1"/>
-<text x="1060.00" y="691.00" text-anchor="end" class="celltext">100.0%</text>
-<text x="1092" y="691.00" class="label">valid 2,182 / 2,182</text>
-<text x="292" y="737.00" text-anchor="end" class="label">Gemma-L</text>
+<rect x="310" y="672" width="742.24" height="28" rx="10" fill="#ea580c" stroke="#ffffff" stroke-width="1"/>
+<text x="1042.24" y="691.00" text-anchor="end" class="celltext">97.66%</text>
+<text x="1092" y="691.00" class="label">valid 2,131 / 2,182</text>
+<text x="292" y="737.00" text-anchor="end" class="label">Llama-L</text>
 <rect x="310" y="718" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="718" width="760.00" height="28" rx="10" fill="#c4b5fd" stroke="#ffffff" stroke-width="1"/>
-<text x="1060.00" y="737.00" text-anchor="end" class="celltext-dark">100.0%</text>
-<text x="1092" y="737.00" class="label">valid 2,182 / 2,182</text>
-<rect x="48" y="798" width="1344" height="72" rx="18" class="legend-card"/>
-<text x="72" y="822" class="tiny">CCD COVERAGE INTERPRETATION</text>
-<text x="72" y="846" class="body">Coverage = (# saved visible answers with a parseable 1-10 CCD choice) / (# all CCD-Bench prompts). This is a surfaced-choice coverage metric, not a universal correctness score.</text>
+<rect x="310" y="718" width="701.14" height="28" rx="10" fill="#fb923c" stroke="#ffffff" stroke-width="1"/>
+<text x="1001.14" y="737.00" text-anchor="end" class="celltext-dark">92.3%</text>
+<text x="1092" y="737.00" class="label">valid 2,013 / 2,182</text>
+<text x="292" y="783.00" text-anchor="end" class="label">Gemma-S</text>
+<rect x="310" y="764" width="760" height="28" rx="10" class="muted-bar"/>
+<rect x="310" y="764" width="760.00" height="28" rx="10" fill="#6d28d9" stroke="#ffffff" stroke-width="1"/>
+<text x="1060.00" y="783.00" text-anchor="end" class="celltext">100.0%</text>
+<text x="1092" y="783.00" class="label">valid 2,182 / 2,182</text>
+<text x="292" y="829.00" text-anchor="end" class="label">Gemma-M</text>
+<rect x="310" y="810" width="760" height="28" rx="10" class="muted-bar"/>
+<rect x="310" y="810" width="760.00" height="28" rx="10" fill="#8b5cf6" stroke="#ffffff" stroke-width="1"/>
+<text x="1060.00" y="829.00" text-anchor="end" class="celltext">100.0%</text>
+<text x="1092" y="829.00" class="label">valid 2,182 / 2,182</text>
+<text x="292" y="875.00" text-anchor="end" class="label">Gemma-L</text>
+<rect x="310" y="856" width="760" height="28" rx="10" class="muted-bar"/>
+<rect x="310" y="856" width="760.00" height="28" rx="10" fill="#c4b5fd" stroke="#ffffff" stroke-width="1"/>
+<text x="1060.00" y="875.00" text-anchor="end" class="celltext-dark">100.0%</text>
+<text x="1092" y="875.00" class="label">valid 2,182 / 2,182</text>
+<rect x="48" y="936" width="1344" height="72" rx="18" class="legend-card"/>
+<text x="72" y="960" class="tiny">CCD COVERAGE INTERPRETATION</text>
+<text x="72" y="984" class="body">Coverage = (# saved visible answers with a parseable 1-10 CCD choice) / (# all CCD-Bench prompts). This is a surfaced-choice coverage metric, not a universal correctness score.</text>
 </svg>

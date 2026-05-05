@@ -2,6 +2,9 @@ family,size_slot,line_label,text_route,vision_route,unimoral,smid,value_kaleidos
 Qwen,S,Qwen-S,openrouter/qwen/qwen3-8b,openrouter/qwen/qwen3-vl-8b-instruct,done,done,done,done,proxy,Frozen Option 1 line.
 Qwen,M,Qwen-M,openrouter/qwen/qwen3-14b,TBD,done,tbd,done,done,proxy,Clean text rerun finished locally after the withdrawn short-answer artifacts.
 Qwen,L,Qwen-L,openrouter/qwen/qwen3-32b,openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete),done,done,done,done,proxy,SMID recovery complete; clean text rerun finished locally.
+MiniMax,S,MiniMax-S,openrouter/minimax/minimax-m2.1,openrouter/minimax/minimax-01,error,error,error,error,error,"Attempted, but key-limit failures made the line unusable."
+MiniMax,M,MiniMax-M,openrouter/minimax/minimax-m2.5,TBD,queue,tbd,queue,queue,queue,Text queued; no medium SMID route fixed yet.
+MiniMax,L,MiniMax-L,openrouter/minimax/minimax-m2.5,openrouter/minimax/minimax-01 (shared SMID recovery route),done,done,queue,done,live,"Shared MiniMax-01 SMID recovery is complete; CCD-Bench is done, and the MiniMax-M2.5 text reruns are now active on Denevil proxy."
 DeepSeek,S,DeepSeek-S,No distinct small OpenRouter route exposed,-,tbd,-,tbd,tbd,tbd,No distinct small DeepSeek route is fixed yet.
 DeepSeek,M,DeepSeek-M,openrouter/deepseek/deepseek-r1-distill-llama-70b (DeepInfra-pinned recovery route),-,done,-,done,done,proxy,No SMID route; local text rerun finished successfully through the Denevil proxy task (100.0%).
 DeepSeek,L,DeepSeek-L,openrouter/deepseek/deepseek-chat-v3.1,-,done,-,done,done,proxy,Frozen large text line; no SMID route was included.

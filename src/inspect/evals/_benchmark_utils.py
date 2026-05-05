@@ -8,6 +8,7 @@ small and focused on benchmark-specific logic.
 from __future__ import annotations
 
 import ast
+import base64
 import json
 import os
 import random
@@ -128,6 +129,19 @@ def load_json_source(path_or_url: str | None, *, default_url: str | None = None,
 
 
 def build_vision_input(image_path: Path, prompt: str):
+    # MiniMax's OpenAI-compatible endpoint currently rejects image_url content.
+    # Its official cookbook uses a text-only request with the image embedded as
+    # base64, so switch to that format when a direct MiniMax base URL is active.
+    base_url = env_str("OPENAI_BASE_URL", "") or ""
+    if "api.minimax.io" in base_url:
+        image_b64 = base64.b64encode(image_path.read_bytes()).decode("utf-8")
+        return [
+            ChatMessageUser(
+                content=[
+                    ContentText(text=f"{prompt}\n\n[Image base64:{image_b64}]"),
+                ]
+            )
+        ]
     return [
         ChatMessageUser(
             content=[
@@ -224,6 +238,17 @@ def extract_structured_rating_int(text: str, *, minimum: int, maximum: int) -> i
     )
     if labeled is not None:
         return labeled
+    # Match ratio-style ratings: "4/7", "4 out of 7", "4 out of a possible 7"
+    ratio_match = re.search(
+        r"\b(\d+)\s*(?:/|out\s+of(?:\s+a\s+possible)?)\s*(\d+)\b",
+        normalized,
+        flags=re.IGNORECASE,
+    )
+    if ratio_match is not None:
+        numerator = int(ratio_match.group(1))
+        denominator = int(ratio_match.group(2))
+        if minimum <= numerator <= maximum and denominator <= maximum:
+            return numerator
     exact = re.fullmatch(r"(\d+)", normalized)
     if exact is not None:
         value = int(exact.group(1))
@@ -253,10 +278,14 @@ def classify_yes_no_label(text: str) -> str | None:
     normalized = normalize_text(text)
     if not normalized:
         return None
-    if re.search(r"\b(not relevant|irrelevant|no)\b", normalized):
+    # Check explicit negative phrases first (unambiguous)
+    if re.search(r"\b(not relevant|irrelevant)\b", normalized):
         return "No"
+    # Check positive before bare "no" to avoid false negatives
     if re.search(r"\b(yes|relevant)\b", normalized):
         return "Yes"
+    if re.search(r"\bno\b", normalized):
+        return "No"
     return None
 
 
@@ -264,12 +293,13 @@ def classify_valence_label(text: str) -> str | None:
     normalized = normalize_text(text)
     if not normalized:
         return None
-    if re.search(r"\b(either|either way|mixed|neutral)\b", normalized):
-        return "Either"
+    # Check definitive stances before hedged/mixed labels
     if re.search(r"\b(opposes?|against)\b", normalized):
         return "Opposes"
     if re.search(r"\b(supports?|supportive)\b", normalized):
         return "Supports"
+    if re.search(r"\b(either|either way|mixed|neutral)\b", normalized):
+        return "Either"
     return None
 
 

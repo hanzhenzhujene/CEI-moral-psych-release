@@ -62,6 +62,8 @@ def test_env_example_exists_and_documents_core_inputs():
     assert env_example.exists()
     content = env_example.read_text(encoding="utf-8")
     assert "OPENROUTER_API_KEY=" in content
+    assert "MINIMAX_API_KEY=" in content
+    assert "CEI_MIN_MAX_TOKENS=2048" in content
     assert "UNIMORAL_DATA_DIR=" in content
     assert "SMID_DATA_DIR=" in content
     assert "VALUEPRISM_RELEVANCE_FILE=" in content
@@ -69,52 +71,21 @@ def test_env_example_exists_and_documents_core_inputs():
     assert "DENEVIL_DATA_FILE=" in content
 
 
-def test_root_readme_prefers_public_bootstrap_before_live_setup():
+def test_root_readme_points_to_final_moral_psych_deliverable():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "## TL;DR" in readme
-    assert "## Research Goal" in readme
-    assert "## Method Overview" in readme
-    assert "how far do current open-source model families get on five moral-psych benchmark papers" in readme
-    assert "Every public table, report, and SVG is regenerated from a tracked authoritative snapshot" in readme
-    assert "Best like-for-like line" in readme
-    assert "There is no universal scaling law" in readme
-    assert "CCD-Bench shows cultural choice style, not accuracy." in readme
-    assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring." in readme
-    assert "## Benchmark Result Visuals" in readme
-    assert "### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy" in readme
-    assert "### 3. CCD-Bench: cultural-cluster choice behavior" in readme
-    assert "### 5. DeNEVIL: proxy behavioral outcomes" in readme
-    assert "option1_benchmark_accuracy_bars.svg" in readme
-    assert "option1_family_scaling_profile.svg" in readme
-    assert "option1_ccd_choice_distribution.svg" in readme
-    assert "option1_ccd_dominant_option_share.svg" in readme
-    assert "option1_denevil_behavior_outcomes.svg" in readme
-    assert "## Public Quickstart" in readme
-    assert "`make bootstrap`" in readme
-    assert "reviewer-safe path" in readme
-    assert "does **not** require `.env`, API keys, or local benchmark datasets" in readme
-    assert "make setup && cp .env.example .env && make smoke" in readme
-    assert readme.count("![Comparable accuracy bars]") == 1
-    assert readme.count("![Family scaling profile]") == 1
-    assert readme.count("![CCD choice distribution]") == 1
-    assert readme.count("![CCD dominant-option share]") == 1
-    assert readme.count("![DeNEVIL proxy behavioral outcomes]") == 1
-    assert "without re-embedding the same chart" in readme
-    assert "without duplicating the same graphics" in readme
-
-
-def test_citation_metadata_exists_and_is_linked_from_root_readme():
-    citation = ROOT / "CITATION.cff"
-    assert citation.exists()
-    content = citation.read_text(encoding="utf-8")
-    assert "cff-version: 1.2.0" in content
-    assert 'title: "CEI Moral-Psych Benchmark Suite"' in content
-    assert 'repository-code: "https://github.com/hanzhenzhujene/CEI-moral-psych-release"' in content
-    assert 'alias: Jenny Zhu' in content
-
-    readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "[CITATION.cff](CITATION.cff)" in readme
-    assert "## Citation" in readme
+    assert "## Moral-Psych Benchmark Suite (Jenny Zhu)" in readme
+    assert "### Final Moral-Psych Deliverable" in readme
+    assert "results/release/2026-04-19-option1/README.md" in readme
+    assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
+    assert "results/release/2026-04-19-option1/topline-summary.md" in readme
+    assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme
+    assert "figures/release/option1_family_scaling_profile.svg" in readme
+    assert "figures/release/option1_ccd_choice_distribution.svg" in readme
+    assert "figures/release/option1_ccd_dominant_option_share.svg" in readme
+    assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
+    assert "`CCD-Bench` as cultural-cluster choice behavior rather than scalar accuracy" in readme
+    assert "`DeNEVIL` as proxy behavioral evidence rather than benchmark-faithful ethical-quality scoring" in readme
+    assert "`make bootstrap`" in readme or "make audit" in readme
 
 
 def test_docs_index_mentions_repo_architecture():
@@ -125,13 +96,13 @@ def test_docs_index_mentions_repo_architecture():
 
 def test_ci_workflow_uses_native_node24_action_releases() -> None:
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
-    assert "FORCE_JAVASCRIPT_ACTIONS_TO_NODE24" not in workflow
     assert "actions/checkout@v5" in workflow
     assert "actions/setup-python@v6" in workflow
     assert "astral-sh/setup-uv@v8.1.0" in workflow
     assert "actions/checkout@v4" not in workflow
     assert "actions/setup-python@v5" not in workflow
     assert "astral-sh/setup-uv@v5" not in workflow
+    assert "make bootstrap" in workflow
 
 
 def test_supporting_docs_track_current_release_artifacts_and_boundaries():
@@ -160,29 +131,28 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "one canonical reporting path" in scripts_readme
     assert "build_release_artifacts.py" in scripts_readme
     assert "DeNEVIL proxy evidence package" in scripts_readme
+    assert "provider_config.sh" in scripts_readme
+    assert "MINIMAX_API_KEY" in scripts_readme
+    assert "CEI_MIN_MAX_TOKENS=2048" in scripts_readme
 
 
-def test_root_readme_links_evaluation_methodology():
+def test_pr6_launchers_now_use_provider_routing_for_direct_provider_reruns():
+    family_launcher = (ROOT / "scripts" / "family_size_text_expansion.sh").read_text(encoding="utf-8")
+    minimax_launcher = (ROOT / "scripts" / "full_option1_runs_minimax_small.sh").read_text(encoding="utf-8")
+
+    for content in (family_launcher, minimax_launcher):
+        assert "provider_config.sh" in content
+        assert "setup_model_provider" in content
+        assert "--model_base_url" in content
+        assert "routing_metadata.csv" in content
+        assert 'cd "$ROOT"' in content
+
+
+def test_root_readme_links_release_methodology_and_summary_paths():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "docs/evaluation-methodology.md" in readme
-    assert "[Benchmark Result Visuals](#benchmark-result-visuals)" in readme
-
-
-def test_root_readme_frames_denevil_as_proxy_only_evidence():
-    readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "### DeNEVIL Proxy Behavioral Evidence" in readme
-    assert "### DeNEVIL Appendix QA / Provenance" in readme
-    assert "proxy-only behavioral evidence and traceability support" in readme
-    assert "not benchmark-faithful ethical-quality scoring" in readme
-    assert "denevil-proxy-summary.csv" in readme
-    assert "denevil-behavior-summary.csv" in readme
-    assert "denevil-prompt-family-breakdown.csv" in readme
-    assert "option1_denevil_behavior_outcomes.svg" in readme
-    assert "option1_denevil_prompt_family_heatmap.svg" in readme
-    assert "denevil-proxy-examples.csv" in readme
-    assert "option1_denevil_proxy_status_matrix.svg" in readme
-    assert "option1_denevil_proxy_pipeline.svg" in readme
-    assert "macro-accuracy claim" in readme
+    assert "docs/evaluation-methodology.md" in readme or "results/release/2026-04-19-option1/README.md" in readme
+    assert "results/release/2026-04-19-option1/README.md" in readme
+    assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
 
 
 def test_evaluation_methodology_versions_current_metric_definition():

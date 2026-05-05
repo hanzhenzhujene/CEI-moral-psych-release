@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1760 1216" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1760 1426" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,8 +35,8 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1760" height="1216" class="canvas"/>
-<rect x="24" y="24" width="1712" height="1168" rx="22" class="panel"/>
+<rect x="0" y="0" width="1760" height="1426" class="canvas"/>
+<rect x="24" y="24" width="1712" height="1378" rx="22" class="panel"/>
 <title>Appendix QA: DeNEVIL proxy status matrix</title>
 <desc>Appendix QA / provenance only. PI-facing matrix of the public DeNEVIL proxy evidence package for each model line, showing proxy status, total proxy samples, visible generated-response count, valid visible-response rate, route provenance, and line-specific notes. This is proxy evidence, not benchmark-faithful accuracy.</desc>
 <text x="48" y="64" class="title">Appendix QA: DeNEVIL proxy status matrix</text>
@@ -78,87 +78,114 @@
 <text x="928" y="386.00" class="label">qwen3-32b</text>
 <text x="1116" y="370.00" class="small">Visible text surfaced for every proxy prompt.</text>
 <rect x="40" y="416" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-<text x="48" y="456.00" class="label">DeepSeek-S</text>
-<rect x="226" y="422" width="150" height="58" rx="12" fill="#cbd5e1"/>
-<text x="301" y="456.00" text-anchor="middle" class="celltext-dark">No route</text>
+<text x="48" y="456.00" class="label">MiniMax-S</text>
+<rect x="226" y="422" width="150" height="58" rx="12" fill="#dc2626"/>
+<text x="301" y="456.00" text-anchor="middle" class="celltext">Error</text>
 <text x="438" y="456.00" class="label">n/a</text>
 <text x="594" y="456.00" class="label">n/a</text>
 <text x="752" y="456.00" class="label">n/a</text>
-<text x="928" y="456.00" class="label">no-route</text>
-<text x="1116" y="440.00" class="small">No released proxy route.</text>
+<text x="928" y="456.00" class="label">minimax-m2.1</text>
+<text x="1116" y="440.00" class="small">Proxy-only evidence; see CSV for full limitation details.</text>
 <rect x="40" y="486" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-<text x="48" y="526.00" class="label">DeepSeek-M</text>
-<rect x="226" y="492" width="150" height="58" rx="12" fill="#b7791f"/>
-<text x="301" y="526.00" text-anchor="middle" class="celltext">Proxy complete</text>
-<text x="438" y="526.00" class="label">20,518</text>
-<text x="594" y="526.00" class="label">2,863</text>
-<text x="752" y="526.00" class="label">14.0%</text>
-<text x="928" y="526.00" class="label">deepseek-r1-distill-llama-70b</text>
-<text x="1116" y="510.00" class="small">Only 14.0% of prompts surfaced visible text (2,863 / 20,518).</text>
+<text x="48" y="526.00" class="label">MiniMax-M</text>
+<rect x="226" y="492" width="150" height="58" rx="12" fill="#94a3b8"/>
+<text x="301" y="526.00" text-anchor="middle" class="celltext-dark">Queued</text>
+<text x="438" y="526.00" class="label">n/a</text>
+<text x="594" y="526.00" class="label">n/a</text>
+<text x="752" y="526.00" class="label">n/a</text>
+<text x="928" y="526.00" class="label">minimax-m2.5</text>
+<text x="1116" y="510.00" class="small">Proxy-only evidence; see CSV for full limitation details.</text>
 <rect x="40" y="556" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-<text x="48" y="596.00" class="label">DeepSeek-L</text>
-<rect x="226" y="562" width="150" height="58" rx="12" fill="#b7791f"/>
-<text x="301" y="596.00" text-anchor="middle" class="celltext">Proxy complete</text>
-<text x="438" y="596.00" class="label">20,518</text>
-<text x="594" y="596.00" class="label">20,514</text>
-<text x="752" y="596.00" class="label">100.0%</text>
-<text x="928" y="596.00" class="label">deepseek-chat-v3.1</text>
-<text x="1116" y="580.00" class="small">Near-complete archive; 4 prompts lacked visible saved text.</text>
+<text x="48" y="596.00" class="label">MiniMax-L</text>
+<rect x="226" y="562" width="150" height="58" rx="12" fill="#1d4ed8"/>
+<text x="301" y="596.00" text-anchor="middle" class="celltext">Active rerun</text>
+<text x="438" y="596.00" class="label">n/a</text>
+<text x="594" y="596.00" class="label">n/a</text>
+<text x="752" y="596.00" class="label">n/a</text>
+<text x="928" y="596.00" class="label">minimax-m2.5</text>
+<text x="1116" y="580.00" class="small">Proxy-only evidence; see CSV for full limitation details.</text>
 <rect x="40" y="626" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-<text x="48" y="666.00" class="label">Llama-S</text>
-<rect x="226" y="632" width="150" height="58" rx="12" fill="#b7791f"/>
-<text x="301" y="666.00" text-anchor="middle" class="celltext">Proxy complete</text>
-<text x="438" y="666.00" class="label">20,518</text>
-<text x="594" y="666.00" class="label">20,518</text>
-<text x="752" y="666.00" class="label">100.0%</text>
-<text x="928" y="666.00" class="label">llama-3.2-11b-vision-instruct</text>
-<text x="1116" y="650.00" class="small">Visible text surfaced for every proxy prompt.</text>
+<text x="48" y="666.00" class="label">DeepSeek-S</text>
+<rect x="226" y="632" width="150" height="58" rx="12" fill="#cbd5e1"/>
+<text x="301" y="666.00" text-anchor="middle" class="celltext-dark">No route</text>
+<text x="438" y="666.00" class="label">n/a</text>
+<text x="594" y="666.00" class="label">n/a</text>
+<text x="752" y="666.00" class="label">n/a</text>
+<text x="928" y="666.00" class="label">no-route</text>
+<text x="1116" y="650.00" class="small">No released proxy route.</text>
 <rect x="40" y="696" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-<text x="48" y="736.00" class="label">Llama-M</text>
+<text x="48" y="736.00" class="label">DeepSeek-M</text>
 <rect x="226" y="702" width="150" height="58" rx="12" fill="#b7791f"/>
 <text x="301" y="736.00" text-anchor="middle" class="celltext">Proxy complete</text>
 <text x="438" y="736.00" class="label">20,518</text>
-<text x="594" y="736.00" class="label">20,518</text>
-<text x="752" y="736.00" class="label">100.0%</text>
-<text x="928" y="736.00" class="label">llama-3.3-70b-instruct</text>
-<text x="1116" y="720.00" class="small">Visible text surfaced for every proxy prompt.</text>
+<text x="594" y="736.00" class="label">2,863</text>
+<text x="752" y="736.00" class="label">14.0%</text>
+<text x="928" y="736.00" class="label">deepseek-r1-distill-llama-70b</text>
+<text x="1116" y="720.00" class="small">Only 14.0% of prompts surfaced visible text (2,863 / 20,518).</text>
 <rect x="40" y="766" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-<text x="48" y="806.00" class="label">Llama-L</text>
+<text x="48" y="806.00" class="label">DeepSeek-L</text>
 <rect x="226" y="772" width="150" height="58" rx="12" fill="#b7791f"/>
 <text x="301" y="806.00" text-anchor="middle" class="celltext">Proxy complete</text>
 <text x="438" y="806.00" class="label">20,518</text>
-<text x="594" y="806.00" class="label">20,518</text>
+<text x="594" y="806.00" class="label">20,514</text>
 <text x="752" y="806.00" class="label">100.0%</text>
-<text x="928" y="806.00" class="label">llama-4-maverick</text>
-<text x="1116" y="790.00" class="small">Visible text surfaced for every proxy prompt.</text>
+<text x="928" y="806.00" class="label">deepseek-chat-v3.1</text>
+<text x="1116" y="790.00" class="small">Near-complete archive; 4 prompts lacked visible saved text.</text>
 <rect x="40" y="836" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-<text x="48" y="876.00" class="label">Gemma-S</text>
+<text x="48" y="876.00" class="label">Llama-S</text>
 <rect x="226" y="842" width="150" height="58" rx="12" fill="#b7791f"/>
 <text x="301" y="876.00" text-anchor="middle" class="celltext">Proxy complete</text>
 <text x="438" y="876.00" class="label">20,518</text>
 <text x="594" y="876.00" class="label">20,518</text>
 <text x="752" y="876.00" class="label">100.0%</text>
-<text x="928" y="876.00" class="label">gemma-3-4b-it</text>
+<text x="928" y="876.00" class="label">llama-3.2-11b-vision-instruct</text>
 <text x="1116" y="860.00" class="small">Visible text surfaced for every proxy prompt.</text>
 <rect x="40" y="906" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-<text x="48" y="946.00" class="label">Gemma-M</text>
+<text x="48" y="946.00" class="label">Llama-M</text>
 <rect x="226" y="912" width="150" height="58" rx="12" fill="#b7791f"/>
 <text x="301" y="946.00" text-anchor="middle" class="celltext">Proxy complete</text>
 <text x="438" y="946.00" class="label">20,518</text>
 <text x="594" y="946.00" class="label">20,518</text>
 <text x="752" y="946.00" class="label">100.0%</text>
-<text x="928" y="946.00" class="label">gemma-3-12b-it</text>
+<text x="928" y="946.00" class="label">llama-3.3-70b-instruct</text>
 <text x="1116" y="930.00" class="small">Visible text surfaced for every proxy prompt.</text>
 <rect x="40" y="976" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-<text x="48" y="1016.00" class="label">Gemma-L</text>
+<text x="48" y="1016.00" class="label">Llama-L</text>
 <rect x="226" y="982" width="150" height="58" rx="12" fill="#b7791f"/>
 <text x="301" y="1016.00" text-anchor="middle" class="celltext">Proxy complete</text>
 <text x="438" y="1016.00" class="label">20,518</text>
 <text x="594" y="1016.00" class="label">20,518</text>
 <text x="752" y="1016.00" class="label">100.0%</text>
-<text x="928" y="1016.00" class="label">gemma-3-27b-it</text>
+<text x="928" y="1016.00" class="label">llama-4-maverick</text>
 <text x="1116" y="1000.00" class="small">Visible text surfaced for every proxy prompt.</text>
-<rect x="48" y="1128" width="1664" height="56" rx="18" class="legend-card"/>
-<text x="72" y="1152" class="tiny">HOW TO READ THIS MATRIX</text>
-<text x="72" y="1174" class="body">DeepSeek-M is the key cautionary row: the proxy archive persisted to disk, but only 14.0% of proxy prompts produced non-empty saved visible text. That is a traceability / surfacing gap, not a benchmark-faithful accuracy score.</text>
+<rect x="40" y="1046" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+<text x="48" y="1086.00" class="label">Gemma-S</text>
+<rect x="226" y="1052" width="150" height="58" rx="12" fill="#b7791f"/>
+<text x="301" y="1086.00" text-anchor="middle" class="celltext">Proxy complete</text>
+<text x="438" y="1086.00" class="label">20,518</text>
+<text x="594" y="1086.00" class="label">20,518</text>
+<text x="752" y="1086.00" class="label">100.0%</text>
+<text x="928" y="1086.00" class="label">gemma-3-4b-it</text>
+<text x="1116" y="1070.00" class="small">Visible text surfaced for every proxy prompt.</text>
+<rect x="40" y="1116" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+<text x="48" y="1156.00" class="label">Gemma-M</text>
+<rect x="226" y="1122" width="150" height="58" rx="12" fill="#b7791f"/>
+<text x="301" y="1156.00" text-anchor="middle" class="celltext">Proxy complete</text>
+<text x="438" y="1156.00" class="label">20,518</text>
+<text x="594" y="1156.00" class="label">20,518</text>
+<text x="752" y="1156.00" class="label">100.0%</text>
+<text x="928" y="1156.00" class="label">gemma-3-12b-it</text>
+<text x="1116" y="1140.00" class="small">Visible text surfaced for every proxy prompt.</text>
+<rect x="40" y="1186" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+<text x="48" y="1226.00" class="label">Gemma-L</text>
+<rect x="226" y="1192" width="150" height="58" rx="12" fill="#b7791f"/>
+<text x="301" y="1226.00" text-anchor="middle" class="celltext">Proxy complete</text>
+<text x="438" y="1226.00" class="label">20,518</text>
+<text x="594" y="1226.00" class="label">20,518</text>
+<text x="752" y="1226.00" class="label">100.0%</text>
+<text x="928" y="1226.00" class="label">gemma-3-27b-it</text>
+<text x="1116" y="1210.00" class="small">Visible text surfaced for every proxy prompt.</text>
+<rect x="48" y="1338" width="1664" height="56" rx="18" class="legend-card"/>
+<text x="72" y="1362" class="tiny">HOW TO READ THIS MATRIX</text>
+<text x="72" y="1384" class="body">DeepSeek-M is the key cautionary row: the proxy archive persisted to disk, but only 14.0% of proxy prompts produced non-empty saved visible text. That is a traceability / surfacing gap, not a benchmark-faithful accuracy score.</text>
 </svg>
