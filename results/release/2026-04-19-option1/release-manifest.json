@@ -4,23 +4,23 @@
   "source_snapshot": "results/release/2026-04-19-option1/source/authoritative-summary.csv",
   "report_metadata": {
     "owner": "Jenny Zhu",
-    "date": "2026-05-01",
+    "date": "2026-05-05",
     "frozen_snapshot_date": "2026-04-19",
-    "current_cost_estimate": "$84.02",
+    "current_cost_estimate": "$243.40",
     "current_cost_scope": "User-updated project total across the frozen release work and the later tracked reruns completed in this repo.",
     "metric_definition_version": "2026-04-30",
     "metric_definition_summary": "Stricter visible-answer parsing is now versioned explicitly: UniMoral, SMID, and Value Kaleidoscope use structured visible-answer extraction; CCD-Bench coverage requires a parseable visible 1-10 choice; CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; Denevil appendix coverage counts non-empty visible proxy answers while the headline proxy figures classify visible behavior categories.",
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "operations_note": "Updated May 1, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, and `Gemma-L`, and the remaining live published follow-up is `Qwen-M`, `Qwen-L`, and `Llama-M`.",
+    "operations_note": "Updated May 5, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, and `DeepSeek-M`, and the remaining live published follow-up is `MiniMax-L`.",
     "ci_workflow_url": "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml"
   },
   "target_matrix": {
     "benchmarks": 5,
-    "model_families": 4,
+    "model_families": 5,
     "size_slots": 3,
-    "family_size_benchmark_cells": 60
+    "family_size_benchmark_cells": 75
   },
   "counts": {
     "authoritative_tasks": 19,
@@ -30,6 +30,7 @@
   },
   "model_families": [
     "Qwen",
+    "MiniMax",
     "DeepSeek",
     "Llama",
     "Gemma"
@@ -119,6 +120,20 @@
       "samples": 102886,
       "benchmark_faithful_macro_accuracy": 0.427602,
       "note": "Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall."
+    },
+    {
+      "family": "MiniMax",
+      "status_relative_to_closed_release": "Active local rerun with SMID and CCD-Bench complete while Denevil proxy is in flight",
+      "exact_route": "text: minimax-m2.5; SMID recovery: minimax-01",
+      "papers_covered": 3,
+      "tasks_completed": 4,
+      "benchmark_faithful_tasks": 4,
+      "proxy_tasks": 0,
+      "completed_benchmark_lines": "UniMoral; SMID; CCD-Bench",
+      "missing_benchmark_lines": "Value Kaleidoscope; Benchmark-faithful Denevil via MoralPrompt; Denevil proxy",
+      "samples": 16848,
+      "benchmark_faithful_macro_accuracy": 0.138179,
+      "note": "Shared MiniMax-01 SMID recovery is complete, UniMoral and CCD-Bench are complete, and the MiniMax-M2.5 text reruns are now active on Denevil proxy while Value Kaleidoscope remains queued on this pass."
     }
   ],
   "entry_points": {

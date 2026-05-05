@@ -7,9 +7,32 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 RUNNER="$ROOT/src/inspect/run.py"
+PROVIDER_CONFIG="$ROOT/provider_config.sh"
 DATA_ROOT="${DATA_ROOT:-$(cd "$ROOT/.." && pwd)/data}"
 UV_BIN="${UV_BIN:-$(command -v uv 2>/dev/null || true)}"
 VENV_PYTHON="${VENV_PYTHON:-$ROOT/.venv/bin/python}"
+
+# Keep task specs and relative artifact paths stable even when the launcher is
+# invoked from outside the repo root (for example via nohup or another script).
+cd "$ROOT"
+
+load_env_file() {
+  local env_file="$1"
+  if [[ -f "$env_file" ]]; then
+    set -a
+    # shellcheck source=/dev/null
+    source "$env_file"
+    set +a
+  fi
+}
+
+load_env_file "$ROOT/.env"
+load_env_file "$ROOT/.env.local"
+
+if [[ -f "$PROVIDER_CONFIG" ]]; then
+  # shellcheck source=/dev/null
+  source "$PROVIDER_CONFIG"
+fi
 
 if [[ -n "${UV_BIN}" ]] && { [[ -x "${UV_BIN}" ]] || command -v "${UV_BIN}" >/dev/null 2>&1; }; then
   RUN_PREFIX=("${UV_BIN}" "run" "--package" "cei-inspect" "python")
@@ -324,6 +347,9 @@ job_prompt_prefix() {
 job_min_max_tokens() {
   local job="$1"
   case "$job" in
+    minimax_m2_5_medium|minimax_m2_7_large)
+      echo "2048"
+      ;;
     qwen_14b_medium|qwen_32b_large)
       echo "128"
       ;;
@@ -333,6 +359,57 @@ job_min_max_tokens() {
   esac
 }
 
+normalize_routing_model() {
+  local model="$1"
+  model="${model#openrouter/}"
+  model="${model#openai/}"
+  echo "$model"
+}
+
+configure_routed_model() {
+  local requested_model="$1"
+  local canonical_model provider_entry
+
+  ROUTED_REQUESTED_MODEL="$requested_model"
+  ROUTED_CANONICAL_MODEL="$(normalize_routing_model "$requested_model")"
+  ROUTED_PROVIDER="openrouter"
+  ROUTED_PROVIDER_MODEL="$ROUTED_CANONICAL_MODEL"
+  ROUTED_KEY_VAR="OPENROUTER_API_KEY"
+  ROUTED_BASE_URL="https://openrouter.ai/api/v1"
+  ROUTED_MODEL="openai/$ROUTED_CANONICAL_MODEL"
+
+  if declare -F setup_model_provider >/dev/null 2>&1; then
+    setup_model_provider "$ROUTED_CANONICAL_MODEL"
+    ROUTED_MODEL="openai/$EFFECTIVE_MODEL"
+    ROUTED_BASE_URL="${OPENAI_BASE_URL:-$ROUTED_BASE_URL}"
+    if provider_entry=$(resolve_provider "$ROUTED_CANONICAL_MODEL" 2>/dev/null); then
+      ROUTED_PROVIDER="${provider_entry%%|*}"
+      ROUTED_PROVIDER_MODEL="${provider_entry#*|}"
+      ROUTED_KEY_VAR="$(provider_key_var "$ROUTED_PROVIDER")"
+    fi
+  fi
+
+  if [[ -n "$ROUTED_KEY_VAR" ]] && [[ -n "${!ROUTED_KEY_VAR:-}" ]]; then
+    ROUTED_KEY_STATE="present"
+  else
+    ROUTED_KEY_STATE="missing"
+  fi
+}
+
+record_routing_metadata() {
+  local job="$1"
+  local task_name="$2"
+  local start_at="$3"
+  local routing_file
+  routing_file="$(job_run_dir "$job")/routing_metadata.csv"
+
+  if [[ ! -f "$routing_file" ]]; then
+    echo "task_name,start_at,requested_model,canonical_model,provider,provider_model,base_url,key_var,key_state" > "$routing_file"
+  fi
+
+  echo "$task_name,$start_at,$ROUTED_REQUESTED_MODEL,$ROUTED_CANONICAL_MODEL,$ROUTED_PROVIDER,$ROUTED_PROVIDER_MODEL,$ROUTED_BASE_URL,$ROUTED_KEY_VAR,$ROUTED_KEY_STATE" >> "$routing_file"
+}
+
 run_task() {
   local job="$1"
   local task_name="$2"
@@ -340,21 +417,24 @@ run_task() {
   local model="$4"
   local max_connections="$5"
 
-  local run_dir output_path log_dir start_at end_at rc reasoning_effort model_args extra_body_json prompt_prefix min_max_tokens
+  local run_dir output_path log_dir runtime_home start_at end_at rc reasoning_effort model_args extra_body_json prompt_prefix min_max_tokens
   run_dir="$(job_run_dir "$job")"
   output_path="$run_dir/${task_name}.txt"
   log_dir="$LOG_BASE/$job"
-  mkdir -p "$run_dir" "$log_dir"
+  runtime_home="$run_dir/_runtime_home"
+  mkdir -p "$run_dir" "$log_dir" "$runtime_home"
   reasoning_effort="$(job_reasoning_effort "$job")"
   model_args="$(job_model_args "$job")"
   extra_body_json="$(job_extra_body_json "$job")"
   prompt_prefix="$(job_prompt_prefix "$job")"
   min_max_tokens="$(job_min_max_tokens "$job")"
+  configure_routed_model "$model"
 
   start_at="$(now_iso)"
+  record_routing_metadata "$job" "$task_name" "$start_at"
   if (
     set +e
-    echo "[$start_at] START job=$job task=$task_name model=$model max_connections=$max_connections reasoning_effort=${reasoning_effort:-default} model_args=${model_args:-default} extra_body_json=${extra_body_json:-default} prompt_prefix=${prompt_prefix:-default} min_max_tokens=${min_max_tokens:-default}"
+    echo "[$start_at] START job=$job task=$task_name model=$model routed_model=$ROUTED_MODEL provider=$ROUTED_PROVIDER provider_model=$ROUTED_PROVIDER_MODEL base_url=$ROUTED_BASE_URL key_var=$ROUTED_KEY_VAR key_state=$ROUTED_KEY_STATE max_connections=$max_connections reasoning_effort=${reasoning_effort:-default} model_args=${model_args:-default} extra_body_json=${extra_body_json:-default} prompt_prefix=${prompt_prefix:-default} min_max_tokens=${min_max_tokens:-default}"
     export PYTHONUNBUFFERED=1
     if [[ -n "$min_max_tokens" ]]; then
       export CEI_MIN_MAX_TOKENS="$min_max_tokens"
@@ -366,9 +446,15 @@ run_task() {
     else
       unset CEI_PROMPT_PREFIX || true
     fi
+    if [[ "$ROUTED_KEY_STATE" != "present" ]]; then
+      echo "[$(now_iso)] ROUTING_PRECHECK_FAILED job=$job task=$task_name provider=$ROUTED_PROVIDER key_var=$ROUTED_KEY_VAR reason=missing_provider_api_key"
+      exit 86
+    fi
     "${RUN_PREFIX[@]}" "$RUNNER" \
       --tasks "$task_spec" \
-      --model "$model" \
+      --model "$ROUTED_MODEL" \
+      --model_base_url "$ROUTED_BASE_URL" \
+      --home_dir "$runtime_home" \
       --temperature 0 \
       --no_sandbox \
       --max_connections "$max_connections" \

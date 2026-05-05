@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import os
 from pathlib import Path
 from typing import Any
 
@@ -36,6 +37,16 @@ FOUNDATION_COLUMNS = {
     "Authority": ("Authority", "authority_mean", "authority"),
     "Sanctity": ("Sanctity", "purity_mean", "purity"),
 }
+
+
+def _resume_count(env_var: str) -> int:
+    raw_value = os.environ.get(env_var, "").strip()
+    if not raw_value:
+        return 0
+    try:
+        return max(0, int(raw_value))
+    except ValueError as exc:
+        raise ValueError(f"{env_var} must be a non-negative integer, got: {raw_value!r}") from exc
 
 
 def _smid_data_dir() -> Path:
@@ -143,15 +154,19 @@ def _foundation_label(row: dict[str, str]) -> str | None:
     return max(scores, key=scores.get)
 
 
-def _make_rating_samples(limit: int | None = None) -> list[Sample]:
+def _make_rating_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
     data_dir = _smid_data_dir()
     rows = _load_rows(_find_norms_file(data_dir))
     lookup = _image_lookup(_find_image_root(data_dir))
     samples: list[Sample] = []
+    completed = 0
     for index, row in enumerate(rows, start=1):
         image_path = _image_path(row, lookup)
         rating = _rating_value(row)
         if not image_path or not rating:
+            continue
+        completed += 1
+        if completed <= start_index:
             continue
         target, scale_max = rating
         prompt = (
@@ -171,15 +186,19 @@ def _make_rating_samples(limit: int | None = None) -> list[Sample]:
     return samples
 
 
-def _make_foundation_samples(limit: int | None = None) -> list[Sample]:
+def _make_foundation_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
     data_dir = _smid_data_dir()
     rows = _load_rows(_find_norms_file(data_dir))
     lookup = _image_lookup(_find_image_root(data_dir))
     samples: list[Sample] = []
+    completed = 0
     for index, row in enumerate(rows, start=1):
         image_path = _image_path(row, lookup)
         label = _foundation_label(row)
         if not image_path or not label:
+            continue
+        completed += 1
+        if completed <= start_index:
             continue
         prompt = (
             "Look at the image and identify the dominant moral foundation. "
@@ -199,10 +218,22 @@ def _make_foundation_samples(limit: int | None = None) -> list[Sample]:
 
 
 @task
-def smid_moral_rating(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_rating_samples(limit=limit)), plan=generation_plan(max_tokens=24), scorer=bounded_integer_scorer(1, 7))
+def smid_moral_rating(limit: int | None = None, start_index: int | None = None) -> Task:
+    if start_index is None:
+        start_index = _resume_count("SMID_MORAL_RESUME_COUNT")
+    return Task(
+        dataset=MemoryDataset(_make_rating_samples(limit=limit, start_index=start_index)),
+        plan=generation_plan(max_tokens=24),
+        scorer=bounded_integer_scorer(1, 7),
+    )
 
 
 @task
-def smid_foundation_classification(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_foundation_samples(limit=limit)), plan=generation_plan(max_tokens=24), scorer=label_membership_scorer(FOUNDATION_PATTERNS))
+def smid_foundation_classification(limit: int | None = None, start_index: int | None = None) -> Task:
+    if start_index is None:
+        start_index = _resume_count("SMID_FOUNDATION_RESUME_COUNT")
+    return Task(
+        dataset=MemoryDataset(_make_foundation_samples(limit=limit, start_index=start_index)),
+        plan=generation_plan(max_tokens=24),
+        scorer=label_membership_scorer(FOUNDATION_PATTERNS),
+    )

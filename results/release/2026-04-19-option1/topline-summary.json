@@ -46,6 +46,20 @@
       "samples": 102886,
       "benchmark_faithful_macro_accuracy": 0.427602,
       "note": "Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall."
+    },
+    {
+      "family": "MiniMax",
+      "status_relative_to_closed_release": "Active local rerun with SMID and CCD-Bench complete while Denevil proxy is in flight",
+      "exact_route": "text: minimax-m2.5; SMID recovery: minimax-01",
+      "papers_covered": 3,
+      "tasks_completed": 4,
+      "benchmark_faithful_tasks": 4,
+      "proxy_tasks": 0,
+      "completed_benchmark_lines": "UniMoral; SMID; CCD-Bench",
+      "missing_benchmark_lines": "Value Kaleidoscope; Benchmark-faithful Denevil via MoralPrompt; Denevil proxy",
+      "samples": 16848,
+      "benchmark_faithful_macro_accuracy": 0.138179,
+      "note": "Shared MiniMax-01 SMID recovery is complete, UniMoral and CCD-Bench are complete, and the MiniMax-M2.5 text reruns are now active on Denevil proxy while Value Kaleidoscope remains queued on this pass."
     }
   ]
 }
