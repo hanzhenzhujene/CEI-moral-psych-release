@@ -71,10 +71,18 @@ def test_env_example_exists_and_documents_core_inputs():
     assert "DENEVIL_DATA_FILE=" in content
 
 
-def test_root_readme_points_to_final_moral_psych_deliverable():
+def test_root_readme_prefers_jenny_only_public_surface():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "## Moral-Psych Benchmark Suite (Jenny Zhu)" in readme
-    assert "### Final Moral-Psych Deliverable" in readme
+    assert "# CEI Moral-Psych Benchmark Suite" in readme
+    assert "Jenny Zhu" in readme
+    assert "Current project cost estimate: `$243.40`" in readme
+    assert "## TL;DR" in readme
+    assert "## Research Goal" in readme
+    assert "## Method Overview" in readme
+    assert "## Benchmark Result Visuals" in readme
+    assert "## Current MiniMax Status" in readme
+    assert "## Public Quickstart" in readme
+    assert "## Final Moral-Psych Deliverable" in readme
     assert "results/release/2026-04-19-option1/README.md" in readme
     assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
     assert "results/release/2026-04-19-option1/topline-summary.md" in readme
@@ -83,6 +91,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_ccd_choice_distribution.svg" in readme
     assert "figures/release/option1_ccd_dominant_option_share.svg" in readme
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
+    assert "current `MiniMax-L` public line" in readme
     assert "`CCD-Bench` as cultural-cluster choice behavior rather than scalar accuracy" in readme
     assert "`DeNEVIL` as proxy behavioral evidence rather than benchmark-faithful ethical-quality scoring" in readme
     assert "`make bootstrap`" in readme or "make audit" in readme
