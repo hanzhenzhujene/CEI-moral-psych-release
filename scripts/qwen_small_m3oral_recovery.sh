@@ -21,13 +21,33 @@ fi
 RUN_ID="${RUN_ID:-2026-05-02-qwen-small-m3oral-recovery}"
 RUN_BASE="$ROOT/results/inspect/full-runs/$RUN_ID"
 LOG_BASE="$ROOT/results/inspect/logs/$RUN_ID"
-MODEL="${MODEL:-openai/qwen/qwen3-8b}"
+DEFAULT_MODEL="openai/qwen/qwen3-8b"
+NVIDIA_SMOKE_MODEL_DEFAULT="openai/nvidia/llama-3.1-nemotron-nano-8b-v1"
+MODEL="${MODEL:-$DEFAULT_MODEL}"
+MODEL_BASE_URL="${MODEL_BASE_URL:-}"
 # MODEL_ARGS_JSON is passed to --model_args_json verbatim. By default it pins
 # OpenRouter to a constrained provider set that has worked for other Qwen recoveries.
 DEFAULT_MODEL_ARGS_JSON='{"extra_body":{"provider":{"only":["nebius","novita","parasail"],"allow_fallbacks":true}}}'
 MODEL_ARGS_JSON="${MODEL_ARGS_JSON:-${PROVIDER_ARGS_JSON:-$DEFAULT_MODEL_ARGS_JSON}}"
 MAX_CONNECTIONS="${MAX_CONNECTIONS:-1}"
 SMOKE_LIMIT="${SMOKE_LIMIT:-25}"
+RUNTIME_HOME="${RUNTIME_HOME:-$ROOT/.tmp/inspect-home/$RUN_ID}"
+
+if [[ -n "${NVIDIA_API_KEY:-}" ]] && [[ -z "${MODEL_BASE_URL}" ]]; then
+  MODEL_BASE_URL="https://integrate.api.nvidia.com/v1"
+fi
+
+if [[ -n "${NVIDIA_API_KEY:-}" ]]; then
+  export OPENAI_API_KEY="${OPENAI_API_KEY:-$NVIDIA_API_KEY}"
+fi
+
+if [[ "$MODEL_BASE_URL" == *"integrate.api.nvidia.com"* ]] && [[ "$MODEL_ARGS_JSON" == "$DEFAULT_MODEL_ARGS_JSON" ]]; then
+  MODEL_ARGS_JSON='{}'
+fi
+
+if [[ "$MODEL_BASE_URL" == *"integrate.api.nvidia.com"* ]] && [[ "$MODEL" != openai/* ]] && [[ "$MODEL" != openai-api/* ]]; then
+  MODEL="openai/$MODEL"
+fi
 
 mkdir -p "$RUN_BASE" "$LOG_BASE"
 
@@ -46,13 +66,16 @@ Environment overrides:
   RUN_ID=custom-run-id
   MODEL=openai/qwen/qwen3-8b
   MODEL_ARGS_JSON='{"extra_body":{"provider":{"only":["nebius"],"allow_fallbacks":false}}}'
-  MODEL_ARGS_JSON='{"base_url":"https://integrate.api.nvidia.com/v1"}'
+  MODEL_BASE_URL='https://integrate.api.nvidia.com/v1'
   NVIDIA_API_KEY=nvapi-...
+  RUNTIME_HOME=/absolute/path/to/repo/.tmp/inspect-home/nvidia-smoke
   MAX_CONNECTIONS=1
   SMOKE_LIMIT=25
 
 Notes:
   - NVIDIA Build uses the OpenAI-compatible base URL https://integrate.api.nvidia.com/v1
+  - When targeting NVIDIA, choose a model ID that NVIDIA actually serves.
+    The default openrouter/qwen route is not guaranteed to exist on NVIDIA.
   - If you still use PROVIDER_ARGS_JSON, it is treated as an alias for MODEL_ARGS_JSON
 EOF
 }
@@ -102,7 +125,11 @@ run_task() {
       --no_sandbox
       --max_connections "$MAX_CONNECTIONS"
       --log_dir "$LOG_BASE"
+      --home_dir "$RUNTIME_HOME"
     )
+    if [[ -n "$MODEL_BASE_URL" ]]; then
+      cmd+=(--model_base_url "$MODEL_BASE_URL")
+    fi
     if [[ ${#limit_args[@]} -gt 0 ]]; then
       cmd+=("${limit_args[@]}")
     fi
@@ -124,6 +151,10 @@ run_task() {
 }
 
 run_smoke() {
+  if [[ "$MODEL_BASE_URL" == *"integrate.api.nvidia.com"* ]] && [[ "$MODEL" == "$DEFAULT_MODEL" ]]; then
+    MODEL="$NVIDIA_SMOKE_MODEL_DEFAULT"
+    echo "Using NVIDIA-compatible smoke model: $MODEL" >&2
+  fi
   run_task "m3oralbench_judgment_smoke" "evals/m3oralbench.py::m3oralbench_judgment" "$SMOKE_LIMIT"
   run_task "m3oralbench_response_smoke" "evals/m3oralbench.py::m3oralbench_response" "$SMOKE_LIMIT"
 }
