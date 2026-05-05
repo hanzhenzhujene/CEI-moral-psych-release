@@ -9,6 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "inspect"))
 
 from evals._benchmark_utils import (  # noqa: E402
+    build_vision_input,
     classify_valence_label,
     classify_yes_no_label,
     extract_action_choice,
@@ -91,3 +92,33 @@ def test_classify_valence_label_either_standalone():
 
 def test_classify_valence_label_neutral():
     assert classify_valence_label("Neutral on this topic.") == "Either"
+
+
+def test_build_vision_input_uses_standard_image_block_off_minimax(tmp_path, monkeypatch):
+    image_path = tmp_path / "sample.png"
+    image_path.write_bytes(b"fake-image-bytes")
+
+    monkeypatch.delenv("OPENAI_BASE_URL", raising=False)
+
+    messages = build_vision_input(image_path, "Rate this image.")
+
+    assert len(messages) == 1
+    assert messages[0].content[0].type == "image"
+    assert messages[0].content[0].image == str(image_path)
+    assert messages[0].content[1].type == "text"
+    assert messages[0].content[1].text == "Rate this image."
+
+
+def test_build_vision_input_inlines_base64_for_direct_minimax(tmp_path, monkeypatch):
+    image_path = tmp_path / "sample.png"
+    image_path.write_bytes(b"fake-image-bytes")
+
+    monkeypatch.setenv("OPENAI_BASE_URL", "https://api.minimax.io/v1")
+
+    messages = build_vision_input(image_path, "Rate this image.")
+
+    assert len(messages) == 1
+    assert len(messages[0].content) == 1
+    assert messages[0].content[0].type == "text"
+    assert messages[0].content[0].text.startswith("Rate this image.\n\n[Image base64:")
+    assert "ZmFrZS1pbWFnZS1ieXRlcw==" in messages[0].content[0].text

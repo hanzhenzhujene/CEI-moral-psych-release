@@ -33,7 +33,12 @@ resolve_provider() {
         "deepseek/deepseek-r1")                    echo "deepseek|deepseek-reasoner" ;;
         "deepseek/deepseek-r1-distill-llama-70b")  echo "deepseek|deepseek-r1-distill-llama-70b" ;;
 
-        # MiniMax direct API — bypasses OpenRouter JSONDecodeError
+        # MiniMax direct API — bypasses OpenRouter issues and uses the funded
+        # account for both text and SMID vision routes.
+        # MiniMax image-understanding cookbook currently routes through
+        # MiniMax-Text-01 with the image embedded as base64 text because the
+        # OpenAI-compatible endpoint rejects image_url content blocks.
+        "minimax/minimax-01") echo "minimax|MiniMax-Text-01" ;;
         "minimax/minimax-m2.5") echo "minimax|MiniMax-M2.5" ;;
 
         *) return 1 ;;
@@ -83,8 +88,10 @@ setup_model_provider() {
         export OPENAI_BASE_URL
         OPENAI_BASE_URL=$(provider_url "$provider")
 
-        # Resolve the key variable indirectly (eval for bash 3.2 compat)
-        eval "export OPENAI_API_KEY=\"\${$key_var}\""
+        # Resolve the key variable indirectly (eval for bash 3.2 compat).
+        # Use the `${var-}` form so launchers running with `set -u` can still
+        # preflight missing provider keys without crashing in the router itself.
+        eval "export OPENAI_API_KEY=\"\${$key_var-}\""
 
         echo "  [provider] $model → $provider ($provider_model)" >&2
     else

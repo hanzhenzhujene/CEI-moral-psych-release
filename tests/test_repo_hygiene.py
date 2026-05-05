@@ -62,6 +62,8 @@ def test_env_example_exists_and_documents_core_inputs():
     assert env_example.exists()
     content = env_example.read_text(encoding="utf-8")
     assert "OPENROUTER_API_KEY=" in content
+    assert "MINIMAX_API_KEY=" in content
+    assert "CEI_MIN_MAX_TOKENS=2048" in content
     assert "UNIMORAL_DATA_DIR=" in content
     assert "SMID_DATA_DIR=" in content
     assert "VALUEPRISM_RELEVANCE_FILE=" in content
@@ -129,6 +131,21 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "one canonical reporting path" in scripts_readme
     assert "build_release_artifacts.py" in scripts_readme
     assert "DeNEVIL proxy evidence package" in scripts_readme
+    assert "provider_config.sh" in scripts_readme
+    assert "MINIMAX_API_KEY" in scripts_readme
+    assert "CEI_MIN_MAX_TOKENS=2048" in scripts_readme
+
+
+def test_pr6_launchers_now_use_provider_routing_for_direct_provider_reruns():
+    family_launcher = (ROOT / "scripts" / "family_size_text_expansion.sh").read_text(encoding="utf-8")
+    minimax_launcher = (ROOT / "scripts" / "full_option1_runs_minimax_small.sh").read_text(encoding="utf-8")
+
+    for content in (family_launcher, minimax_launcher):
+        assert "provider_config.sh" in content
+        assert "setup_model_provider" in content
+        assert "--model_base_url" in content
+        assert "routing_metadata.csv" in content
+        assert 'cd "$ROOT"' in content
 
 
 def test_root_readme_links_release_methodology_and_summary_paths():

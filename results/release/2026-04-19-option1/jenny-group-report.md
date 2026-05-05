@@ -1,6 +1,6 @@
 # Jenny Zhu Moral-Psych Benchmark Report
 
-Updated: `May 1, 2026`
+Updated: `May 5, 2026`
 
 Frozen public snapshot referenced here: `Option 1`, `April 19, 2026`
 
@@ -12,8 +12,10 @@ If you only read one section, read these key takeaways:
 
 - **Best like-for-like line:** `Qwen-L` is the strongest fully comparable line, averaging 0.600 across UniMoral 0.665, SMID 0.483, and Value 0.653. This is the cleanest overall topline because all three comparable metrics are observed on the same line.
 - **Best text-only line:** `Llama-M` is the strongest pure text line, reaching UniMoral 0.670 and Value 0.724. It should not be called the best all-around line because there is no public SMID route on that line.
-- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.378) and widest spread (0.266), while `UniMoral` is tightly clustered (0.048 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
+- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.365) and widest spread (0.280), while `UniMoral` is tightly clustered (0.676 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
 - **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
+- **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `Gemma-L` at 17.6% to `Llama-S` at 23.9%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
+- **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates (92.4% to 99.5% protective response rate). `DeepSeek-M` is the main caveat because 86.0% of prompts surfaced no visible answer, so that line should be read as a trace-surfacing failure rather than a harmful-behavior result.
 
 
 ## Benchmark Result Visuals
@@ -64,13 +66,17 @@ This section is the fastest summary for a mentor or collaborator: which lines al
 | `Llama-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally, outside the frozen Option 1 counts. |
 | `Gemma-M` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
 | `Gemma-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
-| `Qwen-M` | Live local rerun | Live | Earlier text checkpoints withdrawn; UniMoral done; live rerun checkpoint refreshes at build time | Clean text rerun active; detailed checkpoints are summarized in Snapshot. |
-| `Qwen-L` | Live local rerun | Live | SMID recovery stands; UniMoral done; live rerun checkpoint refreshes at build time | SMID recovery complete; clean text rerun active. |
-| `Llama-M` | Live local rerun | Live | UniMoral done; live rerun checkpoint refreshes at build time | Medium text rerun active; detailed checkpoints are summarized in Snapshot. |
+| `Qwen-M` | Complete local line | Done | Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
+| `Qwen-L` | Complete local line | Done | SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | SMID recovery complete; clean text rerun finished locally. |
+| `Llama-M` | Complete local line | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Completed locally on April 22, 2026. |
+| `Llama-L` | Complete local line | Done | SMID complete; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%. | SMID complete; local text rerun finished successfully through the Denevil proxy task. |
+| `DeepSeek-M` | Complete local line | Done | No SMID route; UniMoral, Value Kaleidoscope, and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%. | Local text rerun finished successfully on April 29, 2026 through the Denevil proxy task. |
+| `MiniMax-L` | Live local rerun | Live | Shared MiniMax-01 SMID recovery is complete; UniMoral and CCD-Bench are done; the active text reruns are now on Denevil proxy while Value Kaleidoscope still remains queued. | Shared MiniMax-01 SMID recovery is complete; CCD-Bench is done, and the MiniMax-M2.5 text reruns are now active on Denevil proxy. |
+| `MiniMax-S` | Attempted local line | Error | No usable benchmark line completed | OpenRouter key-limit failures interrupted both text and image paths. |
 
 ### Latest Family-Size Progress Snapshot
 
-This stacked overview is the quickest visual read on the current published four-family matrix.
+This stacked overview is the quickest visual read on the current published family-size matrix.
 
 ![Family-size progress overview](../../../figures/release/option1_family_size_progress_overview.svg)
 
@@ -87,6 +93,9 @@ Metric definition version: `2026-04-30`. The visible-answer parsing rules behind
 | `Qwen-S` | 0.647 | 0.368 | 0.682 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Qwen-M` | 0.665 | n/a | 0.675 | Text-only comparable line; no public SMID route on this slot. |
 | `Qwen-L` | 0.665 | 0.483 | 0.653 | Comparable on all three benchmark-faithful accuracy panels. |
+| `MiniMax-S` | n/a | 0.432 | n/a | Partial comparable evidence; see benchmark-specific sections below. |
+| `MiniMax-L` | 0.008 | 0.203 | n/a | Partial comparable evidence; see benchmark-specific sections below. |
+| `DeepSeek-M` | n/a | n/a | n/a | Coverage-only line; accuracy withheld after visible-answer validation. |
 | `DeepSeek-L` | 0.684 | n/a | 0.635 | Text-only comparable line; no public SMID route on this slot. |
 | `Llama-S` | 0.648 | 0.216 | 0.529 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Llama-M` | 0.670 | n/a | 0.724 | Text-only comparable line; no public SMID route on this slot. |
@@ -107,8 +116,8 @@ These are the strongest claims the current public evidence supports. They use on
 | --- | --- | --- |
 | Strongest fully observed comparable line | `Qwen-L` averages 0.600 across UniMoral 0.665, SMID 0.483, and Value 0.653. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |
 | Strongest text-only comparable line | `Llama-M` reaches UniMoral 0.670 and Value 0.724, a two-metric mean of 0.697. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |
-| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.378 and the widest spread at 0.266. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |
-| Closest thing to saturation | `UniMoral` has the tightest range, from 0.635 to 0.684 (0.048 spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |
+| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.365 and the widest spread at 0.280. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |
+| Closest thing to saturation | `UniMoral` has the tightest range, from 0.008 to 0.684 (0.676 spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |
 | Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen` and `Llama` now add broader text-side size curves. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
 
 ### Benchmark Reading Guide
@@ -131,9 +140,9 @@ _Figure 3. Mean, low, and high accuracy for the three directly comparable benchm
 
 | Benchmark | Mean accuracy | Best line | Lowest line | Spread | Reading |
 | --- | ---: | --- | --- | ---: | --- |
-| `UniMoral` | 0.660 | `DeepSeek-L` (0.684) | `Gemma-S` (0.635) | 0.048 | Tightest spread; current lines cluster closely. |
-| `SMID` | 0.378 | `Qwen-L` (0.483) | `Llama-S` (0.216) | 0.266 | Lowest mean and widest spread in the current comparable slice. |
-| `Value Kaleidoscope` | 0.650 | `Llama-M` (0.724) | `Llama-S` (0.529) | 0.195 | Mid-range difficulty with meaningful but not extreme variation. |
+| `UniMoral` | 0.600 | `DeepSeek-L` (0.684) | `MiniMax-L` (0.008) | 0.676 | Widest cross-line spread in the current comparable slice. |
+| `SMID` | 0.365 | `Qwen-L` (0.483) | `MiniMax-L` (0.203) | 0.280 | Lowest mean in the current comparable slice. |
+| `Value Kaleidoscope` | 0.650 | `Llama-M` (0.724) | `Llama-S` (0.529) | 0.195 | Tightest spread; current lines cluster closely. |
 
 ### Family Scaling Profile
 
@@ -142,6 +151,7 @@ _The headline family-scaling figure already appears above in **Benchmark Result 
 | Family | Evidence scope | Numeric pattern | Cautious interpretation |
 | --- | --- | --- | --- |
 | `Qwen` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence after the recovered large line. | UniMoral: S 0.647 -> M 0.665 -> L 0.665<br/>SMID: S 0.368 -> L 0.483<br/>Value Kaleidoscope: S 0.682 -> M 0.675 -> L 0.653 | Qwen improves from S to M on text tasks and then largely plateaus at L, while the recovered large SMID line is much stronger than the small line. That supports task-specific scaling, not a single monotonic curve. |
+| `MiniMax` | 2 comparable metric series available. | UniMoral: L 0.008<br/>SMID: S 0.432 -> L 0.203 | Current public evidence is too sparse for a stronger within-family scaling claim. |
 | `DeepSeek` | Only the large line remains accuracy-comparable on the family scaling view, and there is still no public SMID route. | UniMoral: L 0.684<br/>Value Kaleidoscope: L 0.635 | DeepSeek remains a useful large-line text comparison point, but the finished medium rerun still cannot support a trustworthy accuracy size curve because its saved short-answer artifacts collapse into empty answers. Read its CCD-Bench and Denevil outputs in the dedicated coverage / proxy figures instead of the comparable-accuracy panel. |
 | `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic. |
 | `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic. |
@@ -162,18 +172,21 @@ The full ten-option numeric table is published in `results/release/2026-04-19-op
 
 | Line | Dominant cluster | Top-cluster share | Effective clusters | Behavioral note |
 | --- | --- | ---: | ---: | --- |
-| `Qwen-S` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
-| `Qwen-M` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
-| `Qwen-L` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
+| `Qwen-S` | option_6 (Nordic Europe) | 19.2% | 8.91 | Compare against the heatmap above, not as scalar accuracy. |
+| `Qwen-M` | option_6 (Nordic Europe) | 21.9% | 8.29 | Compare against the heatmap above, not as scalar accuracy. |
+| `Qwen-L` | option_6 (Nordic Europe) | 23.4% | 7.97 | Compare against the heatmap above, not as scalar accuracy. |
+| `MiniMax-S` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
+| `MiniMax-M` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
+| `MiniMax-L` | option_6 (Nordic Europe) | 18.7% | 9.02 | Compare against the heatmap above, not as scalar accuracy. |
 | `DeepSeek-S` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
 | `DeepSeek-M` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
-| `DeepSeek-L` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
-| `Llama-S` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
-| `Llama-M` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
-| `Llama-L` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
-| `Gemma-S` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
-| `Gemma-M` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
-| `Gemma-L` | n/a | n/a | n/a | No valid visible choice surfaced; see appendix coverage figure. |
+| `DeepSeek-L` | option_6 (Nordic Europe) | 22.6% | 7.99 | Compare against the heatmap above, not as scalar accuracy. |
+| `Llama-S` | option_6 (Nordic Europe) | 23.9% | 7.24 | Compare against the heatmap above, not as scalar accuracy. |
+| `Llama-M` | option_6 (Nordic Europe) | 20.6% | 8.03 | Compare against the heatmap above, not as scalar accuracy. |
+| `Llama-L` | option_6 (Nordic Europe) | 23.5% | 7.67 | Compare against the heatmap above, not as scalar accuracy. |
+| `Gemma-S` | option_6 (Nordic Europe) | 21.6% | 8.37 | Compare against the heatmap above, not as scalar accuracy. |
+| `Gemma-M` | option_6 (Nordic Europe) | 18.6% | 8.89 | Compare against the heatmap above, not as scalar accuracy. |
+| `Gemma-L` | option_6 (Nordic Europe) | 17.6% | 9.05 | Compare against the heatmap above, not as scalar accuracy. |
 
 ### DeNEVIL Proxy Behavioral Evidence
 
@@ -193,18 +206,21 @@ The compact behavior table below is the quickest line-level read. Use it before 
 
 | Line | Refusal | Redirect | Corrective/contextual | Direct answer | Risky continuation | Ambiguous | Empty | Dominant behavior |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| `Qwen-S` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| `Qwen-M` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| `Qwen-L` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
+| `Qwen-S` | 21.5% | 8.0% | 69.9% | 0.0% | 0.1% | 0.4% | 0.0% | Corrective / contextual response |
+| `Qwen-M` | 22.1% | 8.4% | 69.0% | 0.0% | 0.2% | 0.3% | 0.0% | Corrective / contextual response |
+| `Qwen-L` | 29.3% | 5.7% | 64.3% | 0.0% | 0.2% | 0.4% | 0.0% | Corrective / contextual response |
+| `MiniMax-S` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
+| `MiniMax-M` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
+| `MiniMax-L` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | `DeepSeek-S` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| `DeepSeek-M` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| `DeepSeek-L` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| `Llama-S` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| `Llama-M` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| `Llama-L` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| `Gemma-S` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| `Gemma-M` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| `Gemma-L` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
+| `DeepSeek-M` | 8.3% | 0.4% | 4.1% | 0.0% | 0.0% | 1.1% | 86.0% | No visible answer |
+| `DeepSeek-L` | 31.1% | 6.1% | 62.0% | 0.0% | 0.2% | 0.6% | 0.0% | Corrective / contextual response |
+| `Llama-S` | 41.0% | 1.3% | 56.5% | 0.0% | 0.1% | 1.2% | 0.0% | Corrective / contextual response |
+| `Llama-M` | 26.0% | 1.8% | 70.5% | 0.0% | 0.1% | 1.6% | 0.0% | Corrective / contextual response |
+| `Llama-L` | 22.9% | 1.4% | 74.7% | 0.0% | 0.2% | 0.8% | 0.0% | Corrective / contextual response |
+| `Gemma-S` | 36.1% | 12.4% | 48.7% | 0.0% | 0.1% | 2.7% | 0.0% | Corrective / contextual response |
+| `Gemma-M` | 43.3% | 4.1% | 44.9% | 0.0% | 0.0% | 7.6% | 0.0% | Corrective / contextual response |
+| `Gemma-L` | 40.4% | 8.9% | 49.0% | 0.0% | 0.1% | 1.6% | 0.0% | Corrective / contextual response |
 
 ### DeNEVIL Appendix QA / Provenance
 
@@ -230,23 +246,29 @@ The appendix table below records the available QA/provenance fields explicitly.
 
 | Line | Proxy status | Total proxy samples | Visible generated responses | Valid visible response rate | Proxy route | Note |
 | --- | --- | ---: | ---: | ---: | --- | --- |
-| `Qwen-S` | Proxy complete | n/a | n/a | n/a | `qwen3-8b` | Proxy-only evidence; see CSV for full limitation details. |
-| `Qwen-M` | Queued | n/a | n/a | n/a | `qwen3-14b` | Proxy-only evidence; see CSV for full limitation details. |
-| `Qwen-L` | Queued | n/a | n/a | n/a | `qwen3-32b` | Proxy-only evidence; see CSV for full limitation details. |
+| `Qwen-S` | Proxy complete | 20,518 | 20,515 / 20,518 | 100.0% | `qwen3-8b` | Near-complete archive; 3 prompts lacked visible saved text. |
+| `Qwen-M` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `qwen3-14b` | Visible text surfaced for every proxy prompt. |
+| `Qwen-L` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `qwen3-32b` | Visible text surfaced for every proxy prompt. |
+| `MiniMax-S` | Error | n/a | n/a | n/a | `minimax-m2.1` | Proxy-only evidence; see CSV for full limitation details. |
+| `MiniMax-M` | Queued | n/a | n/a | n/a | `minimax-m2.5` | Proxy-only evidence; see CSV for full limitation details. |
+| `MiniMax-L` | Active rerun | n/a | n/a | n/a | `minimax-m2.5` | Proxy-only evidence; see CSV for full limitation details. |
 | `DeepSeek-S` | No route | n/a | n/a | n/a | `no-route` | No released proxy route. |
-| `DeepSeek-M` | Queued | n/a | n/a | n/a | `deepseek-r1-distill-llama-70b` | Proxy-only evidence; see CSV for full limitation details. |
-| `DeepSeek-L` | Proxy complete | n/a | n/a | n/a | `deepseek-chat-v3.1` | Proxy-only evidence; see CSV for full limitation details. |
-| `Llama-S` | Proxy complete | n/a | n/a | n/a | `llama-3.2-11b-vision-instruct` | Proxy-only evidence; see CSV for full limitation details. |
-| `Llama-M` | Queued | n/a | n/a | n/a | `llama-3.3-70b-instruct` | Proxy-only evidence; see CSV for full limitation details. |
-| `Llama-L` | Queued | n/a | n/a | n/a | `llama-4-maverick` | Proxy-only evidence; see CSV for full limitation details. |
-| `Gemma-S` | Proxy complete | n/a | n/a | n/a | `gemma-3-4b-it` | Proxy-only evidence; see CSV for full limitation details. |
-| `Gemma-M` | Proxy complete | n/a | n/a | n/a | `gemma-3-12b-it` | Proxy-only evidence; see CSV for full limitation details. |
-| `Gemma-L` | Proxy complete | n/a | n/a | n/a | `gemma-3-27b-it` | Proxy-only evidence; see CSV for full limitation details. |
+| `DeepSeek-M` | Proxy complete | 20,518 | 2,863 / 20,518 | 14.0% | `deepseek-r1-distill-llama-70b` | Only 14.0% of prompts surfaced visible text (2,863 / 20,518). |
+| `DeepSeek-L` | Proxy complete | 20,518 | 20,514 / 20,518 | 100.0% | `deepseek-chat-v3.1` | Near-complete archive; 4 prompts lacked visible saved text. |
+| `Llama-S` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `llama-3.2-11b-vision-instruct` | Visible text surfaced for every proxy prompt. |
+| `Llama-M` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `llama-3.3-70b-instruct` | Visible text surfaced for every proxy prompt. |
+| `Llama-L` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `llama-4-maverick` | Visible text surfaced for every proxy prompt. |
+| `Gemma-S` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `gemma-3-4b-it` | Visible text surfaced for every proxy prompt. |
+| `Gemma-M` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `gemma-3-12b-it` | Visible text surfaced for every proxy prompt. |
+| `Gemma-L` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `gemma-3-27b-it` | Visible text surfaced for every proxy prompt. |
 
 A few safe qualitative examples help clarify what the proxy traces actually look like in practice.
 
 | Model line | Proxy prompt type | Shortened model output pattern | Interpretable signal |
 | --- | --- | --- | --- |
+| `Qwen-S` | Loaded social / political judgment | Corrective / contextual response | The visible trace gives a corrective or contextual answer, which is useful proxy behavior evidence even though the release does not claim paper-faithful Denevil scoring. |
+| `Llama-L` | Illicit access / sabotage | Protective refusal | The visible trace refuses the request directly, which is a clear protective behavioral outcome in the proxy release. |
+| `DeepSeek-M` | Loaded social / political judgment | No visible answer | This sample shows why the proxy package separates completed archives from the subset of traces that actually surface a visible public answer. |
 
 ### Reporting Guardrails
 
@@ -254,7 +276,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 - Read `CCD-Bench` in its dedicated choice-behavior figures, not in the family scaling line chart. `CCD-Bench` valid-choice coverage stays appendix QA only; the headline result is the cluster-selection heatmap and concentration summary.
 - Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
 - Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.
-- If a line appears only in the appendix coverage/provenance panels, read it as a response-format / release-evidence signal rather than a benchmark-faithful accuracy result.
+- Read `DeepSeek-M` as a visible-answer surfacing failure, not a hidden accuracy collapse: `CCD-Bench coverage = 0.0%` (0 / 2,182) means the saved visible CCD answer never exposed a parseable 1-10 choice, while `Denevil coverage = 14.0%` (2,863 / 20,518) means only that share of DeNEVIL proxy prompts surfaced any visible text.
 - Do not call `Llama-M` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
 - Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, and the broader `Qwen` / `Llama` curves still move in mixed directions across benchmarks.
 - Keep `DeepSeek-M` out of the top-row comparable accuracy charts until its saved short-answer rerun artifacts stop collapsing into empty visible answers.
@@ -265,19 +287,19 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `May 1, 2026` |
+| Repo update date | `May 5, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
-| Current project cost estimate | `$84.02` |
+| Current project cost estimate | `$243.40` |
 | Cost scope | User-updated project total across the frozen release work and the later tracked reruns completed in this repo. |
 | Purpose | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
-| Current public matrix | `5 benchmarks x 4 model families x 3 size slots = 60 family-size-benchmark cells` |
+| Current public matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
 | Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |
-| Model families in scope | `Qwen`, `DeepSeek`, `Llama`, `Gemma` |
+| Model families in scope | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |
 | What the frozen snapshot actually covers | one closed `Option 1` slice across `Qwen`, `DeepSeek`, and `Gemma` |
 | Extra completed local line outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `5` papers / `7` tasks |
 | Run provider / temperature | `OpenRouter`, `temperature=0` |
-| Current live reruns | `Qwen-M`, `Qwen-L`, and `Llama-M` |
-| Next restart focus | Keep the active published reruns healthy. |
+| Current live reruns | `MiniMax-L` |
+| Next restart focus | Keep the active MiniMax-L Denevil proxy passes healthy, then let the queue return to the remaining Value Kaleidoscope work. |
 | Release guardrail | Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables. |
 | CI workflow | [CI workflow](https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml) |
 | Total evaluated samples in this release | `302,776` |
@@ -286,9 +308,9 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 
 This compact block sits between the topline tables and the detailed progress matrix so the live state stays readable.
 
-- Active open-source reruns: `Qwen-M` (Clean text rerun active; detailed checkpoints are summarized in Snapshot), `Qwen-L` (SMID recovery complete; clean text rerun active), and `Llama-M` (Medium text rerun active; detailed checkpoints are summarized in Snapshot).
+- Active open-source reruns: `MiniMax-L` (Shared MiniMax-01 SMID recovery is complete; CCD-Bench is done, and the MiniMax-M2.5 text reruns are now active on Denevil proxy).
 - Stalled or queued follow-up work: no published partial line is waiting right now.
-- Complete local lines beyond the frozen `Option 1` slice: `Llama-S`, `Gemma-M`, and `Gemma-L`.
+- Complete local lines beyond the frozen `Option 1` slice: `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, and `DeepSeek-M`.
 - Release guardrails: Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables.
 
 ## Local Expansion Checkpoint
@@ -300,10 +322,10 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `Qwen-L SMID recovery` | Done | Recovered via qwen2.5-vl-72b-instruct after the earlier moderation stop. |
 | `Gemma-L text batch` | Done | Completed April 21 with a full local large text line. |
 | `Gemma-M text batch` | Done | Completed April 21 with a full local medium text line. |
-| `Qwen-M text batch` | Live | Clean text rerun active; detailed checkpoints are summarized in Snapshot. |
-| `Qwen-L text batch` | Live | SMID recovery complete; clean text rerun active. |
-| `Llama-M text batch` | Live | Medium text rerun active; detailed checkpoints are summarized in Snapshot. |
-| `DeepSeek-M text batch` | Prep | Still queued behind the live Llama-M rerun. |
+| `Qwen-M text batch` | Done | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
+| `Qwen-L text batch` | Done | SMID recovery complete; clean text rerun finished locally. |
+| `Llama-M text batch` | Done | Completed April 22 with a full medium text line. |
+| `DeepSeek-M text batch` | Done | Local text rerun finished successfully on April 29, 2026 through the Denevil proxy task. |
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
 | `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |
 
@@ -337,6 +359,7 @@ Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-
 | Family | Small route | Medium route | Large route |
 | --- | --- | --- | --- |
 | `Qwen` | Text: `openrouter/qwen/qwen3-8b`<br/>Vision: `openrouter/qwen/qwen3-vl-8b-instruct` | `openrouter/qwen/qwen3-14b` | Text: `openrouter/qwen/qwen3-32b`<br/>Vision: `openrouter/qwen/qwen2.5-vl-72b-instruct (recovery complete)` |
+| `MiniMax` | Text: `openrouter/minimax/minimax-m2.1`<br/>Vision: `openrouter/minimax/minimax-01` | `openrouter/minimax/minimax-m2.5` | Text: `openrouter/minimax/minimax-m2.5`<br/>Vision: `openrouter/minimax/minimax-01 (shared SMID recovery route)` |
 | `DeepSeek` | No distinct small OpenRouter route exposed | `openrouter/deepseek/deepseek-r1-distill-llama-70b (DeepInfra-pinned recovery route)` | `openrouter/deepseek/deepseek-chat-v3.1` |
 | `Llama` | `openrouter/meta-llama/llama-3.2-11b-vision-instruct` | `openrouter/meta-llama/llama-3.3-70b-instruct` | `openrouter/meta-llama/llama-4-maverick` |
 | `Gemma` | `openrouter/google/gemma-3-4b-it` | `openrouter/google/gemma-3-12b-it` | `openrouter/google/gemma-3-27b-it` |
@@ -346,14 +369,17 @@ Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-
 | Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | Note |
 | :--- | :---: | :---: | :---: | :---: | :---: | --- |
 | `Qwen-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 line. |
-| `Qwen-M` | Done | TBD | Live | Queue | Queue | Clean text rerun active after withdrawn short-answer artifacts. |
-| `Qwen-L` | Done | Done | Live | Queue | Queue | SMID recovery complete; clean text rerun active. |
+| `Qwen-M` | Done | TBD | Done | Done | Proxy | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
+| `Qwen-L` | Done | Done | Done | Done | Proxy | SMID recovery complete; clean text rerun finished locally. |
+| `MiniMax-S` | Error | Error | Error | Error | Error | Attempted, but key-limit failures made the line unusable. |
+| `MiniMax-M` | Queue | TBD | Queue | Queue | Queue | Text queued; no medium SMID route fixed yet. |
+| `MiniMax-L` | Done | Done | Queue | Done | Live | Shared MiniMax-01 SMID recovery is complete; CCD-Bench is done, and the MiniMax-M2.5 text reruns are now active on Denevil proxy. |
 | `DeepSeek-S` | TBD | - | TBD | TBD | TBD | No distinct small DeepSeek route is fixed yet. |
-| `DeepSeek-M` | Queue | - | Queue | Queue | Queue | No vision route; queued behind the live Llama-M rerun. |
+| `DeepSeek-M` | Done | - | Done | Done | Proxy | No SMID route; local text rerun finished successfully through the Denevil proxy task (100.0%). |
 | `DeepSeek-L` | Done | - | Done | Done | Proxy | Frozen large text line; no SMID route was included. |
 | `Llama-S` | Done | Done | Done | Done | Proxy | Complete locally across all five papers. |
-| `Llama-M` | Done | - | Live | Queue | Queue | No SMID run is planned. UniMoral is complete. The live rerun checkpoint text is refreshed from the local artifacts at build time when those files are available. |
-| `Llama-L` | Queue | Done | Queue | Queue | Queue | SMID done; text is still queued. |
+| `Llama-M` | Done | - | Done | Done | Proxy | No SMID route; medium text line completed locally on April 22, 2026. |
+| `Llama-L` | Done | Done | Done | Done | Proxy | SMID complete; local text rerun is now fully persisted through the Denevil proxy task (100.0%). |
 | `Gemma-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 recovery line. |
 | `Gemma-M` | Done | Done | Done | Done | Proxy | Complete local line across all five papers. |
 | `Gemma-L` | Done | Done | Done | Done | Proxy | Complete local line across all five papers. |

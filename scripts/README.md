@@ -22,9 +22,10 @@ Everything below supports that path, but not every script is meant to be a publi
 - `full_option1_runs.sh`: original `Option 1` launcher for `Qwen`, `DeepSeek`, and `Gemma`.
 - `denevil_proxy_formal_runs.sh`: formal proxy launcher for the current local `Denevil` proxy path.
 - `full_option1_runs_llama_small.sh`: current `Llama 3.2 11B Vision` small-model launcher.
-- `full_option1_runs_minimax_small.sh`: current small-model `MiniMax` hybrid launcher.
-- `family_size_text_expansion.sh`: sequential fixed-order launcher for the active non-image family-by-size expansion (`Gemma`, `Qwen`, `Llama`, `MiniMax`, plus a `DeepSeek` medium distill line).
+- `full_option1_runs_minimax_small.sh`: current small-model `MiniMax` hybrid launcher. It now reads `provider_config.sh` so MiniMax routes can use a direct provider when configured, and it records `routing_metadata.csv` beside the task outputs.
+- `family_size_text_expansion.sh`: sequential fixed-order launcher for the active non-image family-by-size expansion (`Gemma`, `Qwen`, `Llama`, `MiniMax`, plus a `DeepSeek` medium distill line). It now resolves each route through `provider_config.sh`, passes `--model_base_url` through the Inspect runner, and records per-task routing metadata.
 - `family_size_image_expansion.sh`: sequential `SMID`-only image expansion launcher for the selected medium / large vision routes.
+- For MiniMax direct reruns, populate `MINIMAX_API_KEY`. The provider router sends `MiniMax-M2.5` text runs directly and maps the `SMID` route to `MiniMax-Text-01` with an inline base64 image prompt because MiniMax's OpenAI-compatible endpoint does not accept `image_url` blocks. Keep `CEI_MIN_MAX_TOKENS=2048` or higher so `MiniMax-M2.5` has enough reasoning-token headroom.
 - `qwen_large_smid_recovery.sh`: safer `Qwen-L` `SMID` recovery launcher using `qwen2.5-vl-72b-instruct` plus explicit non-Alibaba provider routing.
 
 These launchers are historical and operationally useful, but the public release package should be generated from `build_release_artifacts.py` rather than by reading raw run folders directly.

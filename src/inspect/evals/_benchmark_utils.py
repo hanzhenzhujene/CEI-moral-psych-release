@@ -8,6 +8,7 @@ small and focused on benchmark-specific logic.
 from __future__ import annotations
 
 import ast
+import base64
 import json
 import os
 import random
@@ -128,6 +129,19 @@ def load_json_source(path_or_url: str | None, *, default_url: str | None = None,
 
 
 def build_vision_input(image_path: Path, prompt: str):
+    # MiniMax's OpenAI-compatible endpoint currently rejects image_url content.
+    # Its official cookbook uses a text-only request with the image embedded as
+    # base64, so switch to that format when a direct MiniMax base URL is active.
+    base_url = env_str("OPENAI_BASE_URL", "") or ""
+    if "api.minimax.io" in base_url:
+        image_b64 = base64.b64encode(image_path.read_bytes()).decode("utf-8")
+        return [
+            ChatMessageUser(
+                content=[
+                    ContentText(text=f"{prompt}\n\n[Image base64:{image_b64}]"),
+                ]
+            )
+        ]
     return [
         ChatMessageUser(
             content=[
