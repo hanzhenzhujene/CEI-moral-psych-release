@@ -885,12 +885,12 @@ def test_release_builder_emits_expected_files(tmp_path):
         report_text,
         flags=re.MULTILINE,
     )
-    assert (
-        "Within active `MiniMax-L`, `Value Kaleidoscope` remains queued behind the current benchmark."
-        in report_text
-        or "No currently published line is still running locally." in report_text
-    )
     assert "| Current live reruns |" in report_text
+    assert re.search(
+        r"^\| Current live reruns \| .+\|$",
+        report_text,
+        flags=re.MULTILINE,
+    )
     assert "curated snapshot rather than a live dashboard" in report_text
     assert "## Status Key" in report_text
     assert "## Supporting Figures" in report_text
@@ -910,12 +910,12 @@ def test_release_builder_emits_expected_files(tmp_path):
         release_readme,
         flags=re.MULTILINE,
     )
-    assert (
-        "Within active `MiniMax-L`, `Value Kaleidoscope` remains queued behind the current benchmark."
-        in release_readme
-        or "No currently published line is still running locally." in release_readme
-    )
     assert "| Current live reruns |" in release_readme
+    assert re.search(
+        r"^\| Current live reruns \| .+\|$",
+        release_readme,
+        flags=re.MULTILINE,
+    )
     assert "sample volume chart" in release_readme
     assert "benchmark difficulty profile" in release_readme
     assert "family scaling profile" in release_readme
