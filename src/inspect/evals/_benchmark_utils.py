@@ -10,6 +10,7 @@ from __future__ import annotations
 import ast
 import base64
 import json
+import mimetypes
 import os
 import random
 import re
@@ -22,6 +23,10 @@ from typing import Any, Mapping, Sequence
 
 from inspect_ai.model import ChatMessageUser, ContentImage, ContentText
 from inspect_ai.scorer import Score, Target, accuracy, mean, scorer, stderr
+# Eagerly import the transcript helper before eval task groups start. We saw
+# intermittent late PermissionError failures when Inspect lazily loaded this
+# module mid-run from the shared Desktop-hosted venv.
+import inspect_ai.solver._transcript as _inspect_solver_transcript  # noqa: F401
 from inspect_ai.solver import TaskState, generate
 from rouge_score import rouge_scorer
 
@@ -71,6 +76,16 @@ def generation_plan(max_tokens: int = 256):
     min_max_tokens = env_int("CEI_MIN_MAX_TOKENS", max_tokens)
     effective_max_tokens = max(max_tokens, min_max_tokens)
     return [generate(max_tokens=effective_max_tokens, temperature=env_float("CEI_TEMPERATURE", 0.0))]
+
+
+def resume_start_index(env_var: str) -> int:
+    raw_value = (env_str(env_var, "") or "").strip()
+    if not raw_value:
+        return 0
+    try:
+        return max(0, int(raw_value))
+    except ValueError as exc:
+        raise ValueError(f"{env_var} must be a non-negative integer, got: {raw_value!r}") from exc
 
 
 def normalize_whitespace(text: str) -> str:
@@ -128,24 +143,20 @@ def load_json_source(path_or_url: str | None, *, default_url: str | None = None,
     return json.loads(cached.read_text())
 
 
+def _image_data_uri(image_path: Path) -> str:
+    mime_type, _ = mimetypes.guess_type(str(image_path), strict=False)
+    mime_type = mime_type or "image/png"
+    image_b64 = base64.b64encode(image_path.read_bytes()).decode("utf-8")
+    return f"data:{mime_type};base64,{image_b64}"
+
+
 def build_vision_input(image_path: Path, prompt: str):
-    # MiniMax's OpenAI-compatible endpoint currently rejects image_url content.
-    # Its official cookbook uses a text-only request with the image embedded as
-    # base64, so switch to that format when a direct MiniMax base URL is active.
     base_url = env_str("OPENAI_BASE_URL", "") or ""
-    if "api.minimax.io" in base_url:
-        image_b64 = base64.b64encode(image_path.read_bytes()).decode("utf-8")
-        return [
-            ChatMessageUser(
-                content=[
-                    ContentText(text=f"{prompt}\n\n[Image base64:{image_b64}]"),
-                ]
-            )
-        ]
+    image_ref = _image_data_uri(image_path) if "api.minimax.io" in base_url else str(image_path)
     return [
         ChatMessageUser(
             content=[
-                ContentImage(image=str(image_path)),
+                ContentImage(image=image_ref),
                 ContentText(text=prompt),
             ]
         )
@@ -230,6 +241,19 @@ def extract_structured_rating_int(text: str, *, minimum: int, maximum: int) -> i
     normalized = normalize_whitespace(text)
     if not normalized:
         return None
+    explicit_patterns = [
+        r"\b(?:my\s+)?(?:final\s+)?(?:answer|rating|score)\s*(?:is|=|:)?\s*(\d+)\b",
+        r"\b(?:i\s+(?:would\s+|will\s+|would\s+personally\s+)?rate(?:\s+the)?(?:\s+(?:image|scene|situation|scenario|depicted\s+situation))?\s+as)\s*(?:a\s+)?(\d+)\b",
+        r"\b(?:rate(?:\s+the)?(?:\s+(?:image|scene|situation|scenario|depicted\s+situation))?\s+as)\s*(?:a\s+)?(\d+)\b",
+        r"\b(?:therefore|overall|thus|so)[^\d\n]{0,80}(\d+)\b",
+    ]
+    for pattern in explicit_patterns:
+        matches = list(re.finditer(pattern, normalized, flags=re.IGNORECASE))
+        if not matches:
+            continue
+        value = int(matches[-1].group(1))
+        if minimum <= value <= maximum:
+            return value
     labeled = extract_labeled_int(
         normalized,
         labels=[r"rating", r"score", r"answer"],
@@ -275,6 +299,18 @@ def extract_action_choice(text: str) -> str | None:
 
 
 def classify_yes_no_label(text: str) -> str | None:
+    patterns = {
+        "Yes": [r"\byes\b", r"\brelevant\b"],
+        "No": [r"\bno\b", r"\bnot relevant\b", r"\birrelevant\b"],
+    }
+    explicit = extract_explicit_label(text, patterns)
+    if explicit is not None:
+        return explicit
+
+    leading = _leading_label(text, patterns)
+    if leading is not None:
+        return leading
+
     normalized = normalize_text(text)
     if not normalized:
         return None
@@ -290,6 +326,19 @@ def classify_yes_no_label(text: str) -> str | None:
 
 
 def classify_valence_label(text: str) -> str | None:
+    patterns = {
+        "Supports": [r"\bsupports?\b", r"\bsupportive\b"],
+        "Opposes": [r"\bopposes?\b", r"\bagainst\b"],
+        "Either": [r"\beither way\b", r"\beither\b", r"\bmixed\b", r"\bneutral\b"],
+    }
+    explicit = extract_explicit_label(text, patterns)
+    if explicit is not None:
+        return explicit
+
+    leading = _leading_label(text, patterns)
+    if leading is not None:
+        return leading
+
     normalized = normalize_text(text)
     if not normalized:
         return None
@@ -303,13 +352,106 @@ def classify_valence_label(text: str) -> str | None:
     return None
 
 
+def _label_aliases(patterns: Mapping[str, Sequence[str]]) -> dict[str, str]:
+    aliases: dict[str, str] = {}
+    for canonical, regexes in patterns.items():
+        aliases[normalize_text(canonical)] = canonical
+        for regex in regexes:
+            alias = re.sub(r"\\b", "", regex)
+            alias = re.sub(r"\\s\+", " ", alias)
+            alias = re.sub(r"[\\^$().?*+|{}\[\]]", "", alias)
+            alias = normalize_whitespace(alias).strip().lower()
+            if alias:
+                aliases.setdefault(alias, canonical)
+    return aliases
+
+
+def _match_alias(token: str, alias_map: Mapping[str, str]) -> str | None:
+    return alias_map.get(normalize_text(token))
+
+
+def extract_explicit_label(text: str, patterns: Mapping[str, Sequence[str]]) -> str | None:
+    normalized = normalize_whitespace(text)
+    if not normalized:
+        return None
+
+    alias_map = _label_aliases(patterns)
+    if exact := _match_alias(normalized, alias_map):
+        return exact
+
+    for raw_line in reversed(str(text).splitlines()):
+        line = normalize_whitespace(raw_line).strip(" .,:;!-")
+        if not line:
+            continue
+        if match := _match_alias(line, alias_map):
+            return match
+
+    escaped_aliases = sorted((re.escape(alias) for alias in alias_map), key=len, reverse=True)
+    if not escaped_aliases:
+        return None
+    alias_union = "|".join(escaped_aliases)
+
+    labeled_patterns = [
+        rf"\b(?:final\s+answer|answer|label|response|classification|category)\s*(?:is|=|:)?\s*({alias_union})\b",
+        rf"\b(?:dominant\s+(?:moral\s+)?foundation)\s*(?:is|=|:|appears\s+to\s+be)\s*({alias_union})\b",
+        rf"\b({alias_union})\b\s*(?:is\s+the\s+(?:final\s+)?answer|is\s+the\s+dominant\s+(?:moral\s+)?foundation)\b",
+    ]
+    for pattern in labeled_patterns:
+        matches = list(re.finditer(pattern, normalized, flags=re.IGNORECASE))
+        if matches:
+            return alias_map[normalize_text(matches[-1].group(1))]
+
+    return None
+
+
+def _leading_label(text: str, patterns: Mapping[str, Sequence[str]]) -> str | None:
+    for raw_line in reversed(str(text).splitlines()):
+        line = normalize_whitespace(raw_line).strip(" .,:;!-")
+        if not line:
+            continue
+        lowered = normalize_text(line)
+        for canonical, regexes in patterns.items():
+            for regex in regexes:
+                if re.match(rf"(?:{regex})(?:\b|[\s,.;:!/\-].*)?$", lowered, flags=re.IGNORECASE):
+                    return canonical
+    return None
+
+
+def extract_structured_label(text: str, patterns: Mapping[str, Sequence[str]]) -> str | None:
+    explicit = extract_explicit_label(text, patterns)
+    if explicit is not None:
+        return explicit
+
+    normalized = normalize_whitespace(text)
+    if not normalized:
+        return None
+
+    alias_map = _label_aliases(patterns)
+    escaped_aliases = sorted((re.escape(alias) for alias in alias_map), key=len, reverse=True)
+    if not escaped_aliases:
+        return None
+    alias_union = "|".join(escaped_aliases)
+
+    trailing_matches = list(re.finditer(rf"\b({alias_union})\b", normalized, flags=re.IGNORECASE))
+    if trailing_matches:
+        return alias_map[normalize_text(trailing_matches[-1].group(1))]
+    return None
+
+
 def canonicalize_label(text: str, patterns: Mapping[str, Sequence[str]]) -> str | None:
+    structured = extract_structured_label(text, patterns)
+    if structured is not None:
+        return structured
     lowered = normalize_text(text)
+    matches: list[tuple[int, str]] = []
     for canonical, regexes in patterns.items():
         for regex in regexes:
-            if re.search(regex, lowered):
-                return canonical
-    return None
+            for match in re.finditer(regex, lowered):
+                matches.append((match.start(), canonical))
+    if not matches:
+        return None
+    matches.sort(key=lambda item: item[0])
+    return matches[-1][1]
 
 
 def first_matching_key(row: Mapping[str, Any], *candidates: str) -> str | None:

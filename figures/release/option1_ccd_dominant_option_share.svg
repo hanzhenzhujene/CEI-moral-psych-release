@@ -127,17 +127,17 @@
 <text x="212.00" y="549.00" text-anchor="middle" class="celltext">M</text>
 <text x="258" y="549.00" class="label">DeepSeek-M</text>
 <rect x="420" y="530" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="420" y="530" width="720" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="780.00" y="549.00" text-anchor="middle" class="small">n/a — no valid visible CCD selections</text>
-<text x="1162" y="549.00" class="small">effective clusters n/a</text>
+<rect x="420" y="530" width="162.39" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
+<text x="572.39" y="549.00" text-anchor="end" class="celltext">22.6%</text>
+<text x="1162" y="545.00" class="label">option_6 (Nordic Europe)</text>
+<text x="1162" y="560.00" class="small">effective clusters 7.99</text>
 <rect x="184" y="580" width="56" height="20" rx="12" fill="#60a5fa"/>
 <text x="212.00" y="595.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="595.00" class="label">DeepSeek-L</text>
 <rect x="420" y="576" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="420" y="576" width="162.39" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
-<text x="572.39" y="595.00" text-anchor="end" class="celltext">22.6%</text>
-<text x="1162" y="591.00" class="label">option_6 (Nordic Europe)</text>
-<text x="1162" y="606.00" class="small">effective clusters 7.99</text>
+<rect x="420" y="576" width="720" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
+<text x="780.00" y="595.00" text-anchor="middle" class="small">n/a — no valid visible CCD selections</text>
+<text x="1162" y="595.00" class="small">effective clusters n/a</text>
 <rect x="184" y="626" width="56" height="20" rx="12" fill="#c2410c"/>
 <text x="212.00" y="641.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="641.00" class="label">Llama-S</text>

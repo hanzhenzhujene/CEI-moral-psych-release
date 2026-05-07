@@ -12,15 +12,16 @@ from inspect_ai.dataset import MemoryDataset, Sample
 
 from evals._benchmark_utils import (
     apply_prompt_prefix,
+    env_str,
     extract_action_choice,
     format_ab_choices,
     generation_plan,
-    parsed_label_scorer,
     normalize_possible_actions,
     normalize_whitespace,
-    selected_action_text,
-    env_str,
+    parsed_label_scorer,
+    resume_start_index,
     rouge_l_max_scorer,
+    selected_action_text,
 )
 
 PROMPTS_DIR = Path(__file__).parent / "data" / "unimoral"
@@ -181,7 +182,7 @@ def _common_replacements(row: dict[str, str]) -> dict[str, str]:
     return replacements
 
 
-def _make_action_prediction_samples(limit: int | None = None) -> list[Sample]:
+def _make_action_prediction_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
     prompts = _load_prompt_dict("PROMPTS.txt")
     mode = env_str("UNIMORAL_MODE", "np")
     samples: list[Sample] = []
@@ -194,8 +195,7 @@ def _make_action_prediction_samples(limit: int | None = None) -> list[Sample]:
         prompt_key = _prompt_key(mode, language, 1)
         if prompt_key not in prompts:
             raise KeyError(f"Prompt key {prompt_key!r} not found in PROMPTS.txt")
-        selected_rows = rows[:limit] if limit is not None else rows
-        for sample_index, row in enumerate(selected_rows):
+        for sample_index, row in enumerate(rows):
             replacements = _common_replacements(row)
             for index, fs_row in enumerate(fs_map[(row["Annotator_id"], row["Scenario_id"])], start=1):
                 replacements[f"[FS_SCENARIO_{index}]"] = fs_row["Scenario"]
@@ -210,6 +210,10 @@ def _make_action_prediction_samples(limit: int | None = None) -> list[Sample]:
                     metadata={"language": language, "scenario_id": row["Scenario_id"], "annotator_id": row["Annotator_id"], "sample_index": sample_index},
                 )
             )
+    if start_index:
+        samples = samples[start_index:]
+    if limit is not None:
+        samples = samples[:limit]
     return samples
 
 
@@ -317,8 +321,14 @@ def _make_consequence_samples(limit: int | None = None) -> list[Sample]:
 
 
 @task
-def unimoral_action_prediction(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_action_prediction_samples(limit=limit)), plan=generation_plan(max_tokens=64), scorer=parsed_label_scorer(extract_action_choice))
+def unimoral_action_prediction(limit: int | None = None, start_index: int | None = None) -> Task:
+    if start_index is None:
+        start_index = resume_start_index("UNIMORAL_ACTION_RESUME_COUNT")
+    return Task(
+        dataset=MemoryDataset(_make_action_prediction_samples(limit=limit, start_index=start_index)),
+        plan=generation_plan(max_tokens=64),
+        scorer=parsed_label_scorer(extract_action_choice),
+    )
 
 
 @task

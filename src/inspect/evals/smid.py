@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import csv
-import os
 from pathlib import Path
 from typing import Any
 
@@ -21,6 +20,7 @@ from evals._benchmark_utils import (
     fuzzy_matching_key,
     generation_plan,
     label_membership_scorer,
+    resume_start_index,
 )
 
 FOUNDATION_PATTERNS = {
@@ -37,17 +37,6 @@ FOUNDATION_COLUMNS = {
     "Authority": ("Authority", "authority_mean", "authority"),
     "Sanctity": ("Sanctity", "purity_mean", "purity"),
 }
-
-
-def _resume_count(env_var: str) -> int:
-    raw_value = os.environ.get(env_var, "").strip()
-    if not raw_value:
-        return 0
-    try:
-        return max(0, int(raw_value))
-    except ValueError as exc:
-        raise ValueError(f"{env_var} must be a non-negative integer, got: {raw_value!r}") from exc
-
 
 def _smid_data_dir() -> Path:
     data_dir = env_str("SMID_DATA_DIR")
@@ -220,7 +209,7 @@ def _make_foundation_samples(limit: int | None = None, start_index: int = 0) -> 
 @task
 def smid_moral_rating(limit: int | None = None, start_index: int | None = None) -> Task:
     if start_index is None:
-        start_index = _resume_count("SMID_MORAL_RESUME_COUNT")
+        start_index = resume_start_index("SMID_MORAL_RESUME_COUNT")
     return Task(
         dataset=MemoryDataset(_make_rating_samples(limit=limit, start_index=start_index)),
         plan=generation_plan(max_tokens=24),
@@ -231,7 +220,7 @@ def smid_moral_rating(limit: int | None = None, start_index: int | None = None) 
 @task
 def smid_foundation_classification(limit: int | None = None, start_index: int | None = None) -> Task:
     if start_index is None:
-        start_index = _resume_count("SMID_FOUNDATION_RESUME_COUNT")
+        start_index = resume_start_index("SMID_FOUNDATION_RESUME_COUNT")
     return Task(
         dataset=MemoryDataset(_make_foundation_samples(limit=limit, start_index=start_index)),
         plan=generation_plan(max_tokens=24),

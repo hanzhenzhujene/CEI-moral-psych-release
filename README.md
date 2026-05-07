@@ -67,13 +67,15 @@ If you want the five benchmark results before the tables, start here.
 
 ## Current MiniMax Status
 
-The current `MiniMax-L` public line is being carried by the `MiniMax-M2.5` text rerun plus the shared `MiniMax-01` SMID recovery route.
+The latest published `MiniMax-L` snapshot is the shared `MiniMax-01` SMID recovery plus the `MiniMax-M2.5` text line. In the current public package, that line is partially persisted rather than presented as an active live rerun.
 
 - `UniMoral`: done
 - `SMID`: done
 - `CCD-Bench`: done
-- `DeNEVIL proxy`: live rerun
-- `Value Kaleidoscope`: queued behind the live text rerun
+- `DeNEVIL proxy`: partial / not currently active in the published snapshot
+- `Value Kaleidoscope`: queued
+
+Published queued follow-up lines still visible in the matrix: `MiniMax-M` and `DeepSeek-L`.
 
 For the latest exact snapshot, use the release package linked below rather than treating this root README as the authoritative progress log.
 

@@ -134,45 +134,49 @@
 <text x="212.00" y="478.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="478.00" class="label">MiniMax-L</text>
 <rect x="430" y="458" width="760" height="30" rx="10" class="muted-bar"/>
-<rect x="430" y="458" width="760" height="30" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="810.00" y="478.00" text-anchor="middle" class="small">n/a — no released proxy archive</text>
-<text x="1214" y="478.00" class="small">dominant behavior n/a</text>
+<rect x="430.00" y="458" width="8.05" height="30" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
+<rect x="438.05" y="458" width="18.99" height="30" fill="#0f766e" stroke="#ffffff" stroke-width="1"/>
+<rect x="457.04" y="458" width="728.36" height="30" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="821.22" y="478.00" text-anchor="middle" class="celltext">95.8%</text>
+<rect x="1185.40" y="458" width="4.60" height="30" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+<text x="1214" y="474.00" class="label">Corrective / contextual response</text>
+<text x="1214" y="489.00" class="small">protective 99.4%</text>
 <rect x="184" y="510" width="56" height="22" rx="12" fill="#1d4ed8"/>
 <text x="212.00" y="526.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="526.00" class="label">DeepSeek-S</text>
 <rect x="430" y="506" width="760" height="30" rx="10" class="muted-bar"/>
-<rect x="430" y="506" width="760" height="30" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="810.00" y="526.00" text-anchor="middle" class="small">n/a — no released proxy archive</text>
-<text x="1214" y="526.00" class="small">dominant behavior n/a</text>
+<rect x="430.00" y="506" width="63.27" height="30" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
+<text x="461.63" y="526.00" text-anchor="middle" class="celltext">8.3%</text>
+<rect x="493.27" y="506" width="2.70" height="30" fill="#0f766e" stroke="#ffffff" stroke-width="1"/>
+<rect x="495.97" y="506" width="31.26" height="30" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<rect x="527.23" y="506" width="0.19" height="30" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+<rect x="527.42" y="506" width="8.63" height="30" fill="#d97706" stroke="#ffffff" stroke-width="1"/>
+<rect x="536.05" y="506" width="653.95" height="30" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="863.02" y="526.00" text-anchor="middle" class="celltext-dark">86.0%</text>
+<text x="1214" y="522.00" class="label">No visible answer</text>
+<text x="1214" y="537.00" class="small">protective 12.8%</text>
 <rect x="184" y="558" width="56" height="22" rx="12" fill="#2563eb"/>
 <text x="212.00" y="574.00" text-anchor="middle" class="celltext">M</text>
 <text x="258" y="574.00" class="label">DeepSeek-M</text>
 <rect x="430" y="554" width="760" height="30" rx="10" class="muted-bar"/>
-<rect x="430.00" y="554" width="63.27" height="30" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
-<text x="461.63" y="574.00" text-anchor="middle" class="celltext">8.3%</text>
-<rect x="493.27" y="554" width="2.70" height="30" fill="#0f766e" stroke="#ffffff" stroke-width="1"/>
-<rect x="495.97" y="554" width="31.26" height="30" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
-<rect x="527.23" y="554" width="0.19" height="30" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
-<rect x="527.42" y="554" width="8.63" height="30" fill="#d97706" stroke="#ffffff" stroke-width="1"/>
-<rect x="536.05" y="554" width="653.95" height="30" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
-<text x="863.02" y="574.00" text-anchor="middle" class="celltext-dark">86.0%</text>
-<text x="1214" y="570.00" class="label">No visible answer</text>
-<text x="1214" y="585.00" class="small">protective 12.8%</text>
+<rect x="430.00" y="554" width="236.17" height="30" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
+<text x="548.09" y="574.00" text-anchor="middle" class="celltext">31.1%</text>
+<rect x="666.17" y="554" width="46.12" height="30" fill="#0f766e" stroke="#ffffff" stroke-width="1"/>
+<rect x="712.29" y="554" width="471.05" height="30" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="947.81" y="574.00" text-anchor="middle" class="celltext">62.0%</text>
+<rect x="1183.33" y="554" width="0.15" height="30" fill="#6b7280" stroke="#ffffff" stroke-width="1"/>
+<rect x="1183.48" y="554" width="1.74" height="30" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+<rect x="1185.22" y="554" width="4.63" height="30" fill="#d97706" stroke="#ffffff" stroke-width="1"/>
+<rect x="1189.85" y="554" width="0.15" height="30" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="1214" y="570.00" class="label">Corrective / contextual response</text>
+<text x="1214" y="585.00" class="small">protective 99.1%</text>
 <rect x="184" y="606" width="56" height="22" rx="12" fill="#60a5fa"/>
 <text x="212.00" y="622.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="622.00" class="label">DeepSeek-L</text>
 <rect x="430" y="602" width="760" height="30" rx="10" class="muted-bar"/>
-<rect x="430.00" y="602" width="236.17" height="30" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
-<text x="548.09" y="622.00" text-anchor="middle" class="celltext">31.1%</text>
-<rect x="666.17" y="602" width="46.12" height="30" fill="#0f766e" stroke="#ffffff" stroke-width="1"/>
-<rect x="712.29" y="602" width="471.05" height="30" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
-<text x="947.81" y="622.00" text-anchor="middle" class="celltext">62.0%</text>
-<rect x="1183.33" y="602" width="0.15" height="30" fill="#6b7280" stroke="#ffffff" stroke-width="1"/>
-<rect x="1183.48" y="602" width="1.74" height="30" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
-<rect x="1185.22" y="602" width="4.63" height="30" fill="#d97706" stroke="#ffffff" stroke-width="1"/>
-<rect x="1189.85" y="602" width="0.15" height="30" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
-<text x="1214" y="618.00" class="label">Corrective / contextual response</text>
-<text x="1214" y="633.00" class="small">protective 99.1%</text>
+<rect x="430" y="602" width="760" height="30" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
+<text x="810.00" y="622.00" text-anchor="middle" class="small">n/a — no released proxy archive</text>
+<text x="1214" y="622.00" class="small">dominant behavior n/a</text>
 <rect x="184" y="654" width="56" height="22" rx="12" fill="#c2410c"/>
 <text x="212.00" y="670.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="670.00" class="label">Llama-S</text>

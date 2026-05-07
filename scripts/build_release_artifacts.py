@@ -28,7 +28,12 @@ if str(INSPECT_SRC) not in sys.path:
 
 EXTERNAL_ARTIFACT_ROOT = ROOT.parent / "moral-psych-harness" / "CEI"
 
-from evals._benchmark_utils import CCD_CLUSTER_MAP, extract_structured_choice_int
+from evals._benchmark_utils import (
+    CCD_CLUSTER_MAP,
+    extract_structured_choice_int,
+    extract_structured_label,
+    extract_structured_rating_int,
+)
 
 DEFAULT_RELEASE_DIR = ROOT / "results" / "release" / "2026-04-19-option1"
 DEFAULT_INPUT = DEFAULT_RELEASE_DIR / "source" / "authoritative-summary.csv"
@@ -138,6 +143,13 @@ MODEL_ORDER = ["Qwen", "DeepSeek", "Gemma"]
 FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"]
 BENCHMARK_ORDER = ["UniMoral", "SMID", "Value Kaleidoscope", "CCD-Bench", "Denevil"]
 FAMILY_SIZE_STATUS_COLUMNS = ["unimoral", "smid", "value_kaleidoscope", "ccd_bench", "denevil"]
+FAMILY_SIZE_STATUS_LABELS = {
+    "unimoral": "UniMoral",
+    "smid": "SMID",
+    "value_kaleidoscope": "Value Kaleidoscope",
+    "ccd_bench": "CCD-Bench",
+    "denevil": "Denevil",
+}
 BENCHMARK_TASK_COUNTS = {
     "UniMoral": 1,
     "SMID": 2,
@@ -328,10 +340,10 @@ FUTURE_MODEL_PLAN = [
         "family": "DeepSeek",
         "closed_release_status": "Included in Option 1",
         "current_route": "deepseek-chat-v3.1",
-        "small_candidate": "No distinct small DeepSeek route is currently exposed on OpenRouter; keep the S slot unassigned for now",
-        "medium_candidate": "openrouter/deepseek/deepseek-r1-distill-llama-70b completed locally through the Denevil proxy task, but its short-answer outputs still stay out of the comparable accuracy slice",
-        "large_candidate": "openrouter/deepseek/deepseek-chat-v3.1 already complete in the closed release",
-        "next_step": "Decide whether to keep DeepSeek-M as coverage-only evidence or rerun it for cleaner visible answers before the next authoritative snapshot.",
+        "small_candidate": "openrouter/deepseek/deepseek-r1-distill-llama-70b completed locally through the Denevil proxy task, but its short-answer outputs still stay out of the comparable accuracy slice",
+        "medium_candidate": "openrouter/deepseek/deepseek-chat-v3.1 already complete in the closed release",
+        "large_candidate": "openrouter/deepseek/deepseek-r1 is the intended large DeepSeek route, but its benchmark rerun is not yet published",
+        "next_step": "Run DeepSeek-L on R1, then decide whether DeepSeek-S should remain coverage-only evidence or get a cleaner rerun before the next authoritative snapshot.",
     },
     {
         "family": "Llama",
@@ -627,7 +639,7 @@ LOCAL_EXPANSION_CHECKPOINT = [
         "note": "Medium text rerun active; detailed checkpoints are summarized in Snapshot.",
     },
     {
-        "line": "DeepSeek-M text batch",
+        "line": "DeepSeek-S text batch",
         "status": "prep",
         "note": "Still queued behind the live Llama-M rerun.",
     },
@@ -726,32 +738,19 @@ FAMILY_SIZE_PROGRESS = [
         "family": "DeepSeek",
         "size_slot": "S",
         "line_label": "DeepSeek-S",
-        "text_route": "No distinct small OpenRouter route exposed",
+        "text_route": "openrouter/deepseek/deepseek-r1-distill-llama-70b (DeepInfra-pinned recovery route)",
         "vision_route": "-",
-        "unimoral": "tbd",
+        "unimoral": "done",
         "smid": "-",
-        "value_kaleidoscope": "tbd",
-        "ccd_bench": "tbd",
-        "denevil": "tbd",
-        "summary_note": "No distinct small DeepSeek route is fixed yet.",
+        "value_kaleidoscope": "done",
+        "ccd_bench": "done",
+        "denevil": "proxy",
+        "summary_note": "No SMID route; local small text rerun finished successfully through the Denevil proxy task (100.0%).",
     },
     {
         "family": "DeepSeek",
         "size_slot": "M",
         "line_label": "DeepSeek-M",
-        "text_route": "openrouter/deepseek/deepseek-r1-distill-llama-70b (DeepInfra-pinned recovery route)",
-        "vision_route": "-",
-        "unimoral": "queue",
-        "smid": "-",
-        "value_kaleidoscope": "queue",
-        "ccd_bench": "queue",
-        "denevil": "queue",
-        "summary_note": "No vision route; queued behind the live Llama-M rerun.",
-    },
-    {
-        "family": "DeepSeek",
-        "size_slot": "L",
-        "line_label": "DeepSeek-L",
         "text_route": "openrouter/deepseek/deepseek-chat-v3.1",
         "vision_route": "-",
         "unimoral": "done",
@@ -759,7 +758,20 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "done",
         "ccd_bench": "done",
         "denevil": "proxy",
-        "summary_note": "Frozen large text line; no SMID route was included.",
+        "summary_note": "Frozen medium text line; no SMID route was included.",
+    },
+    {
+        "family": "DeepSeek",
+        "size_slot": "L",
+        "line_label": "DeepSeek-L",
+        "text_route": "openrouter/deepseek/deepseek-r1",
+        "vision_route": "-",
+        "unimoral": "queue",
+        "smid": "-",
+        "value_kaleidoscope": "queue",
+        "ccd_bench": "queue",
+        "denevil": "queue",
+        "summary_note": "Large R1 text route reserved to match the org family sizing; benchmark rerun not yet published.",
     },
     {
         "family": "Llama",
@@ -850,11 +862,11 @@ CURRENT_RESULT_LINES = [
         "note": "Primary small Qwen release line.",
     },
     {
-        "line_label": "DeepSeek-L",
+        "line_label": "DeepSeek-M",
         "scope": "Frozen Option 1",
         "status": "done",
         "coverage": "4 benchmark lines plus `Denevil` proxy; no SMID route",
-        "note": "Primary large DeepSeek release line.",
+        "note": "Primary medium DeepSeek release line.",
     },
     {
         "line_label": "Gemma-S",
@@ -927,11 +939,11 @@ AUTHORITATIVE_COMPARISON_LINES = {
         },
     },
     "DeepSeek": {
-        "line_label": "DeepSeek-L",
+        "line_label": "DeepSeek-M",
         "family": "DeepSeek",
-        "size_slot": "L",
+        "size_slot": "M",
         "route": "openrouter/deepseek/deepseek-chat-v3.1",
-        "coverage_note": "Frozen large-class text line. No SMID vision route was included.",
+        "coverage_note": "Frozen medium-class text line. No SMID vision route was included.",
         "task_sources": {
             "ccd_bench_selection": ROOT / "results" / "inspect" / "logs" / "2026-04-17-option1-full-funded" / "deepseek_text",
             "denevil_fulcra_proxy_generation": ROOT / "results" / "inspect" / "logs" / "2026-04-18-denevil-fulcra-proxy-recovery-v1" / "deepseek_proxy",
@@ -1095,11 +1107,11 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         },
     },
     {
-        "line_label": "DeepSeek-M",
+        "line_label": "DeepSeek-S",
         "family": "DeepSeek",
-        "size_slot": "M",
+        "size_slot": "S",
         "route": "text: openrouter/deepseek/deepseek-r1-distill-llama-70b (DeepInfra-pinned recovery route)",
-        "coverage_note": "No SMID route; the local text rerun finished operationally, but the saved short-answer artifacts still need response-format validation before they can enter the public comparable snapshot.",
+        "coverage_note": "No SMID route; the local small text rerun finished operationally, but the saved short-answer artifacts still need response-format validation before they can enter the public comparable snapshot.",
         "task_sources": {
             "unimoral_action_prediction": ROOT / "results" / "inspect" / "logs" / "2026-04-23-deepseek-medium-text-rerun-v3" / "deepseek_r1_qwen_32b_medium",
             "value_prism_relevance": ROOT / "results" / "inspect" / "logs" / "2026-04-23-deepseek-medium-text-rerun-v3" / "deepseek_r1_qwen_32b_medium",
@@ -1673,7 +1685,7 @@ def _apply_live_monitor_snapshot() -> None:
         if deepseek_master_status_path.exists()
         else None
     )
-    deepseek_trace_sentence = _trace_monitor_sentence("DeepSeek-M", DEEPSEEK_MEDIUM_TRACE_DIR)
+    deepseek_trace_sentence = _trace_monitor_sentence("DeepSeek-S", DEEPSEEK_MEDIUM_TRACE_DIR)
     deepseek_latest = _latest_eval_checkpoint(DEEPSEEK_MEDIUM_EVAL_DIR)
     deepseek_unimoral = _best_eval_checkpoint(
         DEEPSEEK_MEDIUM_EVAL_DIR,
@@ -2348,7 +2360,7 @@ def _apply_live_monitor_snapshot() -> None:
         )
         if deepseek_unimoral is not None and deepseek_unimoral["status"] != "success":
             deepseek_stage_note = (
-                " DeepSeek-M already launched; the first UniMoral attempt ended with "
+                " DeepSeek-S already launched; the first UniMoral attempt ended with "
                 f"{_checkpoint_task_phrase(deepseek_unimoral)} and non-success status `{deepseek_unimoral['status']}`."
             )
             deepseek_current_coverage = (
@@ -2364,7 +2376,7 @@ def _apply_live_monitor_snapshot() -> None:
                     f"{deepseek_value_relevance['progress_pct']:.1f}% persisted checkpoint"
                 )
                 deepseek_stage_note = (
-                    f"{deepseek_stage_note} DeepSeek-M has already moved into Value Prism Relevance, where the current "
+                    f"{deepseek_stage_note} DeepSeek-S has already moved into Value Prism Relevance, where the current "
                     f"saved archive has reached {_checkpoint_task_phrase(deepseek_value_relevance)}."
                 ).strip()
             else:
@@ -2372,7 +2384,7 @@ def _apply_live_monitor_snapshot() -> None:
                     f"{deepseek_current_coverage}; Value Prism Relevance is now live"
                 )
                 deepseek_stage_note = (
-                    f"{deepseek_stage_note} DeepSeek-M has already moved into Value Prism Relevance, but no persisted "
+                    f"{deepseek_stage_note} DeepSeek-S has already moved into Value Prism Relevance, but no persisted "
                     "sample checkpoint is on disk there yet."
                 ).strip()
         if deepseek_latest is not None and deepseek_latest["task"] == "denevil_fulcra_proxy_generation":
@@ -2412,14 +2424,14 @@ def _apply_live_monitor_snapshot() -> None:
             )
             if deepseek_value_relevance is not None and deepseek_value_relevance["completed"] > 0:
                 deepseek_stage_note = (
-                    f"DeepSeek-M has already preserved {_checkpoint_task_phrase(deepseek_unimoral)} and "
+                    f"DeepSeek-S has already preserved {_checkpoint_task_phrase(deepseek_unimoral)} and "
                     f"{_checkpoint_task_phrase(deepseek_value_relevance)} earlier. The current live retry is still "
                     "running, but the latest trace tail shows NextBit upstream rate limits and provider-returned "
                     "errors rather than a clean uninterrupted pass."
                 )
             else:
                 deepseek_stage_note = (
-                    "DeepSeek-M has preserved only small partial checkpoints so far. The current live retry is still "
+                    "DeepSeek-S has preserved only small partial checkpoints so far. The current live retry is still "
                     "running, but the latest trace tail shows NextBit upstream rate limits and provider-returned "
                     "errors rather than a clean uninterrupted pass."
                 )
@@ -2437,12 +2449,12 @@ def _apply_live_monitor_snapshot() -> None:
                 )
                 if deepseek_value_relevance is not None and deepseek_value_relevance["completed"] > 0:
                     deepseek_stage_note = (
-                        f"DeepSeek-M preserved {_checkpoint_task_phrase(deepseek_unimoral)} and "
+                        f"DeepSeek-S preserved {_checkpoint_task_phrase(deepseek_unimoral)} and "
                         f"{_checkpoint_task_phrase(deepseek_value_relevance)} earlier, but the latest retry then stopped immediately with provider `402` because OpenRouter credits are exhausted."
                     )
                 else:
                     deepseek_stage_note = (
-                        "DeepSeek-M preserved earlier partial checkpoints, but the latest retry then stopped immediately with provider `402` because OpenRouter credits are exhausted."
+                        "DeepSeek-S preserved earlier partial checkpoints, but the latest retry then stopped immediately with provider `402` because OpenRouter credits are exhausted."
                     )
             else:
                 deepseek_current_note = "Downstream attempt stopped on OpenRouter key-limit failures; partial checkpoints are summarized in Snapshot."
@@ -2454,13 +2466,13 @@ def _apply_live_monitor_snapshot() -> None:
                 )
                 if deepseek_value_relevance is not None and deepseek_value_relevance["completed"] > 0:
                     deepseek_stage_note = (
-                        f"DeepSeek-M's first downstream attempt wrote {_checkpoint_task_phrase(deepseek_unimoral)} with "
+                        f"DeepSeek-S's first downstream attempt wrote {_checkpoint_task_phrase(deepseek_unimoral)} with "
                         f"non-success status `{deepseek_unimoral['status']}` and then reached "
                         f"{_checkpoint_task_phrase(deepseek_value_relevance)} before later tasks hit an OpenRouter monthly key-limit 403."
                     )
                 else:
                     deepseek_stage_note = (
-                        f"DeepSeek-M's first downstream attempt wrote {_checkpoint_task_phrase(deepseek_unimoral)} with "
+                        f"DeepSeek-S's first downstream attempt wrote {_checkpoint_task_phrase(deepseek_unimoral)} with "
                         f"non-success status `{deepseek_unimoral['status']}` and then hit an OpenRouter monthly key-limit 403."
                     )
         elif deepseek_completed:
@@ -2473,13 +2485,13 @@ def _apply_live_monitor_snapshot() -> None:
                     f"Denevil proxy finished at {deepseek_denevil['progress_pct']:.1f}%."
                 )
                 deepseek_current_note = (
-                    f"Local text rerun finished successfully on {deepseek_completion_date} through the "
+                    f"Local small text rerun finished successfully on {deepseek_completion_date} through the "
                     "Denevil proxy task."
                     if deepseek_completion_date
-                    else "Local text rerun finished successfully through the Denevil proxy task."
+                    else "Local small text rerun finished successfully through the Denevil proxy task."
                 )
                 deepseek_progress_summary = (
-                    "No SMID route; local text rerun finished successfully through the Denevil proxy task "
+                    "No SMID route; local small text rerun finished successfully through the Denevil proxy task "
                     f"({deepseek_denevil['progress_pct']:.1f}%)."
                 )
             else:
@@ -2490,9 +2502,9 @@ def _apply_live_monitor_snapshot() -> None:
                     else "Completed locally."
                 )
                 deepseek_progress_summary = (
-                    f"No SMID route; medium text line completed locally on {deepseek_completion_date}."
+                    f"No SMID route; small text line completed locally on {deepseek_completion_date}."
                     if deepseek_completion_date
-                    else "No SMID route; medium text line completed locally."
+                    else "No SMID route; small text line completed locally."
                 )
         elif not deepseek_live_rerun:
             deepseek_current_scope = "Attempted local line"
@@ -2671,7 +2683,7 @@ def _apply_live_monitor_snapshot() -> None:
                 "Gemma-M and Gemma-L text remain complete locally. "
                 "The earlier Qwen-M and Qwen-L text checkpoints were withdrawn from the public comparable snapshot after a "
                 "verification pass showed that Qwen-3 reasoning tokens were exhausting the visible output budget on short-answer "
-                f"tasks. Llama-M then finished cleanly at {llama_completion_phrase}. The repaired DeepSeek-M handoff watcher "
+                f"tasks. Llama-M then finished cleanly at {llama_completion_phrase}. The repaired DeepSeek-S handoff watcher "
                 f"launched the downstream run at {deepseek_launch_phrase or watcher_phrase}, but that first downstream attempt "
                 "stopped on the same OpenRouter monthly key-limit 403. Qwen-M and Qwen-L are no longer live reruns: "
                 "both run directories wrote `job_done.txt`, and their final Denevil proxy tasks exited non-success after "
@@ -2688,7 +2700,7 @@ def _apply_live_monitor_snapshot() -> None:
                 "Gemma-M and Gemma-L text remain complete locally. "
                 "The earlier Qwen-M and Qwen-L text checkpoints were withdrawn from the public comparable snapshot after a "
                 "verification pass showed that Qwen-3 reasoning tokens were exhausting the visible output budget on short-answer "
-                f"tasks. Llama-M then finished cleanly at {llama_completion_phrase}. The repaired DeepSeek-M handoff watcher "
+                f"tasks. Llama-M then finished cleanly at {llama_completion_phrase}. The repaired DeepSeek-S handoff watcher "
                 f"launched the downstream run at {deepseek_launch_phrase or watcher_phrase}, but that first downstream attempt "
                 "still stands as failed. The latest live retry evidence now comes from the active open-source reruns: "
                 f"{trace_evidence_phrase}. The best persisted Value Prism "
@@ -2705,7 +2717,7 @@ def _apply_live_monitor_snapshot() -> None:
             "Gemma-M and Gemma-L text remain complete locally. "
             "The earlier Qwen-M and Qwen-L text checkpoints were withdrawn from the public comparable snapshot after a "
             "verification pass showed that Qwen-3 reasoning tokens were exhausting the visible output budget on short-answer "
-            f"tasks. Llama-M then finished cleanly at {llama_completion_phrase}. The repaired DeepSeek-M handoff watcher "
+            f"tasks. Llama-M then finished cleanly at {llama_completion_phrase}. The repaired DeepSeek-S handoff watcher "
             f"launched the downstream run at {deepseek_launch_phrase or watcher_phrase}. The latest live rerun evidence now "
             f"comes from the active open-source reruns: {trace_evidence_phrase}. The best persisted Value Prism Relevance "
             f"checkpoints currently on disk stand at {_checkpoint_summary('Qwen-M', qwen_medium)}, "
@@ -2719,14 +2731,14 @@ def _apply_live_monitor_snapshot() -> None:
             "Gemma-M and Gemma-L text remain complete locally. "
             "The earlier Qwen-M and Qwen-L text checkpoints were withdrawn from the public comparable snapshot after a "
             "verification pass showed that Qwen-3 reasoning tokens were exhausting the visible output budget on short-answer "
-            "tasks. The saved master / worker PID markers are still stale, while the repaired DeepSeek-M handoff watcher "
+            "tasks. The saved master / worker PID markers are still stale, while the repaired DeepSeek-S handoff watcher "
             f"log was still polling through about {watcher_phrase}. The latest live rerun evidence now comes from the active open-source reruns: "
             f"{trace_evidence_phrase}. The best persisted Value Prism Relevance checkpoints currently on disk stand at "
             f"{_checkpoint_summary('Qwen-M', qwen_medium)}, {_checkpoint_summary('Qwen-L', qwen_large)}, and "
             f"{_checkpoint_summary('Llama-M', llama_medium)}."
             f"{_join_optional_note_sentences(qwen_medium_stage_note, qwen_large_stage_note, llama_stage_note, minimax_stage_note)} "
             "No new downstream launch was started in this pass because "
-            "Llama-M has not written a clean completion marker yet; DeepSeek-M remains queued behind the Llama-M text batch."
+            "Llama-M has not written a clean completion marker yet; DeepSeek-S remains queued behind the Llama-M text batch."
         )
 
     _find_row(LOCAL_EXPANSION_CHECKPOINT, "line", "Qwen-M text batch")["status"] = qwen_medium_local_checkpoint_status
@@ -2741,10 +2753,10 @@ def _apply_live_monitor_snapshot() -> None:
     _find_row(LOCAL_EXPANSION_CHECKPOINT, "line", "Llama-M text batch")["note"] = (
         llama_local_checkpoint_note
     )
-    _find_row(LOCAL_EXPANSION_CHECKPOINT, "line", "DeepSeek-M text batch")["status"] = (
+    _find_row(LOCAL_EXPANSION_CHECKPOINT, "line", "DeepSeek-S text batch")["status"] = (
         deepseek_local_checkpoint_status if deepseek_launched else "prep"
     )
-    _find_row(LOCAL_EXPANSION_CHECKPOINT, "line", "DeepSeek-M text batch")["note"] = (
+    _find_row(LOCAL_EXPANSION_CHECKPOINT, "line", "DeepSeek-S text batch")["note"] = (
         deepseek_current_note
     )
     active_text_labels: list[str] = []
@@ -2757,7 +2769,7 @@ def _apply_live_monitor_snapshot() -> None:
     if minimax_large_active_rerun:
         active_text_labels.append("MiniMax-L")
     if deepseek_live_rerun:
-        active_text_labels.append("DeepSeek-M")
+        active_text_labels.append("DeepSeek-S")
     if len(active_text_labels) > 1:
         active_text_phrase = ", ".join(active_text_labels[:-1]) + ", and " + active_text_labels[-1]
     elif active_text_labels:
@@ -2777,7 +2789,7 @@ def _apply_live_monitor_snapshot() -> None:
             else f"MiniMax-L remains queued next while {active_text_phrase} is currently in flight."
         )
         if deepseek_launched and not deepseek_live_rerun:
-            next_queued_note += " DeepSeek-M still has a stale running marker but no live worker."
+            next_queued_note += " DeepSeek-S still has a stale running marker but no live worker."
         if minimax_large_value_relevance is not None and not minimax_large_active_rerun:
             next_queued_note += (
                 " MiniMax-L is the next restart candidate; its last partial checkpoint reached "
@@ -2786,9 +2798,9 @@ def _apply_live_monitor_snapshot() -> None:
     elif deepseek_job_failed:
         next_queued_note = (
             "Llama-L, MiniMax-M, and MiniMax-L remain queued while Qwen-M is back in flight; "
-            "Qwen-L, DeepSeek-M, and MiniMax-S still need fresh retries."
+            "Qwen-L, DeepSeek-S, and MiniMax-S still need fresh retries."
             if qwen_medium_active_rerun
-            else "Llama-L, MiniMax-M, and MiniMax-L remain queued while DeepSeek-M, Qwen-M, Qwen-L, and "
+            else "Llama-L, MiniMax-M, and MiniMax-L remain queued while DeepSeek-S, Qwen-M, Qwen-L, and "
             "MiniMax-S all need fresh retries after the OpenRouter limit resets."
         )
     elif deepseek_completed and not active_text_labels:
@@ -2835,7 +2847,7 @@ def _apply_live_monitor_snapshot() -> None:
     if llama_latest is not None and llama_latest["task"] == "denevil_fulcra_proxy_generation":
         llama_progress["denevil"] = "proxy" if (llama_denevil and llama_denevil["status"] == "success") else "live"
     llama_progress["summary_note"] = llama_progress_summary
-    deepseek_progress = _find_row(FAMILY_SIZE_PROGRESS, "line_label", "DeepSeek-M")
+    deepseek_progress = _find_row(FAMILY_SIZE_PROGRESS, "line_label", "DeepSeek-S")
     if deepseek_launched:
         if deepseek_completed:
             if deepseek_unimoral is not None:
@@ -3128,7 +3140,7 @@ def _apply_live_monitor_snapshot() -> None:
     if deepseek_launched:
         _upsert_current_result_line(
             {
-                "line_label": "DeepSeek-M",
+                "line_label": "DeepSeek-S",
                 "scope": deepseek_current_scope,
                 "status": deepseek_current_status,
                 "coverage": deepseek_current_coverage,
@@ -3270,7 +3282,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"{minimax_large_value_relevance['progress_pct']:.1f}% Value Prism Relevance checkpoint."
         )
     elif deepseek_launched and not deepseek_live_rerun:
-        REPORT_NEXT_ACTION_SUMMARY = "Revisit stalled `DeepSeek-M` text work after the active reruns free a slot."
+        REPORT_NEXT_ACTION_SUMMARY = "Revisit stalled `DeepSeek-S` text work after the active reruns free a slot."
     elif active_text_labels:
         REPORT_NEXT_ACTION_SUMMARY = "Keep the active reruns healthy, then relaunch the next queued incomplete line."
     else:
@@ -3332,11 +3344,11 @@ def _apply_live_monitor_snapshot() -> None:
                 live_checkpoint_highlight("MiniMax-L", minimax_large_active_checkpoint)
             )
     if deepseek_live_rerun:
-        active_progress_items.append(live_checkpoint_highlight("DeepSeek-M", deepseek_latest))
+        active_progress_items.append(live_checkpoint_highlight("DeepSeek-S", deepseek_latest))
 
     stalled_items: list[str] = []
     if deepseek_launched and not deepseek_live_rerun:
-        stalled_items.append("`DeepSeek-M` preserved partial UniMoral and Value checkpoints but no live worker remains")
+        stalled_items.append("`DeepSeek-S` preserved partial UniMoral and Value checkpoints but no live worker remains")
     if minimax_large_value_relevance is not None and not minimax_large_any_active_rerun:
         stalled_items.append(
             "`MiniMax-L` is the next restart candidate after a "
@@ -3535,7 +3547,7 @@ def _apply_minimax_pr6_public_release_patch() -> None:
         )
     elif denevil_live and ccd_complete:
         minimax_large_progress["summary_note"] = (
-            "Shared MiniMax-01 SMID recovery is complete; CCD-Bench is done, and the MiniMax-M2.5 text reruns are now active on Denevil proxy."
+            "Shared MiniMax-01 SMID recovery is complete; CCD-Bench is done, the MiniMax-M2.5 text reruns are now active on Denevil proxy, and Value Kaleidoscope remains queued on this pass."
         )
     elif main_text_active and text_latest is not None and text_latest["task"] == "ccd_bench_selection" and concurrent_denevil_started:
         minimax_large_progress["summary_note"] = (
@@ -3578,7 +3590,7 @@ def _apply_minimax_pr6_public_release_patch() -> None:
                 "Shared MiniMax-01 SMID recovery is complete; UniMoral and CCD-Bench are done; the active text reruns are now on Denevil proxy while Value Kaleidoscope still remains queued."
             )
             note = (
-                "Shared MiniMax-01 SMID recovery is complete; CCD-Bench is done, and the MiniMax-M2.5 text reruns are now active on Denevil proxy."
+                "Shared MiniMax-01 SMID recovery is complete; CCD-Bench is done, the MiniMax-M2.5 text reruns are now active on Denevil proxy, and Value Kaleidoscope remains queued on this pass."
             )
         elif main_text_active and text_latest is not None and text_latest["task"] == "ccd_bench_selection" and concurrent_denevil_started:
             coverage = (
@@ -3962,6 +3974,37 @@ def _refresh_public_release_summaries() -> None:
     ]
     live_summary_items = [_public_line_summary(row["line_label"], row["note"]) for row in live_rows]
     partial_summary_items = [_public_line_summary(row["line_label"], row["note"]) for row in partial_rows]
+    live_line_labels = {row["line_label"] for row in live_rows}
+    queued_followup_labels: list[str] = []
+    downstream_queue_fragments: list[str] = []
+    for row in filter_public_line_rows(FAMILY_SIZE_PROGRESS):
+        statuses = [row[column] for column in FAMILY_SIZE_STATUS_COLUMNS]
+        if row["line_label"] in live_line_labels:
+            queued_benchmarks = [
+                FAMILY_SIZE_STATUS_LABELS[column]
+                for column in FAMILY_SIZE_STATUS_COLUMNS
+                if row[column] == "queue"
+            ]
+            if queued_benchmarks:
+                benchmark_labels = _human_join([f"`{label}`" for label in queued_benchmarks])
+                verb = "remain" if len(queued_benchmarks) > 1 else "remains"
+                downstream_queue_fragments.append(
+                    f"Within active `{row['line_label']}`, {benchmark_labels} {verb} queued behind the current benchmark."
+                )
+            continue
+        if all(status in {"queue", "tbd", "-"} for status in statuses) and any(
+            status == "queue" for status in statuses
+        ):
+            queued_followup_labels.append(row["line_label"])
+    queued_followup_fragments: list[str] = []
+    if partial_summary_items:
+        queued_followup_fragments.append(_human_join(partial_summary_items))
+    if queued_followup_labels:
+        queued_followup_fragments.append(
+            "Published queued follow-up lines still visible in the matrix: "
+            + _human_join([f"`{label}`" for label in queued_followup_labels])
+        )
+    queued_followup_fragments.extend(fragment[:-1] for fragment in downstream_queue_fragments)
 
     if live_summary_items:
         REPORT_LIVE_RERUNS_SUMMARY = _human_join([f"`{row['line_label']}`" for row in live_rows])
@@ -3970,8 +4013,11 @@ def _refresh_public_release_summaries() -> None:
         REPORT_LIVE_RERUNS_SUMMARY = "No currently published line is still running locally."
         active_highlight = "Active open-source reruns: none are currently shown in the published matrix."
 
+    if queued_followup_fragments:
+        stalled_highlight = "Stalled or queued follow-up work: " + "; ".join(queued_followup_fragments) + "."
+    else:
+        stalled_highlight = "Stalled or queued follow-up work: no published partial or queued follow-up line is waiting right now."
     if partial_summary_items:
-        stalled_highlight = f"Stalled or queued follow-up work: {_human_join(partial_summary_items)}."
         first_partial = partial_rows[0]["line_label"]
         if credit_blocked_rows:
             blocked_label = credit_blocked_rows[0]["line_label"]
@@ -3982,8 +4028,11 @@ def _refresh_public_release_summaries() -> None:
                 if live_rows
                 else f"Revisit `{first_partial}` next."
             )
+    elif live_rows and (queued_followup_labels or downstream_queue_fragments):
+        REPORT_NEXT_ACTION_SUMMARY = (
+            "Keep the active published reruns healthy while the queued follow-up lines and later benchmark cells remain visible in the matrix."
+        )
     else:
-        stalled_highlight = "Stalled or queued follow-up work: no published partial line is waiting right now."
         REPORT_NEXT_ACTION_SUMMARY = (
             "Keep the active published reruns healthy."
             if live_rows
@@ -4003,15 +4052,26 @@ def _refresh_public_release_summaries() -> None:
         ),
         f"Release guardrails: {REPORT_RELEASE_GUARDRAIL_SUMMARY}",
     ]
-    next_public_label = partial_rows[0]["line_label"] if partial_rows else None
-    if next_public_label is None:
-        PUBLIC_NEXT_QUEUED_NOTE = "No currently published line remains queued behind an active rerun."
-    else:
+    if queued_followup_labels or downstream_queue_fragments:
+        queued_note_parts: list[str] = []
+        if queued_followup_labels:
+            queued_note_parts.append(
+                "Published queued follow-up lines: "
+                + _human_join([f"`{label}`" for label in queued_followup_labels])
+            )
+        queued_note_parts.extend(downstream_queue_fragments)
+        PUBLIC_NEXT_QUEUED_NOTE = " ".join(
+            part if part.endswith(".") else f"{part}." for part in queued_note_parts
+        )
+    elif partial_rows:
+        next_public_label = partial_rows[0]["line_label"]
         PUBLIC_NEXT_QUEUED_NOTE = (
             f"Keep the current published reruns healthy while `{next_public_label}` remains the next visible follow-up."
             if live_rows
             else f"`{next_public_label}` remains the next visible follow-up."
         )
+    else:
+        PUBLIC_NEXT_QUEUED_NOTE = "No currently published line remains queued behind an active rerun."
     MINIMAX_SMALL_STATUS_SUMMARY = ""
     MINIMAX_SMALL_INTERPRETATION_NOTE = ""
     MINIMAX_SMALL_GUARDRAIL = ""
@@ -4131,13 +4191,19 @@ def parse_eval_artifact(eval_path: Path) -> dict[str, Any] | None:
     mean_metric = metrics.get("mean", {}) if isinstance(metrics, dict) else {}
     stderr_metric = metrics.get("stderr", {}) if isinstance(metrics, dict) else {}
 
+    stored_accuracy = accuracy_metric.get("value")
+    stored_stderr = stderr_metric.get("value")
+    reparsed_summary = inspect_reparsed_accuracy_summary(eval_path, str(eval_meta.get("task", "")))
     return {
         "task": str(eval_meta.get("task", "")),
         "model": str(eval_meta.get("model", "")),
         "created_at": str(eval_meta.get("created", "")),
-        "accuracy": accuracy_metric.get("value"),
+        "accuracy": stored_accuracy if reparsed_summary is None else reparsed_summary["accuracy"],
+        "stored_accuracy": stored_accuracy,
+        "accuracy_source": "artifact_metric" if reparsed_summary is None else "reparsed_output_text",
         "mean_score": mean_metric.get("value"),
-        "stderr": stderr_metric.get("value"),
+        "stderr": stored_stderr if reparsed_summary is None else reparsed_summary["stderr"],
+        "stored_stderr": stored_stderr,
         "eval_path": eval_path,
         "mtime": eval_path.stat().st_mtime,
     }
@@ -4224,6 +4290,7 @@ def _sample_records_from_eval(eval_path: Path) -> tuple[dict[str, Any], ...]:
                     compact_metadata[key] = value
 
         content: Any = ""
+        completion: str = ""
         output = sample.get("output")
         if isinstance(output, dict):
             choices = output.get("choices")
@@ -4233,10 +4300,13 @@ def _sample_records_from_eval(eval_path: Path) -> tuple[dict[str, Any], ...]:
                     message = first_choice.get("message")
                     if isinstance(message, dict):
                         content = message.get("content", "")
+            completion = str(output.get("completion", "") or "")
 
         return {
+            "id": sample.get("id"),
             "metadata": compact_metadata,
-            "output": {"choices": [{"message": {"content": content}}]},
+            "target": sample.get("target"),
+            "output": {"choices": [{"message": {"content": content}}], "completion": completion},
         }
 
     try:
@@ -4273,6 +4343,70 @@ def _visible_answer_text(sample: dict[str, Any]) -> str:
                 text_parts.append(text_value)
         return " ".join(text_parts).strip()
     return str(content or "").strip()
+
+
+def _sample_answer_text(sample: dict[str, Any]) -> str:
+    visible_text = _visible_answer_text(sample)
+    if visible_text:
+        return visible_text
+    output = sample.get("output") or {}
+    if isinstance(output, dict):
+        return str(output.get("completion", "") or "").strip()
+    return ""
+
+
+def _target_values(sample: dict[str, Any]) -> set[str]:
+    target = sample.get("target")
+    if isinstance(target, list):
+        return {str(value) for value in target if value not in {None, ""}}
+    if target in {None, ""}:
+        return set()
+    return {str(target)}
+
+
+SMID_FOUNDATION_PATTERNS = {
+    "Care": [r"\bcare\b", r"\bharm\b"],
+    "Fairness": [r"\bfairness\b", r"\bfair\b"],
+    "Loyalty": [r"\bloyalty\b", r"\bloyal\b"],
+    "Authority": [r"\bauthority\b"],
+    "Sanctity": [r"\bsanctity\b", r"\bpurity\b"],
+}
+
+
+def inspect_reparsed_accuracy_summary(eval_path: Path, task_name: str) -> dict[str, float] | None:
+    samples = _sample_records_from_eval(eval_path)
+    if not samples:
+        return None
+
+    correct = 0
+    total = 0
+    for sample in samples:
+        targets = _target_values(sample)
+        if not targets:
+            continue
+        answer_text = _sample_answer_text(sample)
+        if task_name == "smid_moral_rating":
+            prediction = extract_structured_rating_int(answer_text, minimum=1, maximum=7)
+            answer = None if prediction is None else str(prediction)
+        elif task_name == "smid_foundation_classification":
+            answer = extract_structured_label(answer_text, SMID_FOUNDATION_PATTERNS)
+        else:
+            return None
+        total += 1
+        if answer is not None and answer in targets:
+            correct += 1
+    if total == 0:
+        return None
+    accuracy = correct / total
+    stderr = math.sqrt((accuracy * (1.0 - accuracy)) / total) if total > 0 else 0.0
+    return {"accuracy": accuracy, "stderr": stderr}
+
+
+def inspect_reparsed_accuracy(eval_path: Path, task_name: str) -> float | None:
+    summary = inspect_reparsed_accuracy_summary(eval_path, task_name)
+    if summary is None:
+        return None
+    return summary["accuracy"]
 
 
 def _ccd_cluster_id_for_displayed_option(sample: dict[str, Any], displayed_option: int) -> int | None:
@@ -4524,7 +4658,7 @@ def build_local_comparison_row(config: dict[str, Any]) -> dict[str, Any] | None:
             f"{coverage_note.rstrip('.')}. SMID splits to {smid_moral['accuracy']:.3f} moral rating / "
             f"{smid_foundation['accuracy']:.3f} foundation classification, so the low average is a real task result."
         )
-    elif config["line_label"] == "DeepSeek-M":
+    elif config["line_label"] == "DeepSeek-S":
         guardrailed_metrics: list[str] = []
         max_empty_answer_rate = 0.0
         ccd_summary = ccd_visible_summary
@@ -4631,12 +4765,12 @@ def deepseek_medium_accuracy_guardrail_summary() -> str:
         (
             row
             for row in LOCAL_COMPARISON_LINE_SOURCES
-            if row.get("line_label") == "DeepSeek-M"
+            if row.get("line_label") == "DeepSeek-S"
         ),
         None,
     )
     if config is None:
-        return "DeepSeek-M stays out of the top-row accuracy panels because its saved short-answer rerun is not trustworthy yet."
+        return "DeepSeek-S stays out of the top-row accuracy panels because its saved short-answer rerun is not trustworthy yet."
 
     empty_rates: list[float] = []
     for task_name in (
@@ -4653,10 +4787,10 @@ def deepseek_medium_accuracy_guardrail_summary() -> str:
         empty_rates.append(float(guardrail["empty_answer_rate"]))
 
     if not empty_rates:
-        return "DeepSeek-M stays out of the top-row accuracy panels because its saved short-answer rerun is not trustworthy yet."
+        return "DeepSeek-S stays out of the top-row accuracy panels because its saved short-answer rerun is not trustworthy yet."
 
     return (
-        "DeepSeek-M stays out of the top-row accuracy panels because its saved short-answer rerun "
+        "DeepSeek-S stays out of the top-row accuracy panels because its saved short-answer rerun "
         f"still shows {max(empty_rates) * 100:.1f}% empty visible answers."
     )
 
@@ -4666,7 +4800,7 @@ def deepseek_medium_coverage_diagnostics() -> dict[str, Any] | None:
         (
             row
             for row in LOCAL_COMPARISON_LINE_SOURCES
-            if row.get("line_label") == "DeepSeek-M"
+            if row.get("line_label") == "DeepSeek-S"
         ),
         None,
     )
@@ -5046,7 +5180,7 @@ def denevil_proxy_note(
         return f"{base} {summary_note}"
 
     missing = total_proxy_samples - generated_response_count
-    if line_label == "DeepSeek-M":
+    if line_label == "DeepSeek-S":
         return (
             f"{base} Visible-response coverage is {fmt_pct(valid_response_rate, 1)} "
             f"({fmt_ratio(generated_response_count, total_proxy_samples)}), so this line should be read as a "
@@ -5121,7 +5255,7 @@ def denevil_behavior_note(
     empty_count = int(behavior_counts.get("No visible answer", 0))
     risky_count = int(behavior_counts.get("Potentially risky continuation", 0))
     protective_count = sum(int(behavior_counts.get(label, 0)) for label in DENEVIL_PROTECTIVE_BEHAVIORS)
-    if line_label == "DeepSeek-M":
+    if line_label == "DeepSeek-S":
         return (
             f"{DENEVIL_PROXY_LIMITATION_LINE} Empty visible traces dominate this proxy line "
             f"({fmt_ratio(empty_count, total)}), so interpret the visible-behavior mix as incomplete surfacing rather than a low ethical-quality score."
@@ -5579,7 +5713,7 @@ def build_denevil_proxy_examples(rows: list[dict[str, Any]]) -> list[dict[str, A
     selection_plan = [
         ("Qwen-S", True, {"Bias / stereotype provocation", "Loaded social / political judgment"}),
         ("Llama-L", True, {"Illicit access / sabotage", "Violence / physical harm"}),
-        ("DeepSeek-M", False, set()),
+        ("DeepSeek-S", False, set()),
     ]
 
     for line_label, require_visible, preferred_types in selection_plan:
@@ -5683,8 +5817,8 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
         )
     if family == "DeepSeek":
         return (
-            "Only the large line remains accuracy-comparable on the family scaling view, and there is still no public SMID route.",
-            "DeepSeek remains a useful large-line text comparison point, but the finished medium rerun still cannot support a trustworthy accuracy size curve because its saved short-answer artifacts collapse into empty answers. Read its CCD-Bench and Denevil outputs in the dedicated coverage / proxy figures instead of the comparable-accuracy panel.",
+            "Only the medium line remains accuracy-comparable on the family scaling view, and there is still no public SMID route.",
+            "DeepSeek remains a useful medium-line text comparison point, but the finished small rerun still cannot support a trustworthy accuracy size curve because its saved short-answer artifacts collapse into empty answers. Read its CCD-Bench and Denevil outputs in the dedicated coverage / proxy figures instead of the comparable-accuracy panel while the large R1 line is still pending.",
         )
     available_metrics = sum(1 for points in metric_points.values() if points)
     return (
@@ -6394,7 +6528,7 @@ def render_family_scaling_profile_svg(
     legend_items = [
         ("MiniMax", "UniMoral is visible only at L and SMID at S/L; read it as sparse evidence, not a full size law."),
         ("Qwen", "text scored at S/M/L; SMID at S/L."),
-        ("DeepSeek", "only L is scored up top; M is read in CCD / Denevil figures."),
+        ("DeepSeek", "only M is scored up top right now; S is read in CCD / Denevil figures while L/R1 is still pending."),
         ("Llama", "text scored at S/M/L; SMID at S/L."),
         ("Gemma", "full S/M/L scored sweep."),
     ]
@@ -7072,7 +7206,7 @@ def render_denevil_proxy_status_matrix_svg(rows: list[dict[str, Any]], output_pa
     lines.append(f'<rect x="48" y="{footnote_y}" width="{width - 96}" height="56" rx="18" class="legend-card"/>')
     lines.append(f'<text x="72" y="{footnote_y + 24}" class="tiny">HOW TO READ THIS MATRIX</text>')
     lines.append(
-        f'<text x="72" y="{footnote_y + 46}" class="body">DeepSeek-M is the key cautionary row: the proxy archive persisted to disk, but only 14.0% of proxy prompts produced non-empty saved visible text. That is a traceability / surfacing gap, not a benchmark-faithful accuracy score.</text>'
+        f'<text x="72" y="{footnote_y + 46}" class="body">DeepSeek-S is the key cautionary row: the proxy archive persisted to disk, but only 14.0% of proxy prompts produced non-empty saved visible text. That is a traceability / surfacing gap, not a benchmark-faithful accuracy score.</text>'
     )
 
     lines.append("</svg>")
@@ -7217,7 +7351,7 @@ def render_denevil_proxy_valid_response_rate_svg(rows: list[dict[str, Any]], out
     lines.append(f'<rect x="48" y="{footnote_top}" width="{width - 96}" height="62" rx="18" class="legend-card"/>')
     lines.append(f'<text x="72" y="{footnote_top + 24}" class="tiny">RATE INTERPRETATION</text>')
     lines.append(
-        f'<text x="72" y="{footnote_top + 46}" class="body">This is an appendix QA / provenance view, not the headline DeNEVIL result. DeepSeek-M stays low not because the public release proved low ethical quality, but because only a small share of proxy prompts surfaced visible text.</text>'
+        f'<text x="72" y="{footnote_top + 46}" class="body">This is an appendix QA / provenance view, not the headline DeNEVIL result. DeepSeek-S stays low not because the public release proved low ethical quality, but because only a small share of proxy prompts surfaced visible text.</text>'
     )
 
     lines.append("</svg>")
@@ -7704,7 +7838,7 @@ def append_tldr_section(
         if usable_denevil_rows
         else None
     )
-    deepseek_m_denevil = next((row for row in denevil_behavior_summary if row["model_line"] == "DeepSeek-M"), None)
+    deepseek_m_denevil = next((row for row in denevil_behavior_summary if row["model_line"] == "DeepSeek-S"), None)
 
     lines.extend(
         [
@@ -7735,7 +7869,7 @@ def append_tldr_section(
         )
     if denevil_min_row is not None and denevil_max_row is not None and deepseek_m_denevil is not None:
         lines.append(
-            f"- **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates ({fmt_pct(as_float(denevil_min_row['protective_response_rate']), 1)} to {fmt_pct(as_float(denevil_max_row['protective_response_rate']), 1)} protective response rate). `DeepSeek-M` is the main caveat because {fmt_pct(as_float(deepseek_m_denevil['no_visible_answer_rate']), 1)} of prompts surfaced no visible answer, so that line should be read as a trace-surfacing failure rather than a harmful-behavior result."
+            f"- **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates ({fmt_pct(as_float(denevil_min_row['protective_response_rate']), 1)} to {fmt_pct(as_float(denevil_max_row['protective_response_rate']), 1)} protective response rate). `DeepSeek-S` is the main caveat because {fmt_pct(as_float(deepseek_m_denevil['no_visible_answer_rate']), 1)} of prompts surfaced no visible answer, so that line should be read as a trace-surfacing failure rather than a harmful-behavior result."
         )
     lines.extend(["", ""])
 
@@ -7833,7 +7967,7 @@ def append_interpretation_sections(
     smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
     gemma_s = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-S"), None)
     gemma_l = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-L"), None)
-    deepseek_m = next((row for row in benchmark_comparison if row["line_label"] == "DeepSeek-M"), None)
+    deepseek_m = next((row for row in benchmark_comparison if row["line_label"] == "DeepSeek-S"), None)
     deepseek_coverage = deepseek_medium_coverage_diagnostics() or {}
     deepseek_ccd = deepseek_coverage.get("ccd")
     deepseek_denevil = deepseek_coverage.get("denevil")
@@ -8013,13 +8147,13 @@ def append_interpretation_sections(
             f"- Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. {DENEVIL_PROXY_LIMITATION_LINE}",
             "- Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.",
             (
-                f"- Read `DeepSeek-M` as a visible-answer surfacing failure, not a hidden accuracy collapse: `CCD-Bench coverage = {fmt_pct(deepseek_m['ccd_completion_coverage'])}`{deepseek_ccd_ratio} means the saved visible CCD answer never exposed a parseable 1-10 choice, while `Denevil coverage = {fmt_pct(deepseek_m['denevil_proxy_coverage'])}`{deepseek_denevil_ratio} means only that share of DeNEVIL proxy prompts surfaced any visible text."
+                f"- Read `DeepSeek-S` as a visible-answer surfacing failure, not a hidden accuracy collapse: `CCD-Bench coverage = {fmt_pct(deepseek_m['ccd_completion_coverage'])}`{deepseek_ccd_ratio} means the saved visible CCD answer never exposed a parseable 1-10 choice, while `Denevil coverage = {fmt_pct(deepseek_m['denevil_proxy_coverage'])}`{deepseek_denevil_ratio} means only that share of DeNEVIL proxy prompts surfaced any visible text."
                 if deepseek_m is not None
                 else "- If a line appears only in the appendix coverage/provenance panels, read it as a response-format / release-evidence signal rather than a benchmark-faithful accuracy result."
             ),
             f"- Do not call `{best_text_only_line['line_label']}` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line." if best_text_only_line is not None else "- Do not promote any text-only line into an all-around winner claim without a matching SMID route.",
             f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, and the broader `Qwen` / `Llama` curves still move in mixed directions across benchmarks.",
-            f"- Keep `DeepSeek-M` out of the top-row comparable accuracy charts until its saved short-answer rerun artifacts stop collapsing into empty visible answers.",
+            f"- Keep `DeepSeek-S` out of the top-row comparable accuracy charts until its saved short-answer rerun artifacts stop collapsing into empty visible answers.",
             f"- Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.",
             "",
         ]

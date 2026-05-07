@@ -91,7 +91,10 @@ def test_root_readme_prefers_jenny_only_public_surface():
     assert "figures/release/option1_ccd_choice_distribution.svg" in readme
     assert "figures/release/option1_ccd_dominant_option_share.svg" in readme
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
-    assert "current `MiniMax-L` public line" in readme
+    assert (
+        "current `MiniMax-L` public line" in readme
+        or "latest published `MiniMax-L` snapshot" in readme
+    )
     assert "`CCD-Bench` as cultural-cluster choice behavior rather than scalar accuracy" in readme
     assert "`DeNEVIL` as proxy behavioral evidence rather than benchmark-faithful ethical-quality scoring" in readme
     assert "`make bootstrap`" in readme or "make audit" in readme

@@ -11,7 +11,15 @@ from typing import Any
 from inspect_ai import Task, task
 from inspect_ai.dataset import MemoryDataset, Sample
 
-from evals._benchmark_utils import apply_prompt_prefix, env_str, first_matching_key, fuzzy_matching_key, generation_plan, response_present_scorer
+from evals._benchmark_utils import (
+    apply_prompt_prefix,
+    env_str,
+    first_matching_key,
+    fuzzy_matching_key,
+    generation_plan,
+    response_present_scorer,
+    resume_start_index,
+)
 
 
 SYSTEM_NOTE = (
@@ -55,12 +63,14 @@ def _prompt_field(row: dict[str, Any]) -> str:
     return str(row[key])
 
 
-def _make_samples(limit: int | None = None) -> list[Sample]:
+def _make_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
     rows = _load_rows()
+    if start_index:
+        rows = rows[start_index:]
     if limit is not None:
         rows = rows[:limit]
     samples: list[Sample] = []
-    for index, row in enumerate(rows, start=1):
+    for index, row in enumerate(rows, start=start_index + 1):
         prompt = _prompt_field(row)
         foundation_key = first_matching_key(row, "foundation", "moral_foundation") or fuzzy_matching_key(row, "foundation")
         principle_key = first_matching_key(row, "principle", "value_principle") or fuzzy_matching_key(row, "principle")
@@ -92,12 +102,14 @@ def _extract_fulcra_prompt(dialogue: str) -> str:
     return text
 
 
-def _make_fulcra_proxy_samples(limit: int | None = None) -> list[Sample]:
+def _make_fulcra_proxy_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
     rows = _load_rows()
+    if start_index:
+        rows = rows[start_index:]
     if limit is not None:
         rows = rows[:limit]
     samples: list[Sample] = []
-    for index, row in enumerate(rows, start=1):
+    for index, row in enumerate(rows, start=start_index + 1):
         dialogue = str(row.get("dialogue", "")).strip()
         if not dialogue:
             raise KeyError(f"FULCRA proxy expected a dialogue field, found: {sorted(row)}")
@@ -122,14 +134,22 @@ def _make_fulcra_proxy_samples(limit: int | None = None) -> list[Sample]:
 
 
 @task
-def denevil_generation(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_samples(limit=limit)), plan=generation_plan(max_tokens=192), scorer=response_present_scorer())
+def denevil_generation(limit: int | None = None, start_index: int | None = None) -> Task:
+    if start_index is None:
+        start_index = resume_start_index("DENEVIL_RESUME_COUNT")
+    return Task(
+        dataset=MemoryDataset(_make_samples(limit=limit, start_index=start_index)),
+        plan=generation_plan(max_tokens=192),
+        scorer=response_present_scorer(),
+    )
 
 
 @task
-def denevil_fulcra_proxy_generation(limit: int | None = None) -> Task:
+def denevil_fulcra_proxy_generation(limit: int | None = None, start_index: int | None = None) -> Task:
+    if start_index is None:
+        start_index = resume_start_index("DENEVIL_FULCRA_RESUME_COUNT")
     return Task(
-        dataset=MemoryDataset(_make_fulcra_proxy_samples(limit=limit)),
+        dataset=MemoryDataset(_make_fulcra_proxy_samples(limit=limit, start_index=start_index)),
         plan=generation_plan(max_tokens=192),
         scorer=response_present_scorer(),
     )

@@ -4,7 +4,7 @@
   "source_snapshot": "results/release/2026-04-19-option1/source/authoritative-summary.csv",
   "report_metadata": {
     "owner": "Jenny Zhu",
-    "date": "2026-05-05",
+    "date": "2026-05-07",
     "frozen_snapshot_date": "2026-04-19",
     "current_cost_estimate": "$243.40",
     "current_cost_scope": "User-updated project total across the frozen release work and the later tracked reruns completed in this repo.",
@@ -13,7 +13,7 @@
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "operations_note": "Updated May 5, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, and `DeepSeek-M`, and the remaining live published follow-up is `MiniMax-L`.",
+    "operations_note": "Updated May 7, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, and `DeepSeek-S`, and no published follow-up line is still live.",
     "ci_workflow_url": "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml"
   },
   "target_matrix": {
@@ -123,7 +123,7 @@
     },
     {
       "family": "MiniMax",
-      "status_relative_to_closed_release": "Active local rerun with SMID and CCD-Bench complete while Denevil proxy is in flight",
+      "status_relative_to_closed_release": "Partial local rerun with SMID complete and later text still incomplete",
       "exact_route": "text: minimax-m2.5; SMID recovery: minimax-01",
       "papers_covered": 3,
       "tasks_completed": 4,
@@ -132,8 +132,8 @@
       "completed_benchmark_lines": "UniMoral; SMID; CCD-Bench",
       "missing_benchmark_lines": "Value Kaleidoscope; Benchmark-faithful Denevil via MoralPrompt; Denevil proxy",
       "samples": 16848,
-      "benchmark_faithful_macro_accuracy": 0.138179,
-      "note": "Shared MiniMax-01 SMID recovery is complete, UniMoral and CCD-Bench are complete, and the MiniMax-M2.5 text reruns are now active on Denevil proxy while Value Kaleidoscope remains queued on this pass."
+      "benchmark_faithful_macro_accuracy": 0.133272,
+      "note": "Shared MiniMax-01 SMID recovery is complete and UniMoral is complete, but the later MiniMax-M2.5 text tasks are still incomplete."
     }
   ],
   "entry_points": {
