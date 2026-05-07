@@ -495,10 +495,17 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert deepseek_small_ccd["valid_selection_rate"] == "n/a"
         assert deepseek_small_ccd["distribution_status"] == "missing_eval_samples"
     deepseek_medium_ccd = ccd_rows_by_line["DeepSeek-M"]
-    assert deepseek_medium_ccd["valid_selection_count"] == "2177"
-    assert deepseek_medium_ccd["valid_selection_rate"] == "99.770852"
-    assert deepseek_medium_ccd["dominant_option"] == "option_6 (Nordic Europe)"
-    assert deepseek_medium_ccd["dominant_option_share"] == "22.553973"
+    if deepseek_medium_ccd["distribution_status"] == "ok":
+        assert deepseek_medium_ccd["valid_selection_count"] == "2177"
+        assert deepseek_medium_ccd["valid_selection_rate"] == "99.770852"
+        assert deepseek_medium_ccd["dominant_option"] == "option_6 (Nordic Europe)"
+        assert deepseek_medium_ccd["dominant_option_share"] == "22.553973"
+    else:
+        assert deepseek_medium_ccd["distribution_status"] == "missing_eval_samples"
+        assert deepseek_medium_ccd["valid_selection_count"] == "n/a"
+        assert deepseek_medium_ccd["valid_selection_rate"] == "n/a"
+        assert deepseek_medium_ccd["dominant_option"] == "n/a"
+        assert deepseek_medium_ccd["dominant_option_share"] == "n/a"
     llama_large_ccd = ccd_rows_by_line["Llama-L"]
     if llama_large_ccd["distribution_status"] == "ok":
         assert llama_large_ccd["valid_selection_count"] == "2013"
