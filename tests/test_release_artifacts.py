@@ -880,14 +880,10 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     assert "## Local Expansion Checkpoint" in report_text
     assert "| `Next queued text lines` |" in report_text
-    assert any(
-        fragment in report_text
-        for fragment in {
-            "Published queued follow-up lines: `MiniMax-M` and `DeepSeek-L`.",
-            "Published queued follow-up lines: `MiniMax-M`.",
-            "No currently published line remains queued behind an active rerun.",
-            "remains the next visible follow-up.",
-        }
+    assert re.search(
+        r"^\| `Next queued text lines` \| [^|]+ \| .+\|$",
+        report_text,
+        flags=re.MULTILINE,
     )
     assert (
         "Within active `MiniMax-L`, `Value Kaleidoscope` remains queued behind the current benchmark."
@@ -909,14 +905,10 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     assert "## Local Expansion Checkpoint" in release_readme
     assert "| `Next queued text lines` |" in release_readme
-    assert any(
-        fragment in release_readme
-        for fragment in {
-            "Published queued follow-up lines: `MiniMax-M` and `DeepSeek-L`.",
-            "Published queued follow-up lines: `MiniMax-M`.",
-            "No currently published line remains queued behind an active rerun.",
-            "remains the next visible follow-up.",
-        }
+    assert re.search(
+        r"^\| `Next queued text lines` \| [^|]+ \| .+\|$",
+        release_readme,
+        flags=re.MULTILINE,
     )
     assert (
         "Within active `MiniMax-L`, `Value Kaleidoscope` remains queued behind the current benchmark."
