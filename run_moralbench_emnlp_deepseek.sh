@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run Erik's benchmarks for Gemma 3 models via OpenRouter
+# Run MoralBench + EMNLP Educator benchmarks for DeepSeek models
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -9,17 +9,21 @@ set -a; source "$SCRIPT_DIR/.env"; set +a
 
 export MORALBENCH_DATA_DIR="$SCRIPT_DIR/data/moralbench"
 export EMNLP_EDUCATOR_DATA_DIR="$SCRIPT_DIR/data/emnlp_educator"
-export OPENAI_API_KEY="$OPENROUTER_API_KEY"
-export OPENAI_BASE_URL="https://openrouter.ai/api/v1"
 
 mkdir -p "$SCRIPT_DIR/results"
 
 run_model() {
     local ROUTE="$1"
     local MODEL_ID="$2"
+    local PROVIDER_URL="$3"
+    local API_KEY="$4"
+
+    export OPENAI_API_KEY="$API_KEY"
+    export OPENAI_BASE_URL="$PROVIDER_URL"
+
     local SLUG
     SLUG=$(echo "$ROUTE" | tr '/' '_')
-    local LOG="$SCRIPT_DIR/results/run_erik_${SLUG}.txt"
+    local LOG="$SCRIPT_DIR/results/run_moralbench_emnlp_${SLUG}.txt"
 
     echo "=== $ROUTE ($MODEL_ID) started: $(date) ===" | tee "$LOG"
 
@@ -45,22 +49,28 @@ run_model() {
     echo "=== $ROUTE complete: $(date) ===" | tee -a "$LOG"
 }
 
-echo "=== Gemma Erik Benchmarks (via OpenRouter) ==="
+echo "=== DeepSeek MoralBench + EMNLP Educator Benchmarks ==="
 echo "Started: $(date)"
 
 PIDS=()
 
-run_model "google/gemma-3-4b" "google/gemma-3-4b-it" &
+# DeepSeek R1 via DeepSeek direct (deepseek-reasoner still works)
+run_model "deepseek/deepseek-r1" "deepseek-reasoner" \
+    "https://api.deepseek.com" "$DEEPSEEK_API_KEY" &
 PIDS+=($!)
-echo "  Launched gemma-3-4b (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched deepseek-r1 via DeepSeek direct (PID ${PIDS[${#PIDS[@]}-1]})"
 
-run_model "google/gemma-3-12b" "google/gemma-3-12b-it" &
+# DeepSeek R1-distill via OpenRouter (not on DeepSeek direct anymore)
+run_model "deepseek/deepseek-r1-distill-70b" "deepseek/deepseek-r1-distill-llama-70b" \
+    "https://openrouter.ai/api/v1" "$OPENROUTER_API_KEY" &
 PIDS+=($!)
-echo "  Launched gemma-3-12b (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched deepseek-r1-distill-70b via OpenRouter (PID ${PIDS[${#PIDS[@]}-1]})"
 
-run_model "google/gemma-3-27b" "google/gemma-3-27b-it" &
+# DeepSeek V3.1 via DeepSeek direct (deepseek-chat, bypasses Ark endpoint issue)
+run_model "deepseek/deepseek-chat-v3.1" "deepseek-chat" \
+    "https://api.deepseek.com" "$DEEPSEEK_API_KEY" &
 PIDS+=($!)
-echo "  Launched gemma-3-27b (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched deepseek-v3.1 via DeepSeek direct (PID ${PIDS[${#PIDS[@]}-1]})"
 
 echo ""
 echo "3 models launched. PIDs: ${PIDS[*]}"

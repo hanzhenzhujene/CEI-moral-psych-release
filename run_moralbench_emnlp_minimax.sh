@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run Erik's benchmarks for MiniMax models with low concurrency
+# Run MoralBench + EMNLP Educator benchmarks for MiniMax models with low concurrency
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -17,7 +17,7 @@ mkdir -p "$SCRIPT_DIR/results"
 run_minimax() {
     local MODEL_ID="$1"
     local SLUG="$2"
-    local LOG="$SCRIPT_DIR/results/run_erik_minimax_${SLUG}.txt"
+    local LOG="$SCRIPT_DIR/results/run_moralbench_emnlp_minimax_${SLUG}.txt"
 
     echo "=== minimax/$SLUG ($MODEL_ID) started: $(date) ===" | tee "$LOG"
 
