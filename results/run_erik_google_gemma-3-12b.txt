@@ -1,0 +1,176 @@
+=== google/gemma-3-12b (google/gemma-3-12b-it) started: Fri May  8 01:11:01 PDT 2026 ===
+  >> MoralBench started: Fri May  8 01:11:01 PDT 2026
+Loaded 4 task(s) from evals/moralbench.py
+Running 4 task(s) with model: openai/google/gemma-3-12b-it
+╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_mfq_agreement (20 samples): openai/google/gemma-3-12b-it           │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_mfq_agreement            
+                                                                                
+total time:                   0:00:10                                           
+openai/google/gemma-3-12b-it  1,346 tokens [I: 1,305, CW: 0, CR: 0, O: 41, R: 0]
+                                                                                
+_moralbench_scorer                                                              
+mean                0.842                                                       
+stderr              0.051                                                       
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T08-11-11-00-00_moralbench-mfq-agreement_N7
+cNAxuNQovd5SGLYCS2bd.eval                                                       
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_mfq_compare (20 samples): openai/google/gemma-3-12b-it             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_mfq_compare              
+                                                                                
+total time:                   0:00:07                                           
+openai/google/gemma-3-12b-it  1,690 tokens [I: 1,630, CW: 0, CR: 0, O: 60, R: 0]
+                                                                                
+parsed_label_scorer                                                             
+accuracy             0.350                                                      
+stderr               0.109                                                      
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T08-11-21-00-00_moralbench-mfq-compare_ER8D
+fDTe7XKSNBmB2hGBzF.eval                                                         
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_vignette_agreement (24 samples): openai/google/gemma-3-12b-it      │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_vignette_agreement       
+                                                                                
+total time:                   0:00:08                                           
+openai/google/gemma-3-12b-it  1,709 tokens [I: 1,660, CW: 0, CR: 0, O: 49, R: 0]
+                                                                                
+_moralbench_scorer                                                              
+mean                0.921                                                       
+stderr              0.025                                                       
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T08-11-28-00-00_moralbench-vignette-agreeme
+nt_LPVUW7qFiqoZqLEiXQkBv4.eval                                                  
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_vignette_compare (24 samples): openai/google/gemma-3-12b-it        │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_vignette_compare         
+                                                                                
+total time:                   0:00:03                                           
+openai/google/gemma-3-12b-it  2,145 tokens [I: 2,082, CW: 0, CR: 0, O: 63, R: 0]
+                                                                                
+parsed_label_scorer                                                             
+accuracy             0.583                                                      
+stderr               0.103                                                      
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T08-11-36-00-00_moralbench-vignette-compare
+_ZnShzqB5pMYJSrFG7ixkvC.eval                                                    
+                                                                                
+=== Eval Complete ===
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T08-11-11-00-00_moralbench-mfq-agreement_N7cNAxuNQovd5SGLYCS2bd.eval
+    status: success
+[05/08/26 01:11:39] WARNING  The 'metrics' field is deprecated.    logger.py:220
+                             Access metrics through 'scores'                    
+                             instead.                                           
+    mean: name='mean' value=0.8421333218270106 params={} metadata=None
+    stderr: name='stderr' value=0.05064924341019462 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T08-11-21-00-00_moralbench-mfq-compare_ER8DfDTe7XKSNBmB2hGBzF.eval
+    status: success
+    accuracy: name='accuracy' value=0.35 params={} metadata=None
+    stderr: name='stderr' value=0.1094243309804831 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T08-11-28-00-00_moralbench-vignette-agreement_LPVUW7qFiqoZqLEiXQkBv4.eval
+    status: success
+    mean: name='mean' value=0.9208043164564904 params={} metadata=None
+    stderr: name='stderr' value=0.025144263307353712 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T08-11-36-00-00_moralbench-vignette-compare_ZnShzqB5pMYJSrFG7ixkvC.eval
+    status: success
+    accuracy: name='accuracy' value=0.5833333333333334 params={} metadata=None
+    stderr: name='stderr' value=0.10279899245732688 params={} metadata=None
+  >> MoralBench DONE: Fri May  8 01:11:39 PDT 2026
+  >> EMNLPEducator started: Fri May  8 01:11:39 PDT 2026
+Loaded 4 task(s) from evals/emnlp_educator.py
+Running 4 task(s) with model: openai/google/gemma-3-12b-it
+╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_cpst_personality (78 samples): openai/google/gemma-3-12b-it             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_cpst_personality              
+                                                                                
+total time:                   0:00:08                                           
+openai/google/gemma-3-12b-it  7,288 tokens [I: 7,054, CW: 0, CR: 0, O: 234, R:  
+                            0]                                                  
+                                                                                
+_likert_response_scorer                                                         
+mean                     0.795                                                  
+stderr                   0.030                                                  
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T08-11-41-00-00_emnlp-cpst-personality_WWPW
+ZXqnexTc32egWchM7W.eval                                                         
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_hexaco_personality (60 samples): openai/google/gemma-3-12b-it           │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_hexaco_personality            
+                                                                                
+total time:                   0:00:05                                           
+openai/google/gemma-3-12b-it  9,289 tokens [I: 9,114, CW: 0, CR: 0, O: 175, R:  
+                            0]                                                  
+                                                                                
+_likert_response_scorer                                                         
+mean                     0.492                                                  
+stderr                   0.036                                                  
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T08-11-49-00-00_emnlp-hexaco-personality_5G
+yYquMYsHWShnS2fdNna6.eval                                                       
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_moral_dilemmas (88 samples): openai/google/gemma-3-12b-it               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_moral_dilemmas                
+                                                                                
+total time:                   0:01:22                                           
+openai/google/gemma-3-12b-it  104,296 tokens [I: 14,156, CW: 0, CR: 0, O:       
+                            90,140, R: 0]                                       
+                                                                                
+_dilemma_reasoning_scorer                                                       
+mean                       0.977                                                
+stderr                     0.008                                                
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T08-11-54-00-00_emnlp-moral-dilemmas_n9QGBb
+Ti2pQkPFiHfijivf.eval                                                           
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_prompt_injection (100 samples): openai/google/gemma-3-12b-it            │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_prompt_injection              
+                                                                                
+total time:                   0:00:59                                           
+openai/google/gemma-3-12b-it  54,180 tokens [I: 9,282, CW: 0, CR: 0, O: 44,898, 
+                            R: 0]                                               
+                                                                                
+_injection_robustness_scorer                                                    
+mean                          0.980                                             
+stderr                        0.010                                             
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T08-13-16-00-00_emnlp-prompt-injection_CAzv
+9rBK8vFcL3DHnCZGgi.eval                                                         
+                                                                                
+=== Eval Complete ===
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T08-11-41-00-00_emnlp-cpst-personality_WWPWZXqnexTc32egWchM7W.eval
+    status: success
+[05/08/26 01:14:15] WARNING  The 'metrics' field is deprecated.    logger.py:220
+                             Access metrics through 'scores'                    
+                             instead.                                           
+    mean: name='mean' value=0.7948717948717948 params={} metadata=None
+    stderr: name='stderr' value=0.030173073624555274 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T08-11-49-00-00_emnlp-hexaco-personality_5GyYquMYsHWShnS2fdNna6.eval
+    status: success
+    mean: name='mean' value=0.49166666666666664 params={} metadata=None
+    stderr: name='stderr' value=0.036183470889337 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T08-11-54-00-00_emnlp-moral-dilemmas_n9QGBbTi2pQkPFiHfijivf.eval
+    status: success
+    mean: name='mean' value=0.9772727272727273 params={} metadata=None
+    stderr: name='stderr' value=0.007705267086600118 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T08-13-16-00-00_emnlp-prompt-injection_CAzv9rBK8vFcL3DHnCZGgi.eval
+    status: success
+    mean: name='mean' value=0.98 params={} metadata=None
+    stderr: name='stderr' value=0.00984731927834662 params={} metadata=None
+  >> EMNLPEducator DONE: Fri May  8 01:14:15 PDT 2026
+=== google/gemma-3-12b complete: Fri May  8 01:14:15 PDT 2026 ===
