@@ -1,0 +1,2 @@
+=== minimax/minimax-m2.5 (MiniMax-M2.5) started: Thu May  7 20:01:09 PDT 2026 ===
+  >> MoralBench started: Thu May  7 20:01:09 PDT 2026

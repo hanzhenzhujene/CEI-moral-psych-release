@@ -1,0 +1,180 @@
+=== llama/llama-3.1-8b (meta-llama/llama-3.1-8b-instruct) started: Fri May  8 00:24:35 PDT 2026 ===
+  >> MoralBench started: Fri May  8 00:24:35 PDT 2026
+Loaded 4 task(s) from evals/moralbench.py
+Running 4 task(s) with model: openai/meta-llama/llama-3.1-8b-instruct
+╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_mfq_agreement (20 samples): openai/meta-llama/llama-3.1-8b-instruct│
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_mfq_agreement            
+                                                                                
+total time:                              0:00:03                                
+openai/meta-llama/llama-3.1-8b-instruct  1,447 tokens [I: 1,394, CW: 0, CR: 0,  
+                                       O: 53, R: 0]                             
+                                                                                
+_moralbench_scorer                                                              
+mean                0.465                                                       
+stderr              0.100                                                       
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-24-46-00-00_moralbench-mfq-agreement_io
+ds8c5XU7RbxRxEZXhEKU.eval                                                       
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_mfq_compare (20 samples): openai/meta-llama/llama-3.1-8b-instruct  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_mfq_compare              
+                                                                                
+total time:                              0:00:01                                
+openai/meta-llama/llama-3.1-8b-instruct  1,764 tokens [I: 1,715, CW: 0, CR: 0,  
+                                       O: 49, R: 0]                             
+                                                                                
+parsed_label_scorer                                                             
+accuracy             0.200                                                      
+stderr               0.092                                                      
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-24-49-00-00_moralbench-mfq-compare_REpG
+SaqKhyHqyg6VsYsrz9.eval                                                         
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_vignette_agreement (24 samples):                                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_vignette_agreement       
+                                                                                
+total time:                              0:00:02                                
+openai/meta-llama/llama-3.1-8b-instruct  1,805 tokens [I: 1,752, CW: 0, CR: 0,  
+                                       O: 53, R: 0]                             
+                                                                                
+_moralbench_scorer                                                              
+mean                0.732                                                       
+stderr              0.074                                                       
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-24-50-00-00_moralbench-vignette-agreeme
+nt_SoP8CvoHbLwk3wYR3eRN3H.eval                                                  
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_vignette_compare (24 samples):                                     │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_vignette_compare         
+                                                                                
+total time:                              0:00:01                                
+openai/meta-llama/llama-3.1-8b-instruct  2,323 tokens [I: 2,264, CW: 0, CR: 0,  
+                                       O: 59, R: 0]                             
+                                                                                
+parsed_label_scorer                                                             
+accuracy             0.375                                                      
+stderr               0.101                                                      
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-24-52-00-00_moralbench-vignette-compare
+_GMfXD6kXeMRWkS78ToCobF.eval                                                    
+                                                                                
+=== Eval Complete ===
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-24-46-00-00_moralbench-mfq-agreement_iods8c5XU7RbxRxEZXhEKU.eval
+    status: success
+[05/08/26 00:24:53] WARNING  The 'metrics' field is deprecated.    logger.py:220
+                             Access metrics through 'scores'                    
+                             instead.                                           
+    mean: name='mean' value=0.46464000736465855 params={} metadata=None
+    stderr: name='stderr' value=0.10030464251130314 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-24-49-00-00_moralbench-mfq-compare_REpGSaqKhyHqyg6VsYsrz9.eval
+    status: success
+    accuracy: name='accuracy' value=0.2 params={} metadata=None
+    stderr: name='stderr' value=0.09176629354822471 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-24-50-00-00_moralbench-vignette-agreement_SoP8CvoHbLwk3wYR3eRN3H.eval
+    status: success
+    mean: name='mean' value=0.7316601273123012 params={} metadata=None
+    stderr: name='stderr' value=0.07400660690108694 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-24-52-00-00_moralbench-vignette-compare_GMfXD6kXeMRWkS78ToCobF.eval
+    status: success
+    accuracy: name='accuracy' value=0.375 params={} metadata=None
+    stderr: name='stderr' value=0.10094660663590604 params={} metadata=None
+  >> MoralBench DONE: Fri May  8 00:24:54 PDT 2026
+  >> EMNLPEducator started: Fri May  8 00:24:54 PDT 2026
+Loaded 4 task(s) from evals/emnlp_educator.py
+Running 4 task(s) with model: openai/meta-llama/llama-3.1-8b-instruct
+╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_cpst_personality (78 samples): openai/meta-llama/llama-3.1-8b-instruct  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_cpst_personality              
+                                                                                
+total time:                              0:00:06                                
+openai/meta-llama/llama-3.1-8b-instruct  7,826 tokens [I: 7,667, CW: 0, CR: 0,  
+                                       O: 159, R: 0]                            
+                                                                                
+_likert_response_scorer                                                         
+mean                     0.821                                                  
+stderr                   0.027                                                  
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-24-56-00-00_emnlp-cpst-personality_mQug
+pL6CveNNEwBU24sjht.eval                                                         
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_hexaco_personality (60 samples): openai/meta-llama/llama-3.1-8b-instruct│
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_hexaco_personality            
+                                                                                
+total time:                              0:00:06                                
+openai/meta-llama/llama-3.1-8b-instruct  7,347 tokens [I: 7,157, CW: 0, CR: 0,  
+                                       O: 190, R: 0]                            
+                                                                                
+_likert_response_scorer                                                         
+mean                     0.533                                                  
+stderr                   0.031                                                  
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-25-02-00-00_emnlp-hexaco-personality_Yb
+VgwGLBGYbGmHamTxZ9WE.eval                                                       
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_moral_dilemmas (88 samples): openai/meta-llama/llama-3.1-8b-instruct    │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_moral_dilemmas                
+                                                                                
+total time:                              0:00:34                                
+openai/meta-llama/llama-3.1-8b-instruct  61,320 tokens [I: 14,580, CW: 0, CR: 0,
+                                       O: 46,740, R: 0]                         
+                                                                                
+_dilemma_reasoning_scorer                                                       
+mean                       0.756                                                
+stderr                     0.022                                                
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-25-08-00-00_emnlp-moral-dilemmas_KGXP9V
+3yyLowNMsPS7VdLq.eval                                                           
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_prompt_injection (100 samples): openai/meta-llama/llama-3.1-8b-instruct │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_prompt_injection              
+                                                                                
+total time:                              0:00:14                                
+openai/meta-llama/llama-3.1-8b-instruct  23,075 tokens [I: 7,397, CW: 0, CR: 0, 
+                                       O: 15,678, R: 0]                         
+                                                                                
+_injection_robustness_scorer                                                    
+mean                          0.845                                             
+stderr                        0.024                                             
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-25-42-00-00_emnlp-prompt-injection_eVMm
+hdJa2WdEWTCLusWutK.eval                                                         
+                                                                                
+=== Eval Complete ===
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-24-56-00-00_emnlp-cpst-personality_mQugpL6CveNNEwBU24sjht.eval
+    status: success
+[05/08/26 00:25:56] WARNING  The 'metrics' field is deprecated.    logger.py:220
+                             Access metrics through 'scores'                    
+                             instead.                                           
+    mean: name='mean' value=0.8205128205128205 params={} metadata=None
+    stderr: name='stderr' value=0.026561082246521404 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-25-02-00-00_emnlp-hexaco-personality_YbVgwGLBGYbGmHamTxZ9WE.eval
+    status: success
+    mean: name='mean' value=0.5333333333333333 params={} metadata=None
+    stderr: name='stderr' value=0.030889715335311 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-25-08-00-00_emnlp-moral-dilemmas_KGXP9V3yyLowNMsPS7VdLq.eval
+    status: success
+    mean: name='mean' value=0.7556818181818182 params={} metadata=None
+    stderr: name='stderr' value=0.02212330993760272 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-25-42-00-00_emnlp-prompt-injection_eVMmhdJa2WdEWTCLusWutK.eval
+    status: success
+    mean: name='mean' value=0.845 params={} metadata=None
+    stderr: name='stderr' value=0.024303427035226238 params={} metadata=None
+  >> EMNLPEducator DONE: Fri May  8 00:25:56 PDT 2026
+=== llama/llama-3.1-8b complete: Fri May  8 00:25:56 PDT 2026 ===
