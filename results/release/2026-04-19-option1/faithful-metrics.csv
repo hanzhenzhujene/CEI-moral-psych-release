@@ -131,3 +131,7 @@ MoralBench,MFQ agreement,Qwen,moralbench_mfq_agreement,openai/qwen3-8b,0.3626566
 MoralBench,MFQ compare,Qwen,moralbench_mfq_compare,openai/qwen3-8b,,0.11470786693528086,20,success
 MoralBench,Vignette agreement,Qwen,moralbench_vignette_agreement,openai/qwen3-8b,0.8236537918603136,0.03882095285126357,24,success
 MoralBench,Vignette compare,Qwen,moralbench_vignette_compare,openai/qwen3-8b,,0.1042572070285374,24,success
+MoralBench,MFQ agreement,MiniMax,moralbench_mfq_agreement,openai/minimax/minimax-01,0.9119599025892977,0.043156657157785785,20,success
+MoralBench,MFQ compare,MiniMax,moralbench_mfq_compare,openai/minimax/minimax-01,0.5,0.11470786693528086,20,success
+MoralBench,Vignette agreement,MiniMax,moralbench_vignette_agreement,openai/minimax/minimax-01,0.933391729043903,0.0262354954138446,24,success
+MoralBench,Vignette compare,MiniMax,moralbench_vignette_compare,openai/minimax/minimax-01,0.4583333333333333,0.10389457216622949,24,success
