@@ -1,0 +1,182 @@
+=== qwen/qwen3-8b (qwen3-8b) started: Thu May  7 19:49:19 PDT 2026 ===
+  >> MoralBench started: Thu May  7 19:49:19 PDT 2026
+Loaded 4 task(s) from evals/moralbench.py
+Running 4 task(s) with model: openai/qwen3-8b
+╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_mfq_agreement (20 samples): openai/qwen3-8b                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, extra_body: {...}, max_tasks: 1, dataset:                  
+moralbench_mfq_agreement                                                        
+                                                                                
+total time:                 0:00:03                                             
+openai/qwen3-8b             1,448 tokens [I: 1,404, O: 44]                      
+                                                                                
+_moralbench_scorer                                                              
+mean                0.363                                                       
+stderr              0.108                                                       
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T02-49-22-00-00_moralbench-mfq-agreement_6Q
+3Ps5TPR5oZbTHnGhBBnk.eval                                                       
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_mfq_compare (20 samples): openai/qwen3-8b                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, extra_body: {...}, max_tasks: 1, dataset:                  
+moralbench_mfq_compare                                                          
+                                                                                
+total time:                 0:00:03                                             
+openai/qwen3-8b             1,748 tokens [I: 1,728, O: 20]                      
+                                                                                
+parsed_label_scorer                                                             
+accuracy             0.500                                                      
+stderr               0.115                                                      
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T02-49-25-00-00_moralbench-mfq-compare_i4MA
+FEQaya2NKmxwkvF2Fd.eval                                                         
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_vignette_agreement (24 samples): openai/qwen3-8b                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, extra_body: {...}, max_tasks: 1, dataset:                  
+moralbench_vignette_agreement                                                   
+                                                                                
+total time:                 0:00:03                                             
+openai/qwen3-8b             1,807 tokens [I: 1,783, O: 24]                      
+                                                                                
+_moralbench_scorer                                                              
+mean                0.824                                                       
+stderr              0.039                                                       
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T02-49-28-00-00_moralbench-vignette-agreeme
+nt_cU2WpLuPp4Y6EQFRqGBj9N.eval                                                  
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_vignette_compare (24 samples): openai/qwen3-8b                     │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, extra_body: {...}, max_tasks: 1, dataset:                  
+moralbench_vignette_compare                                                     
+                                                                                
+total time:                 0:00:03                                             
+openai/qwen3-8b             2,228 tokens [I: 2,204, O: 24]                      
+                                                                                
+parsed_label_scorer                                                             
+accuracy             0.500                                                      
+stderr               0.104                                                      
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T02-49-31-00-00_moralbench-vignette-compare
+_MUZRWXFRtVP3wQUdRd7NLC.eval                                                    
+                                                                                
+=== Eval Complete ===
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T02-49-22-00-00_moralbench-mfq-agreement_6Q3Ps5TPR5oZbTHnGhBBnk.eval
+    status: success
+[05/07/26 19:49:34] WARNING  The 'metrics' field is deprecated.    logger.py:220
+                             Access metrics through 'scores'                    
+                             instead.                                           
+    mean: name='mean' value=0.36265664160401007 params={} metadata=None
+    stderr: name='stderr' value=0.10801656106804026 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T02-49-25-00-00_moralbench-mfq-compare_i4MAFEQaya2NKmxwkvF2Fd.eval
+    status: success
+    accuracy: name='accuracy' value=0.5 params={} metadata=None
+    stderr: name='stderr' value=0.11470786693528086 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T02-49-28-00-00_moralbench-vignette-agreement_cU2WpLuPp4Y6EQFRqGBj9N.eval
+    status: success
+    mean: name='mean' value=0.8236537918603136 params={} metadata=None
+    stderr: name='stderr' value=0.03882095285126357 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T02-49-31-00-00_moralbench-vignette-compare_MUZRWXFRtVP3wQUdRd7NLC.eval
+    status: success
+    accuracy: name='accuracy' value=0.5 params={} metadata=None
+    stderr: name='stderr' value=0.1042572070285374 params={} metadata=None
+  >> MoralBench DONE: Thu May  7 19:49:34 PDT 2026
+
+  >> EMNLPEducator started: Thu May  7 19:49:35 PDT 2026
+Loaded 4 task(s) from evals/emnlp_educator.py
+Running 4 task(s) with model: openai/qwen3-8b
+╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_cpst_personality (78 samples): openai/qwen3-8b                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, extra_body: {...}, max_tasks: 1, dataset:                  
+emnlp_cpst_personality                                                          
+                                                                                
+total time:                 0:00:13                                             
+openai/qwen3-8b             7,747 tokens [I: 7,669, O: 78]                      
+                                                                                
+_likert_response_scorer                                                         
+mean                     0.718                                                  
+stderr                   0.019                                                  
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T02-49-37-00-00_emnlp-cpst-personality_Bgc9
+3t2hzJy9twrscKhXoZ.eval                                                         
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_hexaco_personality (60 samples): openai/qwen3-8b                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, extra_body: {...}, max_tasks: 1, dataset:                  
+emnlp_hexaco_personality                                                        
+                                                                                
+total time:                 0:00:14                                             
+openai/qwen3-8b             7,252 tokens [I: 7,192, O: 60]                      
+                                                                                
+_likert_response_scorer                                                         
+mean                     0.639                                                  
+stderr                   0.017                                                  
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T02-49-50-00-00_emnlp-hexaco-personality_cw
+j6mxDbj2L4EKc53Hrxu3.eval                                                       
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_moral_dilemmas (88 samples): openai/qwen3-8b                            │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, extra_body: {...}, max_tasks: 1, dataset:                  
+emnlp_moral_dilemmas                                                            
+                                                                                
+total time:              0:00:41                                                
+openai/qwen3-8b          92,815 tokens [I: 14,604, O: 78,211]                   
+                                                                                
+_dilemma_reasoning_scorer                                                       
+mean                       0.986                                                
+stderr                     0.006                                                
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T02-50-04-00-00_emnlp-moral-dilemmas_CEGc9Q
+MY5KvDxhCep3jNRn.eval                                                           
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_prompt_injection (100 samples): openai/qwen3-8b                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, extra_body: {...}, max_tasks: 1, dataset:                  
+emnlp_prompt_injection                                                          
+                                                                                
+total time:               0:00:23                                               
+openai/qwen3-8b           21,883 tokens [I: 7,370, O: 14,513]                   
+                                                                                
+_injection_robustness_scorer                                                    
+mean                          0.935                                             
+stderr                        0.017                                             
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T02-50-45-00-00_emnlp-prompt-injection_HLVW
+ZSqXhrCZzNzr6k2wC5.eval                                                         
+                                                                                
+=== Eval Complete ===
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T02-49-37-00-00_emnlp-cpst-personality_Bgc93t2hzJy9twrscKhXoZ.eval
+    status: success
+[05/07/26 19:51:08] WARNING  The 'metrics' field is deprecated.    logger.py:220
+                             Access metrics through 'scores'                    
+                             instead.                                           
+    mean: name='mean' value=0.717948717948718 params={} metadata=None
+    stderr: name='stderr' value=0.019007472612900665 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T02-49-50-00-00_emnlp-hexaco-personality_cwj6mxDbj2L4EKc53Hrxu3.eval
+    status: success
+    mean: name='mean' value=0.6388888888888888 params={} metadata=None
+    stderr: name='stderr' value=0.01688494849463443 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T02-50-04-00-00_emnlp-moral-dilemmas_CEGc9QMY5KvDxhCep3jNRn.eval
+    status: success
+    mean: name='mean' value=0.9857954545454546 params={} metadata=None
+    stderr: name='stderr' value=0.006204713866221348 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T02-50-45-00-00_emnlp-prompt-injection_HLVWZSqXhrCZzNzr6k2wC5.eval
+    status: success
+    mean: name='mean' value=0.935 params={} metadata=None
+    stderr: name='stderr' value=0.016899883449481554 params={} metadata=None
+  >> EMNLPEducator DONE: Thu May  7 19:51:09 PDT 2026
+
+=== qwen/qwen3-8b complete: Thu May  7 19:51:09 PDT 2026 ===

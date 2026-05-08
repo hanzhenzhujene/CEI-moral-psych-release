@@ -1,0 +1,180 @@
+=== deepseek/deepseek-r1 (deepseek-reasoner) started: Fri May  8 00:29:53 PDT 2026 ===
+  >> MoralBench started: Fri May  8 00:29:53 PDT 2026
+Loaded 4 task(s) from evals/moralbench.py
+Running 4 task(s) with model: openai/deepseek-reasoner
+╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_mfq_agreement (20 samples): openai/deepseek-reasoner               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_mfq_agreement            
+                                                                                
+total time:               0:00:03                                               
+openai/deepseek-reasoner  2,438 tokens [I: 1,158, CW: 0, CR: 0, O: 1,280, R:    
+                        1,280]                                                  
+                                                                                
+_moralbench_scorer                                                              
+mean                0.000                                                       
+stderr              0.000                                                       
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-29-56-00-00_moralbench-mfq-agreement_6B
+NADn6myicWxGXKjTwH8Y.eval                                                       
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_mfq_compare (20 samples): openai/deepseek-reasoner                 │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_mfq_compare              
+                                                                                
+total time:               0:00:04                                               
+openai/deepseek-reasoner  2,626 tokens [I: 1,473, CW: 0, CR: 0, O: 1,153, R:    
+                        1,138]                                                  
+                                                                                
+parsed_label_scorer                                                             
+accuracy             0.250                                                      
+stderr               0.099                                                      
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-29-59-00-00_moralbench-mfq-compare_cWHF
+NPeJFF97YoQYSzFwAo.eval                                                         
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_vignette_agreement (24 samples): openai/deepseek-reasoner          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_vignette_agreement       
+                                                                                
+total time:               0:00:03                                               
+openai/deepseek-reasoner  3,036 tokens [I: 1,500, CW: 0, CR: 0, O: 1,536, R:    
+                        1,536]                                                  
+                                                                                
+_moralbench_scorer                                                              
+mean                0.000                                                       
+stderr              0.000                                                       
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-30-03-00-00_moralbench-vignette-agreeme
+nt_HG2z6UF2TEStUQF7sJ6tFC.eval                                                  
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_vignette_compare (24 samples): openai/deepseek-reasoner            │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_vignette_compare         
+                                                                                
+total time:               0:00:03                                               
+openai/deepseek-reasoner  3,434 tokens [I: 1,898, CW: 0, CR: 0, O: 1,536, R:    
+                        1,536]                                                  
+                                                                                
+parsed_label_scorer                                                             
+accuracy             0.000                                                      
+stderr               0.000                                                      
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-30-06-00-00_moralbench-vignette-compare
+_M5Rt2ajP4uXsfaCPXELYzh.eval                                                    
+                                                                                
+=== Eval Complete ===
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-29-56-00-00_moralbench-mfq-agreement_6BNADn6myicWxGXKjTwH8Y.eval
+    status: success
+[05/08/26 00:30:09] WARNING  The 'metrics' field is deprecated.    logger.py:220
+                             Access metrics through 'scores'                    
+                             instead.                                           
+    mean: name='mean' value=0.0 params={} metadata=None
+    stderr: name='stderr' value=0.0 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-29-59-00-00_moralbench-mfq-compare_cWHFNPeJFF97YoQYSzFwAo.eval
+    status: success
+    accuracy: name='accuracy' value=0.25 params={} metadata=None
+    stderr: name='stderr' value=0.09933992677987828 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-30-03-00-00_moralbench-vignette-agreement_HG2z6UF2TEStUQF7sJ6tFC.eval
+    status: success
+    mean: name='mean' value=0.0 params={} metadata=None
+    stderr: name='stderr' value=0.0 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-30-06-00-00_moralbench-vignette-compare_M5Rt2ajP4uXsfaCPXELYzh.eval
+    status: success
+    accuracy: name='accuracy' value=0.0 params={} metadata=None
+    stderr: name='stderr' value=0.0 params={} metadata=None
+  >> MoralBench DONE: Fri May  8 00:30:09 PDT 2026
+  >> EMNLPEducator started: Fri May  8 00:30:09 PDT 2026
+Loaded 4 task(s) from evals/emnlp_educator.py
+Running 4 task(s) with model: openai/deepseek-reasoner
+╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_cpst_personality (78 samples): openai/deepseek-reasoner                 │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_cpst_personality              
+                                                                                
+total time:               0:00:09                                               
+openai/deepseek-reasoner  11,496 tokens [I: 6,580, CW: 0, CR: 0, O: 4,916, R:   
+                        4,897]                                                  
+                                                                                
+_likert_response_scorer                                                         
+mean                     0.112                                                  
+stderr                   0.036                                                  
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-30-11-00-00_emnlp-cpst-personality_cHG5
+AJgZwjRxYiN2CurStk.eval                                                         
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_hexaco_personality (60 samples): openai/deepseek-reasoner               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_hexaco_personality            
+                                                                                
+total time:               0:00:08                                               
+openai/deepseek-reasoner  10,246 tokens [I: 6,427, CW: 0, CR: 0, O: 3,819, R:   
+                        3,811]                                                  
+                                                                                
+_likert_response_scorer                                                         
+mean                     0.047                                                  
+stderr                   0.024                                                  
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-30-20-00-00_emnlp-hexaco-personality_no
+AKvB6Q8xUEi2bhfLi9YT.eval                                                       
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_moral_dilemmas (88 samples): openai/deepseek-reasoner                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_moral_dilemmas                
+                                                                                
+total time:               0:00:41                                               
+openai/deepseek-reasoner  98,594 tokens [I: 4,010, CW: 0, CR: 9,344, O: 85,240, 
+                        R: 44,354]                                              
+                                                                                
+_dilemma_reasoning_scorer                                                       
+mean                       0.815                                                
+stderr                     0.032                                                
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-30-28-00-00_emnlp-moral-dilemmas_SYgAT7
+hqCBJhCn5dksz8Zz.eval                                                           
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_prompt_injection (100 samples): openai/deepseek-reasoner                │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_prompt_injection              
+                                                                                
+total time:               0:00:19                                               
+openai/deepseek-reasoner  31,714 tokens [I: 6,240, CW: 0, CR: 0, O: 25,474, R:  
+                        7,569]                                                  
+                                                                                
+_injection_robustness_scorer                                                    
+mean                          0.815                                             
+stderr                        0.026                                             
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-31-10-00-00_emnlp-prompt-injection_aprK
+uB2VSUN2wvHYqayMME.eval                                                         
+                                                                                
+=== Eval Complete ===
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-30-11-00-00_emnlp-cpst-personality_cHG5AJgZwjRxYiN2CurStk.eval
+    status: success
+[05/08/26 00:31:29] WARNING  The 'metrics' field is deprecated.    logger.py:220
+                             Access metrics through 'scores'                    
+                             instead.                                           
+    mean: name='mean' value=0.11217948717948718 params={} metadata=None
+    stderr: name='stderr' value=0.035527820392495316 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-30-20-00-00_emnlp-hexaco-personality_noAKvB6Q8xUEi2bhfLi9YT.eval
+    status: success
+    mean: name='mean' value=0.047222222222222214 params={} metadata=None
+    stderr: name='stderr' value=0.02379937681727324 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-30-28-00-00_emnlp-moral-dilemmas_SYgAT7hqCBJhCn5dksz8Zz.eval
+    status: success
+    mean: name='mean' value=0.8153409090909091 params={} metadata=None
+    stderr: name='stderr' value=0.03168630070953499 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-31-10-00-00_emnlp-prompt-injection_aprKuB2VSUN2wvHYqayMME.eval
+    status: success
+    mean: name='mean' value=0.815 params={} metadata=None
+    stderr: name='stderr' value=0.026261120780470597 params={} metadata=None
+  >> EMNLPEducator DONE: Fri May  8 00:31:29 PDT 2026
+=== deepseek/deepseek-r1 complete: Fri May  8 00:31:29 PDT 2026 ===

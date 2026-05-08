@@ -1,0 +1,266 @@
+=== minimax/minimax-m1 (minimax/minimax-m1) started: Fri May  8 00:24:35 PDT 2026 ===
+  >> MoralBench started: Fri May  8 00:24:35 PDT 2026
+Loaded 4 task(s) from evals/moralbench.py
+Running 4 task(s) with model: openai/minimax/minimax-m1
+╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_mfq_agreement (20 samples): openai/minimax/minimax-m1              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_mfq_agreement            
+                                                                                
+total time:                0:00:07                                              
+openai/minimax/minimax-m1  2,622 tokens [I: 1,342, CW: 0, CR: 0, O: 1,280, R:   
+                         1,280]                                                 
+                                                                                
+_moralbench_scorer                                                              
+mean                0.000                                                       
+stderr              0.000                                                       
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-24-46-00-00_moralbench-mfq-agreement_3Z
+2AXVW5qrgZPSnEJqN6aZ.eval                                                       
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_mfq_compare (20 samples): openai/minimax/minimax-m1                │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_mfq_compare              
+                                                                                
+total time:                0:00:05                                              
+openai/minimax/minimax-m1  2,947 tokens [I: 1,667, CW: 0, CR: 0, O: 1,280, R:   
+                         1,279]                                                 
+                                                                                
+parsed_label_scorer                                                             
+accuracy             0.000                                                      
+stderr               0.000                                                      
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-24-53-00-00_moralbench-mfq-compare_nquG
+5ZbQHwQxoNLtcjYwAx.eval                                                         
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_vignette_agreement (24 samples): openai/minimax/minimax-m1         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_vignette_agreement       
+                                                                                
+total time:                0:00:05                                              
+openai/minimax/minimax-m1  3,245 tokens [I: 1,709, CW: 0, CR: 0, O: 1,536, R:   
+                         1,534]                                                 
+                                                                                
+_moralbench_scorer                                                              
+mean                0.000                                                       
+stderr              0.000                                                       
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-24-58-00-00_moralbench-vignette-agreeme
+nt_2RRMcZq6gpGFm6q7p4rEi7.eval                                                  
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│moralbench_vignette_compare (24 samples): openai/minimax/minimax-m1           │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: moralbench_vignette_compare         
+                                                                                
+total time:                0:00:05                                              
+openai/minimax/minimax-m1  3,662 tokens [I: 2,126, CW: 0, CR: 0, O: 1,536, R:   
+                         1,534]                                                 
+                                                                                
+parsed_label_scorer                                                             
+accuracy             0.000                                                      
+stderr               0.000                                                      
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-25-03-00-00_moralbench-vignette-compare
+_iPFucVBKgj7auJsx9vuCwb.eval                                                    
+                                                                                
+=== Eval Complete ===
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-24-46-00-00_moralbench-mfq-agreement_3Z2AXVW5qrgZPSnEJqN6aZ.eval
+    status: success
+[05/08/26 00:25:08] WARNING  The 'metrics' field is deprecated.    logger.py:220
+                             Access metrics through 'scores'                    
+                             instead.                                           
+    mean: name='mean' value=0.0 params={} metadata=None
+    stderr: name='stderr' value=0.0 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-24-53-00-00_moralbench-mfq-compare_nquG5ZbQHwQxoNLtcjYwAx.eval
+    status: success
+    accuracy: name='accuracy' value=0.0 params={} metadata=None
+    stderr: name='stderr' value=0.0 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-24-58-00-00_moralbench-vignette-agreement_2RRMcZq6gpGFm6q7p4rEi7.eval
+    status: success
+    mean: name='mean' value=0.0 params={} metadata=None
+    stderr: name='stderr' value=0.0 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-25-03-00-00_moralbench-vignette-compare_iPFucVBKgj7auJsx9vuCwb.eval
+    status: success
+    accuracy: name='accuracy' value=0.0 params={} metadata=None
+    stderr: name='stderr' value=0.0 params={} metadata=None
+  >> MoralBench DONE: Fri May  8 00:25:09 PDT 2026
+  >> EMNLPEducator started: Fri May  8 00:25:09 PDT 2026
+Loaded 4 task(s) from evals/emnlp_educator.py
+Running 4 task(s) with model: openai/minimax/minimax-m1
+╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_cpst_personality (78 samples): openai/minimax/minimax-m1                │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_cpst_personality              
+                                                                                
+total time:                0:00:11                                              
+openai/minimax/minimax-m1  12,181 tokens [I: 7,189, CW: 0, CR: 0, O: 4,992, R:  
+                         4,992]                                                 
+                                                                                
+_likert_response_scorer                                                         
+mean                     0.000                                                  
+stderr                   0.000                                                  
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-25-11-00-00_emnlp-cpst-personality_9fGX
+K9A8kJdeV6ivtmBpXV.eval                                                         
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_hexaco_personality (60 samples): openai/minimax/minimax-m1              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_hexaco_personality            
+                                                                                
+total time:                0:00:10                                              
+openai/minimax/minimax-m1  10,609 tokens [I: 6,769, CW: 0, CR: 0, O: 3,840, R:  
+                         3,839]                                                 
+                                                                                
+_likert_response_scorer                                                         
+mean                     0.000                                                  
+stderr                   0.000                                                  
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-25-22-00-00_emnlp-hexaco-personality_Ti
+4qp3f5cEaowHWpJrNThJ.eval                                                       
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_moral_dilemmas (88 samples): openai/minimax/minimax-m1                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+max_connections: 50, max_tasks: 1, dataset: emnlp_moral_dilemmas                
+                                                                                
+total time:                0:01:07                                              
+openai/minimax/minimax-m1  97,924 tokens [I: 14,118, CW: 0, CR: 0, O: 83,806, R:
+                         39,847]                                                
+                                                                                
+_dilemma_reasoning_scorer                                                       
+mean                       0.892                                                
+stderr                     0.014                                                
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-25-32-00-00_emnlp-moral-dilemmas_4f8XGG
+NP9sGsNNbTDjEXjB.eval                                                           
+                                                                                ╭──────────────────────────────────────────────────────────────────────────────╮
+│emnlp_prompt_injection (100 samples): openai/minimax/minimax-m1               │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in task_run                                                                  │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in tg_collect                                                                │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in run_task                                                                  │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in run_sample                                                                │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in task_run_sample                                                           │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in task_run_sample                                                           │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in run                                                                       │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in __call__                                                                  │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in solve                                                                     │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in generate                                                                  │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in task_generate                                                             │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in generate                                                                  │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in _generate                                                                 │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in async_wrapped                                                             │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in __call__                                                                  │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in iter                                                                      │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in inner                                                                     │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in <lambda>                                                                  │
+│                                                                              │
+│ /Users/bytedance/.local/share/uv/python/cpython-3.11.14-macos-aarch64-none/… │
+│ in result                                                                    │
+│                                                                              │
+│   446 │   │   │   │   if self._state in [CANCELLED, CANCELLED_AND_NOTIFIED]: │
+│   447 │   │   │   │   │   raise CancelledError()                             │
+│   448 │   │   │   │   elif self._state == FINISHED:                          │
+│ ❱ 449 │   │   │   │   │   return self.__get_result()                         │
+│   450 │   │   │   │                                                          │
+│   451 │   │   │   │   self._condition.wait(timeout)                          │
+│   452                                                                        │
+│                                                                              │
+│ /Users/bytedance/.local/share/uv/python/cpython-3.11.14-macos-aarch64-none/… │
+│ in __get_result                                                              │
+│                                                                              │
+│   398 │   def __get_result(self):                                            │
+│   399 │   │   if self._exception:                                            │
+│   400 │   │   │   try:                                                       │
+│ ❱ 401 │   │   │   │   raise self._exception                                  │
+│   402 │   │   │   finally:                                                   │
+│   403 │   │   │   │   # Break a reference cycle with the exception in self._ │
+│   404 │   │   │   │   self = None                                            │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in __call__                                                                  │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in generate                                                                  │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in generate                                                                  │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in generate_completions                                                      │
+│                                                                              │
+│ /Users/bytedance/Projects/sunyuding/cei/.venv/lib/python3.11/site-packages/… │
+│ in chat_choices_from_openai                                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+TypeError: 'NoneType' object is not iterable                                    
+                                                                                
+Task interrupted (no samples completed before interruption)                     
+                                                                                
+Log:                                                                            
+../../results/inspect/logs/2026-05-08T07-26-39-00-00_emnlp-prompt-injection_dQhM
+DFNbaDudn75hSaSeUv.eval                                                         
+                                                                                
+=== Eval Complete ===
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-25-11-00-00_emnlp-cpst-personality_9fGXK9A8kJdeV6ivtmBpXV.eval
+    status: success
+[05/08/26 00:26:55] WARNING  The 'metrics' field is deprecated.    logger.py:220
+                             Access metrics through 'scores'                    
+                             instead.                                           
+
+One or more eval logs finished with non-success status.
+    mean: name='mean' value=0.0 params={} metadata=None
+    stderr: name='stderr' value=0.0 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-25-22-00-00_emnlp-hexaco-personality_Ti4qp3f5cEaowHWpJrNThJ.eval
+    status: success
+    mean: name='mean' value=0.0 params={} metadata=None
+    stderr: name='stderr' value=0.0 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-25-32-00-00_emnlp-moral-dilemmas_4f8XGGNP9sGsNNbTDjEXjB.eval
+    status: success
+    mean: name='mean' value=0.8920454545454546 params={} metadata=None
+    stderr: name='stderr' value=0.014453795417013233 params={} metadata=None
+  Log: /Users/bytedance/Projects/sunyuding/cei/results/inspect/logs/2026-05-08T07-26-39-00-00_emnlp-prompt-injection_dQhMDFNbaDudn75hSaSeUv.eval
+    status: error
+  >> EMNLPEducator FAILED: Fri May  8 00:26:55 PDT 2026
+=== minimax/minimax-m1 complete: Fri May  8 00:26:55 PDT 2026 ===
