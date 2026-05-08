@@ -1,0 +1,23 @@
+# Default: require review from the Researchers team
+* @Center-for-Ethical-Intelligence/researchers
+
+# Benchmark harnesses
+src/inspect/evals/ @sunyuding @hanzhenzhujene
+
+# Infrastructure and scripts
+scripts/ @sunyuding @hanzhenzhujene
+provider_config.sh @sunyuding @hanzhenzhujene
+run_all_benchmarks.sh @sunyuding
+
+# Results and analysis
+results/ @sunyuding @hanzhenzhujene
+figures/ @sunyuding
+
+# Infrastructure library code
+src/infra/ @sunyuding @hanzhenzhujene
+
+# CI and build
+.github/workflows/ @sunyuding
+Makefile @sunyuding
+Dockerfile* @sunyuding
+docker-compose* @sunyuding
