@@ -2,11 +2,9 @@
 """Generate benchmark result visualizations for the CEI Moral Psychology project."""
 
 import json
-import os
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import seaborn as sns
 
@@ -25,7 +23,7 @@ FAMILY_COLORS = {
     "Gemma": "#a78bfa",
     "MiniMax": "#f472b6",
 }
-SIZE_ORDER = ["S", "M", "L"]
+SIZE_MAP = {"S": 0, "M": 1, "L": 2}
 
 
 # ============================================================
@@ -98,8 +96,7 @@ def plot_scaling_curves():
         for family in sub["family"].unique():
             fsub = sub[sub["family"] == family].copy()
             # Order by size
-            size_map = {"S": 0, "M": 1, "L": 2}
-            fsub["size_idx"] = fsub["size"].map(size_map)
+            fsub["size_idx"] = fsub["size"].map(SIZE_MAP)
             fsub = fsub.sort_values("size_idx")
             ax.plot(fsub["size"], fsub["accuracy"], "o-",
                     color=FAMILY_COLORS.get(family, "#999"),
