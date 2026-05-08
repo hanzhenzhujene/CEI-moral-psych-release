@@ -16,6 +16,11 @@ VENV_PYTHON="${VENV_PYTHON:-$ROOT/.venv/bin/python}"
 # invoked from outside the repo root (for example via nohup or another script).
 cd "$ROOT"
 
+# The shared MiniMax runners execute from a repo without its own venv and reuse
+# the CEI harness environment under Desktop. Avoid pyc writes back into that
+# shared site-packages tree during long evals.
+export PYTHONDONTWRITEBYTECODE="${PYTHONDONTWRITEBYTECODE:-1}"
+
 load_env_file() {
   local env_file="$1"
   if [[ -f "$env_file" ]]; then
@@ -49,7 +54,10 @@ LOG_BASE="$ROOT/results/inspect/logs/$RUN_ID"
 PID_DIR="$RUN_BASE/pids"
 LAUNCHER_STDOUT_DIR="$RUN_BASE/launcher"
 
-TEXT_MAX_CONNECTIONS="${TEXT_MAX_CONNECTIONS:-2}"
+# The general MiniMax text lane can run wider than the Denevil proxy pass.
+# Keep Denevil on its explicit lower cap below, but let ordinary text tasks
+# relaunch at a higher ceiling so future recovery is faster.
+TEXT_MAX_CONNECTIONS="${TEXT_MAX_CONNECTIONS:-6}"
 VISION_MAX_CONNECTIONS="${VISION_MAX_CONNECTIONS:-1}"
 MINIMAX_TEXT_MODEL="${MINIMAX_TEXT_MODEL:-openrouter/minimax/minimax-m2.5}"
 MINIMAX_VISION_MODEL="${MINIMAX_VISION_MODEL:-openrouter/minimax/minimax-01}"
@@ -61,6 +69,7 @@ DENEVIL_DATA_FILE="${DENEVIL_DATA_FILE:-$DATA_ROOT/denevil/data_hybrid.jsonl}"
 CCD_BENCH_DATA_FILE="${CCD_BENCH_DATA_FILE:-$DATA_ROOT/ccd-bench/CCD-Bench.json}"
 VALUEPRISM_RELEVANCE_FILE="${VALUEPRISM_RELEVANCE_FILE:-$DATA_ROOT/valueprism/relevance/relevance_test.csv}"
 VALUEPRISM_VALENCE_FILE="${VALUEPRISM_VALENCE_FILE:-$DATA_ROOT/valueprism/valence/valence_test.csv}"
+MINIMAX_SMID_FOUNDATION_CONCURRENT_RUN_ID="${MINIMAX_SMID_FOUNDATION_CONCURRENT_RUN_ID:-2026-05-04-minimax-pr6-smid-foundation-concurrent}"
 
 families=(
   minimax_text
@@ -104,6 +113,17 @@ family_run_dir() {
 family_log_dir() {
   local family="$1"
   echo "$LOG_BASE/$family"
+}
+
+family_extra_status_files() {
+  local family="$1"
+
+  if [[ "$family" == "minimax_smid" ]]; then
+    local extra_status_file="$ROOT/results/inspect/full-runs/$MINIMAX_SMID_FOUNDATION_CONCURRENT_RUN_ID/minimax_smid/task_status.csv"
+    if [[ -f "$extra_status_file" ]]; then
+      printf '%s\n' "$extra_status_file"
+    fi
+  fi
 }
 
 is_running_pid() {
@@ -164,7 +184,7 @@ log_dir = Path(sys.argv[1]).resolve()
 
 try:
     completed = subprocess.run(
-        ["ps", "-axo", "pid=,command="],
+        ["ps", "-axww", "-o", "pid=,command="],
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
         text=True,
@@ -275,45 +295,65 @@ task_status_has_success() {
   local family="$1"
   local task_name="$2"
   local status_file
+  local -a status_files=()
   status_file="$(family_run_dir "$family")/task_status.csv"
-  [[ -f "$status_file" ]] || return 1
+  [[ -f "$status_file" ]] && status_files+=("$status_file")
+  while IFS= read -r extra_status_file; do
+    [[ -n "$extra_status_file" ]] || continue
+    status_files+=("$extra_status_file")
+  done < <(family_extra_status_files "$family")
+  (( ${#status_files[@]} > 0 )) || return 1
 
-  python3 - "$status_file" "$task_name" <<'PY'
+  python3 - "$task_name" "${status_files[@]}" <<'PY'
 from __future__ import annotations
 
 import csv
 import sys
 
-status_file = sys.argv[1]
-task_name = sys.argv[2]
+task_name = sys.argv[1]
+status_files = sys.argv[2:]
 
-with open(status_file, newline="") as handle:
-    for row in csv.DictReader(handle):
-        if row.get("task_name") == task_name and row.get("returncode") == "0":
-            raise SystemExit(0)
+for status_file in status_files:
+    with open(status_file, newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row.get("task_name") == task_name and row.get("returncode") == "0":
+                raise SystemExit(0)
 
 raise SystemExit(1)
 PY
 }
 
 task_logged_sample_progress() {
-  local log_dir="$1"
-  local task_name="$2"
+  local task_name="$1"
+  shift
 
-  python3 - "$log_dir" "$task_name" <<'PY'
+  python3 - "$task_name" "$@" <<'PY'
 from __future__ import annotations
 
 import json
+import re
 import sys
 import zipfile
 from pathlib import Path
 
-root = Path(sys.argv[1])
-task_name = sys.argv[2]
+task_name = sys.argv[1]
+roots = [Path(path) for path in sys.argv[2:] if path]
 sample_ids: set[str] = set()
+sample_ordinals: set[int] = set()
 total = 0
+stable_ordinal_tasks = {
+    "ccd_bench_selection",
+    "denevil_generation",
+    "denevil_fulcra_proxy_generation",
+    "smid_foundation_classification",
+    "smid_moral_rating",
+    "value_prism_relevance",
+    "value_prism_valence",
+}
 
-if root.exists():
+for root in roots:
+    if not root.exists():
+        continue
     for path in root.glob("*.eval"):
         try:
             with zipfile.ZipFile(path) as zf:
@@ -331,11 +371,51 @@ if root.exists():
                     if "_epoch_" in sample_name:
                         sample_name = sample_name.split("_epoch_", 1)[0]
                     sample_ids.add(sample_name)
+                    if task_name in stable_ordinal_tasks:
+                        ordinal_match = re.search(r"-(\d+)$", sample_name)
+                        if ordinal_match is not None:
+                            sample_ordinals.add(int(ordinal_match.group(1)))
         except Exception:
             continue
 
-print(f"{len(sample_ids)} {total}")
+count = len(sample_ids)
+if sample_ordinals:
+    prefix = 0
+    while (prefix + 1) in sample_ordinals:
+        prefix += 1
+else:
+    prefix = count
+
+print(f"{count} {prefix} {total}")
 PY
+}
+
+task_progress_log_dirs() {
+  local family="$1"
+  local task_name="$2"
+  local primary_log_dir="$3"
+
+  printf '%s\n' "$primary_log_dir"
+
+  # MiniMax Denevil has a parallel persisted pass in a separate run folder.
+  # Merge both sources before choosing a resume point so we do not repay for
+  # already-logged samples from the concurrent archive.
+  if [[ "$family" == "minimax_text" && "$task_name" == "denevil_fulcra_proxy_generation" ]]; then
+    local concurrent_log_dir="${MINIMAX_DENEVIL_CONCURRENT_LOG_DIR:-$ROOT/results/inspect/logs/2026-05-05-minimax-pr6-denevil-concurrent/minimax_text}"
+    if [[ -d "$concurrent_log_dir" && "$concurrent_log_dir" != "$primary_log_dir" ]]; then
+      printf '%s\n' "$concurrent_log_dir"
+    fi
+  fi
+
+  # Value Prism Relevance can also be advanced in a separate concurrent run.
+  # Fold that archive back into the main progress scan so later relaunches do
+  # not start from zero or replay already-paid samples.
+  if [[ "$family" == "minimax_text" && "$task_name" == "value_prism_relevance" ]]; then
+    local relevance_concurrent_log_dir="${MINIMAX_RELEVANCE_CONCURRENT_LOG_DIR:-$ROOT/results/inspect/logs/2026-05-06-minimax-pr6-relevance-concurrent/minimax_text}"
+    if [[ -d "$relevance_concurrent_log_dir" && "$relevance_concurrent_log_dir" != "$primary_log_dir" ]]; then
+      printf '%s\n' "$relevance_concurrent_log_dir"
+    fi
+  fi
 }
 
 family_expected_tasks() {
@@ -363,21 +443,25 @@ family_expected_tasks() {
 family_status_is_successful() {
   local family="$1"
   local status_file
+  local extra_status_file
   if ! family_has_selected_tasks "$family"; then
     return 0
   fi
   status_file="$(family_run_dir "$family")/task_status.csv"
-  [[ -f "$status_file" ]] || return 1
+  extra_status_file="$(family_extra_status_files "$family" | paste -sd: -)"
+  [[ -f "$status_file" || -n "$extra_status_file" ]] || return 1
 
-  python3 - "$family" "$status_file" "$TASK_FILTER" <<'PY'
+  python3 - "$family" "$status_file" "$TASK_FILTER" "$extra_status_file" <<'PY'
 from __future__ import annotations
 
 import csv
+from pathlib import Path
 import sys
 
 family = sys.argv[1]
 status_file = sys.argv[2]
 task_filter = {task.strip() for task in sys.argv[3].split(",") if task.strip()}
+extra_status_files = [item for item in sys.argv[4].split(":") if item]
 expected = {
     "minimax_text": [
         "ccd_bench_selection",
@@ -396,11 +480,15 @@ if task_filter:
     expected = [task_name for task_name in expected if task_name in task_filter]
 
 latest: dict[str, str] = {}
-with open(status_file, newline="") as handle:
-    for row in csv.DictReader(handle):
-        task_name = row.get("task_name", "")
-        if task_name:
-            latest[task_name] = row.get("returncode", "")
+for path_str in [status_file, *extra_status_files]:
+    path = Path(path_str)
+    if not path.exists():
+        continue
+    with path.open(newline="") as handle:
+        for row in csv.DictReader(handle):
+            task_name = row.get("task_name", "")
+            if task_name:
+                latest[task_name] = row.get("returncode", "")
 
 for task_name in expected:
     if latest.get(task_name) != "0":
@@ -467,48 +555,74 @@ run_task() {
   local max_connections="$5"
 
   local run_dir output_path log_dir runtime_home start_at end_at rc
-  local smid_resume_env smid_resume_count smid_resume_total
+  local task_resume_env task_resume_count task_resume_prefix task_resume_total task_logged_count
+  local -a progress_log_dirs=()
   run_dir="$(family_run_dir "$family")"
   output_path="$run_dir/${task_name}.txt"
   log_dir="$LOG_BASE/$family"
   runtime_home="$run_dir/_runtime_home"
   mkdir -p "$run_dir" "$log_dir" "$runtime_home"
   configure_routed_model "$model"
-  smid_resume_env=""
-  smid_resume_count=0
-  smid_resume_total=0
+  task_resume_env=""
+  task_resume_count=0
+  task_resume_prefix=0
+  task_resume_total=0
+  task_logged_count=0
+  while IFS= read -r progress_dir; do
+    [[ -n "$progress_dir" ]] || continue
+    progress_log_dirs+=("$progress_dir")
+  done < <(task_progress_log_dirs "$family" "$task_name" "$log_dir")
 
   if ! task_is_selected "$task_name"; then
     printf '[%s] SKIP family=%s task=%s reason=task_filter=%s\n' "$(now_iso)" "$family" "$task_name" "$TASK_FILTER" > "$output_path"
     return 0
   fi
 
+  if task_status_has_success "$family" "$task_name"; then
+    start_at="$(now_iso)"
+    end_at="$start_at"
+    printf '[%s] SKIP family=%s task=%s reason=task_status_success\n' "$start_at" "$family" "$task_name" > "$output_path"
+    return 0
+  fi
+
   case "$task_name" in
+    ccd_bench_selection)
+      task_resume_env="CCD_BENCH_RESUME_COUNT"
+      ;;
+    denevil_fulcra_proxy_generation)
+      task_resume_env="DENEVIL_FULCRA_RESUME_COUNT"
+      ;;
+    value_prism_valence)
+      task_resume_env="VALUEPRISM_VALENCE_RESUME_COUNT"
+      ;;
+    value_prism_relevance)
+      task_resume_env="VALUEPRISM_RELEVANCE_RESUME_COUNT"
+      ;;
+    unimoral_action_prediction)
+      task_resume_env="UNIMORAL_ACTION_RESUME_COUNT"
+      ;;
     smid_moral_rating)
-      smid_resume_env="SMID_MORAL_RESUME_COUNT"
+      task_resume_env="SMID_MORAL_RESUME_COUNT"
       ;;
     smid_foundation_classification)
-      smid_resume_env="SMID_FOUNDATION_RESUME_COUNT"
+      task_resume_env="SMID_FOUNDATION_RESUME_COUNT"
       ;;
   esac
 
-  if [[ -n "$smid_resume_env" ]]; then
-    if task_status_has_success "$family" "$task_name"; then
-      smid_resume_count=0
-      smid_resume_total=0
-    elif [[ -n "${!smid_resume_env:-}" ]]; then
-      smid_resume_count="${!smid_resume_env}"
-      read -r _smid_logged_count smid_resume_total <<< "$(task_logged_sample_progress "$log_dir" "$task_name")"
-      unset _smid_logged_count
+  if [[ -n "$task_resume_env" ]]; then
+    if [[ -n "${!task_resume_env:-}" ]]; then
+      task_resume_count="${!task_resume_env}"
+      read -r task_logged_count task_resume_prefix task_resume_total <<< "$(task_logged_sample_progress "$task_name" "${progress_log_dirs[@]}")"
     else
-      read -r smid_resume_count smid_resume_total <<< "$(task_logged_sample_progress "$log_dir" "$task_name")"
+      read -r task_logged_count task_resume_prefix task_resume_total <<< "$(task_logged_sample_progress "$task_name" "${progress_log_dirs[@]}")"
+      task_resume_count="$task_resume_prefix"
     fi
   fi
 
-  if [[ "$smid_resume_total" =~ ^[0-9]+$ ]] && (( smid_resume_total > 0 )) && [[ "$smid_resume_count" =~ ^[0-9]+$ ]] && (( smid_resume_count >= smid_resume_total )); then
+  if [[ "$task_resume_total" =~ ^[0-9]+$ ]] && (( task_resume_total > 0 )) && [[ "$task_resume_prefix" =~ ^[0-9]+$ ]] && (( task_resume_prefix >= task_resume_total )); then
     start_at="$(now_iso)"
     end_at="$start_at"
-    printf '[%s] SKIP family=%s task=%s reason=logged_sample_coverage_complete covered=%s total=%s\n' "$start_at" "$family" "$task_name" "$smid_resume_count" "$smid_resume_total" > "$output_path"
+    printf '[%s] SKIP family=%s task=%s reason=logged_sample_coverage_complete covered=%s total=%s\n' "$start_at" "$family" "$task_name" "$task_resume_prefix" "$task_resume_total" > "$output_path"
     record_status "$family" "$task_name" "$start_at" "$end_at" 0 "$output_path"
     return 0
   fi
@@ -517,10 +631,10 @@ run_task() {
   record_routing_metadata "$family" "$task_name" "$start_at"
   if (
     set +e
-    if [[ -n "$smid_resume_env" && "$smid_resume_count" =~ ^[0-9]+$ && "$smid_resume_count" -gt 0 ]]; then
-      export "$smid_resume_env=$smid_resume_count"
+    if [[ -n "$task_resume_env" && "$task_resume_count" =~ ^[0-9]+$ && "$task_resume_count" -gt 0 ]]; then
+      export "$task_resume_env=$task_resume_count"
     fi
-    echo "[$start_at] START family=$family task=$task_name model=$model routed_model=$ROUTED_MODEL provider=$ROUTED_PROVIDER provider_model=$ROUTED_PROVIDER_MODEL base_url=$ROUTED_BASE_URL key_var=$ROUTED_KEY_VAR key_state=$ROUTED_KEY_STATE max_connections=$max_connections resume_count=${smid_resume_count:-0} resume_total=${smid_resume_total:-0}"
+    echo "[$start_at] START family=$family task=$task_name model=$model routed_model=$ROUTED_MODEL provider=$ROUTED_PROVIDER provider_model=$ROUTED_PROVIDER_MODEL base_url=$ROUTED_BASE_URL key_var=$ROUTED_KEY_VAR key_state=$ROUTED_KEY_STATE max_connections=$max_connections resume_count=${task_resume_count:-0} resume_prefix=${task_resume_prefix:-0} logged_count=${task_logged_count:-0} resume_total=${task_resume_total:-0}"
     if [[ "$ROUTED_KEY_STATE" != "present" ]]; then
       echo "[$(now_iso)] ROUTING_PRECHECK_FAILED family=$family task=$task_name provider=$ROUTED_PROVIDER key_var=$ROUTED_KEY_VAR reason=missing_provider_api_key"
       exit 86

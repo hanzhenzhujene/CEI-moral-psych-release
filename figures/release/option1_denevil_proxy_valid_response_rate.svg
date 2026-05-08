@@ -77,22 +77,23 @@
 <text x="670.00" y="411.00" text-anchor="middle" class="small">n/a — no released Denevil proxy route</text>
 <text x="292" y="457.00" text-anchor="end" class="label">MiniMax-L</text>
 <rect x="310" y="438" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="438" width="720" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="670.00" y="457.00" text-anchor="middle" class="small">n/a — no released Denevil proxy route</text>
+<rect x="310" y="438" width="720.00" height="28" rx="10" fill="#fbbf24" stroke="#ffffff" stroke-width="1"/>
+<text x="1020.00" y="457.00" text-anchor="end" class="celltext-dark">100.0%</text>
+<text x="1052" y="457.00" class="label">1,321 / 1,321</text>
 <text x="292" y="503.00" text-anchor="end" class="label">DeepSeek-S</text>
 <rect x="310" y="484" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="484" width="720" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="670.00" y="503.00" text-anchor="middle" class="small">n/a — no released Denevil proxy route</text>
+<rect x="310" y="484" width="100.47" height="28" rx="10" fill="#1d4ed8" stroke="#ffffff" stroke-width="1"/>
+<text x="400.47" y="503.00" text-anchor="end" class="celltext">14.0%</text>
+<text x="1052" y="503.00" class="label">2,863 / 20,518</text>
 <text x="292" y="549.00" text-anchor="end" class="label">DeepSeek-M</text>
 <rect x="310" y="530" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="530" width="100.47" height="28" rx="10" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
-<text x="400.47" y="549.00" text-anchor="end" class="celltext">14.0%</text>
-<text x="1052" y="549.00" class="label">2,863 / 20,518</text>
+<rect x="310" y="530" width="719.86" height="28" rx="10" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
+<text x="1019.86" y="549.00" text-anchor="end" class="celltext">100.0%</text>
+<text x="1052" y="549.00" class="label">20,514 / 20,518</text>
 <text x="292" y="595.00" text-anchor="end" class="label">DeepSeek-L</text>
 <rect x="310" y="576" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="576" width="719.86" height="28" rx="10" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
-<text x="1019.86" y="595.00" text-anchor="end" class="celltext-dark">100.0%</text>
-<text x="1052" y="595.00" class="label">20,514 / 20,518</text>
+<rect x="310" y="576" width="720" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
+<text x="670.00" y="595.00" text-anchor="middle" class="small">n/a — no released Denevil proxy route</text>
 <text x="292" y="641.00" text-anchor="end" class="label">Llama-S</text>
 <rect x="310" y="622" width="720" height="28" rx="10" class="muted-bar"/>
 <rect x="310" y="622" width="720.00" height="28" rx="10" fill="#c2410c" stroke="#ffffff" stroke-width="1"/>
@@ -125,5 +126,5 @@
 <text x="1052" y="871.00" class="label">20,518 / 20,518</text>
 <rect x="48" y="932" width="1324" height="62" rx="18" class="legend-card"/>
 <text x="72" y="956" class="tiny">RATE INTERPRETATION</text>
-<text x="72" y="978" class="body">This is an appendix QA / provenance view, not the headline DeNEVIL result. DeepSeek-M stays low not because the public release proved low ethical quality, but because only a small share of proxy prompts surfaced visible text.</text>
+<text x="72" y="978" class="body">This is an appendix QA / provenance view, not the headline DeNEVIL result. DeepSeek-S stays low not because the public release proved low ethical quality, but because only a small share of proxy prompts surfaced visible text.</text>
 </svg>

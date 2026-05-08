@@ -41,7 +41,7 @@
 <desc>Stacked bar overview of the current public five-benchmark progress state for each published model family and size line.</desc>
 <text x="48" y="64" class="title">Family-Size Progress Overview</text>
 <text x="48" y="88" class="subtitle">Each stacked bar summarizes the five benchmark cells for one published model line.</text>
-<text x="48" y="108" class="subtitle">7 lines are fully complete, 0 lines have partial checkpoints, 1 line is currently running, and 1 attempted line is currently unusable.</text>
+<text x="48" y="108" class="subtitle">7 lines are fully complete, 1 line has partial checkpoints, 0 lines are currently running, and 1 attempted line is currently unusable.</text>
 <text x="48" y="128" class="subtitle">This public figure shows the currently published family-size matrix in the release package.</text>
 <text x="340" y="172" class="tiny">FIVE BENCHMARK CELLS PER LINE</text>
 <line x1="340.00" y1="198" x2="340.00" y2="908" class="guide"/>
@@ -96,18 +96,22 @@
 <rect x="340" y="460" width="540" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="340.00" y="460" width="324.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
 <text x="502.00" y="479" text-anchor="middle" class="celltext">3</text>
-<rect x="664.00" y="460" width="108.00" height="28" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
-<text x="718.00" y="479" text-anchor="middle" class="celltext">1</text>
+<rect x="664.00" y="460" width="108.00" height="28" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
+<text x="718.00" y="479" text-anchor="middle" class="celltext-dark">1</text>
 <rect x="772.00" y="460" width="108.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
 <text x="826.00" y="479" text-anchor="middle" class="celltext-dark">1</text>
-<text x="910" y="479" class="label">usable now 3/5 | live 1</text>
+<text x="910" y="479" class="label">usable now 3/5 | partial 1</text>
 <line x1="48" y1="490" x2="1232" y2="490" class="guide"/>
 <text x="48" y="496" class="tiny">DEEPSEEK</text>
 <text x="322" y="525" text-anchor="end" class="label">DeepSeek-S</text>
 <rect x="340" y="506" width="540" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="340.00" y="506" width="540.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
-<text x="610.00" y="525" text-anchor="middle" class="celltext-dark">5</text>
-<text x="910" y="525" class="label">usable now 0/5</text>
+<rect x="340.00" y="506" width="324.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="502.00" y="525" text-anchor="middle" class="celltext">3</text>
+<rect x="664.00" y="506" width="108.00" height="28" fill="#b7791f" stroke="#ffffff" stroke-width="1"/>
+<text x="718.00" y="525" text-anchor="middle" class="celltext">1</text>
+<rect x="772.00" y="506" width="108.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="826.00" y="525" text-anchor="middle" class="celltext-dark">1</text>
+<text x="910" y="525" class="label">usable now 4/5</text>
 <text x="322" y="571" text-anchor="end" class="label">DeepSeek-M</text>
 <rect x="340" y="552" width="540" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="340.00" y="552" width="324.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
@@ -119,13 +123,9 @@
 <text x="910" y="571" class="label">usable now 4/5</text>
 <text x="322" y="617" text-anchor="end" class="label">DeepSeek-L</text>
 <rect x="340" y="598" width="540" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="340.00" y="598" width="324.00" height="28" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
-<text x="502.00" y="617" text-anchor="middle" class="celltext">3</text>
-<rect x="664.00" y="598" width="108.00" height="28" fill="#b7791f" stroke="#ffffff" stroke-width="1"/>
-<text x="718.00" y="617" text-anchor="middle" class="celltext">1</text>
-<rect x="772.00" y="598" width="108.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
-<text x="826.00" y="617" text-anchor="middle" class="celltext-dark">1</text>
-<text x="910" y="617" class="label">usable now 4/5</text>
+<rect x="340.00" y="598" width="540.00" height="28" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="610.00" y="617" text-anchor="middle" class="celltext-dark">5</text>
+<text x="910" y="617" class="label">usable now 0/5</text>
 <line x1="48" y1="628" x2="1232" y2="628" class="guide"/>
 <text x="48" y="634" class="tiny">LLAMA</text>
 <text x="322" y="663" text-anchor="end" class="label">Llama-S</text>

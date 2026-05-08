@@ -16,6 +16,7 @@ from evals._benchmark_utils import (
     generate_stratified_latin_squares,
     generation_plan,
     load_json_source,
+    resume_start_index,
     valid_choice_scorer,
 )
 
@@ -73,13 +74,15 @@ def _prompt_for_row(question: str, row: dict[int, int], source: dict) -> str:
     )
 
 
-def _make_ccd_samples(limit: int | None = None) -> list[Sample]:
+def _make_ccd_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
     rows = _load_ccd_rows()
     ordered = _latin_square_order(rows)
+    if start_index:
+        ordered = ordered[start_index:]
     if limit is not None:
         ordered = ordered[:limit]
     samples: list[Sample] = []
-    for index, (row, option_order, mapping) in enumerate(ordered, start=1):
+    for index, (row, option_order, mapping) in enumerate(ordered, start=start_index + 1):
         question = row["Question"]
         prompt = _prompt_for_row(question, mapping, row)
         samples.append(
@@ -98,5 +101,11 @@ def _make_ccd_samples(limit: int | None = None) -> list[Sample]:
 
 
 @task
-def ccd_bench_selection(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_ccd_samples(limit=limit)), plan=generation_plan(max_tokens=80), scorer=valid_choice_scorer(1, 10))
+def ccd_bench_selection(limit: int | None = None, start_index: int | None = None) -> Task:
+    if start_index is None:
+        start_index = resume_start_index("CCD_BENCH_RESUME_COUNT")
+    return Task(
+        dataset=MemoryDataset(_make_ccd_samples(limit=limit, start_index=start_index)),
+        plan=generation_plan(max_tokens=80),
+        scorer=valid_choice_scorer(1, 10),
+    )

@@ -21,6 +21,7 @@ from evals._benchmark_utils import (
     fuzzy_matching_key,
     generation_plan,
     parsed_label_scorer,
+    resume_start_index,
 )
 
 
@@ -157,12 +158,16 @@ def _has_explicit_relevance_signal(row: dict[str, Any]) -> bool:
     )
 
 
-def _make_relevance_samples(limit: int | None = None) -> list[Sample]:
+def _make_relevance_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
     rows = _load_valueprism_rows("relevance")
     samples: list[Sample] = []
+    completed = 0
     for row in rows:
         label = _relevance_label(row)
         if label is None:
+            continue
+        completed += 1
+        if completed <= start_index:
             continue
         context = _row_context(row)
         vrd = _row_vrd(row)
@@ -174,6 +179,7 @@ def _make_relevance_samples(limit: int | None = None) -> list[Sample]:
         )
         samples.append(
             Sample(
+                id=f"valueprism-relevance-{completed}",
                 input=apply_prompt_prefix(prompt),
                 target=label,
                 metadata={"vrd": vrd},
@@ -184,14 +190,18 @@ def _make_relevance_samples(limit: int | None = None) -> list[Sample]:
     return samples
 
 
-def _make_valence_samples(limit: int | None = None) -> list[Sample]:
+def _make_valence_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
     rows = _load_valueprism_rows("valence")
     samples: list[Sample] = []
+    completed = 0
     for row in rows:
         if _has_explicit_relevance_signal(row) and _relevance_label(row) != "Yes":
             continue
         label = _valence_label(row)
         if label is None:
+            continue
+        completed += 1
+        if completed <= start_index:
             continue
         context = _row_context(row)
         vrd = _row_vrd(row)
@@ -204,6 +214,7 @@ def _make_valence_samples(limit: int | None = None) -> list[Sample]:
         )
         samples.append(
             Sample(
+                id=f"valueprism-valence-{completed}",
                 input=apply_prompt_prefix(prompt),
                 target=label,
                 metadata={"vrd": vrd},
@@ -215,10 +226,22 @@ def _make_valence_samples(limit: int | None = None) -> list[Sample]:
 
 
 @task
-def value_prism_relevance(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_relevance_samples(limit=limit)), plan=generation_plan(max_tokens=24), scorer=parsed_label_scorer(classify_yes_no_label))
+def value_prism_relevance(limit: int | None = None, start_index: int | None = None) -> Task:
+    if start_index is None:
+        start_index = resume_start_index("VALUEPRISM_RELEVANCE_RESUME_COUNT")
+    return Task(
+        dataset=MemoryDataset(_make_relevance_samples(limit=limit, start_index=start_index)),
+        plan=generation_plan(max_tokens=24),
+        scorer=parsed_label_scorer(classify_yes_no_label),
+    )
 
 
 @task
-def value_prism_valence(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_valence_samples(limit=limit)), plan=generation_plan(max_tokens=32), scorer=parsed_label_scorer(classify_valence_label))
+def value_prism_valence(limit: int | None = None, start_index: int | None = None) -> Task:
+    if start_index is None:
+        start_index = resume_start_index("VALUEPRISM_VALENCE_RESUME_COUNT")
+    return Task(
+        dataset=MemoryDataset(_make_valence_samples(limit=limit, start_index=start_index)),
+        plan=generation_plan(max_tokens=32),
+        scorer=parsed_label_scorer(classify_valence_label),
+    )

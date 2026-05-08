@@ -81,16 +81,16 @@
 <rect x="280" y="378" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="378" width="6.38" height="28" rx="10" fill="#fbbf24"/>
 <text x="296.38" y="397" text-anchor="start" class="label">0.8%</text>
-<rect x="122" y="425" width="10" height="10" rx="3" fill="#2563eb"/>
-<text x="138" y="439" text-anchor="end" class="label">DeepSeek-M</text>
+<rect x="122" y="425" width="10" height="10" rx="3" fill="#1d4ed8"/>
+<text x="138" y="439" text-anchor="end" class="label">DeepSeek-S</text>
 <rect x="280" y="420" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="420" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="420" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="439" text-anchor="end" class="small">no current result for this benchmark</text>
-<rect x="122" y="467" width="10" height="10" rx="3" fill="#60a5fa"/>
-<text x="138" y="481" text-anchor="end" class="label">DeepSeek-L</text>
+<rect x="122" y="467" width="10" height="10" rx="3" fill="#2563eb"/>
+<text x="138" y="481" text-anchor="end" class="label">DeepSeek-M</text>
 <rect x="280" y="462" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="462" width="546.90" height="28" rx="10" fill="#60a5fa"/>
+<rect x="280" y="462" width="546.90" height="28" rx="10" fill="#2563eb"/>
 <text x="836.90" y="481" text-anchor="start" class="label">68.4%</text>
 <rect x="122" y="509" width="10" height="10" rx="3" fill="#c2410c"/>
 <text x="138" y="523" text-anchor="end" class="label">Llama-S</text>
@@ -160,16 +160,16 @@
 <rect x="122" y="1041" width="10" height="10" rx="3" fill="#fbbf24"/>
 <text x="138" y="1055" text-anchor="end" class="label">MiniMax-L</text>
 <rect x="280" y="1036" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1036" width="162.63" height="28" rx="10" fill="#fbbf24"/>
-<text x="452.63" y="1055" text-anchor="start" class="label">20.3%</text>
-<rect x="122" y="1083" width="10" height="10" rx="3" fill="#2563eb"/>
-<text x="138" y="1097" text-anchor="end" class="label">DeepSeek-M</text>
+<rect x="280" y="1036" width="156.74" height="28" rx="10" fill="#fbbf24"/>
+<text x="446.74" y="1055" text-anchor="start" class="label">19.6%</text>
+<rect x="122" y="1083" width="10" height="10" rx="3" fill="#1d4ed8"/>
+<text x="138" y="1097" text-anchor="end" class="label">DeepSeek-S</text>
 <rect x="280" y="1078" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1078" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="1078" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="1097" text-anchor="end" class="small">no current result for this benchmark</text>
-<rect x="122" y="1125" width="10" height="10" rx="3" fill="#60a5fa"/>
-<text x="138" y="1139" text-anchor="end" class="label">DeepSeek-L</text>
+<rect x="122" y="1125" width="10" height="10" rx="3" fill="#2563eb"/>
+<text x="138" y="1139" text-anchor="end" class="label">DeepSeek-M</text>
 <rect x="280" y="1120" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1120" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="1120" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
@@ -203,8 +203,8 @@
 <rect x="122" y="1377" width="10" height="10" rx="3" fill="#c4b5fd"/>
 <text x="138" y="1391" text-anchor="end" class="label">Gemma-L</text>
 <rect x="280" y="1372" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1372" width="329.82" height="28" rx="10" fill="#c4b5fd"/>
-<text x="619.82" y="1391" text-anchor="start" class="label">41.2%</text>
+<rect x="280" y="1372" width="329.68" height="28" rx="10" fill="#c4b5fd"/>
+<text x="619.68" y="1391" text-anchor="start" class="label">41.2%</text>
 <rect x="42" y="1452" width="1136" height="624" rx="18" class="subpanel"/>
 <text x="48" y="1480" class="axis">Value Kaleidoscope</text>
 <text x="48" y="1500" class="subtitle">Average of relevance and valence accuracy</text>
@@ -246,16 +246,16 @@
 <rect x="280" y="1694" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="1694" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="1713" text-anchor="end" class="small">no current result for this benchmark</text>
-<rect x="122" y="1741" width="10" height="10" rx="3" fill="#2563eb"/>
-<text x="138" y="1755" text-anchor="end" class="label">DeepSeek-M</text>
+<rect x="122" y="1741" width="10" height="10" rx="3" fill="#1d4ed8"/>
+<text x="138" y="1755" text-anchor="end" class="label">DeepSeek-S</text>
 <rect x="280" y="1736" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1736" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="1736" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="1755" text-anchor="end" class="small">no current result for this benchmark</text>
-<rect x="122" y="1783" width="10" height="10" rx="3" fill="#60a5fa"/>
-<text x="138" y="1797" text-anchor="end" class="label">DeepSeek-L</text>
+<rect x="122" y="1783" width="10" height="10" rx="3" fill="#2563eb"/>
+<text x="138" y="1797" text-anchor="end" class="label">DeepSeek-M</text>
 <rect x="280" y="1778" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1778" width="507.74" height="28" rx="10" fill="#60a5fa"/>
+<rect x="280" y="1778" width="507.74" height="28" rx="10" fill="#2563eb"/>
 <text x="797.74" y="1797" text-anchor="start" class="label">63.5%</text>
 <rect x="122" y="1825" width="10" height="10" rx="3" fill="#c2410c"/>
 <text x="138" y="1839" text-anchor="end" class="label">Llama-S</text>

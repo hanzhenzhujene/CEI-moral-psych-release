@@ -36,6 +36,14 @@ def clear_env(monkeypatch):
         "CEI_PROMPT_PREFIX",
         "CEI_MIN_MAX_TOKENS",
         "CEI_TEMPERATURE",
+        "CCD_BENCH_RESUME_COUNT",
+        "DENEVIL_RESUME_COUNT",
+        "DENEVIL_FULCRA_RESUME_COUNT",
+        "SMID_MORAL_RESUME_COUNT",
+        "SMID_FOUNDATION_RESUME_COUNT",
+        "UNIMORAL_ACTION_RESUME_COUNT",
+        "VALUEPRISM_RELEVANCE_RESUME_COUNT",
+        "VALUEPRISM_VALENCE_RESUME_COUNT",
     ]:
         monkeypatch.delenv(key, raising=False)
 
@@ -158,6 +166,25 @@ def test_value_prism_sample_builders(tmp_path, monkeypatch):
 
     assert relevance[0].target == "Yes"
     assert valence[0].target == "Supports"
+    assert relevance[0].id == "valueprism-relevance-1"
+    assert valence[0].id == "valueprism-valence-1"
+
+
+def test_value_prism_relevance_resume_skips_completed_prefix(tmp_path, monkeypatch):
+    relevance_path = tmp_path / "valueprism_relevance.csv"
+    _write_csv(
+        relevance_path,
+        [
+            {"action": "A", "vrd": "Value", "text": "Honesty", "output": "Yes"},
+            {"action": "B", "vrd": "Value", "text": "Kindness", "output": "No"},
+        ],
+    )
+    monkeypatch.setenv("VALUEPRISM_RELEVANCE_FILE", str(relevance_path))
+
+    samples = value_kaleidoscope._make_relevance_samples(start_index=1)
+
+    assert len(samples) == 1
+    assert samples[0].id == "valueprism-relevance-2"
 
 
 def test_ccd_bench_samples_from_local_json(tmp_path, monkeypatch):
@@ -186,6 +213,35 @@ def test_ccd_bench_samples_from_local_json(tmp_path, monkeypatch):
     assert len(samples) == 1
     assert samples[0].metadata["domain"] == "Education"
     assert len(samples[0].metadata["display_to_cluster"]) == 10
+
+
+def test_ccd_bench_resume_skips_completed_prefix(tmp_path, monkeypatch):
+    path = tmp_path / "ccd.json"
+    data = []
+    for index in range(2):
+        data.append(
+            {
+                "Domain": "Education",
+                "Question": f"Question {index + 1}",
+                "anglo": "Use clear rules.",
+                "eastern_europe": "Emphasize teacher authority.",
+                "latin-america": "Prioritize community repair.",
+                "latin_europe": "Balance standards and dialogue.",
+                "confucian_asia": "Focus on collective harmony.",
+                "nordic_europe": "Use restorative practices.",
+                "sub-saharan_africa": "Engage elders and community.",
+                "southern-asia": "Respect hierarchy and duty.",
+                "germanic_europe": "Use structured accountability.",
+                "middle_east": "Center family and respect.",
+            }
+        )
+    path.write_text(json.dumps(data), encoding="utf-8")
+    monkeypatch.setenv("CCD_BENCH_DATA_FILE", str(path))
+
+    samples = ccd_bench._make_ccd_samples(start_index=1)
+
+    assert len(samples) == 1
+    assert samples[0].id == "ccd-bench-2"
 
 
 def test_denevil_samples_from_jsonl(tmp_path, monkeypatch):
@@ -228,6 +284,26 @@ def test_denevil_fulcra_proxy_samples_from_dialogue(tmp_path, monkeypatch):
     assert samples[0].metadata["response_source"] == "alpaca"
 
 
+def test_denevil_fulcra_proxy_resume_preserves_original_ids(tmp_path, monkeypatch):
+    path = tmp_path / "fulcra.jsonl"
+    path.write_text(
+        "\n".join(
+            [
+                '{"dialogue":"Human: prompt one\\nBob: no.","query_source":"x","response_source":"alpaca","value_items":[],"value_types":[]}',
+                '{"dialogue":"Human: prompt two\\nBob: no.","query_source":"x","response_source":"alpaca","value_items":[],"value_types":[]}',
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("DENEVIL_DATA_FILE", str(path))
+
+    samples = denevil._make_fulcra_proxy_samples(start_index=1)
+
+    assert len(samples) == 1
+    assert samples[0].id == "denevil-fulcra-2"
+
+
 def test_smid_row_helpers(tmp_path):
     row = {"": "image1", "moral_mean": "4.2", "harm_mean": "0.9", "authority_mean": "0.2"}
     image_dir = tmp_path / "images_400px" / "img"
@@ -239,6 +315,41 @@ def test_smid_row_helpers(tmp_path):
     assert smid._image_path(row, lookup) == image_path
     assert smid._rating_value(row) == (4, 5)
     assert smid._foundation_label(row) == "Care"
+
+
+def test_unimoral_action_resume_skips_completed_prefix(tmp_path, monkeypatch):
+    rows = [
+        {
+            "Scenario_id": "1",
+            "Annotator_id": "ann1",
+            "Scenario": "A friend asks you to lie for them.",
+            "Possible_actions": json.dumps(["Lie to protect them", "Tell the truth"]),
+            "Selected_action": "2",
+            "Moral_values": json.dumps({"Care": 1, "Equality": 2, "Proportionality": 3, "Loyalty": 4, "Authority": 5, "Purity": 6}),
+            "Cultural_values": json.dumps({"Power Distance": 1, "Individualism": 2, "Motivation": 3, "Uncertainty Avoidance": 4, "Long Term Orientation": 5, "Indulgence": 6}),
+            "Annotator_self_description": "I value honesty.",
+        },
+        {
+            "Scenario_id": "2",
+            "Annotator_id": "ann1",
+            "Scenario": "You find a lost wallet.",
+            "Possible_actions": json.dumps(["Keep the money", "Return the wallet"]),
+            "Selected_action": "2",
+            "Moral_values": json.dumps({"Care": 1, "Equality": 2, "Proportionality": 3, "Loyalty": 4, "Authority": 5, "Purity": 6}),
+            "Cultural_values": json.dumps({"Power Distance": 1, "Individualism": 2, "Motivation": 3, "Uncertainty Avoidance": 4, "Long Term Orientation": 5, "Indulgence": 6}),
+            "Annotator_self_description": "I value honesty.",
+        },
+    ]
+    _write_csv(tmp_path / "English_long.csv", rows)
+    _write_csv(tmp_path / "English_short.csv", rows[:1])
+    monkeypatch.setenv("UNIMORAL_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("UNIMORAL_LANGUAGE", "English")
+    monkeypatch.setenv("UNIMORAL_MODE", "np")
+
+    samples = unimoral._make_action_prediction_samples(start_index=1)
+
+    assert len(samples) == 2
+    assert samples[0].metadata["scenario_id"] == "2"
 
 
 def test_generation_plan_respects_min_max_tokens(monkeypatch):

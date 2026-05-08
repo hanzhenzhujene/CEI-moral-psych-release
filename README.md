@@ -267,6 +267,20 @@ Key result visuals:
 - [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)
 - [DeNEVIL behavioral outcomes](figures/release/option1_denevil_behavior_outcomes.svg)
 
+At-a-glance moral-psych result snapshot:
+
+- `Qwen-L` is the strongest fully comparable released line across `UniMoral`, `SMID`, and `Value Kaleidoscope`.
+- `Llama-M` is the strongest text-only line, but it does not have a public `SMID` route.
+- `SMID` is still the hardest benchmark; `CCD-Bench` and `DeNEVIL` should be read as behavior / proxy surfaces rather than a single scalar accuracy story.
+
+![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
+
+![Family scaling profile](figures/release/option1_family_scaling_profile.svg)
+
+![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)
+
+![DeNEVIL behavioral outcomes](figures/release/option1_denevil_behavior_outcomes.svg)
+
 ## Project Structure
 
 ```

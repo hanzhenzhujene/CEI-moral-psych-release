@@ -1,4 +1,4 @@
 benchmark,scope_label,comparable_lines,mean_accuracy,min_accuracy,max_accuracy,spread,best_line,weakest_line
-UniMoral,Action prediction accuracy,11,0.600493,0.007969,0.683629,0.675660,DeepSeek-L,MiniMax-L
-SMID,Average of moral rating and foundation classification,9,0.364610,0.203284,0.482829,0.279545,Qwen-L,MiniMax-L
+UniMoral,Action prediction accuracy,11,0.600493,0.007969,0.683629,0.675660,DeepSeek-M,MiniMax-L
+SMID,Average of moral rating and foundation classification,9,0.363773,0.195923,0.482829,0.286906,Qwen-L,MiniMax-L
 Value Kaleidoscope,Average of relevance and valence accuracy,10,0.650180,0.528583,0.723638,0.195055,Llama-M,Llama-S
