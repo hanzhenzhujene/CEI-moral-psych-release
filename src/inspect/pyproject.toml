@@ -9,6 +9,7 @@ dependencies = [
     "transformers>=4.40",
     "accelerate>=0.29",
     "openai>=1.0",
+    "openpyxl>=3.1",
 ]
 
 [tool.uv]

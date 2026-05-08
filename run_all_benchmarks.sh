@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run all 4 Joseph benchmarks across all 15 model lines via OpenRouter.
+# Run all 7 benchmarks across all 15 model lines via OpenRouter.
 # All models run in parallel, each with its own log file.
 #
 # Usage:
@@ -23,6 +23,8 @@ export MOREBENCH_DATA_DIR="$SCRIPT_DIR/data/morebench"
 export MORAL_CIRCUITS_DATA_DIR="$SCRIPT_DIR/data/moral_circuits"
 export M3ORAL_DATA_DIR="$SCRIPT_DIR/data/m3oralbench"
 export MORALLENS_DATA_DIR="$SCRIPT_DIR/data/morallens"
+export MORALBENCH_DATA_DIR="$SCRIPT_DIR/data/moralbench"
+export EMNLP_EDUCATOR_DATA_DIR="$SCRIPT_DIR/data/emnlp_educator"
 
 # All 15 model routes via OpenRouter
 ALL_MODELS=(
@@ -48,6 +50,9 @@ BENCHMARKS=(
     "evals/moral_circuits.py"
     "evals/m3oralbench.py"
     "evals/morallens.py"
+    "evals/moralbench.py"
+    "evals/emnlp_educator.py"
+    "evals/rules_broken.py"
 )
 
 BENCHMARK_NAMES=(
@@ -55,6 +60,9 @@ BENCHMARK_NAMES=(
     "MoralCircuits"
     "M3oralBench"
     "MoralLens"
+    "MoralBench"
+    "EMNLPEducator"
+    "RulesBroken"
 )
 
 # Defaults
@@ -118,6 +126,12 @@ run_model() {
     for BENCH in "${BENCHMARKS[@]}"; do
         local BENCH_NAME="${BENCHMARK_NAMES[$BENCH_IDX]}"
         BENCH_IDX=$((BENCH_IDX + 1))
+
+        # Skip RulesBroken if UniMoral data is not available
+        if [[ "$BENCH_NAME" == "RulesBroken" && -z "${UNIMORAL_DATA_DIR:-}" ]]; then
+            echo "  >> $BENCH_NAME SKIPPED (UNIMORAL_DATA_DIR not set)" | tee -a "$LOG"
+            continue
+        fi
 
         # Skip Moral Circuits for non-Qwen/Llama models
         if [[ "$BENCH_NAME" == "MoralCircuits" ]]; then
