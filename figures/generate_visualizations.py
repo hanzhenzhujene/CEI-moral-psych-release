@@ -37,7 +37,7 @@ def plot_benchmark_accuracy():
 
     # Pivot for grouped bar
     pivot = df.pivot_table(index="benchmark", columns="model_family", values="accuracy")
-    pivot = pivot.reindex(columns=["Qwen", "DeepSeek", "Gemma"])
+    pivot = pivot.reindex(columns=[c for c in ["Qwen", "DeepSeek", "Llama", "Gemma", "MiniMax"] if c in pivot.columns])
 
     fig, ax = plt.subplots(figsize=(12, 6))
     pivot.plot(kind="bar", ax=ax, color=[FAMILY_COLORS.get(c, "#999") for c in pivot.columns],
@@ -125,9 +125,9 @@ def plot_coverage_heatmap():
     df = pd.read_csv(RELEASE / "family-size-progress.csv")
 
     # Build matrix: rows = family-size, cols = benchmarks
-    benchmarks = ["unimoral", "smid", "value_kaleidoscope", "ccd_bench", "denevil"]
-    bench_labels = ["UniMoral", "SMID", "Value\nKaleidoscope", "CCD-Bench", "Denevil"]
-    status_map = {"done": 1.0, "live": 0.6, "queue": 0.3, "tbd": 0.1, "proxy": 0.8, "-": 0.0}
+    benchmarks = ["unimoral", "smid", "value_kaleidoscope", "ccd_bench", "denevil", "moralbench", "emnlp_educator"]
+    bench_labels = ["UniMoral", "SMID", "Value\nKaleidoscope", "CCD-Bench", "Denevil", "MoralBench", "EMNLP\nEducator"]
+    status_map = {"done": 1.0, "live": 0.6, "queue": 0.3, "tbd": 0.1, "proxy": 0.8, "partial": 0.5, "error": 0.15, "-": 0.0}
 
     rows = []
     for _, row in df.iterrows():
@@ -140,7 +140,7 @@ def plot_coverage_heatmap():
 
     matrix = pd.DataFrame(rows).set_index("line")
 
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots(figsize=(14, 8))
     cmap = sns.color_palette("YlGnBu", as_cmap=True)
     sns.heatmap(matrix, annot=False, cmap=cmap, linewidths=1, linecolor="white",
                 ax=ax, vmin=0, vmax=1, cbar_kws={"label": "Completion"})
