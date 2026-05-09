@@ -4,7 +4,8 @@
 
 This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.
 
-> Current project cost estimate: `$243.40`
+> Current project cost estimate: `$511.99`
+> Cost breakdown: MiniMax direct API `$398.42` + OpenRouter `$113.57` for all other model runs.
 
 It combines three things in one clean public surface:
 
@@ -65,17 +66,18 @@ If you want the five benchmark results before the tables, start here.
 
 ![DeNEVIL proxy behavioral outcomes](figures/release/option1_denevil_behavior_outcomes.svg)
 
-## Current MiniMax Status
+## Current MiniMax / DeepSeek Status
 
-The latest published `MiniMax-L` snapshot is the shared `MiniMax-01` SMID recovery plus the `MiniMax-M2.5` text line. In the current public package, that line is partially persisted rather than presented as an active live rerun.
+The current published snapshot now separates two different states clearly:
 
-- `UniMoral`: done
-- `SMID`: done
-- `CCD-Bench`: done
-- `DeNEVIL proxy`: partial / not currently active in the published snapshot
-- `Value Kaleidoscope`: queued
+- `MiniMax-L`: complete locally across `UniMoral`, `SMID`, test-only `Value Kaleidoscope`, `CCD-Bench`, and `DeNEVIL` proxy
+- `DeepSeek-L`: active local rerun on `deepseek-r1`
+  - `CCD-Bench`: done
+  - `UniMoral`: live
+  - `Value Kaleidoscope` test-only reruns: live
+  - `DeNEVIL proxy`: live
 
-Published queued follow-up lines still visible in the matrix: `MiniMax-M` and `DeepSeek-L`.
+The only published queued follow-up line still visible in the matrix is `MiniMax-M`.
 
 For the latest exact snapshot, use the release package linked below rather than treating this root README as the authoritative progress log.
 

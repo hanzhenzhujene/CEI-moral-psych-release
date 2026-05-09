@@ -134,13 +134,16 @@
 <text x="212.00" y="478.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="478.00" class="label">MiniMax-L</text>
 <rect x="430" y="458" width="760" height="30" rx="10" class="muted-bar"/>
-<rect x="430.00" y="458" width="8.05" height="30" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
-<rect x="438.05" y="458" width="18.99" height="30" fill="#0f766e" stroke="#ffffff" stroke-width="1"/>
-<rect x="457.04" y="458" width="728.36" height="30" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
-<text x="821.22" y="478.00" text-anchor="middle" class="celltext">95.8%</text>
-<rect x="1185.40" y="458" width="4.60" height="30" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+<rect x="430.00" y="458" width="233.28" height="30" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
+<text x="546.64" y="478.00" text-anchor="middle" class="celltext">30.7%</text>
+<rect x="663.28" y="458" width="31.93" height="30" fill="#0f766e" stroke="#ffffff" stroke-width="1"/>
+<rect x="695.21" y="458" width="489.60" height="30" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="940.01" y="478.00" text-anchor="middle" class="celltext">64.4%</text>
+<rect x="1184.81" y="458" width="0.15" height="30" fill="#6b7280" stroke="#ffffff" stroke-width="1"/>
+<rect x="1184.96" y="458" width="3.30" height="30" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+<rect x="1188.26" y="458" width="1.74" height="30" fill="#d97706" stroke="#ffffff" stroke-width="1"/>
 <text x="1214" y="474.00" class="label">Corrective / contextual response</text>
-<text x="1214" y="489.00" class="small">protective 99.4%</text>
+<text x="1214" y="489.00" class="small">protective 99.3%</text>
 <rect x="184" y="510" width="56" height="22" rx="12" fill="#1d4ed8"/>
 <text x="212.00" y="526.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="526.00" class="label">DeepSeek-S</text>

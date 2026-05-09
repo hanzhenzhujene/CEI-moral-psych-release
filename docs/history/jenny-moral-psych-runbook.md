@@ -150,8 +150,8 @@ Run Value Kaleidoscope against a local export:
 
 ```bash
 cd /path/to/CEI/src/inspect
-VALUEPRISM_RELEVANCE_FILE="/absolute/path/to/relevance_train.csv" \
-VALUEPRISM_VALENCE_FILE="/absolute/path/to/valence_train.csv" \
+VALUEPRISM_RELEVANCE_FILE="/absolute/path/to/relevance_test.csv" \
+VALUEPRISM_VALENCE_FILE="/absolute/path/to/valence_test.csv" \
 uv run --package cei-inspect \
   python run.py \
   --tasks evals/value_kaleidoscope.py \

@@ -20,7 +20,8 @@ If you only read one section, read these key takeaways:
 - paper-setup tasks: `16`
 - proxy tasks: `3`
 - total evaluated samples: `302,776`
-- current project cost estimate: `$243.40`
+- current project cost estimate: `$511.99`
+- cost breakdown: MiniMax direct API `$398.42` + OpenRouter `$113.57` for all other model runs.
 - closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`
 - key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup
 - extra local progress outside the frozen snapshot: `Llama` small is complete across `5` papers / `7` tasks and is intentionally excluded from the frozen `19 / 19` totals

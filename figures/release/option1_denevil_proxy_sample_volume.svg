@@ -73,9 +73,9 @@
 <text x="690.00" y="423.00" text-anchor="middle" class="small">n/a — no released Denevil proxy route</text>
 <text x="1092" y="423.00" class="small">n/a</text>
 <text x="292" y="469.00" text-anchor="end" class="label">MiniMax-L</text>
-<rect x="310" y="450" width="33.47" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="450" width="33.47" height="28" rx="10" fill="#fbbf24" stroke="#ffffff" stroke-width="1"/>
-<text x="1092" y="469.00" class="label">visible 1,321 / 1,321</text>
+<rect x="310" y="450" width="519.79" height="28" rx="10" class="muted-bar"/>
+<rect x="310" y="450" width="519.79" height="28" rx="10" fill="#fbbf24" stroke="#ffffff" stroke-width="1"/>
+<text x="1092" y="469.00" class="label">visible 20,518 / 20,518</text>
 <text x="292" y="515.00" text-anchor="end" class="label">DeepSeek-S</text>
 <rect x="310" y="496" width="519.79" height="28" rx="10" class="muted-bar"/>
 <rect x="310" y="496" width="72.53" height="28" rx="10" fill="#1d4ed8" stroke="#ffffff" stroke-width="1"/>
@@ -85,9 +85,9 @@
 <rect x="310" y="542" width="519.69" height="28" rx="10" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
 <text x="1092" y="561.00" class="label">visible 20,514 / 20,518</text>
 <text x="292" y="607.00" text-anchor="end" class="label">DeepSeek-L</text>
-<rect x="310" y="588" width="760" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="690.00" y="607.00" text-anchor="middle" class="small">n/a — no released Denevil proxy route</text>
-<text x="1092" y="607.00" class="small">n/a</text>
+<rect x="310" y="588" width="108.48" height="28" rx="10" class="muted-bar"/>
+<rect x="310" y="588" width="108.48" height="28" rx="10" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
+<text x="1092" y="607.00" class="label">visible 4,282 / 4,282</text>
 <text x="292" y="653.00" text-anchor="end" class="label">Llama-S</text>
 <rect x="310" y="634" width="519.79" height="28" rx="10" class="muted-bar"/>
 <rect x="310" y="634" width="519.79" height="28" rx="10" fill="#c2410c" stroke="#ffffff" stroke-width="1"/>

@@ -97,10 +97,10 @@
 <text x="1116" y="510.00" class="small">Proxy-only evidence; see CSV for full limitation details.</text>
 <rect x="40" y="556" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
 <text x="48" y="596.00" class="label">MiniMax-L</text>
-<rect x="226" y="562" width="150" height="58" rx="12" fill="#2563eb"/>
-<text x="301" y="596.00" text-anchor="middle" class="celltext">Partial checkpoint</text>
-<text x="438" y="596.00" class="label">1,321</text>
-<text x="594" y="596.00" class="label">1,321</text>
+<rect x="226" y="562" width="150" height="58" rx="12" fill="#b7791f"/>
+<text x="301" y="596.00" text-anchor="middle" class="celltext">Proxy complete</text>
+<text x="438" y="596.00" class="label">20,518</text>
+<text x="594" y="596.00" class="label">20,518</text>
 <text x="752" y="596.00" class="label">100.0%</text>
 <text x="928" y="596.00" class="label">MiniMax-M2.5</text>
 <text x="1116" y="580.00" class="small">Visible text surfaced for every proxy prompt.</text>
@@ -124,13 +124,13 @@
 <text x="1116" y="720.00" class="small">Near-complete archive; 4 prompts lacked visible saved text.</text>
 <rect x="40" y="766" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
 <text x="48" y="806.00" class="label">DeepSeek-L</text>
-<rect x="226" y="772" width="150" height="58" rx="12" fill="#94a3b8"/>
-<text x="301" y="806.00" text-anchor="middle" class="celltext-dark">Queued</text>
-<text x="438" y="806.00" class="label">n/a</text>
-<text x="594" y="806.00" class="label">n/a</text>
-<text x="752" y="806.00" class="label">n/a</text>
+<rect x="226" y="772" width="150" height="58" rx="12" fill="#1d4ed8"/>
+<text x="301" y="806.00" text-anchor="middle" class="celltext">Active rerun</text>
+<text x="438" y="806.00" class="label">4,282</text>
+<text x="594" y="806.00" class="label">4,282</text>
+<text x="752" y="806.00" class="label">100.0%</text>
 <text x="928" y="806.00" class="label">deepseek-r1</text>
-<text x="1116" y="790.00" class="small">Proxy-only evidence; see CSV for full limitation details.</text>
+<text x="1116" y="790.00" class="small">Visible text surfaced for every proxy prompt.</text>
 <rect x="40" y="836" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
 <text x="48" y="876.00" class="label">Llama-S</text>
 <rect x="226" y="842" width="150" height="58" rx="12" fill="#b7791f"/>

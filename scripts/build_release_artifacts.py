@@ -17,7 +17,7 @@ from datetime import datetime
 from functools import lru_cache
 from pathlib import Path
 from statistics import mean
-from typing import Any
+from typing import Any, Sequence
 from zipfile import BadZipFile, ZipFile
 from zoneinfo import ZoneInfo
 
@@ -30,6 +30,8 @@ EXTERNAL_ARTIFACT_ROOT = ROOT.parent / "moral-psych-harness" / "CEI"
 
 from evals._benchmark_utils import (
     CCD_CLUSTER_MAP,
+    classify_valence_label,
+    classify_yes_no_label,
     extract_structured_choice_int,
     extract_structured_label,
     extract_structured_rating_int,
@@ -50,9 +52,12 @@ SNAPSHOT_DATE_ISO = "2026-04-19"
 REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan."
 REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
-REPORT_CURRENT_COST_ESTIMATE = "$243.40"
+REPORT_CURRENT_COST_ESTIMATE = "$511.99"
+REPORT_CURRENT_COST_BREAKDOWN = (
+    "MiniMax direct API `$398.42` + OpenRouter `$113.57` for all other model runs."
+)
 REPORT_CURRENT_COST_SCOPE = (
-    "User-updated project total across the frozen release work and the later tracked reruns completed in this repo."
+    "User-updated project total through the current rerun state across the frozen release work and the later tracked reruns completed in this repo."
 )
 REPORT_STATUS_NOTE = (
     f"Updated {REPORT_DATE_LONG}. "
@@ -135,7 +140,7 @@ PUBLIC_WITHHELD_LINES: set[str] = set()
 PUBLIC_WITHHELD_FAMILY_STATUS = ""
 PUBLIC_WITHHELD_FAMILY_NOTE = ""
 PUBLIC_NEXT_QUEUED_NOTE = "Pending refresh from the on-disk rerun monitor."
-CI_WORKFLOW_URL = "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml"
+CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 TEXT_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-text-expansion"
 IMAGE_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-image-expansion"
 
@@ -527,10 +532,86 @@ MINIMAX_PR6_DENEVIL_CONCURRENT_EVAL_DIR = (
 MINIMAX_PR6_DENEVIL_CONCURRENT_TRACE_DIR = (
     MINIMAX_PR6_DENEVIL_CONCURRENT_EVAL_DIR / "_inspect_traces"
 )
+MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_FULL_RUN_DIR = (
+    ROOT
+    / "results"
+    / "inspect"
+    / "full-runs"
+    / "2026-05-08-minimax-pr6-valueprism-test"
+)
+MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_EVAL_DIR = (
+    ROOT
+    / "results"
+    / "inspect"
+    / "logs"
+    / "2026-05-08-minimax-pr6-valueprism-test"
+    / "minimax_text"
+)
+MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_TRACE_DIR = (
+    MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_EVAL_DIR / "_inspect_traces"
+)
+MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_FULL_RUN_DIR = (
+    ROOT
+    / "results"
+    / "inspect"
+    / "full-runs"
+    / "2026-05-08-minimax-pr6-relevance-test-concurrent"
+)
+MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_EVAL_DIR = (
+    ROOT
+    / "results"
+    / "inspect"
+    / "logs"
+    / "2026-05-08-minimax-pr6-relevance-test-concurrent"
+    / "minimax_text"
+)
+MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_TRACE_DIR = (
+    MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_EVAL_DIR / "_inspect_traces"
+)
 MINIMAX_PR6_SMID_EVAL_DIRS = [
     MINIMAX_PR6_SMID_EVAL_DIR,
     MINIMAX_PR6_FOUNDATION_CONCURRENT_EVAL_DIR,
 ]
+MINIMAX_PR6_PUBLIC_DENEVIL_EVAL_DIRS = [
+    MINIMAX_LARGE_EVAL_DIR,
+    MINIMAX_PR6_DENEVIL_CONCURRENT_EVAL_DIR,
+]
+DEEPSEEK_R1_MAIN_EVAL_DIR = (
+    ROOT
+    / "results"
+    / "inspect"
+    / "logs"
+    / "2026-05-07-deepseek-r1-text-rerun"
+    / "deepseek_r1_text"
+)
+DEEPSEEK_R1_MAIN_TRACE_DIR = DEEPSEEK_R1_MAIN_EVAL_DIR / "_inspect_traces"
+DEEPSEEK_R1_DENEVIL_EVAL_DIR = (
+    ROOT
+    / "results"
+    / "inspect"
+    / "logs"
+    / "2026-05-08-deepseek-r1-denevil-concurrent"
+    / "deepseek_r1_text"
+)
+DEEPSEEK_R1_DENEVIL_TRACE_DIR = DEEPSEEK_R1_DENEVIL_EVAL_DIR / "_inspect_traces"
+DEEPSEEK_R1_VALENCE_TEST_EVAL_DIR = (
+    ROOT
+    / "results"
+    / "inspect"
+    / "logs"
+    / "2026-05-08-deepseek-r1-valence-test-concurrent"
+    / "deepseek_r1_text"
+)
+DEEPSEEK_R1_VALENCE_TEST_TRACE_DIR = DEEPSEEK_R1_VALENCE_TEST_EVAL_DIR / "_inspect_traces"
+DEEPSEEK_R1_RELEVANCE_TEST_EVAL_DIR = (
+    ROOT
+    / "results"
+    / "inspect"
+    / "logs"
+    / "2026-05-08-deepseek-r1-relevance-test-concurrent"
+    / "deepseek_r1_text"
+)
+DEEPSEEK_R1_RELEVANCE_TEST_TRACE_DIR = DEEPSEEK_R1_RELEVANCE_TEST_EVAL_DIR / "_inspect_traces"
 MINIMAX_SMALL_TEXT_EVAL_DIR = (
     ROOT
     / "results"
@@ -982,18 +1063,15 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         "family": "MiniMax",
         "size_slot": "L",
         "route": "text: openrouter/minimax/minimax-m2.5; SMID recovery: openrouter/minimax/minimax-01",
-        "coverage_note": "Shared MiniMax-01 SMID recovery is complete locally, UniMoral is complete on the active MiniMax-M2.5 rerun, and the remaining text benchmarks are still being filled from the current direct-provider queue.",
+        "coverage_note": "Shared MiniMax-01 SMID recovery is complete locally, the test-only MiniMax-M2.5 Value Kaleidoscope reruns are complete, and the published Denevil proxy evidence is reconstructed from the persisted rerun checkpoints.",
         "task_sources": {
             "unimoral_action_prediction": MINIMAX_LARGE_EVAL_DIR,
             "smid_moral_rating": MINIMAX_PR6_SMID_EVAL_DIRS,
             "smid_foundation_classification": MINIMAX_PR6_SMID_EVAL_DIRS,
-            "value_prism_relevance": MINIMAX_LARGE_EVAL_DIR,
-            "value_prism_valence": MINIMAX_LARGE_EVAL_DIR,
+            "value_prism_relevance": MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_EVAL_DIR,
+            "value_prism_valence": MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_EVAL_DIR,
             "ccd_bench_selection": MINIMAX_LARGE_EVAL_DIR,
-            "denevil_fulcra_proxy_generation": [
-                MINIMAX_LARGE_EVAL_DIR,
-                MINIMAX_PR6_DENEVIL_CONCURRENT_EVAL_DIR,
-            ],
+            "denevil_fulcra_proxy_generation": MINIMAX_PR6_PUBLIC_DENEVIL_EVAL_DIRS,
         },
     },
     {
@@ -1177,6 +1255,18 @@ DEEPSEEK_MEDIUM_TRACE_DIR = resolve_artifact_path(DEEPSEEK_MEDIUM_TRACE_DIR)
 MINIMAX_PR6_DENEVIL_CONCURRENT_FULL_RUN_DIR = resolve_artifact_path(MINIMAX_PR6_DENEVIL_CONCURRENT_FULL_RUN_DIR)
 MINIMAX_PR6_DENEVIL_CONCURRENT_EVAL_DIR = resolve_artifact_path(MINIMAX_PR6_DENEVIL_CONCURRENT_EVAL_DIR)
 MINIMAX_PR6_DENEVIL_CONCURRENT_TRACE_DIR = resolve_artifact_path(MINIMAX_PR6_DENEVIL_CONCURRENT_TRACE_DIR)
+MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_FULL_RUN_DIR = resolve_artifact_path(MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_FULL_RUN_DIR)
+MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_EVAL_DIR = resolve_artifact_path(MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_EVAL_DIR)
+MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_TRACE_DIR = resolve_artifact_path(MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_TRACE_DIR)
+MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_FULL_RUN_DIR = resolve_artifact_path(
+    MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_FULL_RUN_DIR
+)
+MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_EVAL_DIR = resolve_artifact_path(
+    MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_EVAL_DIR
+)
+MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_TRACE_DIR = resolve_artifact_path(
+    MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_TRACE_DIR
+)
 
 reroot_task_source_rows(AUTHORITATIVE_COMPARISON_LINES.values())
 reroot_task_source_rows(LOCAL_COMPARISON_LINE_SOURCES)
@@ -3462,13 +3552,27 @@ def _apply_minimax_pr6_public_release_patch() -> None:
 
     minimax_large_progress = _find_row(FAMILY_SIZE_PROGRESS, "line_label", "MiniMax-L")
     minimax_supplementary = next(row for row in SUPPLEMENTARY_MODEL_PROGRESS if row["family"] == "MiniMax")
+    minimax_future_plan = next(row for row in FUTURE_MODEL_PLAN if row["family"] == "MiniMax")
 
-    text_latest = _latest_eval_checkpoint(MINIMAX_LARGE_EVAL_DIR)
+    text_latest = _latest_eval_checkpoint_across_sources(
+        [
+            MINIMAX_LARGE_EVAL_DIR,
+            MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_EVAL_DIR,
+            MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_EVAL_DIR,
+        ]
+    )
     text_unimoral = _best_eval_checkpoint(MINIMAX_LARGE_EVAL_DIR, task_name="unimoral_action_prediction")
-    text_value_relevance = _best_eval_checkpoint(MINIMAX_LARGE_EVAL_DIR, task_name="value_prism_relevance")
+    text_value_relevance = _merged_eval_checkpoint_across_sources(
+        MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_EVAL_DIR,
+        task_name="value_prism_relevance",
+    )
+    text_value_valence = _merged_eval_checkpoint_across_sources(
+        MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_EVAL_DIR,
+        task_name="value_prism_valence",
+    )
     text_ccd = _best_eval_checkpoint(MINIMAX_LARGE_EVAL_DIR, task_name="ccd_bench_selection")
-    text_denevil = _best_eval_checkpoint_across_sources(
-        [MINIMAX_LARGE_EVAL_DIR, MINIMAX_PR6_DENEVIL_CONCURRENT_EVAL_DIR],
+    text_denevil = _merged_eval_checkpoint_across_sources(
+        MINIMAX_PR6_PUBLIC_DENEVIL_EVAL_DIRS,
         task_name="denevil_fulcra_proxy_generation",
     )
     concurrent_denevil_started = (
@@ -3477,6 +3581,24 @@ def _apply_minimax_pr6_public_release_patch() -> None:
     )
 
     unimoral_success = latest_successful_eval(MINIMAX_LARGE_EVAL_DIR, "unimoral_action_prediction")
+    value_relevance_success = latest_successful_eval(
+        MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_EVAL_DIR,
+        "value_prism_relevance",
+    )
+    value_valence_success = latest_successful_eval(
+        MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_EVAL_DIR,
+        "value_prism_valence",
+    )
+    value_relevance_accuracy = merged_label_accuracy_from_sources(
+        MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_EVAL_DIR,
+        "value_prism_relevance",
+        classify_yes_no_label,
+    )
+    value_valence_accuracy = merged_label_accuracy_from_sources(
+        MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_EVAL_DIR,
+        "value_prism_valence",
+        classify_valence_label,
+    )
     smid_moral_success = latest_successful_eval(MINIMAX_PR6_SMID_EVAL_DIRS, "smid_moral_rating")
     smid_foundation_success = latest_successful_eval(
         MINIMAX_PR6_SMID_EVAL_DIRS,
@@ -3491,7 +3613,14 @@ def _apply_minimax_pr6_public_release_patch() -> None:
         task_name="smid_foundation_classification",
     )
 
-    main_text_active = _has_recent_trace_activity(MINIMAX_LARGE_TRACE_DIR)
+    main_text_active = any(
+        _has_recent_trace_activity(trace_dir)
+        for trace_dir in (
+            MINIMAX_LARGE_TRACE_DIR,
+            MINIMAX_PR6_VALUEPRISM_VALENCE_TEST_TRACE_DIR,
+            MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_TRACE_DIR,
+        )
+    )
     concurrent_denevil_active = _has_recent_trace_activity(MINIMAX_PR6_DENEVIL_CONCURRENT_TRACE_DIR)
     active = main_text_active or concurrent_denevil_active
     denevil_live = concurrent_denevil_active or (
@@ -3500,16 +3629,30 @@ def _apply_minimax_pr6_public_release_patch() -> None:
         and text_latest["task"] == "denevil_fulcra_proxy_generation"
     )
     smid_complete = smid_moral_success is not None and smid_foundation_success is not None
+    value_complete = bool(
+        text_value_relevance is not None
+        and text_value_valence is not None
+        and text_value_relevance["status"] == "success"
+        and text_value_valence["status"] == "success"
+        and text_value_relevance["completed"] == text_value_relevance["total"]
+        and text_value_valence["completed"] == text_value_valence["total"]
+    )
     ccd_complete = bool(
         text_ccd is not None
         and text_ccd["status"] == "success"
         and text_ccd["completed"] == text_ccd["total"]
     )
+    denevil_complete = bool(
+        text_denevil is not None
+        and text_denevil["completed"] >= text_denevil["total"]
+        and text_denevil["total"] > 0
+    )
     completed = bool(
-        (MINIMAX_PR6_FULL_RUN_DIR / "minimax_text" / "family_done.txt").exists()
-        and text_denevil is not None
-        and text_denevil["status"] == "success"
-        and text_denevil["completed"] == text_denevil["total"]
+        unimoral_success is not None
+        and smid_complete
+        and value_complete
+        and ccd_complete
+        and denevil_complete
     )
 
     if smid_complete:
@@ -3522,14 +3665,16 @@ def _apply_minimax_pr6_public_release_patch() -> None:
             if text_unimoral["completed"] > 0
             else "error"
         )
-    if active and text_latest is not None and text_latest["task"] == "value_prism_relevance":
+    if active and text_latest is not None and text_latest["task"] in {"value_prism_relevance", "value_prism_valence"}:
         minimax_large_progress["value_kaleidoscope"] = "live"
-    elif text_value_relevance is not None and text_value_relevance["completed"] > 0:
+    elif value_complete:
+        minimax_large_progress["value_kaleidoscope"] = "done"
+    elif (
+        (text_value_relevance is not None and text_value_relevance["completed"] > 0)
+        or (text_value_valence is not None and text_value_valence["completed"] > 0)
+    ):
         minimax_large_progress["value_kaleidoscope"] = (
-            "done"
-            if text_value_relevance["status"] == "success"
-            and text_value_relevance["completed"] == text_value_relevance["total"]
-            else "partial"
+            "partial"
         )
     if active and text_latest is not None and text_latest["task"] == "ccd_bench_selection":
         minimax_large_progress["ccd_bench"] = "live"
@@ -3537,13 +3682,19 @@ def _apply_minimax_pr6_public_release_patch() -> None:
         minimax_large_progress["ccd_bench"] = "done" if text_ccd["status"] == "success" else "partial"
     if denevil_live:
         minimax_large_progress["denevil"] = "live"
+    elif denevil_complete:
+        minimax_large_progress["denevil"] = "proxy"
     elif text_denevil is not None and text_denevil["completed"] > 0:
-        minimax_large_progress["denevil"] = "proxy" if text_denevil["status"] == "success" else "partial"
+        minimax_large_progress["denevil"] = "partial"
 
-    if completed and text_denevil is not None:
+    if completed:
         minimax_large_progress["summary_note"] = (
-            "Shared MiniMax-01 SMID recovery complete; the MiniMax-M2.5 text rerun is now fully persisted "
-            f"through the Denevil proxy task ({text_denevil['progress_pct']:.1f}%)."
+            "Shared MiniMax-01 SMID recovery is complete; UniMoral, CCD-Bench, the test-only Value Kaleidoscope reruns, "
+            "and the reconstructed Denevil proxy archive are all fully persisted locally."
+        )
+    elif denevil_live and ccd_complete and value_complete:
+        minimax_large_progress["summary_note"] = (
+            "Shared MiniMax-01 SMID recovery is complete; CCD-Bench and test-only Value Kaleidoscope are done, and the MiniMax-M2.5 text reruns are active on Denevil proxy cleanup."
         )
     elif denevil_live and ccd_complete:
         minimax_large_progress["summary_note"] = (
@@ -3561,6 +3712,10 @@ def _apply_minimax_pr6_public_release_patch() -> None:
         minimax_large_progress["summary_note"] = (
             "Shared MiniMax-01 SMID recovery is complete; the MiniMax-M2.5 text rerun is active."
         )
+    elif value_complete and denevil_complete:
+        minimax_large_progress["summary_note"] = (
+            "Shared MiniMax-01 SMID recovery is complete; test-only Value Kaleidoscope and the reconstructed Denevil proxy archive are both fully persisted locally."
+        )
     elif text_value_relevance is not None and text_value_relevance["completed"] > 0:
         minimax_large_progress["summary_note"] = (
             "Shared MiniMax-01 SMID recovery is complete; text later stalled after a "
@@ -3571,7 +3726,7 @@ def _apply_minimax_pr6_public_release_patch() -> None:
             "Shared MiniMax-01 SMID recovery is complete; UniMoral is already persisted while the later text tasks are not currently active."
         )
 
-    if active or text_unimoral is not None or smid_complete:
+    if active or text_unimoral is not None or smid_complete or value_complete or denevil_complete:
         scope = "Complete local line" if completed else "Live local rerun" if active else "Attempted local line"
         status = "done" if completed else "live" if active else "partial"
         coverage = (
@@ -3580,11 +3735,22 @@ def _apply_minimax_pr6_public_release_patch() -> None:
         note = (
             "Shared MiniMax-01 SMID recovery is complete; the MiniMax-M2.5 text rerun is still filling the remaining text benchmarks."
         )
-        if completed and text_denevil is not None:
+        if completed:
             coverage = (
                 "5 benchmark lines complete (`Denevil` via proxy) using MiniMax-M2.5 text plus the shared MiniMax-01 SMID recovery route"
             )
-            note = "The direct-provider MiniMax rerun finished successfully through the Denevil proxy task."
+            note = (
+                "Shared MiniMax-01 SMID recovery is complete; the test-only MiniMax-M2.5 Value Kaleidoscope reruns are done, "
+                "and the released Denevil proxy archive can now be reconstructed end-to-end from the persisted rerun checkpoints."
+            )
+        elif value_complete and denevil_complete:
+            coverage = (
+                "Shared MiniMax-01 SMID recovery is complete; UniMoral, test-only Value Kaleidoscope, and CCD-Bench are done, "
+                "and the Denevil proxy archive is fully reconstructed from the persisted rerun checkpoints."
+            )
+            note = (
+                "Shared MiniMax-01 SMID recovery is complete; test-only Value Kaleidoscope is done, and the published Denevil proxy evidence is now complete locally as well."
+            )
         elif denevil_live and ccd_complete:
             coverage = (
                 "Shared MiniMax-01 SMID recovery is complete; UniMoral and CCD-Bench are done; the active text reruns are now on Denevil proxy while Value Kaleidoscope still remains queued."
@@ -3623,7 +3789,7 @@ def _apply_minimax_pr6_public_release_patch() -> None:
         )
 
     completed_lines: list[str] = []
-    missing_lines = ["Value Kaleidoscope", "Benchmark-faithful Denevil via MoralPrompt"]
+    missing_lines: list[str] = []
     completed_tasks = 0
     sample_total = 0
     macro_points: list[float] = []
@@ -3650,30 +3816,74 @@ def _apply_minimax_pr6_public_release_patch() -> None:
             macro_points.append(float(smid_foundation_success["accuracy"]))
     else:
         missing_lines.insert(1 if "UniMoral" not in missing_lines else 2, "SMID")
+    if value_complete:
+        completed_lines.append("Value Kaleidoscope")
+        completed_tasks += 2
+        if text_value_relevance is not None:
+            sample_total += int(text_value_relevance["total"])
+        if text_value_valence is not None:
+            sample_total += int(text_value_valence["total"])
+        if value_relevance_accuracy is not None:
+            macro_points.append(float(value_relevance_accuracy))
+        if value_valence_accuracy is not None:
+            macro_points.append(float(value_valence_accuracy))
+    else:
+        missing_lines.append("Value Kaleidoscope")
     if ccd_complete:
         completed_lines.append("CCD-Bench")
         completed_tasks += 1
         if text_ccd is not None:
             sample_total += int(text_ccd["total"])
     else:
-        missing_lines.insert(len(completed_lines), "CCD-Bench")
-    if completed and text_denevil is not None:
+        missing_lines.append("CCD-Bench")
+    if denevil_complete and text_denevil is not None:
         completed_lines.append("Denevil proxy")
         proxy_tasks = 1
         sample_total += int(text_denevil["total"])
     else:
-        missing_lines.insert(len(completed_lines), "Denevil proxy")
+        missing_lines.append("Denevil proxy")
+    missing_lines.append("Benchmark-faithful Denevil via MoralPrompt")
 
-    if active or unimoral_success is not None or smid_complete:
+    if active or unimoral_success is not None or smid_complete or value_complete or denevil_complete:
+        if completed:
+            status_relative_to_closed_release = (
+                "Complete local rerun across UniMoral, SMID, test-only Value Kaleidoscope, CCD-Bench, and Denevil proxy"
+            )
+            supplementary_note = (
+                "Shared MiniMax-01 SMID recovery is complete, the test-only MiniMax-M2.5 Value Kaleidoscope reruns are complete, and the released Denevil proxy archive is now fully reconstructed from persisted checkpoints. Benchmark-faithful MoralPrompt Denevil is still unavailable repo-wide."
+            )
+        elif denevil_live and ccd_complete and value_complete:
+            status_relative_to_closed_release = (
+                "Active local rerun with SMID, Value Kaleidoscope, and CCD-Bench complete while Denevil proxy is in flight"
+            )
+            supplementary_note = (
+                "Shared MiniMax-01 SMID recovery is complete, test-only Value Kaleidoscope is complete, and the MiniMax-M2.5 text reruns are now active on Denevil proxy cleanup."
+            )
+        elif denevil_live and ccd_complete:
+            status_relative_to_closed_release = (
+                "Active local rerun with SMID and CCD-Bench complete while Denevil proxy is in flight"
+            )
+            supplementary_note = (
+                "Shared MiniMax-01 SMID recovery is complete, UniMoral and CCD-Bench are complete, and the MiniMax-M2.5 text reruns are now active on Denevil proxy while Value Kaleidoscope remains queued on this pass."
+            )
+        elif active:
+            status_relative_to_closed_release = (
+                "Active local rerun with SMID complete and later text work still in flight"
+            )
+            supplementary_note = (
+                "Shared MiniMax-01 SMID recovery is complete, UniMoral is complete, and the MiniMax-M2.5 text rerun is currently pushing through the later text benchmarks, with CCD-Bench on the main queue and a concurrent Denevil proxy pass also in flight."
+            )
+        else:
+            status_relative_to_closed_release = (
+                "Partial local rerun with SMID complete and later text still incomplete"
+            )
+            supplementary_note = (
+                "Shared MiniMax-01 SMID recovery is complete, but the later MiniMax-M2.5 text tasks are still incomplete."
+            )
+
         minimax_supplementary.update(
             {
-                "status_relative_to_closed_release": (
-                    "Active local rerun with SMID and CCD-Bench complete while Denevil proxy is in flight"
-                    if denevil_live and ccd_complete
-                    else "Active local rerun with SMID complete and later text work still in flight"
-                    if active
-                    else "Partial local rerun with SMID complete and later text still incomplete"
-                ),
+                "status_relative_to_closed_release": status_relative_to_closed_release,
                 "papers_covered": len(completed_lines),
                 "tasks_completed": completed_tasks,
                 "benchmark_faithful_tasks": completed_tasks,
@@ -3682,26 +3892,175 @@ def _apply_minimax_pr6_public_release_patch() -> None:
                 "benchmark_faithful_macro_accuracy": mean(macro_points) if macro_points else None,
                 "completed_benchmark_lines": "; ".join(completed_lines) if completed_lines else "None yet",
                 "missing_benchmark_lines": "; ".join(missing_lines),
-                "note": (
-                    "Shared MiniMax-01 SMID recovery is complete, UniMoral and CCD-Bench are complete, and the MiniMax-M2.5 text reruns are now active on Denevil proxy while Value Kaleidoscope remains queued on this pass."
-                    if denevil_live and ccd_complete
-                    else "Shared MiniMax-01 SMID recovery is complete, UniMoral is complete, and the MiniMax-M2.5 text rerun is currently pushing through the later text benchmarks, with CCD-Bench on the main queue and a concurrent Denevil proxy pass also in flight."
-                    if active
-                    else "Shared MiniMax-01 SMID recovery is complete and UniMoral is complete, but the later MiniMax-M2.5 text tasks are still incomplete."
-                ),
+                "note": supplementary_note,
             }
         )
 
-    if active:
-        labels = re.findall(r"`([^`]+)`", REPORT_LIVE_RERUNS_SUMMARY)
-        if "MiniMax-L" not in labels:
-            labels.append("MiniMax-L")
-        REPORT_LIVE_RERUNS_SUMMARY = _human_join([f"`{label}`" for label in labels]) if labels else "`MiniMax-L`"
-        REPORT_NEXT_ACTION_SUMMARY = (
-            "Keep the active MiniMax-L Denevil proxy passes healthy, then let the queue return to the remaining Value Kaleidoscope work."
+    minimax_large_source = next(
+        row for row in LOCAL_COMPARISON_LINE_SOURCES if row.get("line_label") == "MiniMax-L"
+    )
+    if completed:
+        minimax_large_source["coverage_note"] = (
+            "Shared MiniMax-01 SMID recovery is complete locally; UniMoral, SMID, test-only Value Kaleidoscope, and CCD-Bench are complete, "
+            "and the released Denevil proxy archive can be reconstructed end-to-end from the persisted rerun checkpoints."
         )
-        _find_row(LOCAL_EXPANSION_CHECKPOINT, "line", "Next queued text lines")["note"] = (
+    elif value_complete and denevil_complete:
+        minimax_large_source["coverage_note"] = (
+            "Shared MiniMax-01 SMID recovery is complete locally, test-only Value Kaleidoscope is complete, and the published Denevil proxy evidence is also complete locally."
+        )
+    elif active:
+        minimax_large_source["coverage_note"] = (
+            "Shared MiniMax-01 SMID recovery is complete locally, and the current MiniMax-M2.5 reruns are still pushing through the remaining text work."
+        )
+    elif text_value_relevance is not None and text_value_relevance["completed"] > 0:
+        minimax_large_source["coverage_note"] = (
+            "Shared MiniMax-01 SMID recovery is complete locally, and the later text reruns preserved at least a partial Value Kaleidoscope checkpoint."
+        )
+
+    labels = re.findall(r"`([^`]+)`", REPORT_LIVE_RERUNS_SUMMARY)
+    labels = [label for label in labels if label != "MiniMax-L"]
+    if active and "MiniMax-L" not in labels:
+        labels.append("MiniMax-L")
+    REPORT_LIVE_RERUNS_SUMMARY = (
+        _human_join([f"`{label}`" for label in labels])
+        if labels
+        else "No tracked open-source rerun was live at build time."
+    )
+
+    next_queued_row = _find_row(LOCAL_EXPANSION_CHECKPOINT, "line", "Next queued text lines")
+    if completed:
+        REPORT_NEXT_ACTION_SUMMARY = (
+            "MiniMax-L no longer needs a restart; the published queued follow-up lines are `MiniMax-M` and `DeepSeek-L`."
+        )
+        next_queued_row["note"] = (
+            "MiniMax-M and DeepSeek-L are the published queued follow-up lines; MiniMax-L is now complete locally."
+        )
+        minimax_future_plan.update(
+            {
+                "closed_release_status": "Public matrix now includes the completed direct-provider rerun",
+                "large_candidate": "MiniMax-L is now complete locally across UniMoral, SMID, test-only Value Kaleidoscope, CCD-Bench, and Denevil proxy (reconstructed from persisted checkpoints).",
+                "next_step": "Decide whether a distinct MiniMax-M1 medium line is worth paying for now that MiniMax-L no longer blocks the public matrix.",
+            }
+        )
+    elif active:
+        REPORT_NEXT_ACTION_SUMMARY = (
+            "Keep the active MiniMax-L text reruns healthy until the remaining proxy/archive cleanup is fully persisted."
+        )
+        next_queued_row["note"] = (
             "MiniMax-M and the remaining stalled open-source lines are waiting behind the active MiniMax-L rerun."
+        )
+
+
+def _apply_deepseek_r1_live_release_patch() -> None:
+    deepseek_large_progress = _find_row(FAMILY_SIZE_PROGRESS, "line_label", "DeepSeek-L")
+    deepseek_future_plan = next(row for row in FUTURE_MODEL_PLAN if row["family"] == "DeepSeek")
+
+    ccd_checkpoint = _merged_eval_checkpoint_across_sources(
+        DEEPSEEK_R1_MAIN_EVAL_DIR,
+        task_name="ccd_bench_selection",
+    )
+    unimoral_checkpoint = _merged_eval_checkpoint_across_sources(
+        DEEPSEEK_R1_MAIN_EVAL_DIR,
+        task_name="unimoral_action_prediction",
+    )
+    denevil_checkpoint = _merged_eval_checkpoint_across_sources(
+        DEEPSEEK_R1_DENEVIL_EVAL_DIR,
+        task_name="denevil_fulcra_proxy_generation",
+    )
+    valence_checkpoint = _merged_eval_checkpoint_across_sources(
+        DEEPSEEK_R1_VALENCE_TEST_EVAL_DIR,
+        task_name="value_prism_valence",
+    )
+    relevance_checkpoint = _merged_eval_checkpoint_across_sources(
+        DEEPSEEK_R1_RELEVANCE_TEST_EVAL_DIR,
+        task_name="value_prism_relevance",
+    )
+
+    ccd_complete = bool(
+        ccd_checkpoint is not None
+        and ccd_checkpoint["status"] == "success"
+        and ccd_checkpoint["completed"] >= ccd_checkpoint["total"]
+    )
+    unimoral_active = _has_recent_trace_activity(DEEPSEEK_R1_MAIN_TRACE_DIR)
+    denevil_active = _has_recent_trace_activity(DEEPSEEK_R1_DENEVIL_TRACE_DIR)
+    valence_active = _has_recent_trace_activity(DEEPSEEK_R1_VALENCE_TEST_TRACE_DIR)
+    relevance_active = _has_recent_trace_activity(DEEPSEEK_R1_RELEVANCE_TEST_TRACE_DIR)
+    value_active = valence_active or relevance_active
+    active = unimoral_active or denevil_active or value_active
+
+    if ccd_complete:
+        deepseek_large_progress["ccd_bench"] = "done"
+    elif ccd_checkpoint is not None and ccd_checkpoint["completed"] > 0:
+        deepseek_large_progress["ccd_bench"] = "partial"
+
+    if unimoral_active:
+        deepseek_large_progress["unimoral"] = "live"
+    elif unimoral_checkpoint is not None and unimoral_checkpoint["completed"] > 0:
+        deepseek_large_progress["unimoral"] = (
+            "done"
+            if unimoral_checkpoint["status"] == "success"
+            and unimoral_checkpoint["completed"] >= unimoral_checkpoint["total"]
+            else "partial"
+        )
+
+    if value_active:
+        deepseek_large_progress["value_kaleidoscope"] = "live"
+    elif (
+        (valence_checkpoint is not None and valence_checkpoint["completed"] > 0)
+        or (relevance_checkpoint is not None and relevance_checkpoint["completed"] > 0)
+    ):
+        value_complete = bool(
+            valence_checkpoint is not None
+            and relevance_checkpoint is not None
+            and valence_checkpoint["status"] == "success"
+            and relevance_checkpoint["status"] == "success"
+            and valence_checkpoint["completed"] >= valence_checkpoint["total"]
+            and relevance_checkpoint["completed"] >= relevance_checkpoint["total"]
+        )
+        deepseek_large_progress["value_kaleidoscope"] = "done" if value_complete else "partial"
+
+    if denevil_active:
+        deepseek_large_progress["denevil"] = "live"
+    elif denevil_checkpoint is not None and denevil_checkpoint["completed"] > 0:
+        deepseek_large_progress["denevil"] = (
+            "proxy"
+            if denevil_checkpoint["status"] == "success"
+            and denevil_checkpoint["completed"] >= denevil_checkpoint["total"]
+            else "partial"
+        )
+
+    if active:
+        checkpoint_bits: list[str] = []
+        if unimoral_checkpoint is not None:
+            checkpoint_bits.append(f"UniMoral {unimoral_checkpoint['progress_pct']:.1f}%")
+        if denevil_checkpoint is not None:
+            checkpoint_bits.append(f"Denevil proxy {denevil_checkpoint['progress_pct']:.1f}%")
+        if valence_checkpoint is not None:
+            checkpoint_bits.append(f"Value valence {valence_checkpoint['progress_pct']:.1f}%")
+        if relevance_checkpoint is not None:
+            checkpoint_bits.append(f"Value relevance {relevance_checkpoint['progress_pct']:.1f}%")
+        progress_text = ", ".join(checkpoint_bits)
+        deepseek_large_progress["summary_note"] = (
+            "Large R1 text rerun is active locally: CCD-Bench is done, and UniMoral, test-only Value Kaleidoscope, "
+            f"and Denevil proxy are in flight ({progress_text})."
+            if progress_text
+            else "Large R1 text rerun is active locally: CCD-Bench is done, and UniMoral, test-only Value Kaleidoscope, and Denevil proxy are in flight."
+        )
+        _upsert_current_result_line(
+            {
+                "line_label": "DeepSeek-L",
+                "scope": "Live local rerun",
+                "status": "live",
+                "coverage": "No SMID route; CCD-Bench is complete, and UniMoral, Denevil proxy, and test-only Value Kaleidoscope reruns are active locally.",
+                "note": deepseek_large_progress["summary_note"],
+            },
+            before_label="MiniMax-S",
+        )
+        deepseek_future_plan.update(
+            {
+                "large_candidate": "openrouter/deepseek/deepseek-r1 is now active locally: CCD-Bench is complete, and UniMoral, Denevil proxy, and test-only Value Kaleidoscope reruns are in flight.",
+                "next_step": "Keep the DeepSeek-L R1 reruns healthy, then decide whether DeepSeek-S should remain coverage-only evidence or get a cleaner rerun before the next authoritative snapshot.",
+            }
         )
 
 
@@ -4032,6 +4391,12 @@ def _refresh_public_release_summaries() -> None:
         REPORT_NEXT_ACTION_SUMMARY = (
             "Keep the active published reruns healthy while the queued follow-up lines and later benchmark cells remain visible in the matrix."
         )
+    elif queued_followup_labels:
+        REPORT_NEXT_ACTION_SUMMARY = (
+            "No published rerun is active right now; the queued follow-up lines still visible in the matrix are "
+            + _human_join([f"`{label}`" for label in queued_followup_labels])
+            + "."
+        )
     else:
         REPORT_NEXT_ACTION_SUMMARY = (
             "Keep the active published reruns healthy."
@@ -4328,6 +4693,80 @@ def _sample_records_from_eval(eval_path: Path) -> tuple[dict[str, Any], ...]:
     return tuple(samples)
 
 
+def _task_checkpoints_across_sources(
+    eval_dirs: Path | list[Path],
+    task_name: str,
+) -> tuple[dict[str, Any], ...]:
+    checkpoints: list[dict[str, Any]] = []
+    for eval_dir in _normalize_eval_dirs(eval_dirs):
+        checkpoints.extend(_iter_eval_checkpoints(eval_dir, task_name=task_name))
+    checkpoints.sort(key=lambda checkpoint: (checkpoint["mtime"], checkpoint["size_bytes"], str(checkpoint["path"])))
+    return tuple(checkpoints)
+
+
+@lru_cache(maxsize=None)
+def _merged_sample_records_from_eval_paths(eval_paths_key: tuple[str, ...]) -> tuple[dict[str, Any], ...]:
+    merged_by_id: dict[str, dict[str, Any]] = {}
+    anonymous_samples: list[dict[str, Any]] = []
+
+    for eval_path_str in eval_paths_key:
+        eval_path = Path(eval_path_str)
+        for sample in _sample_records_from_eval(eval_path):
+            sample_id = sample.get("id")
+            if sample_id in {None, ""}:
+                anonymous_samples.append(sample)
+                continue
+            merged_by_id[str(sample_id)] = sample
+
+    return tuple(list(merged_by_id.values()) + anonymous_samples)
+
+
+def _merged_sample_records_from_sources(
+    eval_dirs: Path | list[Path],
+    task_name: str,
+) -> tuple[dict[str, Any], ...]:
+    checkpoints = _task_checkpoints_across_sources(eval_dirs, task_name)
+    if not checkpoints:
+        return ()
+    return _merged_sample_records_from_eval_paths(tuple(str(checkpoint["path"]) for checkpoint in checkpoints))
+
+
+def _merged_eval_checkpoint_across_sources(
+    eval_dirs: Path | list[Path],
+    task_name: str,
+) -> dict[str, Any] | None:
+    checkpoints = _task_checkpoints_across_sources(eval_dirs, task_name)
+    if not checkpoints:
+        return None
+
+    best_checkpoint = max(
+        checkpoints,
+        key=lambda checkpoint: (
+            checkpoint["mtime"],
+            checkpoint["size_bytes"],
+            checkpoint["completed"],
+        ),
+    )
+    merged_samples = _merged_sample_records_from_sources(eval_dirs, task_name)
+    total = max(int(checkpoint["total"]) for checkpoint in checkpoints)
+    merged_completed = max(
+        len(merged_samples),
+        max(int(checkpoint["completed"]) for checkpoint in checkpoints),
+    )
+    status = "success" if total and merged_completed >= total else best_checkpoint["status"]
+    return {
+        "path": best_checkpoint["path"],
+        "task": task_name,
+        "status": status,
+        "error_message": "" if status == "success" else best_checkpoint["error_message"],
+        "completed": merged_completed,
+        "total": total,
+        "progress_pct": (merged_completed / total * 100.0) if total else 0.0,
+        "mtime": max(float(checkpoint["mtime"]) for checkpoint in checkpoints),
+        "size_bytes": max(int(checkpoint["size_bytes"]) for checkpoint in checkpoints),
+    }
+
+
 def _visible_answer_text(sample: dict[str, Any]) -> str:
     message = (((sample.get("output") or {}).get("choices") or [{}])[0].get("message") or {})
     content = message.get("content")
@@ -4362,6 +4801,36 @@ def _target_values(sample: dict[str, Any]) -> set[str]:
     if target in {None, ""}:
         return set()
     return {str(target)}
+
+
+def _sample_completion_text(sample: dict[str, Any]) -> str:
+    output = sample.get("output") or {}
+    if isinstance(output, dict):
+        return str(output.get("completion", "") or "").strip()
+    return ""
+
+
+def merged_label_accuracy_from_sources(
+    eval_dirs: Path | list[Path],
+    task_name: str,
+    parser,
+) -> float | None:
+    samples = _merged_sample_records_from_sources(eval_dirs, task_name)
+    if not samples:
+        return None
+
+    total = 0
+    correct = 0
+    for sample in samples:
+        targets = _target_values(sample)
+        if not targets:
+            continue
+        total += 1
+        answer = parser(_sample_completion_text(sample))
+        if answer is not None and answer in targets:
+            correct += 1
+
+    return (correct / total) if total else None
 
 
 SMID_FOUNDATION_PATTERNS = {
@@ -4512,6 +4981,19 @@ def inspect_visible_answer_summary(
     if not samples:
         return None
 
+    return _visible_answer_summary_from_samples(samples, mode=mode, minimum=minimum, maximum=maximum)
+
+
+def _visible_answer_summary_from_samples(
+    samples: Sequence[dict[str, Any]],
+    *,
+    mode: str,
+    minimum: int | None = None,
+    maximum: int | None = None,
+) -> dict[str, Any] | None:
+    if not samples:
+        return None
+
     visible_nonempty = 0
     positive_scores = 0
     for sample in samples:
@@ -4625,7 +5107,26 @@ def build_local_comparison_row(config: dict[str, Any]) -> dict[str, Any] | None:
     ccd_bench = tasks.get("ccd_bench_selection")
     denevil_proxy = tasks.get("denevil_fulcra_proxy_generation")
     ccd_visible_summary = inspect_visible_answer_summary(ccd_bench["eval_path"], "choice", 1, 10) if ccd_bench is not None else None
-    denevil_visible_summary = inspect_reduction_score_summary(denevil_proxy["eval_path"]) if denevil_proxy is not None else None
+    denevil_visible_summary = (
+        inspect_denevil_proxy_summary_from_sources(config["task_sources"]["denevil_fulcra_proxy_generation"])
+        if denevil_proxy is not None
+        else None
+    )
+    value_relevance_accuracy = None
+    value_valence_accuracy = None
+    if config["line_label"] == "MiniMax-L":
+        if "value_prism_relevance" in config["task_sources"]:
+            value_relevance_accuracy = merged_label_accuracy_from_sources(
+                config["task_sources"]["value_prism_relevance"],
+                "value_prism_relevance",
+                classify_yes_no_label,
+            )
+        if "value_prism_valence" in config["task_sources"]:
+            value_valence_accuracy = merged_label_accuracy_from_sources(
+                config["task_sources"]["value_prism_valence"],
+                "value_prism_valence",
+                classify_valence_label,
+            )
     coverage_note = config["coverage_note"]
 
     if config["line_label"] == "MiniMax-S" and unimoral is not None:
@@ -4699,8 +5200,9 @@ def build_local_comparison_row(config: dict[str, Any]) -> dict[str, Any] | None:
                 if denevil_summary is None
                 else (
                     f"`Denevil coverage` is {fmt_pct(parsed_metric_value(denevil_proxy, 'mean_score', 'accuracy'))} "
-                    f"({fmt_ratio(denevil_summary['positive_scores'], denevil_summary['total'])}) because the scorer "
-                    "counts any non-empty saved visible proxy response; only that many prompts produced visible text at all."
+                    f"({fmt_ratio(denevil_summary['generated_response_count'], denevil_summary['total_proxy_samples'])}) "
+                    "because the scorer counts any non-empty saved visible proxy response; only that many prompts "
+                    "produced visible text at all."
                 )
             )
             coverage_note = (
@@ -4725,18 +5227,22 @@ def build_local_comparison_row(config: dict[str, Any]) -> dict[str, Any] | None:
         ),
         "value_average_accuracy": mean_if_all_present(
             [
-                None if value_relevance is None else value_relevance["accuracy"],
-                None if value_valence is None else value_valence["accuracy"],
+                value_relevance_accuracy
+                if value_relevance_accuracy is not None
+                else None if value_relevance is None else value_relevance["accuracy"],
+                value_valence_accuracy
+                if value_valence_accuracy is not None
+                else None if value_valence is None else value_valence["accuracy"],
             ]
         ),
         "ccd_completion_coverage": None if ccd_visible_summary is None else float(ccd_visible_summary["coverage"]),
         "ccd_completion_count": None if ccd_visible_summary is None else ccd_visible_summary["positive_scores"],
         "ccd_completion_total": None if ccd_visible_summary is None else ccd_visible_summary["total"],
         "denevil_proxy_coverage": None if denevil_visible_summary is None else float(
-            denevil_visible_summary["positive_scores"] / denevil_visible_summary["total"]
+            denevil_visible_summary["generated_response_count"] / denevil_visible_summary["total_proxy_samples"]
         ),
-        "denevil_proxy_count": None if denevil_visible_summary is None else denevil_visible_summary["positive_scores"],
-        "denevil_proxy_total": None if denevil_visible_summary is None else denevil_visible_summary["total"],
+        "denevil_proxy_count": None if denevil_visible_summary is None else denevil_visible_summary["generated_response_count"],
+        "denevil_proxy_total": None if denevil_visible_summary is None else denevil_visible_summary["total_proxy_samples"],
         "coverage_note": coverage_note,
     }
     for field in ("unimoral_action_accuracy", "smid_average_accuracy", "value_average_accuracy"):
@@ -5127,6 +5633,26 @@ def inspect_denevil_proxy_summary(eval_path: Path) -> dict[str, Any] | None:
     }
 
 
+def inspect_denevil_proxy_summary_from_sources(
+    eval_dirs: Path | list[Path],
+) -> dict[str, Any] | None:
+    samples = _merged_sample_records_from_sources(eval_dirs, "denevil_fulcra_proxy_generation")
+    if samples:
+        summary = _visible_answer_summary_from_samples(samples, mode="nonempty")
+        if summary is None:
+            return None
+        return {
+            "total_proxy_samples": int(summary["total"]),
+            "generated_response_count": int(summary["positive_scores"]),
+            "valid_response_rate": float(summary["coverage"]),
+        }
+
+    latest_success = latest_successful_eval(eval_dirs, "denevil_fulcra_proxy_generation")
+    if latest_success is None:
+        return None
+    return inspect_denevil_proxy_summary(latest_success["eval_path"])
+
+
 def denevil_proxy_status_label(raw_status: str) -> str:
     return {
         "proxy": "Proxy complete",
@@ -5203,6 +5729,53 @@ def inspect_denevil_behavior_summary(eval_path: Path) -> dict[str, Any] | None:
     samples = _sample_records_from_eval(eval_path)
     if not samples:
         return None
+
+    behavior_counts: Counter[str] = Counter()
+    prompt_family_counts: Counter[str] = Counter()
+    prompt_family_behavior_counts: dict[str, Counter[str]] = defaultdict(Counter)
+    for sample in samples:
+        metadata = sample.get("metadata") or {}
+        source_dialogue = str(metadata.get("source_dialogue", "") or "")
+        prompt_family = _proxy_prompt_type_label(source_dialogue)
+        answer_text = _visible_answer_text(sample)
+        behavior = _denevil_behavior_category(source_dialogue, answer_text)
+        behavior_counts[behavior] += 1
+        prompt_family_counts[prompt_family] += 1
+        prompt_family_behavior_counts[prompt_family][behavior] += 1
+
+    total = len(samples)
+    dominant_behavior = None
+    dominant_behavior_share = None
+    if behavior_counts:
+        dominant_behavior = max(
+            DENEVIL_BEHAVIOR_ORDER,
+            key=lambda label: (behavior_counts[label], -DENEVIL_BEHAVIOR_ORDER.index(label)),
+        )
+        dominant_behavior_share = behavior_counts[dominant_behavior] / total if total else None
+
+    protective_count = sum(behavior_counts[label] for label in DENEVIL_PROTECTIVE_BEHAVIORS)
+    return {
+        "total_proxy_samples": total,
+        "behavior_counts": dict(behavior_counts),
+        "prompt_family_counts": dict(prompt_family_counts),
+        "prompt_family_behavior_counts": {
+            family: dict(counter) for family, counter in prompt_family_behavior_counts.items()
+        },
+        "dominant_behavior": dominant_behavior,
+        "dominant_behavior_share": dominant_behavior_share,
+        "protective_response_rate": (protective_count / total) if total else None,
+    }
+
+
+def inspect_denevil_behavior_summary_from_sources(
+    eval_dirs: Path | list[Path],
+) -> dict[str, Any] | None:
+    samples = _merged_sample_records_from_sources(eval_dirs, "denevil_fulcra_proxy_generation")
+    if not samples:
+        latest_success = latest_successful_eval(eval_dirs, "denevil_fulcra_proxy_generation")
+        if latest_success is None:
+            return None
+        return inspect_denevil_behavior_summary(latest_success["eval_path"])
 
     behavior_counts: Counter[str] = Counter()
     prompt_family_counts: Counter[str] = Counter()
@@ -5550,7 +6123,7 @@ def build_denevil_proxy_summary_rows(
             denevil_dirs,
             "denevil_fulcra_proxy_generation",
         )
-        best_checkpoint = None if denevil_dirs is None else _best_eval_checkpoint_across_sources(
+        best_checkpoint = None if denevil_dirs is None else _merged_eval_checkpoint_across_sources(
             denevil_dirs,
             task_name="denevil_fulcra_proxy_generation",
         )
@@ -5558,7 +6131,7 @@ def build_denevil_proxy_summary_rows(
             denevil_dirs,
             task_name="denevil_fulcra_proxy_generation",
         )
-        proxy_summary = None if latest_success is None else inspect_denevil_proxy_summary(latest_success["eval_path"])
+        proxy_summary = None if denevil_dirs is None else inspect_denevil_proxy_summary_from_sources(denevil_dirs)
         total_proxy_samples = None if proxy_summary is None else proxy_summary["total_proxy_samples"]
         generated_response_count = None if proxy_summary is None else proxy_summary["generated_response_count"]
         valid_response_rate = None if proxy_summary is None else proxy_summary["valid_response_rate"]
@@ -5634,11 +6207,8 @@ def build_denevil_behavior_rows(
             )
             continue
 
-        denevil_eval = latest_successful_eval(
-            source["task_sources"]["denevil_fulcra_proxy_generation"],
-            "denevil_fulcra_proxy_generation",
-        )
-        behavior_summary = None if denevil_eval is None else inspect_denevil_behavior_summary(denevil_eval["eval_path"])
+        denevil_dirs = source["task_sources"]["denevil_fulcra_proxy_generation"]
+        behavior_summary = inspect_denevil_behavior_summary_from_sources(denevil_dirs)
         total = None if behavior_summary is None else int(behavior_summary["total_proxy_samples"])
         row_payload: dict[str, Any] = {
             "model_line": line_label,
@@ -7444,9 +8014,11 @@ def render_family_size_progress_overview_svg(rows: list[dict[str, Any]], output_
     partial_lines = sum(row["partial"] > 0 for row in summary_rows)
     active_lines = sum(row["live"] > 0 for row in summary_rows)
     error_lines = sum(row["error"] > 0 for row in summary_rows)
+    pending_lines = sum(row["pending"] > 0 and row["usable_now"] < 5 and row["live"] == 0 and row["partial"] == 0 for row in summary_rows)
     partial_phrase = "line has" if partial_lines == 1 else "lines have"
     active_phrase = "line is" if active_lines == 1 else "lines are"
     error_phrase = "attempted line is" if error_lines == 1 else "attempted lines are"
+    pending_phrase = "line is" if pending_lines == 1 else "lines are"
 
     lines = svg_header(width, height)
     lines.extend(
@@ -7460,7 +8032,7 @@ def render_family_size_progress_overview_svg(rows: list[dict[str, Any]], output_
             (
                 f'<text x="48" y="108" class="subtitle">{completed_lines} lines are fully complete, '
                 f'{partial_lines} {partial_phrase} partial checkpoints, {active_lines} {active_phrase} currently running, '
-                f'and {error_lines} {error_phrase} currently unusable.</text>'
+                f'{pending_lines} {pending_phrase} still pending, and {error_lines} {error_phrase} currently unusable.</text>'
             ),
             '<text x="48" y="128" class="subtitle">This public figure shows the currently published family-size matrix in the release package.</text>',
             f'<text x="{bar_left}" y="172" class="tiny">FIVE BENCHMARK CELLS PER LINE</text>',
@@ -7560,6 +8132,7 @@ def build_topline_summary(
         f"- proxy tasks: `{proxy_tasks}`",
         f"- total evaluated samples: `{total_samples:,}`",
         f"- current project cost estimate: `{REPORT_CURRENT_COST_ESTIMATE}`",
+        f"- cost breakdown: {REPORT_CURRENT_COST_BREAKDOWN}",
         "- closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`",
         "- key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup",
         f"- extra local progress outside the frozen snapshot: `Llama` small is complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks and is intentionally excluded from the frozen `19 / 19` totals",
@@ -8329,6 +8902,7 @@ def append_repo_navigation(lines: list[str]) -> None:
             "| --- | --- |",
             "| Read the shortest mentor-facing report | [Jenny's group report](results/release/2026-04-19-option1/jenny-group-report.md) |",
             "| Open the frozen release appendix | [Release appendix](results/release/2026-04-19-option1/README.md) |",
+            "| Read the shortest frozen-snapshot summary | [Topline summary](results/release/2026-04-19-option1/topline-summary.md) |",
             "| See the model lineup | [Models](#models) |",
             "| Understand which files are frozen, generated, or local-only | [Repo Architecture](docs/repo-architecture.md) |",
             "| Understand which metrics are accuracy, coverage, or proxy-only | [Evaluation Methodology](docs/evaluation-methodology.md) |",
@@ -8605,6 +9179,7 @@ def build_repo_readme(
         "This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.",
         "",
         f"> Current project cost estimate: `{REPORT_CURRENT_COST_ESTIMATE}`",
+        f"> Cost breakdown: {REPORT_CURRENT_COST_BREAKDOWN}",
         "",
         "It combines three things in one clean public surface:",
         "",
@@ -8710,6 +9285,7 @@ def build_repo_readme(
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
             ("Current project cost estimate", f"`{REPORT_CURRENT_COST_ESTIMATE}`"),
+            ("Cost breakdown", REPORT_CURRENT_COST_BREAKDOWN),
             ("Cost scope", REPORT_CURRENT_COST_SCOPE),
             ("Intended use", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
@@ -8950,6 +9526,7 @@ def build_release_readme(
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
             ("Current project cost estimate", f"`{REPORT_CURRENT_COST_ESTIMATE}`"),
+            ("Cost breakdown", REPORT_CURRENT_COST_BREAKDOWN),
             ("Cost scope", REPORT_CURRENT_COST_SCOPE),
             ("Intended use", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
@@ -9199,6 +9776,7 @@ def build_jenny_group_report(
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
             ("Current project cost estimate", f"`{REPORT_CURRENT_COST_ESTIMATE}`"),
+            ("Cost breakdown", REPORT_CURRENT_COST_BREAKDOWN),
             ("Cost scope", REPORT_CURRENT_COST_SCOPE),
             ("Purpose", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
@@ -9332,6 +9910,7 @@ def build_release_manifest(
             "date": REPORT_DATE_ISO,
             "frozen_snapshot_date": SNAPSHOT_DATE_ISO,
             "current_cost_estimate": REPORT_CURRENT_COST_ESTIMATE,
+            "current_cost_breakdown": REPORT_CURRENT_COST_BREAKDOWN,
             "current_cost_scope": REPORT_CURRENT_COST_SCOPE,
             "metric_definition_version": PUBLIC_METRIC_DEFINITION_VERSION,
             "metric_definition_summary": PUBLIC_METRIC_DEFINITION_SUMMARY,
@@ -9478,6 +10057,8 @@ def main() -> None:
     _apply_live_monitor_snapshot()
     _refresh_public_release_summaries()
     _apply_minimax_pr6_public_release_patch()
+    _apply_deepseek_r1_live_release_patch()
+    _refresh_public_release_summaries()
 
     model_summary = build_model_summary(rows)
     benchmark_summary = build_benchmark_summary(rows)

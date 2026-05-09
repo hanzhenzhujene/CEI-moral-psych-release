@@ -179,6 +179,9 @@
 <text x="1048.00" y="566" text-anchor="middle" class="axis">M</text>
 <line x1="1198.00" y1="310" x2="1198.00" y2="542" class="guide"/>
 <text x="1198.00" y="566" text-anchor="middle" class="axis">L</text>
+<circle cx="1178.00" cy="312.72" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
+<circle cx="1178.00" cy="312.72" r="4.2" fill="#d97706"/>
+<text x="1160.00" y="324.00" text-anchor="end" class="small">MiniMax-L</text>
 <circle cx="1048.00" cy="345.67" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
 <circle cx="1048.00" cy="345.67" r="4.2" fill="#2563eb"/>
 <text x="1028.00" y="329.67" text-anchor="end" class="small">DeepSeek-M</text>

@@ -45,34 +45,34 @@
 <text x="690.0" y="126" text-anchor="middle" class="axis">SMID average</text>
 <text x="950.0" y="126" text-anchor="middle" class="axis">Value Kaleidoscope average</text>
 <text x="276" y="191.0" text-anchor="end" class="axis">Qwen-S</text>
-<rect x="300" y="148" width="246" height="62" rx="16" fill="#357c81" stroke="#ffffff" stroke-width="1"/>
+<rect x="300" y="148" width="246" height="62" rx="16" fill="#3a7e83" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="182" text-anchor="middle" class="celltext">64.7%</text>
 <text x="423.0" y="203" text-anchor="middle" class="cellsub">Qwen S</text>
-<rect x="560" y="148" width="246" height="62" rx="16" fill="#88aba3" stroke="#ffffff" stroke-width="1"/>
+<rect x="560" y="148" width="246" height="62" rx="16" fill="#8aada4" stroke="#ffffff" stroke-width="1"/>
 <text x="683.0" y="182" text-anchor="middle" class="celltext-dark">36.8%</text>
 <text x="683.0" y="203" text-anchor="middle" class="cellsub-dark">Qwen S</text>
-<rect x="820" y="148" width="246" height="62" rx="16" fill="#2b767d" stroke="#ffffff" stroke-width="1"/>
+<rect x="820" y="148" width="246" height="62" rx="16" fill="#30797f" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="182" text-anchor="middle" class="celltext">68.2%</text>
 <text x="943.0" y="203" text-anchor="middle" class="cellsub">Qwen S</text>
 <text x="276" y="267.0" text-anchor="end" class="axis">Qwen-M</text>
-<rect x="300" y="224" width="246" height="62" rx="16" fill="#30797f" stroke="#ffffff" stroke-width="1"/>
+<rect x="300" y="224" width="246" height="62" rx="16" fill="#357c81" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="258" text-anchor="middle" class="celltext">66.5%</text>
 <text x="423.0" y="279" text-anchor="middle" class="cellsub">Qwen M</text>
 <rect x="560" y="224" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="224" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="258" text-anchor="middle" class="label">n/a</text>
 <text x="683.0" y="279" text-anchor="middle" class="small">no current result</text>
-<rect x="820" y="224" width="246" height="62" rx="16" fill="#2d777e" stroke="#ffffff" stroke-width="1"/>
+<rect x="820" y="224" width="246" height="62" rx="16" fill="#327a80" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="258" text-anchor="middle" class="celltext">67.5%</text>
 <text x="943.0" y="279" text-anchor="middle" class="cellsub">Qwen M</text>
 <text x="276" y="343.0" text-anchor="end" class="axis">Qwen-L</text>
-<rect x="300" y="300" width="246" height="62" rx="16" fill="#30797f" stroke="#ffffff" stroke-width="1"/>
+<rect x="300" y="300" width="246" height="62" rx="16" fill="#357c81" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="334" text-anchor="middle" class="celltext">66.5%</text>
 <text x="423.0" y="355" text-anchor="middle" class="cellsub">Qwen L</text>
-<rect x="560" y="300" width="246" height="62" rx="16" fill="#669895" stroke="#ffffff" stroke-width="1"/>
+<rect x="560" y="300" width="246" height="62" rx="16" fill="#699a97" stroke="#ffffff" stroke-width="1"/>
 <text x="683.0" y="334" text-anchor="middle" class="celltext">48.3%</text>
 <text x="683.0" y="355" text-anchor="middle" class="cellsub">Qwen L</text>
-<rect x="820" y="300" width="246" height="62" rx="16" fill="#347b81" stroke="#ffffff" stroke-width="1"/>
+<rect x="820" y="300" width="246" height="62" rx="16" fill="#387e82" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="334" text-anchor="middle" class="celltext">65.3%</text>
 <text x="943.0" y="355" text-anchor="middle" class="cellsub">Qwen L</text>
 <text x="276" y="419.0" text-anchor="end" class="axis">MiniMax-S</text>
@@ -80,9 +80,9 @@
 <rect x="300" y="376" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="423.0" y="410" text-anchor="middle" class="label">n/a</text>
 <text x="423.0" y="431" text-anchor="middle" class="small">no current result</text>
-<rect x="560" y="376" width="246" height="62" rx="16" fill="#75a09b" stroke="#ffffff" stroke-width="1"/>
-<text x="683.0" y="410" text-anchor="middle" class="celltext">43.2%</text>
-<text x="683.0" y="431" text-anchor="middle" class="cellsub">MiniMax S</text>
+<rect x="560" y="376" width="246" height="62" rx="16" fill="#78a29d" stroke="#ffffff" stroke-width="1"/>
+<text x="683.0" y="410" text-anchor="middle" class="celltext-dark">43.2%</text>
+<text x="683.0" y="431" text-anchor="middle" class="cellsub-dark">MiniMax S</text>
 <rect x="820" y="376" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="820" y="376" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="943.0" y="410" text-anchor="middle" class="label">n/a</text>
@@ -91,13 +91,12 @@
 <rect x="300" y="452" width="246" height="62" rx="16" fill="#f2e8cf" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="486" text-anchor="middle" class="celltext-dark">0.8%</text>
 <text x="423.0" y="507" text-anchor="middle" class="cellsub-dark">MiniMax L</text>
-<rect x="560" y="452" width="246" height="62" rx="16" fill="#bbc8b8" stroke="#ffffff" stroke-width="1"/>
+<rect x="560" y="452" width="246" height="62" rx="16" fill="#bcc9b9" stroke="#ffffff" stroke-width="1"/>
 <text x="683.0" y="486" text-anchor="middle" class="celltext-dark">19.6%</text>
 <text x="683.0" y="507" text-anchor="middle" class="cellsub-dark">MiniMax L</text>
-<rect x="820" y="452" width="246" height="62" rx="16" class="muted-cell"/>
-<rect x="820" y="452" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
-<text x="943.0" y="486" text-anchor="middle" class="label">n/a</text>
-<text x="943.0" y="507" text-anchor="middle" class="small">no current result</text>
+<rect x="820" y="452" width="246" height="62" rx="16" fill="#1f6f78" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="486" text-anchor="middle" class="celltext">74.1%</text>
+<text x="943.0" y="507" text-anchor="middle" class="cellsub">MiniMax L</text>
 <text x="276" y="571.0" text-anchor="end" class="axis">DeepSeek-S</text>
 <rect x="300" y="528" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="300" y="528" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
@@ -112,75 +111,75 @@
 <text x="943.0" y="562" text-anchor="middle" class="label">n/a</text>
 <text x="943.0" y="583" text-anchor="middle" class="small">no current result</text>
 <text x="276" y="647.0" text-anchor="end" class="axis">DeepSeek-M</text>
-<rect x="300" y="604" width="246" height="62" rx="16" fill="#2b767d" stroke="#ffffff" stroke-width="1"/>
+<rect x="300" y="604" width="246" height="62" rx="16" fill="#30797f" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="638" text-anchor="middle" class="celltext">68.4%</text>
 <text x="423.0" y="659" text-anchor="middle" class="cellsub">DeepSeek M</text>
 <rect x="560" y="604" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="604" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="638" text-anchor="middle" class="label">n/a</text>
 <text x="683.0" y="659" text-anchor="middle" class="small">no current result</text>
-<rect x="820" y="604" width="246" height="62" rx="16" fill="#397e83" stroke="#ffffff" stroke-width="1"/>
+<rect x="820" y="604" width="246" height="62" rx="16" fill="#3e8185" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="638" text-anchor="middle" class="celltext">63.5%</text>
 <text x="943.0" y="659" text-anchor="middle" class="cellsub">DeepSeek M</text>
 <text x="276" y="723.0" text-anchor="end" class="axis">Llama-S</text>
-<rect x="300" y="680" width="246" height="62" rx="16" fill="#357c81" stroke="#ffffff" stroke-width="1"/>
+<rect x="300" y="680" width="246" height="62" rx="16" fill="#3a7e83" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="714" text-anchor="middle" class="celltext">64.8%</text>
 <text x="423.0" y="735" text-anchor="middle" class="cellsub">Llama S</text>
-<rect x="560" y="680" width="246" height="62" rx="16" fill="#b5c5b6" stroke="#ffffff" stroke-width="1"/>
+<rect x="560" y="680" width="246" height="62" rx="16" fill="#b6c6b6" stroke="#ffffff" stroke-width="1"/>
 <text x="683.0" y="714" text-anchor="middle" class="celltext-dark">21.6%</text>
 <text x="683.0" y="735" text-anchor="middle" class="cellsub-dark">Llama S</text>
-<rect x="820" y="680" width="246" height="62" rx="16" fill="#599090" stroke="#ffffff" stroke-width="1"/>
+<rect x="820" y="680" width="246" height="62" rx="16" fill="#5c9291" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="714" text-anchor="middle" class="celltext">52.9%</text>
 <text x="943.0" y="735" text-anchor="middle" class="cellsub">Llama S</text>
 <text x="276" y="799.0" text-anchor="end" class="axis">Llama-M</text>
-<rect x="300" y="756" width="246" height="62" rx="16" fill="#2f787f" stroke="#ffffff" stroke-width="1"/>
+<rect x="300" y="756" width="246" height="62" rx="16" fill="#347b80" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="790" text-anchor="middle" class="celltext">67.0%</text>
 <text x="423.0" y="811" text-anchor="middle" class="cellsub">Llama M</text>
 <rect x="560" y="756" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="756" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="790" text-anchor="middle" class="label">n/a</text>
 <text x="683.0" y="811" text-anchor="middle" class="small">no current result</text>
-<rect x="820" y="756" width="246" height="62" rx="16" fill="#1f6f78" stroke="#ffffff" stroke-width="1"/>
+<rect x="820" y="756" width="246" height="62" rx="16" fill="#24727a" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="790" text-anchor="middle" class="celltext">72.4%</text>
 <text x="943.0" y="811" text-anchor="middle" class="cellsub">Llama M</text>
 <text x="276" y="875.0" text-anchor="end" class="axis">Llama-L</text>
-<rect x="300" y="832" width="246" height="62" rx="16" fill="#327a80" stroke="#ffffff" stroke-width="1"/>
+<rect x="300" y="832" width="246" height="62" rx="16" fill="#367c82" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="866" text-anchor="middle" class="celltext">66.0%</text>
 <text x="423.0" y="887" text-anchor="middle" class="cellsub">Llama L</text>
-<rect x="560" y="832" width="246" height="62" rx="16" fill="#83a8a1" stroke="#ffffff" stroke-width="1"/>
+<rect x="560" y="832" width="246" height="62" rx="16" fill="#85aaa2" stroke="#ffffff" stroke-width="1"/>
 <text x="683.0" y="866" text-anchor="middle" class="celltext-dark">38.6%</text>
 <text x="683.0" y="887" text-anchor="middle" class="cellsub-dark">Llama L</text>
-<rect x="820" y="832" width="246" height="62" rx="16" fill="#28747c" stroke="#ffffff" stroke-width="1"/>
+<rect x="820" y="832" width="246" height="62" rx="16" fill="#2d777e" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="866" text-anchor="middle" class="celltext">69.2%</text>
 <text x="943.0" y="887" text-anchor="middle" class="cellsub">Llama L</text>
 <text x="276" y="951.0" text-anchor="end" class="axis">Gemma-S</text>
-<rect x="300" y="908" width="246" height="62" rx="16" fill="#397e83" stroke="#ffffff" stroke-width="1"/>
+<rect x="300" y="908" width="246" height="62" rx="16" fill="#3d8085" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="942" text-anchor="middle" class="celltext">63.5%</text>
 <text x="423.0" y="963" text-anchor="middle" class="cellsub">Gemma S</text>
-<rect x="560" y="908" width="246" height="62" rx="16" fill="#79a39d" stroke="#ffffff" stroke-width="1"/>
+<rect x="560" y="908" width="246" height="62" rx="16" fill="#7ca59e" stroke="#ffffff" stroke-width="1"/>
 <text x="683.0" y="942" text-anchor="middle" class="celltext-dark">41.7%</text>
 <text x="683.0" y="963" text-anchor="middle" class="cellsub-dark">Gemma S</text>
-<rect x="820" y="908" width="246" height="62" rx="16" fill="#468588" stroke="#ffffff" stroke-width="1"/>
+<rect x="820" y="908" width="246" height="62" rx="16" fill="#4a888a" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="942" text-anchor="middle" class="celltext">59.3%</text>
 <text x="943.0" y="963" text-anchor="middle" class="cellsub">Gemma S</text>
 <text x="276" y="1027.0" text-anchor="end" class="axis">Gemma-M</text>
-<rect x="300" y="984" width="246" height="62" rx="16" fill="#31797f" stroke="#ffffff" stroke-width="1"/>
+<rect x="300" y="984" width="246" height="62" rx="16" fill="#367c81" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="1018" text-anchor="middle" class="celltext">66.3%</text>
 <text x="423.0" y="1039" text-anchor="middle" class="cellsub">Gemma M</text>
-<rect x="560" y="984" width="246" height="62" rx="16" fill="#89aca4" stroke="#ffffff" stroke-width="1"/>
+<rect x="560" y="984" width="246" height="62" rx="16" fill="#8cada5" stroke="#ffffff" stroke-width="1"/>
 <text x="683.0" y="1018" text-anchor="middle" class="celltext-dark">36.4%</text>
 <text x="683.0" y="1039" text-anchor="middle" class="cellsub-dark">Gemma M</text>
-<rect x="820" y="984" width="246" height="62" rx="16" fill="#31797f" stroke="#ffffff" stroke-width="1"/>
+<rect x="820" y="984" width="246" height="62" rx="16" fill="#357c81" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="1018" text-anchor="middle" class="celltext">66.4%</text>
 <text x="943.0" y="1039" text-anchor="middle" class="cellsub">Gemma M</text>
 <text x="276" y="1103.0" text-anchor="end" class="axis">Gemma-L</text>
-<rect x="300" y="1060" width="246" height="62" rx="16" fill="#317a80" stroke="#ffffff" stroke-width="1"/>
+<rect x="300" y="1060" width="246" height="62" rx="16" fill="#367c82" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="1094" text-anchor="middle" class="celltext">66.1%</text>
 <text x="423.0" y="1115" text-anchor="middle" class="cellsub">Gemma L</text>
-<rect x="560" y="1060" width="246" height="62" rx="16" fill="#7ba49e" stroke="#ffffff" stroke-width="1"/>
+<rect x="560" y="1060" width="246" height="62" rx="16" fill="#7ea59f" stroke="#ffffff" stroke-width="1"/>
 <text x="683.0" y="1094" text-anchor="middle" class="celltext-dark">41.2%</text>
 <text x="683.0" y="1115" text-anchor="middle" class="cellsub-dark">Gemma L</text>
-<rect x="820" y="1060" width="246" height="62" rx="16" fill="#337a80" stroke="#ffffff" stroke-width="1"/>
+<rect x="820" y="1060" width="246" height="62" rx="16" fill="#387d82" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="1094" text-anchor="middle" class="celltext">65.6%</text>
 <text x="943.0" y="1115" text-anchor="middle" class="cellsub">Gemma L</text>
 <rect x="540" y="1258" width="446" height="86" rx="16" class="legend-card"/>
@@ -199,7 +198,7 @@
 <rect x="860.00" y="1304" width="31.00" height="16" fill="#327a80" stroke="#ffffff" stroke-width="0.6"/>
 <rect x="890.00" y="1304" width="31.00" height="16" fill="#1f6f78" stroke="#ffffff" stroke-width="0.6"/>
 <text x="560" y="1338" class="small">0.8%</text>
-<text x="920" y="1338" text-anchor="end" class="small">72.4%</text>
+<text x="920" y="1338" text-anchor="end" class="small">74.1%</text>
 <rect x="942" y="1300" width="24" height="24" rx="6" class="muted-cell"/>
 <rect x="942" y="1300" width="24" height="24" rx="6" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="976" y="1318" class="small">no current result</text>

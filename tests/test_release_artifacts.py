@@ -106,8 +106,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_cost_estimate"] == "$243.40"
-    assert "later tracked reruns completed in this repo" in manifest["report_metadata"]["current_cost_scope"]
+    assert manifest["report_metadata"]["current_cost_estimate"] == "$511.99"
+    assert manifest["report_metadata"]["current_cost_breakdown"] == "MiniMax direct API `$398.42` + OpenRouter `$113.57` for all other model runs."
+    assert "through the current rerun state" in manifest["report_metadata"]["current_cost_scope"]
     assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"
     assert "stricter visible-answer parsing" in manifest["report_metadata"]["metric_definition_summary"].lower()
     assert manifest["report_metadata"]["ci_workflow_url"].endswith("/actions/workflows/ci.yml")
@@ -187,6 +188,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         "UniMoral; SMID",
         "UniMoral; SMID; CCD-Bench",
         "UniMoral; SMID; CCD-Bench; Denevil proxy",
+        "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
     }
     if minimax_family["completed_benchmark_lines"] == "None yet":
         assert minimax_family["tasks_completed"] == "0"
@@ -252,22 +254,15 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert minimax_medium["smid"] == "tbd"
     assert minimax_medium["summary_note"] == "Text queued; no medium SMID route fixed yet."
     minimax_large = row_for("MiniMax-L")
-    assert minimax_large["unimoral"] in {"queue", "done"}
-    assert minimax_large["smid"] in {"queue", "done"}
-    assert minimax_large["value_kaleidoscope"] in {"queue", "partial", "live", "done"}
-    assert minimax_large["ccd_bench"] in {"queue", "live", "partial", "done"}
-    assert minimax_large["denevil"] in {"queue", "partial", "live", "proxy"}
-    assert minimax_large["summary_note"] in {
-        "Shared MiniMax-01 SMID recovery and the MiniMax-M2.5 text rerun are refreshed from the current direct-provider run folders at build time.",
-        "Shared MiniMax-01 SMID recovery is complete; MiniMax-L is currently running CCD-Bench.",
-        "Shared MiniMax-01 SMID recovery is complete; MiniMax-L is currently running CCD-Bench, and a concurrent Denevil proxy pass is also in flight.",
-        "Shared MiniMax-01 SMID recovery is complete; CCD-Bench is done, and the MiniMax-M2.5 text reruns are now active on Denevil proxy.",
-        "Shared MiniMax-01 SMID recovery is complete; CCD-Bench is done, the MiniMax-M2.5 text reruns are now active on Denevil proxy, and Value Kaleidoscope remains queued on this pass.",
-        "Shared MiniMax-01 SMID recovery is complete; the MiniMax-M2.5 text rerun is active.",
-        "Shared MiniMax-01 SMID recovery complete; the MiniMax-M2.5 text rerun is now fully persisted through the Denevil proxy task (100.0%).",
-        "Shared MiniMax-01 SMID recovery is complete; text later stalled after a 100.0% Value Prism Relevance checkpoint. Later text tasks remain incomplete.",
-        "Shared MiniMax-01 SMID recovery is complete; UniMoral is already persisted while the later text tasks are not currently active.",
-    }
+    assert minimax_large["unimoral"] == "done"
+    assert minimax_large["smid"] == "done"
+    assert minimax_large["value_kaleidoscope"] == "done"
+    assert minimax_large["ccd_bench"] == "done"
+    assert minimax_large["denevil"] == "proxy"
+    assert minimax_large["summary_note"] == (
+        "Shared MiniMax-01 SMID recovery is complete; UniMoral, CCD-Bench, the test-only Value Kaleidoscope reruns, "
+        "and the reconstructed Denevil proxy archive are all fully persisted locally."
+    )
     assert any(
         row["line_label"] == "Gemma-L"
         and row["smid"] == "done"
@@ -360,15 +355,19 @@ def test_release_builder_emits_expected_files(tmp_path):
         summary_note="Frozen medium text line; no SMID route was included.",
     )
     deepseek_large = row_for("DeepSeek-L")
-    assert deepseek_large["unimoral"] == "queue"
     assert deepseek_large["smid"] == "-"
-    assert deepseek_large["value_kaleidoscope"] == "queue"
-    assert deepseek_large["ccd_bench"] == "queue"
-    assert deepseek_large["denevil"] == "queue"
-    assert (
-        deepseek_large["summary_note"]
-        == "Large R1 text route reserved to match the org family sizing; benchmark rerun not yet published."
-    )
+    if deepseek_large["summary_note"] == "Large R1 text route reserved to match the org family sizing; benchmark rerun not yet published.":
+        assert deepseek_large["unimoral"] == "queue"
+        assert deepseek_large["value_kaleidoscope"] == "queue"
+        assert deepseek_large["ccd_bench"] == "queue"
+        assert deepseek_large["denevil"] == "queue"
+    else:
+        assert deepseek_large["unimoral"] in {"live", "partial", "done"}
+        assert deepseek_large["value_kaleidoscope"] in {"live", "partial", "done"}
+        assert deepseek_large["ccd_bench"] in {"done", "partial", "live"}
+        assert deepseek_large["denevil"] in {"live", "partial", "proxy"}
+        assert "Large R1 text rerun is active locally" in deepseek_large["summary_note"]
+        assert "CCD-Bench is done" in deepseek_large["summary_note"]
 
     with (release_dir / "benchmark-comparison.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -390,7 +389,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert any(
             row["route"] == "text: openrouter/minimax/minimax-m2.5; SMID recovery: openrouter/minimax/minimax-01"
             and row["smid_average_accuracy"] == "0.195923"
-            and row["comparison_note"] == "Partial comparable evidence; see benchmark-specific sections below."
+            and row["value_average_accuracy"] == "0.741197"
+            and row["comparison_note"] == "Comparable on all three benchmark-faithful accuracy panels."
             for row in minimax_large_rows
         )
     rows_by_line = {row["line_label"]: row for row in rows}
@@ -592,6 +592,14 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert qwen_small_proxy["persisted_checkpoint_pct"] == "100.000000"
     else:
         assert qwen_small_proxy["limitation_flag"] == "missing_proxy_artifact"
+    minimax_large_proxy = denevil_proxy_by_line["MiniMax-L"]
+    assert minimax_large_proxy["proxy_status"] == "Proxy complete"
+    assert minimax_large_proxy["route_short_label"] == "MiniMax-M2.5"
+    assert minimax_large_proxy["total_proxy_samples"] == "20518"
+    assert minimax_large_proxy["generated_response_count"] == "20518"
+    assert minimax_large_proxy["valid_response_rate"] == "1.000000"
+    assert minimax_large_proxy["persisted_checkpoint_pct"] == "100.000000"
+    assert minimax_large_proxy["limitation_flag"] == "proxy_only_complete"
 
     with (release_dir / "denevil-behavior-summary.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -749,8 +757,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     assert any(
         row["benchmark"] == "Value Kaleidoscope"
-        and row["mean_accuracy"] == "0.650180"
-        and row["best_line"] == "Llama-M"
+        and row["mean_accuracy"] == "0.658454"
+        and row["best_line"] == "MiniMax-L"
         and row["weakest_line"] == "Llama-S"
         for row in difficulty_rows
     )

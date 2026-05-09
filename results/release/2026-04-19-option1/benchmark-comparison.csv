@@ -3,7 +3,7 @@ Qwen-S,Qwen,S,openrouter/qwen/qwen3-8b + openrouter/qwen/qwen3-vl-8b-instruct,0.
 Qwen-M,Qwen,M,text: openrouter/qwen/qwen3-14b,0.664504,,0.674714,Text-only comparable line; no public SMID route on this slot.
 Qwen-L,Qwen,L,text: openrouter/qwen/qwen3-32b; vision: openrouter/qwen/qwen2.5-vl-72b-instruct,0.665301,0.482829,0.653159,Comparable on all three benchmark-faithful accuracy panels.
 MiniMax-S,MiniMax,S,text: openrouter/minimax/minimax-m2.1; vision: openrouter/minimax/minimax-01,,0.431996,,Partial comparable evidence; see benchmark-specific sections below.
-MiniMax-L,MiniMax,L,text: openrouter/minimax/minimax-m2.5; SMID recovery: openrouter/minimax/minimax-01,0.007969,0.195923,,Partial comparable evidence; see benchmark-specific sections below.
+MiniMax-L,MiniMax,L,text: openrouter/minimax/minimax-m2.5; SMID recovery: openrouter/minimax/minimax-01,0.007969,0.195923,0.741197,Comparable on all three benchmark-faithful accuracy panels.
 DeepSeek-S,DeepSeek,S,text: openrouter/deepseek/deepseek-r1-distill-llama-70b (DeepInfra-pinned recovery route),,,,Coverage-only line; accuracy withheld after visible-answer validation.
 DeepSeek-M,DeepSeek,M,openrouter/deepseek/deepseek-chat-v3.1,0.683629,,0.634673,Text-only comparable line; no public SMID route on this slot.
 Llama-S,Llama,S,openrouter/meta-llama/llama-3.2-11b-vision-instruct,0.647996,0.216423,0.528583,Comparable on all three benchmark-faithful accuracy panels.

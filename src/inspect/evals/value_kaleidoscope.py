@@ -47,6 +47,11 @@ def _valueprism_local_file(task_kind: str) -> Path | None:
         path = Path(local_file).expanduser()
         if not path.exists():
             raise FileNotFoundError(f"{specific_env} does not exist: {path}")
+        if "train" in path.name.lower():
+            raise ValueError(
+                f"{specific_env} points to a train split ({path.name}). "
+                "ValuePrism runs in this repo are test-only; switch to the matching *_test export."
+            )
         return path
     return None
 
@@ -56,7 +61,12 @@ def _load_valueprism_rows(task_kind: str) -> list[dict[str, Any]]:
     if local_path is not None:
         return _load_local_rows(local_path)
 
-    split = env_str("VALUEPRISM_SPLIT", "train")
+    split = env_str("VALUEPRISM_SPLIT", "test")
+    if split.lower() != "test":
+        raise ValueError(
+            f"VALUEPRISM_SPLIT={split!r} is not allowed. "
+            "ValuePrism runs in this repo are test-only."
+        )
     dataset_name = "relevance" if task_kind == "relevance" else "valence"
     try:
         dataset = load_dataset("allenai/ValuePrism", dataset_name, split=split)

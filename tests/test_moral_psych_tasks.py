@@ -187,6 +187,41 @@ def test_value_prism_relevance_resume_skips_completed_prefix(tmp_path, monkeypat
     assert samples[0].id == "valueprism-relevance-2"
 
 
+def test_value_prism_rejects_train_named_local_exports(tmp_path, monkeypatch):
+    relevance_path = tmp_path / "relevance_train.csv"
+    _write_csv(
+        relevance_path,
+        [
+            {"action": "A", "vrd": "Value", "text": "Honesty", "output": "Yes"},
+        ],
+    )
+    monkeypatch.setenv("VALUEPRISM_RELEVANCE_FILE", str(relevance_path))
+
+    with pytest.raises(ValueError, match="test-only"):
+        value_kaleidoscope._make_relevance_samples(limit=1)
+
+
+def test_value_prism_fallback_split_defaults_to_test(monkeypatch):
+    observed: dict[str, str] = {}
+
+    def fake_load_dataset(name: str, config: str, split: str):
+        observed["name"] = name
+        observed["config"] = config
+        observed["split"] = split
+        return [{"action": "A", "vrd": "Value", "text": "Honesty", "output": "Yes"}]
+
+    monkeypatch.setattr(value_kaleidoscope, "load_dataset", fake_load_dataset)
+
+    samples = value_kaleidoscope._make_relevance_samples(limit=1)
+
+    assert samples[0].id == "valueprism-relevance-1"
+    assert observed == {
+        "name": "allenai/ValuePrism",
+        "config": "relevance",
+        "split": "test",
+    }
+
+
 def test_ccd_bench_samples_from_local_json(tmp_path, monkeypatch):
     path = tmp_path / "ccd.json"
     data = [
