@@ -4,7 +4,7 @@
   "source_snapshot": "results/release/2026-04-19-option1/source/authoritative-summary.csv",
   "report_metadata": {
     "owner": "Jenny Zhu",
-    "date": "2026-05-07",
+    "date": "2026-05-09",
     "frozen_snapshot_date": "2026-04-19",
     "current_cost_estimate": "$243.40",
     "current_cost_scope": "User-updated project total across the frozen release work and the later tracked reruns completed in this repo.",
@@ -13,7 +13,7 @@
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "operations_note": "Updated May 7, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, and `DeepSeek-S`, and no published follow-up line is still live.",
+    "operations_note": "Updated May 9, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, and `DeepSeek-S`, and no published follow-up line is still live.",
     "ci_workflow_url": "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml"
   },
   "target_matrix": {
@@ -149,6 +149,7 @@
     "denevil_behavior_summary": "results/release/2026-04-19-option1/denevil-behavior-summary.csv",
     "denevil_prompt_family_breakdown": "results/release/2026-04-19-option1/denevil-prompt-family-breakdown.csv",
     "denevil_proxy_examples": "results/release/2026-04-19-option1/denevil-proxy-examples.csv",
+    "deepseek_sm_readout": "results/release/2026-04-19-option1/deepseek-sm-readout.csv",
     "benchmark_difficulty_summary": "results/release/2026-04-19-option1/benchmark-difficulty-summary.csv",
     "family_scaling_summary": "results/release/2026-04-19-option1/family-scaling-summary.csv",
     "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
@@ -185,6 +186,7 @@
     "denevil-behavior-summary.csv",
     "denevil-prompt-family-breakdown.csv",
     "denevil-proxy-examples.csv",
+    "deepseek-sm-readout.csv",
     "benchmark-difficulty-summary.csv",
     "family-scaling-summary.csv",
     "future-model-plan.csv",
@@ -213,6 +215,7 @@
   "interpretation_guardrails": [
     "Denevil is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
     "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
+    "DeepSeek-S has a completed local archive but remains diagnostic-only for short-answer accuracy because the saved final answer text is empty; reasoning traces are not treated as scored answers.",
     "The completed local Llama small line sits outside the frozen Option 1 totals.",
     "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration."
   ]
