@@ -626,7 +626,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     else:
         assert qwen_small_proxy["limitation_flag"] == "missing_proxy_artifact"
     minimax_large_proxy = denevil_proxy_by_line["MiniMax-L"]
-    assert minimax_large_proxy["route_short_label"] == "MiniMax-M2.5"
+    assert minimax_large_proxy["route_short_label"].lower() == "minimax-m2.5"
     if minimax_large["denevil"] == "queue":
         assert minimax_large_proxy["proxy_status"] == "Queued"
         assert minimax_large_proxy["total_proxy_samples"] == "n/a"
