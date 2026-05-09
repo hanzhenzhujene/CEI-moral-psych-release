@@ -177,9 +177,18 @@
 <text x="212.00" y="622.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="622.00" class="label">DeepSeek-L</text>
 <rect x="430" y="602" width="760" height="30" rx="10" class="muted-bar"/>
-<rect x="430" y="602" width="760" height="30" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="810.00" y="622.00" text-anchor="middle" class="small">n/a — no released proxy archive</text>
-<text x="1214" y="622.00" class="small">dominant behavior n/a</text>
+<rect x="430.00" y="602" width="432.28" height="30" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
+<text x="646.14" y="622.00" text-anchor="middle" class="celltext">56.9%</text>
+<rect x="862.28" y="602" width="55.61" height="30" fill="#0f766e" stroke="#ffffff" stroke-width="1"/>
+<text x="890.08" y="622.00" text-anchor="middle" class="celltext">7.3%</text>
+<rect x="917.89" y="602" width="230.69" height="30" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="1033.24" y="622.00" text-anchor="middle" class="celltext">30.4%</text>
+<rect x="1148.58" y="602" width="0.29" height="30" fill="#6b7280" stroke="#ffffff" stroke-width="1"/>
+<rect x="1148.87" y="602" width="4.34" height="30" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+<rect x="1153.22" y="602" width="29.54" height="30" fill="#d97706" stroke="#ffffff" stroke-width="1"/>
+<rect x="1182.76" y="602" width="7.24" height="30" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="1214" y="618.00" class="label">Protective refusal</text>
+<text x="1214" y="633.00" class="small">protective 94.6%</text>
 <rect x="184" y="654" width="56" height="22" rx="12" fill="#c2410c"/>
 <text x="212.00" y="670.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="670.00" class="label">Llama-S</text>

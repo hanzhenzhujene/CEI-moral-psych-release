@@ -85,9 +85,9 @@
 <rect x="310" y="542" width="519.69" height="28" rx="10" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
 <text x="1092" y="561.00" class="label">visible 20,514 / 20,518</text>
 <text x="292" y="607.00" text-anchor="end" class="label">DeepSeek-L</text>
-<rect x="310" y="588" width="108.48" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="588" width="108.48" height="28" rx="10" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
-<text x="1092" y="607.00" class="label">visible 4,282 / 4,282</text>
+<rect x="310" y="588" width="132.95" height="28" rx="10" class="muted-bar"/>
+<rect x="310" y="588" width="131.68" height="28" rx="10" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
+<text x="1092" y="607.00" class="label">visible 5,198 / 5,248</text>
 <text x="292" y="653.00" text-anchor="end" class="label">Llama-S</text>
 <rect x="310" y="634" width="519.79" height="28" rx="10" class="muted-bar"/>
 <rect x="310" y="634" width="519.79" height="28" rx="10" fill="#c2410c" stroke="#ffffff" stroke-width="1"/>

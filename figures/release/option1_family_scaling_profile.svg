@@ -67,9 +67,6 @@
 <text x="248.00" y="566" text-anchor="middle" class="axis">M</text>
 <line x1="398.00" y1="310" x2="398.00" y2="542" class="guide"/>
 <text x="398.00" y="566" text-anchor="middle" class="axis">L</text>
-<circle cx="378.00" cy="539.53" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
-<circle cx="378.00" cy="539.53" r="4.2" fill="#d97706"/>
-<text x="360.00" y="531.53" text-anchor="end" class="small">MiniMax-L</text>
 <circle cx="248.00" cy="330.53" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
 <circle cx="248.00" cy="330.53" r="4.2" fill="#2563eb"/>
 <text x="228.00" y="324.00" text-anchor="end" class="small">DeepSeek-M</text>
@@ -127,12 +124,9 @@
 <text x="648.00" y="566" text-anchor="middle" class="axis">M</text>
 <line x1="798.00" y1="310" x2="798.00" y2="542" class="guide"/>
 <text x="798.00" y="566" text-anchor="middle" class="axis">L</text>
-<line x1="478.00" y1="408.37" x2="778.00" y2="481.39" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
-<line x1="478.00" y1="408.37" x2="778.00" y2="481.39" stroke="#d97706" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="7 6"/>
 <circle cx="478.00" cy="408.37" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
 <circle cx="478.00" cy="408.37" r="4.2" fill="#d97706"/>
-<circle cx="778.00" cy="481.39" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
-<circle cx="778.00" cy="481.39" r="4.2" fill="#d97706"/>
+<text x="460.00" y="400.37" text-anchor="end" class="small">MiniMax-S</text>
 <line x1="508.00" y1="475.05" x2="808.00" y2="422.57" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
 <line x1="508.00" y1="475.05" x2="808.00" y2="422.57" stroke="#ea580c" stroke-width="4.0" stroke-linecap="round" stroke-dasharray="7 6"/>
 <circle cx="508.00" cy="475.05" r="8" fill="#ffffff" stroke="#ea580c" stroke-width="3.4"/>

@@ -4,7 +4,7 @@
   "source_snapshot": "results/release/2026-04-19-option1/source/authoritative-summary.csv",
   "report_metadata": {
     "owner": "Jenny Zhu",
-    "date": "2026-05-08",
+    "date": "2026-05-09",
     "frozen_snapshot_date": "2026-04-19",
     "current_cost_estimate": "$511.99",
     "current_cost_breakdown": "MiniMax direct API `$398.42` + OpenRouter `$113.57` for all other model runs.",
@@ -14,7 +14,7 @@
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
     "provider": "OpenRouter",
     "temperature": "0",
-    "operations_note": "Updated May 8, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, `DeepSeek-S`, and `MiniMax-L`, and no published follow-up line is still live.",
+    "operations_note": "Updated May 9, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, `DeepSeek-S`, and `MiniMax-L`, and the remaining live published follow-up is `DeepSeek-L`.",
     "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
   },
   "target_matrix": {

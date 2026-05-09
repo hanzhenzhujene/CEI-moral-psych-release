@@ -92,8 +92,9 @@
 <text x="1092" y="553.00" class="label">valid 2,177 / 2,182</text>
 <text x="292" y="599.00" text-anchor="end" class="label">DeepSeek-L</text>
 <rect x="310" y="580" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="580" width="760" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="690.00" y="599.00" text-anchor="middle" class="small">n/a — no released CCD route</text>
+<rect x="310" y="580" width="734.57" height="28" rx="10" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
+<text x="1034.57" y="599.00" text-anchor="end" class="celltext-dark">96.65%</text>
+<text x="1092" y="599.00" class="label">valid 2,109 / 2,182</text>
 <text x="292" y="645.00" text-anchor="end" class="label">Llama-S</text>
 <rect x="310" y="626" width="760" height="28" rx="10" class="muted-bar"/>
 <rect x="310" y="626" width="760.00" height="28" rx="10" fill="#c2410c" stroke="#ffffff" stroke-width="1"/>

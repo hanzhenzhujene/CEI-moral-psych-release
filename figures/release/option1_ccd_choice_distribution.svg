@@ -232,10 +232,28 @@
 <rect x="184" y="672" width="56" height="32" rx="12" fill="#60a5fa"/>
 <text x="212.00" y="693.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="694.00" class="label">DeepSeek-L</text>
-<rect x="420" y="666" width="880" height="44" rx="10" fill="url(#diagonalHatch)" opacity="0.88" stroke="#d7dee6" stroke-width="1"/>
-<text x="860.00" y="694.00" text-anchor="middle" class="small">n/a — no valid visible CCD selection surfaced in the released archive</text>
-<text x="1378" y="694.00" class="small">n/a</text>
-<text x="1548" y="694.00" class="small">n/a</text>
+<rect x="420" y="666" width="88" height="44" fill="#deede5" stroke="#ffffff" stroke-width="1.2"/>
+<text x="464.00" y="694.00" text-anchor="middle" class="celltext-dark">+1.6</text>
+<rect x="508" y="666" width="88" height="44" fill="#f3d9c7" stroke="#ffffff" stroke-width="1.2"/>
+<text x="552.00" y="694.00" text-anchor="middle" class="celltext-dark">-2.8</text>
+<rect x="596" y="666" width="88" height="44" fill="#f9e8da" stroke="#ffffff" stroke-width="1.2"/>
+<text x="640.00" y="694.00" text-anchor="middle" class="celltext-dark">-1.4</text>
+<rect x="684" y="666" width="88" height="44" fill="#f2d5c2" stroke="#ffffff" stroke-width="1.2"/>
+<text x="728.00" y="694.00" text-anchor="middle" class="celltext-dark">-3.2</text>
+<rect x="772" y="666" width="88" height="44" fill="#f1d4c1" stroke="#ffffff" stroke-width="1.2"/>
+<text x="816.00" y="694.00" text-anchor="middle" class="celltext-dark">-3.3</text>
+<rect x="860" y="666" width="88" height="44" fill="#67a687" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="694.00" text-anchor="middle" class="celltext">+10.7</text>
+<rect x="948" y="666" width="88" height="44" fill="#fcefe3" stroke="#ffffff" stroke-width="1.2"/>
+<text x="992.00" y="694.00" text-anchor="middle" class="celltext-dark">-0.7</text>
+<rect x="1036" y="666" width="88" height="44" fill="#f8e5d6" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1080.00" y="694.00" text-anchor="middle" class="celltext-dark">-1.7</text>
+<rect x="1124" y="666" width="88" height="44" fill="#f2f9f5" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1168.00" y="694.00" text-anchor="middle" class="celltext-dark">+0.1</text>
+<rect x="1212" y="666" width="88" height="44" fill="#ecf6f0" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1256.00" y="694.00" text-anchor="middle" class="celltext-dark">+0.6</text>
+<text x="1378" y="694.00" class="label">20.7%</text>
+<text x="1548" y="694.00" class="label">8.68</text>
 <rect x="184" y="728" width="56" height="32" rx="12" fill="#c2410c"/>
 <text x="212.00" y="749.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="750.00" class="label">Llama-S</text>

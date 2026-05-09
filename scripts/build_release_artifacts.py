@@ -26,7 +26,10 @@ INSPECT_SRC = ROOT / "src" / "inspect"
 if str(INSPECT_SRC) not in sys.path:
     sys.path.insert(0, str(INSPECT_SRC))
 
-EXTERNAL_ARTIFACT_ROOT = ROOT.parent / "moral-psych-harness" / "CEI"
+EXTERNAL_ARTIFACT_ROOTS = [
+    ROOT.parent / "moral-psychology-benchmark",
+    ROOT.parent / "moral-psych-harness" / "CEI",
+]
 
 from evals._benchmark_utils import (
     CCD_CLUSTER_MAP,
@@ -95,6 +98,8 @@ DENEVIL_PROXY_LIMITATION_LINE = (
     "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring."
 )
 CCD_UNIFORM_BASELINE_PCT = 10.0
+MINIMAX_LARGE_UNIMORAL_EMPTY_WITHHOLD_RATE = 0.95
+MINIMAX_LARGE_SMID_EMPTY_WITHHOLD_RATE = 0.50
 DENEVIL_BEHAVIOR_ORDER = [
     "Protective refusal",
     "Protective redirect",
@@ -630,15 +635,26 @@ MINIMAX_SMALL_SMID_EVAL_DIR = (
 )
 
 
+def artifact_path_has_payload(path: Path) -> bool:
+    if not path.exists():
+        return False
+    if path.is_file():
+        return True
+    return any(path.iterdir())
+
+
 def resolve_artifact_path(path: Path) -> Path:
-    if path.exists():
+    if artifact_path_has_payload(path):
         return path
     try:
         relative = path.relative_to(ROOT)
     except ValueError:
         return path
-    external = EXTERNAL_ARTIFACT_ROOT / relative
-    return external if external.exists() else path
+    for artifact_root in EXTERNAL_ARTIFACT_ROOTS:
+        external = artifact_root / relative
+        if external.exists():
+            return external
+    return path
 
 
 def resolve_artifact_source(value: Any) -> Any:
@@ -1199,6 +1215,20 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         },
     },
     {
+        "line_label": "DeepSeek-L",
+        "family": "DeepSeek",
+        "size_slot": "L",
+        "route": "openrouter/deepseek/deepseek-r1",
+        "coverage_note": "Live large R1 rerun; no SMID route. Accuracy columns remain withheld until UniMoral and test-only Value Kaleidoscope finish with valid visible answers, while CCD-Bench and DeNEVIL proxy progress are reported as separate behavior/provenance surfaces.",
+        "task_sources": {
+            "unimoral_action_prediction": DEEPSEEK_R1_MAIN_EVAL_DIR,
+            "value_prism_relevance": DEEPSEEK_R1_RELEVANCE_TEST_EVAL_DIR,
+            "value_prism_valence": DEEPSEEK_R1_VALENCE_TEST_EVAL_DIR,
+            "ccd_bench_selection": DEEPSEEK_R1_MAIN_EVAL_DIR,
+            "denevil_fulcra_proxy_generation": DEEPSEEK_R1_DENEVIL_EVAL_DIR,
+        },
+    },
+    {
         "line_label": "Gemma-M",
         "family": "Gemma",
         "size_slot": "M",
@@ -1267,6 +1297,14 @@ MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_EVAL_DIR = resolve_artifact_path(
 MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_TRACE_DIR = resolve_artifact_path(
     MINIMAX_PR6_VALUEPRISM_RELEVANCE_TEST_TRACE_DIR
 )
+DEEPSEEK_R1_MAIN_EVAL_DIR = resolve_artifact_path(DEEPSEEK_R1_MAIN_EVAL_DIR)
+DEEPSEEK_R1_MAIN_TRACE_DIR = resolve_artifact_path(DEEPSEEK_R1_MAIN_TRACE_DIR)
+DEEPSEEK_R1_DENEVIL_EVAL_DIR = resolve_artifact_path(DEEPSEEK_R1_DENEVIL_EVAL_DIR)
+DEEPSEEK_R1_DENEVIL_TRACE_DIR = resolve_artifact_path(DEEPSEEK_R1_DENEVIL_TRACE_DIR)
+DEEPSEEK_R1_VALENCE_TEST_EVAL_DIR = resolve_artifact_path(DEEPSEEK_R1_VALENCE_TEST_EVAL_DIR)
+DEEPSEEK_R1_VALENCE_TEST_TRACE_DIR = resolve_artifact_path(DEEPSEEK_R1_VALENCE_TEST_TRACE_DIR)
+DEEPSEEK_R1_RELEVANCE_TEST_EVAL_DIR = resolve_artifact_path(DEEPSEEK_R1_RELEVANCE_TEST_EVAL_DIR)
+DEEPSEEK_R1_RELEVANCE_TEST_TRACE_DIR = resolve_artifact_path(DEEPSEEK_R1_RELEVANCE_TEST_TRACE_DIR)
 
 reroot_task_source_rows(AUTHORITATIVE_COMPARISON_LINES.values())
 reroot_task_source_rows(LOCAL_COMPARISON_LINE_SOURCES)
@@ -4920,6 +4958,18 @@ def _denevil_behavior_key_base(label: str) -> str:
 @lru_cache(maxsize=None)
 def inspect_ccd_choice_distribution(eval_path: Path) -> dict[str, Any] | None:
     samples = _sample_records_from_eval(eval_path)
+    return _ccd_choice_distribution_from_samples(samples)
+
+
+def inspect_ccd_choice_distribution_from_sources(
+    eval_dirs: Path | list[Path],
+    task_name: str = "ccd_bench_selection",
+) -> dict[str, Any] | None:
+    samples = _merged_sample_records_from_sources(eval_dirs, task_name)
+    return _ccd_choice_distribution_from_samples(samples)
+
+
+def _ccd_choice_distribution_from_samples(samples: Sequence[dict[str, Any]]) -> dict[str, Any] | None:
     if not samples:
         return None
 
@@ -5106,7 +5156,14 @@ def build_local_comparison_row(config: dict[str, Any]) -> dict[str, Any] | None:
     value_valence = tasks.get("value_prism_valence")
     ccd_bench = tasks.get("ccd_bench_selection")
     denevil_proxy = tasks.get("denevil_fulcra_proxy_generation")
-    ccd_visible_summary = inspect_visible_answer_summary(ccd_bench["eval_path"], "choice", 1, 10) if ccd_bench is not None else None
+    ccd_visible_summary = None
+    if ccd_bench is not None and "ccd_bench_selection" in config["task_sources"]:
+        ccd_samples = _merged_sample_records_from_sources(config["task_sources"]["ccd_bench_selection"], "ccd_bench_selection")
+        ccd_visible_summary = (
+            _visible_answer_summary_from_samples(ccd_samples, mode="choice", minimum=1, maximum=10)
+            if ccd_samples
+            else inspect_visible_answer_summary(ccd_bench["eval_path"], "choice", 1, 10)
+        )
     denevil_visible_summary = (
         inspect_denevil_proxy_summary_from_sources(config["task_sources"]["denevil_fulcra_proxy_generation"])
         if denevil_proxy is not None
@@ -5150,6 +5207,41 @@ def build_local_comparison_row(config: dict[str, Any]) -> dict[str, Any] | None:
                         f"{coverage_note} A follow-up no-thinking retry on April 26, 2026 failed immediately because "
                         "the current `minimax-m2.1` endpoint requires reasoning and cannot disable it."
                     )
+    elif config["line_label"] == "MiniMax-L":
+        withheld_reasons: list[str] = []
+        unimoral_guardrail = None if unimoral is None else inspect_empty_answer_rate(unimoral["eval_path"])
+        if (
+            unimoral_guardrail is not None
+            and unimoral_guardrail["empty_answer_rate"] >= MINIMAX_LARGE_UNIMORAL_EMPTY_WITHHOLD_RATE
+        ):
+            unimoral = None
+            withheld_reasons.append(
+                f"`UniMoral` ({fmt_pct(unimoral_guardrail['empty_answer_rate'], 1)} empty visible answers)"
+            )
+
+        smid_guardrails = []
+        for parsed, label in (
+            (smid_moral, "SMID moral rating"),
+            (smid_foundation, "SMID foundation classification"),
+        ):
+            guardrail = None if parsed is None else inspect_empty_answer_rate(parsed["eval_path"])
+            if (
+                guardrail is not None
+                and guardrail["empty_answer_rate"] >= MINIMAX_LARGE_SMID_EMPTY_WITHHOLD_RATE
+            ):
+                smid_guardrails.append(f"`{label}` {fmt_pct(guardrail['empty_answer_rate'], 1)} empty")
+        if smid_guardrails:
+            smid_moral = None
+            smid_foundation = None
+            withheld_reasons.append(f"`SMID` ({_human_join(smid_guardrails)})")
+
+        if withheld_reasons:
+            coverage_note = (
+                "Shared MiniMax-01 SMID recovery is complete operationally, but "
+                f"{_human_join(withheld_reasons)} are withheld from the comparable accuracy table after "
+                "visible-answer validation. The test-only Value Kaleidoscope score, CCD-Bench choice behavior, "
+                "and DeNEVIL proxy evidence remain usable and are reported in their dedicated tables."
+            )
     elif (
         config["line_label"] == "Llama-S"
         and smid_moral is not None
@@ -5465,10 +5557,10 @@ def build_ccd_choice_distribution_rows(
         line_label = progress_row["line_label"]
         comparison_row = comparison_by_line.get(line_label, {})
         source = source_map.get(line_label)
-        ccd_eval = None
         if source is not None and "ccd_bench_selection" in source["task_sources"]:
-            ccd_eval = latest_successful_eval(source["task_sources"]["ccd_bench_selection"], "ccd_bench_selection")
-        distribution = None if ccd_eval is None else inspect_ccd_choice_distribution(ccd_eval["eval_path"])
+            distribution = inspect_ccd_choice_distribution_from_sources(source["task_sources"]["ccd_bench_selection"])
+        else:
+            distribution = None
 
         total = comparison_row.get("ccd_completion_total")
         valid_selection_count = comparison_row.get("ccd_completion_count")
@@ -6239,13 +6331,11 @@ def build_denevil_prompt_family_breakdown_rows(
     for row in family_size_progress:
         line_label = row["line_label"]
         source = source_map.get(line_label)
-        denevil_eval = None
+        behavior_summary = None
         if source is not None and "denevil_fulcra_proxy_generation" in source["task_sources"]:
-            denevil_eval = latest_successful_eval(
-                source["task_sources"]["denevil_fulcra_proxy_generation"],
-                "denevil_fulcra_proxy_generation",
+            behavior_summary = inspect_denevil_behavior_summary_from_sources(
+                source["task_sources"]["denevil_fulcra_proxy_generation"]
             )
-        behavior_summary = None if denevil_eval is None else inspect_denevil_behavior_summary(denevil_eval["eval_path"])
         for prompt_family in DENEVIL_PROMPT_FAMILY_ORDER:
             prompt_total = None if behavior_summary is None else int(behavior_summary["prompt_family_counts"].get(prompt_family, 0))
             family_behavior_counts = {} if behavior_summary is None else behavior_summary["prompt_family_behavior_counts"].get(prompt_family, {})
@@ -8540,6 +8630,7 @@ def append_interpretation_sections(
     smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
     gemma_s = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-S"), None)
     gemma_l = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-L"), None)
+    minimax_l = next((row for row in benchmark_comparison if row["line_label"] == "MiniMax-L"), None)
     deepseek_m = next((row for row in benchmark_comparison if row["line_label"] == "DeepSeek-S"), None)
     deepseek_coverage = deepseek_medium_coverage_diagnostics() or {}
     deepseek_ccd = deepseek_coverage.get("ccd")
@@ -8723,6 +8814,11 @@ def append_interpretation_sections(
                 f"- Read `DeepSeek-S` as a visible-answer surfacing failure, not a hidden accuracy collapse: `CCD-Bench coverage = {fmt_pct(deepseek_m['ccd_completion_coverage'])}`{deepseek_ccd_ratio} means the saved visible CCD answer never exposed a parseable 1-10 choice, while `Denevil coverage = {fmt_pct(deepseek_m['denevil_proxy_coverage'])}`{deepseek_denevil_ratio} means only that share of DeNEVIL proxy prompts surfaced any visible text."
                 if deepseek_m is not None
                 else "- If a line appears only in the appendix coverage/provenance panels, read it as a response-format / release-evidence signal rather than a benchmark-faithful accuracy result."
+            ),
+            (
+                f"- Read `MiniMax-L` as a partial comparable line: `UniMoral` and `SMID` are withheld after visible-answer validation, while the test-only `Value Kaleidoscope` score remains usable at {fmt_float(minimax_l['value_average_accuracy'])}."
+                if minimax_l is not None and minimax_l.get("value_average_accuracy") is not None
+                else "- Do not treat operationally complete MiniMax runs as automatically comparable accuracy lines; visible-answer validation still gates each benchmark column."
             ),
             f"- Do not call `{best_text_only_line['line_label']}` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line." if best_text_only_line is not None else "- Do not promote any text-only line into an all-around winner claim without a matching SMID route.",
             f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, and the broader `Qwen` / `Llama` curves still move in mixed directions across benchmarks.",

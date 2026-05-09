@@ -92,9 +92,9 @@
 <text x="1052" y="549.00" class="label">20,514 / 20,518</text>
 <text x="292" y="595.00" text-anchor="end" class="label">DeepSeek-L</text>
 <rect x="310" y="576" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="576" width="720.00" height="28" rx="10" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
-<text x="1020.00" y="595.00" text-anchor="end" class="celltext-dark">100.0%</text>
-<text x="1052" y="595.00" class="label">4,282 / 4,282</text>
+<rect x="310" y="576" width="713.14" height="28" rx="10" fill="#60a5fa" stroke="#ffffff" stroke-width="1"/>
+<text x="1013.14" y="595.00" text-anchor="end" class="celltext-dark">99.0%</text>
+<text x="1052" y="595.00" class="label">5,198 / 5,248</text>
 <text x="292" y="641.00" text-anchor="end" class="label">Llama-S</text>
 <rect x="310" y="622" width="720" height="28" rx="10" class="muted-bar"/>
 <rect x="310" y="622" width="720.00" height="28" rx="10" fill="#c2410c" stroke="#ffffff" stroke-width="1"/>

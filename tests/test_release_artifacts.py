@@ -408,16 +408,26 @@ def test_release_builder_emits_expected_files(tmp_path):
             "comparison_note",
         ]
         rows = list(reader)
-    assert len(rows) in {10, 11, 12, 13}
+    assert len(rows) in {10, 11, 12, 13, 14}
     minimax_large_rows = [row for row in rows if row["line_label"] == "MiniMax-L"]
     if minimax_large_rows:
         assert any(
             row["route"] == "text: openrouter/minimax/minimax-m2.5; SMID recovery: openrouter/minimax/minimax-01"
-            and row["smid_average_accuracy"] == "0.195923"
             and (
                 (
-                    row["value_average_accuracy"] == "0.741197"
-                    and row["comparison_note"] == "Comparable on all three benchmark-faithful accuracy panels."
+                    row["unimoral_action_accuracy"] == ""
+                    and row["smid_average_accuracy"] == ""
+                    and row["value_average_accuracy"] == "0.741197"
+                    and row["comparison_note"] == "Partial comparable evidence; see benchmark-specific sections below."
+                )
+                or (
+                    row["smid_average_accuracy"] == "0.195923"
+                    and row["value_average_accuracy"] == "0.741197"
+                    and row["comparison_note"]
+                    in {
+                        "Comparable on all three benchmark-faithful accuracy panels.",
+                        "Partial comparable evidence; see benchmark-specific sections below.",
+                    }
                 )
                 or (
                     row["value_average_accuracy"] == ""
@@ -485,6 +495,12 @@ def test_release_builder_emits_expected_files(tmp_path):
             deepseek_medium["comparison_note"]
             == "Text-only comparable line; no public SMID route on this slot."
         )
+    deepseek_large = rows_by_line.get("DeepSeek-L")
+    if deepseek_large is not None:
+        assert deepseek_large["unimoral_action_accuracy"] == ""
+        assert deepseek_large["smid_average_accuracy"] == ""
+        assert deepseek_large["value_average_accuracy"] == ""
+        assert deepseek_large["comparison_note"] == "Coverage-only line; accuracy withheld after visible-answer validation."
 
     with (release_dir / "ccd-choice-distribution.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -506,16 +522,19 @@ def test_release_builder_emits_expected_files(tmp_path):
         else:
             assert all(row[f"option_{cluster_id}_pct"] == "n/a" for cluster_id in range(1, 11))
             assert all(row[f"option_{cluster_id}_delta_pp"] == "n/a" for cluster_id in range(1, 11))
-    assert any(
-        row["line_label"] == "DeepSeek-L"
-        and row["route"] == "openrouter/deepseek/deepseek-r1"
-        and row["valid_selection_count"] == "n/a"
-        and row["valid_selection_rate"] == "n/a"
-        and row["dominant_option"] == "n/a"
-        and row["distribution_status"] == "missing_route"
-        for row in ccd_distribution_rows
-    )
     ccd_rows_by_line = {row["line_label"]: row for row in ccd_distribution_rows}
+    deepseek_large_ccd = ccd_rows_by_line["DeepSeek-L"]
+    assert deepseek_large_ccd["route"] == "openrouter/deepseek/deepseek-r1"
+    if deepseek_large_ccd["distribution_status"] == "ok":
+        assert deepseek_large_ccd["total_ccd_samples"] == "2182"
+        assert deepseek_large_ccd["valid_selection_count"] == "2109"
+        assert deepseek_large_ccd["valid_selection_rate"] == "96.654445"
+        assert deepseek_large_ccd["dominant_option"] == "option_6 (Nordic Europe)"
+    else:
+        assert deepseek_large_ccd["valid_selection_count"] == "n/a"
+        assert deepseek_large_ccd["valid_selection_rate"] == "n/a"
+        assert deepseek_large_ccd["dominant_option"] == "n/a"
+        assert deepseek_large_ccd["distribution_status"] in {"missing_route", "missing_eval_samples"}
     deepseek_small_ccd = ccd_rows_by_line["DeepSeek-S"]
     assert deepseek_small_ccd["dominant_option"] == "n/a"
     assert deepseek_small_ccd["dominant_option_share"] == "n/a"
@@ -611,13 +630,20 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert deepseek_medium_proxy["persisted_checkpoint_pct"] == "n/a"
         assert deepseek_medium_proxy["limitation_flag"] == "missing_proxy_artifact"
     deepseek_large_proxy = denevil_proxy_by_line["DeepSeek-L"]
-    assert deepseek_large_proxy["proxy_status"] == "Queued"
-    assert deepseek_large_proxy["total_proxy_samples"] == "n/a"
-    assert deepseek_large_proxy["generated_response_count"] == "n/a"
-    assert deepseek_large_proxy["valid_response_rate"] == "n/a"
-    assert deepseek_large_proxy["persisted_checkpoint_pct"] == "n/a"
     assert deepseek_large_proxy["route_short_label"] == "deepseek-r1"
-    assert deepseek_large_proxy["limitation_flag"] == "missing_proxy_artifact"
+    if deepseek_large_proxy["proxy_status"] == "Active rerun":
+        assert deepseek_large_proxy["total_proxy_samples"] == "5248"
+        assert deepseek_large_proxy["generated_response_count"] == "5198"
+        assert deepseek_large_proxy["valid_response_rate"] == "0.990473"
+        assert deepseek_large_proxy["persisted_checkpoint_pct"] == "25.577542"
+        assert deepseek_large_proxy["limitation_flag"] == "partial_checkpoint"
+    else:
+        assert deepseek_large_proxy["proxy_status"] == "Queued"
+        assert deepseek_large_proxy["total_proxy_samples"] == "n/a"
+        assert deepseek_large_proxy["generated_response_count"] == "n/a"
+        assert deepseek_large_proxy["valid_response_rate"] == "n/a"
+        assert deepseek_large_proxy["persisted_checkpoint_pct"] == "n/a"
+        assert deepseek_large_proxy["limitation_flag"] == "missing_proxy_artifact"
     qwen_small_proxy = denevil_proxy_by_line["Qwen-S"]
     if qwen_small_proxy["generated_response_count"] != "n/a":
         assert qwen_small_proxy["generated_response_count"] == "20515"
@@ -661,15 +687,19 @@ def test_release_builder_emits_expected_files(tmp_path):
         denevil_behavior_rows = list(reader)
     assert len(denevil_behavior_rows) == 15
     denevil_behavior_by_line = {row["model_line"]: row for row in denevil_behavior_rows}
-    assert any(
-        row["model_line"] == "DeepSeek-L"
-        and row["behavior_status"] == "missing_route"
-        and row["dominant_behavior"] == "n/a"
-        and row["total_proxy_samples"] == "n/a"
-        and row["protective_refusal_count"] == "n/a"
-        and row["protective_refusal_rate"] == "n/a"
-        for row in denevil_behavior_rows
-    )
+    deepseek_large_behavior = denevil_behavior_by_line["DeepSeek-L"]
+    if deepseek_large_behavior["behavior_status"] == "ok":
+        assert deepseek_large_behavior["total_proxy_samples"] == "5248"
+        assert deepseek_large_behavior["protective_response_rate"] == "94.550305"
+        assert deepseek_large_behavior["no_visible_answer_rate"] == "0.952744"
+        assert deepseek_large_behavior["potentially_risky_continuation_rate"] == "0.571646"
+        assert deepseek_large_behavior["dominant_behavior"] == "Protective refusal"
+    else:
+        assert deepseek_large_behavior["behavior_status"] in {"missing_route", "missing_eval_samples"}
+        assert deepseek_large_behavior["dominant_behavior"] == "n/a"
+        assert deepseek_large_behavior["total_proxy_samples"] == "n/a"
+        assert deepseek_large_behavior["protective_refusal_count"] == "n/a"
+        assert deepseek_large_behavior["protective_refusal_rate"] == "n/a"
     deepseek_small_behavior = denevil_behavior_by_line["DeepSeek-S"]
     if deepseek_small_behavior["behavior_status"] == "ok":
         assert deepseek_small_behavior["total_proxy_samples"] == "20518"
@@ -725,14 +755,14 @@ def test_release_builder_emits_expected_files(tmp_path):
     prompt_family_by_key = {
         (row["model_line"], row["prompt_family"]): row for row in denevil_prompt_family_rows
     }
-    assert any(
-        row["model_line"] == "DeepSeek-L"
-        and row["prompt_family"] == "Illicit access / sabotage"
-        and row["prompt_count"] == "n/a"
-        and row["protective_response_rate"] == "n/a"
-        and row["dominant_behavior"] == "n/a"
-        for row in denevil_prompt_family_rows
-    )
+    deepseek_large_prompt_family = prompt_family_by_key[("DeepSeek-L", "Illicit access / sabotage")]
+    if deepseek_large_prompt_family["prompt_count"] == "n/a":
+        assert deepseek_large_prompt_family["protective_response_rate"] == "n/a"
+        assert deepseek_large_prompt_family["dominant_behavior"] == "n/a"
+    else:
+        assert deepseek_large_prompt_family["prompt_count"] == "372"
+        assert deepseek_large_prompt_family["protective_response_rate"] == "89.784946"
+        assert deepseek_large_prompt_family["dominant_behavior"] == "Protective refusal"
     deepseek_small_prompt_family = prompt_family_by_key[
         ("DeepSeek-S", "Loaded social / political judgment")
     ]
@@ -790,7 +820,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert [row["benchmark"] for row in difficulty_rows] == ["UniMoral", "SMID", "Value Kaleidoscope"]
     assert any(
         row["benchmark"] == "SMID"
-        and row["mean_accuracy"] in {"0.364610", "0.378030", "0.363773"}
+        and row["mean_accuracy"] in {"0.364610", "0.378030", "0.363773", "0.384754"}
         and row["spread"] in {"0.279545", "0.266406", "0.286906"}
         and row["best_line"] == "Qwen-L"
         and row["weakest_line"] in {"MiniMax-L", "Llama-S"}
@@ -818,6 +848,7 @@ def test_release_builder_emits_expected_files(tmp_path):
             and row["numeric_pattern"] in {
                 "UniMoral: L 0.008; SMID: S 0.432 -> L 0.203",
                 "UniMoral: L 0.008; SMID: S 0.432 -> L 0.196",
+                "SMID: S 0.432; Value Kaleidoscope: L 0.741",
             }
             and "too sparse" in row["interpretation"]
             for row in minimax_scaling_rows

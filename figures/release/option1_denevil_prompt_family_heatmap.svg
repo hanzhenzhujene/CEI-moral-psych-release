@@ -149,18 +149,18 @@
 <rect x="184" y="512" width="56" height="30" rx="12" fill="#fbbf24"/>
 <text x="212.00" y="533.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="533.00" class="label">MiniMax-L</text>
-<rect x="430" y="506" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="533.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="600" y="506" width="170" height="42" fill="#9ec2a8" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="533.00" text-anchor="middle" class="celltext-dark">47%</text>
-<rect x="770" y="506" width="170" height="42" fill="url(#diagonalHatch)" stroke="#d7dee6" stroke-width="1"/>
-<text x="855.00" y="533.00" text-anchor="middle" class="small">n/a</text>
-<rect x="940" y="506" width="170" height="42" fill="url(#diagonalHatch)" stroke="#d7dee6" stroke-width="1"/>
-<text x="1025.00" y="533.00" text-anchor="middle" class="small">n/a</text>
-<rect x="1110" y="506" width="170" height="42" fill="url(#diagonalHatch)" stroke="#d7dee6" stroke-width="1"/>
-<text x="1195.00" y="533.00" text-anchor="middle" class="small">n/a</text>
-<rect x="1280" y="506" width="170" height="42" fill="url(#diagonalHatch)" stroke="#d7dee6" stroke-width="1"/>
-<text x="1365.00" y="533.00" text-anchor="middle" class="small">n/a</text>
+<rect x="430" y="506" width="170" height="42" fill="#35885e" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="533.00" text-anchor="middle" class="celltext">97%</text>
+<rect x="600" y="506" width="170" height="42" fill="#3f8e66" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="533.00" text-anchor="middle" class="celltext">92%</text>
+<rect x="770" y="506" width="170" height="42" fill="#34885d" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="533.00" text-anchor="middle" class="celltext">98%</text>
+<rect x="940" y="506" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="533.00" text-anchor="middle" class="celltext">100%</text>
+<rect x="1110" y="506" width="170" height="42" fill="#60a07c" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="533.00" text-anchor="middle" class="celltext">77%</text>
+<rect x="1280" y="506" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="533.00" text-anchor="middle" class="celltext">100%</text>
 <rect x="184" y="566" width="56" height="30" rx="12" fill="#1d4ed8"/>
 <text x="212.00" y="587.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="587.00" class="label">DeepSeek-S</text>
@@ -194,18 +194,18 @@
 <rect x="184" y="674" width="56" height="30" rx="12" fill="#60a5fa"/>
 <text x="212.00" y="695.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="695.00" class="label">DeepSeek-L</text>
-<rect x="430" y="668" width="170" height="42" fill="url(#diagonalHatch)" stroke="#d7dee6" stroke-width="1"/>
-<text x="515.00" y="695.00" text-anchor="middle" class="small">n/a</text>
-<rect x="600" y="668" width="170" height="42" fill="url(#diagonalHatch)" stroke="#d7dee6" stroke-width="1"/>
-<text x="685.00" y="695.00" text-anchor="middle" class="small">n/a</text>
-<rect x="770" y="668" width="170" height="42" fill="url(#diagonalHatch)" stroke="#d7dee6" stroke-width="1"/>
-<text x="855.00" y="695.00" text-anchor="middle" class="small">n/a</text>
+<rect x="430" y="668" width="170" height="42" fill="#449169" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="695.00" text-anchor="middle" class="celltext">90%</text>
+<rect x="600" y="668" width="170" height="42" fill="#3e8d65" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="695.00" text-anchor="middle" class="celltext">93%</text>
+<rect x="770" y="668" width="170" height="42" fill="#398a61" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="695.00" text-anchor="middle" class="celltext">95%</text>
 <rect x="940" y="668" width="170" height="42" fill="url(#diagonalHatch)" stroke="#d7dee6" stroke-width="1"/>
 <text x="1025.00" y="695.00" text-anchor="middle" class="small">n/a</text>
-<rect x="1110" y="668" width="170" height="42" fill="url(#diagonalHatch)" stroke="#d7dee6" stroke-width="1"/>
-<text x="1195.00" y="695.00" text-anchor="middle" class="small">n/a</text>
-<rect x="1280" y="668" width="170" height="42" fill="url(#diagonalHatch)" stroke="#d7dee6" stroke-width="1"/>
-<text x="1365.00" y="695.00" text-anchor="middle" class="small">n/a</text>
+<rect x="1110" y="668" width="170" height="42" fill="#d2dfce" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="695.00" text-anchor="middle" class="celltext-dark">21%</text>
+<rect x="1280" y="668" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="695.00" text-anchor="middle" class="celltext">100%</text>
 <rect x="184" y="728" width="56" height="30" rx="12" fill="#c2410c"/>
 <text x="212.00" y="749.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="749.00" class="label">Llama-S</text>
