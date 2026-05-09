@@ -61,7 +61,7 @@ This section is the fastest summary for a mentor or collaborator: which lines al
 | Line | Scope | Status | Coverage | Note |
 | --- | --- | --- | --- | --- |
 | `Qwen-S` | Frozen Option 1 | Done | 5 benchmark lines complete (`Denevil` via proxy) | Primary small Qwen release line. |
-| `DeepSeek-M` | Frozen Option 1 | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Primary medium DeepSeek release line. |
+| `DeepSeek-M` | Frozen Option 1 | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Primary medium DeepSeek release line: UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses. |
 | `Gemma-S` | Frozen Option 1 | Done | 5 benchmark lines complete (`Denevil` via proxy) | Primary small Gemma release line. |
 | `Llama-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally, outside the frozen Option 1 counts. |
 | `Gemma-M` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
@@ -70,9 +70,9 @@ This section is the fastest summary for a mentor or collaborator: which lines al
 | `Qwen-L` | Complete local line | Done | SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | SMID recovery complete; clean text rerun finished locally. |
 | `Llama-M` | Complete local line | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Completed locally on April 22, 2026. |
 | `Llama-L` | Complete local line | Done | SMID complete; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%. | SMID complete; local text rerun finished successfully through the Denevil proxy task. |
-| `DeepSeek-S` | Complete local line | Done | No SMID route; UniMoral, Value Kaleidoscope, and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%. | Local small text rerun finished successfully on April 29, 2026 through the Denevil proxy task. |
+| `DeepSeek-S` | Complete local line | Done | No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy archives are persisted, but comparable short-answer accuracy is withheld after visible-answer validation. | Local small text archive completed on April 29, 2026, but UniMoral, Value, and CCD saved only reasoning text with empty final answers; Denevil proxy visibility is 2,863 / 20,518 (14.0%). |
 | `MiniMax-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) using MiniMax-M2.5 text plus the shared MiniMax-01 SMID recovery route | Shared MiniMax-01 SMID recovery is complete; the test-only MiniMax-M2.5 Value Kaleidoscope reruns are done, and the released Denevil proxy archive can now be reconstructed end-to-end from the persisted rerun checkpoints. |
-| `DeepSeek-L` | Live local rerun | Live | No SMID route; CCD-Bench is complete, and UniMoral, Denevil proxy, and test-only Value Kaleidoscope reruns are active locally. | Large R1 text rerun is active locally: CCD-Bench is done, and UniMoral, test-only Value Kaleidoscope, and Denevil proxy are in flight (UniMoral 32.4%, Denevil proxy 25.6%, Value valence 8.5%, Value relevance 8.6%). |
+| `DeepSeek-L` | Live local rerun | Live | No SMID route; CCD-Bench is complete, and UniMoral, Denevil proxy, and test-only Value Kaleidoscope reruns are active locally. | Large R1 text rerun is active locally: CCD-Bench is done, and UniMoral, test-only Value Kaleidoscope, and Denevil proxy are in flight (UniMoral 32.4%, Denevil proxy 25.6%, Value valence 8.5%, Value relevance 8.9%). |
 | `MiniMax-S` | Attempted local line | Error | No usable benchmark line completed | OpenRouter key-limit failures interrupted both text and image paths. |
 
 ### Latest Family-Size Progress Snapshot
@@ -96,7 +96,7 @@ Metric definition version: `2026-04-30`. The visible-answer parsing rules behind
 | `Qwen-L` | 0.665 | 0.483 | 0.653 | Comparable on all three benchmark-faithful accuracy panels. |
 | `MiniMax-S` | n/a | 0.432 | n/a | Partial comparable evidence; see benchmark-specific sections below. |
 | `MiniMax-L` | n/a | n/a | 0.741 | Partial comparable evidence; see benchmark-specific sections below. |
-| `DeepSeek-S` | n/a | n/a | n/a | Coverage-only line; accuracy withheld after visible-answer validation. |
+| `DeepSeek-S` | n/a | n/a | n/a | Diagnostic-only line; short-answer accuracy withheld because final visible answers are empty in the saved logs. |
 | `DeepSeek-M` | 0.684 | n/a | 0.635 | Text-only comparable line; no public SMID route on this slot. |
 | `DeepSeek-L` | n/a | n/a | n/a | Coverage-only line; accuracy withheld after visible-answer validation. |
 | `Llama-S` | 0.648 | 0.216 | 0.529 | Comparable on all three benchmark-faithful accuracy panels. |
@@ -108,6 +108,14 @@ Metric definition version: `2026-04-30`. The visible-answer parsing rules behind
 
 _The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._
 
+### DeepSeek S/M Log-Derived Readout
+
+`DeepSeek-S` and `DeepSeek-M` both have explicit results from the existing logs. `DeepSeek-M` is a valid text-only comparable line; `DeepSeek-S` is a completed diagnostic line whose short-answer accuracy is withheld because the final visible answer fields are empty, even though reasoning traces were saved.
+
+| Line | Comparable text accuracy | CCD-Bench saved choices | DeNEVIL proxy visibility | Public interpretation |
+| --- | --- | --- | --- | --- |
+| `DeepSeek-S` | withheld; visible final answers empty | 0 / 2,182 (0.0%) | 2,863 / 20,518 (14.0%) | Existing logs are complete, but UniMoral, Value Kaleidoscope, and CCD-Bench final answer text is empty after the model spent the token budget in reasoning and stopped at max_tokens. Do not recover labels from reasoning traces; keep accuracy withheld and report CCD/Denevil as coverage/proxy diagnostics. |
+| `DeepSeek-M` | UniMoral 0.684; Value 0.635 | 2,177 / 2,182 (99.8%) | 20,514 / 20,518 (100.0%) | Valid text-only comparable line from existing logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has near-complete parseable choices, and Denevil is proxy-only behavioral evidence. No SMID route exists. |
 ## Interpretation
 
 These are the strongest claims the current public evidence supports. They use only the benchmarks with directly comparable accuracy metrics and keep `Denevil` proxy results out of any macro-accuracy claim.
@@ -312,7 +320,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 
 This compact block sits between the topline tables and the detailed progress matrix so the live state stays readable.
 
-- Active open-source reruns: `DeepSeek-L` (Large R1 text rerun is active locally: CCD-Bench is done, and UniMoral, test-only Value Kaleidoscope, and Denevil proxy are in flight (UniMoral 32.4%, Denevil proxy 25.6%, Value valence 8.5%, Value relevance 8.6%)).
+- Active open-source reruns: `DeepSeek-L` (Large R1 text rerun is active locally: CCD-Bench is done, and UniMoral, test-only Value Kaleidoscope, and Denevil proxy are in flight (UniMoral 32.4%, Denevil proxy 25.6%, Value valence 8.5%, Value relevance 8.9%)).
 - Stalled or queued follow-up work: Published queued follow-up lines still visible in the matrix: `MiniMax-M`.
 - Complete local lines beyond the frozen `Option 1` slice: `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `Llama-L`, `DeepSeek-S`, and `MiniMax-L`.
 - Release guardrails: Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables.
@@ -329,7 +337,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `Qwen-M text batch` | Done | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
 | `Qwen-L text batch` | Done | SMID recovery complete; clean text rerun finished locally. |
 | `Llama-M text batch` | Done | Completed April 22 with a full medium text line. |
-| `DeepSeek-S text batch` | Done | Local small text rerun finished successfully on April 29, 2026 through the Denevil proxy task. |
+| `DeepSeek-S text batch` | Done | Local small text archive completed on April 29, 2026, but UniMoral, Value, and CCD saved only reasoning text with empty final answers; Denevil proxy visibility is 2,863 / 20,518 (14.0%). |
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
 | `Next queued text lines` | Queue | Published queued follow-up lines: `MiniMax-M`. |
 
@@ -378,9 +386,9 @@ Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-
 | `MiniMax-S` | Error | Error | Error | Error | Error | Attempted, but key-limit failures made the line unusable. |
 | `MiniMax-M` | Queue | TBD | Queue | Queue | Queue | Text queued; no medium SMID route fixed yet. |
 | `MiniMax-L` | Done | Done | Done | Done | Proxy | Shared MiniMax-01 SMID recovery is complete; UniMoral, CCD-Bench, the test-only Value Kaleidoscope reruns, and the reconstructed Denevil proxy archive are all fully persisted locally. |
-| `DeepSeek-S` | Done | - | Done | Done | Proxy | No SMID route; local small text rerun finished successfully through the Denevil proxy task (100.0%). |
-| `DeepSeek-M` | Done | - | Done | Done | Proxy | Frozen medium text line; no SMID route was included. |
-| `DeepSeek-L` | Live | - | Live | Done | Live | Large R1 text rerun is active locally: CCD-Bench is done, and UniMoral, test-only Value Kaleidoscope, and Denevil proxy are in flight (UniMoral 32.4%, Denevil proxy 25.6%, Value valence 8.5%, Value relevance 8.6%). |
+| `DeepSeek-S` | Done | - | Done | Done | Proxy | No SMID route; local small text archive finished, but short-answer accuracy is withheld because final visible answers are empty; Denevil proxy visibility is 14.0%. |
+| `DeepSeek-M` | Done | - | Done | Done | Proxy | Frozen medium text line; no SMID route was included. UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses. |
+| `DeepSeek-L` | Live | - | Live | Done | Live | Large R1 text rerun is active locally: CCD-Bench is done, and UniMoral, test-only Value Kaleidoscope, and Denevil proxy are in flight (UniMoral 32.4%, Denevil proxy 25.6%, Value valence 8.5%, Value relevance 8.9%). |
 | `Llama-S` | Done | Done | Done | Done | Proxy | Complete locally across all five papers. |
 | `Llama-M` | Done | - | Done | Done | Proxy | No SMID route; medium text line completed locally on April 22, 2026. |
 | `Llama-L` | Done | Done | Done | Done | Proxy | SMID complete; local text rerun is now fully persisted through the Denevil proxy task (100.0%). |

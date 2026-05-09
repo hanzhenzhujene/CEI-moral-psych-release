@@ -94,6 +94,11 @@ CURRENT_COMPARABLE_VERSION_NOTE = (
     f"Metric definition version: `{PUBLIC_METRIC_DEFINITION_VERSION}`. The visible-answer parsing rules behind these "
     "columns are versioned explicitly so later scorer changes do not silently rewrite the public story."
 )
+DEEPSEEK_SM_READOUT_NOTE = (
+    "`DeepSeek-S` and `DeepSeek-M` both have explicit results from the existing logs. "
+    "`DeepSeek-M` is a valid text-only comparable line; `DeepSeek-S` is a completed diagnostic line whose short-answer "
+    "accuracy is withheld because the final visible answer fields are empty, even though reasoning traces were saved."
+)
 DENEVIL_PROXY_LIMITATION_LINE = (
     "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring."
 )
@@ -842,7 +847,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "done",
         "ccd_bench": "done",
         "denevil": "proxy",
-        "summary_note": "No SMID route; local small text rerun finished successfully through the Denevil proxy task (100.0%).",
+        "summary_note": "No SMID route; local small text archive finished, but short-answer accuracy is withheld because final visible answers are empty; Denevil proxy visibility is 14.0%.",
     },
     {
         "family": "DeepSeek",
@@ -855,7 +860,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "done",
         "ccd_bench": "done",
         "denevil": "proxy",
-        "summary_note": "Frozen medium text line; no SMID route was included.",
+        "summary_note": "Frozen medium text line; no SMID route was included. UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses.",
     },
     {
         "family": "DeepSeek",
@@ -963,7 +968,7 @@ CURRENT_RESULT_LINES = [
         "scope": "Frozen Option 1",
         "status": "done",
         "coverage": "4 benchmark lines plus `Denevil` proxy; no SMID route",
-        "note": "Primary medium DeepSeek release line.",
+        "note": "Primary medium DeepSeek release line: UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses.",
     },
     {
         "line_label": "Gemma-S",
@@ -1056,6 +1061,60 @@ AUTHORITATIVE_COMPARISON_LINES = {
             "ccd_bench_selection": ROOT / "results" / "inspect" / "logs" / "2026-04-17-option1-full-funded-gemma-paid-v2" / "gemma_text",
             "denevil_fulcra_proxy_generation": ROOT / "results" / "inspect" / "logs" / "2026-04-18-denevil-fulcra-proxy-formal-v3" / "gemma_proxy",
         },
+    },
+}
+
+DEEPSEEK_SM_READOUT_FALLBACKS = {
+    "DeepSeek-S": {
+        "line_label": "DeepSeek-S",
+        "family": "DeepSeek",
+        "size_slot": "S",
+        "route": "text: openrouter/deepseek/deepseek-r1-distill-llama-70b (DeepInfra-pinned recovery route)",
+        "unimoral_action_accuracy": None,
+        "unimoral_visible_answers": 0,
+        "unimoral_total_samples": 8784,
+        "value_relevance_accuracy": None,
+        "value_valence_accuracy": None,
+        "value_average_accuracy": None,
+        "value_visible_answers": 0,
+        "value_total_samples": 65520,
+        "ccd_valid_choice_count": 0,
+        "ccd_total_samples": 2182,
+        "ccd_valid_choice_rate": 0.0,
+        "denevil_visible_response_count": 2863,
+        "denevil_total_samples": 20518,
+        "denevil_visible_response_rate": 0.13953601715566818,
+        "answer_validation": "failed_visible_answer_guardrail",
+        "public_interpretation": (
+            "Existing logs are complete, but UniMoral, Value Kaleidoscope, and CCD-Bench final answer text is empty "
+            "after the model spent the token budget in reasoning and stopped at max_tokens. Do not recover labels from "
+            "reasoning traces; keep accuracy withheld and report CCD/Denevil as coverage/proxy diagnostics."
+        ),
+    },
+    "DeepSeek-M": {
+        "line_label": "DeepSeek-M",
+        "family": "DeepSeek",
+        "size_slot": "M",
+        "route": "openrouter/deepseek/deepseek-chat-v3.1",
+        "unimoral_action_accuracy": 0.6836293260473588,
+        "unimoral_visible_answers": 8767,
+        "unimoral_total_samples": 8784,
+        "value_relevance_accuracy": 0.670856227106227,
+        "value_valence_accuracy": 0.598489010989011,
+        "value_average_accuracy": 0.634672619047619,
+        "value_visible_answers": 65349,
+        "value_total_samples": 65520,
+        "ccd_valid_choice_count": 2177,
+        "ccd_total_samples": 2182,
+        "ccd_valid_choice_rate": 0.9977085242896425,
+        "denevil_visible_response_count": 20514,
+        "denevil_total_samples": 20518,
+        "denevil_visible_response_rate": 0.9998050492250706,
+        "answer_validation": "passed_visible_answer_guardrail",
+        "public_interpretation": (
+            "Valid text-only comparable line from existing logs: UniMoral and Value Kaleidoscope are scored, "
+            "CCD-Bench has near-complete parseable choices, and Denevil is proxy-only behavioral evidence. No SMID route exists."
+        ),
     },
 }
 
@@ -2609,18 +2668,18 @@ def _apply_live_monitor_snapshot() -> None:
             deepseek_local_checkpoint_status = "done"
             if deepseek_denevil is not None and deepseek_denevil["completed"] > 0:
                 deepseek_current_coverage = (
-                    "No SMID route; UniMoral, Value Kaleidoscope, and CCD-Bench are fully persisted; "
-                    f"Denevil proxy finished at {deepseek_denevil['progress_pct']:.1f}%."
+                    "No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy archives are persisted, "
+                    "but comparable short-answer accuracy is withheld after visible-answer validation."
                 )
                 deepseek_current_note = (
-                    f"Local small text rerun finished successfully on {deepseek_completion_date} through the "
-                    "Denevil proxy task."
+                    f"Local small text archive completed on {deepseek_completion_date}, but UniMoral, Value, and CCD "
+                    "saved only reasoning text with empty final answers; Denevil proxy visibility is 2,863 / 20,518 (14.0%)."
                     if deepseek_completion_date
-                    else "Local small text rerun finished successfully through the Denevil proxy task."
+                    else "Local small text archive completed, but UniMoral, Value, and CCD saved only reasoning text with empty final answers; Denevil proxy visibility is 2,863 / 20,518 (14.0%)."
                 )
                 deepseek_progress_summary = (
-                    "No SMID route; local small text rerun finished successfully through the Denevil proxy task "
-                    f"({deepseek_denevil['progress_pct']:.1f}%)."
+                    "No SMID route; local small text archive finished, but short-answer accuracy is withheld because "
+                    "final visible answers are empty; Denevil proxy visibility is 14.0%."
                 )
             else:
                 deepseek_current_coverage = "4 benchmark lines plus `Denevil` proxy; no SMID route"
@@ -5486,6 +5545,8 @@ def family_group_spans(
 
 
 def comparable_snapshot_note(row: dict[str, Any]) -> str:
+    if row.get("line_label") == "DeepSeek-S":
+        return "Diagnostic-only line; short-answer accuracy withheld because final visible answers are empty in the saved logs."
     if all(
         row[field] is not None
         for field in ("unimoral_action_accuracy", "smid_average_accuracy", "value_average_accuracy")
@@ -5503,6 +5564,101 @@ def comparable_snapshot_note(row: dict[str, Any]) -> str:
     ):
         return "Coverage-only line; accuracy withheld after visible-answer validation."
     return "Partial comparable evidence; see benchmark-specific sections below."
+
+
+def _numeric_or_none(value: Any) -> float | None:
+    if value in {None, "", "n/a"}:
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _int_or_none(value: Any) -> int | None:
+    if value in {None, "", "n/a"}:
+        return None
+    try:
+        return int(float(value))
+    except (TypeError, ValueError):
+        return None
+
+
+def build_deepseek_sm_readout_rows(
+    benchmark_comparison: list[dict[str, Any]],
+    ccd_choice_distribution: list[dict[str, Any]],
+    denevil_proxy_summary: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    comparison_by_line = {row["line_label"]: row for row in benchmark_comparison}
+    ccd_by_line = {row["line_label"]: row for row in ccd_choice_distribution}
+    denevil_by_line = {row["model_line"]: row for row in denevil_proxy_summary}
+
+    readout_rows: list[dict[str, Any]] = []
+    for line_label in ("DeepSeek-S", "DeepSeek-M"):
+        fallback = dict(DEEPSEEK_SM_READOUT_FALLBACKS[line_label])
+        comparison_row = comparison_by_line.get(line_label, {})
+        ccd_row = ccd_by_line.get(line_label, {})
+        denevil_row = denevil_by_line.get(line_label, {})
+
+        for field in ("unimoral_action_accuracy", "value_average_accuracy"):
+            value = _numeric_or_none(comparison_row.get(field))
+            if value is not None:
+                fallback[field] = value
+
+        ccd_count = _int_or_none(ccd_row.get("valid_selection_count"))
+        ccd_total = _int_or_none(ccd_row.get("total_ccd_samples"))
+        ccd_rate = _numeric_or_none(ccd_row.get("valid_selection_rate"))
+        if ccd_count is not None:
+            fallback["ccd_valid_choice_count"] = ccd_count
+        if ccd_total is not None:
+            fallback["ccd_total_samples"] = ccd_total
+        if ccd_rate is not None:
+            fallback["ccd_valid_choice_rate"] = ccd_rate
+
+        denevil_count = _int_or_none(denevil_row.get("generated_response_count"))
+        denevil_total = _int_or_none(denevil_row.get("total_proxy_samples"))
+        denevil_rate = _numeric_or_none(denevil_row.get("valid_response_rate"))
+        if denevil_count is not None:
+            fallback["denevil_visible_response_count"] = denevil_count
+        if denevil_total is not None:
+            fallback["denevil_total_samples"] = denevil_total
+        if denevil_rate is not None:
+            fallback["denevil_visible_response_rate"] = denevil_rate
+
+        readout_rows.append(fallback)
+    return readout_rows
+
+
+def append_deepseek_sm_readout_section(lines: list[str], readout_rows: list[dict[str, Any]]) -> None:
+    lines.extend(
+        [
+            "",
+            "### DeepSeek S/M Log-Derived Readout",
+            "",
+            DEEPSEEK_SM_READOUT_NOTE,
+            "",
+            "| Line | Comparable text accuracy | CCD-Bench saved choices | DeNEVIL proxy visibility | Public interpretation |",
+            "| --- | --- | --- | --- | --- |",
+        ]
+    )
+    for row in readout_rows:
+        comparable_bits: list[str] = []
+        if row["unimoral_action_accuracy"] is not None:
+            comparable_bits.append(f"UniMoral {fmt_float(row['unimoral_action_accuracy'])}")
+        if row["value_average_accuracy"] is not None:
+            comparable_bits.append(f"Value {fmt_float(row['value_average_accuracy'])}")
+        comparable_text = "; ".join(comparable_bits) if comparable_bits else "withheld; visible final answers empty"
+        ccd_text = (
+            f"{fmt_ratio(row['ccd_valid_choice_count'], row['ccd_total_samples'])} "
+            f"({fmt_pct(row['ccd_valid_choice_rate'], 1)})"
+        )
+        denevil_text = (
+            f"{fmt_ratio(row['denevil_visible_response_count'], row['denevil_total_samples'])} "
+            f"({fmt_pct(row['denevil_visible_response_rate'], 1)})"
+        )
+        lines.append(
+            f"| `{row['line_label']}` | {comparable_text} | {ccd_text} | {denevil_text} | {row['public_interpretation']} |"
+        )
 
 
 def compact_denevil_proxy_note(row: dict[str, Any]) -> str:
@@ -9264,6 +9420,7 @@ def build_repo_readme(
     denevil_prompt_family_breakdown: list[dict[str, Any]],
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
+    deepseek_sm_readout: list[dict[str, Any]],
 ) -> str:
     llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
     public_families, public_families_label, public_family_count = public_family_summary(family_size_progress)
@@ -9352,9 +9509,9 @@ def build_repo_readme(
         [
             "",
             "_The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._",
-            "",
         ]
     )
+    append_deepseek_sm_readout_section(lines, deepseek_sm_readout)
     append_interpretation_sections(
         lines,
         benchmark_comparison,
@@ -9488,6 +9645,7 @@ def build_repo_readme(
             "- `results/release/2026-04-19-option1/denevil-prompt-family-breakdown.csv`",
             "- `results/release/2026-04-19-option1/denevil-proxy-summary.csv`",
             "- `results/release/2026-04-19-option1/denevil-proxy-examples.csv`",
+            "- `results/release/2026-04-19-option1/deepseek-sm-readout.csv`",
             "- `results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`",
             "- `results/release/2026-04-19-option1/family-scaling-summary.csv`",
             "- `results/release/2026-04-19-option1/release-manifest.json`",
@@ -9538,6 +9696,7 @@ def build_release_readme(
     denevil_prompt_family_breakdown: list[dict[str, Any]],
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
+    deepseek_sm_readout: list[dict[str, Any]],
 ) -> str:
     llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
     public_families, public_families_label, public_family_count = public_family_summary(family_size_progress)
@@ -9593,9 +9752,9 @@ def build_release_readme(
         [
             "",
             "_The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._",
-            "",
         ]
     )
+    append_deepseek_sm_readout_section(lines, deepseek_sm_readout)
     append_interpretation_sections(
         lines,
         benchmark_comparison,
@@ -9752,6 +9911,7 @@ def build_release_readme(
             "- `denevil-prompt-family-breakdown.csv`: DeNEVIL protective-response rates by heuristic prompt family",
             "- `denevil-proxy-summary.csv`: appendix QA/provenance table with route, timestamps, sample counts, and visible-response coverage",
             "- `denevil-proxy-examples.csv`: safe qualitative examples showing what the released Denevil proxy traces actually look like",
+            "- `deepseek-sm-readout.csv`: explicit DeepSeek-S/M log-derived readout, including why DeepSeek-S is diagnostic-only rather than comparable accuracy",
             "- `benchmark-difficulty-summary.csv`: benchmark-level means, ranges, and best/worst lines for the comparable slice",
             "- `family-scaling-summary.csv`: cautious scaling notes for each public family",
             "- `benchmark-catalog.csv`: benchmark registry with paper and dataset links",
@@ -9787,6 +9947,7 @@ def build_jenny_group_report(
     denevil_prompt_family_breakdown: list[dict[str, Any]],
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
+    deepseek_sm_readout: list[dict[str, Any]],
 ) -> str:
     total_samples = sum(row["total_samples"] for row in rows)
     llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
@@ -9843,9 +10004,9 @@ def build_jenny_group_report(
         [
             "",
             "_The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._",
-            "",
         ]
     )
+    append_deepseek_sm_readout_section(lines, deepseek_sm_readout)
     append_interpretation_sections(
         lines,
         benchmark_comparison,
@@ -10059,6 +10220,7 @@ def build_release_manifest(
             "denevil_behavior_summary": "results/release/2026-04-19-option1/denevil-behavior-summary.csv",
             "denevil_prompt_family_breakdown": "results/release/2026-04-19-option1/denevil-prompt-family-breakdown.csv",
             "denevil_proxy_examples": "results/release/2026-04-19-option1/denevil-proxy-examples.csv",
+            "deepseek_sm_readout": "results/release/2026-04-19-option1/deepseek-sm-readout.csv",
             "benchmark_difficulty_summary": "results/release/2026-04-19-option1/benchmark-difficulty-summary.csv",
             "family_scaling_summary": "results/release/2026-04-19-option1/family-scaling-summary.csv",
             "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
@@ -10095,6 +10257,7 @@ def build_release_manifest(
             "denevil-behavior-summary.csv",
             "denevil-prompt-family-breakdown.csv",
             "denevil-proxy-examples.csv",
+            "deepseek-sm-readout.csv",
             "benchmark-difficulty-summary.csv",
             "family-scaling-summary.csv",
             "future-model-plan.csv",
@@ -10123,6 +10286,7 @@ def build_release_manifest(
         "interpretation_guardrails": [
             "Denevil is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
             "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
+            "DeepSeek-S has a completed local archive but remains diagnostic-only for short-answer accuracy because the saved final answer text is empty; reasoning traces are not treated as scored answers.",
             "The completed local Llama small line sits outside the frozen Option 1 totals.",
             "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration.",
         ],
@@ -10170,6 +10334,11 @@ def main() -> None:
     denevil_prompt_family_breakdown = build_denevil_prompt_family_breakdown_rows(family_size_progress)
     denevil_proxy_summary = build_denevil_proxy_summary_rows(family_size_progress)
     denevil_proxy_examples = build_denevil_proxy_examples(denevil_proxy_summary)
+    deepseek_sm_readout = build_deepseek_sm_readout_rows(
+        benchmark_comparison,
+        ccd_choice_distribution,
+        denevil_proxy_summary,
+    )
     benchmark_difficulty_summary = build_benchmark_difficulty_summary(benchmark_comparison)
     family_scaling_summary = build_family_scaling_summary(benchmark_comparison)
     faithful_metrics = build_faithful_metrics(rows)
@@ -10480,6 +10649,43 @@ def main() -> None:
         ["model_line", "proxy_prompt_type", "shortened_model_output_pattern", "interpretable_signal"],
     )
     write_csv(
+        args.release_dir / "deepseek-sm-readout.csv",
+        [
+            {
+                **row,
+                "unimoral_action_accuracy": fmt_float(row["unimoral_action_accuracy"], 6),
+                "value_relevance_accuracy": fmt_float(row["value_relevance_accuracy"], 6),
+                "value_valence_accuracy": fmt_float(row["value_valence_accuracy"], 6),
+                "value_average_accuracy": fmt_float(row["value_average_accuracy"], 6),
+                "ccd_valid_choice_rate": fmt_float(row["ccd_valid_choice_rate"], 6),
+                "denevil_visible_response_rate": fmt_float(row["denevil_visible_response_rate"], 6),
+            }
+            for row in deepseek_sm_readout
+        ],
+        [
+            "line_label",
+            "family",
+            "size_slot",
+            "route",
+            "unimoral_action_accuracy",
+            "unimoral_visible_answers",
+            "unimoral_total_samples",
+            "value_relevance_accuracy",
+            "value_valence_accuracy",
+            "value_average_accuracy",
+            "value_visible_answers",
+            "value_total_samples",
+            "ccd_valid_choice_count",
+            "ccd_total_samples",
+            "ccd_valid_choice_rate",
+            "denevil_visible_response_count",
+            "denevil_total_samples",
+            "denevil_visible_response_rate",
+            "answer_validation",
+            "public_interpretation",
+        ],
+    )
+    write_csv(
         args.release_dir / "benchmark-difficulty-summary.csv",
         [
             {
@@ -10546,6 +10752,7 @@ def main() -> None:
             denevil_prompt_family_breakdown,
             denevil_proxy_summary,
             denevil_proxy_examples,
+            deepseek_sm_readout,
         ),
     )
     if (
@@ -10568,6 +10775,7 @@ def main() -> None:
                 denevil_prompt_family_breakdown,
                 denevil_proxy_summary,
                 denevil_proxy_examples,
+                deepseek_sm_readout,
             ),
         )
     write_text(
@@ -10586,6 +10794,7 @@ def main() -> None:
             denevil_prompt_family_breakdown,
             denevil_proxy_summary,
             denevil_proxy_examples,
+            deepseek_sm_readout,
         ),
     )
     write_text(args.release_dir / "source" / "README.md", build_source_readme())
@@ -10681,6 +10890,7 @@ def main() -> None:
             "denevil-prompt-family-breakdown.csv",
             "denevil-proxy-summary.csv",
             "denevil-proxy-examples.csv",
+            "deepseek-sm-readout.csv",
             "benchmark-difficulty-summary.csv",
             "family-scaling-summary.csv",
             "future-model-plan.csv",

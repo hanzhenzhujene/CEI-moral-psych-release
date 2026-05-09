@@ -150,6 +150,7 @@
     "denevil_behavior_summary": "results/release/2026-04-19-option1/denevil-behavior-summary.csv",
     "denevil_prompt_family_breakdown": "results/release/2026-04-19-option1/denevil-prompt-family-breakdown.csv",
     "denevil_proxy_examples": "results/release/2026-04-19-option1/denevil-proxy-examples.csv",
+    "deepseek_sm_readout": "results/release/2026-04-19-option1/deepseek-sm-readout.csv",
     "benchmark_difficulty_summary": "results/release/2026-04-19-option1/benchmark-difficulty-summary.csv",
     "family_scaling_summary": "results/release/2026-04-19-option1/family-scaling-summary.csv",
     "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
@@ -186,6 +187,7 @@
     "denevil-behavior-summary.csv",
     "denevil-prompt-family-breakdown.csv",
     "denevil-proxy-examples.csv",
+    "deepseek-sm-readout.csv",
     "benchmark-difficulty-summary.csv",
     "family-scaling-summary.csv",
     "future-model-plan.csv",
@@ -214,6 +216,7 @@
   "interpretation_guardrails": [
     "Denevil is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
     "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
+    "DeepSeek-S has a completed local archive but remains diagnostic-only for short-answer accuracy because the saved final answer text is empty; reasoning traces are not treated as scored answers.",
     "The completed local Llama small line sits outside the frozen Option 1 totals.",
     "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration."
   ]

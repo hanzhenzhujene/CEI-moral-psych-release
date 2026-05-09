@@ -55,6 +55,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         "denevil-prompt-family-breakdown.csv",
         "denevil-proxy-summary.csv",
         "denevil-proxy-examples.csv",
+        "deepseek-sm-readout.csv",
         "benchmark-difficulty-summary.csv",
         "benchmark-summary.csv",
         "coverage-matrix.csv",
@@ -105,6 +106,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["authoritative_tasks"] == 19
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
+    assert any("DeepSeek-S" in item and "reasoning traces" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
     assert manifest["report_metadata"]["current_cost_estimate"] == "$511.99"
     assert manifest["report_metadata"]["current_cost_breakdown"] == "MiniMax direct API `$398.42` + OpenRouter `$113.57` for all other model runs."
@@ -127,6 +129,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         "denevil-prompt-family-breakdown.csv"
     )
     assert manifest["entry_points"]["denevil_proxy_examples"].endswith("denevil-proxy-examples.csv")
+    assert manifest["entry_points"]["deepseek_sm_readout"].endswith("deepseek-sm-readout.csv")
     assert manifest["entry_points"]["benchmark_difficulty_figure"].endswith("option1_benchmark_difficulty_profile.svg")
     assert manifest["entry_points"]["family_scaling_figure"].endswith("option1_family_scaling_profile.svg")
     assert manifest["entry_points"]["ccd_valid_choice_coverage_figure"].endswith("option1_ccd_valid_choice_coverage.svg")
@@ -371,13 +374,13 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert_done_text_progress(
         deepseek_small,
         smid_status="-",
-        summary_note="No SMID route; local small text rerun finished successfully through the Denevil proxy task (100.0%).",
+        summary_note="No SMID route; local small text archive finished, but short-answer accuracy is withheld because final visible answers are empty; Denevil proxy visibility is 14.0%.",
     )
     deepseek_medium = row_for("DeepSeek-M")
     assert_done_text_progress(
         deepseek_medium,
         smid_status="-",
-        summary_note="Frozen medium text line; no SMID route was included.",
+        summary_note="Frozen medium text line; no SMID route was included. UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses.",
     )
     deepseek_large = row_for("DeepSeek-L")
     assert deepseek_large["smid"] == "-"
@@ -484,7 +487,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert deepseek_small["value_average_accuracy"] == ""
         assert (
             deepseek_small["comparison_note"]
-            == "Coverage-only line; accuracy withheld after visible-answer validation."
+            == "Diagnostic-only line; short-answer accuracy withheld because final visible answers are empty in the saved logs."
         )
     deepseek_medium = rows_by_line.get("DeepSeek-M")
     if deepseek_medium is not None:
@@ -501,6 +504,45 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert deepseek_large["smid_average_accuracy"] == ""
         assert deepseek_large["value_average_accuracy"] == ""
         assert deepseek_large["comparison_note"] == "Coverage-only line; accuracy withheld after visible-answer validation."
+
+    with (release_dir / "deepseek-sm-readout.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames is not None
+        assert reader.fieldnames == [
+            "line_label",
+            "family",
+            "size_slot",
+            "route",
+            "unimoral_action_accuracy",
+            "unimoral_visible_answers",
+            "unimoral_total_samples",
+            "value_relevance_accuracy",
+            "value_valence_accuracy",
+            "value_average_accuracy",
+            "value_visible_answers",
+            "value_total_samples",
+            "ccd_valid_choice_count",
+            "ccd_total_samples",
+            "ccd_valid_choice_rate",
+            "denevil_visible_response_count",
+            "denevil_total_samples",
+            "denevil_visible_response_rate",
+            "answer_validation",
+            "public_interpretation",
+        ]
+        deepseek_readout = {row["line_label"]: row for row in reader}
+    assert deepseek_readout["DeepSeek-S"]["answer_validation"] == "failed_visible_answer_guardrail"
+    assert deepseek_readout["DeepSeek-S"]["unimoral_action_accuracy"] == ""
+    assert deepseek_readout["DeepSeek-S"]["unimoral_visible_answers"] == "0"
+    assert deepseek_readout["DeepSeek-S"]["value_visible_answers"] == "0"
+    assert deepseek_readout["DeepSeek-S"]["ccd_valid_choice_count"] == "0"
+    assert deepseek_readout["DeepSeek-S"]["denevil_visible_response_count"] == "2863"
+    assert "Do not recover labels from reasoning traces" in deepseek_readout["DeepSeek-S"]["public_interpretation"]
+    assert deepseek_readout["DeepSeek-M"]["answer_validation"] == "passed_visible_answer_guardrail"
+    assert deepseek_readout["DeepSeek-M"]["unimoral_action_accuracy"] == "0.683629"
+    assert deepseek_readout["DeepSeek-M"]["value_average_accuracy"] == "0.634673"
+    assert deepseek_readout["DeepSeek-M"]["ccd_valid_choice_count"] == "2177"
+    assert deepseek_readout["DeepSeek-M"]["denevil_visible_response_count"] == "20514"
 
     with (release_dir / "ccd-choice-distribution.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -921,6 +963,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "These benchmarks do not all ask for the same kind of moral competence" in text
         assert "### Latest Family-Size Progress Snapshot" in text
         assert "Metric definition version: `2026-04-30`." in text
+        assert "### DeepSeek S/M Log-Derived Readout" in text
+        assert "Do not recover labels from reasoning traces" in text
+        assert "`DeepSeek-M` | UniMoral 0.684; Value 0.635" in text
         assert "Strongest fully observed comparable line | `Qwen-L` averages 0.600" in text
         assert "Strongest text-only comparable line | `Llama-M` reaches UniMoral 0.670 and Value 0.724" in text
         assert "Keep `DeepSeek-S` out of the top-row comparable accuracy charts" in text
