@@ -78,7 +78,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "## Public Quickstart" in readme
     assert "## Navigate This Repo" in readme
     assert "## Results First" in readme
-    assert "### DeepSeek S/M Log-Derived Readout" in readme
+    assert "### DeepSeek S/M/L Log-Derived Readout" in readme
     assert "results/release/2026-04-19-option1/README.md" in readme
     assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
     assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme

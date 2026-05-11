@@ -8,6 +8,7 @@ small and focused on benchmark-specific logic.
 from __future__ import annotations
 
 import ast
+import asyncio
 import base64
 import json
 import mimetypes
@@ -27,7 +28,7 @@ from inspect_ai.scorer import Score, Target, accuracy, mean, scorer, stderr
 # intermittent late PermissionError failures when Inspect lazily loaded this
 # module mid-run from the shared Desktop-hosted venv.
 import inspect_ai.solver._transcript as _inspect_solver_transcript  # noqa: F401
-from inspect_ai.solver import TaskState, generate
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 from rouge_score import rouge_scorer
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
@@ -72,10 +73,55 @@ def env_bool(name: str, default: bool = False) -> bool:
     return value.lower() in {"1", "true", "yes", "on"}
 
 
+def _transient_generate_error(exc: Exception) -> bool:
+    text = f"{type(exc).__name__}: {exc}".lower()
+    if any(needle in text for needle in ("402", "payment required", "insufficient credit", "invalid api key")):
+        return False
+    return any(
+        needle in text
+        for needle in (
+            "api connection",
+            "apiconnectionerror",
+            "api timeout",
+            "apitimeouterror",
+            "connection error",
+            "connecterror",
+            "remoteprotocolerror",
+            "server disconnected",
+            "bad gateway",
+            "service unavailable",
+            "internal server error",
+            "nonetype' object is not iterable",
+        )
+    )
+
+
+@solver
+def robust_generate(max_tokens: int = 256, temperature: float = 0.0, retries: int = 3, delay_seconds: float = 2.0) -> Solver:
+    async def solve(state: TaskState, generate: Generate) -> TaskState:
+        for attempt in range(retries + 1):
+            try:
+                return await generate(state, max_tokens=max_tokens, temperature=temperature)
+            except Exception as exc:
+                if attempt >= retries or not _transient_generate_error(exc):
+                    raise
+                await asyncio.sleep(delay_seconds * (2**attempt))
+        raise RuntimeError("unreachable robust_generate retry state")
+
+    return solve
+
+
 def generation_plan(max_tokens: int = 256):
     min_max_tokens = env_int("CEI_MIN_MAX_TOKENS", max_tokens)
     effective_max_tokens = max(max_tokens, min_max_tokens)
-    return [generate(max_tokens=effective_max_tokens, temperature=env_float("CEI_TEMPERATURE", 0.0))]
+    return [
+        robust_generate(
+            max_tokens=effective_max_tokens,
+            temperature=env_float("CEI_TEMPERATURE", 0.0),
+            retries=env_int("CEI_GENERATE_RETRIES", 3),
+            delay_seconds=env_float("CEI_GENERATE_RETRY_DELAY_SECONDS", 2.0),
+        )
+    ]
 
 
 def resume_start_index(env_var: str) -> int:
@@ -182,7 +228,7 @@ def extract_labeled_int(
     maximum: int | None = None,
 ) -> int | None:
     for label in labels:
-        pattern = rf"(?:{label})\s*[:=\-]?\s*(\d+)\b"
+        pattern = rf"(?:{label})\s*(?:is|=|:|\-)?\s*(\d+)\b"
         match = re.search(pattern, text, flags=re.IGNORECASE)
         if not match:
             continue
@@ -286,7 +332,7 @@ def extract_action_choice(text: str) -> str | None:
     if not normalized:
         return None
     patterns = [
-        (r"(?:selected\s+action|action\s+selected|answer|choice)\s*[:=\-]?\s*([ab])\b", "labeled"),
+        (r"(?:selected\s+action|action\s+selected|answer|choice)\s*(?:is|=|:|\-)?\s*([ab])\b", "labeled"),
         (r"(?:option)\s*([ab])\b", "option"),
         (r"^([ab])$", "exact"),
         (r"\(([ab])\)", "paren"),

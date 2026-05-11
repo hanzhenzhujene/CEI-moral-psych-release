@@ -359,5 +359,7 @@ def test_generation_plan_respects_min_max_tokens(monkeypatch):
     plan = generation_plan(max_tokens=24)
     solver = plan[0]
 
-    assert solver.__registry_params__["kwargs"]["max_tokens"] == 128
-    assert solver.__registry_params__["kwargs"]["temperature"] == pytest.approx(0.2)
+    params = solver.__registry_params__
+    kwargs = params.get("kwargs", params)
+    assert kwargs["max_tokens"] == 128
+    assert kwargs["temperature"] == pytest.approx(0.2)

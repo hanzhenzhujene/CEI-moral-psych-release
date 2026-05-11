@@ -40,7 +40,8 @@
 <title>Benchmark difficulty and spread</title>
 <desc>Mean, minimum, and maximum comparable accuracy for UniMoral, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>
 <text x="48" y="64" class="title">Benchmark Difficulty And Spread</text>
-<text x="48" y="88" class="subtitle">Lower means and wider ranges indicate a harder or less stable benchmark in the current comparable slice. These summaries intentionally exclude proxy-only Denevil and non-comparable CCD-Bench.</text>
+<text x="48" y="88" class="subtitle">Lower means and wider ranges indicate a harder or less stable benchmark in the current comparable slice. These summaries intentionally</text>
+<text x="48" y="108" class="subtitle">exclude proxy-only Denevil and non-comparable CCD-Bench.</text>
 <line x1="280.00" y1="158" x2="280.00" y2="482" class="guide"/>
 <text x="280.00" y="148" text-anchor="middle" class="small">0%</text>
 <line x1="415.00" y1="158" x2="415.00" y2="482" class="guide"/>
@@ -53,13 +54,13 @@
 <text x="820.00" y="148" text-anchor="middle" class="small">80%</text>
 <rect x="42" y="158" width="1136" height="82" rx="18" class="subpanel"/>
 <text x="48" y="186" class="axis">UniMoral</text>
-<text x="48" y="206" class="small">11 comparable lines | Action prediction accuracy</text>
+<text x="48" y="206" class="small">13 comparable lines | Action prediction accuracy</text>
 <line x1="285.38" y1="194" x2="741.45" y2="194" stroke="#0f766e" stroke-width="6" stroke-linecap="round"/>
 <circle cx="285.38" cy="194" r="7" fill="#ffffff" stroke="#0f766e" stroke-width="3"/>
 <circle cx="741.45" cy="194" r="7" fill="#ffffff" stroke="#0f766e" stroke-width="3"/>
-<circle cx="685.33" cy="194" r="9" fill="#0f766e" stroke="#ffffff" stroke-width="3"/>
+<circle cx="683.34" cy="194" r="9" fill="#0f766e" stroke="#ffffff" stroke-width="3"/>
 <text x="285.38" y="222" text-anchor="middle" class="small">low 0.8%</text>
-<text x="685.33" y="242" text-anchor="middle" class="label">mean 60.0%</text>
+<text x="683.34" y="242" text-anchor="middle" class="label">mean 59.8%</text>
 <text x="741.45" y="222" text-anchor="middle" class="small">high 68.4%</text>
 <rect x="860" y="168" width="282" height="58" rx="14" class="legend-card"/>
 <text x="878" y="188" class="body">Best: DeepSeek-M (68.4%)</text>
@@ -68,34 +69,34 @@
 <rect x="42" y="270" width="1136" height="82" rx="18" class="subpanel"/>
 <text x="48" y="298" class="axis">SMID</text>
 <text x="48" y="318" class="small">9 comparable lines | Average of moral rating and foundation classification</text>
-<line x1="412.25" y1="306" x2="605.91" y2="306" stroke="#c2410c" stroke-width="6" stroke-linecap="round"/>
-<circle cx="412.25" cy="306" r="7" fill="#ffffff" stroke="#c2410c" stroke-width="3"/>
+<line x1="413.81" y1="306" x2="605.91" y2="306" stroke="#c2410c" stroke-width="6" stroke-linecap="round"/>
+<circle cx="413.81" cy="306" r="7" fill="#ffffff" stroke="#c2410c" stroke-width="3"/>
 <circle cx="605.91" cy="306" r="7" fill="#ffffff" stroke="#c2410c" stroke-width="3"/>
-<circle cx="525.55" cy="306" r="9" fill="#c2410c" stroke="#ffffff" stroke-width="3"/>
-<text x="412.25" y="334" text-anchor="middle" class="small">low 19.6%</text>
-<text x="525.55" y="354" text-anchor="middle" class="label">mean 36.4%</text>
+<circle cx="525.72" cy="306" r="9" fill="#c2410c" stroke="#ffffff" stroke-width="3"/>
+<text x="413.81" y="334" text-anchor="middle" class="small">low 19.8%</text>
+<text x="525.72" y="354" text-anchor="middle" class="label">mean 36.4%</text>
 <text x="605.91" y="334" text-anchor="middle" class="small">high 48.3%</text>
 <rect x="860" y="280" width="282" height="58" rx="14" class="legend-card"/>
 <text x="878" y="300" class="body">Best: Qwen-L (48.3%)</text>
-<text x="878" y="320" class="body">Lowest: MiniMax-L (19.6%)</text>
-<text x="878" y="340" class="small">Spread: 28.7% absolute accuracy points</text>
+<text x="878" y="320" class="body">Lowest: MiniMax-L (19.8%)</text>
+<text x="878" y="340" class="small">Spread: 28.5% absolute accuracy points</text>
 <rect x="42" y="382" width="1136" height="82" rx="18" class="subpanel"/>
 <text x="48" y="410" class="axis">Value Kaleidoscope</text>
-<text x="48" y="430" class="small">10 comparable lines | Average of relevance and valence accuracy</text>
-<line x1="636.79" y1="418" x2="768.46" y2="418" stroke="#6d28d9" stroke-width="6" stroke-linecap="round"/>
+<text x="48" y="430" class="small">13 comparable lines | Average of relevance and valence accuracy</text>
+<line x1="636.79" y1="418" x2="780.31" y2="418" stroke="#6d28d9" stroke-width="6" stroke-linecap="round"/>
 <circle cx="636.79" cy="418" r="7" fill="#ffffff" stroke="#6d28d9" stroke-width="3"/>
-<circle cx="768.46" cy="418" r="7" fill="#ffffff" stroke="#6d28d9" stroke-width="3"/>
-<circle cx="718.87" cy="418" r="9" fill="#6d28d9" stroke="#ffffff" stroke-width="3"/>
+<circle cx="780.31" cy="418" r="7" fill="#ffffff" stroke="#6d28d9" stroke-width="3"/>
+<circle cx="727.52" cy="418" r="9" fill="#6d28d9" stroke="#ffffff" stroke-width="3"/>
 <text x="636.79" y="446" text-anchor="middle" class="small">low 52.9%</text>
-<text x="718.87" y="466" text-anchor="middle" class="label">mean 65.0%</text>
-<text x="768.46" y="446" text-anchor="middle" class="small">high 72.4%</text>
+<text x="727.52" y="466" text-anchor="middle" class="label">mean 66.3%</text>
+<text x="780.31" y="446" text-anchor="middle" class="small">high 74.1%</text>
 <rect x="860" y="392" width="282" height="58" rx="14" class="legend-card"/>
-<text x="878" y="412" class="body">Best: Llama-M (72.4%)</text>
+<text x="878" y="412" class="body">Best: MiniMax-L (74.1%)</text>
 <text x="878" y="432" class="body">Lowest: Llama-S (52.9%)</text>
-<text x="878" y="452" class="small">Spread: 19.5% absolute accuracy points</text>
+<text x="878" y="452" class="small">Spread: 21.3% absolute accuracy points</text>
 <rect x="48" y="472" width="1096" height="94" rx="18" class="legend-card"/>
 <text x="72" y="500" class="tiny">READ THIS FIGURE</text>
 <text x="72" y="524" class="body">Hardest current comparable benchmark: SMID with a mean of 36.4%.</text>
 <text x="72" y="544" class="body">Widest cross-line spread: UniMoral at 67.6% from low to high.</text>
-<text x="72" y="564" class="body">Tightest spread: Value Kaleidoscope at 19.5%; current lines cluster closely there.</text>
+<text x="72" y="564" class="body">Tightest spread: Value Kaleidoscope at 21.3%; current lines cluster closely there.</text>
 </svg>

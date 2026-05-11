@@ -24,6 +24,10 @@ def test_extract_structured_choice_prefers_tagged_choice():
     assert extract_structured_choice_int(text, minimum=1, maximum=10) == 4
 
 
+def test_extract_structured_choice_accepts_selected_option_is_phrase():
+    assert extract_structured_choice_int("Selected option is 4.", minimum=1, maximum=10) == 4
+
+
 def test_extract_structured_choice_rejects_ambiguous_multi_number_freeform_text():
     text = "There are 10 options here and I like 4 for the final answer."
     assert extract_structured_choice_int(text, minimum=1, maximum=10) is None
@@ -69,6 +73,10 @@ def test_extract_action_choice_does_not_confuse_article_with_answer():
 
 def test_extract_action_choice_recovers_explicit_choice():
     assert extract_action_choice("Selected action: b") == "b"
+
+
+def test_extract_action_choice_accepts_selected_action_is_phrase():
+    assert extract_action_choice("Selected action is a.") == "a"
 
 
 def test_classify_yes_no_label_handles_not_relevant_before_relevant():

@@ -67,6 +67,12 @@ DEEPSEEK_REASONING_EFFORT="${DEEPSEEK_REASONING_EFFORT:-none}"
 DEEPSEEK_MODEL_ARGS="${DEEPSEEK_MODEL_ARGS:-reasoning_enabled=False}"
 DEEPSEEK_EXTRA_BODY_JSON="${DEEPSEEK_EXTRA_BODY_JSON:-{\"chat_template_kwargs\":{\"enable_thinking\":false}}}"
 DEEPSEEK_PROMPT_PREFIX="${DEEPSEEK_PROMPT_PREFIX:-/no_think}"
+DEEPSEEK_OPENROUTER_MAX_CONNECTIONS="${DEEPSEEK_OPENROUTER_MAX_CONNECTIONS:-2}"
+DEEPSEEK_OPENROUTER_REASONING_EFFORT="${DEEPSEEK_OPENROUTER_REASONING_EFFORT-}"
+DEEPSEEK_OPENROUTER_MODEL_ARGS="${DEEPSEEK_OPENROUTER_MODEL_ARGS-}"
+DEEPSEEK_OPENROUTER_EXTRA_BODY_JSON="${DEEPSEEK_OPENROUTER_EXTRA_BODY_JSON:-{\"reasoning\":{\"effort\":\"minimal\",\"exclude\":true}}}"
+DEEPSEEK_OPENROUTER_PROMPT_PREFIX="${DEEPSEEK_OPENROUTER_PROMPT_PREFIX:-/no_think}"
+DEEPSEEK_CEI_MIN_MAX_TOKENS="${DEEPSEEK_CEI_MIN_MAX_TOKENS-}"
 TASK_FILTER="${TASK_FILTER:-ccd_bench_selection,unimoral_action_prediction,denevil_fulcra_proxy_generation,value_prism_valence,value_prism_relevance}"
 
 UNIMORAL_DATA_DIR="${UNIMORAL_DATA_DIR:-$DATA_ROOT/unimoral}"
@@ -190,10 +196,12 @@ task_logged_sample_progress() {
   local task_name="$1"
   local root="$2"
 
-  python3 - "$task_name" "$root" <<'PY'
+  python3 - "$task_name" "$root" "${UNIMORAL_DATA_DIR:-}" <<'PY'
 from __future__ import annotations
 
+import csv
 import json
+import os
 import re
 import sys
 import zipfile
@@ -201,13 +209,13 @@ from pathlib import Path
 
 task_name = sys.argv[1]
 root = Path(sys.argv[2])
+unimoral_data_dir = Path(sys.argv[3]).expanduser() if len(sys.argv) > 3 and sys.argv[3] else None
 sample_ids: set[str] = set()
 sample_ordinals: set[int] = set()
 total = 0
 stable_ordinal_tasks = {
     "ccd_bench_selection",
     "denevil_fulcra_proxy_generation",
-    "unimoral_action_prediction",
     "value_prism_relevance",
     "value_prism_valence",
 }
@@ -234,6 +242,26 @@ if root.exists():
 
 count = len(sample_ids)
 prefix = 0
+if task_name == "unimoral_action_prediction" and unimoral_data_dir is not None and unimoral_data_dir.exists():
+    languages = ["Arabic", "Chinese", "English", "Hindi", "Russian", "Spanish"]
+    ordered_ids: list[str] = []
+    for language in languages:
+        rows: list[dict[str, str]] = []
+        for kind in ("long", "short"):
+            path = unimoral_data_dir / f"{language}_{kind}.csv"
+            if not path.exists():
+                continue
+            with path.open(newline="", encoding="utf-8") as handle:
+                rows.extend(csv.DictReader(handle))
+        for index, row in enumerate(rows):
+            ordered_ids.append(f"{language}-rq1-{row['Scenario_id']}-{row['Annotator_id']}-{index}")
+    if ordered_ids:
+        total = max(total, len(ordered_ids))
+        while prefix < len(ordered_ids) and ordered_ids[prefix] in sample_ids:
+            prefix += 1
+        print(f"{count} {prefix} {total}")
+        raise SystemExit(0)
+
 if sample_ordinals:
     while prefix + 1 in sample_ordinals:
         prefix += 1
@@ -326,6 +354,13 @@ run_task() {
   model_args="$DEEPSEEK_MODEL_ARGS"
   extra_body_json="$DEEPSEEK_EXTRA_BODY_JSON"
   prompt_prefix="$DEEPSEEK_PROMPT_PREFIX"
+  if [[ "$ROUTED_PROVIDER" == "openrouter" ]]; then
+    max_connections="$DEEPSEEK_OPENROUTER_MAX_CONNECTIONS"
+    reasoning_effort="$DEEPSEEK_OPENROUTER_REASONING_EFFORT"
+    model_args="$DEEPSEEK_OPENROUTER_MODEL_ARGS"
+    extra_body_json="$DEEPSEEK_OPENROUTER_EXTRA_BODY_JSON"
+    prompt_prefix="$DEEPSEEK_OPENROUTER_PROMPT_PREFIX"
+  fi
 
   if ! task_is_selected "$task_name"; then
     printf '[%s] SKIP family=%s task=%s reason=task_filter=%s\n' "$(now_iso)" "$family" "$task_name" "$TASK_FILTER" > "$output_path"
@@ -376,10 +411,19 @@ run_task() {
     else
       unset CEI_PROMPT_PREFIX || true
     fi
+    if [[ -n "$DEEPSEEK_CEI_MIN_MAX_TOKENS" ]]; then
+      export CEI_MIN_MAX_TOKENS="$DEEPSEEK_CEI_MIN_MAX_TOKENS"
+    else
+      unset CEI_MIN_MAX_TOKENS || true
+    fi
     echo "[$start_at] START family=$family task=$task_name model=$model routed_model=$ROUTED_MODEL provider=$ROUTED_PROVIDER provider_model=$ROUTED_PROVIDER_MODEL base_url=$ROUTED_BASE_URL key_var=$ROUTED_KEY_VAR key_state=$ROUTED_KEY_STATE max_connections=$max_connections reasoning_effort=${reasoning_effort:-default} model_args=${model_args:-default} extra_body_json=${extra_body_json:-default} prompt_prefix=${prompt_prefix:-default} resume_count=${task_resume_count:-0} resume_prefix=${task_resume_prefix:-0} logged_count=${task_logged_count:-0} resume_total=${task_resume_total:-0}"
     if [[ "$ROUTED_KEY_STATE" != "present" ]]; then
       echo "[$(now_iso)] ROUTING_PRECHECK_FAILED family=$family task=$task_name provider=$ROUTED_PROVIDER key_var=$ROUTED_KEY_VAR reason=missing_provider_api_key"
       exit 86
+    fi
+    if [[ "$ROUTED_PROVIDER" == "openrouter" ]]; then
+      export OPENAI_API_KEY="$OPENROUTER_API_KEY"
+      export OPENAI_BASE_URL="$ROUTED_BASE_URL"
     fi
     "${RUN_PREFIX[@]}" "$RUNNER" \
       --tasks "$task_spec" \

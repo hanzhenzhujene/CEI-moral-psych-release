@@ -70,9 +70,16 @@
 <circle cx="378.00" cy="539.53" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
 <circle cx="378.00" cy="539.53" r="4.2" fill="#d97706"/>
 <text x="360.00" y="531.53" text-anchor="end" class="small">MiniMax-L</text>
+<line x1="98.00" y1="337.66" x2="248.00" y2="330.53" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
+<line x1="98.00" y1="337.66" x2="248.00" y2="330.53" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
+<line x1="248.00" y1="330.53" x2="398.00" y2="386.72" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
+<line x1="248.00" y1="330.53" x2="398.00" y2="386.72" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
+<circle cx="98.00" cy="337.66" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
+<circle cx="98.00" cy="337.66" r="4.2" fill="#2563eb"/>
 <circle cx="248.00" cy="330.53" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
 <circle cx="248.00" cy="330.53" r="4.2" fill="#2563eb"/>
-<text x="228.00" y="324.00" text-anchor="end" class="small">DeepSeek-M</text>
+<circle cx="398.00" cy="386.72" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
+<circle cx="398.00" cy="386.72" r="4.2" fill="#2563eb"/>
 <line x1="108.00" y1="341.55" x2="258.00" y2="334.79" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
 <line x1="108.00" y1="341.55" x2="258.00" y2="334.79" stroke="#ea580c" stroke-width="4.0" stroke-linecap="round"/>
 <line x1="258.00" y1="334.79" x2="408.00" y2="337.89" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
@@ -127,12 +134,12 @@
 <text x="648.00" y="566" text-anchor="middle" class="axis">M</text>
 <line x1="798.00" y1="310" x2="798.00" y2="542" class="guide"/>
 <text x="798.00" y="566" text-anchor="middle" class="axis">L</text>
-<line x1="478.00" y1="408.37" x2="778.00" y2="481.39" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
-<line x1="478.00" y1="408.37" x2="778.00" y2="481.39" stroke="#d97706" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="7 6"/>
+<line x1="478.00" y1="408.37" x2="778.00" y2="480.68" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
+<line x1="478.00" y1="408.37" x2="778.00" y2="480.68" stroke="#d97706" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="7 6"/>
 <circle cx="478.00" cy="408.37" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
 <circle cx="478.00" cy="408.37" r="4.2" fill="#d97706"/>
-<circle cx="778.00" cy="481.39" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
-<circle cx="778.00" cy="481.39" r="4.2" fill="#d97706"/>
+<circle cx="778.00" cy="480.68" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
+<circle cx="778.00" cy="480.68" r="4.2" fill="#d97706"/>
 <line x1="508.00" y1="475.05" x2="808.00" y2="422.57" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
 <line x1="508.00" y1="475.05" x2="808.00" y2="422.57" stroke="#ea580c" stroke-width="4.0" stroke-linecap="round" stroke-dasharray="7 6"/>
 <circle cx="508.00" cy="475.05" r="8" fill="#ffffff" stroke="#ea580c" stroke-width="3.4"/>
@@ -179,9 +186,19 @@
 <text x="1048.00" y="566" text-anchor="middle" class="axis">M</text>
 <line x1="1198.00" y1="310" x2="1198.00" y2="542" class="guide"/>
 <text x="1198.00" y="566" text-anchor="middle" class="axis">L</text>
+<circle cx="1178.00" cy="312.72" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
+<circle cx="1178.00" cy="312.72" r="4.2" fill="#d97706"/>
+<text x="1160.00" y="324.00" text-anchor="end" class="small">MiniMax-L</text>
+<line x1="898.00" y1="326.95" x2="1048.00" y2="345.67" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
+<line x1="898.00" y1="326.95" x2="1048.00" y2="345.67" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
+<line x1="1048.00" y1="345.67" x2="1198.00" y2="331.45" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
+<line x1="1048.00" y1="345.67" x2="1198.00" y2="331.45" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
+<circle cx="898.00" cy="326.95" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
+<circle cx="898.00" cy="326.95" r="4.2" fill="#2563eb"/>
 <circle cx="1048.00" cy="345.67" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
 <circle cx="1048.00" cy="345.67" r="4.2" fill="#2563eb"/>
-<text x="1028.00" y="329.67" text-anchor="end" class="small">DeepSeek-M</text>
+<circle cx="1198.00" cy="331.45" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
+<circle cx="1198.00" cy="331.45" r="4.2" fill="#2563eb"/>
 <line x1="908.00" y1="378.49" x2="1058.00" y2="318.15" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
 <line x1="908.00" y1="378.49" x2="1058.00" y2="318.15" stroke="#ea580c" stroke-width="4.0" stroke-linecap="round"/>
 <line x1="1058.00" y1="318.15" x2="1208.00" y2="327.84" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
@@ -231,7 +248,7 @@
 <rect x="656" y="740" width="14" height="14" rx="4" fill="#0d9488"/>
 <text x="680" y="751" class="small">Qwen: text scored at S/M/L; SMID at S/L.</text>
 <rect x="656" y="770" width="14" height="14" rx="4" fill="#2563eb"/>
-<text x="680" y="781" class="small">DeepSeek: only M is scored up top right now; S is read in CCD / Denevil figures while L/R1 is still pending.</text>
+<text x="680" y="781" class="small">DeepSeek: S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists.</text>
 <rect x="656" y="800" width="14" height="14" rx="4" fill="#ea580c"/>
 <text x="680" y="811" class="small">Llama: text scored at S/M/L; SMID at S/L.</text>
 <rect x="656" y="830" width="14" height="14" rx="4" fill="#8b5cf6"/>

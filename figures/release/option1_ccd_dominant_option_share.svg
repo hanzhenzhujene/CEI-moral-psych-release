@@ -120,9 +120,10 @@
 <text x="212.00" y="503.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="503.00" class="label">DeepSeek-S</text>
 <rect x="420" y="484" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="420" y="484" width="720" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="780.00" y="503.00" text-anchor="middle" class="small">n/a — no valid visible CCD selections</text>
-<text x="1162" y="503.00" class="small">effective clusters n/a</text>
+<rect x="420" y="484" width="99.08" height="28" rx="10" fill="#e377c2" stroke="#ffffff" stroke-width="1"/>
+<text x="509.08" y="503.00" text-anchor="end" class="celltext-dark">13.8%</text>
+<text x="1162" y="499.00" class="label">option_7 (Sub Saharan Africa)</text>
+<text x="1162" y="514.00" class="small">effective clusters 9.57</text>
 <rect x="184" y="534" width="56" height="20" rx="12" fill="#2563eb"/>
 <text x="212.00" y="549.00" text-anchor="middle" class="celltext">M</text>
 <text x="258" y="549.00" class="label">DeepSeek-M</text>
@@ -135,9 +136,10 @@
 <text x="212.00" y="595.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="595.00" class="label">DeepSeek-L</text>
 <rect x="420" y="576" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="420" y="576" width="720" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="780.00" y="595.00" text-anchor="middle" class="small">n/a — no valid visible CCD selections</text>
-<text x="1162" y="595.00" class="small">effective clusters n/a</text>
+<rect x="420" y="576" width="149.19" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
+<text x="559.19" y="595.00" text-anchor="end" class="celltext">20.7%</text>
+<text x="1162" y="591.00" class="label">option_6 (Nordic Europe)</text>
+<text x="1162" y="606.00" class="small">effective clusters 8.68</text>
 <rect x="184" y="626" width="56" height="20" rx="12" fill="#c2410c"/>
 <text x="212.00" y="641.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="641.00" class="label">Llama-S</text>
