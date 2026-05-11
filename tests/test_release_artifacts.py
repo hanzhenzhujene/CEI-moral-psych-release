@@ -357,11 +357,15 @@ def test_release_builder_emits_expected_files(tmp_path):
         "SMID done; text is still queued.",
     }
     deepseek_small = row_for("DeepSeek-S")
-    assert_done_text_progress(
-        deepseek_small,
-        smid_status="-",
-        summary_note="No SMID route; May 9 no-thinking text rerun is complete and visible-answer validated.",
-    )
+    assert deepseek_small["unimoral"] == "done"
+    assert deepseek_small["smid"] == "-"
+    assert deepseek_small["value_kaleidoscope"] == "done"
+    assert deepseek_small["ccd_bench"] == "done"
+    assert deepseek_small["denevil"] == "proxy"
+    assert deepseek_small["summary_note"] in {
+        "No SMID route; May 9 no-thinking text rerun is complete and visible-answer validated.",
+        "No SMID route; May 9 no-thinking text rerun is complete and passes visible-answer validation for UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy.",
+    }
     deepseek_medium = row_for("DeepSeek-M")
     assert_done_text_progress(
         deepseek_medium,
