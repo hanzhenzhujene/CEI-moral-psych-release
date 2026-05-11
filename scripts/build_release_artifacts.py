@@ -5026,6 +5026,36 @@ def published_ccd_choice_distribution_fallbacks() -> dict[str, dict[str, Any]]:
     return fallbacks
 
 
+@lru_cache(maxsize=1)
+def published_denevil_proxy_summary_fallbacks() -> dict[str, dict[str, Any]]:
+    """Reuse tracked release proxy QA summaries when local Denevil eval samples are absent."""
+    path = DEFAULT_RELEASE_DIR / "denevil-proxy-summary.csv"
+    if not path.exists():
+        return {}
+
+    fallbacks: dict[str, dict[str, Any]] = {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            fallbacks[row["model_line"]] = {
+                "total_proxy_samples": _parse_optional_int(row.get("total_proxy_samples")),
+                "generated_response_count": _parse_optional_int(row.get("generated_response_count")),
+                "valid_response_rate": _parse_optional_float(row.get("valid_response_rate")),
+                "persisted_checkpoint_pct": (
+                    None
+                    if _parse_optional_float(row.get("persisted_checkpoint_pct")) is None
+                    else (_parse_optional_float(row.get("persisted_checkpoint_pct")) or 0.0) / 100.0
+                ),
+                "route_model_name": None if row.get("route_model_name") in {None, "", "n/a"} else row["route_model_name"],
+                "latest_successful_eval_created_at": None
+                if row.get("latest_successful_eval_created_at") in {None, "", "n/a"}
+                else row["latest_successful_eval_created_at"],
+                "latest_proxy_artifact_updated_at": None
+                if row.get("latest_proxy_artifact_updated_at") in {None, "", "n/a"}
+                else row["latest_proxy_artifact_updated_at"],
+            }
+    return fallbacks
+
+
 def _denevil_behavior_key_base(label: str) -> str:
     return label.lower().replace(" / ", "_").replace(" ", "_").replace("-", "_")
 
@@ -6610,10 +6640,19 @@ def build_denevil_proxy_summary_rows(
             if source is not None and source.get("merge_shards") and denevil_dirs is not None
             else None if latest_success is None else inspect_denevil_proxy_summary(latest_success["eval_path"])
         )
+        published_fallback = published_denevil_proxy_summary_fallbacks().get(line_label)
+        if proxy_summary is None and published_fallback is not None:
+            proxy_summary = {
+                "total_proxy_samples": published_fallback["total_proxy_samples"],
+                "generated_response_count": published_fallback["generated_response_count"],
+                "valid_response_rate": published_fallback["valid_response_rate"],
+            }
         total_proxy_samples = None if proxy_summary is None else proxy_summary["total_proxy_samples"]
         generated_response_count = None if proxy_summary is None else proxy_summary["generated_response_count"]
         valid_response_rate = None if proxy_summary is None else proxy_summary["valid_response_rate"]
         checkpoint_pct = None if best_checkpoint is None else float(best_checkpoint["progress_pct"]) / 100.0
+        if checkpoint_pct is None and published_fallback is not None:
+            checkpoint_pct = published_fallback["persisted_checkpoint_pct"]
         if (
             source is not None
             and source.get("merge_shards")
@@ -6624,8 +6663,24 @@ def build_denevil_proxy_summary_rows(
         route_or_model = (
             str(latest_success["model"])
             if latest_success is not None and latest_success.get("model")
+            else published_fallback["route_model_name"]
+            if published_fallback is not None and published_fallback["route_model_name"]
             else row["text_route"]
         )
+        latest_success_created_at = (
+            latest_success["created_at"]
+            if latest_success is not None
+            else None
+            if published_fallback is None
+            else published_fallback["latest_successful_eval_created_at"]
+        )
+        latest_artifact_updated_at = (
+            None
+            if latest_checkpoint is None
+            else datetime.fromtimestamp(latest_checkpoint["mtime"], tz=REPORT_TIMEZONE).isoformat()
+        )
+        if latest_artifact_updated_at is None and published_fallback is not None:
+            latest_artifact_updated_at = published_fallback["latest_proxy_artifact_updated_at"]
         summary_rows.append(
             {
                 "model_line": line_label,
@@ -6638,10 +6693,8 @@ def build_denevil_proxy_summary_rows(
                 "persisted_checkpoint_pct": checkpoint_pct,
                 "route_model_name": route_or_model,
                 "route_short_label": _short_route_label(route_or_model),
-                "latest_successful_eval_created_at": None if latest_success is None else latest_success["created_at"],
-                "latest_proxy_artifact_updated_at": None
-                if latest_checkpoint is None
-                else datetime.fromtimestamp(latest_checkpoint["mtime"], tz=REPORT_TIMEZONE).isoformat(),
+                "latest_successful_eval_created_at": latest_success_created_at,
+                "latest_proxy_artifact_updated_at": latest_artifact_updated_at,
                 "limitation_flag": denevil_proxy_limitation_flag(
                     row["denevil"],
                     valid_response_rate,
