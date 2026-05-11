@@ -48,6 +48,19 @@ def test_minimax_01_direct_route_matches_pr6_keepalive_contract() -> None:
     ]
 
 
+def test_minimax_m2_1_direct_route_uses_minimax_api() -> None:
+    output = run_provider_script(
+        'source "./provider_config.sh"; '
+        'printf "%s\\n" "$(resolve_provider "minimax/minimax-m2.1")" "$(provider_url minimax)" "$(provider_key_var minimax)"'
+    ).splitlines()
+
+    assert output == [
+        "minimax|MiniMax-M2.1",
+        "https://api.minimax.io/v1",
+        "MINIMAX_API_KEY",
+    ]
+
+
 def test_setup_model_provider_exports_minimax_direct_api_env() -> None:
     env = os.environ.copy()
     env["MINIMAX_API_KEY"] = "dummy-minimax-key"
