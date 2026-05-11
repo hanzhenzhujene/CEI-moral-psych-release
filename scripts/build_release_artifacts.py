@@ -5056,6 +5056,64 @@ def published_denevil_proxy_summary_fallbacks() -> dict[str, dict[str, Any]]:
     return fallbacks
 
 
+@lru_cache(maxsize=1)
+def published_denevil_behavior_summary_fallbacks() -> dict[str, dict[str, Any]]:
+    """Reuse tracked release behavior summaries when local Denevil eval samples are absent."""
+    path = DEFAULT_RELEASE_DIR / "denevil-behavior-summary.csv"
+    if not path.exists():
+        return {}
+
+    fallbacks: dict[str, dict[str, Any]] = {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            payload: dict[str, Any] = {
+                "total_proxy_samples": _parse_optional_int(row.get("total_proxy_samples")),
+                "dominant_behavior": row.get("dominant_behavior") or "n/a",
+                "dominant_behavior_share": (
+                    None
+                    if _parse_optional_float(row.get("dominant_behavior_share")) is None
+                    else (_parse_optional_float(row.get("dominant_behavior_share")) or 0.0) / 100.0
+                ),
+                "protective_response_rate": (
+                    None
+                    if _parse_optional_float(row.get("protective_response_rate")) is None
+                    else (_parse_optional_float(row.get("protective_response_rate")) or 0.0) / 100.0
+                ),
+                "behavior_status": row.get("behavior_status") or "missing_eval_samples",
+                "limitation_note": row.get("limitation_note") or "",
+            }
+            for behavior_label in DENEVIL_BEHAVIOR_ORDER:
+                key_base = _denevil_behavior_key_base(behavior_label)
+                payload[f"{key_base}_count"] = _parse_optional_int(row.get(f"{key_base}_count"))
+                rate_value = _parse_optional_float(row.get(f"{key_base}_rate"))
+                payload[f"{key_base}_rate"] = None if rate_value is None else rate_value / 100.0
+            fallbacks[row["model_line"]] = payload
+    return fallbacks
+
+
+@lru_cache(maxsize=1)
+def published_denevil_prompt_family_fallbacks() -> dict[tuple[str, str], dict[str, Any]]:
+    """Reuse tracked prompt-family proxy summaries when local Denevil eval samples are absent."""
+    path = DEFAULT_RELEASE_DIR / "denevil-prompt-family-breakdown.csv"
+    if not path.exists():
+        return {}
+
+    fallbacks: dict[tuple[str, str], dict[str, Any]] = {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            protective_rate = _parse_optional_float(row.get("protective_response_rate"))
+            risky_rate = _parse_optional_float(row.get("risky_continuation_rate"))
+            empty_rate = _parse_optional_float(row.get("empty_response_rate"))
+            fallbacks[(row["model_line"], row["prompt_family"])] = {
+                "prompt_count": _parse_optional_int(row.get("prompt_count")),
+                "protective_response_rate": None if protective_rate is None else protective_rate / 100.0,
+                "risky_continuation_rate": None if risky_rate is None else risky_rate / 100.0,
+                "empty_response_rate": None if empty_rate is None else empty_rate / 100.0,
+                "dominant_behavior": row.get("dominant_behavior") or "n/a",
+            }
+    return fallbacks
+
+
 def _denevil_behavior_key_base(label: str) -> str:
     return label.lower().replace(" / ", "_").replace(" ", "_").replace("-", "_")
 
@@ -6754,6 +6812,16 @@ def build_denevil_behavior_rows(
                 "denevil_fulcra_proxy_generation",
             )
             behavior_summary = None if denevil_eval is None else inspect_denevil_behavior_summary(denevil_eval["eval_path"])
+        published_behavior = published_denevil_behavior_summary_fallbacks().get(line_label)
+        if behavior_summary is None and published_behavior is not None:
+            row_payload = {
+                "model_line": line_label,
+                "model_family": row["family"],
+                "size_slot": row["size_slot"],
+                **published_behavior,
+            }
+            behavior_rows.append(row_payload)
+            continue
         total = None if behavior_summary is None else int(behavior_summary["total_proxy_samples"])
         row_payload: dict[str, Any] = {
             "model_line": line_label,
@@ -6797,6 +6865,18 @@ def build_denevil_prompt_family_breakdown_rows(
                 )
                 behavior_summary = None if denevil_eval is None else inspect_denevil_behavior_summary(denevil_eval["eval_path"])
         for prompt_family in DENEVIL_PROMPT_FAMILY_ORDER:
+            published_prompt_family = published_denevil_prompt_family_fallbacks().get((line_label, prompt_family))
+            if behavior_summary is None and published_prompt_family is not None:
+                breakdown_rows.append(
+                    {
+                        "model_line": line_label,
+                        "model_family": row["family"],
+                        "size_slot": row["size_slot"],
+                        "prompt_family": prompt_family,
+                        **published_prompt_family,
+                    }
+                )
+                continue
             prompt_total = None if behavior_summary is None else int(behavior_summary["prompt_family_counts"].get(prompt_family, 0))
             family_behavior_counts = {} if behavior_summary is None else behavior_summary["prompt_family_behavior_counts"].get(prompt_family, {})
             protective_count = None
