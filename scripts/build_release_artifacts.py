@@ -4985,6 +4985,47 @@ def _effective_cluster_count(option_shares: dict[int, float | None]) -> float | 
     return 1.0 / concentration
 
 
+def _parse_optional_float(value: str | None) -> float | None:
+    if value in {None, "", "n/a"}:
+        return None
+    return float(value)
+
+
+def _parse_optional_int(value: str | None) -> int | None:
+    if value in {None, "", "n/a"}:
+        return None
+    return int(value)
+
+
+@lru_cache(maxsize=1)
+def published_ccd_choice_distribution_fallbacks() -> dict[str, dict[str, Any]]:
+    """Reuse tracked release CCD distributions when large local eval samples are absent."""
+    path = DEFAULT_RELEASE_DIR / "ccd-choice-distribution.csv"
+    if not path.exists():
+        return {}
+
+    fallbacks: dict[str, dict[str, Any]] = {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            if row.get("distribution_status") != "ok":
+                continue
+            option_shares = {
+                cluster_id: (_parse_optional_float(row.get(f"option_{cluster_id}_pct")) or 0.0) / 100.0
+                for cluster_id in sorted(CCD_CLUSTER_MAP)
+            }
+            fallbacks[row["line_label"]] = {
+                "total": _parse_optional_int(row.get("total_ccd_samples")),
+                "valid_selection_count": _parse_optional_int(row.get("valid_selection_count")),
+                "valid_selection_rate": (_parse_optional_float(row.get("valid_selection_rate")) or 0.0) / 100.0,
+                "option_shares": option_shares,
+                "dominant_option_label": row.get("dominant_option") or "n/a",
+                "dominant_option_share": (_parse_optional_float(row.get("dominant_option_share")) or 0.0) / 100.0,
+                "effective_cluster_count": _parse_optional_float(row.get("effective_cluster_count")),
+                "distribution_status": "ok",
+            }
+    return fallbacks
+
+
 def _denevil_behavior_key_base(label: str) -> str:
     return label.lower().replace(" / ", "_").replace(" ", "_").replace("-", "_")
 
@@ -5957,6 +5998,8 @@ def build_ccd_choice_distribution_rows(
                 distribution = None if ccd_eval is None else inspect_ccd_choice_distribution(ccd_eval["eval_path"])
         else:
             distribution = None
+        if distribution is None:
+            distribution = published_ccd_choice_distribution_fallbacks().get(line_label)
 
         total = comparison_row.get("ccd_completion_total")
         valid_selection_count = comparison_row.get("ccd_completion_count")
