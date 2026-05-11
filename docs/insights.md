@@ -7,6 +7,7 @@ Cross-cutting findings from the CEI moral psychology benchmark evaluation (13 pa
 - [Topline summary](../results/release/2026-04-19-option1/topline-summary.md) — Shortest frozen-snapshot readout
 - [TrolleyBench eval report](../results/trolleybench/20260421_100038/eval_report.md) — Multi-turn ethical consistency results
 - [Joseph's progress report](../PROGRESS.md) — Full family-size matrix for all 5 benchmarks (MoReBench, Moral Circuits, M3oralBench, MoralLens, TrolleyBench)
+- [Faithful metrics CSV](../results/release/2026-04-19-option1/faithful-metrics.csv) — MoralBench + EMNLP Educator results (15 models)
 
 ## 1. Bigger Does Not Mean More Moral
 
@@ -37,6 +38,25 @@ _See: [TrolleyBench eval report](../results/trolleybench/20260421_100038/eval_re
 At T=0.0, models are consistent and resist persuasion. At T=0.7, framework mixing and position reversals spike. For morally-sensitive deployments, low temperature is not just a preference — it is a guardrail.
 
 _See: [TrolleyBench eval report](../results/trolleybench/20260421_100038/eval_report.md) — compare T0.0 vs T0.7 rows across all models_
+
+## 6. Reasoning Models Collapse on Moral Agreement Tasks
+
+The MoralBench benchmark (MFQ + Vignette tasks) reveals a stark blindspot in reasoning-optimized models. DeepSeek-R1 scores **0.0** on both MFQ agreement and vignette agreement — it cannot match its moral judgments to human-normed scales. The distilled variant (R1-distill-70B) also scores 0.0 across all four MoralBench tasks. Meanwhile, MiniMax-01 leads the pack at **0.91 MFQ agreement** and **0.93 vignette agreement**, and Qwen-235B reaches 0.90 and 0.82 respectively. Reasoning depth and moral calibration appear to be orthogonal capabilities.
+
+_See: [faithful-metrics.csv](../results/release/2026-04-19-option1/faithful-metrics.csv) — MoralBench rows, compare DeepSeek-R1 vs MiniMax-01_
+
+## 7. Personality Modeling Remains the Hardest Moral Task
+
+EMNLP Educator personality benchmarks (CPST, HEXACO) are the most challenging tasks in the entire suite. Even the best models only reach ~0.91 on CPST (DeepSeek-V3.1) and ~0.60 on HEXACO (Qwen-32B). MiniMax-M1 scores 0.0 on both personality tasks while performing well on moral dilemmas (0.89) and prompt injection (0.91). Gemma-4B achieves a perfect 1.0 on prompt injection resistance but only 0.63 on CPST. These personality-modeling tasks probe a fundamentally different capability than moral classification or safety compliance.
+
+| Task | Best Score | Model | Worst Score | Model |
+|------|-----------|-------|------------|-------|
+| CPST personality | 0.91 | DeepSeek-V3.1 | 0.0 | MiniMax-M1, MiniMax-M2.5, R1-distill |
+| HEXACO personality | 0.73 | Llama-3.2-3B | 0.0 | MiniMax-M1, R1-distill |
+| Moral dilemmas | 0.99 | Qwen-32B | 0.73 | R1-distill |
+| Prompt injection | 1.0 | Gemma-4B | 0.61 | R1-distill |
+
+_See: [faithful-metrics.csv](../results/release/2026-04-19-option1/faithful-metrics.csv) — EMNLP_Educator rows_
 
 ## Case Studies from Multi-Turn Conversations
 
@@ -96,6 +116,6 @@ Moral reasoning in LLMs is task-dependent, scale-inconsistent, and framework-fra
 
 ---
 
-**Data sources:** TrolleyBench (15 models x 2 temps), Moral-Psych Suite (UniMoral, SMID, Value Kaleidoscope, CCD-Bench, DeNEVIL), MoReBench, Moral Circuits, M3oralBench, MoralLens.
+**Data sources:** TrolleyBench (15 models x 2 temps), Moral-Psych Suite (UniMoral, SMID, Value Kaleidoscope, CCD-Bench, DeNEVIL), MoralBench (MFQ + Vignette, 15 models), EMNLP Educator (CPST, HEXACO, Moral Dilemmas, Prompt Injection, 15 models), MoReBench, Moral Circuits, M3oralBench, MoralLens.
 
-**Last updated:** 2026-05-06
+**Last updated:** 2026-05-08
