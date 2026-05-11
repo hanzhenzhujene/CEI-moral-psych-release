@@ -7147,12 +7147,12 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Current comparable accuracy heatmap</title>",
-            "<desc>Heatmap of the latest available comparable accuracy metrics across completed and in-progress family-size lines.</desc>",
+            "<desc>Heatmap of the latest available comparable accuracy metrics across completed and in-progress family-size lines. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation.</desc>",
             '<text x="48" y="64" class="title">Current Comparable Accuracy Heatmap</text>',
             *svg_text_block(
                 48,
                 88,
-                "Rows cover current comparable metrics. Hatched cells mark incomplete benchmarks or lines withdrawn from direct comparison after response-format validation.",
+                "Rows cover current comparable metrics. Hatched cells mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format validation.",
                 "subtitle",
                 135,
             ),
@@ -7171,10 +7171,11 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
             x = left + col_index * cell_w
             value = row[field]
             if value is None:
+                missing_note = comparable_missing_note(row, field)
                 lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" class="muted-cell"/>')
                 lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>')
                 lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 34}" text-anchor="middle" class="label">n/a</text>')
-                lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 55}" text-anchor="middle" class="small">no current result</text>')
+                lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 55}" text-anchor="middle" class="small">{escape_xml(missing_note)}</text>')
                 continue
             weight = 0.0 if math.isclose(max_acc, min_acc) else (value - min_acc) / (max_acc - min_acc)
             color = interpolate_color("#f2e8cf", "#1f6f78", weight)
@@ -7199,10 +7200,18 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
     lines.append(f'<text x="{legend_x + legend_w}" y="{legend_y + 44}" text-anchor="end" class="small">{max_acc * 100:.1f}%</text>')
     lines.append(f'<rect x="{legend_x + 382}" y="{legend_y + 6}" width="24" height="24" rx="6" class="muted-cell"/>')
     lines.append(f'<rect x="{legend_x + 382}" y="{legend_y + 6}" width="24" height="24" rx="6" fill="url(#diagonalHatch)" opacity="0.8"/>')
-    lines.append(f'<text x="{legend_x + 416}" y="{legend_y + 24}" class="small">no current result</text>')
+    lines.append(f'<text x="{legend_x + 416}" y="{legend_y + 24}" class="small">n/a / no route</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
+
+
+def comparable_missing_note(row: dict[str, Any], field: str) -> str:
+    """Return a compact, figure-safe reason for an unavailable comparable metric."""
+    note = str(row.get("comparison_note") or comparable_snapshot_note(row)).lower()
+    if field == "smid_average_accuracy" and "no public smid route" in note:
+        return "no SMID vision route"
+    return "no current result"
 
 
 def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
@@ -7313,12 +7322,12 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Comparable accuracy by benchmark</title>",
-            "<desc>Horizontal bar panels comparing the latest available family-size lines on benchmarks with directly comparable accuracy metrics.</desc>",
+            "<desc>Horizontal bar panels comparing the latest available family-size lines on benchmarks with directly comparable accuracy metrics. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>",
             '<text x="48" y="64" class="title">Comparable Accuracy by Benchmark</text>',
             *svg_text_block(
                 48,
                 88,
-                "Each panel keeps the same current lines. Hatched rows mark incomplete benchmarks or lines withdrawn from direct comparison after response-format validation.",
+                "Each panel keeps the same current lines. Hatched rows mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format validation. SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells.",
                 "subtitle",
                 135,
             ),
@@ -7348,12 +7357,13 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
             lines.append(f'<text x="{panel_left - 142}" y="{y + 19}" text-anchor="end" class="label">{escape_xml(line_label)}</text>')
             lines.append(f'<rect x="{panel_left}" y="{y}" width="{panel_width}" height="{bar_height}" rx="10" fill="#e2e8f0"/>')
             if value is None:
+                missing_note = comparable_missing_note(row, field) if row is not None else "no current result"
                 lines.append(f'<rect x="{panel_left}" y="{y}" width="{panel_width}" height="{bar_height}" rx="10" class="muted-bar"/>')
                 lines.append(
                     f'<rect x="{panel_left}" y="{y}" width="{panel_width}" height="{bar_height}" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>'
                 )
                 lines.append(
-                    f'<text x="{panel_left + panel_width - 10}" y="{y + 19}" text-anchor="end" class="small">no current result for this benchmark</text>'
+                    f'<text x="{panel_left + panel_width - 10}" y="{y + 19}" text-anchor="end" class="small">{escape_xml(missing_note)}</text>'
                 )
                 continue
             width_px = panel_width * value
@@ -7485,6 +7495,7 @@ def render_family_scaling_profile_svg(
     intro_lines = [
         "Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.",
         "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.",
+        "SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.",
         "Read CCD-Bench in the dedicated valid-choice coverage + distribution figures below.",
         "Read Denevil in the dedicated proxy status / volume / valid-response figures below.",
     ]
@@ -7493,7 +7504,7 @@ def render_family_scaling_profile_svg(
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Family scaling profile by benchmark</title>",
-            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
+            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
             '<text x="48" y="64" class="title">Family Scaling Profile</text>',
         ]
     )
@@ -8986,13 +8997,13 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             f"![Comparable accuracy bars]({figure_prefix}/option1_benchmark_accuracy_bars.svg)",
             "",
-            "_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks._",
+            "_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._",
             "",
             "### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling",
             "",
             f"![Family scaling profile]({figure_prefix}/option1_family_scaling_profile.svg)",
             "",
-            "_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence._",
+            "_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._",
             "",
             "### 3. CCD-Bench: cultural-cluster choice behavior",
             "",

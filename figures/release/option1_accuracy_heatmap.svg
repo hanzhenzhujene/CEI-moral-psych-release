@@ -38,10 +38,10 @@
 <rect x="0" y="0" width="1220" height="1464" class="canvas"/>
 <rect x="24" y="24" width="1172" height="1416" rx="22" class="panel"/>
 <title>Current comparable accuracy heatmap</title>
-<desc>Heatmap of the latest available comparable accuracy metrics across completed and in-progress family-size lines.</desc>
+<desc>Heatmap of the latest available comparable accuracy metrics across completed and in-progress family-size lines. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation.</desc>
 <text x="48" y="64" class="title">Current Comparable Accuracy Heatmap</text>
-<text x="48" y="88" class="subtitle">Rows cover current comparable metrics. Hatched cells mark incomplete benchmarks or lines withdrawn from direct comparison after</text>
-<text x="48" y="108" class="subtitle">response-format validation.</text>
+<text x="48" y="88" class="subtitle">Rows cover current comparable metrics. Hatched cells mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct</text>
+<text x="48" y="108" class="subtitle">comparison after response-format validation.</text>
 <text x="430.0" y="126" text-anchor="middle" class="axis">UniMoral action</text>
 <text x="690.0" y="126" text-anchor="middle" class="axis">SMID average</text>
 <text x="950.0" y="126" text-anchor="middle" class="axis">Value Kaleidoscope average</text>
@@ -62,7 +62,7 @@
 <rect x="560" y="224" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="224" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="258" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="279" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="279" text-anchor="middle" class="small">no SMID vision route</text>
 <rect x="820" y="224" width="246" height="62" rx="16" fill="#327a80" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="258" text-anchor="middle" class="celltext">67.5%</text>
 <text x="943.0" y="279" text-anchor="middle" class="cellsub">Qwen M</text>
@@ -105,7 +105,7 @@
 <rect x="560" y="528" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="528" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="562" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="583" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="583" text-anchor="middle" class="small">no SMID vision route</text>
 <rect x="820" y="528" width="246" height="62" rx="16" fill="#2c777d" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="562" text-anchor="middle" class="celltext">69.5%</text>
 <text x="943.0" y="583" text-anchor="middle" class="cellsub">DeepSeek S</text>
@@ -116,7 +116,7 @@
 <rect x="560" y="604" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="604" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="638" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="659" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="659" text-anchor="middle" class="small">no SMID vision route</text>
 <rect x="820" y="604" width="246" height="62" rx="16" fill="#3e8185" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="638" text-anchor="middle" class="celltext">63.5%</text>
 <text x="943.0" y="659" text-anchor="middle" class="cellsub">DeepSeek M</text>
@@ -127,7 +127,7 @@
 <rect x="560" y="680" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="680" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="714" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="735" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="735" text-anchor="middle" class="small">no SMID vision route</text>
 <rect x="820" y="680" width="246" height="62" rx="16" fill="#30797f" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="714" text-anchor="middle" class="celltext">68.1%</text>
 <text x="943.0" y="735" text-anchor="middle" class="cellsub">DeepSeek L</text>
@@ -148,7 +148,7 @@
 <rect x="560" y="832" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="832" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="866" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="887" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="887" text-anchor="middle" class="small">no SMID vision route</text>
 <rect x="820" y="832" width="246" height="62" rx="16" fill="#24727a" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="866" text-anchor="middle" class="celltext">72.4%</text>
 <text x="943.0" y="887" text-anchor="middle" class="cellsub">Llama M</text>
@@ -211,5 +211,5 @@
 <text x="920" y="1414" text-anchor="end" class="small">74.1%</text>
 <rect x="942" y="1376" width="24" height="24" rx="6" class="muted-cell"/>
 <rect x="942" y="1376" width="24" height="24" rx="6" fill="url(#diagonalHatch)" opacity="0.8"/>
-<text x="976" y="1394" class="small">no current result</text>
+<text x="976" y="1394" class="small">n/a / no route</text>
 </svg>

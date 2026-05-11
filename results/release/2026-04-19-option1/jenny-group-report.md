@@ -26,13 +26,13 @@ If you want the five benchmark results before the tables, start here. These five
 
 ![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
 
-_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks._
+_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
 
 ### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling
 
 ![Family scaling profile](../../../figures/release/option1_family_scaling_profile.svg)
 
-_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence._
+_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
 
 ### 3. CCD-Bench: cultural-cluster choice behavior
 

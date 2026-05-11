@@ -38,12 +38,13 @@
 <rect x="0" y="0" width="1280" height="1100" class="canvas"/>
 <rect x="24" y="24" width="1232" height="1052" rx="22" class="panel"/>
 <title>Family scaling profile by benchmark</title>
-<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
+<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
 <text x="48" y="64" class="title">Family Scaling Profile</text>
 <text x="48" y="92" class="subtitle">Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.</text>
 <text x="48" y="114" class="subtitle">This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.</text>
-<text x="48" y="136" class="subtitle">Read CCD-Bench in the dedicated valid-choice coverage + distribution figures below.</text>
-<text x="48" y="158" class="subtitle">Read Denevil in the dedicated proxy status / volume / valid-response figures below.</text>
+<text x="48" y="136" class="subtitle">SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.</text>
+<text x="48" y="158" class="subtitle">Read CCD-Bench in the dedicated valid-choice coverage + distribution figures below.</text>
+<text x="48" y="180" class="subtitle">Read Denevil in the dedicated proxy status / volume / valid-response figures below.</text>
 <rect x="52" y="248" width="382" height="356" rx="20" class="subpanel"/>
 <rect x="346" y="264" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
 <text x="379" y="278" text-anchor="middle" class="tiny">SCORED</text>

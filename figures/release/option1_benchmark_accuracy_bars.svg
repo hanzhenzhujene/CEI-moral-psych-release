@@ -38,10 +38,10 @@
 <rect x="0" y="0" width="1220" height="2342" class="canvas"/>
 <rect x="24" y="24" width="1172" height="2294" rx="22" class="panel"/>
 <title>Comparable accuracy by benchmark</title>
-<desc>Horizontal bar panels comparing the latest available family-size lines on benchmarks with directly comparable accuracy metrics.</desc>
+<desc>Horizontal bar panels comparing the latest available family-size lines on benchmarks with directly comparable accuracy metrics. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>
 <text x="48" y="64" class="title">Comparable Accuracy by Benchmark</text>
-<text x="48" y="88" class="subtitle">Each panel keeps the same current lines. Hatched rows mark incomplete benchmarks or lines withdrawn from direct comparison after</text>
-<text x="48" y="108" class="subtitle">response-format validation.</text>
+<text x="48" y="88" class="subtitle">Each panel keeps the same current lines. Hatched rows mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct</text>
+<text x="48" y="108" class="subtitle">comparison after response-format validation. SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells.</text>
 <rect x="42" y="136" width="1136" height="666" rx="18" class="subpanel"/>
 <text x="48" y="164" class="axis">UniMoral</text>
 <text x="48" y="184" class="subtitle">Action prediction accuracy</text>
@@ -76,7 +76,7 @@
 <rect x="280" y="336" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="336" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="336" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
-<text x="1070" y="355" text-anchor="end" class="small">no current result for this benchmark</text>
+<text x="1070" y="355" text-anchor="end" class="small">no current result</text>
 <rect x="122" y="383" width="10" height="10" rx="3" fill="#fbbf24"/>
 <text x="138" y="397" text-anchor="end" class="label">MiniMax-L</text>
 <rect x="280" y="378" width="800" height="28" rx="10" fill="#e2e8f0"/>
@@ -151,7 +151,7 @@
 <rect x="280" y="952" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="952" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="952" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
-<text x="1070" y="971" text-anchor="end" class="small">no current result for this benchmark</text>
+<text x="1070" y="971" text-anchor="end" class="small">no SMID vision route</text>
 <rect x="122" y="999" width="10" height="10" rx="3" fill="#2dd4bf"/>
 <text x="138" y="1013" text-anchor="end" class="label">Qwen-L</text>
 <rect x="280" y="994" width="800" height="28" rx="10" fill="#e2e8f0"/>
@@ -172,19 +172,19 @@
 <rect x="280" y="1120" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1120" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="1120" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
-<text x="1070" y="1139" text-anchor="end" class="small">no current result for this benchmark</text>
+<text x="1070" y="1139" text-anchor="end" class="small">no SMID vision route</text>
 <rect x="122" y="1167" width="10" height="10" rx="3" fill="#2563eb"/>
 <text x="138" y="1181" text-anchor="end" class="label">DeepSeek-M</text>
 <rect x="280" y="1162" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1162" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="1162" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
-<text x="1070" y="1181" text-anchor="end" class="small">no current result for this benchmark</text>
+<text x="1070" y="1181" text-anchor="end" class="small">no SMID vision route</text>
 <rect x="122" y="1209" width="10" height="10" rx="3" fill="#60a5fa"/>
 <text x="138" y="1223" text-anchor="end" class="label">DeepSeek-L</text>
 <rect x="280" y="1204" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1204" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="1204" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
-<text x="1070" y="1223" text-anchor="end" class="small">no current result for this benchmark</text>
+<text x="1070" y="1223" text-anchor="end" class="small">no SMID vision route</text>
 <rect x="122" y="1251" width="10" height="10" rx="3" fill="#c2410c"/>
 <text x="138" y="1265" text-anchor="end" class="label">Llama-S</text>
 <rect x="280" y="1246" width="800" height="28" rx="10" fill="#e2e8f0"/>
@@ -195,7 +195,7 @@
 <rect x="280" y="1288" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1288" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="1288" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
-<text x="1070" y="1307" text-anchor="end" class="small">no current result for this benchmark</text>
+<text x="1070" y="1307" text-anchor="end" class="small">no SMID vision route</text>
 <rect x="122" y="1335" width="10" height="10" rx="3" fill="#fb923c"/>
 <text x="138" y="1349" text-anchor="end" class="label">Llama-L</text>
 <rect x="280" y="1330" width="800" height="28" rx="10" fill="#e2e8f0"/>
@@ -250,7 +250,7 @@
 <rect x="280" y="1736" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1736" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="1736" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
-<text x="1070" y="1755" text-anchor="end" class="small">no current result for this benchmark</text>
+<text x="1070" y="1755" text-anchor="end" class="small">no current result</text>
 <rect x="122" y="1783" width="10" height="10" rx="3" fill="#fbbf24"/>
 <text x="138" y="1797" text-anchor="end" class="label">MiniMax-L</text>
 <rect x="280" y="1778" width="800" height="28" rx="10" fill="#e2e8f0"/>
