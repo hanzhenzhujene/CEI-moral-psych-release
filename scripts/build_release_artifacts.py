@@ -5114,6 +5114,76 @@ def published_denevil_prompt_family_fallbacks() -> dict[tuple[str, str], dict[st
     return fallbacks
 
 
+@lru_cache(maxsize=1)
+def published_benchmark_comparison_fallbacks() -> dict[str, dict[str, Any]]:
+    """Reuse tracked comparable accuracy rows when local saved eval artifacts are absent."""
+    path = DEFAULT_RELEASE_DIR / "benchmark-comparison.csv"
+    if not path.exists():
+        return {}
+
+    ccd_fallbacks = published_ccd_choice_distribution_fallbacks()
+    denevil_fallbacks = published_denevil_proxy_summary_fallbacks()
+    fallbacks: dict[str, dict[str, Any]] = {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            line_label = row["line_label"]
+            ccd = ccd_fallbacks.get(line_label, {})
+            denevil = denevil_fallbacks.get(line_label, {})
+            fallbacks[line_label] = {
+                "line_label": line_label,
+                "family": row["family"],
+                "size_slot": row["size_slot"],
+                "route": row["route"],
+                "unimoral_action_accuracy": _parse_optional_float(row.get("unimoral_action_accuracy")),
+                "smid_average_accuracy": _parse_optional_float(row.get("smid_average_accuracy")),
+                "value_average_accuracy": _parse_optional_float(row.get("value_average_accuracy")),
+                "ccd_completion_coverage": ccd.get("valid_selection_rate"),
+                "ccd_completion_count": ccd.get("valid_selection_count"),
+                "ccd_completion_total": ccd.get("total"),
+                "denevil_proxy_coverage": denevil.get("valid_response_rate"),
+                "denevil_proxy_count": denevil.get("generated_response_count"),
+                "denevil_proxy_total": denevil.get("total_proxy_samples"),
+                "coverage_note": row.get("comparison_note") or "",
+                "_from_published_fallback": True,
+            }
+    return fallbacks
+
+
+@lru_cache(maxsize=1)
+def published_benchmark_difficulty_summary_fallback_rows() -> list[dict[str, Any]]:
+    path = DEFAULT_RELEASE_DIR / "benchmark-difficulty-summary.csv"
+    if not path.exists():
+        return []
+
+    rows: list[dict[str, Any]] = []
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            rows.append(
+                {
+                    "benchmark": row["benchmark"],
+                    "scope_label": row["scope_label"],
+                    "comparable_lines": _parse_optional_int(row.get("comparable_lines")),
+                    "mean_accuracy": _parse_optional_float(row.get("mean_accuracy")),
+                    "min_accuracy": _parse_optional_float(row.get("min_accuracy")),
+                    "max_accuracy": _parse_optional_float(row.get("max_accuracy")),
+                    "spread": _parse_optional_float(row.get("spread")),
+                    "best_line": row["best_line"],
+                    "weakest_line": row["weakest_line"],
+                }
+            )
+    return rows
+
+
+@lru_cache(maxsize=1)
+def published_family_scaling_summary_fallback_rows() -> list[dict[str, Any]]:
+    path = DEFAULT_RELEASE_DIR / "family-scaling-summary.csv"
+    if not path.exists():
+        return []
+
+    with path.open(newline="", encoding="utf-8") as handle:
+        return [dict(row) for row in csv.DictReader(handle)]
+
+
 def _denevil_behavior_key_base(label: str) -> str:
     return label.lower().replace(" / ", "_").replace(" ", "_").replace("-", "_")
 
@@ -5980,6 +6050,9 @@ def build_benchmark_comparison(rows: list[dict[str, Any]]) -> list[dict[str, Any
             comparison_rows.append(local_row)
 
     lookup = {row["line_label"]: row for row in comparison_rows}
+    for line_label, fallback in published_benchmark_comparison_fallbacks().items():
+        lookup.setdefault(line_label, fallback)
+    comparison_rows = list(lookup.values())
     return [lookup[label] for label in comparable_line_order(comparison_rows) if label in lookup]
 
 
@@ -6961,6 +7034,11 @@ def build_denevil_proxy_examples(rows: list[dict[str, Any]]) -> list[dict[str, A
 
 
 def build_benchmark_difficulty_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    if any(row.get("_from_published_fallback") for row in rows):
+        fallback_rows = published_benchmark_difficulty_summary_fallback_rows()
+        if fallback_rows:
+            return fallback_rows
+
     summary_rows: list[dict[str, Any]] = []
     for benchmark, field, scope_label in COMPARABLE_METRIC_SPECS:
         scored = [
@@ -7033,6 +7111,11 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
 
 
 def build_family_scaling_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    if any(row.get("_from_published_fallback") for row in rows):
+        fallback_rows = published_family_scaling_summary_fallback_rows()
+        if fallback_rows:
+            return fallback_rows
+
     family_rows: list[dict[str, Any]] = []
     rows_by_family: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
