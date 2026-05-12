@@ -14,7 +14,7 @@ ROOT = Path(__file__).parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.build_release_artifacts import build_axis_ticks, nice_tick_step
+from scripts.build_release_artifacts import _sample_correctness_value, build_axis_ticks, nice_tick_step
 
 SCRIPT = ROOT / "scripts" / "build_release_artifacts.py"
 SOURCE = ROOT / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
@@ -25,6 +25,29 @@ def test_axis_tick_helpers_stay_nonzero_for_minimal_clean_state():
     ticks, upper = build_axis_ticks(1, target_ticks=4)
     assert ticks == [0, 1, 2, 3, 4]
     assert upper == 1
+
+
+def test_unimoral_blank_scorer_answer_reparsed_from_visible_completion():
+    sample = {
+        "target": "a",
+        "output": {
+            "choices": [
+                {
+                    "message": {
+                        "content": [
+                            {"internal": "think", "type": "reasoning", "reasoning": "hidden trace"},
+                            {"type": "text", "text": "Selected action is a."},
+                        ]
+                    }
+                }
+            ],
+            "completion": "Selected action is a.",
+        },
+        "score_value": 0,
+        "score_answer": "",
+    }
+
+    assert _sample_correctness_value(sample, "unimoral_action_prediction") == 1.0
 
 
 def test_release_builder_emits_expected_files(tmp_path):
@@ -423,7 +446,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     minimax_large_rows = [row for row in rows if row["line_label"] == "MiniMax-L"]
     if minimax_large_rows:
         assert any(
-            row["route"] == "text: openrouter/minimax/minimax-m2.5; SMID recovery: openrouter/minimax/minimax-01"
+            row["route"] == "text: minimax-m2.5 via direct MiniMax API; SMID recovery: minimax-01 via direct MiniMax API"
+            and row["unimoral_action_accuracy"] == "0.660519"
             and row["smid_average_accuracy"] == "0.198232"
             and row["comparison_note"] == "Comparable on all three benchmark-faithful accuracy panels."
             for row in minimax_large_rows
@@ -503,7 +527,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         )
     deepseek_large = rows_by_line.get("DeepSeek-L")
     if deepseek_large is not None:
-        assert deepseek_large["unimoral_action_accuracy"] == "0.501996"
+        assert deepseek_large["unimoral_action_accuracy"] == "0.562550"
         assert deepseek_large["smid_average_accuracy"] == ""
         assert deepseek_large["value_average_accuracy"] == "0.680658"
         assert (
@@ -550,7 +574,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert deepseek_readout["DeepSeek-M"]["ccd_valid_choice_count"] == "2177"
     assert deepseek_readout["DeepSeek-M"]["denevil_visible_response_count"] == "20514"
     assert deepseek_readout["DeepSeek-L"]["answer_validation"] == "passed_visible_answer_guardrail"
-    assert deepseek_readout["DeepSeek-L"]["unimoral_action_accuracy"] == "0.501996"
+    assert deepseek_readout["DeepSeek-L"]["unimoral_action_accuracy"] == "0.562550"
     assert deepseek_readout["DeepSeek-L"]["unimoral_visible_answers"] == "8769"
     assert deepseek_readout["DeepSeek-L"]["value_relevance_accuracy"] == "0.681162"
     assert deepseek_readout["DeepSeek-L"]["value_valence_accuracy"] == "0.680154"
@@ -862,9 +886,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert any(
             row["evidence_scope"] == "3 comparable metric series available."
             and row["numeric_pattern"] in {
-                "UniMoral: L 0.008; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: L 0.741",
-                "UniMoral: S 0.661 -> L 0.008; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> L 0.741",
-                "UniMoral: S 0.661 -> M 0.659 -> L 0.008; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> M 0.740 -> L 0.741",
+                "UniMoral: L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: L 0.741",
+                "UniMoral: S 0.661 -> L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> L 0.741",
+                "UniMoral: S 0.661 -> M 0.659 -> L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> M 0.740 -> L 0.741",
             }
             and "too sparse" in row["interpretation"]
             for row in minimax_scaling_rows
@@ -897,7 +921,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert any(
         row["family"] == "DeepSeek"
         and "S/M/L text lines are now accuracy-comparable" in row["evidence_scope"]
-        and "UniMoral: S 0.661 -> M 0.684 -> L 0.502" in row["numeric_pattern"]
+        and "UniMoral: S 0.661 -> M 0.684 -> L 0.563" in row["numeric_pattern"]
         and "Value Kaleidoscope: S 0.695 -> M 0.635 -> L 0.681" in row["numeric_pattern"]
         and "CCD-Bench" not in row["numeric_pattern"]
         and "Denevil" not in row["numeric_pattern"]
@@ -942,7 +966,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "### DeepSeek S/M/L Log-Derived Readout" in text
         assert "Valid text-only no-thinking rerun from saved May 9 logs" in text
         assert "`DeepSeek-M` | UniMoral 0.684; Value 0.635" in text
-        assert "`DeepSeek-L` | UniMoral 0.502; Value 0.681" in text
+        assert "`DeepSeek-L` | UniMoral 0.563; Value 0.681" in text
         assert "Strongest fully observed comparable line | `MiniMax-S` averages 0.611" in text
         assert "Strongest text-only comparable line | `MiniMax-M` reaches UniMoral 0.659 and Value 0.740" in text
         assert "Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route" in text

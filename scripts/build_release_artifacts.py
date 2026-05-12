@@ -1260,7 +1260,7 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         "line_label": "MiniMax-L",
         "family": "MiniMax",
         "size_slot": "L",
-        "route": "text: openrouter/minimax/minimax-m2.5; SMID recovery: openrouter/minimax/minimax-01",
+        "route": "text: minimax-m2.5 via direct MiniMax API; SMID recovery: minimax-01 via direct MiniMax API",
         "merge_shards": True,
         "coverage_note": "Shared MiniMax-01 SMID recovery plus MiniMax-M2.5 text reruns are complete in saved local artifacts; ValuePrism uses the explicit May 8 test-only rerun folders.",
         "task_sources": {
@@ -5181,13 +5181,19 @@ def _sample_correctness_value(sample: dict[str, Any], task_name: str) -> float |
     elif task_name == "smid_foundation_classification":
         answer = extract_structured_label(visible_text, SMID_FOUNDATION_PATTERNS)
     elif task_name == "unimoral_action_prediction":
+        # Some older MiniMax Inspect artifacts saved a blank scorer answer even
+        # when the public completion contained the required "Selected action"
+        # text. Use the visible saved answer in that case rather than turning
+        # every affected sample into a false negative.
+        answer = _extract_action_choice(visible_text)
+        if answer is not None and not str(sample.get("score_answer") or "").strip():
+            return 1.0 if answer in targets else 0.0
         score_value = sample.get("score_value")
         if score_value is not None:
             try:
                 return float(score_value)
             except (TypeError, ValueError):
                 pass
-        answer = _extract_action_choice(visible_text)
     elif task_name in {"value_prism_relevance", "value_prism_valence"}:
         score_value = sample.get("score_value")
         if score_value is not None:
@@ -10118,9 +10124,11 @@ def append_repo_layout(lines: list[str]) -> None:
             "├── figures/release/                        # tracked SVG figures for the public package",
             "├── results/release/2026-04-19-option1/     # frozen release package and report artifacts",
             "├── results/inspect/                        # local Inspect AI run outputs and progress logs",
-            "├── scripts/                                # run launchers, recovery helpers, and release builders",
+            "├── scripts/                                # active launchers, recovery helpers, and release builders",
+            "├── scripts/legacy-openrouter/              # archived one-off OpenRouter launchers",
             "├── src/                                    # inspect-ai and lm-eval-harness task code",
             "├── tests/                                  # regression, hygiene, and release artifact tests",
+            "├── tools/legacy_openrouter/                # archived standalone OpenRouter/TrolleyBench tools",
             "├── Makefile                                # setup, test, release, and audit entry points",
             "└── pyproject.toml                          # project metadata and Python tooling",
             "```",

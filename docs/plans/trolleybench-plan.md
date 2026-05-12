@@ -9,8 +9,8 @@ The key innovation of TrolleyBench is its **multi-turn design**: each scenario h
 ## What We're Building
 
 1. **Scenario dataset** (`prompts/trolleybench.jsonl`) — trolley problem variants with follow-ups
-2. **Multi-turn runner** (`run_trolleybench.py`) — extends the generic runner to handle 3-turn conversations
-3. **Evaluation script** (`eval_trolleybench.py`) — computes ECI, entropy-based inconsistency, and generates analysis
+2. **Multi-turn runner** (`tools/legacy_openrouter/run_trolleybench.py`) — extends the generic runner to handle 3-turn conversations
+3. **Evaluation script** (`tools/legacy_openrouter/eval_trolleybench.py`) — computes ECI, entropy-based inconsistency, and generates analysis
 
 ## Step 1: Create Trolley Problem Scenarios
 
@@ -46,11 +46,11 @@ Each variant has 3 turns:
 
 Total: ~6 variants × 3-4 sub-scenarios each = **~20 scenarios × 3 turns = ~60 API calls per model**
 
-## Step 2: Multi-Turn Runner (`run_trolleybench.py`)
+## Step 2: Multi-Turn Runner (`tools/legacy_openrouter/run_trolleybench.py`)
 
-The existing `run_benchmark.py` only handles single-turn queries. TrolleyBench needs multi-turn conversations where follow-ups reference prior answers.
+The existing `tools/legacy_openrouter/run_benchmark.py` only handles single-turn queries. TrolleyBench needs multi-turn conversations where follow-ups reference prior answers.
 
-**New file: `run_trolleybench.py`**
+**New file: `tools/legacy_openrouter/run_trolleybench.py`**
 
 ```
 For each scenario:
@@ -60,19 +60,19 @@ For each scenario:
   Save full conversation + all 3 responses
 ```
 
-- Reuses `client.py` (OpenRouter client) — add a `query_multiturn()` function
-- CLI: `python run_trolleybench.py --models qwen llama --sizes L M S --temps 0.0 0.7`
+- Reuses `tools/legacy_openrouter/client.py` (OpenRouter client) — add a `query_multiturn()` function
+- CLI: `python tools/legacy_openrouter/run_trolleybench.py --models qwen llama --sizes L M S --temps 0.0 0.7`
 - Output: `results/trolleybench/<timestamp>/<model>_T<temp>.json`
 
 ## Step 3: Response Parser
 
-**Add to `eval_trolleybench.py`**
+**Add to `tools/legacy_openrouter/eval_trolleybench.py`**
 
 Extract from each response:
 - **Binary action choice**: Yes (act/intervene) or No (do nothing) — parsed from free text via keyword matching + LLM fallback
 - **Ethical framework cited**: Consequentialist, Deontological, Virtue Ethics, or Mixed — classified from rationale text
 
-## Step 4: Evaluation Metrics (`eval_trolleybench.py`)
+## Step 4: Evaluation Metrics (`tools/legacy_openrouter/eval_trolleybench.py`)
 
 ### Ethical Consistency Index (ECI)
 
@@ -100,7 +100,7 @@ Range: 0 (never changes answer) to 1 (maximally unpredictable). Lower = more con
 
 ## Step 5: Output & Reporting
 
-`eval_trolleybench.py` generates:
+`tools/legacy_openrouter/eval_trolleybench.py` generates:
 - `results/trolleybench/<timestamp>/eval_summary.json` — ECI, entropy, per-model scores
 - `results/trolleybench/<timestamp>/eval_report.md` — human-readable markdown report with tables
 - Console output with key findings
@@ -110,9 +110,9 @@ Range: 0 (never changes answer) to 1 (maximally unpredictable). Lower = more con
 | File | Action | Description |
 |------|--------|-------------|
 | `prompts/trolleybench.jsonl` | Create | ~20 multi-turn trolley scenarios |
-| `client.py` | Modify | Add `query_multiturn()` for conversation history |
-| `run_trolleybench.py` | Create | Multi-turn benchmark runner |
-| `eval_trolleybench.py` | Create | ECI + entropy scoring + report generation |
+| `tools/legacy_openrouter/client.py` | Modify | Add `query_multiturn()` for conversation history |
+| `tools/legacy_openrouter/run_trolleybench.py` | Create | Multi-turn benchmark runner |
+| `tools/legacy_openrouter/eval_trolleybench.py` | Create | ECI + entropy scoring + report generation |
 
 ## Models
 
@@ -199,5 +199,5 @@ Not included in the primary run. May be added later for comparison.
 
 1. **Smoke test**: Run 1 model (qwen-S) at T=0.0 on all scenarios — verify output format
 2. **Parse test**: Verify binary action extraction works on the smoke test responses
-3. **Eval test**: Run `eval_trolleybench.py` on smoke test output — verify ECI and entropy calculations
+3. **Eval test**: Run `tools/legacy_openrouter/eval_trolleybench.py` on smoke test output — verify ECI and entropy calculations
 4. **Full run**: All 5 families × 3 sizes × selected temperatures

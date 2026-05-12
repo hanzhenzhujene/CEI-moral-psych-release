@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Run Erik's 2 benchmarks (MoralBench + EMNLP Educator) for models with working providers.
+# Run MoralBench + EMNLP Educator benchmarks (MoralBench + EMNLP Educator) for models with working providers.
 # Each model runs in parallel; benchmarks run sequentially per model.
 set -uo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$SCRIPT_DIR"
 
 # Load env with export-all so HF_TOKEN propagates to subprocesses
@@ -41,7 +41,7 @@ run_model() {
 
     local SLUG
     SLUG=$(echo "$MODEL_ROUTE" | tr '/' '_')
-    local LOG="$SCRIPT_DIR/results/run_erik_${SLUG}.txt"
+    local LOG="$SCRIPT_DIR/results/run_moralbench_emnlp_${SLUG}.txt"
 
     echo "=== $MODEL_ROUTE ($MODEL_ID) started: $(date) ===" | tee "$LOG"
 
@@ -77,7 +77,7 @@ run_model() {
     echo "=== $MODEL_ROUTE complete: $(date) ===" | tee -a "$LOG"
 }
 
-echo "=== Erik's Benchmarks Run ==="
+echo "=== MoralBench + EMNLP Educator Benchmarks ==="
 echo "Started: $(date)"
 echo "Running models with working providers only"
 echo "Benchmarks: MoralBench (4 tasks), EMNLP Educator (4 tasks)"
@@ -134,7 +134,7 @@ echo "  - Llama 3.2-3b, 3.1-8b, 3.3-70b: OpenRouter out of credits"
 echo "  - Gemma 3-4b, 3-12b, 3-27b: models removed from Google AI Studio"
 echo "  - MiniMax-M1: OpenRouter out of credits"
 echo ""
-echo "Logs: results/run_erik_*.txt"
+echo "Logs: results/run_moralbench_emnlp_*.txt"
 echo ""
 
 wait "${PIDS[@]}"

@@ -1,7 +1,7 @@
 """TrolleyBench evaluation: ECI, entropy-based inconsistency, and analysis.
 
 Usage:
-    python eval_trolleybench.py --results-dir results/trolleybench/20260420_150000
+    python tools/legacy_openrouter/eval_trolleybench.py --results-dir results/trolleybench/20260420_150000
 """
 
 from __future__ import annotations

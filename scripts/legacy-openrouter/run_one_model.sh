@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Run all benchmarks for a single model.
-# Usage: ./run_one_model.sh <model_id> [--limit N]
-# Example: ./run_one_model.sh deepseek/deepseek-r1
-#          ./run_one_model.sh google/gemma-3-4b-it --limit 10
+# Usage: scripts/legacy-openrouter/run_one_model.sh <model_id> [--limit N]
+# Example: scripts/legacy-openrouter/run_one_model.sh deepseek/deepseek-r1
+#          scripts/legacy-openrouter/run_one_model.sh google/gemma-3-4b-it --limit 10
 set -euo pipefail
 
 if [[ -z "${1:-}" ]]; then
@@ -10,7 +10,7 @@ if [[ -z "${1:-}" ]]; then
     exit 1
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 
 # Load env and provider routing
 set -a; source "$SCRIPT_DIR/.env"; set +a

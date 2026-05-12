@@ -2,7 +2,7 @@
 # Run Erik's benchmarks for MiniMax models with low concurrency
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$SCRIPT_DIR"
 
 set -a; source "$SCRIPT_DIR/.env"; set +a

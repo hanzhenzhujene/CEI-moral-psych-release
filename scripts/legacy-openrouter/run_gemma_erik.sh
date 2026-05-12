@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Run Erik's benchmarks for OpenRouter models
+# Run Erik's benchmarks for Gemma 3 models via OpenRouter
 set -uo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$SCRIPT_DIR"
 
 set -a; source "$SCRIPT_DIR/.env"; set +a
@@ -45,30 +45,25 @@ run_model() {
     echo "=== $ROUTE complete: $(date) ===" | tee -a "$LOG"
 }
 
-echo "=== OpenRouter Erik Benchmarks ==="
+echo "=== Gemma Erik Benchmarks (via OpenRouter) ==="
 echo "Started: $(date)"
 
 PIDS=()
 
-run_model "llama/llama-3.2-3b" "meta-llama/llama-3.2-3b-instruct" &
+run_model "google/gemma-3-4b" "google/gemma-3-4b-it" &
 PIDS+=($!)
-echo "  Launched llama-3.2-3b (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched gemma-3-4b (PID ${PIDS[${#PIDS[@]}-1]})"
 
-run_model "llama/llama-3.1-8b" "meta-llama/llama-3.1-8b-instruct" &
+run_model "google/gemma-3-12b" "google/gemma-3-12b-it" &
 PIDS+=($!)
-echo "  Launched llama-3.1-8b (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched gemma-3-12b (PID ${PIDS[${#PIDS[@]}-1]})"
 
-run_model "llama/llama-3.3-70b" "meta-llama/llama-3.3-70b-instruct" &
+run_model "google/gemma-3-27b" "google/gemma-3-27b-it" &
 PIDS+=($!)
-echo "  Launched llama-3.3-70b (PID ${PIDS[${#PIDS[@]}-1]})"
-
-run_model "minimax/minimax-m1" "minimax/minimax-m1" &
-PIDS+=($!)
-echo "  Launched minimax-m1 (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched gemma-3-27b (PID ${PIDS[${#PIDS[@]}-1]})"
 
 echo ""
-echo "4 models launched. PIDs: ${PIDS[*]}"
-echo "Logs: results/run_erik_*.txt"
+echo "3 models launched. PIDs: ${PIDS[*]}"
 
 wait "${PIDS[@]}"
-echo "=== All 4 models complete: $(date) ==="
+echo "=== All 3 models complete: $(date) ==="

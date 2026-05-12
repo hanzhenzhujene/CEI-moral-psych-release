@@ -1,26 +1,22 @@
 #!/usr/bin/env bash
-# Run MoralBench + EMNLP Educator benchmarks for DeepSeek models
+# Run MoralBench + EMNLP Educator benchmarks for OpenRouter models
 set -uo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$SCRIPT_DIR"
 
 set -a; source "$SCRIPT_DIR/.env"; set +a
 
 export MORALBENCH_DATA_DIR="$SCRIPT_DIR/data/moralbench"
 export EMNLP_EDUCATOR_DATA_DIR="$SCRIPT_DIR/data/emnlp_educator"
+export OPENAI_API_KEY="$OPENROUTER_API_KEY"
+export OPENAI_BASE_URL="https://openrouter.ai/api/v1"
 
 mkdir -p "$SCRIPT_DIR/results"
 
 run_model() {
     local ROUTE="$1"
     local MODEL_ID="$2"
-    local PROVIDER_URL="$3"
-    local API_KEY="$4"
-
-    export OPENAI_API_KEY="$API_KEY"
-    export OPENAI_BASE_URL="$PROVIDER_URL"
-
     local SLUG
     SLUG=$(echo "$ROUTE" | tr '/' '_')
     local LOG="$SCRIPT_DIR/results/run_moralbench_emnlp_${SLUG}.txt"
@@ -49,31 +45,30 @@ run_model() {
     echo "=== $ROUTE complete: $(date) ===" | tee -a "$LOG"
 }
 
-echo "=== DeepSeek MoralBench + EMNLP Educator Benchmarks ==="
+echo "=== OpenRouter MoralBench + EMNLP Educator Benchmarks ==="
 echo "Started: $(date)"
 
 PIDS=()
 
-# DeepSeek R1 via DeepSeek direct (deepseek-reasoner still works)
-run_model "deepseek/deepseek-r1" "deepseek-reasoner" \
-    "https://api.deepseek.com" "$DEEPSEEK_API_KEY" &
+run_model "llama/llama-3.2-3b" "meta-llama/llama-3.2-3b-instruct" &
 PIDS+=($!)
-echo "  Launched deepseek-r1 via DeepSeek direct (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched llama-3.2-3b (PID ${PIDS[${#PIDS[@]}-1]})"
 
-# DeepSeek R1-distill via OpenRouter (not on DeepSeek direct anymore)
-run_model "deepseek/deepseek-r1-distill-70b" "deepseek/deepseek-r1-distill-llama-70b" \
-    "https://openrouter.ai/api/v1" "$OPENROUTER_API_KEY" &
+run_model "llama/llama-3.1-8b" "meta-llama/llama-3.1-8b-instruct" &
 PIDS+=($!)
-echo "  Launched deepseek-r1-distill-70b via OpenRouter (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched llama-3.1-8b (PID ${PIDS[${#PIDS[@]}-1]})"
 
-# DeepSeek V3.1 via DeepSeek direct (deepseek-chat, bypasses Ark endpoint issue)
-run_model "deepseek/deepseek-chat-v3.1" "deepseek-chat" \
-    "https://api.deepseek.com" "$DEEPSEEK_API_KEY" &
+run_model "llama/llama-3.3-70b" "meta-llama/llama-3.3-70b-instruct" &
 PIDS+=($!)
-echo "  Launched deepseek-v3.1 via DeepSeek direct (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched llama-3.3-70b (PID ${PIDS[${#PIDS[@]}-1]})"
+
+run_model "minimax/minimax-m1" "minimax/minimax-m1" &
+PIDS+=($!)
+echo "  Launched minimax-m1 (PID ${PIDS[${#PIDS[@]}-1]})"
 
 echo ""
-echo "3 models launched. PIDs: ${PIDS[*]}"
+echo "4 models launched. PIDs: ${PIDS[*]}"
+echo "Logs: results/run_moralbench_emnlp_*.txt"
 
 wait "${PIDS[@]}"
-echo "=== All 3 models complete: $(date) ==="
+echo "=== All 4 models complete: $(date) ==="

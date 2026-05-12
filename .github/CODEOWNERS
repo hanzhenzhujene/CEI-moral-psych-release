@@ -7,7 +7,7 @@ src/inspect/evals/ @sunyuding @hanzhenzhujene
 # Infrastructure and scripts
 scripts/ @sunyuding @hanzhenzhujene
 provider_config.sh @sunyuding @hanzhenzhujene
-run_all_benchmarks.sh @sunyuding
+scripts/legacy-openrouter/run_all_benchmarks.sh @sunyuding
 
 # Results and analysis
 results/ @sunyuding @hanzhenzhujene

@@ -4,10 +4,10 @@ Qwen-M,Qwen,M,text: openrouter/qwen/qwen3-14b,0.664504,,0.674714,Text-only compa
 Qwen-L,Qwen,L,text: openrouter/qwen/qwen3-32b; vision: openrouter/qwen/qwen2.5-vl-72b-instruct,0.665301,0.482829,0.653159,Comparable on all three benchmark-faithful accuracy panels.
 MiniMax-S,MiniMax,S,text: minimax-m2.1 via direct MiniMax API; vision: minimax-01 recovery route,0.660861,0.431996,0.739942,Comparable on all three benchmark-faithful accuracy panels.
 MiniMax-M,MiniMax,M,text: minimax-m2.5 via direct MiniMax API clean run; medium SMID route TBD,0.658698,,0.739778,Text-only comparable line; no public SMID route on this slot.
-MiniMax-L,MiniMax,L,text: openrouter/minimax/minimax-m2.5; SMID recovery: openrouter/minimax/minimax-01,0.007969,0.198232,0.741197,Comparable on all three benchmark-faithful accuracy panels.
+MiniMax-L,MiniMax,L,text: minimax-m2.5 via direct MiniMax API; SMID recovery: minimax-01 via direct MiniMax API,0.660519,0.198232,0.741197,Comparable on all three benchmark-faithful accuracy panels.
 DeepSeek-S,DeepSeek,S,text: openrouter/deepseek/deepseek-r1-distill-llama-70b (DeepInfra-pinned recovery route),0.660594,,0.695198,Text-only comparable no-thinking rerun; no public SMID route on this slot.
 DeepSeek-M,DeepSeek,M,openrouter/deepseek/deepseek-chat-v3.1,0.683629,,0.634673,Text-only comparable line; no public SMID route on this slot.
-DeepSeek-L,DeepSeek,L,text: openrouter/deepseek/deepseek-r1,0.501996,,0.680658,Text-only comparable line; no public SMID route on this slot.
+DeepSeek-L,DeepSeek,L,text: openrouter/deepseek/deepseek-r1,0.562550,,0.680658,Text-only comparable line; no public SMID route on this slot.
 Llama-S,Llama,S,openrouter/meta-llama/llama-3.2-11b-vision-instruct,0.647996,0.216423,0.528583,Comparable on all three benchmark-faithful accuracy panels.
 Llama-M,Llama,M,text: openrouter/meta-llama/llama-3.3-70b-instruct,0.669854,,0.723638,Text-only comparable line; no public SMID route on this slot.
 Llama-L,Llama,L,text: openrouter/meta-llama/llama-4-maverick; vision: openrouter/meta-llama/llama-4-maverick,0.659836,0.386093,0.692319,Comparable on all three benchmark-faithful accuracy panels.

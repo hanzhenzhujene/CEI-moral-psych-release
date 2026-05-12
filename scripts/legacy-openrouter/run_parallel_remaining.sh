@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# DEPRECATED: Use run_all_benchmarks.sh --models 4,5,6,7,8,9,10,11,12,13,14,15 instead.
+# DEPRECATED: Use scripts/legacy-openrouter/run_all_benchmarks.sh --models 4,5,6,7,8,9,10,11,12,13,14,15 instead.
 # Run remaining 12 models — each model as its own parallel stream.
-# Usage: ./run_parallel_remaining.sh [--limit N]
+# Usage: scripts/legacy-openrouter/run_parallel_remaining.sh [--limit N]
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$SCRIPT_DIR"
 
 # Load env and provider routing

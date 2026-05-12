@@ -25,7 +25,7 @@ MiniMax-M,MiniMax,M,value_prism_relevance,merged_saved_shards_by_sample_id,18,43
 MiniMax-M,MiniMax,M,value_prism_valence,merged_saved_shards_by_sample_id,15,21840,21840,0.756822,21840,21840,,complete
 MiniMax-M,MiniMax,M,ccd_bench_selection,merged_saved_shards_by_sample_id,1,2182,2182,,0,2182,0.999542,complete
 MiniMax-M,MiniMax,M,denevil_fulcra_proxy_generation,merged_saved_shards_by_sample_id,14,20518,20518,,0,20518,1.000000,complete
-MiniMax-L,MiniMax,L,unimoral_action_prediction,merged_saved_shards_by_sample_id,1,8784,8784,0.007969,8784,8784,,complete
+MiniMax-L,MiniMax,L,unimoral_action_prediction,merged_saved_shards_by_sample_id,1,8784,8784,0.660519,8784,8784,,complete
 MiniMax-L,MiniMax,L,smid_moral_rating,merged_saved_shards_by_sample_id,3,2941,2941,0.109487,2941,2941,,complete
 MiniMax-L,MiniMax,L,smid_foundation_classification,merged_saved_shards_by_sample_id,3,2941,2941,0.286977,2941,2941,,complete
 MiniMax-L,MiniMax,L,value_prism_relevance,merged_saved_shards_by_sample_id,3,43680,43680,0.722734,43680,43680,,complete
@@ -39,7 +39,7 @@ DeepSeek-S,DeepSeek,S,ccd_bench_selection,merged_saved_shards_by_sample_id,2,218
 DeepSeek-S,DeepSeek,S,denevil_fulcra_proxy_generation,merged_saved_shards_by_sample_id,7,20518,20518,,0,20474,0.997856,complete
 DeepSeek-M,DeepSeek,M,ccd_bench_selection,latest_successful_eval,1,2182,2182,,,2182,0.997709,complete
 DeepSeek-M,DeepSeek,M,denevil_fulcra_proxy_generation,latest_successful_eval,1,20518,20518,,,,0.999805,complete
-DeepSeek-L,DeepSeek,L,unimoral_action_prediction,merged_saved_shards_by_sample_id,15,8784,8784,0.501996,8769,8769,,complete
+DeepSeek-L,DeepSeek,L,unimoral_action_prediction,merged_saved_shards_by_sample_id,15,8784,8784,0.562550,8769,8769,,complete
 DeepSeek-L,DeepSeek,L,value_prism_relevance,merged_saved_shards_by_sample_id,71,43680,43680,0.681162,43508,43508,,complete
 DeepSeek-L,DeepSeek,L,value_prism_valence,merged_saved_shards_by_sample_id,56,21840,21840,0.680154,21748,21748,,complete
 DeepSeek-L,DeepSeek,L,ccd_bench_selection,merged_saved_shards_by_sample_id,3,2182,2182,,0,2109,0.966544,complete

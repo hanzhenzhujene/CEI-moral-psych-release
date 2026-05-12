@@ -73,7 +73,7 @@
 
 ### Next Steps
 - [ ] Wait for full run to complete (12 model families remaining)
-- [ ] Run `eval_trolleybench.py` on complete results
-- [ ] Run `export_results.py` for CSV/markdown exports
+- [ ] Run `tools/legacy_openrouter/eval_trolleybench.py` on complete results
+- [ ] Run `tools/legacy_openrouter/export_results.py` for CSV/markdown exports
 - [ ] Commit final results and eval report
 - [ ] Start next benchmark (MoReBench or Moral Circuits)

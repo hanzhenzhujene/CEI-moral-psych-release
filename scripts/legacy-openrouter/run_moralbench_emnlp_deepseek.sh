@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Run Erik's benchmarks for DeepSeek models
+# Run MoralBench + EMNLP Educator benchmarks for DeepSeek models
 set -uo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$SCRIPT_DIR"
 
 set -a; source "$SCRIPT_DIR/.env"; set +a
@@ -23,7 +23,7 @@ run_model() {
 
     local SLUG
     SLUG=$(echo "$ROUTE" | tr '/' '_')
-    local LOG="$SCRIPT_DIR/results/run_erik_${SLUG}.txt"
+    local LOG="$SCRIPT_DIR/results/run_moralbench_emnlp_${SLUG}.txt"
 
     echo "=== $ROUTE ($MODEL_ID) started: $(date) ===" | tee "$LOG"
 
@@ -49,7 +49,7 @@ run_model() {
     echo "=== $ROUTE complete: $(date) ===" | tee -a "$LOG"
 }
 
-echo "=== DeepSeek Erik Benchmarks ==="
+echo "=== DeepSeek MoralBench + EMNLP Educator Benchmarks ==="
 echo "Started: $(date)"
 
 PIDS=()

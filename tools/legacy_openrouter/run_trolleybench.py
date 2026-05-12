@@ -1,9 +1,9 @@
 """Multi-turn TrolleyBench runner.
 
 Usage:
-    python run_trolleybench.py --models qwen llama --sizes L M S --temps 0.0 0.7
-    python run_trolleybench.py --all-models --temps 0.0
-    python run_trolleybench.py --models qwen --sizes S --temps 0.0  # smoke test
+    python tools/legacy_openrouter/run_trolleybench.py --models qwen llama --sizes L M S --temps 0.0 0.7
+    python tools/legacy_openrouter/run_trolleybench.py --all-models --temps 0.0
+    python tools/legacy_openrouter/run_trolleybench.py --models qwen --sizes S --temps 0.0  # smoke test
 """
 
 from __future__ import annotations
@@ -137,7 +137,7 @@ def run(models: list[tuple[str, str]], temperatures: list[float], delay: float =
     }
     (output_dir / "meta.json").write_text(json.dumps(meta, indent=2))
     print(f"\nDone. Results in {output_dir}/")
-    print(f"Next: python eval_trolleybench.py --results-dir {output_dir}")
+    print(f"Next: python tools/legacy_openrouter/eval_trolleybench.py --results-dir {output_dir}")
 
 
 def main():

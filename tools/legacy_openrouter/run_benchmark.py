@@ -1,9 +1,9 @@
 """Batch benchmark runner for CEI moral psychology evaluation.
 
 Usage:
-    python run_benchmark.py --benchmark morebench --models qwen llama --sizes L M S --temps 0.0 0.7
-    python run_benchmark.py --benchmark morebench --all-models --temps 0.0
-    python run_benchmark.py --list-models
+    python tools/legacy_openrouter/run_benchmark.py --benchmark morebench --models qwen llama --sizes L M S --temps 0.0 0.7
+    python tools/legacy_openrouter/run_benchmark.py --benchmark morebench --all-models --temps 0.0
+    python tools/legacy_openrouter/run_benchmark.py --list-models
 """
 
 import argparse

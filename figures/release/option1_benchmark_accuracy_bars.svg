@@ -84,8 +84,8 @@
 <rect x="122" y="425" width="10" height="10" rx="3" fill="#fbbf24"/>
 <text x="138" y="439" text-anchor="end" class="label">MiniMax-L</text>
 <rect x="280" y="420" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="420" width="6.38" height="28" rx="10" fill="#fbbf24"/>
-<text x="296.38" y="439" text-anchor="start" class="label">0.8%</text>
+<rect x="280" y="420" width="528.42" height="28" rx="10" fill="#fbbf24"/>
+<text x="818.42" y="439" text-anchor="start" class="label">66.1%</text>
 <rect x="122" y="467" width="10" height="10" rx="3" fill="#1d4ed8"/>
 <text x="138" y="481" text-anchor="end" class="label">DeepSeek-S</text>
 <rect x="280" y="462" width="800" height="28" rx="10" fill="#e2e8f0"/>
@@ -99,8 +99,8 @@
 <rect x="122" y="551" width="10" height="10" rx="3" fill="#60a5fa"/>
 <text x="138" y="565" text-anchor="end" class="label">DeepSeek-L</text>
 <rect x="280" y="546" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="546" width="401.60" height="28" rx="10" fill="#60a5fa"/>
-<text x="691.60" y="565" text-anchor="start" class="label">50.2%</text>
+<rect x="280" y="546" width="450.04" height="28" rx="10" fill="#60a5fa"/>
+<text x="740.04" y="565" text-anchor="start" class="label">56.3%</text>
 <rect x="122" y="593" width="10" height="10" rx="3" fill="#c2410c"/>
 <text x="138" y="607" text-anchor="end" class="label">Llama-S</text>
 <rect x="280" y="588" width="800" height="28" rx="10" fill="#e2e8f0"/>

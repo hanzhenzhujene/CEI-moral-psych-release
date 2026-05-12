@@ -30,6 +30,12 @@ Everything below supports that path, but not every script is meant to be a publi
 
 These launchers are historical and operationally useful, but the public release package should be generated from `build_release_artifacts.py` rather than by reading raw run folders directly.
 
+## Legacy Root Launchers
+
+Older one-off OpenRouter scripts that used to live in the repository root are now under `scripts/legacy-openrouter/`. They remain tracked for provenance and recovery workflows, but they are not the canonical public entrypoint.
+
+Standalone OpenRouter/TrolleyBench Python helpers are under `tools/legacy_openrouter/`.
+
 ## Which scripts matter for which audience
 
 - **Reviewer / collaborator:** usually only needs `make bootstrap` and `build_release_artifacts.py`

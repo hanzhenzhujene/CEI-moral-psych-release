@@ -91,6 +91,33 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "`make bootstrap`" in readme or "make audit" in readme
 
 
+def test_repository_root_keeps_legacy_files_archived():
+    legacy_root_files = {
+        "PROGRESS.md",
+        "STATUS.md",
+        "moral-psychology-benchmarks.md",
+        "openrouter-setup.md",
+        "trolleybench-plan.md",
+        "client.py",
+        "config.py",
+        "run_benchmark.py",
+        "run_trolleybench.py",
+        "eval_trolleybench.py",
+        "export_results.py",
+        "run_all_benchmarks.sh",
+        "run_one_model.sh",
+        "run_parallel_remaining.sh",
+    }
+
+    for filename in legacy_root_files:
+        assert not (ROOT / filename).exists(), f"Move legacy root clutter into docs/, scripts/, or tools/: {filename}"
+
+    assert (ROOT / "docs" / "status" / "PROGRESS.md").exists()
+    assert (ROOT / "docs" / "plans" / "trolleybench-plan.md").exists()
+    assert (ROOT / "scripts" / "legacy-openrouter" / "run_all_benchmarks.sh").exists()
+    assert (ROOT / "tools" / "legacy_openrouter" / "run_trolleybench.py").exists()
+
+
 def test_docs_index_mentions_repo_architecture():
     docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
     assert "repo-architecture.md" in docs_index

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Run MoralBench + EMNLP Educator benchmarks for Gemma 3 models via OpenRouter
+# Run Erik's benchmarks for OpenRouter models
 set -uo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$SCRIPT_DIR"
 
 set -a; source "$SCRIPT_DIR/.env"; set +a
@@ -19,7 +19,7 @@ run_model() {
     local MODEL_ID="$2"
     local SLUG
     SLUG=$(echo "$ROUTE" | tr '/' '_')
-    local LOG="$SCRIPT_DIR/results/run_moralbench_emnlp_${SLUG}.txt"
+    local LOG="$SCRIPT_DIR/results/run_erik_${SLUG}.txt"
 
     echo "=== $ROUTE ($MODEL_ID) started: $(date) ===" | tee "$LOG"
 
@@ -45,25 +45,30 @@ run_model() {
     echo "=== $ROUTE complete: $(date) ===" | tee -a "$LOG"
 }
 
-echo "=== Gemma MoralBench + EMNLP Educator Benchmarks (via OpenRouter) ==="
+echo "=== OpenRouter Erik Benchmarks ==="
 echo "Started: $(date)"
 
 PIDS=()
 
-run_model "google/gemma-3-4b" "google/gemma-3-4b-it" &
+run_model "llama/llama-3.2-3b" "meta-llama/llama-3.2-3b-instruct" &
 PIDS+=($!)
-echo "  Launched gemma-3-4b (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched llama-3.2-3b (PID ${PIDS[${#PIDS[@]}-1]})"
 
-run_model "google/gemma-3-12b" "google/gemma-3-12b-it" &
+run_model "llama/llama-3.1-8b" "meta-llama/llama-3.1-8b-instruct" &
 PIDS+=($!)
-echo "  Launched gemma-3-12b (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched llama-3.1-8b (PID ${PIDS[${#PIDS[@]}-1]})"
 
-run_model "google/gemma-3-27b" "google/gemma-3-27b-it" &
+run_model "llama/llama-3.3-70b" "meta-llama/llama-3.3-70b-instruct" &
 PIDS+=($!)
-echo "  Launched gemma-3-27b (PID ${PIDS[${#PIDS[@]}-1]})"
+echo "  Launched llama-3.3-70b (PID ${PIDS[${#PIDS[@]}-1]})"
+
+run_model "minimax/minimax-m1" "minimax/minimax-m1" &
+PIDS+=($!)
+echo "  Launched minimax-m1 (PID ${PIDS[${#PIDS[@]}-1]})"
 
 echo ""
-echo "3 models launched. PIDs: ${PIDS[*]}"
+echo "4 models launched. PIDs: ${PIDS[*]}"
+echo "Logs: results/run_erik_*.txt"
 
 wait "${PIDS[@]}"
-echo "=== All 3 models complete: $(date) ==="
+echo "=== All 4 models complete: $(date) ==="

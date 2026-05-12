@@ -4,10 +4,10 @@ Generates:
   - results/<run>/export/summary.csv          — one row per model, key metrics
   - results/<run>/export/all_responses.csv     — one row per scenario×model, with actions + frameworks
   - results/<run>/export/conversations.md      — full conversations, human-readable
-  - results/<run>/eval_report.md               — evaluation report (from eval_trolleybench.py)
+  - results/<run>/eval_report.md               — evaluation report (from tools/legacy_openrouter/eval_trolleybench.py)
 
 Usage:
-    python export_results.py --results-dir results/trolleybench/20260421_072446
+    python tools/legacy_openrouter/export_results.py --results-dir results/trolleybench/20260421_072446
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ def export_summary_csv(results_dir: Path, export_dir: Path):
     """Export one-row-per-model summary CSV."""
     eval_summary = results_dir / "eval_summary.json"
     if not eval_summary.exists():
-        print(f"  Skipping summary.csv — run eval_trolleybench.py first")
+        print("  Skipping summary.csv — run tools/legacy_openrouter/eval_trolleybench.py first")
         return
 
     data = json.loads(eval_summary.read_text())

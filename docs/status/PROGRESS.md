@@ -10,7 +10,7 @@
 
 | # | Benchmark | Paper | Harness File | Status | Tasks |
 |---|-----------|-------|--------------|--------|-------|
-| 1 | **TrolleyBench** | Zhu 2025 | `run_trolleybench.py` | **Complete** | Multi-turn ethical consistency (ECI, entropy, reversal rate) |
+| 1 | **TrolleyBench** | Zhu 2025 | `tools/legacy_openrouter/run_trolleybench.py` | **Complete** | Multi-turn ethical consistency (ECI, entropy, reversal rate) |
 | 2 | **MoReBench** | Chiu 2025 | `src/inspect/evals/morebench.py` | **Complete** | `morebench_advisor`, `morebench_agent` |
 | 3 | **Moral Circuits** | Schacht 2025 | `src/inspect/evals/moral_circuits.py` | **Complete** | `moral_circuits_judgment`, `moral_circuits_reasoning` |
 | 4 | **M³oralBench** | Yan 2024 | `src/inspect/evals/m3oralbench.py` | **Complete** | `m3oralbench_judgment`, `m3oralbench_foundation`, `m3oralbench_response` |
@@ -45,7 +45,7 @@
 - **API:** OpenRouter primary; provider_config.sh routes select models to Ark, Together AI, DeepSeek, Google AI Studio, MiniMax, DashScope
 - **Temperatures:** 0.0 and 0.7
 - **Harness:** Inspect AI (`@task` pattern) for MoReBench, Moral Circuits, M³oralBench, MoralLens
-- **Harness:** Custom multi-turn for TrolleyBench (`run_trolleybench.py`)
+- **Harness:** Custom multi-turn for TrolleyBench (`tools/legacy_openrouter/run_trolleybench.py`)
 - **Per TrolleyBench model:** 18 scenarios × 3 turns = 54 API calls
 - **Total TrolleyBench:** 15 models × 2 temps × 54 calls = 1,620 API calls
 

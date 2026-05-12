@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Run Erik's benchmarks for Gemma 3 models via OpenRouter
+# Run MoralBench + EMNLP Educator benchmarks for Gemma 3 models via OpenRouter
 set -uo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$SCRIPT_DIR"
 
 set -a; source "$SCRIPT_DIR/.env"; set +a
@@ -19,7 +19,7 @@ run_model() {
     local MODEL_ID="$2"
     local SLUG
     SLUG=$(echo "$ROUTE" | tr '/' '_')
-    local LOG="$SCRIPT_DIR/results/run_erik_${SLUG}.txt"
+    local LOG="$SCRIPT_DIR/results/run_moralbench_emnlp_${SLUG}.txt"
 
     echo "=== $ROUTE ($MODEL_ID) started: $(date) ===" | tee "$LOG"
 
@@ -45,7 +45,7 @@ run_model() {
     echo "=== $ROUTE complete: $(date) ===" | tee -a "$LOG"
 }
 
-echo "=== Gemma Erik Benchmarks (via OpenRouter) ==="
+echo "=== Gemma MoralBench + EMNLP Educator Benchmarks (via OpenRouter) ==="
 echo "Started: $(date)"
 
 PIDS=()
