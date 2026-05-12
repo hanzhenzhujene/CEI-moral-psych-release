@@ -136,8 +136,8 @@
 <text x="258" y="479.00" class="label">MiniMax-M</text>
 <rect x="430" y="452" width="170" height="42" fill="#35885e" stroke="#ffffff" stroke-width="1.2"/>
 <text x="515.00" y="479.00" text-anchor="middle" class="celltext">97%</text>
-<rect x="600" y="452" width="170" height="42" fill="#3c8c63" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="479.00" text-anchor="middle" class="celltext">94%</text>
+<rect x="600" y="452" width="170" height="42" fill="#3d8d64" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="479.00" text-anchor="middle" class="celltext">93%</text>
 <rect x="770" y="452" width="170" height="42" fill="#34885e" stroke="#ffffff" stroke-width="1.2"/>
 <text x="855.00" y="479.00" text-anchor="middle" class="celltext">97%</text>
 <rect x="940" y="452" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>

@@ -20,11 +20,11 @@ MiniMax-S,MiniMax,S,value_prism_relevance,merged_saved_shards_by_sample_id,16,43
 MiniMax-S,MiniMax,S,value_prism_valence,merged_saved_shards_by_sample_id,10,21840,21840,0.755793,21838,21838,,complete
 MiniMax-S,MiniMax,S,ccd_bench_selection,merged_saved_shards_by_sample_id,1,2182,2182,,0,2182,1.000000,complete
 MiniMax-S,MiniMax,S,denevil_fulcra_proxy_generation,merged_saved_shards_by_sample_id,9,20518,20518,,0,20516,0.999903,complete
-MiniMax-M,MiniMax,M,unimoral_action_prediction,merged_saved_shards_by_sample_id,1,3512,8784,0.656036,3512,3512,,partial
-MiniMax-M,MiniMax,M,value_prism_relevance,merged_saved_shards_by_sample_id,12,25500,43680,0.720157,25500,25500,,partial
-MiniMax-M,MiniMax,M,value_prism_valence,merged_saved_shards_by_sample_id,12,14100,21840,0.760284,14100,14100,,partial
+MiniMax-M,MiniMax,M,unimoral_action_prediction,merged_saved_shards_by_sample_id,1,8784,8784,0.658698,8784,8784,,complete
+MiniMax-M,MiniMax,M,value_prism_relevance,merged_saved_shards_by_sample_id,18,43680,43680,0.722734,43680,43680,,complete
+MiniMax-M,MiniMax,M,value_prism_valence,merged_saved_shards_by_sample_id,15,21840,21840,0.756822,21840,21840,,complete
 MiniMax-M,MiniMax,M,ccd_bench_selection,merged_saved_shards_by_sample_id,1,2182,2182,,0,2182,0.999542,complete
-MiniMax-M,MiniMax,M,denevil_fulcra_proxy_generation,merged_saved_shards_by_sample_id,14,18551,20518,,0,18551,1.000000,partial
+MiniMax-M,MiniMax,M,denevil_fulcra_proxy_generation,merged_saved_shards_by_sample_id,14,20518,20518,,0,20518,1.000000,complete
 MiniMax-L,MiniMax,L,unimoral_action_prediction,merged_saved_shards_by_sample_id,1,8784,8784,0.007969,8784,8784,,complete
 MiniMax-L,MiniMax,L,smid_moral_rating,merged_saved_shards_by_sample_id,3,2941,2941,0.109487,2941,2941,,complete
 MiniMax-L,MiniMax,L,smid_foundation_classification,merged_saved_shards_by_sample_id,3,2941,2941,0.286977,2941,2941,,complete

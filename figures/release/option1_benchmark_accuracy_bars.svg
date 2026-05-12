@@ -79,9 +79,8 @@
 <rect x="122" y="383" width="10" height="10" rx="3" fill="#d97706"/>
 <text x="138" y="397" text-anchor="end" class="label">MiniMax-M</text>
 <rect x="280" y="378" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="378" width="800" height="28" rx="10" class="muted-bar"/>
-<rect x="280" y="378" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
-<text x="1070" y="397" text-anchor="end" class="small">no current result</text>
+<rect x="280" y="378" width="526.96" height="28" rx="10" fill="#d97706"/>
+<text x="816.96" y="397" text-anchor="start" class="label">65.9%</text>
 <rect x="122" y="425" width="10" height="10" rx="3" fill="#fbbf24"/>
 <text x="138" y="439" text-anchor="end" class="label">MiniMax-L</text>
 <rect x="280" y="420" width="800" height="28" rx="10" fill="#e2e8f0"/>
@@ -172,7 +171,7 @@
 <rect x="280" y="1120" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1120" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="1120" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
-<text x="1070" y="1139" text-anchor="end" class="small">no current result</text>
+<text x="1070" y="1139" text-anchor="end" class="small">no SMID vision route</text>
 <rect x="122" y="1167" width="10" height="10" rx="3" fill="#fbbf24"/>
 <text x="138" y="1181" text-anchor="end" class="label">MiniMax-L</text>
 <rect x="280" y="1162" width="800" height="28" rx="10" fill="#e2e8f0"/>
@@ -264,9 +263,8 @@
 <rect x="122" y="1867" width="10" height="10" rx="3" fill="#d97706"/>
 <text x="138" y="1881" text-anchor="end" class="label">MiniMax-M</text>
 <rect x="280" y="1862" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1862" width="800" height="28" rx="10" class="muted-bar"/>
-<rect x="280" y="1862" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
-<text x="1070" y="1881" text-anchor="end" class="small">no current result</text>
+<rect x="280" y="1862" width="591.82" height="28" rx="10" fill="#d97706"/>
+<text x="881.82" y="1881" text-anchor="start" class="label">74.0%</text>
 <rect x="122" y="1909" width="10" height="10" rx="3" fill="#fbbf24"/>
 <text x="138" y="1923" text-anchor="end" class="label">MiniMax-L</text>
 <rect x="280" y="1904" width="800" height="28" rx="10" fill="#e2e8f0"/>

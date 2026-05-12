@@ -170,7 +170,10 @@ def test_release_builder_emits_expected_files(tmp_path):
         report_text = (release_dir / report_name).read_text(encoding="utf-8")
         assert "**Current GitHub-facing boundary:**" in report_text
         assert "`MiniMax-M`" in report_text
-        assert "intentionally withheld until the clean M2.5 text pass is complete" in report_text
+        assert (
+            "intentionally withheld until the clean M2.5 text pass is complete" in report_text
+            or "No MiniMax-M2.5 text benchmark remains live" in report_text
+        )
 
     with (release_dir / "benchmark-catalog.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -271,7 +274,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert minimax_medium["ccd_bench"] == "done"
     assert minimax_medium["denevil"] in {"live", "proxy"}
     assert minimax_medium["summary_note"].startswith(
-        "Clean direct MiniMax-M2.5 text run is active; no medium SMID route fixed yet."
+        (
+            "Clean direct MiniMax-M2.5 text run is active; no medium SMID route fixed yet.",
+            "Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet.",
+        )
     )
     minimax_large = row_for("MiniMax-L")
     assert minimax_large["unimoral"] in {"queue", "done"}
@@ -420,10 +426,16 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert rows_by_line["MiniMax-S"]["smid_average_accuracy"] == "0.431996"
     assert rows_by_line["MiniMax-S"]["value_average_accuracy"] == "0.739942"
     assert rows_by_line["MiniMax-S"]["comparison_note"] == "Comparable on all three benchmark-faithful accuracy panels."
-    assert rows_by_line["MiniMax-M"]["unimoral_action_accuracy"] == ""
-    assert rows_by_line["MiniMax-M"]["smid_average_accuracy"] == ""
-    assert rows_by_line["MiniMax-M"]["value_average_accuracy"] == ""
-    assert rows_by_line["MiniMax-M"]["comparison_note"] == "Coverage-only live line; accuracy withheld until the clean M2.5 text pass completes and a medium SMID route is fixed."
+    if rows_by_line["MiniMax-M"]["unimoral_action_accuracy"]:
+        assert rows_by_line["MiniMax-M"]["unimoral_action_accuracy"] == "0.658698"
+        assert rows_by_line["MiniMax-M"]["smid_average_accuracy"] == ""
+        assert rows_by_line["MiniMax-M"]["value_average_accuracy"] == "0.739778"
+        assert rows_by_line["MiniMax-M"]["comparison_note"] == "Text-only comparable line; no public SMID route on this slot."
+    else:
+        assert rows_by_line["MiniMax-M"]["unimoral_action_accuracy"] == ""
+        assert rows_by_line["MiniMax-M"]["smid_average_accuracy"] == ""
+        assert rows_by_line["MiniMax-M"]["value_average_accuracy"] == ""
+        assert rows_by_line["MiniMax-M"]["comparison_note"] == "Coverage-only live line; accuracy withheld until the clean M2.5 text pass completes and a medium SMID route is fixed."
     assert any(
         row["line_label"] == "Gemma-L"
         and row["unimoral_action_accuracy"] == "0.661088"
@@ -825,7 +837,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     assert any(
         row["benchmark"] == "Value Kaleidoscope"
-        and row["mean_accuracy"] in {"0.650180", "0.662989", "0.668485"}
+        and row["mean_accuracy"] in {"0.650180", "0.662989", "0.668485", "0.673238"}
         and row["best_line"] in {"Llama-M", "MiniMax-L"}
         and row["weakest_line"] == "Llama-S"
         for row in difficulty_rows
@@ -845,6 +857,7 @@ def test_release_builder_emits_expected_files(tmp_path):
             and row["numeric_pattern"] in {
                 "UniMoral: L 0.008; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: L 0.741",
                 "UniMoral: S 0.661 -> L 0.008; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> L 0.741",
+                "UniMoral: S 0.661 -> M 0.659 -> L 0.008; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> M 0.740 -> L 0.741",
             }
             and "too sparse" in row["interpretation"]
             for row in minimax_scaling_rows
@@ -924,7 +937,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "`DeepSeek-M` | UniMoral 0.684; Value 0.635" in text
         assert "`DeepSeek-L` | UniMoral 0.502; Value 0.681" in text
         assert "Strongest fully observed comparable line | `MiniMax-S` averages 0.611" in text
-        assert "Strongest text-only comparable line | `Llama-M` reaches UniMoral 0.670 and Value 0.724" in text
+        assert "Strongest text-only comparable line | `MiniMax-M` reaches UniMoral 0.659 and Value 0.740" in text
         assert "Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route" in text
         assert "CCD-Bench should not be flattened into a universal accuracy number." in text
         assert "The repo still lacks a stable local `MoralPrompt` export" in text
@@ -1035,7 +1048,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     heatmap_svg = (figure_dir / "option1_accuracy_heatmap.svg").read_text(encoding="utf-8")
     assert "Current Comparable Accuracy Heatmap" in heatmap_svg
     assert "Accuracy scale" in heatmap_svg
-    assert "no current result" in heatmap_svg
+    assert "n/a / no route" in heatmap_svg
     assert "withdrawn from direct comparison" in heatmap_svg
     assert "Qwen-S" in heatmap_svg
 
@@ -1069,7 +1082,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Qwen" in family_scaling_svg
     assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
     if "MiniMax" in family_scaling_svg:
-        assert "MiniMax: S and L are comparable on UniMoral, SMID, and Value; M remains a live text-only run." in family_scaling_svg
+        assert "MiniMax: S/M/L are scored on UniMoral and Value; S/L have SMID, while M has no SMID route." in family_scaling_svg
     assert "Qwen: text scored at S/M/L; SMID at S/L." in family_scaling_svg
     assert "Llama: text scored at S/M/L; SMID at S/L." in family_scaling_svg
     assert "DeepSeek: S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists." in family_scaling_svg
@@ -1143,7 +1156,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Appendix QA: DeNEVIL proxy status matrix" in denevil_status_matrix_svg
     assert "Appendix QA / provenance only." in denevil_status_matrix_svg
     assert "Proxy complete" in denevil_status_matrix_svg
-    assert "Active rerun" in denevil_status_matrix_svg
+    assert "Active rerun" not in denevil_status_matrix_svg
     assert "SAMPLE COUNT" in denevil_status_matrix_svg
     assert "GENERATED RESPONSES" in denevil_status_matrix_svg
     assert "VALID RESPONSE RATE" in denevil_status_matrix_svg

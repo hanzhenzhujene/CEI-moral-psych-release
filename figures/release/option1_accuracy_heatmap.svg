@@ -87,18 +87,16 @@
 <text x="943.0" y="410" text-anchor="middle" class="celltext">74.0%</text>
 <text x="943.0" y="431" text-anchor="middle" class="cellsub">MiniMax S</text>
 <text x="276" y="495.0" text-anchor="end" class="axis">MiniMax-M</text>
-<rect x="300" y="452" width="246" height="62" rx="16" class="muted-cell"/>
-<rect x="300" y="452" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
-<text x="423.0" y="486" text-anchor="middle" class="label">n/a</text>
-<text x="423.0" y="507" text-anchor="middle" class="small">no current result</text>
+<rect x="300" y="452" width="246" height="62" rx="16" fill="#377d82" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="486" text-anchor="middle" class="celltext">65.9%</text>
+<text x="423.0" y="507" text-anchor="middle" class="cellsub">MiniMax M</text>
 <rect x="560" y="452" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="452" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="486" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="507" text-anchor="middle" class="small">no current result</text>
-<rect x="820" y="452" width="246" height="62" rx="16" class="muted-cell"/>
-<rect x="820" y="452" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
-<text x="943.0" y="486" text-anchor="middle" class="label">n/a</text>
-<text x="943.0" y="507" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="507" text-anchor="middle" class="small">no SMID vision route</text>
+<rect x="820" y="452" width="246" height="62" rx="16" fill="#1f6f78" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="486" text-anchor="middle" class="celltext">74.0%</text>
+<text x="943.0" y="507" text-anchor="middle" class="cellsub">MiniMax M</text>
 <text x="276" y="571.0" text-anchor="end" class="axis">MiniMax-L</text>
 <rect x="300" y="528" width="246" height="62" rx="16" fill="#f2e8cf" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="562" text-anchor="middle" class="celltext-dark">0.8%</text>

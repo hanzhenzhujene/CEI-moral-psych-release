@@ -351,9 +351,9 @@ FUTURE_MODEL_PLAN = [
         "closed_release_status": "Public matrix now includes the completed direct-provider rerun",
         "current_route": "text: minimax-m2.1 and minimax-m2.5; shared SMID recovery: minimax-01",
         "small_candidate": "MiniMax-M2.1 direct-provider text rerun is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the prior MiniMax-01 recovery route",
-        "medium_candidate": "MiniMax-M2.5 clean text rerun is active; no distinct medium SMID route is fixed yet",
-        "large_candidate": "The MiniMax-M2.5 text rerun now carries the public MiniMax line, paired with the shared MiniMax-01 SMID recovery route; UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy are persisted in saved artifacts",
-        "next_step": "Finish the clean MiniMax-M2.5 medium text pass, then decide whether a separate MiniMax-M1 pass is still worth paying for.",
+        "medium_candidate": "MiniMax-M2.5 clean text/proxy rerun is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no distinct medium SMID route is fixed yet",
+        "large_candidate": "The MiniMax-M2.5 text rerun now carries the public MiniMax-M line for text/proxy benchmarks, while SMID remains unavailable for that medium slot rather than borrowed from another route",
+        "next_step": "Decide whether a separate MiniMax-M1 pass or a distinct medium SMID route is still worth paying for; no published MiniMax-M2.5 text/proxy line remains active.",
     },
     {
         "family": "DeepSeek",
@@ -4217,6 +4217,13 @@ def _apply_minimax_m_clean_public_release_patch() -> None:
 
     relevance_done = completed("value_prism_relevance")
     valence_done = completed("value_prism_valence")
+    text_complete = (
+        completed("unimoral_action_prediction") >= expected("unimoral_action_prediction")
+        and relevance_done >= expected("value_prism_relevance")
+        and valence_done >= expected("value_prism_valence")
+        and completed("ccd_bench_selection") >= expected("ccd_bench_selection")
+        and completed("denevil_fulcra_proxy_generation") >= expected("denevil_fulcra_proxy_generation")
+    )
     value_status = (
         "done"
         if relevance_done >= expected("value_prism_relevance")
@@ -4234,8 +4241,15 @@ def _apply_minimax_m_clean_public_release_patch() -> None:
     progress["value_kaleidoscope"] = value_status
     progress["ccd_bench"] = status("ccd_bench_selection")
     progress["denevil"] = status("denevil_fulcra_proxy_generation", proxy=True)
+    summary_prefix = (
+        "Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet."
+        if text_complete
+        else "Clean direct MiniMax-M2.5 text run is active; no medium SMID route fixed yet."
+        if active
+        else "Clean direct MiniMax-M2.5 text checkpoints are partially persisted; no medium SMID route fixed yet."
+    )
     progress["summary_note"] = (
-        "Clean direct MiniMax-M2.5 text run is active; no medium SMID route fixed yet. "
+        f"{summary_prefix} "
         f"Build-time persisted text counts: UniMoral {completed('unimoral_action_prediction'):,}/{expected('unimoral_action_prediction'):,}; "
         f"Value {relevance_done + valence_done:,}/{expected('value_prism_relevance') + expected('value_prism_valence'):,}; "
         f"CCD {completed('ccd_bench_selection'):,}/{expected('ccd_bench_selection'):,}; "
@@ -4245,10 +4259,12 @@ def _apply_minimax_m_clean_public_release_patch() -> None:
     current = next((row for row in CURRENT_RESULT_LINES if row.get("line_label") == "MiniMax-M"), None)
     current_payload = {
         "line_label": "MiniMax-M",
-        "scope": "Live local rerun" if active else "Attempted local line",
-        "status": "live" if active else "partial",
+        "scope": "Complete local text line" if text_complete else "Live local rerun" if active else "Attempted local line",
+        "status": "done" if text_complete else "live" if active else "partial",
         "coverage": (
-            "No medium SMID route fixed yet; clean MiniMax-M2.5 text run is active across the remaining text benchmarks."
+            "Clean MiniMax-M2.5 text/proxy benchmarks complete; no medium SMID route fixed yet."
+            if text_complete
+            else "No medium SMID route fixed yet; clean MiniMax-M2.5 text run is active across the remaining text benchmarks."
             if active
             else "No medium SMID route fixed yet; clean MiniMax-M2.5 text checkpoints are partially persisted."
         ),
@@ -4260,9 +4276,11 @@ def _apply_minimax_m_clean_public_release_patch() -> None:
         current.update(current_payload)
 
     checkpoint = _find_row(LOCAL_EXPANSION_CHECKPOINT, "line", "Next queued text lines")
-    checkpoint["status"] = "live" if active else "queue"
+    checkpoint["status"] = "done" if text_complete else "live" if active else "queue"
     checkpoint["note"] = (
-        "MiniMax-M clean direct text pass is active now; remaining queued work should wait until this run finishes."
+        "No currently published line remains queued behind an active rerun."
+        if text_complete
+        else "MiniMax-M clean direct text pass is active now; remaining queued work should wait until this run finishes."
         if active
         else "MiniMax-M clean direct text pass has partial checkpoints and should be resumed before any new paid line."
     )
@@ -8072,7 +8090,7 @@ def render_family_scaling_profile_svg(
 
     lines.append('<text x="656" y="696" class="tiny">FAMILY READ</text>')
     legend_items = [
-        ("MiniMax", "S and L are comparable on UniMoral, SMID, and Value; M remains a live text-only run."),
+        ("MiniMax", "S/M/L are scored on UniMoral and Value; S/L have SMID, while M has no SMID route."),
         ("Qwen", "text scored at S/M/L; SMID at S/L."),
         ("DeepSeek", "S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists."),
         ("Llama", "text scored at S/M/L; SMID at S/L."),

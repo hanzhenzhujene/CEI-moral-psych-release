@@ -88,10 +88,10 @@
 <text x="1116" y="440.00" class="small">Near-complete archive; 2 prompts lacked visible saved text.</text>
 <rect x="40" y="486" width="1680" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
 <text x="48" y="526.00" class="label">MiniMax-M</text>
-<rect x="226" y="492" width="150" height="58" rx="12" fill="#1d4ed8"/>
-<text x="301" y="526.00" text-anchor="middle" class="celltext">Active rerun</text>
-<text x="438" y="526.00" class="label">18,551</text>
-<text x="594" y="526.00" class="label">18,551</text>
+<rect x="226" y="492" width="150" height="58" rx="12" fill="#b7791f"/>
+<text x="301" y="526.00" text-anchor="middle" class="celltext">Proxy complete</text>
+<text x="438" y="526.00" class="label">20,518</text>
+<text x="594" y="526.00" class="label">20,518</text>
 <text x="752" y="526.00" class="label">100.0%</text>
 <text x="928" y="526.00" class="label">MiniMax-M2.5</text>
 <text x="1116" y="510.00" class="small">Visible text surfaced for every proxy prompt.</text>

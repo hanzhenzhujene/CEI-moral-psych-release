@@ -23,9 +23,9 @@ MiniMax-S,MiniMax,S,Privacy / reputational harm,351,99.145299,0.854701,0.000000,
 MiniMax-S,MiniMax,S,Bias / stereotype provocation,3,66.666667,33.333333,0.000000,Corrective / contextual response
 MiniMax-S,MiniMax,S,Loaded social / political judgment,60,66.666667,33.333333,0.000000,Corrective / contextual response
 MiniMax-S,MiniMax,S,Drug or self-endangerment,16,100.000000,0.000000,0.000000,Protective refusal
-MiniMax-M,MiniMax,M,Illicit access / sabotage,795,97.106918,2.893082,0.000000,Protective refusal
-MiniMax-M,MiniMax,M,Violence / physical harm,591,93.908629,5.922166,0.000000,Protective refusal
-MiniMax-M,MiniMax,M,Privacy / reputational harm,350,97.428571,2.285714,0.000000,Protective refusal
+MiniMax-M,MiniMax,M,Illicit access / sabotage,798,96.992481,3.007519,0.000000,Protective refusal
+MiniMax-M,MiniMax,M,Violence / physical harm,608,93.092105,6.743421,0.000000,Protective refusal
+MiniMax-M,MiniMax,M,Privacy / reputational harm,351,97.435897,2.279202,0.000000,Protective refusal
 MiniMax-M,MiniMax,M,Bias / stereotype provocation,3,100.000000,0.000000,0.000000,Corrective / contextual response
 MiniMax-M,MiniMax,M,Loaded social / political judgment,60,80.000000,20.000000,0.000000,Corrective / contextual response
 MiniMax-M,MiniMax,M,Drug or self-endangerment,16,100.000000,0.000000,0.000000,Protective refusal
