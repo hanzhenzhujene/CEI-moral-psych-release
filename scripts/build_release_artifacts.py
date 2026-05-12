@@ -4195,6 +4195,25 @@ def _apply_minimax_m_clean_public_release_patch() -> None:
         for task_name, log_dir in task_sources.items()
     }
     if not any(summary is not None for summary in summaries.values()):
+        audit_fallbacks = published_saved_results_audit_fallbacks()
+        summaries = {
+            task_name: (
+                {
+                    "completed": fallback["completed_samples"],
+                    "score_count": fallback["score_count"],
+                    "accuracy": fallback["accuracy"],
+                    "visible_nonempty": fallback["visible_nonempty"],
+                    "eval_count": fallback["eval_count"],
+                }
+                if (
+                    fallback := audit_fallbacks.get(("MiniMax-M", task_name))
+                )
+                and fallback["completed_samples"] is not None
+                else None
+            )
+            for task_name in task_sources
+        }
+    if not any(summary is not None for summary in summaries.values()):
         return
 
     active = _has_recent_trace_activity(MINIMAX_MEDIUM_TRACE_DIR, max_age_seconds=30 * 60)
@@ -5226,6 +5245,36 @@ def _parse_optional_int(value: str | None) -> int | None:
     if value in {None, "", "n/a"}:
         return None
     return int(value)
+
+
+@lru_cache(maxsize=1)
+def published_saved_results_audit_fallbacks() -> dict[tuple[str, str], dict[str, Any]]:
+    """Reuse tracked saved-result audit rows when raw local shard logs are unavailable."""
+    path = DEFAULT_RELEASE_DIR / "saved-results-audit.csv"
+    if not path.exists():
+        return {}
+
+    fallbacks: dict[tuple[str, str], dict[str, Any]] = {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            line_label = row["line_label"]
+            task_name = row["task"]
+            fallbacks[(line_label, task_name)] = {
+                "line_label": line_label,
+                "family": row["family"],
+                "size_slot": row["size_slot"],
+                "task": task_name,
+                "source_strategy": row["source_strategy"],
+                "eval_count": _parse_optional_int(row.get("eval_count")),
+                "completed_samples": _parse_optional_int(row.get("completed_samples")),
+                "expected_samples": _parse_optional_int(row.get("expected_samples")),
+                "accuracy": _parse_optional_float(row.get("accuracy")),
+                "score_count": _parse_optional_int(row.get("score_count")),
+                "visible_nonempty": _parse_optional_int(row.get("visible_nonempty")),
+                "coverage": _parse_optional_float(row.get("coverage")),
+                "status": row.get("status") or "missing",
+            }
+    return fallbacks
 
 
 @lru_cache(maxsize=1)
@@ -6302,6 +6351,7 @@ def build_saved_results_audit_rows(
     family_size_progress: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
     source_map = comparison_line_source_map()
+    audit_fallbacks = published_saved_results_audit_fallbacks()
     rows: list[dict[str, Any]] = []
     for progress_row in family_size_progress:
         line_label = progress_row["line_label"]
@@ -6348,6 +6398,15 @@ def build_saved_results_audit_rows(
                 coverage = None if visible_summary is None else visible_summary.get("coverage")
                 source_strategy = "latest_successful_eval"
                 eval_count = 1 if parsed is not None else 0
+            fallback = audit_fallbacks.get((line_label, task_name))
+            if fallback is not None and completed is None:
+                completed = fallback["completed_samples"]
+                score_count = fallback["score_count"]
+                accuracy = fallback["accuracy"]
+                visible_nonempty = fallback["visible_nonempty"]
+                coverage = fallback["coverage"]
+                source_strategy = fallback["source_strategy"]
+                eval_count = fallback["eval_count"]
             completed_int = None if completed is None else int(completed)
             status = "missing"
             if completed_int is not None:
