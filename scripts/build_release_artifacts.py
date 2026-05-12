@@ -50,14 +50,14 @@ SNAPSHOT_DATE_ISO = "2026-04-19"
 REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan."
 REPORT_PROVIDER = "OpenRouter"
 REPORT_TEMPERATURE = "0"
-REPORT_MINIMAX_API_COST = "$398.42"
-REPORT_OPENROUTER_COST = "$113.57"
-REPORT_CURRENT_COST_ESTIMATE = "$511.99"
+REPORT_MINIMAX_API_COST = "$504.66"
+REPORT_OPENROUTER_COST = "$254.17"
+REPORT_CURRENT_TOTAL_COST = "$758.83"
 REPORT_CURRENT_COST_BREAKDOWN = (
     f"MiniMax API: `{REPORT_MINIMAX_API_COST}`; OpenRouter for all other models: `{REPORT_OPENROUTER_COST}`."
 )
 REPORT_CURRENT_COST_SCOPE = (
-    "User-updated total through the latest saved reruns parsed in this repo."
+    "User-confirmed total spend through the latest saved reruns parsed in this repo."
 )
 REPORT_STATUS_NOTE = (
     f"Updated {REPORT_DATE_LONG}. "
@@ -9272,8 +9272,8 @@ def build_topline_summary(
         f"- paper-setup tasks: `{faithful_tasks}`",
         f"- proxy tasks: `{proxy_tasks}`",
         f"- total evaluated samples: `{total_samples:,}`",
-        f"- current project cost estimate: `{REPORT_CURRENT_COST_ESTIMATE}`",
-        f"- current cost breakdown: {REPORT_CURRENT_COST_BREAKDOWN}",
+        f"- current project total cost: `{REPORT_CURRENT_TOTAL_COST}`",
+        f"- total cost breakdown: {REPORT_CURRENT_COST_BREAKDOWN}",
         "- closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`",
         "- key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup",
         f"- extra local progress outside the frozen snapshot: `Llama` small is complete across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks and is intentionally excluded from the frozen `19 / 19` totals",
@@ -9471,8 +9471,8 @@ def current_research_group_status_takeaway() -> str | None:
         )
     if all(status in {"done", "proxy"} for status in status_values):
         return (
-            "- **Current GitHub-facing boundary:** No MiniMax-M2.5 text benchmark remains live; the saved text pass is parsed into the public tables and SVGs. "
-            f"{summary_note} {smid_clause}"
+            "- **Current GitHub-facing boundary:** No MiniMax-M2.5 text benchmark remains live; the saved MiniMax-M2.5 text/proxy pass is already parsed into the public tables and SVGs. "
+            f"{smid_clause}"
         )
     if any(status == "partial" for status in status_values):
         return (
@@ -10367,7 +10367,7 @@ def build_repo_readme(
         "",
         "This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.",
         "",
-        f"> Current project cost estimate: `{REPORT_CURRENT_COST_ESTIMATE}` ({REPORT_CURRENT_COST_BREAKDOWN})",
+        f"> Current project total cost: `{REPORT_CURRENT_TOTAL_COST}` ({REPORT_CURRENT_COST_BREAKDOWN})",
         "",
         "It combines three things in one clean public surface:",
         "",
@@ -10472,8 +10472,8 @@ def build_repo_readme(
             ("Report owner", f"`{REPORT_OWNER}`"),
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
-            ("Current project cost estimate", f"`{REPORT_CURRENT_COST_ESTIMATE}`"),
-            ("Current cost breakdown", REPORT_CURRENT_COST_BREAKDOWN),
+            ("Current project total cost", f"`{REPORT_CURRENT_TOTAL_COST}`"),
+            ("Total cost breakdown", REPORT_CURRENT_COST_BREAKDOWN),
             ("Cost scope", REPORT_CURRENT_COST_SCOPE),
             ("Intended use", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
@@ -10716,8 +10716,8 @@ def build_release_readme(
             ("Report owner", f"`{REPORT_OWNER}`"),
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
-            ("Current project cost estimate", f"`{REPORT_CURRENT_COST_ESTIMATE}`"),
-            ("Current cost breakdown", REPORT_CURRENT_COST_BREAKDOWN),
+            ("Current project total cost", f"`{REPORT_CURRENT_TOTAL_COST}`"),
+            ("Total cost breakdown", REPORT_CURRENT_COST_BREAKDOWN),
             ("Cost scope", REPORT_CURRENT_COST_SCOPE),
             ("Intended use", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
@@ -10969,8 +10969,8 @@ def build_jenny_group_report(
             ("Report owner", f"`{REPORT_OWNER}`"),
             ("Repo update date", f"`{REPORT_DATE_LONG}`"),
             ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
-            ("Current project cost estimate", f"`{REPORT_CURRENT_COST_ESTIMATE}`"),
-            ("Current cost breakdown", REPORT_CURRENT_COST_BREAKDOWN),
+            ("Current project total cost", f"`{REPORT_CURRENT_TOTAL_COST}`"),
+            ("Total cost breakdown", REPORT_CURRENT_COST_BREAKDOWN),
             ("Cost scope", REPORT_CURRENT_COST_SCOPE),
             ("Purpose", REPORT_PURPOSE),
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
@@ -11103,7 +11103,7 @@ def build_release_manifest(
             "owner": REPORT_OWNER,
             "date": REPORT_DATE_ISO,
             "frozen_snapshot_date": SNAPSHOT_DATE_ISO,
-            "current_cost_estimate": REPORT_CURRENT_COST_ESTIMATE,
+            "current_total_cost": REPORT_CURRENT_TOTAL_COST,
             "current_cost_breakdown": {
                 "minimax_api": REPORT_MINIMAX_API_COST,
                 "openrouter_all_other_models": REPORT_OPENROUTER_COST,

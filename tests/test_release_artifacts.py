@@ -109,10 +109,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_cost_estimate"] == "$511.99"
+    assert manifest["report_metadata"]["current_total_cost"] == "$758.83"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
-        "minimax_api": "$398.42",
-        "openrouter_all_other_models": "$113.57",
+        "minimax_api": "$504.66",
+        "openrouter_all_other_models": "$254.17",
     }
     assert "latest saved reruns parsed in this repo" in manifest["report_metadata"]["current_cost_scope"]
     assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"
@@ -962,8 +962,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "option1_denevil_proxy_valid_response_rate.svg" in text
         assert "option1_denevil_proxy_pipeline.svg" in text
         assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in text
-        assert "Current project cost estimate" in text
+        assert "Current project total cost" in text
         assert "Cost scope" in text
+        assert "Current project cost estimate" not in text
         assert "Current cost to date" not in text
         assert "24634450927" not in text
         assert "| `MiniMax-L` |" in text

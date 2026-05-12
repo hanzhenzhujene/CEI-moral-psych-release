@@ -17,7 +17,7 @@ If you only read one section, read these key takeaways:
 - **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
 - **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `Llama-S` at 23.9%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
 - **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates (92.4% to 99.5% protective response rate). `DeepSeek-S` no longer has the old visibility-collapse problem in the May 9 saved rerun (0.2% no-visible proxy traces).
-- **Current GitHub-facing boundary:** No MiniMax-M2.5 text benchmark remains live; the saved text pass is parsed into the public tables and SVGs. Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. SMID remains `TBD`, so the medium MiniMax line is not a fully comparable all-around line yet.
+- **Current GitHub-facing boundary:** No MiniMax-M2.5 text benchmark remains live; the saved MiniMax-M2.5 text/proxy pass is already parsed into the public tables and SVGs. SMID remains `TBD`, so the medium MiniMax line is not a fully comparable all-around line yet.
 
 
 ## Benchmark Result Visuals
@@ -304,9 +304,9 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Report owner | `Jenny Zhu` |
 | Repo update date | `May 12, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
-| Current project cost estimate | `$511.99` |
-| Current cost breakdown | MiniMax API: `$398.42`; OpenRouter for all other models: `$113.57`. |
-| Cost scope | User-updated total through the latest saved reruns parsed in this repo. |
+| Current project total cost | `$758.83` |
+| Total cost breakdown | MiniMax API: `$504.66`; OpenRouter for all other models: `$254.17`. |
+| Cost scope | User-confirmed total spend through the latest saved reruns parsed in this repo. |
 | Intended use | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
 | Current public matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
 | Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |

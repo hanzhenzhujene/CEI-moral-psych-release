@@ -6,12 +6,12 @@
     "owner": "Jenny Zhu",
     "date": "2026-05-12",
     "frozen_snapshot_date": "2026-04-19",
-    "current_cost_estimate": "$511.99",
+    "current_total_cost": "$758.83",
     "current_cost_breakdown": {
-      "minimax_api": "$398.42",
-      "openrouter_all_other_models": "$113.57"
+      "minimax_api": "$504.66",
+      "openrouter_all_other_models": "$254.17"
     },
-    "current_cost_scope": "User-updated total through the latest saved reruns parsed in this repo.",
+    "current_cost_scope": "User-confirmed total spend through the latest saved reruns parsed in this repo.",
     "metric_definition_version": "2026-04-30",
     "metric_definition_summary": "Stricter visible-answer parsing is now versioned explicitly: UniMoral, SMID, and Value Kaleidoscope use structured visible-answer extraction; CCD-Bench coverage requires a parseable visible 1-10 choice; CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; Denevil appendix coverage counts non-empty visible proxy answers while the headline proxy figures classify visible behavior categories.",
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
