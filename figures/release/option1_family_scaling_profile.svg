@@ -68,9 +68,12 @@
 <text x="248.00" y="566" text-anchor="middle" class="axis">M</text>
 <line x1="398.00" y1="310" x2="398.00" y2="542" class="guide"/>
 <text x="398.00" y="566" text-anchor="middle" class="axis">L</text>
+<line x1="78.00" y1="337.57" x2="378.00" y2="539.53" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
+<line x1="78.00" y1="337.57" x2="378.00" y2="539.53" stroke="#d97706" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="7 6"/>
+<circle cx="78.00" cy="337.57" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
+<circle cx="78.00" cy="337.57" r="4.2" fill="#d97706"/>
 <circle cx="378.00" cy="539.53" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
 <circle cx="378.00" cy="539.53" r="4.2" fill="#d97706"/>
-<text x="360.00" y="531.53" text-anchor="end" class="small">MiniMax-L</text>
 <line x1="98.00" y1="337.66" x2="248.00" y2="330.53" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
 <line x1="98.00" y1="337.66" x2="248.00" y2="330.53" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
 <line x1="248.00" y1="330.53" x2="398.00" y2="386.72" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
@@ -187,9 +190,12 @@
 <text x="1048.00" y="566" text-anchor="middle" class="axis">M</text>
 <line x1="1198.00" y1="310" x2="1198.00" y2="542" class="guide"/>
 <text x="1198.00" y="566" text-anchor="middle" class="axis">L</text>
+<line x1="878.00" y1="313.11" x2="1178.00" y2="312.72" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
+<line x1="878.00" y1="313.11" x2="1178.00" y2="312.72" stroke="#d97706" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="7 6"/>
+<circle cx="878.00" cy="313.11" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
+<circle cx="878.00" cy="313.11" r="4.2" fill="#d97706"/>
 <circle cx="1178.00" cy="312.72" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
 <circle cx="1178.00" cy="312.72" r="4.2" fill="#d97706"/>
-<text x="1160.00" y="324.00" text-anchor="end" class="small">MiniMax-L</text>
 <line x1="898.00" y1="326.95" x2="1048.00" y2="345.67" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
 <line x1="898.00" y1="326.95" x2="1048.00" y2="345.67" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
 <line x1="1048.00" y1="345.67" x2="1198.00" y2="331.45" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
@@ -245,7 +251,7 @@
 <text x="72" y="904" class="body">Read Denevil in Figures 8-11.</text>
 <text x="656" y="696" class="tiny">FAMILY READ</text>
 <rect x="656" y="710" width="14" height="14" rx="4" fill="#d97706"/>
-<text x="680" y="721" class="small">MiniMax: UniMoral is visible only at L and SMID at S/L; read it as sparse evidence, not a full size law.</text>
+<text x="680" y="721" class="small">MiniMax: S and L are comparable on UniMoral, SMID, and Value; M remains a live text-only run.</text>
 <rect x="656" y="740" width="14" height="14" rx="4" fill="#0d9488"/>
 <text x="680" y="751" class="small">Qwen: text scored at S/M/L; SMID at S/L.</text>
 <rect x="656" y="770" width="14" height="14" rx="4" fill="#2563eb"/>

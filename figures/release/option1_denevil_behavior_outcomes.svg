@@ -120,16 +120,31 @@
 <text x="212.00" y="382.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="382.00" class="label">MiniMax-S</text>
 <rect x="430" y="362" width="760" height="30" rx="10" class="muted-bar"/>
-<rect x="430" y="362" width="760" height="30" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="810.00" y="382.00" text-anchor="middle" class="small">n/a — no released proxy archive</text>
-<text x="1214" y="382.00" class="small">dominant behavior n/a</text>
+<rect x="430.00" y="362" width="233.76" height="30" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
+<text x="546.88" y="382.00" text-anchor="middle" class="celltext">30.8%</text>
+<rect x="663.76" y="362" width="32.04" height="30" fill="#0f766e" stroke="#ffffff" stroke-width="1"/>
+<rect x="695.80" y="362" width="489.53" height="30" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="940.57" y="382.00" text-anchor="middle" class="celltext">64.4%</text>
+<rect x="1185.33" y="362" width="0.15" height="30" fill="#6b7280" stroke="#ffffff" stroke-width="1"/>
+<rect x="1185.48" y="362" width="3.11" height="30" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+<rect x="1188.59" y="362" width="1.33" height="30" fill="#d97706" stroke="#ffffff" stroke-width="1"/>
+<rect x="1189.93" y="362" width="0.07" height="30" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
+<text x="1214" y="378.00" class="label">Corrective / contextual response</text>
+<text x="1214" y="393.00" class="small">protective 99.4%</text>
 <rect x="184" y="414" width="56" height="22" rx="12" fill="#d97706"/>
 <text x="212.00" y="430.00" text-anchor="middle" class="celltext">M</text>
 <text x="258" y="430.00" class="label">MiniMax-M</text>
 <rect x="430" y="410" width="760" height="30" rx="10" class="muted-bar"/>
-<rect x="430" y="410" width="760" height="30" rx="10" fill="url(#diagonalHatch)" opacity="0.85"/>
-<text x="810.00" y="430.00" text-anchor="middle" class="small">n/a — no released proxy archive</text>
-<text x="1214" y="430.00" class="small">dominant behavior n/a</text>
+<rect x="430.00" y="410" width="259.57" height="30" fill="#2563eb" stroke="#ffffff" stroke-width="1"/>
+<text x="559.79" y="430.00" text-anchor="middle" class="celltext">34.2%</text>
+<rect x="689.57" y="410" width="32.61" height="30" fill="#0f766e" stroke="#ffffff" stroke-width="1"/>
+<rect x="722.18" y="410" width="463.23" height="30" fill="#2f855a" stroke="#ffffff" stroke-width="1"/>
+<text x="953.80" y="430.00" text-anchor="middle" class="celltext">61.0%</text>
+<rect x="1185.41" y="410" width="0.16" height="30" fill="#6b7280" stroke="#ffffff" stroke-width="1"/>
+<rect x="1185.58" y="410" width="3.20" height="30" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+<rect x="1188.77" y="410" width="1.23" height="30" fill="#d97706" stroke="#ffffff" stroke-width="1"/>
+<text x="1214" y="426.00" class="label">Corrective / contextual response</text>
+<text x="1214" y="441.00" class="small">protective 99.4%</text>
 <rect x="184" y="462" width="56" height="22" rx="12" fill="#fbbf24"/>
 <text x="212.00" y="478.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="478.00" class="label">MiniMax-L</text>
