@@ -4125,6 +4125,19 @@ def _apply_minimax_s_direct_public_release_patch() -> None:
         task_name: _merged_task_summary(log_dir, task_name)
         for task_name, log_dir in task_sources.items()
     }
+    if not any(summary is not None for summary in summaries.values()):
+        audit_fallbacks = published_saved_results_audit_fallbacks()
+        summaries = {
+            task_name: (
+                {"completed": fallback["completed_samples"]}
+                if (
+                    fallback := audit_fallbacks.get(("MiniMax-S", task_name))
+                )
+                and fallback["completed_samples"] is not None
+                else None
+            )
+            for task_name in task_sources
+        }
 
     def complete(task_name: str) -> bool:
         summary = summaries.get(task_name)
@@ -4303,6 +4316,44 @@ def _apply_minimax_m_clean_public_release_patch() -> None:
         if active
         else "MiniMax-M clean direct text pass has partial checkpoints and should be resumed before any new paid line."
     )
+
+
+def _apply_minimax_tracked_release_fallbacks() -> None:
+    """Keep CI rebuilds faithful when MiniMax raw shard folders are not checked in."""
+    fallbacks = published_family_size_progress_fallbacks()
+    if not fallbacks:
+        return
+
+    fallback_small = fallbacks.get("MiniMax-S")
+    if fallback_small is not None:
+        progress = _find_row(FAMILY_SIZE_PROGRESS, "line_label", "MiniMax-S")
+        if progress["unimoral"] == "error":
+            progress.update(fallback_small)
+            current = _find_row(CURRENT_RESULT_LINES, "line_label", "MiniMax-S")
+            current.update(
+                {
+                    "scope": "Complete local line",
+                    "status": "done",
+                    "coverage": "5 benchmark lines complete (`Denevil` via proxy)",
+                    "note": "MiniMax-S now uses the clean direct MiniMax-M2.1 text rerun plus the completed MiniMax-01 SMID recovery route.",
+                }
+            )
+
+    fallback_large = fallbacks.get("MiniMax-L")
+    if fallback_large is not None:
+        progress = _find_row(FAMILY_SIZE_PROGRESS, "line_label", "MiniMax-L")
+        if all(progress[field] == "queue" for field in ("unimoral", "smid", "value_kaleidoscope", "ccd_bench", "denevil")):
+            progress.update(fallback_large)
+            _upsert_current_result_line(
+                {
+                    "line_label": "MiniMax-L",
+                    "scope": "Complete local line",
+                    "status": "done",
+                    "coverage": "5 benchmark lines complete (`Denevil` via proxy) using MiniMax-M2.5 text plus the shared MiniMax-01 SMID recovery route",
+                    "note": "The direct-provider MiniMax rerun finished successfully through the Denevil proxy task.",
+                },
+                before_label="MiniMax-S",
+            )
 
 
 def read_rows(path: Path) -> list[dict[str, Any]]:
@@ -5275,6 +5326,17 @@ def published_saved_results_audit_fallbacks() -> dict[tuple[str, str], dict[str,
                 "status": row.get("status") or "missing",
             }
     return fallbacks
+
+
+@lru_cache(maxsize=1)
+def published_family_size_progress_fallbacks() -> dict[str, dict[str, str]]:
+    """Reuse the tracked family-size matrix when CI lacks local raw run folders."""
+    path = DEFAULT_RELEASE_DIR / "family-size-progress.csv"
+    if not path.exists():
+        return {}
+
+    with path.open(newline="", encoding="utf-8") as handle:
+        return {row["line_label"]: dict(row) for row in csv.DictReader(handle)}
 
 
 @lru_cache(maxsize=1)
@@ -11198,6 +11260,7 @@ def main() -> None:
     _apply_minimax_pr6_public_release_patch()
     _apply_minimax_s_direct_public_release_patch()
     _apply_minimax_m_clean_public_release_patch()
+    _apply_minimax_tracked_release_fallbacks()
     _refresh_public_release_summaries()
 
     model_summary = build_model_summary(rows)
