@@ -166,7 +166,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "figures/release/option1_denevil_proxy_valid_response_rate.svg" in manifest["figures"]
     assert "figures/release/option1_denevil_proxy_pipeline.svg" in manifest["figures"]
 
-    for report_name in ("README.md", "jenny-group-report.md", "topline-summary.md"):
+    for report_name in ("README.md", "jenny-group-report.md"):
         report_text = (release_dir / report_name).read_text(encoding="utf-8")
         assert "**Current GitHub-facing boundary:**" in report_text
         assert "`MiniMax-M`" in report_text
@@ -174,6 +174,13 @@ def test_release_builder_emits_expected_files(tmp_path):
             "intentionally withheld until the clean M2.5 text pass is complete" in report_text
             or "No MiniMax-M2.5 text benchmark remains live" in report_text
         )
+    topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
+    assert "## TL;DR" in topline_text
+    assert "`MiniMax-M`" in topline_text
+    assert (
+        "intentionally withheld until the clean M2.5 text pass is complete" in topline_text
+        or "No MiniMax-M2.5 text benchmark remains live" in topline_text
+    )
 
     with (release_dir / "benchmark-catalog.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
