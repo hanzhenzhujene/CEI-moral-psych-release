@@ -25,5 +25,5 @@
 <text x="176" y="307.0" text-anchor="end" class="label">Mistral Nemo</text>
 <rect x="190" y="294.0" width="552.1" height="18" rx="5" fill="#f97316"/>
 <text x="750.1" y="308.0" class="small">25.3% Nordic Europe</text>
-<text x="34" y="386" class="subtitle">All five cheap/older lines peak on Nordic Europe; Llama 3.2 1B is the most diffuse in this pilot.</text>
+<text x="34" y="386" class="subtitle">All five additional model lines peak on Nordic Europe; Llama 3.2 1B is the most diffuse in this sweep.</text>
 </svg>

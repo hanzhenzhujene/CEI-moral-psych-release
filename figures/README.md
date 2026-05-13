@@ -41,8 +41,8 @@ That split is especially important for `CCD-Bench` and `DeNEVIL`: headline figur
 
 ## Exploratory Figures
 
-Lower-cost follow-up pilots use `figures/exploratory/`.
+Follow-up model-sweep figures use `figures/exploratory/`.
 
-- `cheap_pilot_unimoral_strict_vs_relaxed.svg`: UniMoral official strict scorer versus saved-log parser repair for the May 13 cheap-model pilot
-- `cheap_pilot_ccd_dominant_share.svg`: CCD-Bench dominant cultural-cluster concentration for the same pilot
-- `cheap_pilot_scaling.svg`: approximate model-size readout for the pilot, with CCD concentration encoded by point radius
+- `additional_model_sweep_unimoral_accuracy.svg`: UniMoral accuracy for the May 13 additional-model sweep
+- `additional_model_sweep_ccd_dominant_share.svg`: CCD-Bench dominant cultural-cluster concentration for the same sweep
+- `additional_model_sweep_scaling.svg`: approximate model-size readout for the sweep, with CCD concentration encoded by point radius

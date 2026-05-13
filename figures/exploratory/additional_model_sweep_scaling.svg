@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="930" height="470" viewBox="0 0 930 470"><style>text{font-family:Arial,Helvetica,sans-serif;fill:#18212f}.title{font-size:22px;font-weight:700}.subtitle{font-size:12px;fill:#536171}.axis{font-size:11px;fill:#536171}.label{font-size:12px}.small{font-size:10px;fill:#536171}</style>
 <rect width="100%" height="100%" fill="#f6f7fb"/>
-<text x="34" y="38" class="title">Cheap pilot scaling readout</text>
-<text x="34" y="60" class="subtitle">UniMoral relaxed accuracy by approximate model size; CCD concentration shown by point radius.</text>
+<text x="34" y="38" class="title">Additional model sweep: scaling readout</text>
+<text x="34" y="60" class="subtitle">UniMoral accuracy by approximate model size; CCD concentration shown by point radius.</text>
 <line x1="86" y1="319.2" x2="816" y2="319.2" stroke="#d9dee8"/>
 <text x="72" y="323.2" text-anchor="end" class="axis">0.4</text>
 <line x1="86" y1="232.8" x2="816" y2="232.8" stroke="#d9dee8"/>
@@ -33,6 +33,6 @@
 <text x="771.8" y="95.9" class="small">Mistral Nemo</text>
 <text x="771.8" y="109.9" class="small">0.648</text>
 <text x="451.0" y="416" text-anchor="middle" class="axis">Approximate model size (B parameters)</text>
-<text x="24" y="228.5" transform="rotate(-90 24 228.5)" text-anchor="middle" class="axis">UniMoral relaxed accuracy</text>
-<text x="34" y="436" class="subtitle">Interpretation: the 1B Llama line is clearly weaker, but the 7B-12B models cluster tightly; this pilot does not show a clean monotonic scaling law.</text>
+<text x="24" y="228.5" transform="rotate(-90 24 228.5)" text-anchor="middle" class="axis">UniMoral accuracy</text>
+<text x="34" y="436" class="subtitle">Interpretation: the 1B Llama line is clearly weaker, but the 7B-12B models cluster tightly; this sweep does not show a clean monotonic scaling law.</text>
 </svg>

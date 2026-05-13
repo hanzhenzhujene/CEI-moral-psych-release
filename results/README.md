@@ -19,15 +19,15 @@ The most useful public entry points are:
 - `results/release/2026-04-19-option1/ccd-choice-distribution.csv`
 - `results/release/2026-04-19-option1/denevil-behavior-summary.csv`
 
-## Exploratory Follow-Up Pilots
+## Exploratory Follow-Up Sweeps
 
-Exploratory, lower-cost follow-up readouts live under:
+Exploratory follow-up model-sweep readouts live under:
 
-- `results/exploratory/2026-05-13-cheap-model-pilot/`
+- `results/exploratory/2026-05-13-additional-model-sweep/`
 
-The May 13 pilot is intentionally separate from the main release matrix. It
-summarizes cheaper/older OpenRouter routes on `UniMoral` and `CCD-Bench`,
-including a strict-vs-relaxed UniMoral parser audit and CCD cultural-cluster
+The May 13 additional-model sweep is intentionally separate from the main
+release matrix. It summarizes older or smaller OpenRouter routes on `UniMoral`
+and `CCD-Bench`, with final UniMoral accuracy and CCD cultural-cluster
 concentration tables.
 
 ## Public Result Layers

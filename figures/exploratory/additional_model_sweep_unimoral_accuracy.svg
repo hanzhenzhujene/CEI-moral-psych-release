@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430"><style>text{font-family:Arial,Helvetica,sans-serif;fill:#18212f}.title{font-size:22px;font-weight:700}.subtitle{font-size:12px;fill:#536171}.axis{font-size:11px;fill:#536171}.label{font-size:12px}.small{font-size:10px;fill:#536171}</style>
+<rect width="100%" height="100%" fill="#f8faf7"/>
+<text x="34" y="38" class="title">Additional model sweep: UniMoral accuracy</text>
+<text x="34" y="60" class="subtitle">Final saved-log scoring for the UniMoral action-prediction task.</text>
+<line x1="190.0" y1="82" x2="190.0" y2="327" stroke="#d6ddd9" stroke-width="1"/>
+<text x="190.0" y="351" text-anchor="middle" class="axis">0.0</text>
+<line x1="364.3" y1="82" x2="364.3" y2="327" stroke="#d6ddd9" stroke-width="1"/>
+<text x="364.3" y="351" text-anchor="middle" class="axis">0.2</text>
+<line x1="538.6" y1="82" x2="538.6" y2="327" stroke="#d6ddd9" stroke-width="1"/>
+<text x="538.6" y="351" text-anchor="middle" class="axis">0.4</text>
+<line x1="712.9" y1="82" x2="712.9" y2="327" stroke="#d6ddd9" stroke-width="1"/>
+<text x="712.9" y="351" text-anchor="middle" class="axis">0.6</text>
+<text x="176" y="112.0" text-anchor="end" class="label">Mistral Nemo</text>
+<rect x="190" y="98.0" width="564.8" height="18" rx="5" fill="#0f766e"/>
+<text x="762.8" y="112.0" class="small">0.648</text>
+<text x="176" y="161.0" text-anchor="end" class="label">Qwen2.5 7B</text>
+<rect x="190" y="147.0" width="557.9" height="18" rx="5" fill="#0f766e"/>
+<text x="755.9" y="161.0" class="small">0.640</text>
+<text x="176" y="210.0" text-anchor="end" class="label">Llama 3.1 8B</text>
+<rect x="190" y="196.0" width="556.6" height="18" rx="5" fill="#0f766e"/>
+<text x="754.6" y="210.0" class="small">0.639</text>
+<text x="176" y="259.0" text-anchor="end" class="label">Llama 3 8B</text>
+<rect x="190" y="245.0" width="550.6" height="18" rx="5" fill="#0f766e"/>
+<text x="748.6" y="259.0" class="small">0.632</text>
+<text x="176" y="308.0" text-anchor="end" class="label">Llama 3.2 1B</text>
+<rect x="190" y="294.0" width="353.5" height="18" rx="5" fill="#94a3b8"/>
+<text x="551.5" y="308.0" class="small">0.406</text>
+<text x="34" y="386" class="subtitle">Mistral Nemo, Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B cluster tightly; Llama 3.2 1B is the clear low line.</text>
+</svg>
