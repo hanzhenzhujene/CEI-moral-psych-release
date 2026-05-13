@@ -28,11 +28,13 @@ My result TL;DR:
 
 The May 13 additional-model sweep tests older or smaller OpenRouter routes on `UniMoral` and `CCD-Bench` to check whether they produce a different pattern from the main model matrix. Full tables and provenance are in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/).
 
-**Model-wise:** Mistral Nemo, Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B are tightly clustered on UniMoral. Llama 3.2 1B is clearly weaker.
+**Model-wise:** Mistral Nemo is the top UniMoral line at 0.648, but Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B are close behind from 0.632 to 0.640. Llama 3.2 1B is the clear weak line at 0.406, with a lower answer rate as well.
 
-**Benchmark-wise:** UniMoral separates the very small 1B route from the stronger 7B-12B cluster. CCD-Bench is not accuracy; it shows cultural choice concentration. All models peak on Nordic Europe, but Llama 3.2 1B is most diffuse and Mistral Nemo is most concentrated.
+**Benchmark-wise:** UniMoral gives a clear performance separation between the very small 1B route and the stronger 7B-12B cluster. CCD-Bench gives a style/concentration readout rather than a correctness score: all models peak on Nordic Europe, but Llama 3.2 1B is most diffuse (15.9% dominant share; 9.12 effective clusters), while Mistral Nemo is most concentrated (25.3%; 7.22 effective clusters).
 
-**Scaling-wise:** There is no clean monotonic scaling law. The 1B model is much worse, but above about 7B the results cluster closely rather than improving smoothly with size.
+**Scaling-wise:** There is no clean monotonic scaling law. The move from 1B to 7B+ matters a lot, but above that threshold the 7B-12B models cluster closely rather than improving smoothly with size. This looks more like a capability floor than a simple bigger-is-better trend.
+
+**Bottom line:** The additional sweep does not overturn the main release story. It adds one useful detail: very small models can fall off sharply, while several older or mid-sized instruction routes remain competitive on the selected text/style checks.
 
 ![Additional model sweep UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg)
 

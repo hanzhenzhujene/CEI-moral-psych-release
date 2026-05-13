@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430"><style>text{font-family:Arial,Helvetica,sans-serif;fill:#18212f}.title{font-size:22px;font-weight:700}.subtitle{font-size:12px;fill:#536171}.axis{font-size:11px;fill:#536171}.label{font-size:12px}.small{font-size:10px;fill:#536171}</style>
 <rect width="100%" height="100%" fill="#f8faf7"/>
 <text x="34" y="38" class="title">Additional model sweep: UniMoral accuracy</text>
-<text x="34" y="60" class="subtitle">Final saved-log scoring for the UniMoral action-prediction task.</text>
+<text x="34" y="60" class="subtitle">Final scored result for the UniMoral action-prediction task.</text>
 <line x1="190.0" y1="82" x2="190.0" y2="327" stroke="#d6ddd9" stroke-width="1"/>
 <text x="190.0" y="351" text-anchor="middle" class="axis">0.0</text>
 <line x1="364.3" y1="82" x2="364.3" y2="327" stroke="#d6ddd9" stroke-width="1"/>
