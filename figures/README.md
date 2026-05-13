@@ -38,3 +38,11 @@ The figure set is intentionally split between:
 - appendix QA / provenance figures that explain what ran without pretending those support the same performance claims.
 
 That split is especially important for `CCD-Bench` and `DeNEVIL`: headline figures show model behavior, while coverage, parsing, route, and trace-surfacing diagnostics stay in appendix-only visuals.
+
+## Exploratory Figures
+
+Lower-cost follow-up pilots use `figures/exploratory/`.
+
+- `cheap_pilot_unimoral_strict_vs_relaxed.svg`: UniMoral official strict scorer versus saved-log parser repair for the May 13 cheap-model pilot
+- `cheap_pilot_ccd_dominant_share.svg`: CCD-Bench dominant cultural-cluster concentration for the same pilot
+- `cheap_pilot_scaling.svg`: approximate model-size readout for the pilot, with CCD concentration encoded by point radius

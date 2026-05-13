@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="930" height="470" viewBox="0 0 930 470"><style>text{font-family:Arial,Helvetica,sans-serif;fill:#18212f}.title{font-size:22px;font-weight:700}.subtitle{font-size:12px;fill:#536171}.axis{font-size:11px;fill:#536171}.label{font-size:12px}.small{font-size:10px;fill:#536171}</style>
+<rect width="100%" height="100%" fill="#f6f7fb"/>
+<text x="34" y="38" class="title">Cheap pilot scaling readout</text>
+<text x="34" y="60" class="subtitle">UniMoral relaxed accuracy by approximate model size; CCD concentration shown by point radius.</text>
+<line x1="86" y1="319.2" x2="816" y2="319.2" stroke="#d9dee8"/>
+<text x="72" y="323.2" text-anchor="end" class="axis">0.4</text>
+<line x1="86" y1="232.8" x2="816" y2="232.8" stroke="#d9dee8"/>
+<text x="72" y="236.8" text-anchor="end" class="axis">0.5</text>
+<line x1="86" y1="146.5" x2="816" y2="146.5" stroke="#d9dee8"/>
+<text x="72" y="150.5" text-anchor="end" class="axis">0.6</text>
+<line x1="142.2" y1="86" x2="142.2" y2="371" stroke="#e5e9f2"/>
+<text x="142.2" y="395" text-anchor="middle" class="axis">1B</text>
+<line x1="479.1" y1="86" x2="479.1" y2="371" stroke="#e5e9f2"/>
+<text x="479.1" y="395" text-anchor="middle" class="axis">7B</text>
+<line x1="535.2" y1="86" x2="535.2" y2="371" stroke="#e5e9f2"/>
+<text x="535.2" y="395" text-anchor="middle" class="axis">8B</text>
+<line x1="759.8" y1="86" x2="759.8" y2="371" stroke="#e5e9f2"/>
+<text x="759.8" y="395" text-anchor="middle" class="axis">12B</text>
+<polyline points="142.2,314.3 535.2,119.0 535.2,113.0" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
+<circle cx="142.2" cy="314.3" r="13.7" fill="#f97316" fill-opacity="0.78" stroke="white" stroke-width="2"/>
+<text x="154.2" y="305.3" class="small">Llama 3.2 1B</text>
+<text x="154.2" y="319.3" class="small">0.406</text>
+<circle cx="479.1" cy="111.7" r="14.5" fill="#0ea5e9" fill-opacity="0.78" stroke="white" stroke-width="2"/>
+<text x="491.1" y="102.7" class="small">Qwen2.5 7B</text>
+<text x="491.1" y="116.7" class="small">0.640</text>
+<circle cx="535.2" cy="119.0" r="16.3" fill="#f97316" fill-opacity="0.78" stroke="white" stroke-width="2"/>
+<text x="547.2" y="110.0" class="small">Llama 3 8B</text>
+<text x="547.2" y="124.0" class="small">0.632</text>
+<circle cx="535.2" cy="113.0" r="17.4" fill="#f97316" fill-opacity="0.78" stroke="white" stroke-width="2"/>
+<text x="547.2" y="104.0" class="small">Llama 3.1 8B</text>
+<text x="547.2" y="118.0" class="small">0.639</text>
+<circle cx="759.8" cy="104.9" r="17.6" fill="#7c3aed" fill-opacity="0.78" stroke="white" stroke-width="2"/>
+<text x="771.8" y="95.9" class="small">Mistral Nemo</text>
+<text x="771.8" y="109.9" class="small">0.648</text>
+<text x="451.0" y="416" text-anchor="middle" class="axis">Approximate model size (B parameters)</text>
+<text x="24" y="228.5" transform="rotate(-90 24 228.5)" text-anchor="middle" class="axis">UniMoral relaxed accuracy</text>
+<text x="34" y="436" class="subtitle">Interpretation: the 1B Llama line is clearly weaker, but the 7B-12B models cluster tightly; this pilot does not show a clean monotonic scaling law.</text>
+</svg>

@@ -1,0 +1,719 @@
+#!/usr/bin/env python3
+"""Build result tables and figures for the May 13 cheap-model pilot.
+
+This parser reads Inspect `.eval` archives directly. It intentionally treats
+Mistral's provider-503 partial archives as valid partial evidence and merges
+them with the later resume archives by sample id.
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+import math
+import re
+import zipfile
+from collections import Counter, defaultdict
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_LOG_ROOT = ROOT / "results" / "inspect" / "logs" / "2026-05-13-cheap-model-pilot" / "full"
+DEFAULT_RESULT_DIR = ROOT / "results" / "exploratory" / "2026-05-13-cheap-model-pilot"
+DEFAULT_FIGURE_DIR = ROOT / "figures" / "exploratory"
+
+MODEL_LABELS = {
+    "meta-llama__llama-3-8b-instruct": "Llama 3 8B",
+    "meta-llama__llama-3.1-8b-instruct": "Llama 3.1 8B",
+    "meta-llama__llama-3.2-1b-instruct": "Llama 3.2 1B",
+    "qwen__qwen-2.5-7b-instruct": "Qwen2.5 7B",
+    "mistralai__mistral-nemo": "Mistral Nemo",
+}
+
+MODEL_FAMILY = {
+    "Llama 3 8B": "Llama",
+    "Llama 3.1 8B": "Llama",
+    "Llama 3.2 1B": "Llama",
+    "Qwen2.5 7B": "Qwen",
+    "Mistral Nemo": "Mistral",
+}
+
+MODEL_SIZE_B = {
+    "Llama 3.2 1B": 1.0,
+    "Qwen2.5 7B": 7.0,
+    "Llama 3 8B": 8.0,
+    "Llama 3.1 8B": 8.0,
+    "Mistral Nemo": 12.0,
+}
+
+MODEL_ORDER = [
+    "Mistral Nemo",
+    "Qwen2.5 7B",
+    "Llama 3.1 8B",
+    "Llama 3 8B",
+    "Llama 3.2 1B",
+]
+
+CCD_CLUSTER_LABELS = {
+    "anglo": "Anglo",
+    "eastern_europe": "Eastern Europe",
+    "latin-america": "Latin America",
+    "latin_europe": "Latin Europe",
+    "confucian_asia": "Confucian Asia",
+    "nordic_europe": "Nordic Europe",
+    "sub-saharan_africa": "Sub-Saharan Africa",
+    "southern-asia": "Southern Asia",
+    "germanic_europe": "Germanic Europe",
+    "middle_east": "Middle East",
+}
+
+CCD_CLUSTER_ORDER = [
+    "anglo",
+    "eastern_europe",
+    "latin-america",
+    "latin_europe",
+    "confucian_asia",
+    "nordic_europe",
+    "sub-saharan_africa",
+    "southern-asia",
+    "germanic_europe",
+    "middle_east",
+]
+
+
+@dataclass(frozen=True)
+class ParsedSample:
+    model: str
+    task: str
+    sample_id: str
+    completion: str
+    target: str
+    metadata: dict[str, Any]
+    scores: dict[str, Any]
+    source_eval: str
+
+
+def canonical_task(task_dir_name: str, header_task: str | None = None) -> str:
+    if task_dir_name.startswith("ccd_bench_selection"):
+        return "ccd_bench_selection"
+    if task_dir_name.startswith("unimoral_action_prediction"):
+        return "unimoral_action_prediction"
+    return header_task or task_dir_name
+
+
+def iter_eval_samples(log_root: Path) -> list[ParsedSample]:
+    samples: list[ParsedSample] = []
+    for eval_path in sorted(log_root.rglob("*.eval")):
+        parts = eval_path.relative_to(log_root).parts
+        if len(parts) < 3:
+            continue
+        model_dir, task_dir = parts[0], parts[1]
+        model = MODEL_LABELS.get(model_dir, model_dir)
+
+        with zipfile.ZipFile(eval_path) as archive:
+            header_task = None
+            if "header.json" in archive.namelist():
+                try:
+                    header = json.loads(archive.read("header.json"))
+                    header_task = (header.get("eval") or {}).get("task")
+                except json.JSONDecodeError:
+                    header_task = None
+            task = canonical_task(task_dir, header_task)
+            if task not in {"unimoral_action_prediction", "ccd_bench_selection"}:
+                continue
+            for name in archive.namelist():
+                if not name.startswith("samples/") or not name.endswith(".json"):
+                    continue
+                record = json.loads(archive.read(name))
+                output = record.get("output") or {}
+                samples.append(
+                    ParsedSample(
+                        model=model,
+                        task=task,
+                        sample_id=str(record.get("id") or ""),
+                        completion=str(output.get("completion") or ""),
+                        target=str(record.get("target") or ""),
+                        metadata=record.get("metadata") or {},
+                        scores=record.get("scores") or {},
+                        source_eval=str(eval_path.relative_to(ROOT)),
+                    )
+                )
+    return samples
+
+
+def merged_samples(samples: list[ParsedSample]) -> dict[tuple[str, str, str], ParsedSample]:
+    merged: dict[tuple[str, str, str], ParsedSample] = {}
+    duplicate_sources: dict[tuple[str, str, str], list[str]] = defaultdict(list)
+    for sample in samples:
+        key = (sample.model, sample.task, sample.sample_id)
+        if key in merged:
+            duplicate_sources[key].append(sample.source_eval)
+        # Later sorted archives are resume runs; if a duplicate exists, keep the
+        # later archive because it reflects the repaired/resumed pass.
+        merged[key] = sample
+    return merged
+
+
+def normalize_text(text: str) -> str:
+    text = text.strip().lower()
+    text = text.replace("<", " ").replace(">", " ")
+    text = re.sub(r"[`\"'“”‘’]", "", text)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
+
+def relaxed_unimoral_answer(text: str) -> str | None:
+    normalized = normalize_text(text)
+    if not normalized:
+        return None
+
+    # Most undercounted routes followed the natural-language instruction
+    # literally, e.g. "Selected action is (a)." rather than a bare "a".
+    patterns = [
+        r"^selected action(?:\s+is|\s+es|是)?\s*[:\-]?\s*\(?\s*([ab])\s*\)?\b",
+        r"^(?:answer|choice|option|action)\s*[:\-]?\s*\(?\s*([ab])\s*\)?\b",
+        r"^i (?:choose|chose|select|selected|would choose|would select)\s+(?:option\s+|action\s+)?\(?\s*([ab])\s*\)?\b",
+        r"^(?:la\s+)?acci[oó]n seleccionada es\s*\(?\s*([ab])\s*\)?\b",
+        r"^выбранное действие\s*[:\-]?\s*\(?\s*([ab])\s*\)?\b",
+        r"^(?:चयनित कार्य|चयनित कार्रवाई|चुनी गई क्रिया|चुनी गई कार्रवाई|चुनी गई कार्य|संभावित क्रिया)\s*(?:है)?\s*[:\-]?\s*\(?\s*([ab])\s*\)?\b",
+        r"^(?:الإجابة الصحيحة هي|الإجابة|الجواب هو|الجواب)\s*[:\-]?\s*[\"']?\(?\s*([ab])\s*\)?\b",
+        r"^\(?([ab])\)?\.?$",
+    ]
+    for pattern in patterns:
+        match = re.match(pattern, normalized)
+        if match:
+            return match.group(1)
+
+    # A small number of weak-model outputs localize the option letter itself.
+    compact = normalized.strip(" .。\"'()[]{}")
+    localized_exact = {
+        "ब": "b",
+        "बी": "b",
+        "ب": "b",
+        "أ": "a",
+        "ا": "a",
+    }
+    if compact in localized_exact:
+        return localized_exact[compact]
+    return None
+
+
+def official_unimoral_value(sample: ParsedSample) -> float | None:
+    score = sample.scores.get("parsed_label_scorer") or {}
+    value = score.get("value")
+    if value is None:
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def parse_ccd_selected_option(sample: ParsedSample) -> int | None:
+    score = sample.scores.get("valid_choice_scorer") or {}
+    metadata = score.get("metadata") or {}
+    selected = metadata.get("selected_option") or score.get("answer")
+    if selected is not None:
+        try:
+            value = int(selected)
+            if 1 <= value <= 10:
+                return value
+        except (TypeError, ValueError):
+            pass
+    match = re.search(r"selected option\s*[:\-]\s*(10|[1-9])\b", sample.completion, flags=re.I)
+    if match:
+        return int(match.group(1))
+    return None
+
+
+def pct(value: float | None) -> str:
+    if value is None or math.isnan(value):
+        return ""
+    return f"{value:.3f}"
+
+
+def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: row.get(field, "") for field in fieldnames})
+
+
+def summarize_unimoral(samples: list[ParsedSample]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    rows: list[dict[str, Any]] = []
+    language_rows: list[dict[str, Any]] = []
+    by_model: dict[str, list[ParsedSample]] = defaultdict(list)
+    for sample in samples:
+        by_model[sample.model].append(sample)
+
+    for model, model_samples in by_model.items():
+        total = len(model_samples)
+        official_values = [official_unimoral_value(sample) for sample in model_samples]
+        official_values_clean = [value for value in official_values if value is not None]
+        official_acc_total = sum(official_values_clean) / total if total else None
+        official_acc_scored = (
+            sum(official_values_clean) / len(official_values_clean)
+            if official_values_clean
+            else None
+        )
+        relaxed_answers = [relaxed_unimoral_answer(sample.completion) for sample in model_samples]
+        relaxed_answered = sum(answer is not None for answer in relaxed_answers)
+        relaxed_correct = sum(
+            answer == sample.target
+            for answer, sample in zip(relaxed_answers, model_samples)
+            if answer is not None
+        )
+        relaxed_acc_total = relaxed_correct / total if total else None
+        strict_blank_recovered = sum(
+            (official_unimoral_value(sample) == 0)
+            and not ((sample.scores.get("parsed_label_scorer") or {}).get("answer"))
+            and relaxed_unimoral_answer(sample.completion) is not None
+            for sample in model_samples
+        )
+        rows.append(
+            {
+                "model": model,
+                "family": MODEL_FAMILY.get(model, ""),
+                "size_b": MODEL_SIZE_B.get(model, ""),
+                "samples": total,
+                "official_strict_accuracy_total": official_acc_total,
+                "official_strict_accuracy_scored": official_acc_scored,
+                "relaxed_answered": relaxed_answered,
+                "relaxed_answer_rate": relaxed_answered / total if total else None,
+                "relaxed_correct": relaxed_correct,
+                "relaxed_accuracy_total": relaxed_acc_total,
+                "strict_blank_recovered": strict_blank_recovered,
+            }
+        )
+
+        by_language: dict[str, list[tuple[ParsedSample, str | None]]] = defaultdict(list)
+        for sample, answer in zip(model_samples, relaxed_answers):
+            by_language[str(sample.metadata.get("language") or "unknown")].append((sample, answer))
+        for language, language_samples in sorted(by_language.items()):
+            lang_total = len(language_samples)
+            lang_answered = sum(answer is not None for _, answer in language_samples)
+            lang_correct = sum(answer == sample.target for sample, answer in language_samples if answer is not None)
+            language_rows.append(
+                {
+                    "model": model,
+                    "language": language,
+                    "samples": lang_total,
+                    "relaxed_answered": lang_answered,
+                    "relaxed_accuracy_total": lang_correct / lang_total if lang_total else None,
+                }
+            )
+    rows.sort(key=lambda row: row["relaxed_accuracy_total"] or 0, reverse=True)
+    return rows, language_rows
+
+
+def summarize_ccd(samples: list[ParsedSample]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    summary_rows: list[dict[str, Any]] = []
+    distribution_rows: list[dict[str, Any]] = []
+    by_model: dict[str, list[ParsedSample]] = defaultdict(list)
+    for sample in samples:
+        by_model[sample.model].append(sample)
+
+    for model, model_samples in by_model.items():
+        selected_options = [parse_ccd_selected_option(sample) for sample in model_samples]
+        valid_count = sum(option is not None for option in selected_options)
+        cluster_counts: Counter[str] = Counter()
+        for sample, option in zip(model_samples, selected_options):
+            if option is None:
+                continue
+            cluster = (sample.metadata.get("display_to_cluster") or {}).get(str(option))
+            if cluster:
+                cluster_counts[str(cluster)] += 1
+        dominant_cluster, dominant_count = ("", 0)
+        if cluster_counts:
+            dominant_cluster, dominant_count = cluster_counts.most_common(1)[0]
+        total = len(model_samples)
+        valid_total = max(valid_count, 1)
+        shares = [cluster_counts.get(cluster, 0) / valid_total for cluster in CCD_CLUSTER_ORDER]
+        effective_clusters = 1 / sum(share * share for share in shares if share > 0)
+        summary_rows.append(
+            {
+                "model": model,
+                "family": MODEL_FAMILY.get(model, ""),
+                "size_b": MODEL_SIZE_B.get(model, ""),
+                "samples": total,
+                "valid_choice_count": valid_count,
+                "valid_choice_rate": valid_count / total if total else None,
+                "dominant_cluster": CCD_CLUSTER_LABELS.get(dominant_cluster, dominant_cluster),
+                "dominant_share": dominant_count / valid_total if valid_count else None,
+                "effective_cluster_count": effective_clusters,
+            }
+        )
+        for cluster in CCD_CLUSTER_ORDER:
+            count = cluster_counts.get(cluster, 0)
+            distribution_rows.append(
+                {
+                    "model": model,
+                    "cluster": CCD_CLUSTER_LABELS[cluster],
+                    "count": count,
+                    "share": count / valid_total if valid_count else None,
+                }
+            )
+    summary_rows.sort(key=lambda row: row["dominant_share"] or 0, reverse=True)
+    distribution_rows.sort(key=lambda row: (MODEL_ORDER.index(row["model"]) if row["model"] in MODEL_ORDER else 99, row["cluster"]))
+    return summary_rows, distribution_rows
+
+
+def load_pilot(log_root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    raw = iter_eval_samples(log_root)
+    merged = merged_samples(raw)
+    unimoral_samples = [sample for sample in merged.values() if sample.task == "unimoral_action_prediction"]
+    ccd_samples = [sample for sample in merged.values() if sample.task == "ccd_bench_selection"]
+    unimoral_rows, language_rows = summarize_unimoral(unimoral_samples)
+    ccd_rows, ccd_distribution_rows = summarize_ccd(ccd_samples)
+    return unimoral_rows, language_rows, ccd_rows, ccd_distribution_rows
+
+
+def svg_header(width: int, height: int) -> str:
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="0 0 {width} {height}">'
+        '<style>'
+        'text{font-family:Arial,Helvetica,sans-serif;fill:#18212f}'
+        '.title{font-size:22px;font-weight:700}.subtitle{font-size:12px;fill:#536171}'
+        '.axis{font-size:11px;fill:#536171}.label{font-size:12px}.small{font-size:10px;fill:#536171}'
+        '</style>'
+    )
+
+
+def write_strict_vs_relaxed_svg(path: Path, rows: list[dict[str, Any]]) -> None:
+    width, height = 940, 460
+    left, top, chart_w, chart_h = 190, 86, 650, 270
+    models = [row["model"] for row in rows]
+    max_val = 0.72
+    colors = {"strict": "#b8c2cc", "relaxed": "#0f766e"}
+    gap = 22
+    group_h = chart_h / len(models)
+    bar_h = 16
+    parts = [
+        svg_header(width, height),
+        '<rect width="100%" height="100%" fill="#f8faf7"/>',
+        '<text x="34" y="38" class="title">Cheap pilot: UniMoral strict scorer vs repaired parser</text>',
+        '<text x="34" y="60" class="subtitle">Relaxed parser only repairs obvious A/B formats such as "Selected action is a."; no API rerun.</text>',
+    ]
+    for tick in [0, 0.2, 0.4, 0.6]:
+        x = left + tick / max_val * chart_w
+        parts.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{top+chart_h}" stroke="#d6ddd9" stroke-width="1"/>')
+        parts.append(f'<text x="{x:.1f}" y="{top+chart_h+24}" text-anchor="middle" class="axis">{tick:.1f}</text>')
+    for idx, row in enumerate(rows):
+        y = top + idx * group_h + 14
+        strict = float(row["official_strict_accuracy_total"] or 0)
+        relaxed = float(row["relaxed_accuracy_total"] or 0)
+        parts.append(f'<text x="{left-14}" y="{y+14}" text-anchor="end" class="label">{row["model"]}</text>')
+        for offset, kind, value in [(0, "strict", strict), (bar_h + 6, "relaxed", relaxed)]:
+            bar_w = value / max_val * chart_w
+            parts.append(
+                f'<rect x="{left}" y="{y+offset}" width="{bar_w:.1f}" height="{bar_h}" rx="4" fill="{colors[kind]}"/>'
+            )
+            parts.append(f'<text x="{left+bar_w+6:.1f}" y="{y+offset+12}" class="small">{value:.3f}</text>')
+    legend_y = height - 58
+    parts.extend(
+        [
+            f'<rect x="34" y="{legend_y}" width="14" height="14" rx="3" fill="{colors["strict"]}"/>',
+            f'<text x="56" y="{legend_y+12}" class="axis">official strict scorer</text>',
+            f'<rect x="210" y="{legend_y}" width="14" height="14" rx="3" fill="{colors["relaxed"]}"/>',
+            f'<text x="232" y="{legend_y+12}" class="axis">relaxed post-hoc A/B parser</text>',
+            '<text x="34" y="432" class="subtitle">Main caveat: strict scores are not valid model-quality estimates for routes that followed the prompt with "Selected action is a/b."</text>',
+            "</svg>",
+        ]
+    )
+    path.write_text("\n".join(parts), encoding="utf-8")
+
+
+def write_ccd_dominant_svg(path: Path, rows: list[dict[str, Any]]) -> None:
+    width, height = 900, 430
+    left, top, chart_w, chart_h = 190, 82, 610, 245
+    max_val = 0.28
+    parts = [
+        svg_header(width, height),
+        '<rect width="100%" height="100%" fill="#fffaf2"/>',
+        '<text x="34" y="38" class="title">CCD-Bench: dominant cultural-cluster concentration</text>',
+        '<text x="34" y="60" class="subtitle">CCD is not accuracy. Lower dominant share means less collapse into one cultural cluster.</text>',
+    ]
+    for tick in [0.10, 0.15, 0.20, 0.25]:
+        x = left + tick / max_val * chart_w
+        parts.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{top+chart_h}" stroke="#eadfce" stroke-width="1"/>')
+        parts.append(f'<text x="{x:.1f}" y="{top+chart_h+24}" text-anchor="middle" class="axis">{tick:.0%}</text>')
+    ordered = sorted(rows, key=lambda row: float(row["dominant_share"] or 0))
+    group_h = chart_h / len(ordered)
+    for idx, row in enumerate(ordered):
+        y = top + idx * group_h + 16
+        share = float(row["dominant_share"] or 0)
+        bar_w = share / max_val * chart_w
+        color = "#2563eb" if row["model"] == "Llama 3.2 1B" else "#f97316"
+        parts.append(f'<text x="{left-14}" y="{y+13}" text-anchor="end" class="label">{row["model"]}</text>')
+        parts.append(f'<rect x="{left}" y="{y}" width="{bar_w:.1f}" height="18" rx="5" fill="{color}"/>')
+        parts.append(
+            f'<text x="{left+bar_w+8:.1f}" y="{y+14}" class="small">{share:.1%} {row["dominant_cluster"]}</text>'
+        )
+    parts.extend(
+        [
+            '<text x="34" y="386" class="subtitle">All five cheap/older lines peak on Nordic Europe; Llama 3.2 1B is the most diffuse in this pilot.</text>',
+            "</svg>",
+        ]
+    )
+    path.write_text("\n".join(parts), encoding="utf-8")
+
+
+def write_scaling_svg(path: Path, unimoral_rows: list[dict[str, Any]], ccd_rows: list[dict[str, Any]]) -> None:
+    width, height = 930, 470
+    left, top, chart_w, chart_h = 86, 86, 730, 285
+    by_model = {row["model"]: row for row in unimoral_rows}
+    ccd_by_model = {row["model"]: row for row in ccd_rows}
+    models = ["Llama 3.2 1B", "Qwen2.5 7B", "Llama 3 8B", "Llama 3.1 8B", "Mistral Nemo"]
+    x_min, x_max = 0, 13
+    y_min, y_max = 0.34, 0.67
+    colors = {
+        "Llama": "#f97316",
+        "Qwen": "#0ea5e9",
+        "Mistral": "#7c3aed",
+    }
+    parts = [
+        svg_header(width, height),
+        '<rect width="100%" height="100%" fill="#f6f7fb"/>',
+        '<text x="34" y="38" class="title">Cheap pilot scaling readout</text>',
+        '<text x="34" y="60" class="subtitle">UniMoral relaxed accuracy by approximate model size; CCD concentration shown by point radius.</text>',
+    ]
+    for tick in [0.4, 0.5, 0.6]:
+        y = top + chart_h - (tick - y_min) / (y_max - y_min) * chart_h
+        parts.append(f'<line x1="{left}" y1="{y:.1f}" x2="{left+chart_w}" y2="{y:.1f}" stroke="#d9dee8"/>')
+        parts.append(f'<text x="{left-14}" y="{y+4:.1f}" text-anchor="end" class="axis">{tick:.1f}</text>')
+    for tick in [1, 7, 8, 12]:
+        x = left + (tick - x_min) / (x_max - x_min) * chart_w
+        parts.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{top+chart_h}" stroke="#e5e9f2"/>')
+        parts.append(f'<text x="{x:.1f}" y="{top+chart_h+24}" text-anchor="middle" class="axis">{tick:g}B</text>')
+    llama_points = []
+    for model in ["Llama 3.2 1B", "Llama 3 8B", "Llama 3.1 8B"]:
+        row = by_model[model]
+        x = left + (float(row["size_b"]) - x_min) / (x_max - x_min) * chart_w
+        y = top + chart_h - (float(row["relaxed_accuracy_total"]) - y_min) / (y_max - y_min) * chart_h
+        llama_points.append((x, y))
+    parts.append(
+        '<polyline points="{}" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>'.format(
+            " ".join(f"{x:.1f},{y:.1f}" for x, y in llama_points)
+        )
+    )
+    for model in models:
+        row = by_model[model]
+        ccd = ccd_by_model[model]
+        size = float(row["size_b"])
+        acc = float(row["relaxed_accuracy_total"])
+        concentration = float(ccd["dominant_share"])
+        x = left + (size - x_min) / (x_max - x_min) * chart_w
+        y = top + chart_h - (acc - y_min) / (y_max - y_min) * chart_h
+        radius = 7 + concentration * 42
+        family = str(row["family"])
+        parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{radius:.1f}" fill="{colors.get(family, "#334155")}" fill-opacity="0.78" stroke="white" stroke-width="2"/>')
+        parts.append(f'<text x="{x+12:.1f}" y="{y-9:.1f}" class="small">{model}</text>')
+        parts.append(f'<text x="{x+12:.1f}" y="{y+5:.1f}" class="small">{acc:.3f}</text>')
+    parts.extend(
+        [
+            f'<text x="{left + chart_w / 2:.1f}" y="{height-54}" text-anchor="middle" class="axis">Approximate model size (B parameters)</text>',
+            f'<text x="24" y="{top + chart_h / 2:.1f}" transform="rotate(-90 24 {top + chart_h / 2:.1f})" text-anchor="middle" class="axis">UniMoral relaxed accuracy</text>',
+            '<text x="34" y="436" class="subtitle">Interpretation: the 1B Llama line is clearly weaker, but the 7B-12B models cluster tightly; this pilot does not show a clean monotonic scaling law.</text>',
+            "</svg>",
+        ]
+    )
+    path.write_text("\n".join(parts), encoding="utf-8")
+
+
+def write_readme(
+    path: Path,
+    unimoral_rows: list[dict[str, Any]],
+    ccd_rows: list[dict[str, Any]],
+    figure_dir: Path,
+) -> None:
+    best = max(unimoral_rows, key=lambda row: float(row["relaxed_accuracy_total"] or 0))
+    weakest = min(unimoral_rows, key=lambda row: float(row["relaxed_accuracy_total"] or 0))
+    most_diffuse = min(ccd_rows, key=lambda row: float(row["dominant_share"] or 0))
+    most_concentrated = max(ccd_rows, key=lambda row: float(row["dominant_share"] or 0))
+    rel_fig = Path("../../../figures/exploratory/cheap_pilot_unimoral_strict_vs_relaxed.svg")
+    ccd_fig = Path("../../../figures/exploratory/cheap_pilot_ccd_dominant_share.svg")
+    scaling_fig = Path("../../../figures/exploratory/cheap_pilot_scaling.svg")
+    lines = [
+        "# Cheap Model Pilot: UniMoral + CCD-Bench",
+        "",
+        "Date: 2026-05-13",
+        "",
+        "This exploratory sweep tested cheaper/older OpenRouter routes on the two lowest-cost Jenny benchmarks selected for follow-up: UniMoral action prediction and CCD-Bench cultural choice style. It is intentionally separate from the main Option 1 release package.",
+        "",
+        "## Key Findings",
+        "",
+        f"- Best UniMoral relaxed result: **{best['model']}** at **{float(best['relaxed_accuracy_total']):.3f}**.",
+        f"- Weakest UniMoral relaxed result: **{weakest['model']}** at **{float(weakest['relaxed_accuracy_total']):.3f}**; this is the only clear low-performing line.",
+        "- The official strict UniMoral scorer badly undercounts several routes because many models followed the prompt as `Selected action is a/b.`, while the strict scorer expected narrower answer formats.",
+        f"- CCD-Bench is **not accuracy**. All five lines peak on **Nordic Europe**, but concentration differs: **{most_diffuse['model']}** is most diffuse at **{float(most_diffuse['dominant_share']):.1%}**, while **{most_concentrated['model']}** is most concentrated at **{float(most_concentrated['dominant_share']):.1%}**.",
+        "- Scaling readout: there is **no clean monotonic scaling law** in this cheap pilot. Llama 3.2 1B is much weaker on UniMoral, but the 7B-12B models are tightly clustered.",
+        "",
+        "## Interpretation",
+        "",
+        "**Model-wise:** Mistral Nemo, Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B are tightly clustered on UniMoral. Llama 3.2 1B is clearly weaker.",
+        "",
+        "**Benchmark-wise:** UniMoral exposed a scorer/parser issue, so I report strict and relaxed saved-log parsing separately. CCD-Bench is not accuracy; it shows cultural choice concentration. All models peak on Nordic Europe, but Llama 3.2 1B is most diffuse and Mistral Nemo is most concentrated.",
+        "",
+        "**Scaling-wise:** There is no clean monotonic scaling law. The 1B model is much worse, but above about 7B the results cluster closely rather than improving smoothly with size.",
+        "",
+        "## Result Tables",
+        "",
+        "### UniMoral",
+        "",
+        "| Model | Official strict acc. | Relaxed acc. | Answer rate | Strict blanks recovered |",
+        "|---|---:|---:|---:|---:|",
+    ]
+    for row in unimoral_rows:
+        lines.append(
+            f"| {row['model']} | {float(row['official_strict_accuracy_total']):.3f} | "
+            f"{float(row['relaxed_accuracy_total']):.3f} | {float(row['relaxed_answer_rate']):.3f} | "
+            f"{int(row['strict_blank_recovered'])} |"
+        )
+    lines.extend(
+        [
+            "",
+            "### CCD-Bench",
+            "",
+            "| Model | Valid choice rate | Dominant cluster | Dominant share | Effective clusters |",
+            "|---|---:|---|---:|---:|",
+        ]
+    )
+    for row in ccd_rows:
+        lines.append(
+            f"| {row['model']} | {float(row['valid_choice_rate']):.3f} | {row['dominant_cluster']} | "
+            f"{float(row['dominant_share']):.3f} | {float(row['effective_cluster_count']):.2f} |"
+        )
+    lines.extend(
+        [
+            "",
+            "## Figures",
+            "",
+            f"![UniMoral strict vs relaxed]({rel_fig})",
+            "",
+            f"![CCD dominant cluster share]({ccd_fig})",
+            "",
+            f"![Cheap pilot scaling]({scaling_fig})",
+            "",
+            "## Metric Boundary",
+            "",
+            "- UniMoral relaxed accuracy is a post-hoc parser repair over saved logs only; it does not spend new API credit.",
+            "- CCD-Bench reports cultural-choice distribution and concentration, not correctness.",
+            "- This is an exploratory pilot, not a replacement for the main release matrix.",
+            "",
+        ]
+    )
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def build(log_root: Path, result_dir: Path, figure_dir: Path) -> None:
+    result_dir.mkdir(parents=True, exist_ok=True)
+    figure_dir.mkdir(parents=True, exist_ok=True)
+    unimoral_rows, language_rows, ccd_rows, ccd_distribution_rows = load_pilot(log_root)
+
+    write_csv(
+        result_dir / "unimoral-summary.csv",
+        unimoral_rows,
+        [
+            "model",
+            "family",
+            "size_b",
+            "samples",
+            "official_strict_accuracy_total",
+            "official_strict_accuracy_scored",
+            "relaxed_answered",
+            "relaxed_answer_rate",
+            "relaxed_correct",
+            "relaxed_accuracy_total",
+            "strict_blank_recovered",
+        ],
+    )
+    write_csv(
+        result_dir / "unimoral-language-breakdown.csv",
+        language_rows,
+        ["model", "language", "samples", "relaxed_answered", "relaxed_accuracy_total"],
+    )
+    write_csv(
+        result_dir / "ccd-summary.csv",
+        ccd_rows,
+        [
+            "model",
+            "family",
+            "size_b",
+            "samples",
+            "valid_choice_count",
+            "valid_choice_rate",
+            "dominant_cluster",
+            "dominant_share",
+            "effective_cluster_count",
+        ],
+    )
+    write_csv(
+        result_dir / "ccd-cluster-distribution.csv",
+        ccd_distribution_rows,
+        ["model", "cluster", "count", "share"],
+    )
+    write_csv(
+        result_dir / "pilot-overview.csv",
+        [
+            {
+                "artifact": "unimoral_action_prediction",
+                "models": len(unimoral_rows),
+                "samples_per_complete_model": 8784,
+                "status": "complete",
+                "metric_boundary": "official strict scorer plus relaxed saved-log parser repair",
+            },
+            {
+                "artifact": "ccd_bench_selection",
+                "models": len(ccd_rows),
+                "samples_per_complete_model": 2182,
+                "status": "complete",
+                "metric_boundary": "valid cultural choice distribution, not accuracy",
+            },
+        ],
+        ["artifact", "models", "samples_per_complete_model", "status", "metric_boundary"],
+    )
+    write_strict_vs_relaxed_svg(figure_dir / "cheap_pilot_unimoral_strict_vs_relaxed.svg", unimoral_rows)
+    write_ccd_dominant_svg(figure_dir / "cheap_pilot_ccd_dominant_share.svg", ccd_rows)
+    write_scaling_svg(figure_dir / "cheap_pilot_scaling.svg", unimoral_rows, ccd_rows)
+    write_readme(result_dir / "README.md", unimoral_rows, ccd_rows, figure_dir)
+
+    manifest = {
+        "source_log_root": str(log_root.relative_to(ROOT)),
+        "result_dir": str(result_dir.relative_to(ROOT)),
+        "figure_dir": str(figure_dir.relative_to(ROOT)),
+        "tables": sorted(path.name for path in result_dir.glob("*.csv")),
+        "figures": sorted(path.name for path in figure_dir.glob("cheap_pilot_*.svg")),
+        "counts": {
+            "unimoral_models": len(unimoral_rows),
+            "ccd_models": len(ccd_rows),
+            "unimoral_samples_total": sum(int(row["samples"]) for row in unimoral_rows),
+            "ccd_samples_total": sum(int(row["samples"]) for row in ccd_rows),
+        },
+    }
+    (result_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--log-root", type=Path, default=DEFAULT_LOG_ROOT)
+    parser.add_argument("--result-dir", type=Path, default=DEFAULT_RESULT_DIR)
+    parser.add_argument("--figure-dir", type=Path, default=DEFAULT_FIGURE_DIR)
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    build(args.log_root, args.result_dir, args.figure_dir)
+    print(f"Wrote cheap pilot artifacts to {args.result_dir}")
+    print(f"Wrote cheap pilot figures to {args.figure_dir}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

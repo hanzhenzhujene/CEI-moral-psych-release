@@ -24,6 +24,22 @@ My result TL;DR:
 - **DeNEVIL:** `DeNEVIL` is proxy safety-behavior evidence, not official benchmark-faithful scoring. Since the original MoralPrompt scorer is not available locally, this release classifies visible behaviors: refusal, redirect, corrective/contextual answer, risky continuation, ambiguous answer, or no visible answer. Results show high protective/contextual response rates, 92.4% to 99.5%, meaning models usually refuse, redirect, or add safety context instead of continuing harmful content.
 
 
+## Latest Exploratory Pilot
+
+The May 13 cheap-model pilot is a lower-cost follow-up on `UniMoral` and `CCD-Bench`, using older/cheaper OpenRouter routes. Full tables and provenance are in [results/exploratory/2026-05-13-cheap-model-pilot](results/exploratory/2026-05-13-cheap-model-pilot/).
+
+**Model-wise:** Mistral Nemo, Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B are tightly clustered on UniMoral. Llama 3.2 1B is clearly weaker.
+
+**Benchmark-wise:** UniMoral exposed a scorer/parser issue, so I report strict and relaxed saved-log parsing separately. CCD-Bench is not accuracy; it shows cultural choice concentration. All models peak on Nordic Europe, but Llama 3.2 1B is most diffuse and Mistral Nemo is most concentrated.
+
+**Scaling-wise:** There is no clean monotonic scaling law. The 1B model is much worse, but above about 7B the results cluster closely rather than improving smoothly with size.
+
+![Cheap pilot UniMoral strict vs relaxed](figures/exploratory/cheap_pilot_unimoral_strict_vs_relaxed.svg)
+
+![Cheap pilot CCD concentration](figures/exploratory/cheap_pilot_ccd_dominant_share.svg)
+
+![Cheap pilot scaling readout](figures/exploratory/cheap_pilot_scaling.svg)
+
 ## Research Goal
 
 This repo asks a simple question with a careful release contract: how far do current open-source model families get on five moral-psych benchmark papers once we separate benchmark-faithful accuracy from distributional or proxy-only evidence?
@@ -101,6 +117,7 @@ This repo has two distinct entrypoints:
 | Cite the repo as a software artifact | [CITATION.cff](CITATION.cff) |
 | Understand how raw runs become public artifacts | [Data Flow](#data-flow) |
 | Go straight to the five benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |
+| Read the May 13 cheap-model follow-up pilot | [Latest Exploratory Pilot](#latest-exploratory-pilot) |
 | Jump straight to the live summary | [Results First](#results-first) |
 | Check the exact full-matrix status | [Family-Size Progress Matrix](#family-size-progress-matrix) |
 | Browse only the charts and figures | [Supporting Figures](#supporting-figures) |

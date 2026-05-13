@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="460" viewBox="0 0 940 460"><style>text{font-family:Arial,Helvetica,sans-serif;fill:#18212f}.title{font-size:22px;font-weight:700}.subtitle{font-size:12px;fill:#536171}.axis{font-size:11px;fill:#536171}.label{font-size:12px}.small{font-size:10px;fill:#536171}</style>
+<rect width="100%" height="100%" fill="#f8faf7"/>
+<text x="34" y="38" class="title">Cheap pilot: UniMoral strict scorer vs repaired parser</text>
+<text x="34" y="60" class="subtitle">Relaxed parser only repairs obvious A/B formats such as "Selected action is a."; no API rerun.</text>
+<line x1="190.0" y1="86" x2="190.0" y2="356" stroke="#d6ddd9" stroke-width="1"/>
+<text x="190.0" y="380" text-anchor="middle" class="axis">0.0</text>
+<line x1="370.6" y1="86" x2="370.6" y2="356" stroke="#d6ddd9" stroke-width="1"/>
+<text x="370.6" y="380" text-anchor="middle" class="axis">0.2</text>
+<line x1="551.1" y1="86" x2="551.1" y2="356" stroke="#d6ddd9" stroke-width="1"/>
+<text x="551.1" y="380" text-anchor="middle" class="axis">0.4</text>
+<line x1="731.7" y1="86" x2="731.7" y2="356" stroke="#d6ddd9" stroke-width="1"/>
+<text x="731.7" y="380" text-anchor="middle" class="axis">0.6</text>
+<text x="176" y="114.0" text-anchor="end" class="label">Mistral Nemo</text>
+<rect x="190" y="100.0" width="254.3" height="16" rx="4" fill="#b8c2cc"/>
+<text x="450.3" y="112.0" class="small">0.282</text>
+<rect x="190" y="122.0" width="585.1" height="16" rx="4" fill="#0f766e"/>
+<text x="781.1" y="134.0" class="small">0.648</text>
+<text x="176" y="168.0" text-anchor="end" class="label">Qwen2.5 7B</text>
+<rect x="190" y="154.0" width="0.0" height="16" rx="4" fill="#b8c2cc"/>
+<text x="196.0" y="166.0" class="small">0.000</text>
+<rect x="190" y="176.0" width="578.0" height="16" rx="4" fill="#0f766e"/>
+<text x="774.0" y="188.0" class="small">0.640</text>
+<text x="176" y="222.0" text-anchor="end" class="label">Llama 3.1 8B</text>
+<rect x="190" y="208.0" width="57.5" height="16" rx="4" fill="#b8c2cc"/>
+<text x="253.5" y="220.0" class="small">0.064</text>
+<rect x="190" y="230.0" width="576.7" height="16" rx="4" fill="#0f766e"/>
+<text x="772.7" y="242.0" class="small">0.639</text>
+<text x="176" y="276.0" text-anchor="end" class="label">Llama 3 8B</text>
+<rect x="190" y="262.0" width="402.6" height="16" rx="4" fill="#b8c2cc"/>
+<text x="598.6" y="274.0" class="small">0.446</text>
+<rect x="190" y="284.0" width="570.4" height="16" rx="4" fill="#0f766e"/>
+<text x="766.4" y="296.0" class="small">0.632</text>
+<text x="176" y="330.0" text-anchor="end" class="label">Llama 3.2 1B</text>
+<rect x="190" y="316.0" width="288.8" height="16" rx="4" fill="#b8c2cc"/>
+<text x="484.8" y="328.0" class="small">0.320</text>
+<rect x="190" y="338.0" width="366.2" height="16" rx="4" fill="#0f766e"/>
+<text x="562.2" y="350.0" class="small">0.406</text>
+<rect x="34" y="402" width="14" height="14" rx="3" fill="#b8c2cc"/>
+<text x="56" y="414" class="axis">official strict scorer</text>
+<rect x="210" y="402" width="14" height="14" rx="3" fill="#0f766e"/>
+<text x="232" y="414" class="axis">relaxed post-hoc A/B parser</text>
+<text x="34" y="432" class="subtitle">Main caveat: strict scores are not valid model-quality estimates for routes that followed the prompt with "Selected action is a/b."</text>
+</svg>
