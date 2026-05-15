@@ -105,28 +105,22 @@ Known T1 cells (as of 2026-05-15 — see `results/CHECKLIST.md` for full tracker
    b. Compare against dimension-specific thresholds.
    c. Flag or retire as appropriate.
 
-5. Output a validation report in this format:
+5. Update `results/CHECKLIST.md` in place with any tier changes, new cells, or resolved action items. This is the single source of truth — no separate dated report files.
+
+6. Output a summary to the user:
 
 ```markdown
-## Validation Report — [date]
+## Validation Summary — [date]
 
-### Tier Status
-| Benchmark | Model | Tier | Issues |
-|-----------|-------|------|--------|
-| ... | ... | T1/T2/T3 | ... |
+### Changes
+- [list tier promotions/demotions and new cells]
 
-### Saturation Check
-| Task | Dimension | Spread | Threshold | Status |
-|------|-----------|--------|-----------|--------|
-| ... | D1/D2/D3 | ... | ... | Healthy/Flag/Retire |
+### Saturation Alerts
+- [list any FLAG or RETIRE changes]
 
 ### Recommended Actions
 1. ...
 ```
-
-6. Save report to `results/validation/YYYY-MM-DD.md`.
-
-7. Update `results/CHECKLIST.md` with any tier changes, new cells, or resolved action items.
 
 ## Cross-Dimension Rules
 

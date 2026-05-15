@@ -1,9 +1,8 @@
 # Benchmark Results Checklist
 
 **Last validated:** 2026-05-15
-**Full report:** `results/validation/2026-05-15.md`
 
-> Run `/validate-results` to regenerate.
+> Run `/validate-results` to regenerate. History tracked via `git log results/CHECKLIST.md`.
 
 ---
 
@@ -247,10 +246,3 @@
 - [ ] Gemma MoReBench convergence (S/M/L spread 0.041)
 - [ ] MoralLens CoT top-cluster convergence (0.90–0.96 range)
 
----
-
-## Validation History
-
-| Date | Report | Key Changes |
-|------|--------|-------------|
-| 2026-05-15 | `results/validation/2026-05-15.md` | Initial full validation; 55 T1 cells identified |
