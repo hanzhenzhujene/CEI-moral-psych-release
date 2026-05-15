@@ -42,6 +42,14 @@ Known T1 cells (as of 2026-05-15 — see `results/CHECKLIST.md` for full tracker
 - [ ] **No outlier inflation**: Apparent spread is not driven by a single anomalous score that may be a format artifact.
 - [ ] **Human baseline available** (if applicable): For benchmarks with human-normed data (SMID, MoralBench MFQ), human inter-rater reliability is documented.
 - [ ] **Paper-faithful scoring**: The scoring method matches the original paper's methodology. No ad-hoc modifications.
+- [ ] **Human spot-check**: At least 10 model outputs per cell manually reviewed for plausibility (response is coherent, not garbled/truncated/off-topic).
+
+### Blocked cells
+
+If a cell cannot advance and the blocker is outside the scorer's control, tag it in CHECKLIST.md:
+- Format: `BLOCKED: <reason>` in the Note column
+- A blocked cell stays at its current tier until the blocker is resolved
+- Common blockers: missing modality (vision), missing dataset, scorer limitation, model access
 
 ## Saturation Policy
 
