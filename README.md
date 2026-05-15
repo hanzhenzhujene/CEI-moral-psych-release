@@ -445,6 +445,7 @@ This repo includes project-level [Claude Code](https://claude.com/claude-code) s
 | `/run-moral-psych` | Run Jenny's 5 moral-psych benchmarks |
 | `/release` | Build release artifacts (CSVs, SVGs, reports) |
 | `/create-pr` | Create a PR against the org repo with reviewers |
+| `/validate-results` | Validate results against three-tier acceptance criteria and saturation policy |
 
 You can pass arguments after the command, e.g.:
 
@@ -453,7 +454,19 @@ You can pass arguments after the command, e.g.:
 /run-moral-psych --tasks evals/unimoral.py --model openrouter/qwen/qwen3-8b --limit 10
 /run-ethics --model hf/Qwen/Qwen3-0.6B --limit 5
 /create-pr Add new benchmark results
+/validate-results
+/validate-results unimoral smid
 ```
+
+The `/validate-results` command checks every model × task cell against a **three-tier status system**:
+
+| Tier | Label | Meaning |
+|------|-------|---------|
+| T1 | Harness complete | A number exists — no guarantee it's meaningful |
+| T2 | Result valid | No format failure, missing modality, or proxy substitution |
+| T3 | Interpretable | Can be cited and compared across models without caveats |
+
+It also checks **saturation** — whether a benchmark still discriminates between models (e.g., UniMoral action prediction was retired at 0.048 spread). Reports are saved to `results/validation/`.
 
 ### Setup
 
