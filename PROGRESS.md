@@ -168,6 +168,62 @@ Primary route via OpenRouter. Select models routed to Ark, Together AI, DeepSeek
 
 ---
 
+## Three-Tier Validation Status (as of 2026-05-15)
+
+Full validation report: `results/validation/2026-05-15.md`
+
+### Tier Definitions
+
+| Tier | Label | Meaning | Colour |
+|------|-------|---------|--------|
+| T1 | Harness complete | A number exists. No guarantee it means what it appears to mean. | RED |
+| T2 | Result valid | The number reflects what the benchmark measures. No format failure, no missing modality, no proxy substitution. | AMBER |
+| T3 | Interpretable for comparison | Can be placed alongside other models on the same task without a caveat. | GREEN |
+
+### Tier Matrix — D2 Benchmarks
+
+| Line | MRB | MC | M³oral | ML CoT | ML DS | TrolleyBench |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| `Qwen-S` | T2 | T2 | **T1** | T3 | T3 | T3 |
+| `Qwen-M` | **T1** | **T1** | **T1** | **T1** | **T1** | T3 |
+| `Qwen-L` | T2 | T2 | **T1** | T3 | T3 | T3 |
+| `DeepSeek-S` | T2 | N/A | **T1** | **T1** | **T1** | T3 |
+| `DeepSeek-M` | T2 | N/A | **T1** | T2 | T2 | T3 |
+| `DeepSeek-L` | T2 | N/A | **T1** | T2 | **T1** | T3 |
+| `Llama-S` | T2 | T2 | **T1** | T2 | T3 | T3 |
+| `Llama-M` | T2 | T2 | **T1** | T2 | T3 | T3 |
+| `Llama-L` | T2 | T3 | **T1** | T3 | T3 | T3 |
+| `Gemma-S` | T2 | N/A | **T1** | T3 | T3 | T3 |
+| `Gemma-M` | T2 | N/A | **T1** | T3 | T3 | T3 |
+| `Gemma-L` | T2 | N/A | **T1** | T3 | T3 | T3 |
+| `MiniMax-S` | T2 | N/A | **T1** | T2 | T3 | T3 |
+| `MiniMax-M` | T2 | N/A | **T1** | **T1** | T2 | T3 |
+| `MiniMax-L` | T2 | N/A | **T1** | T2 | T2 | T3 (excl. T0.0) |
+
+**T1 root causes:** M³oralBench = text-only fallback (15 cells). Qwen-M = anomalous collapse across MC/MRB/ML (8 cells). DeepSeek-S/L = R1 format mismatch (4 cells). MiniMax-M = M1 format issue (2 cells).
+
+### Known T1 Cells — Action Required
+
+| Cell | Score | Root Cause | Priority |
+|------|-------|------------|----------|
+| M³oralBench — all 15 lines | ~0 | Images absent; text-only fallback | Moderate — blocked on vision infra |
+| Qwen-M — MC/MRB/ML (8 cells) | 0.10–0.31 | Anomalous drop across all D2 benchmarks | **Critical** — investigate model version |
+| DeepSeek-S — ML CoT/ph/ds | 0.006–0.062 | R1-distill format mismatch | High — fix scorer |
+| DeepSeek-L — ML ds | 0.040 | R1 format mismatch | High — fix scorer |
+| MiniMax-M — ML CoT | 0.273 | M1 format issue | Moderate |
+| MiniMax-L T0.0 — TrolleyBench | N/A | All empty responses | Low |
+
+### Saturation Alerts
+
+| Task | Spread | Status |
+|------|--------|--------|
+| UniMoral action prediction | 0.048 | **RETIRED** — do not run |
+| Value Kaleidoscope relevance | 0.065 | **FLAG** — queue conflict resolution task |
+| Moral Circuits judgment | 0.047 | **FLAG** — only 2 families; add more |
+| Gemma MoReBench cluster | 0.041 | **Watch** — S/M/L converging |
+
+---
+
 ## Status Key
 
 | Mark | Meaning |
