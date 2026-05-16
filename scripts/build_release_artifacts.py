@@ -174,7 +174,7 @@ TEXT_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-text
 IMAGE_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-image-expansion"
 
 MODEL_ORDER = ["Qwen", "DeepSeek", "Gemma"]
-FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT4 only"]
+FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT-4o mini"]
 BENCHMARK_ORDER = ["UniMoral", "SMID", "Value Kaleidoscope", "CCD-Bench", "Denevil"]
 FAMILY_SIZE_STATUS_COLUMNS = ["unimoral", "smid", "value_kaleidoscope", "ccd_bench", "denevil"]
 FAMILY_SIZE_STATUS_LABELS = {
@@ -246,13 +246,13 @@ CCD_OPTION_COLORS = {
     9: "#bcbd22",
     10: "#17becf",
 }
-OPENAI_REFERENCE_LINE_LABEL = "GPT4 only"
-OPENAI_REFERENCE_FAMILY_LABEL = "GPT4 only"
+OPENAI_REFERENCE_LINE_LABEL = "GPT-4o mini"
+OPENAI_REFERENCE_FAMILY_LABEL = "GPT-4o mini"
 OPENAI_BATCH_REFERENCE_FAMILY_LABEL = "OpenAI Batch refs"
-LEGACY_OPENAI_REFERENCE_LINE_LABELS = {"OpenAI-Ref"}
+LEGACY_OPENAI_REFERENCE_LINE_LABELS = {"OpenAI-Ref", "GPT4 only"}
 OPENAI_REFERENCE_ROUTE = "openai/gpt-4o-mini (Responses API + Batch API; text-only reference)"
 OPENAI_REFERENCE_NOTE = (
-    "One-model GPT4-only text reference line; SMID and DeNEVIL are intentionally not run, "
+    "One-model GPT-4o mini text reference line; SMID and DeNEVIL are intentionally not run, "
     "so this is a reference marker rather than S/M/L scaling evidence."
 )
 OPENAI_REFERENCE_TOTAL_SAMPLES = 76486
@@ -284,7 +284,7 @@ OPENAI_TEXT_REFERENCE_SPECS = [
         "size_slot": "Ref",
         "route": OPENAI_REFERENCE_ROUTE,
         "note": OPENAI_REFERENCE_NOTE,
-        "comparison_note": "GPT4-only text reference marker; SMID and DeNEVIL intentionally not run.",
+        "comparison_note": "GPT-4o mini text reference marker; SMID and DeNEVIL intentionally not run.",
         "total_samples": OPENAI_REFERENCE_TOTAL_SAMPLES,
         "parsed_samples": OPENAI_REFERENCE_PARSED_SAMPLES,
         "unimoral_action_accuracy": OPENAI_REFERENCE_UNIMORAL_ACCURACY,
@@ -7787,7 +7787,7 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
     if family == OPENAI_REFERENCE_FAMILY_LABEL:
         return (
             "Single text-only reference point, not a family-size scaling sweep.",
-            "GPT4 only is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about GPT4 family scaling or vision-side SMID performance.",
+            "GPT-4o mini is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about OpenAI family scaling or vision-side SMID performance.",
         )
     available_metrics = sum(1 for points in metric_points.values() if points)
     return (
@@ -8234,8 +8234,6 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
     panel_top, panel_gap = 164, 34
     tick_count = 5
     line_colors = {row["line_label"]: line_color(row) for row in rows}
-    row_order = [row["line_label"] for row in rows]
-    row_count = max(len(row_order), 1)
     metric_specs = [
         (
             "unimoral_action_accuracy",
@@ -8253,8 +8251,15 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
             "Average of relevance and valence accuracy",
         ),
     ]
-    panel_height = 78 + row_count * (bar_height + bar_gap)
-    height = panel_top + len(metric_specs) * panel_height + (len(metric_specs) - 1) * panel_gap + 112
+    metric_rows: dict[str, list[dict[str, Any]]] = {
+        field: ([row for row in rows if row[field] is not None] if field == "smid_average_accuracy" else rows)
+        for field, _, _ in metric_specs
+    }
+    metric_panel_heights = {
+        field: 78 + max(len(metric_rows[field]), 1) * (bar_height + bar_gap)
+        for field, _, _ in metric_specs
+    }
+    height = panel_top + sum(metric_panel_heights.values()) + (len(metric_specs) - 1) * panel_gap + 112
 
     lines = svg_header(width, height)
     lines.extend(
@@ -8262,20 +8267,21 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Comparable accuracy by benchmark</title>",
-            "<desc>Horizontal bar panels comparing the latest available family-size lines on benchmarks with directly comparable accuracy metrics. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>",
+            "<desc>Horizontal bar panels comparing the latest available family-size lines on benchmarks with directly comparable accuracy metrics. UniMoral and Value keep the text-only reference rows, while the SMID panel omits rows with no public vision route instead of showing empty placeholders.</desc>",
             '<text x="48" y="64" class="title">Comparable Accuracy by Benchmark</text>',
             *svg_text_block(
                 48,
                 88,
-                "Each panel keeps the same current lines. Hatched rows mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format validation. SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells.",
+                "UniMoral and Value show the text-only comparison/reference rows. SMID shows only lines with a public vision route, so no-vision routes are removed from that panel rather than left as blank bars.",
                 "subtitle",
                 135,
             ),
         ]
     )
 
+    panel_y = panel_top
     for panel_index, (field, benchmark_label, scope_label) in enumerate(metric_specs):
-        panel_y = panel_top + panel_index * (panel_height + panel_gap)
+        panel_height = metric_panel_heights[field]
         lines.append(f'<rect x="42" y="{panel_y - 28}" width="{width - 84}" height="{panel_height}" rx="18" class="subpanel"/>')
         lines.append(f'<text x="48" y="{panel_y}" class="axis">{escape_xml(benchmark_label)}</text>')
         lines.append(f'<text x="48" y="{panel_y + 20}" class="subtitle">{escape_xml(scope_label)}</text>')
@@ -8289,7 +8295,8 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
             lines.append(f'<text x="{x:.2f}" y="{tick_y - 8}" text-anchor="middle" class="small">{ratio * 100:.0f}%</text>')
 
         row_lookup = {row["line_label"]: row for row in rows}
-        for row_index, line_label in enumerate(row_order):
+        panel_row_order = [row["line_label"] for row in metric_rows[field]]
+        for row_index, line_label in enumerate(panel_row_order):
             y = panel_y + 46 + row_index * (bar_height + bar_gap)
             row = row_lookup.get(line_label)
             value = None if row is None else row[field]
@@ -8313,6 +8320,8 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
             label_x = min(panel_left + width_px + 10, panel_left + panel_width - 4)
             label_anchor = "start" if label_x < panel_left + panel_width - 4 else "end"
             lines.append(f'<text x="{label_x:.2f}" y="{y + 19}" text-anchor="{label_anchor}" class="label">{value * 100:.1f}%</text>')
+
+        panel_y += panel_height + panel_gap
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -8436,7 +8445,7 @@ def render_family_scaling_profile_svg(
     intro_lines = [
         "Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.",
         "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.",
-        "The legacy GPT4-only marker is text-only; the newer OpenAI Batch rows are read in the bar and CCD figures, not as size curves.",
+        "The GPT-4o mini marker is text-only; the newer OpenAI Batch rows are read in the bar and CCD figures, not as size curves.",
         "SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.",
         "Read CCD-Bench in the dedicated choice-distribution and concentration figures.",
         "Read Denevil in the dedicated behavioral-outcomes figure.",
@@ -8446,7 +8455,7 @@ def render_family_scaling_profile_svg(
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Family scaling profile by benchmark</title>",
-            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. The legacy GPT4-only point is text-only, while the newer OpenAI Batch reference rows are read in the bar and CCD figures rather than as size curves. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
+            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. The GPT-4o mini point is text-only, while the newer OpenAI Batch reference rows are read in the bar and CCD figures rather than as size curves. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
             '<text x="48" y="64" class="title">Family Scaling Profile</text>',
         ]
     )
@@ -8513,8 +8522,9 @@ def render_family_scaling_profile_svg(
                 label_x = x + label_dx
                 label_y = max(chart_top + 14, min(chart_bottom - 8, y + label_dy))
                 label_anchor = "start" if label_dx >= 0 else "end"
+                point_label = only_row["line_label"] if family == OPENAI_REFERENCE_FAMILY_LABEL else family + "-" + only_row["size_slot"]
                 lines.append(
-                    f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{label_anchor}" class="small">{escape_xml(family + "-" + only_row["size_slot"])}</text>'
+                    f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{label_anchor}" class="small">{escape_xml(point_label)}</text>'
                 )
 
         lines.append(
@@ -8544,7 +8554,7 @@ def render_family_scaling_profile_svg(
         ("DeepSeek", "S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists."),
         ("Llama", "text scored at S/M/L; SMID at S/L."),
         ("Gemma", "full S/M/L scored sweep."),
-        (OPENAI_REFERENCE_FAMILY_LABEL, "GPT4-only reference point; no GPT4 S/M/L or SMID route is claimed."),
+        (OPENAI_REFERENCE_FAMILY_LABEL, "text-only reference point; no OpenAI S/M/L or SMID route is claimed."),
     ]
     for index, (family, note) in enumerate(legend_items):
         x = 656
@@ -10008,13 +10018,13 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             f"![Comparable accuracy bars]({figure_prefix}/option1_benchmark_accuracy_bars.svg)",
             "",
-            "_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._",
+            "_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks. The SMID panel only includes lines with a public vision route; no-vision text-only rows are removed rather than shown as blanks._",
             "",
             "### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling",
             "",
             f"![Family scaling profile]({figure_prefix}/option1_family_scaling_profile.svg)",
             "",
-            "_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._",
+            "_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence; absent SMID points are route gaps._",
             "",
             "### 3. CCD-Bench: cultural-cluster choice behavior",
             "",
@@ -10364,7 +10374,7 @@ def append_current_operations_highlights(lines: list[str]) -> None:
             "",
             "### Current Operations Highlights",
             "",
-            "This compact block sits between the topline tables and the detailed progress matrix so the live state stays readable.",
+            "This compact block keeps the live state readable without repeating the full family-size status table in the main README.",
             "",
         ]
     )
@@ -10419,15 +10429,17 @@ def append_latest_additional_model_sweep_section(lines: list[str]) -> None:
         [
             "## Latest Additional Model Sweep",
             "",
-            "The May 13 additional-model sweep tests older or smaller OpenRouter routes on `UniMoral` and `CCD-Bench` to check whether they produce a different pattern from the main model matrix. Full tables and provenance are in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/).",
+            "The May 13 additional-model sweep tests older or smaller OpenRouter routes on `UniMoral` and `CCD-Bench`; the May 16 OpenAI text-only reference sweep adds `gpt-4o-mini`, `gpt-5-nano`, `gpt-4.1-nano`, `gpt-5-mini`, and `gpt-4.1-mini` on `UniMoral`, `Value Kaleidoscope`, and `CCD-Bench`. Full May 13 tables and provenance are in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/); the OpenAI rows are integrated into the release comparison and CCD tables.",
             "",
             "**Model-wise:** Mistral Nemo is the top UniMoral line at 0.648, but Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B are close behind from 0.632 to 0.640. Llama 3.2 1B is the clear weak line at 0.406, with a lower answer rate as well.",
             "",
             "**Benchmark-wise:** UniMoral gives a clear performance separation between the very small 1B route and the stronger 7B-12B cluster. CCD-Bench gives a style/concentration readout rather than a correctness score: all models peak on Nordic Europe, but Llama 3.2 1B is most diffuse (15.9% dominant share; 9.12 effective clusters), while Mistral Nemo is most concentrated (25.3%; 7.22 effective clusters).",
             "",
+            "**OpenAI reference add-on:** `GPT-4.1 mini` is the strongest OpenAI UniMoral line at 0.679, while `GPT-5 mini` is the strongest OpenAI Value Kaleidoscope line at 0.739. These rows are text-only references only: they intentionally omit SMID and DeNEVIL, and CCD-Bench is read as cultural-choice concentration rather than accuracy.",
+            "",
             "**Scaling-wise:** There is no clean monotonic scaling law. The move from 1B to 7B+ matters a lot, but above that threshold the 7B-12B models cluster closely rather than improving smoothly with size. This looks more like a capability floor than a simple bigger-is-better trend.",
             "",
-            "**Bottom line:** The additional sweep does not overturn the main release story. It adds one useful detail: very small models can fall off sharply, while several older or mid-sized instruction routes remain competitive on the selected text/style checks.",
+            "**Bottom line:** The additional sweeps do not overturn the main release story. They add two useful details: very small models can fall off sharply, and the OpenAI text-only references are strong on text tasks but still cannot be promoted into all-around winners without SMID vision evidence.",
             "",
             "![Additional model sweep UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg)",
             "",
@@ -10454,9 +10466,9 @@ def append_repo_navigation(lines: list[str]) -> None:
             "| Cite the repo as a software artifact | [CITATION.cff](CITATION.cff) |",
             "| Understand how raw runs become public artifacts | [Data Flow](#data-flow) |",
             "| Go straight to the five benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |",
-            "| Read the May 13 additional-model follow-up | [Latest Additional Model Sweep](#latest-additional-model-sweep) |",
+            "| Read the additional model and OpenAI follow-up | [Latest Additional Model Sweep](#latest-additional-model-sweep) |",
             "| Jump straight to the live summary | [Results First](#results-first) |",
-            "| Check the exact full-matrix status | [Family-Size Progress Matrix](#family-size-progress-matrix) |",
+            "| Download the exact full-matrix status | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
             "| Rebuild or verify the public package locally | [Reproducibility](#reproducibility) |",
             "",
         ]
@@ -10648,7 +10660,7 @@ def append_models_section(lines: list[str], rows: list[dict[str, Any]]) -> None:
     lines.extend(
         [
             "",
-            "_Exact per-line status lives below in Results First and the Family-Size Progress Matrix._",
+            "_Exact per-line status is summarized in Results First and saved as `family-size-progress.csv`._",
             "",
         ]
     )
@@ -10732,7 +10744,7 @@ def build_repo_readme(
         "",
         "1. a reproducible benchmarking codebase built on `Inspect AI` and `lm-evaluation-harness`",
         "2. a frozen `Option 1` snapshot for the first formal public release",
-        f"3. a clearly labeled progress matrix for the current `{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} public model families x 3 size slots` plan",
+        f"3. a visuals-first readout plus CSV status files for the current `{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} public model families x 3 size slots` plan",
         "",
     ]
     append_tldr_section(
@@ -10742,6 +10754,7 @@ def build_repo_readme(
         ccd_choice_distribution,
         denevil_behavior_summary,
     )
+    append_benchmark_result_visuals_section(lines, "figures/release")
     append_latest_additional_model_sweep_section(lines)
     lines.extend(
         [
@@ -10765,7 +10778,6 @@ def build_repo_readme(
             "",
         ]
     )
-    append_benchmark_result_visuals_section(lines, "figures/release")
     append_public_quickstart(lines)
     append_repo_navigation(lines)
     append_repo_layout(lines)
@@ -10864,17 +10876,7 @@ def build_repo_readme(
     lines.extend(
         [
             "",
-            "## Family-Size Progress Matrix",
-            "",
-            "This is the main public status table for the current published matrix.",
-            "",
-        ]
-    )
-    append_family_size_progress_table(lines, family_size_progress)
-    lines.extend(
-        [
-            "",
-            "The same matrix is also saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv).",
+            "Exact per-line family-size status is saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv); the README keeps the main surface focused on the visuals and interpretation.",
             "",
             "## The Five Benchmark Papers",
             "",
@@ -10987,7 +10989,7 @@ def build_release_readme(
         "It separates two things clearly:",
         "",
         "1. the frozen `Option 1` public snapshot from `April 19, 2026`, and",
-        f"2. the wider `{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} public model families x 3 size slots` progress matrix that is still being filled in.",
+        f"2. the wider `{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} public model families x 3 size slots` status snapshot, with exact status kept in CSV rather than repeated as a large README table.",
         "",
     ]
     append_tldr_section(
@@ -11100,7 +11102,7 @@ def build_release_readme(
             "",
             "### Reports",
             "",
-            "- `jenny-group-report.md`: mentor-facing report with the benchmark list, progress matrix, model roster, and current results",
+            "- `jenny-group-report.md`: mentor-facing report with the benchmark list, model roster, and current results",
             "- `topline-summary.md`: shortest narrative summary of the frozen Option 1 snapshot",
             "- `release-manifest.json`: machine-readable release index",
             f"- {markdown_link('how to read the results', '../../../docs/how-to-read-results.md')}: plain-language explanation of the report terms",
@@ -11122,15 +11124,7 @@ def build_release_readme(
     lines.extend(
         [
             "",
-            "## Family-Size Progress Matrix",
-            "",
-            "This is the cleanest public-facing summary of the current published matrix.",
-            "",
-        ]
-    )
-    append_family_size_progress_table(lines, family_size_progress)
-    lines.extend(
-        [
+            "Exact per-line family-size status is saved as [family-size-progress.csv](family-size-progress.csv); this README keeps the main surface focused on the visuals and interpretation.",
             "",
             "## Benchmark List",
             "",
@@ -11344,13 +11338,7 @@ def build_jenny_group_report(
     lines.extend(
         [
             "",
-            "## Full Family-Size Progress Matrix",
-            "",
-        ]
-    )
-    append_family_size_progress_table(lines, family_size_progress)
-    lines.extend(
-        [
+            "Exact per-line family-size status is saved as `family-size-progress.csv`; this report keeps the main surface focused on the visuals, interpretation, routes, and compact status notes.",
             "",
         ]
     )
@@ -11371,7 +11359,7 @@ def build_jenny_group_report(
             "",
             "## Safe One-Sentence Framing",
             "",
-            "> This repository contains Jenny Zhu's CEI moral-psych benchmark deliverable for five target papers, with a frozen Option 1 snapshot over Qwen, DeepSeek, and Gemma, an extra completed Llama small line outside the frozen counts, and a clearly labeled family-size progress matrix for the broader five-family plan.",
+            "> This repository contains Jenny Zhu's CEI moral-psych benchmark deliverable for five target papers, with a frozen Option 1 snapshot over Qwen, DeepSeek, and Gemma, an extra completed Llama small line outside the frozen counts, and a visuals-first status readout for the broader five-family plan.",
         ]
     )
     return "\n".join(lines) + "\n"

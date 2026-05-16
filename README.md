@@ -10,7 +10,7 @@ It combines three things in one clean public surface:
 
 1. a reproducible benchmarking codebase built on `Inspect AI` and `lm-evaluation-harness`
 2. a frozen `Option 1` snapshot for the first formal public release
-3. a clearly labeled progress matrix for the current `5 benchmarks x 5 public model families x 3 size slots` plan
+3. a visuals-first readout plus CSV status files for the current `5 benchmarks x 5 public model families x 3 size slots` plan
 
 ## TL;DR
 
@@ -26,17 +26,57 @@ If you only read one section, read these key takeaways:
 - **Current GitHub-facing boundary:** No MiniMax-M2.5 text benchmark remains live; the saved MiniMax-M2.5 text/proxy pass is already parsed into the public tables and SVGs. SMID remains `TBD`, so the medium MiniMax line is not a fully comparable all-around line yet.
 
 
+## Benchmark Result Visuals
+
+If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
+
+OpenAI Responses/Batch API text-only reference rows are shown in the comparable-accuracy and CCD figures. They are not treated as family-size scaling series, and they have no SMID or DeNEVIL rows.
+
+### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy
+
+![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
+
+_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks. The SMID panel only includes lines with a public vision route; no-vision text-only rows are removed rather than shown as blanks._
+
+### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling
+
+![Family scaling profile](figures/release/option1_family_scaling_profile.svg)
+
+_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence; absent SMID points are route gaps._
+
+### 3. CCD-Bench: cultural-cluster choice behavior
+
+![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)
+
+_This is the main CCD-Bench result: deviation from the 10% uniform baseline across the ten canonical cultural clusters._
+
+### 4. CCD-Bench: dominant-option concentration
+
+![CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)
+
+_This is the compact CCD-Bench summary: how much each line collapses onto one dominant cluster, and how broadly it still spreads across the option set._
+
+### 5. DeNEVIL: proxy behavioral outcomes
+
+![DeNEVIL proxy behavioral outcomes](figures/release/option1_denevil_behavior_outcomes.svg)
+
+_This is the main DeNEVIL result surface: auditable behavioral categories from proxy traces, not benchmark-faithful accuracy._
+
+Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
+
 ## Latest Additional Model Sweep
 
-The May 13 additional-model sweep tests older or smaller OpenRouter routes on `UniMoral` and `CCD-Bench` to check whether they produce a different pattern from the main model matrix. Full tables and provenance are in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/).
+The May 13 additional-model sweep tests older or smaller OpenRouter routes on `UniMoral` and `CCD-Bench`; the May 16 OpenAI text-only reference sweep adds `gpt-4o-mini`, `gpt-5-nano`, `gpt-4.1-nano`, `gpt-5-mini`, and `gpt-4.1-mini` on `UniMoral`, `Value Kaleidoscope`, and `CCD-Bench`. Full May 13 tables and provenance are in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/); the OpenAI rows are integrated into the release comparison and CCD tables.
 
 **Model-wise:** Mistral Nemo is the top UniMoral line at 0.648, but Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B are close behind from 0.632 to 0.640. Llama 3.2 1B is the clear weak line at 0.406, with a lower answer rate as well.
 
 **Benchmark-wise:** UniMoral gives a clear performance separation between the very small 1B route and the stronger 7B-12B cluster. CCD-Bench gives a style/concentration readout rather than a correctness score: all models peak on Nordic Europe, but Llama 3.2 1B is most diffuse (15.9% dominant share; 9.12 effective clusters), while Mistral Nemo is most concentrated (25.3%; 7.22 effective clusters).
 
+**OpenAI reference add-on:** `GPT-4.1 mini` is the strongest OpenAI UniMoral line at 0.679, while `GPT-5 mini` is the strongest OpenAI Value Kaleidoscope line at 0.739. These rows are text-only references only: they intentionally omit SMID and DeNEVIL, and CCD-Bench is read as cultural-choice concentration rather than accuracy.
+
 **Scaling-wise:** There is no clean monotonic scaling law. The move from 1B to 7B+ matters a lot, but above that threshold the 7B-12B models cluster closely rather than improving smoothly with size. This looks more like a capability floor than a simple bigger-is-better trend.
 
-**Bottom line:** The additional sweep does not overturn the main release story. It adds one useful detail: very small models can fall off sharply, while several older or mid-sized instruction routes remain competitive on the selected text/style checks.
+**Bottom line:** The additional sweeps do not overturn the main release story. They add two useful details: very small models can fall off sharply, and the OpenAI text-only references are strong on text tasks but still cannot be promoted into all-around winners without SMID vision evidence.
 
 ![Additional model sweep UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg)
 
@@ -62,44 +102,6 @@ The release follows one consistent evaluation logic:
 3. `DeNEVIL` is reported as proxy behavioral evidence from released traces because local `MoralPrompt` scoring is unavailable; it is therefore excluded from macro-accuracy claims by design.
 4. Every public table, report, and SVG is regenerated from a tracked authoritative snapshot through one builder, so the repo publishes a coherent frozen release rather than a hand-edited dashboard.
 
-## Benchmark Result Visuals
-
-If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
-
-OpenAI Responses/Batch API text-only reference rows are shown in the comparable-accuracy and CCD figures. They are not treated as family-size scaling series, and they have no SMID or DeNEVIL rows.
-
-### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy
-
-![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
-
-_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
-
-### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling
-
-![Family scaling profile](figures/release/option1_family_scaling_profile.svg)
-
-_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
-
-### 3. CCD-Bench: cultural-cluster choice behavior
-
-![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)
-
-_This is the main CCD-Bench result: deviation from the 10% uniform baseline across the ten canonical cultural clusters._
-
-### 4. CCD-Bench: dominant-option concentration
-
-![CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)
-
-_This is the compact CCD-Bench summary: how much each line collapses onto one dominant cluster, and how broadly it still spreads across the option set._
-
-### 5. DeNEVIL: proxy behavioral outcomes
-
-![DeNEVIL proxy behavioral outcomes](figures/release/option1_denevil_behavior_outcomes.svg)
-
-_This is the main DeNEVIL result surface: auditable behavioral categories from proxy traces, not benchmark-faithful accuracy._
-
-Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
-
 ## Public Quickstart
 
 This repo has two distinct entrypoints:
@@ -123,9 +125,9 @@ This repo has two distinct entrypoints:
 | Cite the repo as a software artifact | [CITATION.cff](CITATION.cff) |
 | Understand how raw runs become public artifacts | [Data Flow](#data-flow) |
 | Go straight to the five benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |
-| Read the May 13 additional-model follow-up | [Latest Additional Model Sweep](#latest-additional-model-sweep) |
+| Read the additional model and OpenAI follow-up | [Latest Additional Model Sweep](#latest-additional-model-sweep) |
 | Jump straight to the live summary | [Results First](#results-first) |
-| Check the exact full-matrix status | [Family-Size Progress Matrix](#family-size-progress-matrix) |
+| Download the exact full-matrix status | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
 | Rebuild or verify the public package locally | [Reproducibility](#reproducibility) |
 
 ## Repository Layout
@@ -162,7 +164,7 @@ Every evaluation line in this repo is mapped onto a family-size slot and served 
 | `Llama` | **Text / Vision:** `llama-3.2-11b-vision-instruct` | **Text:** `llama-3.3-70b-instruct` | **Text / Vision:** `llama-4-maverick` | Text benchmarks on `S/M/L`; SMID on `S/L`. |
 | `Gemma` | **Text / Vision:** `gemma-3-4b-it` | **Text / Vision:** `gemma-3-12b-it` | **Text / Vision:** `gemma-3-27b-it` | Text benchmarks and SMID on `S/M/L`. |
 
-_Exact per-line status lives below in Results First and the Family-Size Progress Matrix._
+_Exact per-line status is summarized in Results First and saved as `family-size-progress.csv`._
 
 ## Data Flow
 
@@ -250,7 +252,7 @@ Metric definition version: `2026-04-30`. The visible-answer parsing rules behind
 | `Gemma-S` | 0.635 | 0.417 | 0.593 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Gemma-M` | 0.663 | 0.364 | 0.664 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Gemma-L` | 0.661 | 0.412 | 0.656 | Comparable on all three benchmark-faithful accuracy panels. |
-| `GPT4 only` | 0.673 | n/a | 0.701 | GPT4-only text reference marker; SMID and DeNEVIL intentionally not run. |
+| `GPT-4o mini` | 0.673 | n/a | 0.701 | GPT-4o mini text reference marker; SMID and DeNEVIL intentionally not run. |
 | `GPT-5 nano` | 0.654 | n/a | 0.617 | OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run. |
 | `GPT-4.1 nano` | 0.646 | n/a | 0.673 | OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run. |
 | `GPT-5 mini` | 0.678 | n/a | 0.739 | OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run. |
@@ -317,7 +319,7 @@ _The headline family-scaling figure already appears above in **Benchmark Result 
 | `DeepSeek` | The S/M/L text lines are now accuracy-comparable where text-only metrics exist, but no DeepSeek slot has a public SMID route. | UniMoral: S 0.661 -> M 0.684 -> L 0.563<br/>Value Kaleidoscope: S 0.695 -> M 0.635 -> L 0.681 | Read the DeepSeek size curve as text-only evidence: S and L now come from saved shard reruns, M remains the frozen closed-slice line, and all three still omit SMID. |
 | `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic. |
 | `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic. |
-| `GPT4 only` | Single text-only reference point, not a family-size scaling sweep. | UniMoral: Ref 0.673<br/>Value Kaleidoscope: Ref 0.701 | GPT4 only is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about GPT4 family scaling or vision-side SMID performance. |
+| `GPT-4o mini` | Single text-only reference point, not a family-size scaling sweep. | UniMoral: Ref 0.673<br/>Value Kaleidoscope: Ref 0.701 | GPT-4o mini is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about OpenAI family scaling or vision-side SMID performance. |
 
 ### CCD-Bench Choice Behavior
 
@@ -344,7 +346,7 @@ _The two headline CCD figures already appear above in **Benchmark Result Visuals
 | `Gemma-S` | option_6 (Nordic Europe) | 21.6% | 8.37 | Compare against the heatmap above, not as scalar accuracy. |
 | `Gemma-M` | option_6 (Nordic Europe) | 18.6% | 8.89 | Compare against the heatmap above, not as scalar accuracy. |
 | `Gemma-L` | option_6 (Nordic Europe) | 17.6% | 9.05 | Compare against the heatmap above, not as scalar accuracy. |
-| `GPT4 only` | option_6 (Nordic Europe) | 17.1% | 8.94 | Compare against the heatmap above, not as scalar accuracy. |
+| `GPT-4o mini` | option_6 (Nordic Europe) | 17.1% | 8.94 | Compare against the heatmap above, not as scalar accuracy. |
 | `GPT-5 nano` | option_6 (Nordic Europe) | 27.8% | 6.79 | Compare against the heatmap above, not as scalar accuracy. |
 | `GPT-4.1 nano` | option_6 (Nordic Europe) | 21.5% | 8.40 | Compare against the heatmap above, not as scalar accuracy. |
 | `GPT-5 mini` | option_6 (Nordic Europe) | 25.3% | 7.13 | Compare against the heatmap above, not as scalar accuracy. |
@@ -425,7 +427,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 
 ### Current Operations Highlights
 
-This compact block sits between the topline tables and the detailed progress matrix so the live state stays readable.
+This compact block keeps the live state readable without repeating the full family-size status table in the main README.
 
 - Active open-source reruns: none are currently shown in the published matrix.
 - Stalled or queued follow-up work: no published partial or queued follow-up line is waiting right now.
@@ -462,29 +464,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `TBD` | The family-size route is not frozen yet. |
 | `-` | No run is planned on that line right now. |
 
-## Family-Size Progress Matrix
-
-This is the main public status table for the current published matrix.
-
-| Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | Note |
-| :--- | :---: | :---: | :---: | :---: | :---: | --- |
-| `Qwen-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 line. |
-| `Qwen-M` | Done | TBD | Done | Done | Proxy | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
-| `Qwen-L` | Done | Done | Done | Done | Proxy | SMID recovery complete; clean text rerun finished locally. |
-| `MiniMax-S` | Done | Done | Done | Done | Proxy | Direct MiniMax-M2.1 text rerun complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route. |
-| `MiniMax-M` | Done | TBD | Done | Done | Proxy | Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
-| `MiniMax-L` | Done | Done | Done | Done | Proxy | Shared MiniMax-01 SMID recovery complete; the MiniMax-M2.5 text rerun is now fully persisted through the Denevil proxy task (100.0%). |
-| `DeepSeek-S` | Done | - | Done | Done | Proxy | No SMID route; May 9 no-thinking text rerun is complete and visible-answer validated. |
-| `DeepSeek-M` | Done | - | Done | Done | Proxy | Frozen medium text line; no SMID route was included. UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses. |
-| `DeepSeek-L` | Done | - | Done | Done | Proxy | No SMID route; large R1 text rerun is complete from saved shards with UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed. |
-| `Llama-S` | Done | Done | Done | Done | Proxy | Complete locally across all five papers. |
-| `Llama-M` | Done | - | Done | Done | Proxy | No SMID route; medium text line completed locally on April 22, 2026. |
-| `Llama-L` | Done | Done | Done | Done | Proxy | SMID complete; local text rerun is now fully persisted through the Denevil proxy task (100.0%). |
-| `Gemma-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 recovery line. |
-| `Gemma-M` | Done | Done | Done | Done | Proxy | Complete local line across all five papers. |
-| `Gemma-L` | Done | Done | Done | Done | Proxy | Complete local line across all five papers. |
-
-The same matrix is also saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv).
+Exact per-line family-size status is saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv); the README keeps the main surface focused on the visuals and interpretation.
 
 ## The Five Benchmark Papers
 

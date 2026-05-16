@@ -38,11 +38,11 @@
 <rect x="0" y="0" width="1280" height="1100" class="canvas"/>
 <rect x="24" y="24" width="1232" height="1052" rx="22" class="panel"/>
 <title>Family scaling profile by benchmark</title>
-<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. The legacy GPT4-only point is text-only, while the newer OpenAI Batch reference rows are read in the bar and CCD figures rather than as size curves. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
+<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. The GPT-4o mini point is text-only, while the newer OpenAI Batch reference rows are read in the bar and CCD figures rather than as size curves. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
 <text x="48" y="64" class="title">Family Scaling Profile</text>
 <text x="48" y="92" class="subtitle">Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.</text>
 <text x="48" y="114" class="subtitle">This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.</text>
-<text x="48" y="136" class="subtitle">The legacy GPT4-only marker is text-only; the newer OpenAI Batch rows are read in the bar and CCD figures, not as size curves.</text>
+<text x="48" y="136" class="subtitle">The GPT-4o mini marker is text-only; the newer OpenAI Batch rows are read in the bar and CCD figures, not as size curves.</text>
 <text x="48" y="158" class="subtitle">SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.</text>
 <text x="48" y="180" class="subtitle">Read CCD-Bench in the dedicated choice-distribution and concentration figures.</text>
 <text x="48" y="202" class="subtitle">Read Denevil in the dedicated behavioral-outcomes figure.</text>
@@ -123,7 +123,7 @@
 <circle cx="288.00" cy="336.20" r="4.2" fill="#0d9488"/>
 <circle cx="398.00" cy="333.91" r="8" fill="#ffffff" stroke="#111827" stroke-width="3.4"/>
 <circle cx="398.00" cy="333.91" r="4.2" fill="#111827"/>
-<text x="390.00" y="324.00" text-anchor="end" class="small">GPT4 only-Ref</text>
+<text x="390.00" y="324.00" text-anchor="end" class="small">GPT-4o mini</text>
 <text x="70" y="590" class="small">Dashed connectors skip missing size slots; no point means no public comparable score.</text>
 <rect x="452" y="248" width="382" height="356" rx="20" class="subpanel"/>
 <rect x="746" y="264" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
@@ -256,7 +256,7 @@
 <circle cx="1088.00" cy="339.96" r="4.2" fill="#0d9488"/>
 <circle cx="1198.00" cy="325.25" r="8" fill="#ffffff" stroke="#111827" stroke-width="3.4"/>
 <circle cx="1198.00" cy="325.25" r="4.2" fill="#111827"/>
-<text x="1190.00" y="324.00" text-anchor="end" class="small">GPT4 only-Ref</text>
+<text x="1190.00" y="324.00" text-anchor="end" class="small">GPT-4o mini</text>
 <text x="870" y="590" class="small">Dashed connectors skip missing size slots; no point means no public comparable score.</text>
 <rect x="48" y="644" width="1184" height="360" rx="18" class="legend-card"/>
 <text x="72" y="670" class="tiny">HOW TO READ THIS FIGURE</text>
@@ -281,7 +281,7 @@
 <rect x="656" y="830" width="14" height="14" rx="4" fill="#8b5cf6"/>
 <text x="680" y="841" class="small">Gemma: full S/M/L scored sweep.</text>
 <rect x="656" y="860" width="14" height="14" rx="4" fill="#111827"/>
-<text x="680" y="871" class="small">GPT4 only: GPT4-only reference point; no GPT4 S/M/L or SMID route is claimed.</text>
+<text x="680" y="871" class="small">GPT-4o mini: text-only reference point; no OpenAI S/M/L or SMID route is claimed.</text>
 <text x="656" y="910" class="tiny">EVIDENCE BOUNDARY</text>
 <text x="656" y="936" class="body">This figure stops at the three accuracy-comparable benchmarks.</text>
 <text x="656" y="964" class="body">That avoids mixing comparable accuracy with coverage or proxy evidence.</text>

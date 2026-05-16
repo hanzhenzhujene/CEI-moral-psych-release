@@ -460,12 +460,12 @@ def test_release_builder_emits_expected_files(tmp_path):
         )
     rows_by_line = {row["line_label"]: row for row in rows}
     expected_openai_references = {
-        "GPT4 only": {
-            "family": "GPT4 only",
+        "GPT-4o mini": {
+            "family": "GPT-4o mini",
             "route": "openai/gpt-4o-mini (Responses API + Batch API; text-only reference)",
             "unimoral_action_accuracy": "0.672700",
             "value_average_accuracy": "0.700698",
-            "comparison_note": "GPT4-only text reference marker; SMID and DeNEVIL intentionally not run.",
+            "comparison_note": "GPT-4o mini text reference marker; SMID and DeNEVIL intentionally not run.",
         },
         "GPT-5 nano": {
             "family": "OpenAI Batch refs",
@@ -656,8 +656,8 @@ def test_release_builder_emits_expected_files(tmp_path):
             assert all(row[f"option_{cluster_id}_pct"] == "n/a" for cluster_id in range(1, 11))
             assert all(row[f"option_{cluster_id}_delta_pp"] == "n/a" for cluster_id in range(1, 11))
     ccd_rows_by_line = {row["line_label"]: row for row in ccd_distribution_rows}
-    openai_ccd = ccd_rows_by_line["GPT4 only"]
-    assert openai_ccd["family"] == "GPT4 only"
+    openai_ccd = ccd_rows_by_line["GPT-4o mini"]
+    assert openai_ccd["family"] == "GPT-4o mini"
     assert openai_ccd["size_slot"] == "Ref"
     assert openai_ccd["valid_selection_count"] == "2182"
     assert openai_ccd["valid_selection_rate"] == "100.000000"
@@ -978,7 +978,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         reader = csv.DictReader(handle)
         scaling_rows = list(reader)
     assert tuple(row["family"] for row in scaling_rows) in {
-        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT4 only"),
+        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT-4o mini"),
         ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"),
         ("Qwen", "DeepSeek", "Llama", "Gemma"),
     }
@@ -1031,11 +1031,11 @@ def test_release_builder_emits_expected_files(tmp_path):
         for row in scaling_rows
     )
     assert any(
-        row["family"] == "GPT4 only"
+        row["family"] == "GPT-4o mini"
         and "Single text-only reference point" in row["evidence_scope"]
         and "UniMoral: Ref 0.673" in row["numeric_pattern"]
         and "Value Kaleidoscope: Ref 0.701" in row["numeric_pattern"]
-        and "not be read as evidence about GPT4 family scaling" in row["interpretation"]
+        and "not be read as evidence about OpenAI family scaling" in row["interpretation"]
         for row in scaling_rows
     )
 
@@ -1078,6 +1078,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "Strongest fully observed comparable line | `MiniMax-S` averages 0.611" in text
         assert "Strongest text-only comparable line | `GPT-5 mini` reaches UniMoral 0.678 and Value 0.739" in text
         assert "OpenAI text-only reference markers | 5 Batch API rows have 76,486/76,486 collected responses each" in text
+        assert "GPT-4o mini text reference marker" in text
         assert "Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route" in text
         assert "CCD-Bench should not be flattened into a universal accuracy number." in text
         assert "The repo still lacks a stable local `MoralPrompt` export" in text
@@ -1138,7 +1139,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "## Supporting Figures" not in report_text
     assert "option1_family_size_progress_overview.svg" not in report_text
     assert "![Coverage matrix]" not in report_text
-    assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" in report_text
+    assert "## Full Family-Size Progress Matrix" not in report_text
+    assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" not in report_text
 
     assert "## Local Expansion Checkpoint" in release_readme
     assert "| `Next queued text lines` |" in release_readme
@@ -1170,6 +1172,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "denevil-behavior-summary.csv" in release_readme
     assert "denevil-prompt-family-breakdown.csv" in release_readme
     assert "denevil-proxy-examples.csv" in release_readme
+    assert "## Family-Size Progress Matrix" not in release_readme
+    assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" not in release_readme
 
     assert "## TL;DR" in topline_summary
     assert "## Frozen Snapshot Scope" in topline_summary
@@ -1195,9 +1199,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Qwen-S" in heatmap_svg
 
     benchmark_bar_svg = (figure_dir / "option1_benchmark_accuracy_bars.svg").read_text(encoding="utf-8")
-    assert "no current result for this benchmark" in benchmark_bar_svg
+    assert "SMID panel omits rows with no public vision route" in benchmark_bar_svg
+    assert "no SMID vision route" not in benchmark_bar_svg
     assert "Gemma-L" in benchmark_bar_svg
-    assert "withdrawn from direct comparison" in benchmark_bar_svg
+    assert "GPT-4o mini" in benchmark_bar_svg
 
     benchmark_difficulty_svg = (figure_dir / "option1_benchmark_difficulty_profile.svg").read_text(encoding="utf-8")
     assert "Benchmark Difficulty And Spread" in benchmark_difficulty_svg

@@ -71,7 +71,7 @@
 <text x="107.00" y="825.00" text-anchor="middle" class="label">Gemma</text>
 <line x1="48" y1="744.00" x2="1632" y2="744.00" class="baseline"/>
 <rect x="48" y="892" width="118" height="40" rx="18" fill="#d9dadc" stroke="#111827" stroke-width="1.2"/>
-<text x="107.00" y="917.00" text-anchor="middle" class="label">GPT4 only</text>
+<text x="107.00" y="917.00" text-anchor="middle" class="label">GPT-4o mini</text>
 <line x1="48" y1="882.00" x2="1632" y2="882.00" class="baseline"/>
 <rect x="48" y="938" width="118" height="178" rx="18" fill="#dee1e4" stroke="#334155" stroke-width="1.2"/>
 <text x="107.00" y="1032.00" text-anchor="middle" class="label">OpenAI Batch refs</text>
@@ -198,7 +198,7 @@
 <text x="1162" y="882.00" class="small">effective clusters 9.05</text>
 <rect x="184" y="902" width="56" height="20" rx="12" fill="#111827"/>
 <text x="212.00" y="917.00" text-anchor="middle" class="celltext">Ref</text>
-<text x="258" y="917.00" class="label">GPT4 only</text>
+<text x="258" y="917.00" class="label">GPT-4o mini</text>
 <rect x="420" y="898" width="720" height="28" rx="10" class="muted-bar"/>
 <rect x="420" y="898" width="123.08" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
 <text x="533.08" y="917.00" text-anchor="end" class="celltext">17.1%</text>
