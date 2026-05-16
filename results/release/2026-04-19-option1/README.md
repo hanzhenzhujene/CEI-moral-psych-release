@@ -13,7 +13,7 @@ If you only read one section, read these key takeaways:
 
 - **Best like-for-like line:** `MiniMax-S` is the strongest fully comparable line, averaging 0.611 across UniMoral 0.661, SMID 0.432, and Value 0.740. This is the cleanest overall topline because all three comparable metrics are observed on the same line.
 - **Best text-only line:** `MiniMax-M` is the strongest pure text line, reaching UniMoral 0.659 and Value 0.740. It should not be called the best all-around line because there is no public SMID route on that line.
-- **OpenAI reference line:** `OpenAI-Ref` (`gpt-4o-mini`) is added as a single text-only reference point with 76,486/76,486 parsed prompts: UniMoral 0.673, Value 0.701, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`.
+- **GPT4-only reference line:** `GPT4 only` is added as a single text-only reference point with 76,486/76,486 parsed prompts: UniMoral 0.673, Value 0.701, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`.
 - **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.364) and widest spread (0.285), while `UniMoral` is tightly clustered (0.121 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
 - **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
 - **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `Llama-S` at 23.9%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
@@ -25,7 +25,7 @@ If you only read one section, read these key takeaways:
 
 If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
 
-`OpenAI-Ref` is shown as a single `gpt-4o-mini` text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as an OpenAI S/M/L scaling series, and it has no SMID or DeNEVIL row.
+`GPT4 only` is shown as a single text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as a GPT4 S/M/L scaling series, and it has no SMID or DeNEVIL row.
 
 ### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy
 
@@ -57,7 +57,7 @@ _This is the compact CCD-Bench summary: how much each line collapses onto one do
 
 _This is the main DeNEVIL result surface: auditable behavioral categories from proxy traces, not benchmark-faithful accuracy._
 
-Secondary benchmark-specific visuals still appear later in the deliverable, including the benchmark difficulty profile, the DeNEVIL prompt-family heatmap, and the appendix QA / provenance figures.
+Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
 
 ## Results First
 
@@ -80,14 +80,6 @@ This is the fastest way to read the deliverable: which lines already have usable
 | `MiniMax-M` | Complete local text line | Done | Clean MiniMax-M2.5 text/proxy benchmarks complete; no medium SMID route fixed yet. | Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
 | `MiniMax-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) using MiniMax-M2.5 text plus the shared MiniMax-01 SMID recovery route | The direct-provider MiniMax rerun finished successfully through the Denevil proxy task. |
 | `MiniMax-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | MiniMax-S now uses the clean direct MiniMax-M2.1 text rerun plus the completed MiniMax-01 SMID recovery route. |
-
-### Latest Family-Size Progress Snapshot
-
-This stacked overview is the quickest visual read on the current published family-size matrix.
-
-![Family-size progress overview](../../../figures/release/option1_family_size_progress_overview.svg)
-
-_Latest family-size progress overview. Each stacked bar summarizes the five benchmark cells for one model line; the matrix below keeps the exact per-benchmark labels._
 
 ### Current Comparable Accuracy Snapshot
 
@@ -112,7 +104,7 @@ Metric definition version: `2026-04-30`. The visible-answer parsing rules behind
 | `Gemma-S` | 0.635 | 0.417 | 0.593 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Gemma-M` | 0.663 | 0.364 | 0.664 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Gemma-L` | 0.661 | 0.412 | 0.656 | Comparable on all three benchmark-faithful accuracy panels. |
-| `OpenAI-Ref` | 0.673 | n/a | 0.701 | OpenAI text-only reference marker; SMID and DeNEVIL intentionally not run. |
+| `GPT4 only` | 0.673 | n/a | 0.701 | GPT4-only text reference marker; SMID and DeNEVIL intentionally not run. |
 
 _The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._
 
@@ -135,10 +127,10 @@ These are the strongest claims the current public evidence supports. They use on
 | --- | --- | --- |
 | Strongest fully observed comparable line | `MiniMax-S` averages 0.611 across UniMoral 0.661, SMID 0.432, and Value 0.740. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |
 | Strongest text-only comparable line | `MiniMax-M` reaches UniMoral 0.659 and Value 0.740, a two-metric mean of 0.699. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |
-| OpenAI reference marker | `OpenAI-Ref` (`gpt-4o-mini`) parses 76,486/76,486 prompts, reaches UniMoral 0.673 and Value 0.701; CCD-Bench valid-choice coverage is 100.0%. | This is a useful external text-only reference, but it is not an OpenAI size-series claim and has no SMID / DeNEVIL evidence in this release. |
+| GPT4-only reference marker | `GPT4 only` parses 76,486/76,486 prompts, reaches UniMoral 0.673 and Value 0.701; CCD-Bench valid-choice coverage is 100.0%. | This is a useful external text-only reference, but it is not a GPT4 size-series claim and has no SMID / DeNEVIL evidence in this release. |
 | Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.364 and the widest spread at 0.285. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |
 | Closest thing to saturation | `UniMoral` has the tightest range, from 0.563 to 0.684 (0.121 spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |
-| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. `OpenAI-Ref` is a single reference point and is excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
+| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. `GPT4 only` is a single reference point and is excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
 
 ### Benchmark Reading Guide
 
@@ -175,7 +167,7 @@ _The headline family-scaling figure already appears above in **Benchmark Result 
 | `DeepSeek` | The S/M/L text lines are now accuracy-comparable where text-only metrics exist, but no DeepSeek slot has a public SMID route. | UniMoral: S 0.661 -> M 0.684 -> L 0.563<br/>Value Kaleidoscope: S 0.695 -> M 0.635 -> L 0.681 | Read the DeepSeek size curve as text-only evidence: S and L now come from saved shard reruns, M remains the frozen closed-slice line, and all three still omit SMID. |
 | `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic. |
 | `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic. |
-| `OpenAI` | Single text-only reference point, not a family-size scaling sweep. | UniMoral: Ref 0.673<br/>Value Kaleidoscope: Ref 0.701 | GPT-4o-mini is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about OpenAI size scaling or vision-side SMID performance. |
+| `GPT4 only` | Single text-only reference point, not a family-size scaling sweep. | UniMoral: Ref 0.673<br/>Value Kaleidoscope: Ref 0.701 | GPT4 only is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about GPT4 family scaling or vision-side SMID performance. |
 
 ### CCD-Bench Choice Behavior
 
@@ -183,13 +175,7 @@ CCD-Bench should not be flattened into a universal accuracy number. The paper as
 
 CCD option order follows the paper's canonical cluster IDs: 1 = Anglo; 2 = Eastern Europe; 3 = Latin America; 4 = Latin Europe; 5 = Confucian Asia; 6 = Nordic Europe; 7 = Sub Saharan Africa; 8 = Southern Asia; 9 = Germanic Europe; 10 = Middle East.
 
-_The two headline CCD figures already appear above in **Benchmark Result Visuals**. They remain the main result surfaces; the appendix coverage figure and compact table below provide QA context and inline numeric support without duplicating the same graphics._
-
-![CCD valid-choice coverage](../../../figures/release/option1_ccd_valid_choice_coverage.svg)
-
-_Figure 7. Appendix QA only. `CCD-Bench` valid-choice coverage = (# saved visible answers with a parseable 1-10 choice) / (# all CCD-Bench prompts). This figure is kept for provenance and parser auditing, not as the headline CCD result._
-
-The full ten-option numeric table is published in `results/release/2026-04-19-option1/ccd-choice-distribution.csv`; the compact table below keeps the most PI-facing CCD readouts inline without turning coverage into the headline claim.
+_The two headline CCD figures already appear above in **Benchmark Result Visuals**. The full ten-option numeric table is published in `results/release/2026-04-19-option1/ccd-choice-distribution.csv`; the compact table below keeps the most PI-facing CCD readouts inline without turning parser coverage into the headline claim._
 
 | Line | Dominant cluster | Top-cluster share | Effective clusters | Behavioral note |
 | --- | --- | ---: | ---: | --- |
@@ -208,7 +194,7 @@ The full ten-option numeric table is published in `results/release/2026-04-19-op
 | `Gemma-S` | option_6 (Nordic Europe) | 21.6% | 8.37 | Compare against the heatmap above, not as scalar accuracy. |
 | `Gemma-M` | option_6 (Nordic Europe) | 18.6% | 8.89 | Compare against the heatmap above, not as scalar accuracy. |
 | `Gemma-L` | option_6 (Nordic Europe) | 17.6% | 9.05 | Compare against the heatmap above, not as scalar accuracy. |
-| `OpenAI-Ref` | option_6 (Nordic Europe) | 17.1% | 8.94 | Compare against the heatmap above, not as scalar accuracy. |
+| `GPT4 only` | option_6 (Nordic Europe) | 17.1% | 8.94 | Compare against the heatmap above, not as scalar accuracy. |
 
 ### DeNEVIL Proxy Behavioral Evidence
 
@@ -216,15 +202,11 @@ The full ten-option numeric table is published in `results/release/2026-04-19-op
 
 The repo still lacks a stable local `MoralPrompt` export, so paper-aligned APV / EVR / MVP are `n/a` in this public package. Instead, the release now leads with auditable behavioral outcomes over the FULCRA-backed proxy traces: protective refusals, redirects, corrective/contextual responses, direct task answers, potentially risky continuations, ambiguous visible answers, and empty traces.
 
-The main DeNEVIL result surface is now the visible-behavior mix across the full released proxy archive. A secondary prompt-family heatmap asks how often safety-salient prompt families receive visibly protective responses. Route/model provenance, sample volume, completion state, timestamps, and visible-response coverage are still exported, but they now live in the appendix QA figures rather than the headline result story.
+The main DeNEVIL result surface is the visible-behavior mix across the full released proxy archive. Route/model provenance, sample volume, completion state, timestamps, and visible-response coverage are still exported in CSV/SVG artifacts, but they are not repeated in the README because they are QA/provenance rather than the audience-facing result story.
 
-_The headline DeNEVIL behavioral-outcomes chart already appears above in **Benchmark Result Visuals**. This section keeps the explanatory framing, the secondary prompt-family breakdown, and the appendix provenance surfaces without re-embedding the same main chart._
+_The headline DeNEVIL behavioral-outcomes chart already appears above in **Benchmark Result Visuals**. This section keeps the explanatory framing and compact line-level behavior table without re-embedding low-level QA charts._
 
-![DeNEVIL prompt-family heatmap](../../../figures/release/option1_denevil_prompt_family_heatmap.svg)
-
-_Figure 9. Secondary DeNEVIL breakdown. For the safety-salient proxy prompt families only, each cell shows the rate of visibly protective behavior (refusal, redirect, or corrective/contextual response). Prompt-family labels are heuristic and derived from the released source dialogue._
-
-The compact behavior table below is the quickest line-level read. Use it before dropping into the appendix provenance figures.
+The compact behavior table below is the quickest line-level read.
 
 | Line | Refusal | Redirect | Corrective/contextual | Direct answer | Risky continuation | Ambiguous | Empty | Dominant behavior |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
@@ -244,45 +226,7 @@ The compact behavior table below is the quickest line-level read. Use it before 
 | `Gemma-M` | 43.3% | 4.1% | 44.9% | 0.0% | 0.0% | 7.6% | 0.0% | Corrective / contextual response |
 | `Gemma-L` | 40.4% | 8.9% | 49.0% | 0.0% | 0.1% | 1.6% | 0.0% | Corrective / contextual response |
 
-### DeNEVIL Appendix QA / Provenance
-
-These appendix artifacts stay public because a PI still needs to inspect what actually ran: route provenance, timestamps, sample volume, visible-response coverage, and a safe example table. They are intentionally no longer the headline DeNEVIL result surfaces.
-
-![Denevil proxy status matrix](../../../figures/release/option1_denevil_proxy_status_matrix.svg)
-
-_Figure 10. Appendix QA only. PI-facing proxy status matrix with route / model provenance, timestamps, sample counts, visible-response coverage, and concise limitation notes._
-
-![Denevil proxy sample volume](../../../figures/release/option1_denevil_proxy_sample_volume.svg)
-
-_Figure 11. Appendix QA only. Sample-volume view of the released DeNEVIL proxy archive._
-
-![Denevil proxy valid-response rate](../../../figures/release/option1_denevil_proxy_valid_response_rate.svg)
-
-_Figure 12. Appendix QA only. Visible-response coverage chart retained for provenance and debugging, not as the main DeNEVIL result._
-
-![Denevil proxy pipeline](../../../figures/release/option1_denevil_proxy_pipeline.svg)
-
-_Figure 13. Public contract for the proxy package: paper goal -> local limitation -> FULCRA-backed proxy path -> generated traces -> provenance deliverable rather than benchmark-faithful accuracy._
-
-The appendix table below records the available QA/provenance fields explicitly.
-
-| Line | Proxy status | Total proxy samples | Visible generated responses | Valid visible response rate | Proxy route | Note |
-| --- | --- | ---: | ---: | ---: | --- | --- |
-| `Qwen-S` | Proxy complete | 20,518 | 20,515 / 20,518 | 100.0% | `qwen3-8b` | Near-complete archive; 3 prompts lacked visible saved text. |
-| `Qwen-M` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `qwen3-14b` | Visible text surfaced for every proxy prompt. |
-| `Qwen-L` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `qwen3-32b` | Visible text surfaced for every proxy prompt. |
-| `MiniMax-S` | Proxy complete | 20,518 | 20,516 / 20,518 | 100.0% | `MiniMax-M2.1` | Near-complete archive; 2 prompts lacked visible saved text. |
-| `MiniMax-M` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `MiniMax-M2.5` | Visible text surfaced for every proxy prompt. |
-| `MiniMax-L` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `MiniMax-M2.5` | Visible text surfaced for every proxy prompt. |
-| `DeepSeek-S` | Proxy complete | 20,518 | 20,474 / 20,518 | 99.8% | `deepseek-r1-distill-llama-70b` | Near-complete archive; 44 prompts lacked visible saved text. |
-| `DeepSeek-M` | Proxy complete | 20,518 | 20,514 / 20,518 | 100.0% | `deepseek-chat-v3.1` | Near-complete archive; 4 prompts lacked visible saved text. |
-| `DeepSeek-L` | Proxy complete | 20,518 | 20,331 / 20,518 | 99.1% | `deepseek-r1` | Near-complete archive; 187 prompts lacked visible saved text. |
-| `Llama-S` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `llama-3.2-11b-vision-instruct` | Visible text surfaced for every proxy prompt. |
-| `Llama-M` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `llama-3.3-70b-instruct` | Visible text surfaced for every proxy prompt. |
-| `Llama-L` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `llama-4-maverick` | Visible text surfaced for every proxy prompt. |
-| `Gemma-S` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `gemma-3-4b-it` | Visible text surfaced for every proxy prompt. |
-| `Gemma-M` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `gemma-3-12b-it` | Visible text surfaced for every proxy prompt. |
-| `Gemma-L` | Proxy complete | 20,518 | 20,518 / 20,518 | 100.0% | `gemma-3-27b-it` | Visible text surfaced for every proxy prompt. |
+Low-level DeNEVIL QA/provenance artifacts remain exported in the release folder for audit, but the README does not embed the status, sample-volume, or visible-response-rate charts.
 
 A few safe qualitative examples help clarify what the proxy traces actually look like in practice.
 
@@ -300,7 +244,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 - Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.
 - Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%`, and `Denevil visible proxy coverage = 99.8%`. These are parser/proxy coverage checks, not CCD or Denevil accuracy.
 - Do not call `MiniMax-M` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
-- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and `OpenAI-Ref` is only a single text-reference marker.
+- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and `GPT4 only` is only a single text-reference marker.
 - Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.
 - Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.
 
@@ -387,23 +331,12 @@ This checkpoint summarizes the broader family-size expansion separately from the
 
 ### Figures
 
-- [family-size progress overview](../../../figures/release/option1_family_size_progress_overview.svg): latest line-level status across the current published matrix
 - [grouped bar chart](../../../figures/release/option1_benchmark_accuracy_bars.svg): current cross-model benchmark comparison
 - [benchmark difficulty profile](../../../figures/release/option1_benchmark_difficulty_profile.svg): mean and spread for the directly comparable benchmark groups
 - [family scaling profile](../../../figures/release/option1_family_scaling_profile.svg): family-size scaling across the three directly comparable accuracy benchmarks only
-- [CCD valid-choice coverage](../../../figures/release/option1_ccd_valid_choice_coverage.svg): horizontal bar chart showing which lines surfaced a parseable visible CCD choice at all
 - [CCD choice heatmap](../../../figures/release/option1_ccd_choice_distribution.svg): main CCD-Bench result showing deviation from the 10% uniform baseline across the ten canonical clusters
 - [CCD concentration summary](../../../figures/release/option1_ccd_dominant_option_share.svg): dominant-cluster share plus effective-cluster count
-- [CCD valid-choice coverage (appendix QA)](../../../figures/release/option1_ccd_valid_choice_coverage.svg): parseable visible 1-10 choice coverage by model line, not a headline result
 - [DeNEVIL behavioral outcomes](../../../figures/release/option1_denevil_behavior_outcomes.svg): main proxy-result view showing visible behavior categories by model line
-- [DeNEVIL prompt-family heatmap](../../../figures/release/option1_denevil_prompt_family_heatmap.svg): secondary breakdown of protective-response rate on safety-salient proxy prompt families
-- [DeNEVIL proxy status matrix (appendix QA)](../../../figures/release/option1_denevil_proxy_status_matrix.svg): route / model provenance, timestamps, sample counts, and notes
-- [DeNEVIL proxy sample volume (appendix QA)](../../../figures/release/option1_denevil_proxy_sample_volume.svg): total proxy prompt archive versus visible generated-response count for each released line
-- [DeNEVIL visible-response coverage (appendix QA)](../../../figures/release/option1_denevil_proxy_valid_response_rate.svg): visible-response coverage retained for provenance and debugging
-- [DeNEVIL proxy pipeline](../../../figures/release/option1_denevil_proxy_pipeline.svg): one-slide explanation of why the public DeNEVIL package is proxy-only evidence rather than accuracy
-- [accuracy heatmap](../../../figures/release/option1_accuracy_heatmap.svg): task-level view of comparable metrics
-- [coverage matrix](../../../figures/release/option1_coverage_matrix.svg): frozen Option 1 coverage only
-- [sample volume chart](../../../figures/release/option1_sample_volume.svg): where the evaluated samples are concentrated
 
 ## Status Key
 
@@ -449,41 +382,6 @@ This is the cleanest public-facing summary of the current published matrix.
 | `Value Kaleidoscope` | [Sorensen et al. (AAAI 2024 / arXiv 2023)](https://arxiv.org/abs/2309.00779) | [Hugging Face dataset card](https://huggingface.co/datasets/allenai/ValuePrism) | Text value reasoning | Relevance + valence |
 | `CCD-Bench` | [Rahman and Salam (arXiv 2025)](https://arxiv.org/abs/2510.03553) | [GitHub repo](https://github.com/smartlab-nyu/CCD-Bench); [JSON](https://raw.githubusercontent.com/smartlab-nyu/CCD-Bench/main/datasets/CCD-Bench.json) | Text response selection | Selection |
 | `Denevil` | [Duan et al. (ICLR 2024 / arXiv 2023)](https://arxiv.org/abs/2310.11053) | No public MoralPrompt export confirmed | Text generation | Proxy generation only |
-
-## Supporting Figures
-
-Figures 1 through 13 are already embedded above in context; this gallery keeps the full set together without repeating the surrounding interpretation text.
-
-| Figure | Why it matters | File |
-| --- | --- | --- |
-| Figure 1 | Latest line-level progress across the current published family-size matrix. | [option1_family_size_progress_overview.svg](../../../figures/release/option1_family_size_progress_overview.svg) |
-| Figure 2 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | [option1_benchmark_accuracy_bars.svg](../../../figures/release/option1_benchmark_accuracy_bars.svg) |
-| Figure 3 | Benchmark-level difficulty and spread across the current comparable slice. | [option1_benchmark_difficulty_profile.svg](../../../figures/release/option1_benchmark_difficulty_profile.svg) |
-| Figure 4 | Family-size scaling view for the three directly comparable accuracy benchmarks only. | [option1_family_scaling_profile.svg](../../../figures/release/option1_family_scaling_profile.svg) |
-| Figure 5 | Main CCD-Bench result: canonical cultural-cluster heatmap showing deviation from the 10% uniform baseline. | [option1_ccd_choice_distribution.svg](../../../figures/release/option1_ccd_choice_distribution.svg) |
-| Figure 6 | Compact CCD concentration summary: dominant-cluster share plus effective-cluster count. | [option1_ccd_dominant_option_share.svg](../../../figures/release/option1_ccd_dominant_option_share.svg) |
-| Figure 7 | Appendix QA for CCD only: parseable visible 1-10 choice coverage by model line. | [option1_ccd_valid_choice_coverage.svg](../../../figures/release/option1_ccd_valid_choice_coverage.svg) |
-| Figure 8 | Main DeNEVIL proxy result: visible-behavior outcome mix by model line. | [option1_denevil_behavior_outcomes.svg](../../../figures/release/option1_denevil_behavior_outcomes.svg) |
-| Figure 9 | Secondary DeNEVIL breakdown: protective-response rate by heuristic prompt family. | [option1_denevil_prompt_family_heatmap.svg](../../../figures/release/option1_denevil_prompt_family_heatmap.svg) |
-| Figure 10 | Appendix QA only: DeNEVIL proxy status matrix with route/model provenance and timestamps. | [option1_denevil_proxy_status_matrix.svg](../../../figures/release/option1_denevil_proxy_status_matrix.svg) |
-| Figure 11 | Appendix QA only: DeNEVIL proxy sample volume. | [option1_denevil_proxy_sample_volume.svg](../../../figures/release/option1_denevil_proxy_sample_volume.svg) |
-| Figure 12 | Appendix QA only: DeNEVIL visible-response coverage by model line. | [option1_denevil_proxy_valid_response_rate.svg](../../../figures/release/option1_denevil_proxy_valid_response_rate.svg) |
-| Figure 13 | Proxy pipeline diagram showing why the released DeNEVIL package is evidence/provenance rather than paper-faithful accuracy. | [option1_denevil_proxy_pipeline.svg](../../../figures/release/option1_denevil_proxy_pipeline.svg) |
-| Figure 14 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | [option1_accuracy_heatmap.svg](../../../figures/release/option1_accuracy_heatmap.svg) |
-| Figure 15 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | [option1_coverage_matrix.svg](../../../figures/release/option1_coverage_matrix.svg) |
-| Figure 16 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | [option1_sample_volume.svg](../../../figures/release/option1_sample_volume.svg) |
-
-![Accuracy heatmap](../../../figures/release/option1_accuracy_heatmap.svg)
-
-_Figure 14. Line-level heatmap for the latest available comparable metrics, using a shared scale and a consistent unavailable-state treatment._
-
-![Coverage matrix](../../../figures/release/option1_coverage_matrix.svg)
-
-_Figure 15. Coverage matrix showing which benchmark lines are paper-setup, proxy-only, or absent from the frozen release._
-
-![Sample volume by benchmark](../../../figures/release/option1_sample_volume.svg)
-
-_Figure 16. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._
 
 ## Frozen Option 1 Model Summary
 

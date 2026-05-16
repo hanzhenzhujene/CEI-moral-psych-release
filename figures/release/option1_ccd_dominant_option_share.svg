@@ -41,7 +41,7 @@
 <desc>Secondary CCD result. Compact CCD-Bench comparison showing how concentrated each line's valid visible selections are on its most frequent canonical cluster. Bars show dominant-cluster share; right-hand labels add effective-cluster count. This is a concentration summary, not accuracy.</desc>
 <text x="48" y="64" class="title">CCD-Bench choice-concentration summary, not accuracy</text>
 <text x="48" y="88" class="subtitle">Bars show the dominant-cluster share among valid visible CCD selections; the right-hand label adds the effective number of clusters implied by that same distribution.</text>
-<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L; OpenAI-Ref is shown only as a one-off reference row. Higher bars mean more concentration on one cluster.</text>
+<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT4 only is shown only as a one-off reference row. Higher bars mean more concentration on one cluster.</text>
 <text x="107.00" y="190" text-anchor="middle" class="tiny">FAMILY</text>
 <text x="212.00" y="190" text-anchor="middle" class="tiny">SIZE</text>
 <text x="258" y="190" class="tiny">MODEL LINE</text>
@@ -71,7 +71,7 @@
 <text x="107.00" y="825.00" text-anchor="middle" class="label">Gemma</text>
 <line x1="48" y1="744.00" x2="1632" y2="744.00" class="baseline"/>
 <rect x="48" y="892" width="118" height="40" rx="18" fill="#d9dadc" stroke="#111827" stroke-width="1.2"/>
-<text x="107.00" y="917.00" text-anchor="middle" class="label">OpenAI</text>
+<text x="107.00" y="917.00" text-anchor="middle" class="label">GPT4 only</text>
 <line x1="48" y1="882.00" x2="1632" y2="882.00" class="baseline"/>
 <rect x="184" y="212" width="56" height="20" rx="12" fill="#0f766e"/>
 <text x="212.00" y="227.00" text-anchor="middle" class="celltext">S</text>
@@ -195,7 +195,7 @@
 <text x="1162" y="882.00" class="small">effective clusters 9.05</text>
 <rect x="184" y="902" width="56" height="20" rx="12" fill="#111827"/>
 <text x="212.00" y="917.00" text-anchor="middle" class="celltext">Ref</text>
-<text x="258" y="917.00" class="label">OpenAI-Ref</text>
+<text x="258" y="917.00" class="label">GPT4 only</text>
 <rect x="420" y="898" width="720" height="28" rx="10" class="muted-bar"/>
 <rect x="420" y="898" width="123.08" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
 <text x="533.08" y="917.00" text-anchor="end" class="celltext">17.1%</text>

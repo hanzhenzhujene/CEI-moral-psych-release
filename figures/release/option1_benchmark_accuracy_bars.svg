@@ -132,7 +132,7 @@
 <rect x="280" y="798" width="528.87" height="28" rx="10" fill="#c4b5fd"/>
 <text x="818.87" y="817" text-anchor="start" class="label">66.1%</text>
 <rect x="122" y="845" width="10" height="10" rx="3" fill="#111827"/>
-<text x="138" y="859" text-anchor="end" class="label">OpenAI-Ref</text>
+<text x="138" y="859" text-anchor="end" class="label">GPT4 only</text>
 <rect x="280" y="840" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="840" width="538.16" height="28" rx="10" fill="#111827"/>
 <text x="828.16" y="859" text-anchor="start" class="label">67.3%</text>
@@ -232,7 +232,7 @@
 <rect x="280" y="1582" width="329.82" height="28" rx="10" fill="#c4b5fd"/>
 <text x="619.82" y="1601" text-anchor="start" class="label">41.2%</text>
 <rect x="122" y="1629" width="10" height="10" rx="3" fill="#111827"/>
-<text x="138" y="1643" text-anchor="end" class="label">OpenAI-Ref</text>
+<text x="138" y="1643" text-anchor="end" class="label">GPT4 only</text>
 <rect x="280" y="1624" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1624" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="1624" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
@@ -327,7 +327,7 @@
 <rect x="280" y="2366" width="524.79" height="28" rx="10" fill="#c4b5fd"/>
 <text x="814.79" y="2385" text-anchor="start" class="label">65.6%</text>
 <rect x="122" y="2413" width="10" height="10" rx="3" fill="#111827"/>
-<text x="138" y="2427" text-anchor="end" class="label">OpenAI-Ref</text>
+<text x="138" y="2427" text-anchor="end" class="label">GPT4 only</text>
 <rect x="280" y="2408" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="2408" width="560.56" height="28" rx="10" fill="#111827"/>
 <text x="850.56" y="2427" text-anchor="start" class="label">70.1%</text>

@@ -14,4 +14,4 @@ Llama-L,Llama,L,text: openrouter/meta-llama/llama-4-maverick; vision: openrouter
 Gemma-S,Gemma,S,openrouter/google/gemma-3-4b-it,0.635246,0.416865,0.592663,Comparable on all three benchmark-faithful accuracy panels.
 Gemma-M,Gemma,M,text: openrouter/google/gemma-3-12b-it; vision: openrouter/google/gemma-3-12b-it,0.662568,0.363652,0.663656,Comparable on all three benchmark-faithful accuracy panels.
 Gemma-L,Gemma,L,text: openrouter/google/gemma-3-27b-it; vision: openrouter/google/gemma-3-27b-it,0.661088,0.412275,0.655987,Comparable on all three benchmark-faithful accuracy panels.
-OpenAI-Ref,OpenAI,Ref,openai/gpt-4o-mini (Responses API + Batch API; text-only reference),0.672700,,0.700698,OpenAI text-only reference marker; SMID and DeNEVIL intentionally not run.
+GPT4 only,GPT4 only,Ref,openai/gpt-4o-mini (Responses API + Batch API; text-only reference),0.672700,,0.700698,GPT4-only text reference marker; SMID and DeNEVIL intentionally not run.

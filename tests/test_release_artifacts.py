@@ -131,7 +131,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
-    assert any("OpenAI-Ref" in item and "text-only reference marker" in item for item in manifest["interpretation_guardrails"])
+    assert any("GPT4 only" in item and "text-only reference marker" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
     assert manifest["report_metadata"]["current_total_cost"] == "$759.59"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
@@ -455,13 +455,13 @@ def test_release_builder_emits_expected_files(tmp_path):
             for row in minimax_large_rows
         )
     rows_by_line = {row["line_label"]: row for row in rows}
-    openai_reference = rows_by_line["OpenAI-Ref"]
-    assert openai_reference["family"] == "OpenAI"
+    openai_reference = rows_by_line["GPT4 only"]
+    assert openai_reference["family"] == "GPT4 only"
     assert openai_reference["size_slot"] == "Ref"
     assert openai_reference["unimoral_action_accuracy"] == "0.672700"
     assert openai_reference["smid_average_accuracy"] == ""
     assert openai_reference["value_average_accuracy"] == "0.700698"
-    assert openai_reference["comparison_note"] == "OpenAI text-only reference marker; SMID and DeNEVIL intentionally not run."
+    assert openai_reference["comparison_note"] == "GPT4-only text reference marker; SMID and DeNEVIL intentionally not run."
     assert rows_by_line["MiniMax-S"]["unimoral_action_accuracy"] == "0.660861"
     assert rows_by_line["MiniMax-S"]["smid_average_accuracy"] == "0.431996"
     assert rows_by_line["MiniMax-S"]["value_average_accuracy"] == "0.739942"
@@ -613,8 +613,8 @@ def test_release_builder_emits_expected_files(tmp_path):
             assert all(row[f"option_{cluster_id}_pct"] == "n/a" for cluster_id in range(1, 11))
             assert all(row[f"option_{cluster_id}_delta_pp"] == "n/a" for cluster_id in range(1, 11))
     ccd_rows_by_line = {row["line_label"]: row for row in ccd_distribution_rows}
-    openai_ccd = ccd_rows_by_line["OpenAI-Ref"]
-    assert openai_ccd["family"] == "OpenAI"
+    openai_ccd = ccd_rows_by_line["GPT4 only"]
+    assert openai_ccd["family"] == "GPT4 only"
     assert openai_ccd["size_slot"] == "Ref"
     assert openai_ccd["valid_selection_count"] == "2182"
     assert openai_ccd["valid_selection_rate"] == "100.000000"
@@ -895,7 +895,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         reader = csv.DictReader(handle)
         scaling_rows = list(reader)
     assert tuple(row["family"] for row in scaling_rows) in {
-        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "OpenAI"),
+        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT4 only"),
         ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"),
         ("Qwen", "DeepSeek", "Llama", "Gemma"),
     }
@@ -948,11 +948,11 @@ def test_release_builder_emits_expected_files(tmp_path):
         for row in scaling_rows
     )
     assert any(
-        row["family"] == "OpenAI"
+        row["family"] == "GPT4 only"
         and "Single text-only reference point" in row["evidence_scope"]
         and "UniMoral: Ref 0.673" in row["numeric_pattern"]
         and "Value Kaleidoscope: Ref 0.701" in row["numeric_pattern"]
-        and "not be read as evidence about OpenAI size scaling" in row["interpretation"]
+        and "not be read as evidence about GPT4 family scaling" in row["interpretation"]
         for row in scaling_rows
     )
 
@@ -984,10 +984,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "### Family Scaling Profile" in text
         assert "### CCD-Bench Choice Behavior" in text
         assert "### DeNEVIL Proxy Behavioral Evidence" in text
-        assert "### DeNEVIL Appendix QA / Provenance" in text
         assert "### Reporting Guardrails" in text
         assert "These benchmarks do not all ask for the same kind of moral competence" in text
-        assert "### Latest Family-Size Progress Snapshot" in text
+        assert "### Latest Family-Size Progress Snapshot" not in text
         assert "Metric definition version: `2026-04-30`." in text
         assert "### DeepSeek S/M/L Log-Derived Readout" in text
         assert "Valid text-only no-thinking rerun from saved May 9 logs" in text
@@ -1001,16 +1000,16 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "paper-aligned APV / EVR / MVP are `n/a`" in text
         assert "headline DeNEVIL behavioral-outcomes chart already appears above" in text
         assert "ccd-choice-distribution.csv" in text
-        assert "option1_ccd_valid_choice_coverage.svg" in text
         assert "option1_ccd_choice_distribution.svg" in text
         assert "option1_ccd_dominant_option_share.svg" in text
         assert "option1_denevil_behavior_outcomes.svg" in text
         assert "option1_family_scaling_profile.svg" in text
-        assert "option1_denevil_prompt_family_heatmap.svg" in text
-        assert "option1_denevil_proxy_status_matrix.svg" in text
-        assert "option1_denevil_proxy_sample_volume.svg" in text
-        assert "option1_denevil_proxy_valid_response_rate.svg" in text
-        assert "option1_denevil_proxy_pipeline.svg" in text
+        assert "option1_ccd_valid_choice_coverage.svg" not in text
+        assert "option1_denevil_prompt_family_heatmap.svg" not in text
+        assert "option1_denevil_proxy_status_matrix.svg" not in text
+        assert "option1_denevil_proxy_sample_volume.svg" not in text
+        assert "option1_denevil_proxy_valid_response_rate.svg" not in text
+        assert "option1_denevil_proxy_pipeline.svg" not in text
         assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in text
         assert "Current project total cost" in text
         assert "Cost scope" in text
@@ -1022,6 +1021,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "headline family-scaling figure already appears above" in text
         assert "Read `CCD-Bench` in its dedicated choice-behavior figures" in text
         assert "Read `Denevil` only through the dedicated proxy evidence package." in text
+        assert "Low-level DeNEVIL QA/provenance artifacts remain exported" in text
         assert "## Interpretation Notes" not in text
         assert text.count("![Comparable accuracy bars]") == 1
         assert text.count("![Family scaling profile]") == 1
@@ -1029,7 +1029,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert text.count("![CCD dominant-option share]") == 1
         assert text.count("![DeNEVIL proxy behavioral outcomes]") == 1
         assert "without re-embedding the same chart" in text
-        assert "without duplicating the same graphics" in text
+        assert "without re-embedding low-level QA charts" in text
 
     assert "## Local Expansion Checkpoint" in report_text
     assert "| `Next queued text lines` |" in report_text
@@ -1046,14 +1046,14 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     assert "curated snapshot rather than a live dashboard" in report_text
     assert "## Status Key" in report_text
-    assert "## Supporting Figures" in report_text
-    assert "option1_family_size_progress_overview.svg" in report_text
     assert "option1_benchmark_difficulty_profile.svg" in report_text
     assert "option1_family_scaling_profile.svg" in report_text
     assert "Partial" in report_text
     assert "Model families in scope" in report_text
     assert "## Safe One-Sentence Framing" in report_text
-    assert "![Coverage matrix]" in report_text
+    assert "## Supporting Figures" not in report_text
+    assert "option1_family_size_progress_overview.svg" not in report_text
+    assert "![Coverage matrix]" not in report_text
     assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" in report_text
 
     assert "## Local Expansion Checkpoint" in release_readme
@@ -1069,16 +1069,16 @@ def test_release_builder_emits_expected_files(tmp_path):
         release_readme,
         flags=re.MULTILINE,
     )
-    assert "sample volume chart" in release_readme
+    assert "sample volume chart" not in release_readme
     assert "benchmark difficulty profile" in release_readme
     assert "family scaling profile" in release_readme
     assert "## Start Here" in release_readme
     assert "## Benchmark Result Visuals" in release_readme
     assert "## Status Key" in release_readme
-    assert "## Supporting Figures" in release_readme
-    assert "option1_family_size_progress_overview.svg" in release_readme
     assert "option1_benchmark_difficulty_profile.svg" in release_readme
     assert "option1_family_scaling_profile.svg" in release_readme
+    assert "## Supporting Figures" not in release_readme
+    assert "option1_family_size_progress_overview.svg" not in release_readme
     assert "Partial" in release_readme
     assert "Model families in scope" in release_readme
     assert "Done" in release_readme
@@ -1132,10 +1132,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "67% coverage" not in family_scaling_svg
     assert "33% coverage" not in family_scaling_svg
     assert "0% coverage" not in family_scaling_svg
-    assert "Read CCD-Bench in Figures 5-7." in family_scaling_svg
-    assert "Read Denevil in Figures 8-11." in family_scaling_svg
-    assert "Proxy-only coverage and traceability evidence;" in family_scaling_svg
-    assert "MoralPrompt unavailable; not benchmark-faithful" in family_scaling_svg
+    assert "Read CCD-Bench in the choice-distribution" in family_scaling_svg
+    assert "and dominant-option concentration figures." in family_scaling_svg
+    assert "Read Denevil in the behavioral-outcomes figure." in family_scaling_svg
+    assert "Do not mix proxy evidence into accuracy scaling." in family_scaling_svg
     assert "DeepSeek: S/M/L text metrics are now parsed from saved logs" in family_scaling_svg
     assert "Qwen" in family_scaling_svg
     assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg

@@ -42,7 +42,7 @@
 <text x="48" y="64" class="title">CCD-Bench cultural-cluster choice behavior, not accuracy</text>
 <text x="48" y="88" class="subtitle">Cells show deviation from the 10% uniform baseline across the paper&apos;s ten canonical GLOBE cultural clusters, computed over valid visible selections only.</text>
 <text x="48" y="108" class="subtitle">Positive cells mean the line selected that cluster more often than uniform choice; negative cells mean under-indexing. This is CCD choice behavior, not benchmark accuracy.</text>
-<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L; OpenAI-Ref is a one-off reference row. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>
+<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT4 only is a one-off reference row. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>
 <text x="48" y="148" class="subtitle">Coverage stays in the appendix QA figure.</text>
 <text x="107.00" y="194" text-anchor="middle" class="tiny">FAMILY</text>
 <text x="212.00" y="194" text-anchor="middle" class="tiny">SIZE</text>
@@ -84,7 +84,7 @@
 <text x="107.00" y="973.00" text-anchor="middle" class="label">Gemma</text>
 <line x1="48" y1="874.00" x2="1772" y2="874.00" class="baseline"/>
 <rect x="48" y="1052" width="118" height="56" rx="18" fill="#d9dadc" stroke="#111827" stroke-width="1.2"/>
-<text x="107.00" y="1085.00" text-anchor="middle" class="label">OpenAI</text>
+<text x="107.00" y="1085.00" text-anchor="middle" class="label">GPT4 only</text>
 <line x1="48" y1="1042.00" x2="1772" y2="1042.00" class="baseline"/>
 <rect x="184" y="224" width="56" height="32" rx="12" fill="#0f766e"/>
 <text x="212.00" y="245.00" text-anchor="middle" class="celltext">S</text>
@@ -463,7 +463,7 @@
 <text x="1548" y="1030.00" class="label">9.05</text>
 <rect x="184" y="1064" width="56" height="32" rx="12" fill="#111827"/>
 <text x="212.00" y="1085.00" text-anchor="middle" class="celltext">Ref</text>
-<text x="258" y="1086.00" class="label">OpenAI-Ref</text>
+<text x="258" y="1086.00" class="label">GPT4 only</text>
 <rect x="420" y="1058" width="88" height="44" fill="#bedacc" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="1086.00" text-anchor="middle" class="celltext-dark">+4.1</text>
 <rect x="508" y="1058" width="88" height="44" fill="#f7e3d3" stroke="#ffffff" stroke-width="1.2"/>

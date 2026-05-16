@@ -174,7 +174,7 @@ TEXT_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-text
 IMAGE_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-image-expansion"
 
 MODEL_ORDER = ["Qwen", "DeepSeek", "Gemma"]
-FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "OpenAI"]
+FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT4 only"]
 BENCHMARK_ORDER = ["UniMoral", "SMID", "Value Kaleidoscope", "CCD-Bench", "Denevil"]
 FAMILY_SIZE_STATUS_COLUMNS = ["unimoral", "smid", "value_kaleidoscope", "ccd_bench", "denevil"]
 FAMILY_SIZE_STATUS_LABELS = {
@@ -246,10 +246,12 @@ CCD_OPTION_COLORS = {
     9: "#bcbd22",
     10: "#17becf",
 }
-OPENAI_REFERENCE_LINE_LABEL = "OpenAI-Ref"
+OPENAI_REFERENCE_LINE_LABEL = "GPT4 only"
+OPENAI_REFERENCE_FAMILY_LABEL = "GPT4 only"
+LEGACY_OPENAI_REFERENCE_LINE_LABELS = {"OpenAI-Ref"}
 OPENAI_REFERENCE_ROUTE = "openai/gpt-4o-mini (Responses API + Batch API; text-only reference)"
 OPENAI_REFERENCE_NOTE = (
-    "One-model OpenAI text-only reference line; SMID and DeNEVIL are intentionally not run, "
+    "One-model GPT4-only text reference line; SMID and DeNEVIL are intentionally not run, "
     "so this is a reference marker rather than S/M/L scaling evidence."
 )
 OPENAI_REFERENCE_TOTAL_SAMPLES = 76486
@@ -1552,7 +1554,7 @@ FAMILY_COLOR_SCALES = {
     "Llama": {"S": "#c2410c", "M": "#ea580c", "L": "#fb923c"},
     "Gemma": {"S": "#6d28d9", "M": "#8b5cf6", "L": "#c4b5fd"},
     "MiniMax": {"S": "#b45309", "M": "#d97706", "L": "#fbbf24"},
-    "OpenAI": {"Ref": "#111827"},
+    OPENAI_REFERENCE_FAMILY_LABEL: {"Ref": "#111827"},
 }
 
 STATUS_DISPLAY = {
@@ -4640,7 +4642,12 @@ def filter_public_family_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]
 
 
 def filter_public_line_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    return [row for row in rows if row.get("line_label") not in PUBLIC_WITHHELD_LINES]
+    return [
+        row
+        for row in rows
+        if row.get("line_label") not in PUBLIC_WITHHELD_LINES
+        and row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
+    ]
 
 
 def public_current_result_lines() -> list[dict[str, Any]]:
@@ -5422,6 +5429,8 @@ def published_ccd_choice_distribution_fallbacks() -> dict[str, dict[str, Any]]:
     fallbacks: dict[str, dict[str, Any]] = {}
     with path.open(newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle):
+            if row.get("line_label") in LEGACY_OPENAI_REFERENCE_LINE_LABELS:
+                continue
             if row.get("distribution_status") != "ok":
                 continue
             option_shares = {
@@ -5542,6 +5551,8 @@ def published_benchmark_comparison_fallbacks() -> dict[str, dict[str, Any]]:
     with path.open(newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle):
             line_label = row["line_label"]
+            if line_label in LEGACY_OPENAI_REFERENCE_LINE_LABELS:
+                continue
             ccd = ccd_fallbacks.get(line_label, {})
             denevil = denevil_fallbacks.get(line_label, {})
             fallbacks[line_label] = {
@@ -6316,7 +6327,7 @@ def family_group_spans(
 def openai_reference_benchmark_row() -> dict[str, Any]:
     return {
         "line_label": OPENAI_REFERENCE_LINE_LABEL,
-        "family": "OpenAI",
+        "family": OPENAI_REFERENCE_FAMILY_LABEL,
         "size_slot": "Ref",
         "route": OPENAI_REFERENCE_ROUTE,
         "unimoral_action_accuracy": OPENAI_REFERENCE_UNIMORAL_ACCURACY,
@@ -6343,7 +6354,7 @@ def openai_reference_ccd_distribution_row() -> dict[str, Any]:
     )
     row = {
         "line_label": OPENAI_REFERENCE_LINE_LABEL,
-        "family": "OpenAI",
+        "family": OPENAI_REFERENCE_FAMILY_LABEL,
         "size_slot": "Ref",
         "route": OPENAI_REFERENCE_ROUTE,
         "total_ccd_samples": OPENAI_REFERENCE_CCD_TOTAL,
@@ -6364,7 +6375,7 @@ def openai_reference_ccd_distribution_row() -> dict[str, Any]:
 def openai_reference_ccd_coverage_row() -> dict[str, Any]:
     return {
         "line_label": OPENAI_REFERENCE_LINE_LABEL,
-        "family": "OpenAI",
+        "family": OPENAI_REFERENCE_FAMILY_LABEL,
         "size_slot": "Ref",
         "total_ccd_samples": OPENAI_REFERENCE_CCD_TOTAL,
         "valid_selection_count": OPENAI_REFERENCE_CCD_VALID,
@@ -6380,6 +6391,15 @@ def add_openai_reference_outputs(
     ccd_valid_choice_coverage: list[dict[str, Any]],
 ) -> None:
     """Add the completed GPT-4o-mini text-only sweep as a reference marker."""
+    benchmark_comparison[:] = [
+        row for row in benchmark_comparison if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
+    ]
+    ccd_choice_distribution[:] = [
+        row for row in ccd_choice_distribution if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
+    ]
+    ccd_valid_choice_coverage[:] = [
+        row for row in ccd_valid_choice_coverage if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
+    ]
     if not any(row["line_label"] == OPENAI_REFERENCE_LINE_LABEL for row in benchmark_comparison):
         benchmark_comparison.append(openai_reference_benchmark_row())
     if not any(row["line_label"] == OPENAI_REFERENCE_LINE_LABEL for row in ccd_choice_distribution):
@@ -6390,7 +6410,7 @@ def add_openai_reference_outputs(
 
 def comparable_snapshot_note(row: dict[str, Any]) -> str:
     if row.get("line_label") == OPENAI_REFERENCE_LINE_LABEL:
-        return "OpenAI text-only reference marker; SMID and DeNEVIL intentionally not run."
+        return "GPT4-only text reference marker; SMID and DeNEVIL intentionally not run."
     if (
         row.get("line_label") == "DeepSeek-S"
         and row["unimoral_action_accuracy"] is not None
@@ -7616,10 +7636,10 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
             "The S/M/L text lines are now accuracy-comparable where text-only metrics exist, but no DeepSeek slot has a public SMID route.",
             "Read the DeepSeek size curve as text-only evidence: S and L now come from saved shard reruns, M remains the frozen closed-slice line, and all three still omit SMID.",
         )
-    if family == "OpenAI":
+    if family == OPENAI_REFERENCE_FAMILY_LABEL:
         return (
             "Single text-only reference point, not a family-size scaling sweep.",
-            "GPT-4o-mini is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about OpenAI size scaling or vision-side SMID performance.",
+            "GPT4 only is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about GPT4 family scaling or vision-side SMID performance.",
         )
     available_metrics = sum(1 for points in metric_points.values() if points)
     return (
@@ -8244,16 +8264,16 @@ def render_family_scaling_profile_svg(
     chart_left_pad, chart_right_pad = 46, 36
     chart_top_pad, chart_bottom_pad = 62, 62
     y_min, y_max = 0.0, 0.75
-    family_draw_order = ["MiniMax", "DeepSeek", "Llama", "Gemma", "Qwen", "OpenAI"]
-    family_slot_offsets = {"MiniMax": -20, "Qwen": -10, "DeepSeek": 0, "Llama": 10, "Gemma": 20, "OpenAI": 0}
-    family_line_widths = {"MiniMax": 4.2, "Qwen": 5.2, "DeepSeek": 4.0, "Llama": 4.0, "Gemma": 4.4, "OpenAI": 3.8}
+    family_draw_order = ["MiniMax", "DeepSeek", "Llama", "Gemma", "Qwen", OPENAI_REFERENCE_FAMILY_LABEL]
+    family_slot_offsets = {"MiniMax": -20, "Qwen": -10, "DeepSeek": 0, "Llama": 10, "Gemma": 20, OPENAI_REFERENCE_FAMILY_LABEL: 0}
+    family_line_widths = {"MiniMax": 4.2, "Qwen": 5.2, "DeepSeek": 4.0, "Llama": 4.0, "Gemma": 4.4, OPENAI_REFERENCE_FAMILY_LABEL: 3.8}
     singleton_label_offsets = {
         "MiniMax": (-18, -8),
         "Qwen": (-10, -12),
         "DeepSeek": (-20, -16),
         "Llama": (10, -10),
         "Gemma": (10, -10),
-        "OpenAI": (-8, -12),
+        OPENAI_REFERENCE_FAMILY_LABEL: (-8, -12),
     }
     rows_by_benchmark: dict[str, list[dict[str, Any]]] = {}
     for benchmark, field, _ in COMPARABLE_METRIC_SPECS:
@@ -8268,17 +8288,17 @@ def render_family_scaling_profile_svg(
     intro_lines = [
         "Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.",
         "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.",
-        "OpenAI-Ref is a one-model text-only reference point, not an S/M/L family-size curve.",
+        "GPT4 only is a one-model text-only reference point, not an S/M/L family-size curve.",
         "SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.",
-        "Read CCD-Bench in the dedicated valid-choice coverage + distribution figures below.",
-        "Read Denevil in the dedicated proxy status / volume / valid-response figures below.",
+        "Read CCD-Bench in the dedicated choice-distribution and concentration figures.",
+        "Read Denevil in the dedicated behavioral-outcomes figure.",
     ]
     lines.extend(
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Family scaling profile by benchmark</title>",
-            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. OpenAI-Ref is plotted as a one-model text-only reference point rather than a size curve. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
+            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. GPT4 only is plotted as a one-model text-only reference point rather than a size curve. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
             '<text x="48" y="64" class="title">Family Scaling Profile</text>',
         ]
     )
@@ -8361,11 +8381,10 @@ def render_family_scaling_profile_svg(
         "Use this figure for family-size comparisons on UniMoral,",
         "SMID, and Value Kaleidoscope.",
         "CCD-Bench is intentionally excluded here.",
-        "Read CCD-Bench in Figures 5-7.",
-        "Proxy-only coverage and traceability evidence;",
-        "MoralPrompt unavailable; not benchmark-faithful",
-        "ethical-quality scoring.",
-        "Read Denevil in Figures 8-11.",
+        "Read CCD-Bench in the choice-distribution",
+        "and dominant-option concentration figures.",
+        "Read Denevil in the behavioral-outcomes figure.",
+        "Do not mix proxy evidence into accuracy scaling.",
     ]
     for index, line in enumerate(left_lines):
         lines.append(f'<text x="72" y="{696 + index * 26}" class="body">{escape_xml(line)}</text>')
@@ -8377,7 +8396,7 @@ def render_family_scaling_profile_svg(
         ("DeepSeek", "S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists."),
         ("Llama", "text scored at S/M/L; SMID at S/L."),
         ("Gemma", "full S/M/L scored sweep."),
-        ("OpenAI", "GPT-4o-mini reference point only; no OpenAI S/M/L or SMID route is claimed."),
+        (OPENAI_REFERENCE_FAMILY_LABEL, "GPT4-only reference point; no GPT4 S/M/L or SMID route is claimed."),
     ]
     for index, (family, note) in enumerate(legend_items):
         x = 656
@@ -8511,7 +8530,7 @@ def render_ccd_choice_distribution_svg(rows: list[dict[str, Any]], output_path: 
             '<text x="48" y="64" class="title">CCD-Bench cultural-cluster choice behavior, not accuracy</text>',
             '<text x="48" y="88" class="subtitle">Cells show deviation from the 10% uniform baseline across the paper&apos;s ten canonical GLOBE cultural clusters, computed over valid visible selections only.</text>',
             '<text x="48" y="108" class="subtitle">Positive cells mean the line selected that cluster more often than uniform choice; negative cells mean under-indexing. This is CCD choice behavior, not benchmark accuracy.</text>',
-            '<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L; OpenAI-Ref is a one-off reference row. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>',
+            '<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT4 only is a one-off reference row. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>',
             '<text x="48" y="148" class="subtitle">Coverage stays in the appendix QA figure.</text>',
         ]
     )
@@ -8629,7 +8648,7 @@ def render_ccd_dominant_option_share_svg(rows: list[dict[str, Any]], output_path
             "<desc>Secondary CCD result. Compact CCD-Bench comparison showing how concentrated each line's valid visible selections are on its most frequent canonical cluster. Bars show dominant-cluster share; right-hand labels add effective-cluster count. This is a concentration summary, not accuracy.</desc>",
             '<text x="48" y="64" class="title">CCD-Bench choice-concentration summary, not accuracy</text>',
             '<text x="48" y="88" class="subtitle">Bars show the dominant-cluster share among valid visible CCD selections; the right-hand label adds the effective number of clusters implied by that same distribution.</text>',
-            '<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L; OpenAI-Ref is shown only as a one-off reference row. Higher bars mean more concentration on one cluster.</text>',
+            '<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT4 only is shown only as a one-off reference row. Higher bars mean more concentration on one cluster.</text>',
         ]
     )
 
@@ -9772,7 +9791,7 @@ def append_tldr_section(
         )
     if openai_reference_line is not None:
         lines.append(
-            f"- **OpenAI reference line:** `{OPENAI_REFERENCE_LINE_LABEL}` (`gpt-4o-mini`) is added as a single text-only reference point with {OPENAI_REFERENCE_PARSED_SAMPLES:,}/{OPENAI_REFERENCE_TOTAL_SAMPLES:,} parsed prompts: UniMoral {fmt_float(as_float(openai_reference_line['unimoral_action_accuracy']))}, Value {fmt_float(as_float(openai_reference_line['value_average_accuracy']))}, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`."
+            f"- **GPT4-only reference line:** `{OPENAI_REFERENCE_LINE_LABEL}` is added as a single text-only reference point with {OPENAI_REFERENCE_PARSED_SAMPLES:,}/{OPENAI_REFERENCE_TOTAL_SAMPLES:,} parsed prompts: UniMoral {fmt_float(as_float(openai_reference_line['unimoral_action_accuracy']))}, Value {fmt_float(as_float(openai_reference_line['value_average_accuracy']))}, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`."
         )
     lines.append(
         f"- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy ({fmt_float(as_float(smid_summary['mean_accuracy']))}) and widest spread ({fmt_float(as_float(smid_summary['spread']))}), while `UniMoral` is tightly clustered ({fmt_float(as_float(unimoral_summary['spread']))} spread). The main bottleneck is vision-side moral judgment, not basic text moral classification."
@@ -9813,7 +9832,7 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.",
             "",
-            "`OpenAI-Ref` is shown as a single `gpt-4o-mini` text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as an OpenAI S/M/L scaling series, and it has no SMID or DeNEVIL row.",
+            "`GPT4 only` is shown as a single text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as a GPT4 S/M/L scaling series, and it has no SMID or DeNEVIL row.",
             "",
             "### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy",
             "",
@@ -9845,7 +9864,7 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "_This is the main DeNEVIL result surface: auditable behavioral categories from proxy traces, not benchmark-faithful accuracy._",
             "",
-            "Secondary benchmark-specific visuals still appear later in the deliverable, including the benchmark difficulty profile, the DeNEVIL prompt-family heatmap, and the appendix QA / provenance figures.",
+            "Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.",
             "",
         ]
     )
@@ -9958,7 +9977,7 @@ def append_interpretation_sections(
         )
     if openai_reference_line is not None:
         lines.append(
-            f"| OpenAI reference marker | `{OPENAI_REFERENCE_LINE_LABEL}` (`gpt-4o-mini`) parses {OPENAI_REFERENCE_PARSED_SAMPLES:,}/{OPENAI_REFERENCE_TOTAL_SAMPLES:,} prompts, reaches UniMoral {fmt_float(openai_reference_line['unimoral_action_accuracy'])} and Value {fmt_float(openai_reference_line['value_average_accuracy'])}; CCD-Bench valid-choice coverage is 100.0%. | This is a useful external text-only reference, but it is not an OpenAI size-series claim and has no SMID / DeNEVIL evidence in this release. |"
+            f"| GPT4-only reference marker | `{OPENAI_REFERENCE_LINE_LABEL}` parses {OPENAI_REFERENCE_PARSED_SAMPLES:,}/{OPENAI_REFERENCE_TOTAL_SAMPLES:,} prompts, reaches UniMoral {fmt_float(openai_reference_line['unimoral_action_accuracy'])} and Value {fmt_float(openai_reference_line['value_average_accuracy'])}; CCD-Bench valid-choice coverage is 100.0%. | This is a useful external text-only reference, but it is not a GPT4 size-series claim and has no SMID / DeNEVIL evidence in this release. |"
         )
     lines.append(
         f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |"
@@ -9967,7 +9986,7 @@ def append_interpretation_sections(
         f"| Closest thing to saturation | `UniMoral` has the tightest range, from {fmt_float(unimoral_summary['min_accuracy'])} to {fmt_float(unimoral_summary['max_accuracy'])} ({fmt_float(unimoral_summary['spread'])} spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |"
     )
     lines.append(
-        f"| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. `OpenAI-Ref` is a single reference point and is excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
+        f"| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. `GPT4 only` is a single reference point and is excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
     )
     lines.extend(
         [
@@ -10010,13 +10029,7 @@ def append_interpretation_sections(
             "",
             ccd_cluster_order_note,
             "",
-            "_The two headline CCD figures already appear above in **Benchmark Result Visuals**. They remain the main result surfaces; the appendix coverage figure and compact table below provide QA context and inline numeric support without duplicating the same graphics._",
-            "",
-            f"![CCD valid-choice coverage]({figure_prefix}/option1_ccd_valid_choice_coverage.svg)",
-            "",
-            "_Figure 7. Appendix QA only. `CCD-Bench` valid-choice coverage = (# saved visible answers with a parseable 1-10 choice) / (# all CCD-Bench prompts). This figure is kept for provenance and parser auditing, not as the headline CCD result._",
-            "",
-            "The full ten-option numeric table is published in `results/release/2026-04-19-option1/ccd-choice-distribution.csv`; the compact table below keeps the most PI-facing CCD readouts inline without turning coverage into the headline claim.",
+            "_The two headline CCD figures already appear above in **Benchmark Result Visuals**. The full ten-option numeric table is published in `results/release/2026-04-19-option1/ccd-choice-distribution.csv`; the compact table below keeps the most PI-facing CCD readouts inline without turning parser coverage into the headline claim._",
             "",
         ]
     )
@@ -10030,15 +10043,11 @@ def append_interpretation_sections(
             "",
             "The repo still lacks a stable local `MoralPrompt` export, so paper-aligned APV / EVR / MVP are `n/a` in this public package. Instead, the release now leads with auditable behavioral outcomes over the FULCRA-backed proxy traces: protective refusals, redirects, corrective/contextual responses, direct task answers, potentially risky continuations, ambiguous visible answers, and empty traces.",
             "",
-            "The main DeNEVIL result surface is now the visible-behavior mix across the full released proxy archive. A secondary prompt-family heatmap asks how often safety-salient prompt families receive visibly protective responses. Route/model provenance, sample volume, completion state, timestamps, and visible-response coverage are still exported, but they now live in the appendix QA figures rather than the headline result story.",
+            "The main DeNEVIL result surface is the visible-behavior mix across the full released proxy archive. Route/model provenance, sample volume, completion state, timestamps, and visible-response coverage are still exported in CSV/SVG artifacts, but they are not repeated in the README because they are QA/provenance rather than the audience-facing result story.",
             "",
-            "_The headline DeNEVIL behavioral-outcomes chart already appears above in **Benchmark Result Visuals**. This section keeps the explanatory framing, the secondary prompt-family breakdown, and the appendix provenance surfaces without re-embedding the same main chart._",
+            "_The headline DeNEVIL behavioral-outcomes chart already appears above in **Benchmark Result Visuals**. This section keeps the explanatory framing and compact line-level behavior table without re-embedding low-level QA charts._",
             "",
-            f"![DeNEVIL prompt-family heatmap]({figure_prefix}/option1_denevil_prompt_family_heatmap.svg)",
-            "",
-            "_Figure 9. Secondary DeNEVIL breakdown. For the safety-salient proxy prompt families only, each cell shows the rate of visibly protective behavior (refusal, redirect, or corrective/contextual response). Prompt-family labels are heuristic and derived from the released source dialogue._",
-            "",
-            "The compact behavior table below is the quickest line-level read. Use it before dropping into the appendix provenance figures.",
+            "The compact behavior table below is the quickest line-level read.",
             "",
         ]
     )
@@ -10046,38 +10055,11 @@ def append_interpretation_sections(
     lines.extend(
         [
             "",
-            "### DeNEVIL Appendix QA / Provenance",
-            "",
-            "These appendix artifacts stay public because a PI still needs to inspect what actually ran: route provenance, timestamps, sample volume, visible-response coverage, and a safe example table. They are intentionally no longer the headline DeNEVIL result surfaces.",
-            "",
-            f"![Denevil proxy status matrix]({figure_prefix}/option1_denevil_proxy_status_matrix.svg)",
-            "",
-            "_Figure 10. Appendix QA only. PI-facing proxy status matrix with route / model provenance, timestamps, sample counts, visible-response coverage, and concise limitation notes._",
-            "",
-            f"![Denevil proxy sample volume]({figure_prefix}/option1_denevil_proxy_sample_volume.svg)",
-            "",
-            "_Figure 11. Appendix QA only. Sample-volume view of the released DeNEVIL proxy archive._",
-            "",
-            f"![Denevil proxy valid-response rate]({figure_prefix}/option1_denevil_proxy_valid_response_rate.svg)",
-            "",
-            "_Figure 12. Appendix QA only. Visible-response coverage chart retained for provenance and debugging, not as the main DeNEVIL result._",
-            "",
-            f"![Denevil proxy pipeline]({figure_prefix}/option1_denevil_proxy_pipeline.svg)",
-            "",
-            "_Figure 13. Public contract for the proxy package: paper goal -> local limitation -> FULCRA-backed proxy path -> generated traces -> provenance deliverable rather than benchmark-faithful accuracy._",
-            "",
-            "The appendix table below records the available QA/provenance fields explicitly.",
+            "Low-level DeNEVIL QA/provenance artifacts remain exported in the release folder for audit, but the README does not embed the status, sample-volume, or visible-response-rate charts.",
             "",
         ]
     )
-    append_denevil_proxy_summary_table(lines, denevil_proxy_summary)
-    lines.extend(
-        [
-            "",
-            "A few safe qualitative examples help clarify what the proxy traces actually look like in practice.",
-            "",
-        ]
-    )
+    lines.extend(["A few safe qualitative examples help clarify what the proxy traces actually look like in practice.", ""])
     append_denevil_proxy_examples_table(lines, denevil_proxy_examples)
     lines.extend(
         [
@@ -10094,7 +10076,7 @@ def append_interpretation_sections(
                 else "- If a line appears only in the appendix coverage/provenance panels, read it as a response-format / release-evidence signal rather than a benchmark-faithful accuracy result."
             ),
             f"- Do not call `{best_text_only_line['line_label']}` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line." if best_text_only_line is not None else "- Do not promote any text-only line into an all-around winner claim without a matching SMID route.",
-            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and `OpenAI-Ref` is only a single text-reference marker.",
+            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and `GPT4 only` is only a single text-reference marker.",
             f"- Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.",
             f"- Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.",
             "",
@@ -10305,7 +10287,6 @@ def append_repo_navigation(lines: list[str]) -> None:
             "| Read the May 13 additional-model follow-up | [Latest Additional Model Sweep](#latest-additional-model-sweep) |",
             "| Jump straight to the live summary | [Results First](#results-first) |",
             "| Check the exact full-matrix status | [Family-Size Progress Matrix](#family-size-progress-matrix) |",
-            "| Browse only the charts and figures | [Supporting Figures](#supporting-figures) |",
             "| Rebuild or verify the public package locally | [Reproducibility](#reproducibility) |",
             "",
         ]
@@ -10632,14 +10613,6 @@ def build_repo_readme(
     lines.extend(
         [
             "",
-            "### Latest Family-Size Progress Snapshot",
-            "",
-            "This stacked overview is the quickest visual read on the current published family-size matrix.",
-            "",
-            "![Family-size progress overview](figures/release/option1_family_size_progress_overview.svg)",
-            "",
-            "_Latest family-size progress overview. Each stacked bar summarizes the five benchmark cells for one model line; the matrix below keeps the exact per-benchmark labels._",
-            "",
             "### Current Comparable Accuracy Snapshot",
             "",
             CURRENT_COMPARABLE_SNAPSHOT_NOTE,
@@ -10743,7 +10716,6 @@ def build_repo_readme(
             "",
         ]
     )
-    append_figure_gallery(lines, "figures/release")
     lines.extend(
         [
             "## Reproducibility",
@@ -10794,20 +10766,12 @@ def build_repo_readme(
             "- `results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`",
             "- `results/release/2026-04-19-option1/family-scaling-summary.csv`",
             "- `results/release/2026-04-19-option1/release-manifest.json`",
-            "- `figures/release/option1_family_size_progress_overview.svg`",
             "- `figures/release/option1_benchmark_accuracy_bars.svg`",
             "- `figures/release/option1_benchmark_difficulty_profile.svg`",
             "- `figures/release/option1_family_scaling_profile.svg`",
-            "- `figures/release/option1_ccd_valid_choice_coverage.svg`",
             "- `figures/release/option1_ccd_choice_distribution.svg`",
             "- `figures/release/option1_ccd_dominant_option_share.svg`",
             "- `figures/release/option1_denevil_behavior_outcomes.svg`",
-            "- `figures/release/option1_denevil_prompt_family_heatmap.svg`",
-            "- `figures/release/option1_denevil_proxy_status_matrix.svg`",
-            "- `figures/release/option1_denevil_proxy_sample_volume.svg`",
-            "- `figures/release/option1_denevil_proxy_valid_response_rate.svg`",
-            "- `figures/release/option1_denevil_proxy_pipeline.svg`",
-            "- `figures/release/option1_coverage_matrix.svg`",
             "",
             "For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibility.md). For the repo layer map, see [docs/repo-architecture.md](docs/repo-architecture.md).",
             "",
@@ -10875,14 +10839,6 @@ def build_release_readme(
     append_current_result_lines_table(lines)
     lines.extend(
         [
-            "",
-            "### Latest Family-Size Progress Snapshot",
-            "",
-            "This stacked overview is the quickest visual read on the current published family-size matrix.",
-            "",
-            "![Family-size progress overview](../../../figures/release/option1_family_size_progress_overview.svg)",
-            "",
-            "_Latest family-size progress overview. Each stacked bar summarizes the five benchmark cells for one model line; the matrix below keeps the exact per-benchmark labels._",
             "",
             "### Current Comparable Accuracy Snapshot",
             "",
@@ -10981,23 +10937,12 @@ def build_release_readme(
             "",
             "### Figures",
             "",
-            f"- {markdown_link('family-size progress overview', '../../../figures/release/option1_family_size_progress_overview.svg')}: latest line-level status across the current published matrix",
             f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: current cross-model benchmark comparison",
             f"- {markdown_link('benchmark difficulty profile', '../../../figures/release/option1_benchmark_difficulty_profile.svg')}: mean and spread for the directly comparable benchmark groups",
             f"- {markdown_link('family scaling profile', '../../../figures/release/option1_family_scaling_profile.svg')}: family-size scaling across the three directly comparable accuracy benchmarks only",
-            f"- {markdown_link('CCD valid-choice coverage', '../../../figures/release/option1_ccd_valid_choice_coverage.svg')}: horizontal bar chart showing which lines surfaced a parseable visible CCD choice at all",
             f"- {markdown_link('CCD choice heatmap', '../../../figures/release/option1_ccd_choice_distribution.svg')}: main CCD-Bench result showing deviation from the 10% uniform baseline across the ten canonical clusters",
             f"- {markdown_link('CCD concentration summary', '../../../figures/release/option1_ccd_dominant_option_share.svg')}: dominant-cluster share plus effective-cluster count",
-            f"- {markdown_link('CCD valid-choice coverage (appendix QA)', '../../../figures/release/option1_ccd_valid_choice_coverage.svg')}: parseable visible 1-10 choice coverage by model line, not a headline result",
             f"- {markdown_link('DeNEVIL behavioral outcomes', '../../../figures/release/option1_denevil_behavior_outcomes.svg')}: main proxy-result view showing visible behavior categories by model line",
-            f"- {markdown_link('DeNEVIL prompt-family heatmap', '../../../figures/release/option1_denevil_prompt_family_heatmap.svg')}: secondary breakdown of protective-response rate on safety-salient proxy prompt families",
-            f"- {markdown_link('DeNEVIL proxy status matrix (appendix QA)', '../../../figures/release/option1_denevil_proxy_status_matrix.svg')}: route / model provenance, timestamps, sample counts, and notes",
-            f"- {markdown_link('DeNEVIL proxy sample volume (appendix QA)', '../../../figures/release/option1_denevil_proxy_sample_volume.svg')}: total proxy prompt archive versus visible generated-response count for each released line",
-            f"- {markdown_link('DeNEVIL visible-response coverage (appendix QA)', '../../../figures/release/option1_denevil_proxy_valid_response_rate.svg')}: visible-response coverage retained for provenance and debugging",
-            f"- {markdown_link('DeNEVIL proxy pipeline', '../../../figures/release/option1_denevil_proxy_pipeline.svg')}: one-slide explanation of why the public DeNEVIL package is proxy-only evidence rather than accuracy",
-            f"- {markdown_link('accuracy heatmap', '../../../figures/release/option1_accuracy_heatmap.svg')}: task-level view of comparable metrics",
-            f"- {markdown_link('coverage matrix', '../../../figures/release/option1_coverage_matrix.svg')}: frozen Option 1 coverage only",
-            f"- {markdown_link('sample volume chart', '../../../figures/release/option1_sample_volume.svg')}: where the evaluated samples are concentrated",
             "",
             "## Status Key",
             "",
@@ -11027,7 +10972,6 @@ def build_release_readme(
             "",
         ]
     )
-    append_figure_gallery(lines, "../../../figures/release")
     lines.extend(
         [
             "## Frozen Option 1 Model Summary",
@@ -11128,14 +11072,6 @@ def build_jenny_group_report(
     append_current_result_lines_table(lines)
     lines.extend(
         [
-            "",
-            "### Latest Family-Size Progress Snapshot",
-            "",
-            "This stacked overview is the quickest visual read on the current published family-size matrix.",
-            "",
-            "![Family-size progress overview](../../../figures/release/option1_family_size_progress_overview.svg)",
-            "",
-            "_Latest family-size progress overview. Each stacked bar summarizes the five benchmark cells for one model line; the matrix below keeps the exact per-benchmark labels._",
             "",
             "### Current Comparable Accuracy Snapshot",
             "",
@@ -11248,7 +11184,6 @@ def build_jenny_group_report(
             "",
         ]
     )
-    append_figure_gallery(lines, "../../../figures/release")
     lines.extend(
         [
             "## Frozen Option 1 Summary",
@@ -11439,7 +11374,7 @@ def build_release_manifest(
             "Denevil is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
             "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
             "DeepSeek-S text metrics come from the May 9 no-thinking saved rerun; it remains text-only because no SMID vision route exists.",
-            "OpenAI-Ref is a GPT-4o-mini text-only reference marker, not a claimed OpenAI family-size sweep.",
+            "GPT4 only is a text-only reference marker, not a claimed GPT4 family-size sweep.",
             "The completed local Llama small line sits outside the frozen Option 1 totals.",
             "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration.",
         ],
