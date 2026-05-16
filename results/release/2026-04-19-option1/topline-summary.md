@@ -4,14 +4,16 @@ This is the shortest frozen-snapshot readout in the repo: what the closed public
 
 ## TL;DR
 
-My result TL;DR:
+If you only read one section, read these key takeaways:
 
-- **Overall model-wise:** `MiniMax-S` is the strongest all-around line on the three comparable accuracy benchmarks: UniMoral 0.661, SMID 0.432, Value Kaleidoscope 0.740, average 0.611. `Qwen-L` is close at 0.600. `Llama-S` is weakest at 0.464, mainly because of low SMID and Value scores.
-- **Text-only model-wise:** `MiniMax` is the strongest family on text benchmarks. `MiniMax-S`, `MiniMax-M`, and `MiniMax-L` all score around 0.699-0.701 across UniMoral and Value Kaleidoscope. `Llama-M` is also strong at 0.697. `Llama-S` is weakest at 0.588.
-- **Benchmark-wise:** `SMID` is the hardest benchmark. It is the vision task, with the lowest mean accuracy (0.364) and widest spread (0.285), so vision-side moral judgment is the main bottleneck. `UniMoral` is the most saturated benchmark, with models clustered from 0.563 to 0.684. `Value Kaleidoscope` is in the middle, with clear but less extreme spread.
-- **Scaling-wise:** There is no universal scaling law. Bigger models are not always better: `Gemma` is non-monotonic on SMID, and `Llama-M` beats `Llama-L` on Value. Size helps on some tasks, but the effect depends on benchmark and route.
-- **CCD-Bench:** `CCD-Bench` measures cultural choice style, not accuracy. Most lines over-select `option_6`, the Nordic Europe cluster; `DeepSeek-S` is the exception, peaking on `option_7`, Sub-Saharan Africa. The point is not that one option is "correct," but that models may collapse toward specific cultural styles. Concentration ranges from `DeepSeek-S` at 13.8% to `Llama-S` at 23.9%, so `DeepSeek-S` is more spread out while `Llama-S` is more concentrated.
-- **DeNEVIL:** `DeNEVIL` is proxy safety-behavior evidence, not official benchmark-faithful scoring. Since the original MoralPrompt scorer is not available locally, this release classifies visible behaviors: refusal, redirect, corrective/contextual answer, risky continuation, ambiguous answer, or no visible answer. Results show high protective/contextual response rates, 92.4% to 99.5%, meaning models usually refuse, redirect, or add safety context instead of continuing harmful content.
+- **Best like-for-like line:** `MiniMax-S` is the strongest fully comparable line, averaging 0.611 across UniMoral 0.661, SMID 0.432, and Value 0.740. This is the cleanest overall topline because all three comparable metrics are observed on the same line.
+- **Best text-only line:** `MiniMax-M` is the strongest pure text line, reaching UniMoral 0.659 and Value 0.740. It should not be called the best all-around line because there is no public SMID route on that line.
+- **OpenAI reference line:** `OpenAI-Ref` (`gpt-4o-mini`) is added as a single text-only reference point with 76,486/76,486 parsed prompts: UniMoral 0.673, Value 0.701, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`.
+- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.364) and widest spread (0.285), while `UniMoral` is tightly clustered (0.121 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
+- **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
+- **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `Llama-S` at 23.9%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
+- **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates (92.4% to 99.5% protective response rate). `DeepSeek-S` no longer has the old visibility-collapse problem in the May 9 saved rerun (0.2% no-visible proxy traces).
+- **Current GitHub-facing boundary:** No MiniMax-M2.5 text benchmark remains live; the saved MiniMax-M2.5 text/proxy pass is already parsed into the public tables and SVGs. SMID remains `TBD`, so the medium MiniMax line is not a fully comparable all-around line yet.
 
 
 ## Frozen Snapshot Scope
@@ -20,8 +22,8 @@ My result TL;DR:
 - paper-setup tasks: `16`
 - proxy tasks: `3`
 - total evaluated samples: `302,776`
-- current project total cost: `$758.83`
-- total cost breakdown: MiniMax API: `$504.66`; OpenRouter for all other models: `$254.17`.
+- current project total cost: `$759.59`
+- total cost breakdown: MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$254.17`; OpenAI API reference sweep: `$0.76`.
 - closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`
 - key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup
 - extra local progress outside the frozen snapshot: `Llama` small is complete across `5` papers / `7` tasks and is intentionally excluded from the frozen `19 / 19` totals

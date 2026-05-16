@@ -131,11 +131,13 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
+    assert any("OpenAI-Ref" in item and "text-only reference marker" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_total_cost"] == "$758.83"
+    assert manifest["report_metadata"]["current_total_cost"] == "$759.59"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
         "minimax_api": "$504.66",
-        "openrouter_all_other_models": "$254.17",
+        "openrouter_other_model_family_runs": "$254.17",
+        "openai_api_reference_sweep": "$0.76",
     }
     assert "latest saved reruns parsed in this repo" in manifest["report_metadata"]["current_cost_scope"]
     assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"
@@ -442,7 +444,7 @@ def test_release_builder_emits_expected_files(tmp_path):
             "comparison_note",
         ]
         rows = list(reader)
-    assert len(rows) in {10, 11, 12, 13, 14, 15}
+    assert len(rows) in {10, 11, 12, 13, 14, 15, 16}
     minimax_large_rows = [row for row in rows if row["line_label"] == "MiniMax-L"]
     if minimax_large_rows:
         assert any(
@@ -453,6 +455,13 @@ def test_release_builder_emits_expected_files(tmp_path):
             for row in minimax_large_rows
         )
     rows_by_line = {row["line_label"]: row for row in rows}
+    openai_reference = rows_by_line["OpenAI-Ref"]
+    assert openai_reference["family"] == "OpenAI"
+    assert openai_reference["size_slot"] == "Ref"
+    assert openai_reference["unimoral_action_accuracy"] == "0.672700"
+    assert openai_reference["smid_average_accuracy"] == ""
+    assert openai_reference["value_average_accuracy"] == "0.700698"
+    assert openai_reference["comparison_note"] == "OpenAI text-only reference marker; SMID and DeNEVIL intentionally not run."
     assert rows_by_line["MiniMax-S"]["unimoral_action_accuracy"] == "0.660861"
     assert rows_by_line["MiniMax-S"]["smid_average_accuracy"] == "0.431996"
     assert rows_by_line["MiniMax-S"]["value_average_accuracy"] == "0.739942"
@@ -592,7 +601,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "dominant_option_share" in reader.fieldnames
         assert "distribution_status" in reader.fieldnames
         ccd_distribution_rows = list(reader)
-    assert len(ccd_distribution_rows) == 15
+    assert len(ccd_distribution_rows) == 16
     for row in ccd_distribution_rows:
         valid_rate = row["valid_selection_rate"]
         if valid_rate == "n/a":
@@ -604,6 +613,14 @@ def test_release_builder_emits_expected_files(tmp_path):
             assert all(row[f"option_{cluster_id}_pct"] == "n/a" for cluster_id in range(1, 11))
             assert all(row[f"option_{cluster_id}_delta_pp"] == "n/a" for cluster_id in range(1, 11))
     ccd_rows_by_line = {row["line_label"]: row for row in ccd_distribution_rows}
+    openai_ccd = ccd_rows_by_line["OpenAI-Ref"]
+    assert openai_ccd["family"] == "OpenAI"
+    assert openai_ccd["size_slot"] == "Ref"
+    assert openai_ccd["valid_selection_count"] == "2182"
+    assert openai_ccd["valid_selection_rate"] == "100.000000"
+    assert openai_ccd["option_6_pct"] == "17.094409"
+    assert openai_ccd["dominant_option"] == "option_6 (Nordic Europe)"
+    assert openai_ccd["effective_cluster_count"] == "8.937721"
     deepseek_small_ccd = ccd_rows_by_line["DeepSeek-S"]
     assert deepseek_small_ccd["distribution_status"] == "ok"
     assert deepseek_small_ccd["valid_selection_count"] == "2180"
@@ -860,7 +877,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert [row["benchmark"] for row in difficulty_rows] == ["UniMoral", "SMID", "Value Kaleidoscope"]
     assert any(
         row["benchmark"] == "SMID"
-        and row["mean_accuracy"] in {"0.364610", "0.378030", "0.363773", "0.364030"}
+        and row["mean_accuracy"] in {"0.364610", "0.378030", "0.363773", "0.364030", "0.364049", "0.364232"}
         and row["spread"] in {"0.279545", "0.266406", "0.286906", "0.284597"}
         and row["best_line"] == "Qwen-L"
         and row["weakest_line"] in {"MiniMax-L", "Llama-S"}
@@ -868,7 +885,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     assert any(
         row["benchmark"] == "Value Kaleidoscope"
-        and row["mean_accuracy"] in {"0.650180", "0.662989", "0.668485", "0.673238"}
+        and row["mean_accuracy"] in {"0.650180", "0.662989", "0.668485", "0.673238", "0.674954"}
         and row["best_line"] in {"Llama-M", "MiniMax-L"}
         and row["weakest_line"] == "Llama-S"
         for row in difficulty_rows
@@ -878,6 +895,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         reader = csv.DictReader(handle)
         scaling_rows = list(reader)
     assert tuple(row["family"] for row in scaling_rows) in {
+        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "OpenAI"),
         ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"),
         ("Qwen", "DeepSeek", "Llama", "Gemma"),
     }
@@ -927,6 +945,14 @@ def test_release_builder_emits_expected_files(tmp_path):
         and "Denevil" not in row["numeric_pattern"]
         and "text-only evidence" in row["interpretation"]
         and "all three still omit SMID" in row["interpretation"]
+        for row in scaling_rows
+    )
+    assert any(
+        row["family"] == "OpenAI"
+        and "Single text-only reference point" in row["evidence_scope"]
+        and "UniMoral: Ref 0.673" in row["numeric_pattern"]
+        and "Value Kaleidoscope: Ref 0.701" in row["numeric_pattern"]
+        and "not be read as evidence about OpenAI size scaling" in row["interpretation"]
         for row in scaling_rows
     )
 

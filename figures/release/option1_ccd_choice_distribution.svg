@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1820 1272" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1820 1328" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,14 +35,14 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1820" height="1272" class="canvas"/>
-<rect x="24" y="24" width="1772" height="1224" rx="22" class="panel"/>
+<rect x="0" y="0" width="1820" height="1328" class="canvas"/>
+<rect x="24" y="24" width="1772" height="1280" rx="22" class="panel"/>
 <title>CCD-Bench cultural-cluster choice behavior, not accuracy</title>
 <desc>Main CCD result. Model-line by cultural-cluster heatmap for CCD-Bench. Each cell shows percentage-point deviation from a 10% uniform baseline among valid visible selections only. Positive cells indicate the line selected that canonical cluster more often than uniform choice; negative cells indicate under-indexing. This is a choice-distribution result, not scalar accuracy.</desc>
 <text x="48" y="64" class="title">CCD-Bench cultural-cluster choice behavior, not accuracy</text>
 <text x="48" y="88" class="subtitle">Cells show deviation from the 10% uniform baseline across the paper&apos;s ten canonical GLOBE cultural clusters, computed over valid visible selections only.</text>
 <text x="48" y="108" class="subtitle">Positive cells mean the line selected that cluster more often than uniform choice; negative cells mean under-indexing. This is CCD choice behavior, not benchmark accuracy.</text>
-<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L so within-family size comparisons are readable. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>
+<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L; OpenAI-Ref is a one-off reference row. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>
 <text x="48" y="148" class="subtitle">Coverage stays in the appendix QA figure.</text>
 <text x="107.00" y="194" text-anchor="middle" class="tiny">FAMILY</text>
 <text x="212.00" y="194" text-anchor="middle" class="tiny">SIZE</text>
@@ -83,6 +83,9 @@
 <rect x="48" y="884" width="118" height="168" rx="18" fill="#ece5fe" stroke="#8b5cf6" stroke-width="1.2"/>
 <text x="107.00" y="973.00" text-anchor="middle" class="label">Gemma</text>
 <line x1="48" y1="874.00" x2="1772" y2="874.00" class="baseline"/>
+<rect x="48" y="1052" width="118" height="56" rx="18" fill="#d9dadc" stroke="#111827" stroke-width="1.2"/>
+<text x="107.00" y="1085.00" text-anchor="middle" class="label">OpenAI</text>
+<line x1="48" y1="1042.00" x2="1772" y2="1042.00" class="baseline"/>
 <rect x="184" y="224" width="56" height="32" rx="12" fill="#0f766e"/>
 <text x="212.00" y="245.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="246.00" class="label">Qwen-S</text>
@@ -458,9 +461,34 @@
 <text x="1256.00" y="1030.00" text-anchor="middle" class="celltext-dark">+0.3</text>
 <text x="1378" y="1030.00" class="label">17.6%</text>
 <text x="1548" y="1030.00" class="label">9.05</text>
-<rect x="48" y="1092" width="1724" height="134" rx="18" class="legend-card"/>
-<text x="72" y="1116" class="tiny">HOW TO READ THE CCD HEATMAP</text>
-<text x="72" y="1140" class="body">The baseline is 10% because the paper offers ten canonical cluster options. `+5.0` means a line selected that cluster five percentage points more often than uniform choice; `-3.0` means three points less often.</text>
-<text x="72" y="1166" class="body">`Top cluster share` is the line&apos;s most frequent cluster share among valid visible selections. `Effective clusters` is the inverse concentration count: lower means more concentrated, higher means more spread out.</text>
-<text x="72" y="1192" class="body">No explicit rationale tags are retained in the public archive, so this figure stays with choice behavior only. The appendix coverage figure still reports whether a valid visible CCD choice surfaced at all.</text>
+<rect x="184" y="1064" width="56" height="32" rx="12" fill="#111827"/>
+<text x="212.00" y="1085.00" text-anchor="middle" class="celltext">Ref</text>
+<text x="258" y="1086.00" class="label">OpenAI-Ref</text>
+<rect x="420" y="1058" width="88" height="44" fill="#bedacc" stroke="#ffffff" stroke-width="1.2"/>
+<text x="464.00" y="1086.00" text-anchor="middle" class="celltext-dark">+4.1</text>
+<rect x="508" y="1058" width="88" height="44" fill="#f7e3d3" stroke="#ffffff" stroke-width="1.2"/>
+<text x="552.00" y="1086.00" text-anchor="middle" class="celltext-dark">-1.9</text>
+<rect x="596" y="1058" width="88" height="44" fill="#fcf0e4" stroke="#ffffff" stroke-width="1.2"/>
+<text x="640.00" y="1086.00" text-anchor="middle" class="celltext-dark">-0.7</text>
+<rect x="684" y="1058" width="88" height="44" fill="#ebc5ad" stroke="#ffffff" stroke-width="1.2"/>
+<text x="728.00" y="1086.00" text-anchor="middle" class="celltext-dark">-4.7</text>
+<rect x="772" y="1058" width="88" height="44" fill="#f2d5c2" stroke="#ffffff" stroke-width="1.2"/>
+<text x="816.00" y="1086.00" text-anchor="middle" class="celltext-dark">-3.1</text>
+<rect x="860" y="1058" width="88" height="44" fill="#96c3ac" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="1086.00" text-anchor="middle" class="celltext-dark">+7.1</text>
+<rect x="948" y="1058" width="88" height="44" fill="#d8eae0" stroke="#ffffff" stroke-width="1.2"/>
+<text x="992.00" y="1086.00" text-anchor="middle" class="celltext-dark">+2.1</text>
+<rect x="1036" y="1058" width="88" height="44" fill="#e1efe7" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1080.00" y="1086.00" text-anchor="middle" class="celltext-dark">+1.4</text>
+<rect x="1124" y="1058" width="88" height="44" fill="#f4dac9" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1168.00" y="1086.00" text-anchor="middle" class="celltext-dark">-2.7</text>
+<rect x="1212" y="1058" width="88" height="44" fill="#f8e5d6" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1256.00" y="1086.00" text-anchor="middle" class="celltext-dark">-1.7</text>
+<text x="1378" y="1086.00" class="label">17.1%</text>
+<text x="1548" y="1086.00" class="label">8.94</text>
+<rect x="48" y="1148" width="1724" height="134" rx="18" class="legend-card"/>
+<text x="72" y="1172" class="tiny">HOW TO READ THE CCD HEATMAP</text>
+<text x="72" y="1196" class="body">The baseline is 10% because the paper offers ten canonical cluster options. `+5.0` means a line selected that cluster five percentage points more often than uniform choice; `-3.0` means three points less often.</text>
+<text x="72" y="1222" class="body">`Top cluster share` is the line&apos;s most frequent cluster share among valid visible selections. `Effective clusters` is the inverse concentration count: lower means more concentrated, higher means more spread out.</text>
+<text x="72" y="1248" class="body">No explicit rationale tags are retained in the public archive, so this figure stays with choice behavior only. The appendix coverage figure still reports whether a valid visible CCD choice surfaced at all.</text>
 </svg>

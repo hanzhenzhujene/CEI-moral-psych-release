@@ -181,7 +181,7 @@
 <text x="258" y="641.00" class="label">DeepSeek-M</text>
 <rect x="430" y="614" width="170" height="42" fill="#34885e" stroke="#ffffff" stroke-width="1.2"/>
 <text x="515.00" y="641.00" text-anchor="middle" class="celltext">97%</text>
-<rect x="600" y="614" width="170" height="42" fill="#378a60" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="600" y="614" width="170" height="42" fill="#378960" stroke="#ffffff" stroke-width="1.2"/>
 <text x="685.00" y="641.00" text-anchor="middle" class="celltext">96%</text>
 <rect x="770" y="614" width="170" height="42" fill="#33875d" stroke="#ffffff" stroke-width="1.2"/>
 <text x="855.00" y="641.00" text-anchor="middle" class="celltext">98%</text>
@@ -209,7 +209,7 @@
 <rect x="184" y="728" width="56" height="30" rx="12" fill="#c2410c"/>
 <text x="212.00" y="749.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="749.00" class="label">Llama-S</text>
-<rect x="430" y="722" width="170" height="42" fill="#34885e" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="430" y="722" width="170" height="42" fill="#34885d" stroke="#ffffff" stroke-width="1.2"/>
 <text x="515.00" y="749.00" text-anchor="middle" class="celltext">98%</text>
 <rect x="600" y="722" width="170" height="42" fill="#31865c" stroke="#ffffff" stroke-width="1.2"/>
 <text x="685.00" y="749.00" text-anchor="middle" class="celltext">99%</text>

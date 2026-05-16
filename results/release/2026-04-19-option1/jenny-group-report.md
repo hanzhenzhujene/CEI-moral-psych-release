@@ -1,6 +1,6 @@
 # Jenny Zhu Moral-Psych Benchmark Report
 
-Updated: `May 12, 2026`
+Updated: `May 15, 2026`
 
 Frozen public snapshot referenced here: `Option 1`, `April 19, 2026`
 
@@ -8,19 +8,23 @@ This report covers Jenny Zhu's five assigned moral-psych benchmark papers under 
 
 ## TL;DR
 
-My result TL;DR:
+If you only read one section, read these key takeaways:
 
-- **Overall model-wise:** `MiniMax-S` is the strongest all-around line on the three comparable accuracy benchmarks: UniMoral 0.661, SMID 0.432, Value Kaleidoscope 0.740, average 0.611. `Qwen-L` is close at 0.600. `Llama-S` is weakest at 0.464, mainly because of low SMID and Value scores.
-- **Text-only model-wise:** `MiniMax` is the strongest family on text benchmarks. `MiniMax-S`, `MiniMax-M`, and `MiniMax-L` all score around 0.699-0.701 across UniMoral and Value Kaleidoscope. `Llama-M` is also strong at 0.697. `Llama-S` is weakest at 0.588.
-- **Benchmark-wise:** `SMID` is the hardest benchmark. It is the vision task, with the lowest mean accuracy (0.364) and widest spread (0.285), so vision-side moral judgment is the main bottleneck. `UniMoral` is the most saturated benchmark, with models clustered from 0.563 to 0.684. `Value Kaleidoscope` is in the middle, with clear but less extreme spread.
-- **Scaling-wise:** There is no universal scaling law. Bigger models are not always better: `Gemma` is non-monotonic on SMID, and `Llama-M` beats `Llama-L` on Value. Size helps on some tasks, but the effect depends on benchmark and route.
-- **CCD-Bench:** `CCD-Bench` measures cultural choice style, not accuracy. Most lines over-select `option_6`, the Nordic Europe cluster; `DeepSeek-S` is the exception, peaking on `option_7`, Sub-Saharan Africa. The point is not that one option is "correct," but that models may collapse toward specific cultural styles. Concentration ranges from `DeepSeek-S` at 13.8% to `Llama-S` at 23.9%, so `DeepSeek-S` is more spread out while `Llama-S` is more concentrated.
-- **DeNEVIL:** `DeNEVIL` is proxy safety-behavior evidence, not official benchmark-faithful scoring. Since the original MoralPrompt scorer is not available locally, this release classifies visible behaviors: refusal, redirect, corrective/contextual answer, risky continuation, ambiguous answer, or no visible answer. Results show high protective/contextual response rates, 92.4% to 99.5%, meaning models usually refuse, redirect, or add safety context instead of continuing harmful content.
+- **Best like-for-like line:** `MiniMax-S` is the strongest fully comparable line, averaging 0.611 across UniMoral 0.661, SMID 0.432, and Value 0.740. This is the cleanest overall topline because all three comparable metrics are observed on the same line.
+- **Best text-only line:** `MiniMax-M` is the strongest pure text line, reaching UniMoral 0.659 and Value 0.740. It should not be called the best all-around line because there is no public SMID route on that line.
+- **OpenAI reference line:** `OpenAI-Ref` (`gpt-4o-mini`) is added as a single text-only reference point with 76,486/76,486 parsed prompts: UniMoral 0.673, Value 0.701, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`.
+- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.364) and widest spread (0.285), while `UniMoral` is tightly clustered (0.121 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
+- **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
+- **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `Llama-S` at 23.9%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
+- **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates (92.4% to 99.5% protective response rate). `DeepSeek-S` no longer has the old visibility-collapse problem in the May 9 saved rerun (0.2% no-visible proxy traces).
+- **Current GitHub-facing boundary:** No MiniMax-M2.5 text benchmark remains live; the saved MiniMax-M2.5 text/proxy pass is already parsed into the public tables and SVGs. SMID remains `TBD`, so the medium MiniMax line is not a fully comparable all-around line yet.
 
 
 ## Benchmark Result Visuals
 
 If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
+
+`OpenAI-Ref` is shown as a single `gpt-4o-mini` text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as an OpenAI S/M/L scaling series, and it has no SMID or DeNEVIL row.
 
 ### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy
 
@@ -71,8 +75,8 @@ This section is the fastest summary for a mentor or collaborator: which lines al
 | `Llama-M` | Complete local line | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Completed locally on April 22, 2026. |
 | `DeepSeek-L` | Complete local line | Done | No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed from saved R1 shards | Large R1 text rerun complete from saved logs; keep it text-only because no SMID route exists. |
 | `Llama-L` | Complete local line | Done | SMID complete; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%. | SMID complete; local text rerun finished successfully through the Denevil proxy task. |
-| `MiniMax-M` | Complete local text line | Done | Clean MiniMax-M2.5 text/proxy benchmarks complete; no medium SMID route fixed yet. | Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
 | `DeepSeek-S` | Complete local line | Done | No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs | May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot. |
+| `MiniMax-M` | Complete local text line | Done | Clean MiniMax-M2.5 text/proxy benchmarks complete; no medium SMID route fixed yet. | Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
 | `MiniMax-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) using MiniMax-M2.5 text plus the shared MiniMax-01 SMID recovery route | The direct-provider MiniMax rerun finished successfully through the Denevil proxy task. |
 | `MiniMax-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | MiniMax-S now uses the clean direct MiniMax-M2.1 text rerun plus the completed MiniMax-01 SMID recovery route. |
 
@@ -107,6 +111,7 @@ Metric definition version: `2026-04-30`. The visible-answer parsing rules behind
 | `Gemma-S` | 0.635 | 0.417 | 0.593 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Gemma-M` | 0.663 | 0.364 | 0.664 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Gemma-L` | 0.661 | 0.412 | 0.656 | Comparable on all three benchmark-faithful accuracy panels. |
+| `OpenAI-Ref` | 0.673 | n/a | 0.701 | OpenAI text-only reference marker; SMID and DeNEVIL intentionally not run. |
 
 _The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._
 
@@ -129,9 +134,10 @@ These are the strongest claims the current public evidence supports. They use on
 | --- | --- | --- |
 | Strongest fully observed comparable line | `MiniMax-S` averages 0.611 across UniMoral 0.661, SMID 0.432, and Value 0.740. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |
 | Strongest text-only comparable line | `MiniMax-M` reaches UniMoral 0.659 and Value 0.740, a two-metric mean of 0.699. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |
+| OpenAI reference marker | `OpenAI-Ref` (`gpt-4o-mini`) parses 76,486/76,486 prompts, reaches UniMoral 0.673 and Value 0.701; CCD-Bench valid-choice coverage is 100.0%. | This is a useful external text-only reference, but it is not an OpenAI size-series claim and has no SMID / DeNEVIL evidence in this release. |
 | Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.364 and the widest spread at 0.285. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |
 | Closest thing to saturation | `UniMoral` has the tightest range, from 0.563 to 0.684 (0.121 spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |
-| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
+| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. `OpenAI-Ref` is a single reference point and is excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
 
 ### Benchmark Reading Guide
 
@@ -168,6 +174,7 @@ _The headline family-scaling figure already appears above in **Benchmark Result 
 | `DeepSeek` | The S/M/L text lines are now accuracy-comparable where text-only metrics exist, but no DeepSeek slot has a public SMID route. | UniMoral: S 0.661 -> M 0.684 -> L 0.563<br/>Value Kaleidoscope: S 0.695 -> M 0.635 -> L 0.681 | Read the DeepSeek size curve as text-only evidence: S and L now come from saved shard reruns, M remains the frozen closed-slice line, and all three still omit SMID. |
 | `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic. |
 | `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic. |
+| `OpenAI` | Single text-only reference point, not a family-size scaling sweep. | UniMoral: Ref 0.673<br/>Value Kaleidoscope: Ref 0.701 | GPT-4o-mini is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about OpenAI size scaling or vision-side SMID performance. |
 
 ### CCD-Bench Choice Behavior
 
@@ -200,6 +207,7 @@ The full ten-option numeric table is published in `results/release/2026-04-19-op
 | `Gemma-S` | option_6 (Nordic Europe) | 21.6% | 8.37 | Compare against the heatmap above, not as scalar accuracy. |
 | `Gemma-M` | option_6 (Nordic Europe) | 18.6% | 8.89 | Compare against the heatmap above, not as scalar accuracy. |
 | `Gemma-L` | option_6 (Nordic Europe) | 17.6% | 9.05 | Compare against the heatmap above, not as scalar accuracy. |
+| `OpenAI-Ref` | option_6 (Nordic Europe) | 17.1% | 8.94 | Compare against the heatmap above, not as scalar accuracy. |
 
 ### DeNEVIL Proxy Behavioral Evidence
 
@@ -289,9 +297,9 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 - Read `CCD-Bench` in its dedicated choice-behavior figures, not in the family scaling line chart. `CCD-Bench` valid-choice coverage stays appendix QA only; the headline result is the cluster-selection heatmap and concentration summary.
 - Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
 - Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.
-- Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%` (2,180 / 2,182), and `Denevil visible proxy coverage = 99.8%` (20,474 / 20,518). These are parser/proxy coverage checks, not CCD or Denevil accuracy.
+- Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%`, and `Denevil visible proxy coverage = 99.8%`. These are parser/proxy coverage checks, not CCD or Denevil accuracy.
 - Do not call `MiniMax-M` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
-- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, and the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions across benchmarks.
+- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and `OpenAI-Ref` is only a single text-reference marker.
 - Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.
 - Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.
 
@@ -300,10 +308,10 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `May 12, 2026` |
+| Repo update date | `May 15, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
-| Current project total cost | `$758.83` |
-| Total cost breakdown | MiniMax API: `$504.66`; OpenRouter for all other models: `$254.17`. |
+| Current project total cost | `$759.59` |
+| Total cost breakdown | MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$254.17`; OpenAI API reference sweep: `$0.76`. |
 | Cost scope | User-confirmed total spend through the latest saved reruns parsed in this repo. |
 | Purpose | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
 | Current public matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
@@ -311,7 +319,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Model families in scope | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |
 | What the frozen snapshot actually covers | one closed `Option 1` slice across `Qwen`, `DeepSeek`, and `Gemma` |
 | Extra completed local line outside release | `Llama` small complete via `llama-3.2-11b-vision-instruct` across `5` papers / `7` tasks |
-| Run provider / temperature | `OpenRouter`, `temperature=0` |
+| Run provider / temperature | `OpenRouter` + direct `MiniMax` + `OpenAI`, `temperature=0` |
 | Current live reruns | No currently published line is still running locally. |
 | Next restart focus | No published rerun is active right now. |
 | Release guardrail | Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables. |
