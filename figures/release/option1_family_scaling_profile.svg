@@ -38,11 +38,11 @@
 <rect x="0" y="0" width="1280" height="1100" class="canvas"/>
 <rect x="24" y="24" width="1232" height="1052" rx="22" class="panel"/>
 <title>Family scaling profile by benchmark</title>
-<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. GPT4 only is plotted as a one-model text-only reference point rather than a size curve. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
+<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. The legacy GPT4-only point is text-only, while the newer OpenAI Batch reference rows are read in the bar and CCD figures rather than as size curves. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
 <text x="48" y="64" class="title">Family Scaling Profile</text>
 <text x="48" y="92" class="subtitle">Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.</text>
 <text x="48" y="114" class="subtitle">This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.</text>
-<text x="48" y="136" class="subtitle">GPT4 only is a one-model text-only reference point, not an S/M/L family-size curve.</text>
+<text x="48" y="136" class="subtitle">The legacy GPT4-only marker is text-only; the newer OpenAI Batch rows are read in the bar and CCD figures, not as size curves.</text>
 <text x="48" y="158" class="subtitle">SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.</text>
 <text x="48" y="180" class="subtitle">Read CCD-Bench in the dedicated choice-distribution and concentration figures.</text>
 <text x="48" y="202" class="subtitle">Read Denevil in the dedicated behavioral-outcomes figure.</text>

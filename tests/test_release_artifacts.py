@@ -131,15 +131,18 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
-    assert any("GPT4 only" in item and "text-only reference marker" in item for item in manifest["interpretation_guardrails"])
+    assert any("OpenAI Batch rows" in item and "text-only reference markers" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_total_cost"] == "$759.59"
+    assert manifest["report_metadata"]["current_total_cost"] == "$759.59 confirmed before May 16 OpenAI Batch additions"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
         "minimax_api": "$504.66",
         "openrouter_other_model_family_runs": "$254.17",
-        "openai_api_reference_sweep": "$0.76",
+        "openai_api_reference_sweep": "$0.76 confirmed before May 16; new OpenAI Batch reference sweeps pending billing confirmation",
     }
-    assert "latest saved reruns parsed in this repo" in manifest["report_metadata"]["current_cost_scope"]
+    assert (
+        manifest["report_metadata"]["current_cost_scope"]
+        == "User-confirmed total spend before the May 16 OpenAI Batch additions; check the OpenAI billing dashboard before publishing an exact updated dollar total."
+    )
     assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"
     assert "stricter visible-answer parsing" in manifest["report_metadata"]["metric_definition_summary"].lower()
     assert manifest["report_metadata"]["ci_workflow_url"].endswith("/actions/workflows/ci.yml")
@@ -201,7 +204,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         )
     topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     assert "## TL;DR" in topline_text
-    assert "`MiniMax-M`" in topline_text
+    assert "`GPT-5 mini`" in topline_text
+    assert "OpenAI text-only Batch references" in topline_text
     assert (
         "intentionally withheld until the clean M2.5 text pass is complete" in topline_text
         or "No MiniMax-M2.5 text benchmark remains live" in topline_text
@@ -444,7 +448,7 @@ def test_release_builder_emits_expected_files(tmp_path):
             "comparison_note",
         ]
         rows = list(reader)
-    assert len(rows) in {10, 11, 12, 13, 14, 15, 16}
+    assert len(rows) == 20
     minimax_large_rows = [row for row in rows if row["line_label"] == "MiniMax-L"]
     if minimax_large_rows:
         assert any(
@@ -455,13 +459,52 @@ def test_release_builder_emits_expected_files(tmp_path):
             for row in minimax_large_rows
         )
     rows_by_line = {row["line_label"]: row for row in rows}
-    openai_reference = rows_by_line["GPT4 only"]
-    assert openai_reference["family"] == "GPT4 only"
-    assert openai_reference["size_slot"] == "Ref"
-    assert openai_reference["unimoral_action_accuracy"] == "0.672700"
-    assert openai_reference["smid_average_accuracy"] == ""
-    assert openai_reference["value_average_accuracy"] == "0.700698"
-    assert openai_reference["comparison_note"] == "GPT4-only text reference marker; SMID and DeNEVIL intentionally not run."
+    expected_openai_references = {
+        "GPT4 only": {
+            "family": "GPT4 only",
+            "route": "openai/gpt-4o-mini (Responses API + Batch API; text-only reference)",
+            "unimoral_action_accuracy": "0.672700",
+            "value_average_accuracy": "0.700698",
+            "comparison_note": "GPT4-only text reference marker; SMID and DeNEVIL intentionally not run.",
+        },
+        "GPT-5 nano": {
+            "family": "OpenAI Batch refs",
+            "route": "openai/gpt-5-nano (Responses API + Batch API; text-only reference)",
+            "unimoral_action_accuracy": "0.653575",
+            "value_average_accuracy": "0.617193",
+            "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
+        },
+        "GPT-4.1 nano": {
+            "family": "OpenAI Batch refs",
+            "route": "openai/gpt-4.1-nano (Responses API + Batch API; text-only reference)",
+            "unimoral_action_accuracy": "0.646289",
+            "value_average_accuracy": "0.673043",
+            "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
+        },
+        "GPT-5 mini": {
+            "family": "OpenAI Batch refs",
+            "route": "openai/gpt-5-mini (Responses API + Batch API; text-only reference)",
+            "unimoral_action_accuracy": "0.677937",
+            "value_average_accuracy": "0.738897",
+            "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
+        },
+        "GPT-4.1 mini": {
+            "family": "OpenAI Batch refs",
+            "route": "openai/gpt-4.1-mini (Responses API + Batch API; text-only reference)",
+            "unimoral_action_accuracy": "0.679417",
+            "value_average_accuracy": "0.734890",
+            "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
+        },
+    }
+    for line_label, expected in expected_openai_references.items():
+        openai_reference = rows_by_line[line_label]
+        assert openai_reference["family"] == expected["family"]
+        assert openai_reference["size_slot"] == "Ref"
+        assert openai_reference["route"] == expected["route"]
+        assert openai_reference["unimoral_action_accuracy"] == expected["unimoral_action_accuracy"]
+        assert openai_reference["smid_average_accuracy"] == ""
+        assert openai_reference["value_average_accuracy"] == expected["value_average_accuracy"]
+        assert openai_reference["comparison_note"] == expected["comparison_note"]
     assert rows_by_line["MiniMax-S"]["unimoral_action_accuracy"] == "0.660861"
     assert rows_by_line["MiniMax-S"]["smid_average_accuracy"] == "0.431996"
     assert rows_by_line["MiniMax-S"]["value_average_accuracy"] == "0.739942"
@@ -601,7 +644,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "dominant_option_share" in reader.fieldnames
         assert "distribution_status" in reader.fieldnames
         ccd_distribution_rows = list(reader)
-    assert len(ccd_distribution_rows) == 16
+    assert len(ccd_distribution_rows) == 20
     for row in ccd_distribution_rows:
         valid_rate = row["valid_selection_rate"]
         if valid_rate == "n/a":
@@ -621,6 +664,46 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert openai_ccd["option_6_pct"] == "17.094409"
     assert openai_ccd["dominant_option"] == "option_6 (Nordic Europe)"
     assert openai_ccd["effective_cluster_count"] == "8.937721"
+    expected_openai_ccd = {
+        "GPT-5 nano": {
+            "valid_selection_count": "2181",
+            "valid_selection_rate": "99.954170",
+            "option_6_pct": "27.785420",
+            "dominant_option_share": "27.785420",
+            "effective_cluster_count": "6.793151",
+        },
+        "GPT-4.1 nano": {
+            "valid_selection_count": "2182",
+            "valid_selection_rate": "100.000000",
+            "option_6_pct": "21.494042",
+            "dominant_option_share": "21.494042",
+            "effective_cluster_count": "8.397459",
+        },
+        "GPT-5 mini": {
+            "valid_selection_count": "2182",
+            "valid_selection_rate": "100.000000",
+            "option_6_pct": "25.297892",
+            "dominant_option_share": "25.297892",
+            "effective_cluster_count": "7.131573",
+        },
+        "GPT-4.1 mini": {
+            "valid_selection_count": "2182",
+            "valid_selection_rate": "100.000000",
+            "option_6_pct": "22.410632",
+            "dominant_option_share": "22.410632",
+            "effective_cluster_count": "8.069893",
+        },
+    }
+    for line_label, expected in expected_openai_ccd.items():
+        openai_batch_ccd = ccd_rows_by_line[line_label]
+        assert openai_batch_ccd["family"] == "OpenAI Batch refs"
+        assert openai_batch_ccd["size_slot"] == "Ref"
+        assert openai_batch_ccd["valid_selection_count"] == expected["valid_selection_count"]
+        assert openai_batch_ccd["valid_selection_rate"] == expected["valid_selection_rate"]
+        assert openai_batch_ccd["option_6_pct"] == expected["option_6_pct"]
+        assert openai_batch_ccd["dominant_option"] == "option_6 (Nordic Europe)"
+        assert openai_batch_ccd["dominant_option_share"] == expected["dominant_option_share"]
+        assert openai_batch_ccd["effective_cluster_count"] == expected["effective_cluster_count"]
     deepseek_small_ccd = ccd_rows_by_line["DeepSeek-S"]
     assert deepseek_small_ccd["distribution_status"] == "ok"
     assert deepseek_small_ccd["valid_selection_count"] == "2180"
@@ -966,7 +1049,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "The hardest benchmark is SMID" in text
         assert "There is no universal scaling law" in text
         if "CCD-Bench shows cultural choice style, not accuracy" in text:
-            assert "`DeepSeek-S` at 13.8% to `Llama-S` at 23.9%" in text
+            assert "`DeepSeek-S` at 13.8% to `GPT-5 nano` at 27.8%" in text
         if "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" in text:
             assert "92.4% to 99.5% protective response rate" in text
             assert "0.2% no-visible proxy traces" in text
@@ -993,7 +1076,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "`DeepSeek-M` | UniMoral 0.684; Value 0.635" in text
         assert "`DeepSeek-L` | UniMoral 0.563; Value 0.681" in text
         assert "Strongest fully observed comparable line | `MiniMax-S` averages 0.611" in text
-        assert "Strongest text-only comparable line | `MiniMax-M` reaches UniMoral 0.659 and Value 0.740" in text
+        assert "Strongest text-only comparable line | `GPT-5 mini` reaches UniMoral 0.678 and Value 0.739" in text
+        assert "OpenAI text-only reference markers | 5 Batch API rows have 76,486/76,486 collected responses each" in text
         assert "Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route" in text
         assert "CCD-Bench should not be flattened into a universal accuracy number." in text
         assert "The repo still lacks a stable local `MoralPrompt` export" in text
@@ -1091,7 +1175,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "## Frozen Snapshot Scope" in topline_summary
     assert "Best like-for-like line" in topline_summary
     if "CCD-Bench shows cultural choice style, not accuracy" in topline_summary:
-        assert "Llama-S" in topline_summary
+        assert "GPT-5 nano" in topline_summary
     if "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" in topline_summary:
         assert "DeepSeek-S" in topline_summary
     assert "For the full public package, move next to `README.md`" in topline_summary

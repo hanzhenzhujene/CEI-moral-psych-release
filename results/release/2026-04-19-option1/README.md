@@ -12,11 +12,11 @@ It separates two things clearly:
 If you only read one section, read these key takeaways:
 
 - **Best like-for-like line:** `MiniMax-S` is the strongest fully comparable line, averaging 0.611 across UniMoral 0.661, SMID 0.432, and Value 0.740. This is the cleanest overall topline because all three comparable metrics are observed on the same line.
-- **Best text-only line:** `MiniMax-M` is the strongest pure text line, reaching UniMoral 0.659 and Value 0.740. It should not be called the best all-around line because there is no public SMID route on that line.
-- **GPT4-only reference line:** `GPT4 only` is added as a single text-only reference point with 76,486/76,486 parsed prompts: UniMoral 0.673, Value 0.701, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`.
+- **Best text-only line:** `GPT-5 mini` is the strongest pure text line, reaching UniMoral 0.678 and Value 0.739. It should not be called the best all-around line because there is no public SMID route on that line.
+- **OpenAI text-only Batch references:** 5 Responses/Batch API reference lines are now integrated, each with 76,486/76,486 response rows collected and parser coverage from 76,401 to 76,486 parsed rows. Best OpenAI UniMoral is `GPT-4.1 mini` at 0.679; best OpenAI Value is `GPT-5 mini` at 0.739. SMID and DeNEVIL remain intentionally `n/a` for these text-only references.
 - **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.364) and widest spread (0.285), while `UniMoral` is tightly clustered (0.121 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
 - **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
-- **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `Llama-S` at 23.9%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
+- **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `GPT-5 nano` at 27.8%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
 - **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates (92.4% to 99.5% protective response rate). `DeepSeek-S` no longer has the old visibility-collapse problem in the May 9 saved rerun (0.2% no-visible proxy traces).
 - **Current GitHub-facing boundary:** No MiniMax-M2.5 text benchmark remains live; the saved MiniMax-M2.5 text/proxy pass is already parsed into the public tables and SVGs. SMID remains `TBD`, so the medium MiniMax line is not a fully comparable all-around line yet.
 
@@ -25,7 +25,7 @@ If you only read one section, read these key takeaways:
 
 If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
 
-`GPT4 only` is shown as a single text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as a GPT4 S/M/L scaling series, and it has no SMID or DeNEVIL row.
+OpenAI Responses/Batch API text-only reference rows are shown in the comparable-accuracy and CCD figures. They are not treated as family-size scaling series, and they have no SMID or DeNEVIL rows.
 
 ### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy
 
@@ -105,6 +105,10 @@ Metric definition version: `2026-04-30`. The visible-answer parsing rules behind
 | `Gemma-M` | 0.663 | 0.364 | 0.664 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Gemma-L` | 0.661 | 0.412 | 0.656 | Comparable on all three benchmark-faithful accuracy panels. |
 | `GPT4 only` | 0.673 | n/a | 0.701 | GPT4-only text reference marker; SMID and DeNEVIL intentionally not run. |
+| `GPT-5 nano` | 0.654 | n/a | 0.617 | OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run. |
+| `GPT-4.1 nano` | 0.646 | n/a | 0.673 | OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run. |
+| `GPT-5 mini` | 0.678 | n/a | 0.739 | OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run. |
+| `GPT-4.1 mini` | 0.679 | n/a | 0.735 | OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run. |
 
 _The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._
 
@@ -126,11 +130,11 @@ These are the strongest claims the current public evidence supports. They use on
 | Claim | Evidence | Why it matters |
 | --- | --- | --- |
 | Strongest fully observed comparable line | `MiniMax-S` averages 0.611 across UniMoral 0.661, SMID 0.432, and Value 0.740. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |
-| Strongest text-only comparable line | `MiniMax-M` reaches UniMoral 0.659 and Value 0.740, a two-metric mean of 0.699. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |
-| GPT4-only reference marker | `GPT4 only` parses 76,486/76,486 prompts, reaches UniMoral 0.673 and Value 0.701; CCD-Bench valid-choice coverage is 100.0%. | This is a useful external text-only reference, but it is not a GPT4 size-series claim and has no SMID / DeNEVIL evidence in this release. |
+| Strongest text-only comparable line | `GPT-5 mini` reaches UniMoral 0.678 and Value 0.739, a two-metric mean of 0.708. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |
+| OpenAI text-only reference markers | 5 Batch API rows have 76,486/76,486 collected responses each, with parser coverage from 76,401 to 76,486. Best OpenAI UniMoral: `GPT-4.1 mini` at 0.679; best OpenAI Value: `GPT-5 mini` at 0.739. | These are useful external text-only references, but they are not OpenAI family-size scaling claims and have no SMID / DeNEVIL evidence in this release. |
 | Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.364 and the widest spread at 0.285. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |
 | Closest thing to saturation | `UniMoral` has the tightest range, from 0.563 to 0.684 (0.121 spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |
-| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. `GPT4 only` is a single reference point and is excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
+| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. OpenAI Batch rows are external text-only reference markers and are excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
 
 ### Benchmark Reading Guide
 
@@ -195,6 +199,10 @@ _The two headline CCD figures already appear above in **Benchmark Result Visuals
 | `Gemma-M` | option_6 (Nordic Europe) | 18.6% | 8.89 | Compare against the heatmap above, not as scalar accuracy. |
 | `Gemma-L` | option_6 (Nordic Europe) | 17.6% | 9.05 | Compare against the heatmap above, not as scalar accuracy. |
 | `GPT4 only` | option_6 (Nordic Europe) | 17.1% | 8.94 | Compare against the heatmap above, not as scalar accuracy. |
+| `GPT-5 nano` | option_6 (Nordic Europe) | 27.8% | 6.79 | Compare against the heatmap above, not as scalar accuracy. |
+| `GPT-4.1 nano` | option_6 (Nordic Europe) | 21.5% | 8.40 | Compare against the heatmap above, not as scalar accuracy. |
+| `GPT-5 mini` | option_6 (Nordic Europe) | 25.3% | 7.13 | Compare against the heatmap above, not as scalar accuracy. |
+| `GPT-4.1 mini` | option_6 (Nordic Europe) | 22.4% | 8.07 | Compare against the heatmap above, not as scalar accuracy. |
 
 ### DeNEVIL Proxy Behavioral Evidence
 
@@ -243,8 +251,8 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 - Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
 - Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.
 - Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%`, and `Denevil visible proxy coverage = 99.8%`. These are parser/proxy coverage checks, not CCD or Denevil accuracy.
-- Do not call `MiniMax-M` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
-- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and `GPT4 only` is only a single text-reference marker.
+- Do not call `GPT-5 mini` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
+- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI Batch rows are text-only reference markers rather than family-size curves.
 - Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.
 - Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.
 
@@ -253,11 +261,11 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `May 15, 2026` |
+| Repo update date | `May 16, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
-| Current project total cost | `$759.59` |
-| Total cost breakdown | MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$254.17`; OpenAI API reference sweep: `$0.76`. |
-| Cost scope | User-confirmed total spend through the latest saved reruns parsed in this repo. |
+| Current project total cost | `$759.59 confirmed before May 16 OpenAI Batch additions` |
+| Total cost breakdown | MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$254.17`; OpenAI API reference sweep: `$0.76 confirmed before May 16; new OpenAI Batch reference sweeps pending billing confirmation`. |
+| Cost scope | User-confirmed total spend before the May 16 OpenAI Batch additions; check the OpenAI billing dashboard before publishing an exact updated dollar total. |
 | Intended use | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
 | Current public matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
 | Benchmarks in scope | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |

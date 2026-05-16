@@ -54,14 +54,14 @@ REPORT_PROVIDER = "OpenRouter + direct MiniMax + OpenAI"
 REPORT_TEMPERATURE = "0"
 REPORT_MINIMAX_API_COST = "$504.66"
 REPORT_OPENROUTER_COST = "$254.17"
-REPORT_OPENAI_API_COST = "$0.76"
-REPORT_CURRENT_TOTAL_COST = "$759.59"
+REPORT_OPENAI_API_COST = "$0.76 confirmed before May 16; new OpenAI Batch reference sweeps pending billing confirmation"
+REPORT_CURRENT_TOTAL_COST = "$759.59 confirmed before May 16 OpenAI Batch additions"
 REPORT_CURRENT_COST_BREAKDOWN = (
     f"MiniMax API: `{REPORT_MINIMAX_API_COST}`; OpenRouter for other model-family runs: `{REPORT_OPENROUTER_COST}`; "
     f"OpenAI API reference sweep: `{REPORT_OPENAI_API_COST}`."
 )
 REPORT_CURRENT_COST_SCOPE = (
-    "User-confirmed total spend through the latest saved reruns parsed in this repo."
+    "User-confirmed total spend before the May 16 OpenAI Batch additions; check the OpenAI billing dashboard before publishing an exact updated dollar total."
 )
 REPORT_STATUS_NOTE = (
     f"Updated {REPORT_DATE_LONG}. "
@@ -248,6 +248,7 @@ CCD_OPTION_COLORS = {
 }
 OPENAI_REFERENCE_LINE_LABEL = "GPT4 only"
 OPENAI_REFERENCE_FAMILY_LABEL = "GPT4 only"
+OPENAI_BATCH_REFERENCE_FAMILY_LABEL = "OpenAI Batch refs"
 LEGACY_OPENAI_REFERENCE_LINE_LABELS = {"OpenAI-Ref"}
 OPENAI_REFERENCE_ROUTE = "openai/gpt-4o-mini (Responses API + Batch API; text-only reference)"
 OPENAI_REFERENCE_NOTE = (
@@ -275,6 +276,136 @@ OPENAI_REFERENCE_CCD_CLUSTER_COUNTS = {
     8: 249,
     9: 160,
     10: 182,
+}
+OPENAI_TEXT_REFERENCE_SPECS = [
+    {
+        "line_label": OPENAI_REFERENCE_LINE_LABEL,
+        "family": OPENAI_REFERENCE_FAMILY_LABEL,
+        "size_slot": "Ref",
+        "route": OPENAI_REFERENCE_ROUTE,
+        "note": OPENAI_REFERENCE_NOTE,
+        "comparison_note": "GPT4-only text reference marker; SMID and DeNEVIL intentionally not run.",
+        "total_samples": OPENAI_REFERENCE_TOTAL_SAMPLES,
+        "parsed_samples": OPENAI_REFERENCE_PARSED_SAMPLES,
+        "unimoral_action_accuracy": OPENAI_REFERENCE_UNIMORAL_ACCURACY,
+        "value_relevance_accuracy": OPENAI_REFERENCE_VALUE_RELEVANCE_ACCURACY,
+        "value_valence_accuracy": OPENAI_REFERENCE_VALUE_VALENCE_ACCURACY,
+        "ccd_total": OPENAI_REFERENCE_CCD_TOTAL,
+        "ccd_valid": OPENAI_REFERENCE_CCD_VALID,
+        "ccd_cluster_counts": OPENAI_REFERENCE_CCD_CLUSTER_COUNTS,
+    },
+    {
+        "line_label": "GPT-5 nano",
+        "family": OPENAI_BATCH_REFERENCE_FAMILY_LABEL,
+        "size_slot": "Ref",
+        "route": "openai/gpt-5-nano (Responses API + Batch API; text-only reference)",
+        "note": "OpenAI text-only Batch API reference line; SMID and DeNEVIL intentionally not run.",
+        "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
+        "total_samples": 76_486,
+        "parsed_samples": 76_401,
+        "unimoral_action_accuracy": 5741 / 8784,
+        "value_relevance_accuracy": 26284 / 43680,
+        "value_valence_accuracy": 13817 / 21840,
+        "ccd_total": 2182,
+        "ccd_valid": 2181,
+        "ccd_cluster_counts": {
+            1: 359,
+            2: 116,
+            3: 133,
+            4: 148,
+            5: 134,
+            6: 606,
+            7: 184,
+            8: 159,
+            9: 259,
+            10: 83,
+        },
+    },
+    {
+        "line_label": "GPT-4.1 nano",
+        "family": OPENAI_BATCH_REFERENCE_FAMILY_LABEL,
+        "size_slot": "Ref",
+        "route": "openai/gpt-4.1-nano (Responses API + Batch API; text-only reference)",
+        "note": "OpenAI text-only Batch API reference line; SMID and DeNEVIL intentionally not run.",
+        "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
+        "total_samples": 76_486,
+        "parsed_samples": 76_466,
+        "unimoral_action_accuracy": 5677 / 8784,
+        "value_relevance_accuracy": 29337 / 43680,
+        "value_valence_accuracy": 14730 / 21840,
+        "ccd_total": 2182,
+        "ccd_valid": 2182,
+        "ccd_cluster_counts": {
+            1: 273,
+            2: 156,
+            3: 180,
+            4: 142,
+            5: 140,
+            6: 469,
+            7: 270,
+            8: 211,
+            9: 185,
+            10: 156,
+        },
+    },
+    {
+        "line_label": "GPT-5 mini",
+        "family": OPENAI_BATCH_REFERENCE_FAMILY_LABEL,
+        "size_slot": "Ref",
+        "route": "openai/gpt-5-mini (Responses API + Batch API; text-only reference)",
+        "note": "OpenAI text-only Batch API reference line; SMID and DeNEVIL intentionally not run.",
+        "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
+        "total_samples": 76_486,
+        "parsed_samples": 76_464,
+        "unimoral_action_accuracy": 5955 / 8784,
+        "value_relevance_accuracy": 32186 / 43680,
+        "value_valence_accuracy": 16182 / 21840,
+        "ccd_total": 2182,
+        "ccd_valid": 2182,
+        "ccd_cluster_counts": {
+            1: 374,
+            2: 114,
+            3: 144,
+            4: 146,
+            5: 122,
+            6: 552,
+            7: 210,
+            8: 150,
+            9: 280,
+            10: 90,
+        },
+    },
+    {
+        "line_label": "GPT-4.1 mini",
+        "family": OPENAI_BATCH_REFERENCE_FAMILY_LABEL,
+        "size_slot": "Ref",
+        "route": "openai/gpt-4.1-mini (Responses API + Batch API; text-only reference)",
+        "note": "OpenAI text-only Batch API reference line; SMID and DeNEVIL intentionally not run.",
+        "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
+        "total_samples": 76_486,
+        "parsed_samples": 76_486,
+        "unimoral_action_accuracy": 5968 / 8784,
+        "value_relevance_accuracy": 31726 / 43680,
+        "value_valence_accuracy": 16237 / 21840,
+        "ccd_total": 2182,
+        "ccd_valid": 2182,
+        "ccd_cluster_counts": {
+            1: 312,
+            2: 148,
+            3: 169,
+            4: 132,
+            5: 130,
+            6: 489,
+            7: 243,
+            8: 205,
+            9: 227,
+            10: 127,
+        },
+    },
+]
+OPENAI_REFERENCE_LINE_LABELS = {str(spec["line_label"]) for spec in OPENAI_TEXT_REFERENCE_SPECS}
+OPENAI_REFERENCE_SPEC_BY_LINE = {
+    str(spec["line_label"]): spec for spec in OPENAI_TEXT_REFERENCE_SPECS
 }
 
 BENCHMARK_METADATA = {
@@ -1555,6 +1686,7 @@ FAMILY_COLOR_SCALES = {
     "Gemma": {"S": "#6d28d9", "M": "#8b5cf6", "L": "#c4b5fd"},
     "MiniMax": {"S": "#b45309", "M": "#d97706", "L": "#fbbf24"},
     OPENAI_REFERENCE_FAMILY_LABEL: {"Ref": "#111827"},
+    OPENAI_BATCH_REFERENCE_FAMILY_LABEL: {"Ref": "#334155"},
 }
 
 STATUS_DISPLAY = {
@@ -6324,42 +6456,48 @@ def family_group_spans(
     return spans
 
 
-def openai_reference_benchmark_row() -> dict[str, Any]:
+def openai_reference_value_average(spec: dict[str, Any]) -> float:
+    return mean([float(spec["value_relevance_accuracy"]), float(spec["value_valence_accuracy"])])
+
+
+def openai_reference_benchmark_row(spec: dict[str, Any]) -> dict[str, Any]:
     return {
-        "line_label": OPENAI_REFERENCE_LINE_LABEL,
-        "family": OPENAI_REFERENCE_FAMILY_LABEL,
-        "size_slot": "Ref",
-        "route": OPENAI_REFERENCE_ROUTE,
-        "unimoral_action_accuracy": OPENAI_REFERENCE_UNIMORAL_ACCURACY,
+        "line_label": spec["line_label"],
+        "family": spec["family"],
+        "size_slot": spec["size_slot"],
+        "route": spec["route"],
+        "unimoral_action_accuracy": spec["unimoral_action_accuracy"],
         "smid_average_accuracy": None,
-        "value_average_accuracy": OPENAI_REFERENCE_VALUE_AVERAGE_ACCURACY,
-        "ccd_completion_coverage": 1.0,
-        "ccd_completion_count": OPENAI_REFERENCE_CCD_VALID,
-        "ccd_completion_total": OPENAI_REFERENCE_CCD_TOTAL,
+        "value_average_accuracy": openai_reference_value_average(spec),
+        "ccd_completion_coverage": int(spec["ccd_valid"]) / int(spec["ccd_total"]),
+        "ccd_completion_count": spec["ccd_valid"],
+        "ccd_completion_total": spec["ccd_total"],
         "denevil_proxy_coverage": None,
         "denevil_proxy_count": None,
         "denevil_proxy_total": None,
-        "coverage_note": OPENAI_REFERENCE_NOTE,
+        "coverage_note": spec["note"],
     }
 
 
-def openai_reference_ccd_distribution_row() -> dict[str, Any]:
+def openai_reference_ccd_distribution_row(spec: dict[str, Any]) -> dict[str, Any]:
+    cluster_counts = spec["ccd_cluster_counts"]
+    ccd_valid = int(spec["ccd_valid"])
     option_shares = {
-        cluster_id: count / OPENAI_REFERENCE_CCD_VALID
-        for cluster_id, count in OPENAI_REFERENCE_CCD_CLUSTER_COUNTS.items()
+        cluster_id: count / ccd_valid
+        for cluster_id, count in cluster_counts.items()
     }
     dominant_option = max(
-        OPENAI_REFERENCE_CCD_CLUSTER_COUNTS,
-        key=lambda cluster_id: (OPENAI_REFERENCE_CCD_CLUSTER_COUNTS[cluster_id], -cluster_id),
+        cluster_counts,
+        key=lambda cluster_id: (cluster_counts[cluster_id], -cluster_id),
     )
     row = {
-        "line_label": OPENAI_REFERENCE_LINE_LABEL,
-        "family": OPENAI_REFERENCE_FAMILY_LABEL,
-        "size_slot": "Ref",
-        "route": OPENAI_REFERENCE_ROUTE,
-        "total_ccd_samples": OPENAI_REFERENCE_CCD_TOTAL,
-        "valid_selection_count": OPENAI_REFERENCE_CCD_VALID,
-        "valid_selection_rate": 1.0,
+        "line_label": spec["line_label"],
+        "family": spec["family"],
+        "size_slot": spec["size_slot"],
+        "route": spec["route"],
+        "total_ccd_samples": spec["ccd_total"],
+        "valid_selection_count": ccd_valid,
+        "valid_selection_rate": ccd_valid / int(spec["ccd_total"]),
         "dominant_option": _ccd_distribution_option_label(dominant_option),
         "dominant_option_share": option_shares[dominant_option],
         "effective_cluster_count": _effective_cluster_count(option_shares),
@@ -6372,16 +6510,18 @@ def openai_reference_ccd_distribution_row() -> dict[str, Any]:
     return row
 
 
-def openai_reference_ccd_coverage_row() -> dict[str, Any]:
+def openai_reference_ccd_coverage_row(spec: dict[str, Any]) -> dict[str, Any]:
+    ccd_valid = int(spec["ccd_valid"])
+    ccd_total = int(spec["ccd_total"])
     return {
-        "line_label": OPENAI_REFERENCE_LINE_LABEL,
-        "family": OPENAI_REFERENCE_FAMILY_LABEL,
-        "size_slot": "Ref",
-        "total_ccd_samples": OPENAI_REFERENCE_CCD_TOTAL,
-        "valid_selection_count": OPENAI_REFERENCE_CCD_VALID,
-        "valid_selection_rate": 1.0,
+        "line_label": spec["line_label"],
+        "family": spec["family"],
+        "size_slot": spec["size_slot"],
+        "total_ccd_samples": ccd_total,
+        "valid_selection_count": ccd_valid,
+        "valid_selection_rate": ccd_valid / ccd_total,
         "coverage_status": "ok",
-        "coverage_note": f"valid {fmt_ratio(OPENAI_REFERENCE_CCD_VALID, OPENAI_REFERENCE_CCD_TOTAL)}",
+        "coverage_note": f"valid {fmt_ratio(ccd_valid, ccd_total)}",
     }
 
 
@@ -6390,27 +6530,35 @@ def add_openai_reference_outputs(
     ccd_choice_distribution: list[dict[str, Any]],
     ccd_valid_choice_coverage: list[dict[str, Any]],
 ) -> None:
-    """Add the completed GPT-4o-mini text-only sweep as a reference marker."""
+    """Add completed OpenAI text-only Batch sweeps as reference markers."""
     benchmark_comparison[:] = [
-        row for row in benchmark_comparison if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
+        row
+        for row in benchmark_comparison
+        if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
+        and row.get("line_label") not in OPENAI_REFERENCE_LINE_LABELS
     ]
     ccd_choice_distribution[:] = [
-        row for row in ccd_choice_distribution if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
+        row
+        for row in ccd_choice_distribution
+        if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
+        and row.get("line_label") not in OPENAI_REFERENCE_LINE_LABELS
     ]
     ccd_valid_choice_coverage[:] = [
-        row for row in ccd_valid_choice_coverage if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
+        row
+        for row in ccd_valid_choice_coverage
+        if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
+        and row.get("line_label") not in OPENAI_REFERENCE_LINE_LABELS
     ]
-    if not any(row["line_label"] == OPENAI_REFERENCE_LINE_LABEL for row in benchmark_comparison):
-        benchmark_comparison.append(openai_reference_benchmark_row())
-    if not any(row["line_label"] == OPENAI_REFERENCE_LINE_LABEL for row in ccd_choice_distribution):
-        ccd_choice_distribution.append(openai_reference_ccd_distribution_row())
-    if not any(row["line_label"] == OPENAI_REFERENCE_LINE_LABEL for row in ccd_valid_choice_coverage):
-        ccd_valid_choice_coverage.append(openai_reference_ccd_coverage_row())
+    for spec in OPENAI_TEXT_REFERENCE_SPECS:
+        benchmark_comparison.append(openai_reference_benchmark_row(spec))
+        ccd_choice_distribution.append(openai_reference_ccd_distribution_row(spec))
+        ccd_valid_choice_coverage.append(openai_reference_ccd_coverage_row(spec))
 
 
 def comparable_snapshot_note(row: dict[str, Any]) -> str:
-    if row.get("line_label") == OPENAI_REFERENCE_LINE_LABEL:
-        return "GPT4-only text reference marker; SMID and DeNEVIL intentionally not run."
+    if row.get("line_label") in OPENAI_REFERENCE_LINE_LABELS:
+        spec = OPENAI_REFERENCE_SPEC_BY_LINE[str(row["line_label"])]
+        return str(spec["comparison_note"])
     if (
         row.get("line_label") == "DeepSeek-S"
         and row["unimoral_action_accuracy"] is not None
@@ -7577,7 +7725,7 @@ def build_benchmark_difficulty_summary(rows: list[dict[str, Any]]) -> list[dict[
             {"line_label": row["line_label"], "family": row["family"], "size_slot": row["size_slot"], "accuracy": float(row[field])}
             for row in rows
             if row[field] is not None
-            and row.get("line_label") != OPENAI_REFERENCE_LINE_LABEL
+            and row.get("line_label") not in OPENAI_REFERENCE_LINE_LABELS
         ]
         if not scored:
             continue
@@ -8288,7 +8436,7 @@ def render_family_scaling_profile_svg(
     intro_lines = [
         "Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.",
         "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.",
-        "GPT4 only is a one-model text-only reference point, not an S/M/L family-size curve.",
+        "The legacy GPT4-only marker is text-only; the newer OpenAI Batch rows are read in the bar and CCD figures, not as size curves.",
         "SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.",
         "Read CCD-Bench in the dedicated choice-distribution and concentration figures.",
         "Read Denevil in the dedicated behavioral-outcomes figure.",
@@ -8298,7 +8446,7 @@ def render_family_scaling_profile_svg(
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Family scaling profile by benchmark</title>",
-            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. GPT4 only is plotted as a one-model text-only reference point rather than a size curve. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
+            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. The legacy GPT4-only point is text-only, while the newer OpenAI Batch reference rows are read in the bar and CCD figures rather than as size curves. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
             '<text x="48" y="64" class="title">Family Scaling Profile</text>',
         ]
     )
@@ -8530,7 +8678,7 @@ def render_ccd_choice_distribution_svg(rows: list[dict[str, Any]], output_path: 
             '<text x="48" y="64" class="title">CCD-Bench cultural-cluster choice behavior, not accuracy</text>',
             '<text x="48" y="88" class="subtitle">Cells show deviation from the 10% uniform baseline across the paper&apos;s ten canonical GLOBE cultural clusters, computed over valid visible selections only.</text>',
             '<text x="48" y="108" class="subtitle">Positive cells mean the line selected that cluster more often than uniform choice; negative cells mean under-indexing. This is CCD choice behavior, not benchmark accuracy.</text>',
-            '<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT4 only is a one-off reference row. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>',
+            '<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI Batch references are one-off text-only rows. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>',
             '<text x="48" y="148" class="subtitle">Coverage stays in the appendix QA figure.</text>',
         ]
     )
@@ -8648,7 +8796,7 @@ def render_ccd_dominant_option_share_svg(rows: list[dict[str, Any]], output_path
             "<desc>Secondary CCD result. Compact CCD-Bench comparison showing how concentrated each line's valid visible selections are on its most frequent canonical cluster. Bars show dominant-cluster share; right-hand labels add effective-cluster count. This is a concentration summary, not accuracy.</desc>",
             '<text x="48" y="64" class="title">CCD-Bench choice-concentration summary, not accuracy</text>',
             '<text x="48" y="88" class="subtitle">Bars show the dominant-cluster share among valid visible CCD selections; the right-hand label adds the effective number of clusters implied by that same distribution.</text>',
-            '<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT4 only is shown only as a one-off reference row. Higher bars mean more concentration on one cluster.</text>',
+            '<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI Batch references are one-off text-only rows. Higher bars mean more concentration on one cluster.</text>',
         ]
     )
 
@@ -9663,6 +9811,28 @@ def current_research_group_status_takeaway() -> str | None:
     return None
 
 
+def _openai_reference_rows(benchmark_comparison: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows_by_label = {row["line_label"]: row for row in benchmark_comparison}
+    return [
+        rows_by_label[str(spec["line_label"])]
+        for spec in OPENAI_TEXT_REFERENCE_SPECS
+        if str(spec["line_label"]) in rows_by_label
+    ]
+
+
+def _openai_reference_parsed_range() -> tuple[int, int, int]:
+    parsed_values = [int(spec["parsed_samples"]) for spec in OPENAI_TEXT_REFERENCE_SPECS]
+    total = int(OPENAI_TEXT_REFERENCE_SPECS[0]["total_samples"])
+    return min(parsed_values), max(parsed_values), total
+
+
+def _best_openai_reference(rows: list[dict[str, Any]], field: str) -> dict[str, Any] | None:
+    candidates = [row for row in rows if _numeric_or_none(row.get(field)) is not None]
+    if not candidates:
+        return None
+    return max(candidates, key=lambda row: _numeric_or_none(row[field]) or float("-inf"))
+
+
 def append_tldr_section(
     lines: list[str],
     benchmark_comparison: list[dict[str, Any]],
@@ -9721,10 +9891,7 @@ def append_tldr_section(
         if text_only_lines
         else None
     )
-    openai_reference_line = next(
-        (row for row in benchmark_comparison if row["line_label"] == OPENAI_REFERENCE_LINE_LABEL),
-        None,
-    )
+    openai_reference_rows = _openai_reference_rows(benchmark_comparison)
 
     smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
     unimoral_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "UniMoral")
@@ -9789,9 +9956,12 @@ def append_tldr_section(
         lines.append(
             f"- **Best text-only line:** `{best_text_only_line['line_label']}` is the strongest pure text line, reaching UniMoral {fmt_float(as_float(best_text_only_line['unimoral_action_accuracy']))} and Value {fmt_float(as_float(best_text_only_line['value_average_accuracy']))}. It should not be called the best all-around line because there is no public SMID route on that line."
         )
-    if openai_reference_line is not None:
+    if openai_reference_rows:
+        parsed_min, parsed_max, parsed_total = _openai_reference_parsed_range()
+        best_openai_unimoral = _best_openai_reference(openai_reference_rows, "unimoral_action_accuracy")
+        best_openai_value = _best_openai_reference(openai_reference_rows, "value_average_accuracy")
         lines.append(
-            f"- **GPT4-only reference line:** `{OPENAI_REFERENCE_LINE_LABEL}` is added as a single text-only reference point with {OPENAI_REFERENCE_PARSED_SAMPLES:,}/{OPENAI_REFERENCE_TOTAL_SAMPLES:,} parsed prompts: UniMoral {fmt_float(as_float(openai_reference_line['unimoral_action_accuracy']))}, Value {fmt_float(as_float(openai_reference_line['value_average_accuracy']))}, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`."
+            f"- **OpenAI text-only Batch references:** {len(openai_reference_rows)} Responses/Batch API reference lines are now integrated, each with {parsed_total:,}/{parsed_total:,} response rows collected and parser coverage from {parsed_min:,} to {parsed_max:,} parsed rows. Best OpenAI UniMoral is `{best_openai_unimoral['line_label']}` at {fmt_float(as_float(best_openai_unimoral['unimoral_action_accuracy']))}; best OpenAI Value is `{best_openai_value['line_label']}` at {fmt_float(as_float(best_openai_value['value_average_accuracy']))}. SMID and DeNEVIL remain intentionally `n/a` for these text-only references."
         )
     lines.append(
         f"- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy ({fmt_float(as_float(smid_summary['mean_accuracy']))}) and widest spread ({fmt_float(as_float(smid_summary['spread']))}), while `UniMoral` is tightly clustered ({fmt_float(as_float(unimoral_summary['spread']))} spread). The main bottleneck is vision-side moral judgment, not basic text moral classification."
@@ -9832,7 +10002,7 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.",
             "",
-            "`GPT4 only` is shown as a single text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as a GPT4 S/M/L scaling series, and it has no SMID or DeNEVIL row.",
+            "OpenAI Responses/Batch API text-only reference rows are shown in the comparable-accuracy and CCD figures. They are not treated as family-size scaling series, and they have no SMID or DeNEVIL rows.",
             "",
             "### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy",
             "",
@@ -9916,10 +10086,7 @@ def append_interpretation_sections(
                 if value is not None
             ),
         )
-    openai_reference_line = next(
-        (row for row in benchmark_comparison if row["line_label"] == OPENAI_REFERENCE_LINE_LABEL),
-        None,
-    )
+    openai_reference_rows = _openai_reference_rows(benchmark_comparison)
     unimoral_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "UniMoral")
     smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
     gemma_s = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-S"), None)
@@ -9975,9 +10142,12 @@ def append_interpretation_sections(
         lines.append(
             f"| Strongest text-only comparable line | `{best_text_only_line['line_label']}` reaches UniMoral {fmt_float(best_text_only_line['unimoral_action_accuracy'])} and Value {fmt_float(best_text_only_line['value_average_accuracy'])}, a two-metric mean of {fmt_float(best_text_only_mean)}. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |"
         )
-    if openai_reference_line is not None:
+    if openai_reference_rows:
+        parsed_min, parsed_max, parsed_total = _openai_reference_parsed_range()
+        best_openai_unimoral = _best_openai_reference(openai_reference_rows, "unimoral_action_accuracy")
+        best_openai_value = _best_openai_reference(openai_reference_rows, "value_average_accuracy")
         lines.append(
-            f"| GPT4-only reference marker | `{OPENAI_REFERENCE_LINE_LABEL}` parses {OPENAI_REFERENCE_PARSED_SAMPLES:,}/{OPENAI_REFERENCE_TOTAL_SAMPLES:,} prompts, reaches UniMoral {fmt_float(openai_reference_line['unimoral_action_accuracy'])} and Value {fmt_float(openai_reference_line['value_average_accuracy'])}; CCD-Bench valid-choice coverage is 100.0%. | This is a useful external text-only reference, but it is not a GPT4 size-series claim and has no SMID / DeNEVIL evidence in this release. |"
+            f"| OpenAI text-only reference markers | {len(openai_reference_rows)} Batch API rows have {parsed_total:,}/{parsed_total:,} collected responses each, with parser coverage from {parsed_min:,} to {parsed_max:,}. Best OpenAI UniMoral: `{best_openai_unimoral['line_label']}` at {fmt_float(best_openai_unimoral['unimoral_action_accuracy'])}; best OpenAI Value: `{best_openai_value['line_label']}` at {fmt_float(best_openai_value['value_average_accuracy'])}. | These are useful external text-only references, but they are not OpenAI family-size scaling claims and have no SMID / DeNEVIL evidence in this release. |"
         )
     lines.append(
         f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |"
@@ -9986,7 +10156,7 @@ def append_interpretation_sections(
         f"| Closest thing to saturation | `UniMoral` has the tightest range, from {fmt_float(unimoral_summary['min_accuracy'])} to {fmt_float(unimoral_summary['max_accuracy'])} ({fmt_float(unimoral_summary['spread'])} spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |"
     )
     lines.append(
-        f"| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. `GPT4 only` is a single reference point and is excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
+        f"| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. OpenAI Batch rows are external text-only reference markers and are excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
     )
     lines.extend(
         [
@@ -10076,7 +10246,7 @@ def append_interpretation_sections(
                 else "- If a line appears only in the appendix coverage/provenance panels, read it as a response-format / release-evidence signal rather than a benchmark-faithful accuracy result."
             ),
             f"- Do not call `{best_text_only_line['line_label']}` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line." if best_text_only_line is not None else "- Do not promote any text-only line into an all-around winner claim without a matching SMID route.",
-            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and `GPT4 only` is only a single text-reference marker.",
+            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI Batch rows are text-only reference markers rather than family-size curves.",
             f"- Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.",
             f"- Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.",
             "",
@@ -11374,7 +11544,7 @@ def build_release_manifest(
             "Denevil is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
             "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
             "DeepSeek-S text metrics come from the May 9 no-thinking saved rerun; it remains text-only because no SMID vision route exists.",
-            "GPT4 only is a text-only reference marker, not a claimed GPT4 family-size sweep.",
+            "OpenAI Batch rows are text-only reference markers, not claimed OpenAI family-size sweeps.",
             "The completed local Llama small line sits outside the frozen Option 1 totals.",
             "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration.",
         ],
