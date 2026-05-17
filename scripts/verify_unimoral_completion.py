@@ -399,18 +399,24 @@ def verify_release(
         (row["line_label"], row["task_name"], row["sample_id"])
         for row in prediction_rows
     ]
+    duplicate_prediction_count = len(prediction_keys) - len(set(prediction_keys))
     if len(prediction_rows) != EXPECTED_SAMPLE_PREDICTION_ROWS:
         fail(
             errors,
             f"unimoral-sample-predictions.csv has {len(prediction_rows)} rows, expected {EXPECTED_SAMPLE_PREDICTION_ROWS}",
         )
-    if len(set(prediction_keys)) != len(prediction_keys):
+    if duplicate_prediction_count:
         fail(errors, "unimoral-sample-predictions.csv contains duplicate line/task/sample rows")
     predictions_by_pair: dict[tuple[str, str], list[dict[str, str]]] = {}
     for row in prediction_rows:
         predictions_by_pair.setdefault((row["line_label"], row["task_name"]), []).append(row)
     strict_prediction_gap = 0
     completion_audit_blocker_phrases: list[str] = []
+    if duplicate_prediction_count:
+        completion_audit_blocker_phrases.append(
+            f"`unimoral-sample-predictions.csv`: {duplicate_prediction_count} duplicate "
+            "line/task/sample prediction rows prevent strict completion"
+        )
     for line in MODEL_LINES:
         for task_name, task in PREDICTION_TASKS.items():
             rows_for_pair = predictions_by_pair.get((line, task_name), [])

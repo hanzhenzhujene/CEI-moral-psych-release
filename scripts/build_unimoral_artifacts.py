@@ -1224,12 +1224,20 @@ def write_completion_audit(
         for row in full_rows
     }
     prediction_counts: dict[tuple[str, str], int] = {}
+    prediction_keys: list[tuple[str, str, str]] = []
     for row in prediction_rows:
         key = (str(row.get("line_label", "")), str(row.get("task_name", "")))
         prediction_counts[key] = prediction_counts.get(key, 0) + 1
+        prediction_keys.append((*key, str(row.get("sample_id", ""))))
 
     total_prediction_gap = 0
     strict_blocker_lines: list[str] = []
+    duplicate_prediction_count = len(prediction_keys) - len(set(prediction_keys))
+    if duplicate_prediction_count:
+        strict_blocker_lines.append(
+            f"- `unimoral-sample-predictions.csv`: {duplicate_prediction_count} duplicate "
+            "line/task/sample prediction rows prevent strict completion."
+        )
     for line_label, _, _, _ in MODEL_LINES:
         for task_name, task in TASKS.items():
             if task_name == "unimoral_action_prediction":
@@ -1250,7 +1258,7 @@ def write_completion_audit(
                     f"- `{line_label}` `{task_name}`: no sample-count gap "
                     f"({prediction_count}/{expected}) but status `{status_value}` prevents strict completion."
                 )
-    sample_predictions_complete = sample_rows == expected_prediction_rows
+    sample_predictions_complete = sample_rows == expected_prediction_rows and duplicate_prediction_count == 0
     failures_clear = not failures
     strict_complete = coverage_complete and sample_predictions_complete and failures_clear and not strict_blocker_lines
     status = "achieved" if strict_complete else "not achieved"
@@ -1262,7 +1270,7 @@ def write_completion_audit(
     gate_sentence = (
         "Strict completion is achieved by `scripts/verify_unimoral_completion.py`; `unimoral-failure-checklist.csv` is empty and `unimoral-coverage.csv` has complete RQ2/RQ3/RQ4 rows."
         if strict_complete
-        else "Strict completion is blocked by MiniMax-only saved-artifact gaps. Do not mark the objective complete while `scripts/verify_unimoral_completion.py` fails, `unimoral-failure-checklist.csv` is nonempty, or `unimoral-coverage.csv` has incomplete RQ2/RQ3/RQ4 rows."
+        else "Strict completion is blocked by saved-artifact gaps or consistency failures. Do not mark the objective complete while `scripts/verify_unimoral_completion.py` fails, `unimoral-failure-checklist.csv` is nonempty, or `unimoral-coverage.csv` has incomplete RQ2/RQ3/RQ4 rows."
     )
     lines = [
         "# UniMoral Completion Audit",

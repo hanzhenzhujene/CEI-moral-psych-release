@@ -29,6 +29,6 @@ Total strict sample prediction gap: **3474** rows.
 
 ## Completion Gate
 
-Strict completion is blocked by MiniMax-only saved-artifact gaps. Do not mark the objective complete while `scripts/verify_unimoral_completion.py` fails, `unimoral-failure-checklist.csv` is nonempty, or `unimoral-coverage.csv` has incomplete RQ2/RQ3/RQ4 rows.
+Strict completion is blocked by saved-artifact gaps or consistency failures. Do not mark the objective complete while `scripts/verify_unimoral_completion.py` fails, `unimoral-failure-checklist.csv` is nonempty, or `unimoral-coverage.csv` has incomplete RQ2/RQ3/RQ4 rows.
 
 No MiniMax provider calls are made by generating this audit.

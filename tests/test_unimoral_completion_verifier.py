@@ -552,6 +552,7 @@ def test_unimoral_completion_verifier_allow_incomplete_fails_duplicate_predictio
     errors = verifier.verify_release(release, figures, allow_incomplete=True)
 
     assert any("contains duplicate line/task/sample rows" in error for error in errors)
+    assert any("missing CSV blocker phrase" in error for error in errors)
 
 
 def test_unimoral_completion_verifier_allow_incomplete_requires_failure_checklist_row(tmp_path, monkeypatch):
