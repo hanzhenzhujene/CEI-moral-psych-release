@@ -126,6 +126,63 @@ MINIMAX_PARSER_AUDIT = [
     ("MiniMax-L", "unimoral_consequence_generation", "1782 missing samples; no usable saved samples to recover"),
 ]
 
+MINIMAX_LOCAL_SAMPLEBUFFER_AUDIT = [
+    (
+        "MiniMax-S",
+        "unimoral_moral_typology",
+        "3 DBs; 31 buffered samples; 11 scored samples",
+        "All scored rows already appear in `unimoral-sample-predictions.csv`",
+    ),
+    (
+        "MiniMax-M",
+        "unimoral_moral_typology",
+        "1 DB; 10 buffered samples; 9 scored samples",
+        "Non-blocking cell; no missing release rows",
+    ),
+    (
+        "MiniMax-M",
+        "unimoral_factor_attribution",
+        "1 DB; 15 buffered samples; 7 scored samples",
+        "Non-blocking cell; no missing release rows",
+    ),
+    (
+        "MiniMax-L",
+        "unimoral_moral_typology",
+        "3 DBs; 17 buffered samples; 3 scored samples",
+        "Non-blocking cell; no missing release rows",
+    ),
+    (
+        "MiniMax-L",
+        "unimoral_factor_attribution",
+        "no matching factor-attribution samplebuffer DBs",
+        "Cannot recover the 1692 missing samples",
+    ),
+    (
+        "MiniMax-L",
+        "unimoral_consequence_generation",
+        "no samplebuffer DB for `2026-05-17T03-30-30-00-00_unimoral-consequence-generation_Ax9iEsGjvHYpAKRrpnqexK.eval`",
+        "Cannot recover the 1782 missing samples",
+    ),
+]
+
+MINIMAX_COMPACT_DRY_RUN_RANGES = [
+    (
+        "MiniMax-S",
+        "unimoral_moral_typology",
+        "2613 2614;3298 3300;3304 3395;3399 3423;3431 3481;3485 3492",
+    ),
+    (
+        "MiniMax-M",
+        "unimoral_consequence_generation",
+        "1111 1112;1172 1173;1334 1335;1465 1476",
+    ),
+    (
+        "MiniMax-L",
+        "unimoral_factor_attribution",
+        "379 380;715 717;721 1750;2774 2775;2811 3492",
+    ),
+]
+
 
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
@@ -1019,6 +1076,37 @@ def write_minimax_resume_plan(release_dir: Path, failures: list[dict[str, object
         lines.extend(
             [
                 "",
+                "## Local Samplebuffer Audit",
+                "",
+                "Inspect's local samplebuffer cache was also checked under `~/Library/Application Support/inspect_ai/samplebuffer/`. This found small interrupted-shard buffers, but no provider-free path to close the remaining MiniMax blockers.",
+                "",
+                "| Line | Task | Buffered state | Release impact |",
+                "| --- | --- | --- | --- |",
+            ]
+        )
+        for line_label, task_name, buffered_state, release_impact in MINIMAX_LOCAL_SAMPLEBUFFER_AUDIT:
+            lines.append(f"| `{line_label}` | `{task_name}` | {buffered_state} | {release_impact} |")
+        lines.extend(
+            [
+                "",
+                "The MiniMax trace files for the failed consequence-generation run contained request telemetry only. The eval config had `log_samples=true` but `log_model_api=false`, and no response-body fields such as `choices`, `messages`, `content`, `prompt`, `completion`, or `sample_id` were present in the MiniMax trace files.",
+                "",
+                "The broader Inspect application-support trace directory was checked as well. Those global traces had no matching `MiniMax`, failed RQ4 eval ID, or response-body fields, so they do not provide an alternate recovery source.",
+                "",
+                "Redacted shell-history and older-checkout breadcrumbs were checked too. The history points to UniMoral dataset setup under `~/Desktop/moral-psych-data/unimoral` and an older `~/Desktop/moral-psychology-benchmark` checkout, but not to completed RQ2/RQ3/RQ4 MiniMax result artifacts. The older checkout contains UniMoral RQ2/RQ3/RQ4 task-builder code and prompts, while its saved Inspect UniMoral logs are action-prediction runs only.",
+                "",
+                'The sibling `~/Desktop/cei-jenny-main-sync` checkout was also inspected. Its release catalog reports UniMoral as "Action prediction only", and the checkout contains RQ2/RQ3/RQ4 task-builder code/prompts but no saved MiniMax RQ2/RQ3/RQ4 release artifacts or Inspect logs.',
+                "",
+                "Local Time Machine snapshots were listed for May 17, 2026, but no browsable backup content was mounted under `/Volumes/.timemachine`. Do not attempt a snapshot restore or mount operation without explicit user approval.",
+                "",
+                "The `results/inspect/full-runs/2026-05-16-unimoral-full/minimax_l/` transcripts were checked after a Spotlight index search. They contain run starts and one old `args[@]: unbound variable` shell failure for MiniMax-L factor attribution, but no model predictions. The current launcher keeps the empty-args expansion guarded under `set -u`, with a regression test in `tests/test_provider_config.py`.",
+                "",
+                "Git LFS and ignored local payloads were checked. There are no Git LFS files or local LFS objects. The ignored MiniMax-L full-run `.eval` files match the release tables exactly: `unimoral_factor_attribution` has 1800 unique logged samples locally and 1800 release prediction rows, while `unimoral_consequence_generation` has 0 local samples and 0 release prediction rows. No ignored success shard was omitted from `unimoral-sample-predictions.csv`.",
+                "",
+                "The MiniMax smoke/probe logs under `results/inspect/logs/2026-05-16-unimoral-smoke/` and `results/inspect/logs/2026-05-17-unimoral-smoke/` were checked. They contain 22 tiny MiniMax eval archives, map only to MiniMax-S/M model routes, and do not add any same-line sample IDs missing from the release tables. They should not be used to fill the MiniMax-L blockers.",
+                "",
+                'Google Drive was searched for exported or shared UniMoral artifacts using exact and broad terms including `unimoral sample predictions`, `unimoral full benchmark`, `unimoral-rq4-bertscore`, `unimoral_factor_attribution`, `unimoral_consequence_generation`, `MiniMax-L factor attribution`, `MiniMax-L consequence generation`, `CEI moral psych release`, and the failed MiniMax-L consequence-generation eval ID. The only relevant hits were the May 2026 working doc/deck materials, which state the extra UniMoral tasks were still "not yet scored" or action items to check; no Drive result contained saved MiniMax RQ2/RQ3/RQ4 predictions or release CSV artifacts.',
+                "",
                 "## Dry-Run Check",
                 "",
                 "Use this before any provider call to refresh the planned ranges:",
@@ -1032,6 +1120,19 @@ def write_minimax_resume_plan(release_dir: Path, failures: list[dict[str, object
                 "```bash",
                 "UNIMORAL_DRY_RUN=1 FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 UNIMORAL_RERUN_UNPARSED_MAX_GAP=3 UNIMORAL_ROUTE_MODE=openrouter MODEL_FILTER='MiniMax-S' TASK_FILTER='unimoral_factor_attribution' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh",
                 "```",
+                "",
+                "A full MiniMax provider-free refresh with `UNIMORAL_RERUN_UNPARSED_MAX_GAP=3` on May 17, 2026 kept the same missing cells but merged nearby gaps for other cells too. Notable compact ranges were:",
+                "",
+                "| Line | Task | `max_gap=3` dry-run ranges |",
+                "| --- | --- | --- |",
+            ]
+        )
+        for line_label, task_name, ranges in MINIMAX_COMPACT_DRY_RUN_RANGES:
+            lines.append(f"| `{line_label}` | `{task_name}` | `{ranges}` |")
+        lines.extend(
+            [
+                "",
+                "Use these compact ranges only when you intentionally want to rerun a few already-parseable samples between close gaps to reduce process startup overhead.",
                 "",
                 "## Recommended Execution",
                 "",
