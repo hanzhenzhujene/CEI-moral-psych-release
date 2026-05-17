@@ -240,9 +240,9 @@
     "unimoral-model-rankings.csv",
     "unimoral-sample-predictions.csv",
     "unimoral-failure-checklist.csv",
+    "unimoral-completion-audit.md",
     "unimoral-minimax-resume-plan.md",
-    "unimoral-rq4-bertscore.csv",
-    "unimoral-completion-audit.md"
+    "unimoral-rq4-bertscore.csv"
   ],
   "target_matrix": {
     "benchmarks": 5,

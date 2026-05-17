@@ -425,6 +425,7 @@ def test_unimoral_markdown_top_line_accepts_csv_rank_strings():
         ],
         figure_prefix="figures/release/",
         resume_plan_link="results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md",
+        completion_audit_link="results/release/2026-04-19-option1/unimoral-completion-audit.md",
     )
 
     assert "Model-A (0.750)" in section
