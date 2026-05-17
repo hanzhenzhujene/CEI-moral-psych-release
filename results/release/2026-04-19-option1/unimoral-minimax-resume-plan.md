@@ -75,7 +75,13 @@ Google Drive was searched for exported or shared UniMoral artifacts using exact 
 
 ## Dry-Run Check
 
-Use this before any provider call to refresh the planned ranges:
+Use this provider-free wrapper before any provider call to refresh the planned ranges:
+
+```bash
+make unimoral-missing-plan
+```
+
+Equivalent raw command:
 
 ```bash
 UNIMORAL_DRY_RUN=1 FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 UNIMORAL_ROUTE_MODE=openrouter MODEL_FILTER='MiniMax-S,MiniMax-M,MiniMax-L' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh

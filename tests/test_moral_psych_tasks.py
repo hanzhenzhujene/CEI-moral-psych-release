@@ -587,6 +587,7 @@ def test_unimoral_minimax_resume_plan_registers_handoff_artifact(tmp_path):
 
     plan = (release_dir / "unimoral-minimax-resume-plan.md").read_text(encoding="utf-8")
     assert "without granting permission to run MiniMax" in plan
+    assert "make unimoral-missing-plan" in plan
     assert "`MiniMax-L` | `unimoral_factor_attribution`" in plan
     assert "`MiniMax-S` | `unimoral_consequence_generation` | `parse_gap_dry_run`" in plan
     assert "Do not infer labels from hidden reasoning" in plan

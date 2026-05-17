@@ -602,6 +602,7 @@ def verify_release(
             if "No MiniMax blockers are listed" not in resume_plan_text:
                 required_phrases = [
                     "without granting permission to run MiniMax",
+                    "make unimoral-missing-plan",
                     "UNIMORAL_DRY_RUN=1",
                     "Do not infer labels from hidden reasoning",
                     "Local Samplebuffer Audit",
