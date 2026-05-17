@@ -61,6 +61,8 @@ Git LFS and ignored local payloads were checked. There are no Git LFS files or l
 
 The MiniMax smoke/probe logs under `results/inspect/logs/2026-05-16-unimoral-smoke/` and `results/inspect/logs/2026-05-17-unimoral-smoke/` were checked. They contain 22 tiny MiniMax eval archives, map only to MiniMax-S/M model routes, and do not add any same-line sample IDs missing from the release tables. They should not be used to fill the MiniMax-L blockers.
 
+A follow-up provider-free filesystem search across the local Desktop and Inspect application-support paths found the current full-run logs, those tiny smoke/probe logs, older UniMoral action-prediction logs, and unrelated MiniMax benchmark logs, but no additional full MiniMax RQ2/RQ3/RQ4 archives that close the remaining blockers.
+
 Google Drive was searched for exported or shared UniMoral artifacts using exact and broad terms including `unimoral sample predictions`, `unimoral full benchmark`, `unimoral-rq4-bertscore`, `unimoral_factor_attribution`, `unimoral_consequence_generation`, `MiniMax-L factor attribution`, `MiniMax-L consequence generation`, `CEI moral psych release`, and the failed MiniMax-L consequence-generation eval ID. The only relevant hits were the May 2026 working doc/deck materials, which state the extra UniMoral tasks were still "not yet scored" or action items to check; no Drive result contained saved MiniMax RQ2/RQ3/RQ4 predictions or release CSV artifacts.
 
 ## Dry-Run Check
