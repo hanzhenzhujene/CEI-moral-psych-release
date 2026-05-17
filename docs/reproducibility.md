@@ -156,6 +156,14 @@ This command runs:
 - temperature: `0`
 - sample limit: `2`
 
+The smoke target intentionally stays on the small RQ1/action-prediction task.
+For provider-free coverage of the full UniMoral registry, run
+`make verify-unimoral-task-builders`; it instantiates RQ1/RQ2/RQ3/RQ4 through
+`src/inspect/evals/moral_psych.py` using a tiny temporary fixture. For release
+artifacts, `make verify-unimoral-artifacts` checks the generated RQ1-RQ4 tables,
+sample predictions, BERTScore export, figures, manifest entries, and documented
+failure checklist.
+
 ### Expected Output Location
 
 - raw inspect logs: `results/inspect/logs/smoke/`
@@ -174,6 +182,12 @@ uv run --package cei-inspect python src/inspect/run.py \
 ```
 
 The `src/inspect/evals/moral_psych.py` registry is the convenience entrypoint for the moral-psych suite when you want one file that exposes tasks spanning multiple benchmark modules.
+The UniMoral entries exposed there are:
+
+- `unimoral_action_prediction`
+- `unimoral_moral_typology`
+- `unimoral_factor_attribution`
+- `unimoral_consequence_generation`
 
 ## Notes on Scope
 
@@ -183,4 +197,4 @@ Two points are especially important for correct interpretation:
 
 - `Denevil` is currently a proxy line rather than the paper's original `MoralPrompt` setup.
 - `Llama` small is complete locally across all five benchmark papers, but it is tracked as an extra local result rather than folded into the closed `Option 1` counts.
-- `MiniMax` small has a formal local attempt on disk, but the current run failed and should not yet be treated as a completed comparison point.
+- A formal local attempt on disk is not enough to treat a cell as complete; use the generated release status tables and task-specific failure checklists.

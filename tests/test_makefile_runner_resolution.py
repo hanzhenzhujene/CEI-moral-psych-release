@@ -89,7 +89,7 @@ def test_makefile_release_uses_fallback_python_when_uv_is_missing(tmp_path: Path
     assert "fake-python invoked scripts/build_release_artifacts.py --input" in result.stdout
 
 
-def test_makefile_audit_uses_fallback_python_for_both_steps_when_uv_is_missing(tmp_path: Path) -> None:
+def test_makefile_audit_uses_fallback_python_for_all_steps_when_uv_is_missing(tmp_path: Path) -> None:
     fake_python = _write_fake_executable(
         tmp_path / "fake-python",
         "#!/bin/sh\nprintf 'fake-python invoked %s\\n' \"$*\"\n",
@@ -112,8 +112,12 @@ def test_makefile_audit_uses_fallback_python_for_both_steps_when_uv_is_missing(t
     assert result.returncode == 0
     assert f"{fake_python} -m pytest tests -q" in result.stdout
     assert f"{fake_python} scripts/build_release_artifacts.py --input" in result.stdout
+    assert f"{fake_python} scripts/verify_unimoral_task_builders.py" in result.stdout
+    assert f"{fake_python} scripts/verify_unimoral_completion.py --allow-incomplete" in result.stdout
     assert "fake-python invoked -m pytest tests -q" in result.stdout
     assert "fake-python invoked scripts/build_release_artifacts.py --input" in result.stdout
+    assert "fake-python invoked scripts/verify_unimoral_task_builders.py" in result.stdout
+    assert "fake-python invoked scripts/verify_unimoral_completion.py --allow-incomplete" in result.stdout
 
 
 def test_makefile_refresh_authoritative_uses_fallback_python_and_copies_snapshot(tmp_path: Path) -> None:
@@ -191,6 +195,8 @@ def test_makefile_bootstrap_combines_setup_and_audit_when_uv_is_available(tmp_pa
     assert "fake-uv sync --frozen" in result.stdout
     assert "fake-uv run pytest tests -q" in result.stdout
     assert "fake-uv run python scripts/build_release_artifacts.py --input" in result.stdout
+    assert "fake-uv run python scripts/verify_unimoral_task_builders.py" in result.stdout
+    assert "fake-uv run python scripts/verify_unimoral_completion.py --allow-incomplete" in result.stdout
 
 
 def test_makefile_bootstrap_reuses_fallback_python_when_uv_is_missing(tmp_path: Path) -> None:
@@ -217,8 +223,12 @@ def test_makefile_bootstrap_reuses_fallback_python_when_uv_is_missing(tmp_path: 
     assert f"uv not found; reusing {fake_python} for bootstrap." in result.stdout
     assert f"{fake_python} -m pytest tests -q" in result.stdout
     assert f"{fake_python} scripts/build_release_artifacts.py --input" in result.stdout
+    assert f"{fake_python} scripts/verify_unimoral_task_builders.py" in result.stdout
+    assert f"{fake_python} scripts/verify_unimoral_completion.py --allow-incomplete" in result.stdout
     assert "fake-python invoked -m pytest tests -q" in result.stdout
     assert "fake-python invoked scripts/build_release_artifacts.py --input" in result.stdout
+    assert "fake-python invoked scripts/verify_unimoral_task_builders.py" in result.stdout
+    assert "fake-python invoked scripts/verify_unimoral_completion.py --allow-incomplete" in result.stdout
 
 
 def test_makefile_clean_release_covers_generated_release_tables_and_docs() -> None:
@@ -268,6 +278,60 @@ def test_makefile_smoke_uses_fallback_python_when_uv_is_missing(tmp_path: Path) 
     assert f"{fake_python} src/inspect/run.py" in result.stdout
     assert "fake-python invoked src/inspect/run.py" in result.stdout
     assert "--tasks src/inspect/evals/moral_psych.py::unimoral_action_prediction" in result.stdout
+
+
+def test_makefile_verify_unimoral_artifacts_uses_allow_incomplete(tmp_path: Path) -> None:
+    fake_python = _write_fake_executable(
+        tmp_path / "fake-python",
+        "#!/bin/sh\nprintf 'fake-python invoked %s\\n' \"$*\"\n",
+    )
+
+    result = subprocess.run(
+        [
+            "make",
+            "-f",
+            str(MAKEFILE),
+            "verify-unimoral-artifacts",
+            "UV=definitely-not-a-real-uv",
+            f"VENV_PYTHON={fake_python}",
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0
+    assert f"{fake_python} scripts/verify_unimoral_completion.py --allow-incomplete" in result.stdout
+    assert "fake-python invoked scripts/verify_unimoral_completion.py --allow-incomplete" in result.stdout
+
+
+def test_makefile_unimoral_bertscore_uses_fallback_python_and_rebuilds_artifacts(tmp_path: Path) -> None:
+    fake_python = _write_fake_executable(
+        tmp_path / "fake-python",
+        "#!/bin/sh\nprintf 'fake-python invoked %s\\n' \"$*\"\n",
+    )
+
+    result = subprocess.run(
+        [
+            "make",
+            "-f",
+            str(MAKEFILE),
+            "unimoral-bertscore",
+            "UV=definitely-not-a-real-uv",
+            f"VENV_PYTHON={fake_python}",
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0
+    assert f"{fake_python} scripts/compute_unimoral_bertscore.py" in result.stdout
+    assert "--input results/release/2026-04-19-option1/unimoral-sample-predictions.csv" in result.stdout
+    assert "--output results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv" in result.stdout
+    assert f"{fake_python} scripts/build_unimoral_artifacts.py" in result.stdout
+    assert "fake-python invoked scripts/compute_unimoral_bertscore.py" in result.stdout
+    assert "fake-python invoked scripts/build_unimoral_artifacts.py" in result.stdout
 
 
 def test_makefile_smoke_keeps_cei_inspect_package_when_uv_is_available(tmp_path: Path) -> None:

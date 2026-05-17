@@ -134,3 +134,17 @@ def test_load_tasks_from_registry_file_discovers_curated_suite():
     assert "value_prism_relevance" in task_names
     assert "ccd_bench_selection" in task_names
     assert "denevil_fulcra_proxy_generation" in task_names
+
+
+def test_unimoral_registry_tasks_are_defined_in_registry_module():
+    task_file = Path(__file__).parent.parent / "src" / "inspect" / "evals" / "moral_psych.py"
+    tasks = load_tasks_from_file(str(task_file))
+    tasks_by_name = {task.__name__: task for task in tasks}
+
+    for task_name in [
+        "unimoral_action_prediction",
+        "unimoral_moral_typology",
+        "unimoral_factor_attribution",
+        "unimoral_consequence_generation",
+    ]:
+        assert tasks_by_name[task_name].__module__ == "moral_psych"

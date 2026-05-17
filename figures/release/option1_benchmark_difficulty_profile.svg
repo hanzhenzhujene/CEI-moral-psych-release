@@ -38,7 +38,7 @@
 <rect x="0" y="0" width="1220" height="620" class="canvas"/>
 <rect x="24" y="24" width="1172" height="572" rx="22" class="panel"/>
 <title>Benchmark difficulty and spread</title>
-<desc>Mean, minimum, and maximum comparable accuracy for UniMoral, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>
+<desc>Mean, minimum, and maximum comparable accuracy for UniMoral action prediction, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>
 <text x="48" y="64" class="title">Benchmark Difficulty And Spread</text>
 <text x="48" y="88" class="subtitle">Lower means and wider ranges indicate a harder or less stable benchmark in the current comparable slice. These summaries intentionally</text>
 <text x="48" y="108" class="subtitle">exclude proxy-only Denevil and non-comparable CCD-Bench.</text>

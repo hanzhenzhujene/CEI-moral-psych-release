@@ -297,7 +297,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert_done_text_progress(
         minimax_small,
         smid_status="done",
-        summary_note="Direct MiniMax-M2.1 text rerun complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route.",
+        summary_note="Direct MiniMax-M2.1 text rerun complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route.",
     )
     minimax_medium = row_for("MiniMax-M")
     assert minimax_medium["unimoral"] in {"live", "done"}
@@ -308,7 +308,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert minimax_medium["summary_note"].startswith(
         (
             "Clean direct MiniMax-M2.5 text run is active; no medium SMID route fixed yet.",
-            "Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet.",
+            "Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet.",
         )
     )
     minimax_large = row_for("MiniMax-L")
@@ -415,7 +415,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert deepseek_small["denevil"] == "proxy"
     assert deepseek_small["summary_note"] in {
         "No SMID route; May 9 no-thinking text rerun is complete and visible-answer validated.",
-        "No SMID route; May 9 no-thinking text rerun is complete and passes visible-answer validation for UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy.",
+        "No SMID route; May 9 no-thinking text rerun is complete and passes visible-answer validation for UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy.",
     }
     deepseek_medium = row_for("DeepSeek-M")
     assert_done_text_progress(
@@ -427,7 +427,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert_done_text_progress(
         deepseek_large,
         smid_status="-",
-        summary_note="No SMID route; large R1 text rerun is complete from saved shards with UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed.",
+        summary_note="No SMID route; large R1 text rerun is complete from saved shards with UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed.",
     )
 
     with (release_dir / "benchmark-comparison.csv").open(newline="", encoding="utf-8") as handle:

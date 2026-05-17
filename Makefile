@@ -1,4 +1,4 @@
-.PHONY: help bootstrap setup ensure-runner test release refresh-authoritative smoke audit clean-release
+.PHONY: help bootstrap setup ensure-runner test release refresh-authoritative smoke audit verify-unimoral verify-unimoral-artifacts verify-unimoral-task-builders unimoral-bertscore clean-release
 
 RELEASE_DIR := results/release/2026-04-19-option1
 RELEASE_SOURCE := $(RELEASE_DIR)/source/authoritative-summary.csv
@@ -26,7 +26,11 @@ help:
 	@echo "  make release       Build public release artifacts from the tracked source snapshot (runner: $(RUNNER_NOTE))"
 	@echo "  make refresh-authoritative  Refresh the tracked source snapshot from local raw full-run tables"
 	@echo "  make smoke         Run a 2-sample UniMoral smoke test (runner: $(RUNNER_NOTE))"
-	@echo "  make audit         Run the public QA gate (tests + release rebuild)"
+	@echo "  make audit         Run the public QA gate (tests + release rebuild + UniMoral structural checks)"
+	@echo "  make verify-unimoral  Strict UniMoral RQ1-RQ4 completion gate"
+	@echo "  make verify-unimoral-artifacts  Structural UniMoral artifact gate allowing documented incomplete cells"
+	@echo "  make verify-unimoral-task-builders  Provider-free task-builder dry run for UniMoral registry entries"
+	@echo "  make unimoral-bertscore  Optional offline RQ4 BERTScore pass, then rebuild UniMoral artifacts"
 	@echo "  make clean-release Remove generated release tables and figures"
 
 bootstrap:
@@ -64,7 +68,22 @@ release: ensure-runner
 	$(RUN_PYTHON) scripts/build_release_artifacts.py --input $(RELEASE_SOURCE)
 	$(RUN_PYTHON) scripts/build_unimoral_artifacts.py
 
-audit: test release
+audit: test release verify-unimoral-task-builders verify-unimoral-artifacts
+
+verify-unimoral: ensure-runner
+	$(RUN_PYTHON) scripts/verify_unimoral_completion.py
+
+verify-unimoral-artifacts: ensure-runner
+	$(RUN_PYTHON) scripts/verify_unimoral_completion.py --allow-incomplete
+
+verify-unimoral-task-builders: ensure-runner
+	$(RUN_PYTHON) scripts/verify_unimoral_task_builders.py
+
+unimoral-bertscore: ensure-runner
+	$(RUN_PYTHON) scripts/compute_unimoral_bertscore.py \
+		--input $(RELEASE_DIR)/unimoral-sample-predictions.csv \
+		--output $(RELEASE_DIR)/unimoral-rq4-bertscore.csv
+	$(RUN_PYTHON) scripts/build_unimoral_artifacts.py
 
 refresh-authoritative: ensure-runner
 	$(RUN_PYTHON) scripts/build_authoritative_option1_status.py

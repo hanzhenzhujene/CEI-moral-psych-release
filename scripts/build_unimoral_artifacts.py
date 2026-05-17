@@ -15,11 +15,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src" / "inspect"))
 
 from evals._benchmark_utils import (  # noqa: E402
-    canonicalize_label,
-    extract_consequence_generation,
+    canonicalize_label_from_output,
+    consequence_text_from_output,
     meteor_score,
     normalize_whitespace,
     sentence_bleu_score,
+    text_from_sample_output,
 )
 from evals.unimoral import FACTOR_PATTERNS, TYPOLOGY_PATTERNS  # noqa: E402
 from rouge_score import rouge_scorer  # noqa: E402
@@ -53,13 +54,13 @@ TASKS = {
     "unimoral_moral_typology": {
         "rq": "RQ2",
         "label": "Moral typology",
-        "metric": "accuracy",
+        "metric": "official_weighted_f1",
         "expected": 3492,
     },
     "unimoral_factor_attribution": {
         "rq": "RQ3",
         "label": "Factor attribution",
-        "metric": "accuracy",
+        "metric": "official_weighted_f1",
         "expected": 3492,
     },
     "unimoral_consequence_generation": {
@@ -79,7 +80,7 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 def write_csv(path: Path, rows: list[dict[str, object]], fieldnames: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -109,14 +110,20 @@ def successful_eval(log_dir: Path, task_name: str) -> Path | None:
     return max(candidates, key=lambda path: path.stat().st_mtime)
 
 
+def display_path(path: Path) -> str:
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def eval_task_name(path: Path) -> str | None:
     try:
         with ZipFile(path) as zf:
             names = zf.namelist()
             if "header.json" in names:
                 header = json.loads(zf.read("header.json").decode("utf-8"))
-                if header.get("status") not in {"success", "cancelled"}:
-                    return None
                 eval_meta = header.get("eval") if isinstance(header.get("eval"), dict) else {}
                 return eval_meta.get("task")
             if "_journal/start.json" in names:
@@ -151,6 +158,25 @@ def eval_paths_for_task(log_dir: Path, task_name: str) -> list[Path]:
     return sorted(paths, key=lambda path: path.stat().st_mtime)
 
 
+def resolve_display_path(path_text: str) -> Path:
+    path = Path(path_text)
+    return path if path.is_absolute() else ROOT / path
+
+
+def eval_error_message(path: Path) -> str:
+    try:
+        with ZipFile(path) as zf:
+            if "header.json" not in zf.namelist():
+                return ""
+            header = json.loads(zf.read("header.json").decode("utf-8"))
+    except (BadZipFile, KeyError, json.JSONDecodeError):
+        return ""
+    error = header.get("error") if isinstance(header, dict) else None
+    if not isinstance(error, dict):
+        return ""
+    return str(error.get("message") or "")
+
+
 def iter_samples(eval_path: Path) -> list[dict]:
     samples = []
     try:
@@ -166,14 +192,75 @@ def iter_samples(eval_path: Path) -> list[dict]:
     return samples
 
 
-def combined_samples(eval_paths: list[Path]) -> list[dict]:
+def parsed_answer_for_task(task_name: str, sample: dict) -> tuple[str, str]:
+    cache = sample.get("_artifact_parsed_answers")
+    if not isinstance(cache, dict):
+        cache = {}
+        sample["_artifact_parsed_answers"] = cache
+    if task_name in cache:
+        cached_answer, cached_source = cache[task_name]
+        return str(cached_answer), str(cached_source)
+
+    record = score_record(sample)
+    answer = str(record.get("answer") or "").strip()
+    score_metadata = record.get("metadata") if isinstance(record.get("metadata"), dict) else {}
+    score_source = str(score_metadata.get("answer_source") or "")
+    if task_name == "unimoral_moral_typology":
+        if answer in TYPOLOGY_PATTERNS:
+            result = (answer, score_source or "score")
+            cache[task_name] = result
+            return result
+        parsed_answer, _, answer_source = canonicalize_label_from_output(sample_output(sample), TYPOLOGY_PATTERNS)
+        result = (parsed_answer or answer, answer_source)
+        cache[task_name] = result
+        return result
+    if task_name == "unimoral_factor_attribution":
+        if answer in FACTOR_PATTERNS:
+            result = (answer, score_source or "score")
+            cache[task_name] = result
+            return result
+        parsed_answer, _, answer_source = canonicalize_label_from_output(sample_output(sample), FACTOR_PATTERNS)
+        result = (parsed_answer or answer, answer_source)
+        cache[task_name] = result
+        return result
+    if task_name == "unimoral_consequence_generation":
+        if answer:
+            result = (answer, score_source or "score")
+            cache[task_name] = result
+            return result
+        parsed_answer, _, answer_source = consequence_text_from_output(sample_output(sample))
+        result = (parsed_answer, answer_source)
+        cache[task_name] = result
+        return result
+    result = (answer, score_source)
+    cache[task_name] = result
+    return result
+
+
+def prefer_sample_for_task(task_name: str, existing: dict, candidate: dict) -> dict:
+    """Prefer parseable duplicates; otherwise keep the newer candidate."""
+    existing_answer, _ = parsed_answer_for_task(task_name, existing)
+    candidate_answer, _ = parsed_answer_for_task(task_name, candidate)
+    if existing_answer and not candidate_answer:
+        return existing
+    return candidate
+
+
+def parsed_sample_count(task_name: str, samples: list[dict]) -> int:
+    return sum(1 for sample in samples if parsed_answer_for_task(task_name, sample)[0])
+
+
+def combined_samples(eval_paths: list[Path], task_name: str | None = None) -> list[dict]:
     samples_by_id: dict[str, dict] = {}
     for eval_path in eval_paths:
         for sample in iter_samples(eval_path):
             sample_id = str(sample.get("id") or sample.get("uuid") or "")
             if not sample_id:
                 sample_id = f"{eval_path.name}:{len(samples_by_id)}"
-            samples_by_id[sample_id] = sample
+            if task_name is None or sample_id not in samples_by_id:
+                samples_by_id[sample_id] = sample
+            else:
+                samples_by_id[sample_id] = prefer_sample_for_task(task_name, samples_by_id[sample_id], sample)
     return [samples_by_id[key] for key in sorted(samples_by_id)]
 
 
@@ -187,19 +274,12 @@ def score_record(sample: dict) -> dict:
     return {}
 
 
-def answer_text(sample: dict) -> str:
-    output = sample.get("output") if isinstance(sample.get("output"), dict) else {}
-    completion = output.get("completion")
-    if isinstance(completion, str) and completion.strip():
-        return completion
-    choices = output.get("choices")
-    if isinstance(choices, list) and choices:
-        message = choices[0].get("message") if isinstance(choices[0], dict) else {}
-        content = message.get("content") if isinstance(message, dict) else ""
-        if isinstance(content, list):
-            return " ".join(str(item.get("text", "")) for item in content if isinstance(item, dict))
-        return str(content or "")
-    return ""
+def sample_output(sample: dict) -> dict:
+    return sample.get("output") if isinstance(sample.get("output"), dict) else {}
+
+
+def answer_text(sample: dict, *, include_reasoning: bool = True) -> str:
+    return text_from_sample_output(sample_output(sample), include_reasoning=include_reasoning)
 
 
 def target_list(sample: dict) -> list[str]:
@@ -211,6 +291,40 @@ def target_list(sample: dict) -> list[str]:
     return [str(target)]
 
 
+def load_bertscore_lookup(path: Path | None) -> dict[tuple[str, str, str], float]:
+    if path is None or not path.exists():
+        return {}
+    lookup: dict[tuple[str, str, str], float] = {}
+    for row in read_csv(path):
+        value = row.get("bert_score_f1")
+        if value in {None, ""}:
+            continue
+        key = (str(row.get("line_label") or ""), str(row.get("task_name") or ""), str(row.get("sample_id") or ""))
+        if not all(key):
+            continue
+        lookup[key] = float(value)
+    return lookup
+
+
+def sample_bertscore_average(
+    *,
+    line_label: str,
+    task_name: str,
+    samples: list[dict],
+    lookup: dict[tuple[str, str, str], float],
+) -> float | None:
+    if not samples or not lookup:
+        return None
+    values = []
+    for sample in samples:
+        sample_id = str(sample.get("id") or sample.get("uuid") or "")
+        key = (line_label, task_name, sample_id)
+        if key not in lookup:
+            return None
+        values.append(lookup[key])
+    return mean(values) if values else None
+
+
 def classification_summary(samples: list[dict], patterns: dict[str, list[str]]) -> dict[str, object]:
     labels = list(patterns)
     per_class = {label: {"tp": 0, "fp": 0, "fn": 0, "support": 0} for label in labels}
@@ -219,7 +333,7 @@ def classification_summary(samples: list[dict], patterns: dict[str, list[str]]) 
     for sample in samples:
         targets = set(target_list(sample))
         answer = str(score_record(sample).get("answer") or "").strip()
-        prediction = answer if answer in labels else canonicalize_label(answer_text(sample), patterns)
+        prediction = answer if answer in labels else canonicalize_label_from_output(sample_output(sample), patterns)[0]
         if prediction:
             parsed += 1
         if prediction in targets:
@@ -256,7 +370,9 @@ def consequence_summary(samples: list[dict]) -> dict[str, object]:
     rouge_values = []
     parsed = 0
     for sample in samples:
-        prediction = normalize_whitespace(extract_consequence_generation(answer_text(sample)).lower())
+        scored_answer = str(score_record(sample).get("answer") or "").strip()
+        raw_prediction = scored_answer or consequence_text_from_output(sample_output(sample))[0]
+        prediction = normalize_whitespace(raw_prediction.lower())
         refs = [normalize_whitespace(reference).lower() for reference in target_list(sample)]
         if prediction:
             parsed += 1
@@ -278,6 +394,18 @@ def consequence_summary(samples: list[dict]) -> dict[str, object]:
     }
 
 
+def fallback_sample_score(task_name: str, answer: str, targets: list[str]) -> float | str:
+    if not targets:
+        return ""
+    if task_name in {"unimoral_moral_typology", "unimoral_factor_attribution"}:
+        return 1.0 if answer in set(targets) else 0.0
+    if task_name == "unimoral_consequence_generation":
+        prediction = normalize_whitespace(answer.lower())
+        refs = [normalize_whitespace(reference).lower() for reference in targets]
+        return max(meteor_score(ref, prediction) for ref in refs) if refs and prediction else 0.0
+    return ""
+
+
 def action_lookup(release_dir: Path) -> dict[str, float]:
     lookup: dict[str, float] = {}
     for row in read_csv(release_dir / "benchmark-comparison.csv"):
@@ -287,8 +415,14 @@ def action_lookup(release_dir: Path) -> dict[str, float]:
     return lookup
 
 
-def build_rows(log_root: Path, release_dir: Path) -> list[dict[str, object]]:
+def build_rows(
+    log_root: Path,
+    release_dir: Path,
+    *,
+    bertscore_lookup: dict[tuple[str, str, str], float] | None = None,
+) -> list[dict[str, object]]:
     action = action_lookup(release_dir)
+    bertscore_lookup = bertscore_lookup or {}
     rows: list[dict[str, object]] = []
     for line_label, family, size_slot, slug in MODEL_LINES:
         for task_name, task in TASKS.items():
@@ -329,13 +463,23 @@ def build_rows(log_root: Path, release_dir: Path) -> list[dict[str, object]]:
                 rows.append(base)
                 continue
             success_paths = [path for path in eval_paths if eval_status(path) == "success"]
-            success_samples = combined_samples(success_paths)
+            success_samples = combined_samples(success_paths, task_name)
             if len(success_samples) == task["expected"]:
-                samples = success_samples
-                scoring_paths = success_paths
+                all_samples = combined_samples(eval_paths, task_name)
+                success_parsed = parsed_sample_count(task_name, success_samples)
+                all_parsed = parsed_sample_count(task_name, all_samples)
+                if success_parsed < int(0.95 * task["expected"]) and all_parsed > success_parsed:
+                    samples = all_samples
+                    scoring_paths = eval_paths
+                    has_success_full_coverage = False
+                else:
+                    samples = success_samples
+                    scoring_paths = success_paths
+                    has_success_full_coverage = True
             else:
-                samples = combined_samples(eval_paths)
+                samples = combined_samples(eval_paths, task_name)
                 scoring_paths = eval_paths
+                has_success_full_coverage = False
             if task_name == "unimoral_moral_typology":
                 summary = classification_summary(samples, TYPOLOGY_PATTERNS)
             elif task_name == "unimoral_factor_attribution":
@@ -344,27 +488,98 @@ def build_rows(log_root: Path, release_dir: Path) -> list[dict[str, object]]:
                 summary = consequence_summary(samples)
             complete = summary["samples"] == task["expected"]
             parse_rate = (int(summary["parsed"]) / int(summary["samples"])) if summary["samples"] else 0.0
-            has_success_full_coverage = len(success_samples) == task["expected"]
             if not complete:
                 status = "partial"
             elif parse_rate < 0.95:
                 status = "complete_parse_gap"
             elif not has_success_full_coverage:
-                status = "complete_with_interrupted_logs"
+                status = "complete_recovered_logs"
             else:
                 status = "complete"
             base.update(
                 {
                     "completed_samples": summary["samples"],
                     "status": status,
-                    "log_path": ";".join(str(path.relative_to(ROOT)) for path in scoring_paths),
+                    "log_path": ";".join(display_path(path) for path in scoring_paths),
                     "parsed_count": summary["parsed"],
                 }
             )
             for key in ("accuracy", "official_weighted_f1", "bleu", "meteor", "bert_score_f1", "rouge_l"):
                 value = summary.get(key)
                 base[key] = "" if value is None else round(float(value), 6)
+            if task_name == "unimoral_consequence_generation" and bertscore_lookup:
+                bert_average = sample_bertscore_average(
+                    line_label=line_label,
+                    task_name=task_name,
+                    samples=samples,
+                    lookup=bertscore_lookup,
+                )
+                if bert_average is not None:
+                    base["bert_score_f1"] = round(bert_average, 6)
             rows.append(base)
+    return rows
+
+
+def sample_prediction_rows(
+    log_root: Path,
+    *,
+    bertscore_lookup: dict[tuple[str, str, str], float] | None = None,
+) -> list[dict[str, object]]:
+    bertscore_lookup = bertscore_lookup or {}
+    rows: list[dict[str, object]] = []
+    for line_label, family, size_slot, slug in MODEL_LINES:
+        for task_name, task in TASKS.items():
+            if task_name == "unimoral_action_prediction":
+                continue
+            eval_paths = eval_paths_for_task(log_root / slug, task_name)
+            if not eval_paths:
+                continue
+            success_paths = [path for path in eval_paths if eval_status(path) == "success"]
+            success_samples = combined_samples(success_paths, task_name)
+            if len(success_samples) == task["expected"]:
+                all_samples = combined_samples(eval_paths, task_name)
+                success_parsed = parsed_sample_count(task_name, success_samples)
+                all_parsed = parsed_sample_count(task_name, all_samples)
+                if success_parsed < int(0.95 * task["expected"]) and all_parsed > success_parsed:
+                    samples = all_samples
+                    source_paths = eval_paths
+                else:
+                    samples = success_samples
+                    source_paths = success_paths
+            else:
+                samples = combined_samples(eval_paths, task_name)
+                source_paths = eval_paths
+
+            for sample in samples:
+                record = score_record(sample)
+                answer, answer_source = parsed_answer_for_task(task_name, sample)
+                metadata = sample.get("metadata") if isinstance(sample.get("metadata"), dict) else {}
+                score_value = record.get("value", "")
+                if score_value in {None, ""}:
+                    score_value = fallback_sample_score(task_name, answer, target_list(sample))
+                rows.append(
+                    {
+                        "line_label": line_label,
+                        "family": family,
+                        "size_slot": size_slot,
+                        "task_name": task_name,
+                        "rq": task["rq"],
+                        "sample_id": sample.get("id") or sample.get("uuid") or "",
+                        "language": metadata.get("language", ""),
+                        "scenario_id": metadata.get("scenario_id", ""),
+                        "target_json": json.dumps(target_list(sample), ensure_ascii=False),
+                        "prediction": answer,
+                        "score_value": score_value,
+                        "bert_score_f1": (
+                            bertscore_lookup.get((line_label, task_name, str(sample.get("id") or sample.get("uuid") or "")), "")
+                            if task_name == "unimoral_consequence_generation"
+                            else ""
+                        ),
+                        "answer_source": answer_source,
+                        "source_log_dir": display_path(log_root / slug),
+                        "source_log_count": len(source_paths),
+                    }
+                )
     return rows
 
 
@@ -411,12 +626,48 @@ def failure_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
         elif completed < expected:
             category = "api/runtime"
             reason = f"provider run stalled or was interrupted after saving {completed}/{expected} samples"
+            error_messages = [
+                eval_error_message(resolve_display_path(path_text))
+                for path_text in str(row["log_path"]).split(";")
+                if path_text
+            ]
+            if any("Insufficient credits" in message or "Error code: 402" in message for message in error_messages):
+                category = "api"
+                reason = f"OpenRouter 402 insufficient credits after saving {completed}/{expected} samples"
         elif parsed < int(0.95 * expected):
             category = "format/parsing"
-            reason = f"only {parsed}/{expected} samples had a parseable visible answer"
+            reason = f"only {parsed}/{expected} samples had a parseable scored answer"
         else:
             category = "runtime"
-            reason = "full sample coverage exists only across interrupted logs"
+            reason = "some scored samples were recovered from interrupted or error logs"
+        task_filter = row["task_name"]
+        model_filter = row["line_label"]
+        is_minimax = str(model_filter).lower().startswith("minimax")
+        route_prefix = "UNIMORAL_ROUTE_MODE=openrouter " if is_minimax else ""
+        provider_clause = "when MiniMax is allowed and OPENROUTER_API_KEY is available, " if is_minimax else ""
+        if category == "format/parsing":
+            next_action = (
+                f"Rerun parse gaps only {provider_clause}with "
+                f"{route_prefix}FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='{model_filter}' TASK_FILTER='{task_filter}' "
+                "scripts/run_unimoral_missing_tasks.sh."
+            )
+        elif completed == 0:
+            next_action = (
+                f"Run the full missing task {provider_clause}with "
+                f"{route_prefix}MODEL_FILTER='{model_filter}' TASK_FILTER='{task_filter}' scripts/run_unimoral_missing_tasks.sh."
+            )
+        elif completed < expected:
+            next_action = (
+                f"Resume missing and parse-limited sample ranges after provider/API issue is resolved {provider_clause}with "
+                f"{route_prefix}FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='{model_filter}' TASK_FILTER='{task_filter}' "
+                "scripts/run_unimoral_missing_tasks.sh."
+            )
+        else:
+            next_action = (
+                f"Rerun non-success or unparseable saved samples {provider_clause}to replace interrupted/error logs with "
+                f"{route_prefix}FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='{model_filter}' TASK_FILTER='{task_filter}' "
+                "scripts/run_unimoral_missing_tasks.sh."
+            )
         output.append(
             {
                 "line_label": row["line_label"],
@@ -427,6 +678,7 @@ def failure_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
                 "parsed_count": parsed,
                 "category": category,
                 "reason": reason,
+                "next_action": next_action,
                 "log_path": row["log_path"],
             }
         )
@@ -569,6 +821,46 @@ def update_manifest(release_dir: Path) -> None:
     if not manifest_path.exists():
         return
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    task_count = len(TASKS)
+    model_line_count = len(MODEL_LINES)
+    family_labels = list(dict.fromkeys(family for _, family, _, _ in MODEL_LINES))
+    total_samples = sum(int(task["expected"]) for task in TASKS.values()) * model_line_count
+    coverage_path = release_dir / "unimoral-coverage.csv"
+    coverage_rows_for_status = read_csv(coverage_path) if coverage_path.exists() else []
+    all_complete = bool(coverage_rows_for_status) and all(row.get("status") == "complete" for row in coverage_rows_for_status)
+    mode = "benchmark_faithful" if all_complete else "benchmark_faithful; documented_incomplete"
+
+    benchmarks = manifest.setdefault("benchmarks", [])
+    unimoral_row = next((row for row in benchmarks if row.get("benchmark") == "UniMoral"), None)
+    if unimoral_row is None:
+        unimoral_row = {"benchmark": "UniMoral"}
+        benchmarks.append(unimoral_row)
+    unimoral_row.update(
+        {
+            "evaluated_lines": task_count * model_line_count,
+            "models_covered": len(family_labels),
+            "modes": mode,
+            "samples": total_samples,
+            "task_types": task_count,
+        }
+    )
+    counts = manifest.setdefault("counts", {})
+    try:
+        counts["authoritative_tasks"] = sum(int(row.get("evaluated_lines") or 0) for row in benchmarks)
+        counts["benchmark_faithful_tasks"] = sum(
+            int(row.get("evaluated_lines") or 0)
+            for row in benchmarks
+            if "benchmark_faithful" in str(row.get("modes") or "")
+        )
+        counts["proxy_tasks"] = sum(
+            int(row.get("evaluated_lines") or 0)
+            for row in benchmarks
+            if str(row.get("modes") or "") == "proxy"
+        )
+        counts["total_samples"] = sum(int(row.get("samples") or 0) for row in benchmarks)
+    except (TypeError, ValueError):
+        counts["total_samples"] = total_samples
+
     entry_points = manifest.setdefault("entry_points", {})
     entry_points.update(
         {
@@ -576,19 +868,25 @@ def update_manifest(release_dir: Path) -> None:
             "unimoral_coverage": "results/release/2026-04-19-option1/unimoral-coverage.csv",
             "unimoral_task_spread": "results/release/2026-04-19-option1/unimoral-task-spread.csv",
             "unimoral_model_rankings": "results/release/2026-04-19-option1/unimoral-model-rankings.csv",
+            "unimoral_sample_predictions": "results/release/2026-04-19-option1/unimoral-sample-predictions.csv",
             "unimoral_failure_checklist": "results/release/2026-04-19-option1/unimoral-failure-checklist.csv",
             "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
             "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
             "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
         }
     )
+    bertscore_path = release_dir / "unimoral-rq4-bertscore.csv"
+    if bertscore_path.exists() and bertscore_path.stat().st_size > 0:
+        entry_points["unimoral_rq4_bertscore"] = "results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv"
     for key, values in {
         "tables": [
             "unimoral-full-benchmark.csv",
             "unimoral-coverage.csv",
             "unimoral-task-spread.csv",
             "unimoral-model-rankings.csv",
+            "unimoral-sample-predictions.csv",
             "unimoral-failure-checklist.csv",
+            *(["unimoral-rq4-bertscore.csv"] if bertscore_path.exists() and bertscore_path.stat().st_size > 0 else []),
         ],
         "figures": [
             "figures/release/option1_unimoral_task_heatmap.svg",
@@ -601,6 +899,93 @@ def update_manifest(release_dir: Path) -> None:
             if value not in existing:
                 existing.append(value)
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def log_root_has_evals(log_root: Path) -> bool:
+    return any(log_root.glob("*.eval")) or any(log_root.glob("*/*.eval"))
+
+
+def existing_release_tables_available(release_dir: Path) -> bool:
+    required = [
+        "unimoral-full-benchmark.csv",
+        "unimoral-coverage.csv",
+        "unimoral-task-spread.csv",
+        "unimoral-model-rankings.csv",
+        "unimoral-sample-predictions.csv",
+        "unimoral-failure-checklist.csv",
+    ]
+    return all((release_dir / filename).exists() and (release_dir / filename).stat().st_size > 0 for filename in required)
+
+
+def update_release_overview_tables(release_dir: Path, coverage: list[dict[str, object]]) -> None:
+    all_complete = all(row["status"] == "complete" for row in coverage)
+    task_count = len(TASKS)
+    model_line_count = len(MODEL_LINES)
+    family_labels = list(dict.fromkeys(family for _, family, _, _ in MODEL_LINES))
+    total_samples = sum(int(task["expected"]) for task in TASKS.values()) * model_line_count
+    per_line_unimoral_samples = sum(int(task["expected"]) for task in TASKS.values())
+    added_unimoral_samples = per_line_unimoral_samples - int(TASKS["unimoral_action_prediction"]["expected"])
+    task_names = list(TASKS)
+
+    coverage_path = release_dir / "coverage-matrix.csv"
+    if all_complete and coverage_path.exists():
+        rows = read_csv(coverage_path)
+        for row in rows:
+            if row.get("benchmark") != "UniMoral" or row.get("status") == "not_run":
+                continue
+            row["status"] = "benchmark_faithful"
+            row["completed_tasks"] = str(task_count)
+            row["expected_tasks"] = str(task_count)
+            row["label"] = f"{task_count}/{task_count}"
+        write_csv(coverage_path, rows, list(rows[0]) if rows else [])
+
+    summary_path = release_dir / "benchmark-summary.csv"
+    if summary_path.exists():
+        rows = read_csv(summary_path)
+        for row in rows:
+            if row.get("benchmark") != "UniMoral":
+                continue
+            row["task_types"] = str(task_count)
+            row["evaluated_lines"] = str(task_count * model_line_count)
+            row["models_covered"] = str(len(family_labels))
+            row["samples"] = str(total_samples)
+            row["modes"] = "benchmark_faithful" if all_complete else "benchmark_faithful; documented_incomplete"
+        write_csv(summary_path, rows, list(rows[0]) if rows else [])
+
+    catalog_path = release_dir / "benchmark-catalog.csv"
+    if catalog_path.exists():
+        rows = read_csv(catalog_path)
+        for row in rows:
+            if row.get("benchmark") != "UniMoral":
+                continue
+            row["models_in_release"] = "; ".join(family_labels)
+            row["samples_in_release"] = str(total_samples)
+            if "current_release_mode" in row:
+                row["current_release_mode"] = "benchmark_faithful" if all_complete else "benchmark_faithful; documented_incomplete"
+            row["repo_readout"] = "The release implements all four UniMoral task definitions: action prediction, moral typology classification, factor attribution, and consequence generation."
+            if all_complete:
+                row["release_interpretation"] = "Action prediction remains the original comparable UniMoral scalar and is near-saturated; RQ2/RQ3/RQ4 expose typology, attribution, and generation behavior separately across the full model-line matrix."
+            else:
+                row["release_interpretation"] = "Action prediction remains the original comparable UniMoral scalar and is near-saturated; RQ2/RQ3/RQ4 expose typology, attribution, and generation behavior separately, with incomplete or parse-limited model-line cells tracked in unimoral-failure-checklist.csv."
+        write_csv(catalog_path, rows, list(rows[0]) if rows else [])
+
+    roster_path = release_dir / "model-roster.csv"
+    if all_complete and roster_path.exists():
+        rows = read_csv(roster_path)
+        for row in rows:
+            benchmarks = {item.strip() for item in str(row.get("benchmarks", "")).split(";") if item.strip()}
+            if "UniMoral" not in benchmarks:
+                continue
+            existing_tasks = [item.strip() for item in str(row.get("tasks", "")).split(";") if item.strip()]
+            task_list = list(dict.fromkeys([*existing_tasks, *task_names]))
+            row["tasks"] = "; ".join(task_list)
+            try:
+                current_samples = int(row.get("samples") or 0)
+            except ValueError:
+                current_samples = 0
+            if added_unimoral_samples and not all(task in existing_tasks for task in task_names):
+                row["samples"] = str(current_samples + added_unimoral_samples)
+        write_csv(roster_path, rows, list(rows[0]) if rows else [])
 
 
 def format_value(value: object) -> str:
@@ -657,12 +1042,14 @@ def build_markdown_section(
     lines.extend(
         [
             "",
+            "Sample-level predictions for RQ2/RQ3/RQ4 are exported in `unimoral-sample-predictions.csv`; full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.",
+            "",
             "| Task | What it measures | Scoring note |",
             "| --- | --- | --- |",
             "| RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | Accuracy from the existing release matrix. |",
-            "| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Exact-match membership accuracy plus official-style weighted F1 in `unimoral-full-benchmark.csv`. |",
-            "| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Exact-match membership accuracy plus official-style weighted F1 in `unimoral-full-benchmark.csv`. |",
-            "| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar; BLEU and ROUGE-L are exported beside it. The official BERTScore column is retained for offline scoring but is not computed by the default live scorer. |",
+            "| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Official-style weighted F1 is the primary release metric; exact-match membership accuracy is exported beside it. |",
+            "| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Official-style weighted F1 is the primary release metric; exact-match membership accuracy is exported beside it. |",
+            "| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar; BLEU and ROUGE-L are exported beside it. Official BERTScore F1 is exported in `unimoral-rq4-bertscore.csv` and merged into completed RQ4 rows when present. |",
             "",
             f"![UniMoral task heatmap]({figure_prefix}option1_unimoral_task_heatmap.svg)",
             "",
@@ -687,7 +1074,7 @@ def update_markdown(path: Path, section: str) -> None:
         updated = before.rstrip() + "\n\n" + block + after
     else:
         updated = text.rstrip() + "\n\n" + block
-    path.write_text(updated, encoding="utf-8")
+    path.write_text(updated.rstrip() + "\n", encoding="utf-8")
 
 
 def update_markdown_reports(
@@ -718,9 +1105,33 @@ def main() -> None:
     parser.add_argument("--log-root", default=ROOT / "results" / "inspect" / "logs" / "2026-05-16-unimoral-full", type=Path)
     parser.add_argument("--release-dir", default=ROOT / "results" / "release" / "2026-04-19-option1", type=Path)
     parser.add_argument("--figure-dir", default=ROOT / "figures" / "release", type=Path)
+    parser.add_argument(
+        "--bertscore-file",
+        default=None,
+        type=Path,
+        help="Optional per-sample RQ4 BERTScore CSV to merge into UniMoral artifacts.",
+    )
     args = parser.parse_args()
 
-    rows = build_rows(args.log_root, args.release_dir)
+    if not log_root_has_evals(args.log_root) and existing_release_tables_available(args.release_dir):
+        rows = read_csv(args.release_dir / "unimoral-full-benchmark.csv")
+        coverage = read_csv(args.release_dir / "unimoral-coverage.csv")
+        spreads = read_csv(args.release_dir / "unimoral-task-spread.csv")
+        rankings = read_csv(args.release_dir / "unimoral-model-rankings.csv")
+        args.figure_dir.mkdir(parents=True, exist_ok=True)
+        svg_heatmap(rows, args.figure_dir / "option1_unimoral_task_heatmap.svg")
+        svg_rankings(rankings, args.figure_dir / "option1_unimoral_task_rankings.svg")
+        svg_spread(spreads, args.figure_dir / "option1_unimoral_task_spread.svg")
+        update_manifest(args.release_dir)
+        update_release_overview_tables(args.release_dir, coverage)
+        update_markdown_reports(args.release_dir, coverage, spreads, rankings)
+        print(f"No Inspect .eval logs found under {args.log_root}; reused existing tracked UniMoral CSV artifacts.")
+        return
+
+    bertscore_file = args.bertscore_file or args.release_dir / "unimoral-rq4-bertscore.csv"
+    bertscore_lookup = load_bertscore_lookup(bertscore_file)
+    rows = build_rows(args.log_root, args.release_dir, bertscore_lookup=bertscore_lookup)
+    predictions = sample_prediction_rows(args.log_root, bertscore_lookup=bertscore_lookup)
     coverage = coverage_rows(rows)
     spreads = spread_rows(rows)
     rankings = ranking_rows(rows)
@@ -751,6 +1162,27 @@ def main() -> None:
     write_csv(args.release_dir / "unimoral-task-spread.csv", spreads, list(spreads[0]))
     write_csv(args.release_dir / "unimoral-model-rankings.csv", rankings, list(rankings[0]) if rankings else ["task_name", "task_label", "rank", "line_label", "metric", "value"])
     write_csv(
+        args.release_dir / "unimoral-sample-predictions.csv",
+        predictions,
+        [
+            "line_label",
+            "family",
+            "size_slot",
+            "task_name",
+            "rq",
+            "sample_id",
+            "language",
+            "scenario_id",
+            "target_json",
+            "prediction",
+            "score_value",
+            "bert_score_f1",
+            "answer_source",
+            "source_log_dir",
+            "source_log_count",
+        ],
+    )
+    write_csv(
         args.release_dir / "unimoral-failure-checklist.csv",
         failures,
         [
@@ -762,6 +1194,7 @@ def main() -> None:
             "parsed_count",
             "category",
             "reason",
+            "next_action",
             "log_path",
         ],
     )
@@ -771,6 +1204,7 @@ def main() -> None:
     svg_rankings(rankings, args.figure_dir / "option1_unimoral_task_rankings.svg")
     svg_spread(spreads, args.figure_dir / "option1_unimoral_task_spread.svg")
     update_manifest(args.release_dir)
+    update_release_overview_tables(args.release_dir, coverage)
     update_markdown_reports(args.release_dir, coverage, spreads, rankings)
 
 

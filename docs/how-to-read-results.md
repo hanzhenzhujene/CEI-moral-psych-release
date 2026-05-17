@@ -23,8 +23,9 @@ This repo uses a few status words repeatedly. This page explains them in plain l
 
 - `Qwen`, `DeepSeek`, and `Gemma` are inside the frozen `Option 1` snapshot.
 - `Llama-S` is complete locally, but it is still outside the frozen snapshot counts.
-- `MiniMax-S` has a formal attempt on disk, but the current run failed and should not be reported as complete.
+- A formal attempt on disk is not enough to call a line complete; use the current release status tables and task-specific failure checklists.
 - `Denevil` should be reported as `proxy` unless a real local `MoralPrompt` export becomes available and `denevil_generation` is rerun.
+- In legacy release tables, `UniMoral` means the RQ1/action-prediction scalar unless the table explicitly says `UniMoral Full Benchmark`. The full RQ1-RQ4 package has its own coverage table and failure checklist.
 
 ## Short Version
 

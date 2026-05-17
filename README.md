@@ -209,6 +209,8 @@ Raw evaluation artifacts stay under `results/inspect/`; the public-facing README
 
 This is the fastest way to understand the deliverable: which lines already have usable results, what is directly comparable now, and which family-size expansions are complete versus partial.
 
+In the legacy status and comparable-accuracy tables below, `UniMoral` refers to the original RQ1 action-prediction scalar unless a table explicitly says `UniMoral Full Benchmark`. The full RQ1-RQ4 coverage table later in this README is the source of truth for typology, factor attribution, and consequence generation status.
+
 | Line | Scope | Status | Coverage | Note |
 | --- | --- | --- | --- | --- |
 | `Qwen-S` | Frozen Option 1 | Done | 5 benchmark lines complete (`Denevil` via proxy) | Primary small Qwen release line. |
@@ -217,13 +219,13 @@ This is the fastest way to understand the deliverable: which lines already have 
 | `Llama-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally, outside the frozen Option 1 counts. |
 | `Gemma-M` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
 | `Gemma-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
-| `Qwen-M` | Complete local line | Done | Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
-| `Qwen-L` | Complete local line | Done | SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | SMID recovery complete; clean text rerun finished locally. |
+| `Qwen-M` | Complete local line | Done | Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
+| `Qwen-L` | Complete local line | Done | SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | SMID recovery complete; clean text rerun finished locally. |
 | `Llama-M` | Complete local line | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Completed locally on April 22, 2026. |
-| `DeepSeek-L` | Complete local line | Done | No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed from saved R1 shards | Large R1 text rerun complete from saved logs; keep it text-only because no SMID route exists. |
-| `Llama-L` | Complete local line | Done | SMID complete; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%. | SMID complete; local text rerun finished successfully through the Denevil proxy task. |
-| `DeepSeek-S` | Complete local line | Done | No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs | May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot. |
-| `MiniMax-M` | Complete local text line | Done | Clean MiniMax-M2.5 text/proxy benchmarks complete; no medium SMID route fixed yet. | Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
+| `DeepSeek-L` | Complete local line | Done | No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed from saved R1 shards | Large R1 text rerun complete from saved logs; keep it text-only because no SMID route exists. |
+| `Llama-L` | Complete local line | Done | SMID complete; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%. | SMID complete; local text rerun finished successfully through the Denevil proxy task. |
+| `DeepSeek-S` | Complete local line | Done | No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs | May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot. |
+| `MiniMax-M` | Complete local text line | Done | Clean MiniMax-M2.5 text/proxy benchmarks complete; no medium SMID route fixed yet. | Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral action prediction 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
 | `MiniMax-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) using MiniMax-M2.5 text plus the shared MiniMax-01 SMID recovery route | The direct-provider MiniMax rerun finished successfully through the Denevil proxy task. |
 | `MiniMax-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | MiniMax-S now uses the clean direct MiniMax-M2.1 text rerun plus the completed MiniMax-01 SMID recovery route. |
 
@@ -313,7 +315,7 @@ _The headline family-scaling figure already appears above in **Benchmark Result 
 | `DeepSeek` | The S/M/L text lines are now accuracy-comparable where text-only metrics exist, but no DeepSeek slot has a public SMID route. | UniMoral: S 0.661 -> M 0.684 -> L 0.563<br/>Value Kaleidoscope: S 0.695 -> M 0.635 -> L 0.681 | Read the DeepSeek size curve as text-only evidence: S and L now come from saved shard reruns, M remains the frozen closed-slice line, and all three still omit SMID. |
 | `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic. |
 | `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic. |
-| `GPT4 only` | Single text-only reference point, not a family-size scaling sweep. | UniMoral: Ref 0.673<br/>Value Kaleidoscope: Ref 0.701 | GPT4 only is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about GPT4 family scaling or vision-side SMID performance. |
+| `GPT4 only` | Single text-only reference point, not a family-size scaling sweep. | UniMoral: Ref 0.673<br/>Value Kaleidoscope: Ref 0.701 | GPT4 only is plotted as a reference marker on UniMoral action prediction, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about GPT4 family scaling or vision-side SMID performance. |
 
 ### CCD-Bench Choice Behavior
 
@@ -437,7 +439,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `Qwen-L text batch` | Done | SMID recovery complete; clean text rerun finished locally. |
 | `Llama-M text batch` | Done | Completed April 22 with a full medium text line. |
 | `DeepSeek-S text batch` | Done | May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot. |
-| `DeepSeek-L R1 text batch` | Done | Saved R1 shards now cover UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy; no SMID route exists. |
+| `DeepSeek-L R1 text batch` | Done | Saved R1 shards now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy; no SMID route exists. |
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
 | `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |
 
@@ -458,17 +460,19 @@ This checkpoint summarizes the broader family-size expansion separately from the
 
 This is the main public status table for the current published matrix.
 
+Here, the `UniMoral` column tracks the legacy action-prediction release line. See `UniMoral Full Benchmark Coverage` for the separate RQ2/RQ3/RQ4 completion matrix.
+
 | Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | Note |
 | :--- | :---: | :---: | :---: | :---: | :---: | --- |
 | `Qwen-S` | Done | Done | Done | Done | Proxy | Frozen Option 1 line. |
 | `Qwen-M` | Done | TBD | Done | Done | Proxy | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
 | `Qwen-L` | Done | Done | Done | Done | Proxy | SMID recovery complete; clean text rerun finished locally. |
-| `MiniMax-S` | Done | Done | Done | Done | Proxy | Direct MiniMax-M2.1 text rerun complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route. |
-| `MiniMax-M` | Done | TBD | Done | Done | Proxy | Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
+| `MiniMax-S` | Done | Done | Done | Done | Proxy | Direct MiniMax-M2.1 text rerun complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route. |
+| `MiniMax-M` | Done | TBD | Done | Done | Proxy | Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral action prediction 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
 | `MiniMax-L` | Done | Done | Done | Done | Proxy | Shared MiniMax-01 SMID recovery complete; the MiniMax-M2.5 text rerun is now fully persisted through the Denevil proxy task (100.0%). |
 | `DeepSeek-S` | Done | - | Done | Done | Proxy | No SMID route; May 9 no-thinking text rerun is complete and visible-answer validated. |
 | `DeepSeek-M` | Done | - | Done | Done | Proxy | Frozen medium text line; no SMID route was included. UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses. |
-| `DeepSeek-L` | Done | - | Done | Done | Proxy | No SMID route; large R1 text rerun is complete from saved shards with UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed. |
+| `DeepSeek-L` | Done | - | Done | Done | Proxy | No SMID route; large R1 text rerun is complete from saved shards with UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed. |
 | `Llama-S` | Done | Done | Done | Done | Proxy | Complete locally across all five papers. |
 | `Llama-M` | Done | - | Done | Done | Proxy | No SMID route; medium text line completed locally on April 22, 2026. |
 | `Llama-L` | Done | Done | Done | Done | Proxy | SMID complete; local text rerun is now fully persisted through the Denevil proxy task (100.0%). |
@@ -501,6 +505,9 @@ make bootstrap
 This is the default reproducibility path for the research deliverable. It installs the pinned environment, runs the full test suite, and rebuilds the tracked release artifacts from the committed authoritative snapshot.
 
 It does **not** require `.env`, API keys, or local benchmark datasets.
+
+For UniMoral-specific provider-free checks, `make verify-unimoral-task-builders` verifies the RQ1-RQ4 registry entries with a tiny temporary fixture, and `make verify-unimoral-artifacts` checks the generated full-benchmark artifacts while allowing documented incomplete cells.
+The UniMoral artifact builder can refresh docs and figures from the tracked UniMoral CSVs when the ignored raw `.eval` logs are not present.
 
 ### 2. Live benchmark smoke test
 
@@ -564,16 +571,18 @@ The release now implements all four UniMoral task definitions and exports scored
 | RQ | Task | Status | Strict complete | Reported cells | Primary metric | Mean | Range | Top line | Diagnostic read |
 | --- | --- | --- | ---: | ---: | --- | ---: | ---: | --- | --- |
 | RQ1 | Action prediction | complete | 16/16 | 16/16 | accuracy | 0.655 | 0.121 | DeepSeek-M (0.684) | diagnostic |
-| RQ2 | Moral typology | incomplete | 12/16 | 14/16 | accuracy | 0.580 | 0.045 | Gemma-S (0.599) | saturated |
-| RQ3 | Factor attribution | incomplete | 11/16 | 13/16 | accuracy | 0.596 | 0.070 | Llama-M (0.631) | moderately diagnostic |
-| RQ4 | Consequence generation | incomplete | 10/16 | 13/16 | meteor | 0.127 | 0.069 | Llama-L (0.157) | moderately diagnostic |
+| RQ2 | Moral typology | incomplete | 15/16 | 16/16 | official_weighted_f1 | 0.315 | 0.080 | Llama-S (0.354) | moderately diagnostic |
+| RQ3 | Factor attribution | incomplete | 14/16 | 15/16 | official_weighted_f1 | 0.256 | 0.022 | DeepSeek-S (0.264) | saturated |
+| RQ4 | Consequence generation | incomplete | 14/16 | 15/16 | meteor | 0.116 | 0.081 | Llama-L (0.157) | moderately diagnostic |
+
+Sample-level predictions for RQ2/RQ3/RQ4 are exported in `unimoral-sample-predictions.csv`; full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.
 
 | Task | What it measures | Scoring note |
 | --- | --- | --- |
 | RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | Accuracy from the existing release matrix. |
-| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Exact-match membership accuracy plus official-style weighted F1 in `unimoral-full-benchmark.csv`. |
-| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Exact-match membership accuracy plus official-style weighted F1 in `unimoral-full-benchmark.csv`. |
-| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar; BLEU and ROUGE-L are exported beside it. The official BERTScore column is retained for offline scoring but is not computed by the default live scorer. |
+| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Official-style weighted F1 is the primary release metric; exact-match membership accuracy is exported beside it. |
+| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Official-style weighted F1 is the primary release metric; exact-match membership accuracy is exported beside it. |
+| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar; BLEU and ROUGE-L are exported beside it. Official BERTScore F1 is exported in `unimoral-rq4-bertscore.csv` and merged into completed RQ4 rows when present. |
 
 ![UniMoral task heatmap](figures/release/option1_unimoral_task_heatmap.svg)
 
@@ -581,6 +590,3 @@ The release now implements all four UniMoral task definitions and exports scored
 
 ![UniMoral task rankings](figures/release/option1_unimoral_task_rankings.svg)
 <!-- UNIMORAL_FULL_BENCHMARK_END -->
-
-
-

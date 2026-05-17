@@ -117,3 +117,73 @@ def test_setup_model_provider_tolerates_missing_minimax_01_key_under_nounset() -
     )
 
     assert output == "MODEL=MiniMax-Text-01\nURL=https://api.minimax.io/v1\nKEY="
+
+
+def test_unimoral_launcher_routes_minimax_direct_when_key_exists() -> None:
+    env = os.environ.copy()
+    env.pop("OPENROUTER_API_KEY", None)
+    env["MINIMAX_API_KEY"] = "dummy-minimax-key"
+
+    output = run_provider_script(
+        'UNIMORAL_SOURCE_ONLY=1 source "./scripts/run_unimoral_missing_tasks.sh" >/dev/null 2>/dev/null; '
+        'configure_routed_model "openrouter/minimax/minimax-m2.5" 2>/dev/null; '
+        'printf "%s\\n" "$ROUTED_MODEL" "$ROUTED_PROVIDER" "$ROUTED_BASE_URL" "$ROUTED_KEY_VAR" "$ROUTED_KEY_STATE"',
+        env=env,
+    ).splitlines()
+
+    assert output == [
+        "openai/MiniMax-M2.5",
+        "minimax",
+        "https://api.minimax.io/v1",
+        "MINIMAX_API_KEY",
+        "present",
+    ]
+
+
+def test_unimoral_launcher_falls_back_to_openrouter_in_auto_mode() -> None:
+    env = os.environ.copy()
+    env.pop("MINIMAX_API_KEY", None)
+    env["OPENROUTER_API_KEY"] = "dummy-openrouter-key"
+
+    output = run_provider_script(
+        'UNIMORAL_SOURCE_ONLY=1 source "./scripts/run_unimoral_missing_tasks.sh" >/dev/null 2>/dev/null; '
+        'configure_routed_model "openrouter/minimax/minimax-m2.5" 2>/dev/null; '
+        'printf "%s\\n" "$ROUTED_MODEL" "$ROUTED_PROVIDER" "$ROUTED_BASE_URL" "$ROUTED_KEY_VAR" "$ROUTED_KEY_STATE"',
+        env=env,
+    ).splitlines()
+
+    assert output == [
+        "openai/minimax/minimax-m2.5",
+        "openrouter",
+        "https://openrouter.ai/api/v1",
+        "OPENROUTER_API_KEY",
+        "present",
+    ]
+
+
+def test_unimoral_launcher_preserves_true_openai_route() -> None:
+    env = os.environ.copy()
+    env["OPENAI_API_KEY"] = "dummy-openai-key"
+
+    output = run_provider_script(
+        'UNIMORAL_SOURCE_ONLY=1 source "./scripts/run_unimoral_missing_tasks.sh" >/dev/null 2>/dev/null; '
+        'configure_routed_model "openai/gpt-4o-mini" 2>/dev/null; '
+        'printf "MODEL=%s\\nPROVIDER=%s\\nBASE=%s\\nKEY=%s\\nSTATE=%s\\n" "$ROUTED_MODEL" "$ROUTED_PROVIDER" "${ROUTED_BASE_URL:-}" "$ROUTED_KEY_VAR" "$ROUTED_KEY_STATE"',
+        env=env,
+    )
+
+    assert output == "MODEL=openai/gpt-4o-mini\nPROVIDER=openai\nBASE=\nKEY=OPENAI_API_KEY\nSTATE=present"
+
+
+def test_unimoral_launcher_can_skip_minimax_lines_before_routing() -> None:
+    env = os.environ.copy()
+    env["UNIMORAL_SKIP_MODEL_REGEX"] = "MiniMax|minimax"
+
+    output = run_provider_script(
+        'UNIMORAL_SOURCE_ONLY=1 source "./scripts/run_unimoral_missing_tasks.sh" >/dev/null 2>/dev/null; '
+        'if skip_model_line "MiniMax-S" "minimax_s" "openrouter/minimax/minimax-m2.1" "minimax_reasoning"; then echo skip; else echo run; fi; '
+        'if skip_model_line "Qwen-S" "qwen_s" "openrouter/qwen/qwen3-8b" "qwen"; then echo skip; else echo run; fi',
+        env=env,
+    ).splitlines()
+
+    assert output == ["skip", "run"]

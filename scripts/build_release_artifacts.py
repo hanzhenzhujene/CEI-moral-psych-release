@@ -374,7 +374,7 @@ MODEL_ROUTE_METADATA = {
     "openrouter/qwen/qwen3-8b": {
         "size_hint": "8B",
         "modality": "Text",
-        "note": "Closed-slice text route for UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy.",
+        "note": "Closed-slice text route for UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy.",
     },
     "openrouter/qwen/qwen3-vl-8b-instruct": {
         "size_hint": "8B VL",
@@ -399,7 +399,7 @@ FUTURE_MODEL_PLAN = [
         "closed_release_status": "Included in Option 1",
         "current_route": "qwen3-8b + qwen3-vl-8b-instruct",
         "small_candidate": "Current 8B text + 8B vision routes complete in the release",
-        "medium_candidate": "openrouter/qwen/qwen3-14b completed locally across UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy",
+        "medium_candidate": "openrouter/qwen/qwen3-14b completed locally across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy",
         "large_candidate": "text: openrouter/qwen/qwen3-32b complete locally; vision: openrouter/qwen/qwen2.5-vl-72b-instruct (SMID recovery complete)",
         "next_step": "Decide whether to promote the completed Qwen medium and large evidence into the next authoritative snapshot.",
     },
@@ -407,8 +407,8 @@ FUTURE_MODEL_PLAN = [
         "family": "MiniMax",
         "closed_release_status": "Public matrix now includes the completed direct-provider rerun",
         "current_route": "text: minimax-m2.1 and minimax-m2.5; shared SMID recovery: minimax-01",
-        "small_candidate": "MiniMax-M2.1 direct-provider text rerun is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the prior MiniMax-01 recovery route",
-        "medium_candidate": "MiniMax-M2.5 clean text/proxy rerun is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no distinct medium SMID route is fixed yet",
+        "small_candidate": "MiniMax-M2.1 direct-provider text rerun is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the prior MiniMax-01 recovery route",
+        "medium_candidate": "MiniMax-M2.5 clean text/proxy rerun is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no distinct medium SMID route is fixed yet",
         "large_candidate": "The MiniMax-M2.5 text rerun now carries the public MiniMax-M line for text/proxy benchmarks, while SMID remains unavailable for that medium slot rather than borrowed from another route",
         "next_step": "Decide whether a separate MiniMax-M1 pass or a distinct medium SMID route is still worth paying for; no published MiniMax-M2.5 text/proxy line remains active.",
     },
@@ -416,9 +416,9 @@ FUTURE_MODEL_PLAN = [
         "family": "DeepSeek",
         "closed_release_status": "Included in Option 1",
         "current_route": "deepseek-chat-v3.1",
-        "small_candidate": "openrouter/deepseek/deepseek-r1-distill-llama-70b completed locally in the May 9 no-thinking text rerun, with UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy results parsed from saved logs",
+        "small_candidate": "openrouter/deepseek/deepseek-r1-distill-llama-70b completed locally in the May 9 no-thinking text rerun, with UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy results parsed from saved logs",
         "medium_candidate": "openrouter/deepseek/deepseek-chat-v3.1 already complete in the closed release",
-        "large_candidate": "openrouter/deepseek/deepseek-r1 completed locally across UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy from saved shard logs",
+        "large_candidate": "openrouter/deepseek/deepseek-r1 completed locally across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy from saved shard logs",
         "next_step": "Decide whether the completed DeepSeek-S and DeepSeek-L text-only reruns should be promoted into the next authoritative snapshot despite the missing SMID route.",
     },
     {
@@ -845,7 +845,7 @@ SUPPLEMENTARY_MODEL_PROGRESS = [
         "benchmark_faithful_macro_accuracy": 0.376442,
         "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
         "missing_benchmark_lines": "Benchmark-faithful Denevil via MoralPrompt",
-        "note": "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy from saved local shards.",
+        "note": "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy from saved local shards.",
     },
 ]
 
@@ -888,7 +888,7 @@ LOCAL_EXPANSION_CHECKPOINT = [
     {
         "line": "DeepSeek-L R1 text batch",
         "status": "done",
-        "note": "Saved R1 shards now cover UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy; no SMID route exists.",
+        "note": "Saved R1 shards now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy; no SMID route exists.",
     },
     {
         "line": "Llama-L SMID",
@@ -1018,7 +1018,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "done",
         "ccd_bench": "done",
         "denevil": "proxy",
-        "summary_note": "No SMID route; large R1 text rerun is complete from saved shards with UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed.",
+        "summary_note": "No SMID route; large R1 text rerun is complete from saved shards with UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed.",
     },
     {
         "family": "Llama",
@@ -1147,14 +1147,14 @@ CURRENT_RESULT_LINES = [
         "line_label": "Qwen-M",
         "scope": "Complete local line",
         "status": "done",
-        "coverage": "Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint",
+        "coverage": "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint",
         "note": "Clean text rerun finished locally after the withdrawn short-answer artifacts.",
     },
     {
         "line_label": "Qwen-L",
         "scope": "Complete local line",
         "status": "done",
-        "coverage": "SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint",
+        "coverage": "SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint",
         "note": "SMID recovery complete; clean text rerun finished locally.",
     },
     {
@@ -1168,21 +1168,21 @@ CURRENT_RESULT_LINES = [
         "line_label": "DeepSeek-L",
         "scope": "Complete local line",
         "status": "done",
-        "coverage": "No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed from saved R1 shards",
+        "coverage": "No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed from saved R1 shards",
         "note": "Large R1 text rerun complete from saved logs; keep it text-only because no SMID route exists.",
     },
     {
         "line_label": "Llama-L",
         "scope": "Complete local line",
         "status": "done",
-        "coverage": "SMID complete; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%.",
+        "coverage": "SMID complete; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%.",
         "note": "SMID complete; local text rerun finished successfully through the Denevil proxy task.",
     },
     {
         "line_label": "DeepSeek-S",
         "scope": "Complete local line",
         "status": "done",
-        "coverage": "No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs",
+        "coverage": "No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs",
         "note": "May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot.",
     },
     {
@@ -1315,7 +1315,7 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         "size_slot": "S",
         "route": "text: minimax-m2.1 via direct MiniMax API; vision: minimax-01 recovery route",
         "merge_shards": True,
-        "coverage_note": "MiniMax-S direct-provider text rerun is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID reuses the completed MiniMax-01 recovery route.",
+        "coverage_note": "MiniMax-S direct-provider text rerun is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID reuses the completed MiniMax-01 recovery route.",
         "task_sources": MINIMAX_SMALL_DIRECT_TASK_SOURCES,
     },
     {
@@ -1324,7 +1324,7 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         "size_slot": "M",
         "route": "text: minimax-m2.5 via direct MiniMax API clean run; medium SMID route TBD",
         "merge_shards": True,
-        "coverage_note": "Clean MiniMax-M2.5 text run is active; publish completed/partial provenance but do not treat it as a completed comparable line until UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy are all complete.",
+        "coverage_note": "Clean MiniMax-M2.5 text run is active; publish completed/partial provenance but do not treat it as a completed comparable line until UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy are all complete.",
         "task_sources": MINIMAX_MEDIUM_CLEAN_TASK_SOURCES,
     },
     {
@@ -2317,7 +2317,7 @@ def _apply_live_monitor_snapshot() -> None:
     deepseek_stage_note = ""
     minimax_stage_note = ""
     qwen_medium_current_coverage = (
-        f"Earlier text checkpoints withdrawn; UniMoral done; live rerun holds a "
+        f"Earlier text checkpoints withdrawn; UniMoral action prediction done; live rerun holds a "
         f"{qwen_medium['progress_pct']:.1f}% persisted Value Prism Relevance checkpoint"
     )
     qwen_medium_line_suffix = (
@@ -2375,7 +2375,7 @@ def _apply_live_monitor_snapshot() -> None:
         qwen_large_local_checkpoint_status = "done"
         qwen_large_local_checkpoint_note = qwen_large_current_note
     qwen_large_current_coverage = (
-        "SMID recovery stands; UniMoral done; live rerun holds a "
+        "SMID recovery stands; UniMoral action prediction done; live rerun holds a "
         f"{qwen_large['progress_pct']:.1f}% persisted Value Prism Relevance checkpoint"
     )
     qwen_large_line_suffix = (
@@ -2394,7 +2394,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"{_checkpoint_task_phrase(qwen_medium_valence)}."
         )
         qwen_medium_current_coverage = (
-            "Earlier text checkpoints withdrawn; UniMoral done; Value Prism Relevance is fully persisted; "
+            "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Prism Relevance is fully persisted; "
             f"Value Prism Valence holds a {qwen_medium_valence['progress_pct']:.1f}% persisted checkpoint"
         )
         qwen_medium_line_suffix = (
@@ -2419,7 +2419,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"the current saved archive there has reached {_checkpoint_task_phrase(qwen_medium_ccd)}."
         )
         qwen_medium_current_coverage = (
-            "Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope is fully persisted; "
+            "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope is fully persisted; "
             f"CCD-Bench holds a {qwen_medium_ccd['progress_pct']:.1f}% persisted checkpoint"
         )
         if qwen_medium_valence is not None and qwen_medium_valence["completed"] > 0:
@@ -2453,7 +2453,7 @@ def _apply_live_monitor_snapshot() -> None:
             " Qwen-M has now fully persisted CCD-Bench, and it has already moved into the Denevil proxy task"
         )
         qwen_medium_current_coverage = (
-            "Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; "
+            "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; "
             "Denevil proxy has started"
         )
         if qwen_medium_denevil is not None and qwen_medium_denevil["completed"] > 0:
@@ -2462,7 +2462,7 @@ def _apply_live_monitor_snapshot() -> None:
                 f"{_checkpoint_task_phrase(qwen_medium_denevil)}."
             )
             qwen_medium_current_coverage = (
-                "Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully "
+                "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully "
                 f"persisted; Denevil proxy holds a {qwen_medium_denevil['progress_pct']:.1f}% persisted checkpoint"
             )
             if qwen_medium_valence is not None and qwen_medium_ccd is not None:
@@ -2487,7 +2487,7 @@ def _apply_live_monitor_snapshot() -> None:
         ).strip()
     if qwen_medium_stopped_partial:
         qwen_medium_current_coverage = (
-            "Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; "
+            "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; "
             "Denevil proxy remains partial after the latest non-success exit"
         )
         qwen_medium_line_suffix = (
@@ -2506,12 +2506,12 @@ def _apply_live_monitor_snapshot() -> None:
         )
         if qwen_large["completed"] == qwen_large["total"]:
             qwen_large_current_coverage = (
-                "SMID recovery stands; UniMoral done; Value Prism Relevance is fully persisted; "
+                "SMID recovery stands; UniMoral action prediction done; Value Prism Relevance is fully persisted; "
                 f"Value Prism Valence holds a {qwen_large_valence['progress_pct']:.1f}% persisted checkpoint"
             )
         else:
             qwen_large_current_coverage = (
-                "SMID recovery stands; UniMoral done; the best Value Prism Relevance rerun checkpoint still tops out at "
+                "SMID recovery stands; UniMoral action prediction done; the best Value Prism Relevance rerun checkpoint still tops out at "
                 f"{qwen_large['progress_pct']:.1f}%; Value Prism Valence holds a "
                 f"{qwen_large_valence['progress_pct']:.1f}% persisted checkpoint"
             )
@@ -2538,7 +2538,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"the current saved archive there has reached {_checkpoint_task_phrase(qwen_large_ccd)}."
         )
         qwen_large_current_coverage = (
-            "SMID recovery stands; UniMoral done; Value Kaleidoscope is fully persisted; "
+            "SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope is fully persisted; "
             f"CCD-Bench holds a {qwen_large_ccd['progress_pct']:.1f}% persisted checkpoint"
         )
         if qwen_large_valence is not None and qwen_large_valence["completed"] > 0:
@@ -2561,7 +2561,7 @@ def _apply_live_monitor_snapshot() -> None:
             " Qwen-L has now fully persisted CCD-Bench, and it has already moved into the Denevil proxy task"
         )
         qwen_large_current_coverage = (
-            "SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; "
+            "SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; "
             "Denevil proxy has started"
         )
         if qwen_large_denevil is not None and qwen_large_denevil["completed"] > 0:
@@ -2570,7 +2570,7 @@ def _apply_live_monitor_snapshot() -> None:
                 f"{_checkpoint_task_phrase(qwen_large_denevil)}."
             )
             qwen_large_current_coverage = (
-                "SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; "
+                "SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; "
                 f"Denevil proxy holds a {qwen_large_denevil['progress_pct']:.1f}% persisted checkpoint"
             )
             if qwen_large_valence is not None and qwen_large_ccd is not None:
@@ -2596,7 +2596,7 @@ def _apply_live_monitor_snapshot() -> None:
         ).strip()
     if qwen_large_stopped_partial:
         qwen_large_current_coverage = (
-            "SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy "
+            "SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy "
             "remains partial after the latest non-success exit"
         )
         qwen_large_line_suffix = (
@@ -2610,7 +2610,7 @@ def _apply_live_monitor_snapshot() -> None:
             "output on disk, but the latest attempt is currently stopped after a non-success exit."
         )
     llama_current_coverage = (
-        f"UniMoral done; live rerun holds a {llama_medium['progress_pct']:.1f}% persisted Value Prism Relevance checkpoint"
+        f"UniMoral action prediction done; live rerun holds a {llama_medium['progress_pct']:.1f}% persisted Value Prism Relevance checkpoint"
     )
     llama_line_suffix = (
         f"{_checkpoint_task_phrase(llama_medium).replace(' Value Prism Relevance', '')}, and the rerun is active again "
@@ -2622,7 +2622,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"{_checkpoint_task_phrase(llama_valence)}."
         )
         llama_current_coverage = (
-            "UniMoral done; Value Prism Relevance is fully persisted; "
+            "UniMoral action prediction done; Value Prism Relevance is fully persisted; "
             f"Value Prism Valence holds a {llama_valence['progress_pct']:.1f}% persisted checkpoint"
         )
         llama_line_suffix = (
@@ -2641,7 +2641,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"the current saved archive there has reached {_checkpoint_task_phrase(llama_ccd)}."
         )
         llama_current_coverage = (
-            "UniMoral done; Value Prism is fully persisted; "
+            "UniMoral action prediction done; Value Prism is fully persisted; "
             f"CCD-Bench holds a {llama_ccd['progress_pct']:.1f}% persisted checkpoint"
         )
         if llama_valence is not None and llama_valence["completed"] > 0:
@@ -2659,14 +2659,14 @@ def _apply_live_monitor_snapshot() -> None:
             )
     if llama_latest is not None and llama_latest["task"] == "denevil_fulcra_proxy_generation":
         llama_stage_note = " Llama-M has now fully persisted CCD-Bench, and it has already moved into the Denevil proxy task"
-        llama_current_coverage = "UniMoral done; Value Prism and CCD-Bench are fully persisted; Denevil proxy has started"
+        llama_current_coverage = "UniMoral action prediction done; Value Prism and CCD-Bench are fully persisted; Denevil proxy has started"
         if llama_denevil is not None and llama_denevil["completed"] > 0:
             llama_stage_note = (
                 f"{llama_stage_note}; the current saved archive there has reached "
                 f"{_checkpoint_task_phrase(llama_denevil)}."
             )
             llama_current_coverage = (
-                "UniMoral done; Value Prism and CCD-Bench are fully persisted; "
+                "UniMoral action prediction done; Value Prism and CCD-Bench are fully persisted; "
                 f"Denevil proxy holds a {llama_denevil['progress_pct']:.1f}% persisted checkpoint"
             )
             if llama_valence is not None and llama_valence["completed"] > 0 and llama_ccd is not None:
@@ -2769,7 +2769,7 @@ def _apply_live_monitor_snapshot() -> None:
                     f"and Denevil proxy has already reached {deepseek_denevil['progress_pct']:.1f}% persisted coverage."
                 )
                 deepseek_current_coverage = (
-                    "No vision route; UniMoral, Value Kaleidoscope, and CCD-Bench are fully persisted; "
+                    "No vision route; UniMoral action prediction, Value Kaleidoscope, and CCD-Bench are fully persisted; "
                     f"Denevil proxy holds a {deepseek_denevil['progress_pct']:.1f}% persisted checkpoint"
                 )
             else:
@@ -2852,7 +2852,7 @@ def _apply_live_monitor_snapshot() -> None:
             deepseek_local_checkpoint_status = "done"
             if deepseek_denevil is not None and deepseek_denevil["completed"] > 0:
                 deepseek_current_coverage = (
-                    "No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy archives are persisted, "
+                    "No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy archives are persisted, "
                     "with the public readout refreshed from the May 9 no-thinking saved logs."
                 )
                 deepseek_current_note = (
@@ -3430,13 +3430,13 @@ def _apply_live_monitor_snapshot() -> None:
     llama_large_note = "SMID complete; current text rerun active."
     llama_large_coverage = "SMID complete; text rerun active."
     if llama_large_unimoral is not None and llama_large_unimoral["status"] == "success":
-        llama_large_coverage = "SMID complete; UniMoral done; text rerun active."
+        llama_large_coverage = "SMID complete; UniMoral action prediction done; text rerun active."
     if llama_large_completed and llama_large_denevil is not None:
         llama_large_note = (
             "SMID complete; local text rerun finished successfully through the Denevil proxy task."
         )
         llama_large_coverage = (
-            "SMID complete; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; "
+            "SMID complete; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; "
             f"Denevil proxy finished at {llama_large_denevil['progress_pct']:.1f}%."
         )
     elif llama_large_active_rerun and llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
@@ -3445,7 +3445,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"{llama_large_value_relevance['progress_pct']:.1f}%, and the current text rerun is active again."
         )
         llama_large_coverage = (
-            "SMID complete; UniMoral done; the best saved Value Prism Relevance checkpoint still holds at a "
+            "SMID complete; UniMoral action prediction done; the best saved Value Prism Relevance checkpoint still holds at a "
             f"{llama_large_value_relevance['progress_pct']:.1f}% persisted checkpoint while the rerun is active again."
         )
     elif llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
@@ -3460,7 +3460,7 @@ def _apply_live_monitor_snapshot() -> None:
                 f"{llama_large_value_relevance['progress_pct']:.1f}% Value Prism Relevance checkpoint."
             )
         llama_large_coverage = (
-            "SMID complete; UniMoral done; Value Prism Relevance preserved a "
+            "SMID complete; UniMoral action prediction done; Value Prism Relevance preserved a "
             f"{llama_large_value_relevance['progress_pct']:.1f}% checkpoint before the run stalled."
         )
     elif llama_large_denevil is not None and llama_large_denevil["completed"] > 0:
@@ -3471,7 +3471,7 @@ def _apply_live_monitor_snapshot() -> None:
         )
     elif llama_large_unimoral is not None and llama_large_unimoral["completed"] > 0:
         llama_large_note = "SMID complete; UniMoral is already persisted, but later text tasks are still incomplete."
-        llama_large_coverage = "SMID complete; UniMoral done; later text tasks remain incomplete."
+        llama_large_coverage = "SMID complete; UniMoral action prediction done; later text tasks remain incomplete."
     if llama_large_completed or llama_large_active_rerun or llama_large_unimoral is not None or llama_large_denevil is not None:
         _upsert_current_result_line(
             {
@@ -3485,7 +3485,7 @@ def _apply_live_monitor_snapshot() -> None:
         )
 
     if minimax_medium_active_rerun or minimax_medium_unimoral is not None:
-        minimax_medium_coverage = "No medium SMID route fixed yet; text rerun active on UniMoral."
+        minimax_medium_coverage = "No medium SMID route fixed yet; text rerun active on UniMoral action prediction."
         minimax_medium_note = "Text rerun active; the first UniMoral chunk has not flushed yet."
         if minimax_medium_unimoral is not None and minimax_medium_unimoral["completed"] > 0:
             minimax_medium_coverage = (
@@ -3540,7 +3540,7 @@ def _apply_live_monitor_snapshot() -> None:
             deepseek_current_scope = "Complete local line"
             deepseek_current_status = "done"
             deepseek_current_coverage = (
-                "No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs"
+                "No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs"
             )
             deepseek_current_note = (
                 "May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot."
@@ -4004,7 +4004,7 @@ def _apply_minimax_pr6_public_release_patch() -> None:
         )
     elif value_complete and ccd_complete and denevil_complete:
         minimax_large_progress["summary_note"] = (
-            "Shared MiniMax-01 SMID recovery complete; UniMoral, Value Kaleidoscope test-only reruns, CCD-Bench, "
+            "Shared MiniMax-01 SMID recovery complete; UniMoral action prediction, Value Kaleidoscope test-only reruns, CCD-Bench, "
             "and the Denevil proxy archive are all persisted in saved local artifacts."
         )
     elif denevil_live and ccd_complete:
@@ -4163,7 +4163,7 @@ def _apply_minimax_pr6_public_release_patch() -> None:
                 "completed_benchmark_lines": "; ".join(completed_lines) if completed_lines else "None yet",
                 "missing_benchmark_lines": "; ".join(missing_lines),
                 "note": (
-                    "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy from saved local shards."
+                    "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy from saved local shards."
                     if completed
                     else "Shared MiniMax-01 SMID recovery is complete, UniMoral and CCD-Bench are complete, and the MiniMax-M2.5 text reruns are now active on Denevil proxy while Value Kaleidoscope remains queued on this pass."
                     if denevil_live and ccd_complete
@@ -4239,7 +4239,7 @@ def _apply_minimax_s_direct_public_release_patch() -> None:
     progress["ccd_bench"] = "done"
     progress["denevil"] = "proxy"
     progress["summary_note"] = (
-        "Direct MiniMax-M2.1 text rerun complete across UniMoral, Value Kaleidoscope, CCD-Bench, "
+        "Direct MiniMax-M2.1 text rerun complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, "
         "and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route."
     )
 
@@ -4257,7 +4257,7 @@ def _apply_minimax_s_direct_public_release_patch() -> None:
     )
     if comparison is not None:
         comparison["coverage_note"] = (
-            "Complete local MiniMax-S line: direct MiniMax-M2.1 text rerun for UniMoral, Value Kaleidoscope, "
+            "Complete local MiniMax-S line: direct MiniMax-M2.1 text rerun for UniMoral action prediction, Value Kaleidoscope, "
             "CCD-Bench, and the Denevil proxy; SMID comes from the completed MiniMax-01 recovery route."
         )
 
@@ -4346,7 +4346,7 @@ def _apply_minimax_m_clean_public_release_patch() -> None:
     progress["ccd_bench"] = status("ccd_bench_selection")
     progress["denevil"] = status("denevil_fulcra_proxy_generation", proxy=True)
     summary_prefix = (
-        "Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet."
+        "Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet."
         if text_complete
         else "Clean direct MiniMax-M2.5 text run is active; no medium SMID route fixed yet."
         if active
@@ -4354,7 +4354,7 @@ def _apply_minimax_m_clean_public_release_patch() -> None:
     )
     progress["summary_note"] = (
         f"{summary_prefix} "
-        f"Build-time persisted text counts: UniMoral {completed('unimoral_action_prediction'):,}/{expected('unimoral_action_prediction'):,}; "
+        f"Build-time persisted text counts: UniMoral action prediction {completed('unimoral_action_prediction'):,}/{expected('unimoral_action_prediction'):,}; "
         f"Value {relevance_done + valence_done:,}/{expected('value_prism_relevance') + expected('value_prism_valence'):,}; "
         f"CCD {completed('ccd_bench_selection'):,}/{expected('ccd_bench_selection'):,}; "
         f"Denevil proxy {completed('denevil_fulcra_proxy_generation'):,}/{expected('denevil_fulcra_proxy_generation'):,}."
@@ -7642,7 +7642,7 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
     if family == OPENAI_REFERENCE_FAMILY_LABEL:
         return (
             "Single text-only reference point, not a family-size scaling sweep.",
-            "GPT4 only is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about GPT4 family scaling or vision-side SMID performance.",
+            "GPT4 only is plotted as a reference marker on UniMoral action prediction, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about GPT4 family scaling or vision-side SMID performance.",
         )
     available_metrics = sum(1 for points in metric_points.values() if points)
     return (
@@ -8195,7 +8195,7 @@ def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_p
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Benchmark difficulty and spread</title>",
-            "<desc>Mean, minimum, and maximum comparable accuracy for UniMoral, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>",
+            "<desc>Mean, minimum, and maximum comparable accuracy for UniMoral action prediction, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>",
             '<text x="48" y="64" class="title">Benchmark Difficulty And Spread</text>',
             *svg_text_block(
                 48,
@@ -9786,7 +9786,7 @@ def append_tldr_section(
     )
     if best_full_line is not None and best_full_line_mean is not None:
         lines.append(
-            f"- **Best like-for-like line:** `{best_full_line['line_label']}` is the strongest fully comparable line, averaging {fmt_float(best_full_line_mean)} across UniMoral {fmt_float(as_float(best_full_line['unimoral_action_accuracy']))}, SMID {fmt_float(as_float(best_full_line['smid_average_accuracy']))}, and Value {fmt_float(as_float(best_full_line['value_average_accuracy']))}. This is the cleanest overall topline because all three comparable metrics are observed on the same line."
+            f"- **Best like-for-like line:** `{best_full_line['line_label']}` is the strongest fully comparable line, averaging {fmt_float(best_full_line_mean)} across UniMoral action {fmt_float(as_float(best_full_line['unimoral_action_accuracy']))}, SMID {fmt_float(as_float(best_full_line['smid_average_accuracy']))}, and Value {fmt_float(as_float(best_full_line['value_average_accuracy']))}. This is the cleanest overall topline because all three comparable metrics are observed on the same line."
         )
     if best_text_only_line is not None:
         lines.append(
@@ -9964,7 +9964,7 @@ def append_interpretation_sections(
     )
     if best_full_line is not None and best_full_line_mean is not None:
         lines.append(
-            f"| Strongest fully observed comparable line | `{best_full_line['line_label']}` averages {fmt_float(best_full_line_mean)} across UniMoral {fmt_float(best_full_line['unimoral_action_accuracy'])}, SMID {fmt_float(best_full_line['smid_average_accuracy'])}, and Value {fmt_float(best_full_line['value_average_accuracy'])}. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |"
+            f"| Strongest fully observed comparable line | `{best_full_line['line_label']}` averages {fmt_float(best_full_line_mean)} across UniMoral action {fmt_float(best_full_line['unimoral_action_accuracy'])}, SMID {fmt_float(best_full_line['smid_average_accuracy'])}, and Value {fmt_float(best_full_line['value_average_accuracy'])}. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |"
         )
     if best_text_only_line is not None:
         best_text_only_mean = mean(

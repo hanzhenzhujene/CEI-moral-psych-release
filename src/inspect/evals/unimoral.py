@@ -39,7 +39,7 @@ TYPOLOGY_PATTERNS = {
     "Deontological": [r"deontolog", r"deonolog"],
     "Utilitarianism": [r"utilitarian"],
     "Rights-based": [r"rights?[- ]based", r"\bright\b"],
-    "Virtuous": [r"virtu", r"virtou"],
+    "Virtuous": [r"virtu", r"virtou", r"virtous"],
 }
 FACTOR_PATTERNS = {
     "Emotions": [r"emotion"],
@@ -107,10 +107,21 @@ def _load_csv_rows(path: Path) -> list[dict[str, str]]:
 
 def _language_files(language: str) -> tuple[Path, Path]:
     data_dir = _unimoral_data_dir()
-    long_path = data_dir / f"{language}_long.csv"
-    short_path = data_dir / f"{language}_short.csv"
+    long_candidates = [
+        data_dir / f"{language}_long.csv",
+        data_dir / f"{language}_long_formatted.csv",
+        data_dir / f"{language}_long_withDemo.csv",
+    ]
+    short_candidates = [
+        data_dir / f"{language}_short.csv",
+        data_dir / f"{language}_short_formatted.csv",
+        data_dir / f"{language}_short_withDemo.csv",
+    ]
+    long_path = next((path for path in long_candidates if path.exists()), long_candidates[0])
+    short_path = next((path for path in short_candidates if path.exists()), short_candidates[0])
     if not long_path.exists():
-        raise FileNotFoundError(f"Missing UniMoral file: {long_path}")
+        expected = ", ".join(path.name for path in long_candidates)
+        raise FileNotFoundError(f"Missing UniMoral long file for {language}: expected one of {expected} in {data_dir}")
     return long_path, short_path
 
 
@@ -127,6 +138,49 @@ def _top_label_order(vector: list[float], labels: list[str]) -> list[str]:
 def _action_target(raw_value: str | int) -> str:
     normalized = str(raw_value).strip().lower()
     return "a" if normalized in {"1", "a"} else "b"
+
+
+def _sample_index_selector() -> list[int] | None:
+    raw_value = env_str("UNIMORAL_SAMPLE_INDICES", "")
+    if not raw_value:
+        return None
+
+    indices: list[int] = []
+    for part in raw_value.replace("\n", ",").split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if ":" in part:
+            start_text, end_text = part.split(":", 1)
+            start = int(start_text.strip())
+            end = int(end_text.strip())
+            if start < 0 or end < start:
+                raise ValueError(f"Invalid UNIMORAL_SAMPLE_INDICES range: {part!r}")
+            indices.extend(range(start, end))
+        else:
+            index = int(part)
+            if index < 0:
+                raise ValueError(f"Invalid UNIMORAL_SAMPLE_INDICES index: {part!r}")
+            indices.append(index)
+    return indices
+
+
+def _select_samples(samples: list[Sample], limit: int | None = None, start_index: int = 0) -> list[Sample]:
+    selected_indices = _sample_index_selector()
+    if selected_indices is not None:
+        out_of_range = [index for index in selected_indices if index >= len(samples)]
+        if out_of_range:
+            raise ValueError(
+                "UNIMORAL_SAMPLE_INDICES contains out-of-range index "
+                f"{out_of_range[0]} for {len(samples)} UniMoral samples."
+            )
+        samples = [samples[index] for index in selected_indices]
+        return samples[:limit] if limit is not None else samples
+    if start_index:
+        samples = samples[start_index:]
+    if limit is not None:
+        samples = samples[:limit]
+    return samples
 
 
 def _list_targets(serialized: str, labels: list[str]) -> list[str]:
@@ -273,11 +327,7 @@ def _make_action_prediction_samples(limit: int | None = None, start_index: int =
                     metadata={"language": language, "scenario_id": row["Scenario_id"], "annotator_id": row["Annotator_id"], "sample_index": sample_index},
                 )
             )
-    if start_index:
-        samples = samples[start_index:]
-    if limit is not None:
-        samples = samples[:limit]
-    return samples
+    return _select_samples(samples, limit=limit, start_index=start_index)
 
 
 def _make_typology_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
@@ -309,11 +359,7 @@ def _make_typology_samples(limit: int | None = None, start_index: int = 0) -> li
                     metadata={"language": language, "scenario_id": row["Scenario_id"], "annotator_id": row["Annotator_id"], "sample_index": sample_index},
                 )
             )
-    if start_index:
-        samples = samples[start_index:]
-    if limit is not None:
-        samples = samples[:limit]
-    return samples
+    return _select_samples(samples, limit=limit, start_index=start_index)
 
 
 def _make_factor_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
@@ -345,11 +391,7 @@ def _make_factor_samples(limit: int | None = None, start_index: int = 0) -> list
                     metadata={"language": language, "scenario_id": row["Scenario_id"], "annotator_id": row["Annotator_id"], "sample_index": sample_index},
                 )
             )
-    if start_index:
-        samples = samples[start_index:]
-    if limit is not None:
-        samples = samples[:limit]
-    return samples
+    return _select_samples(samples, limit=limit, start_index=start_index)
 
 
 def _make_consequence_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
@@ -390,11 +432,7 @@ def _make_consequence_samples(limit: int | None = None, start_index: int = 0) ->
                     metadata={"language": language, "scenario_id": scenario_id, "selected_action": action_label},
                 )
             )
-    if start_index:
-        samples = samples[start_index:]
-    if limit is not None:
-        samples = samples[:limit]
-    return samples
+    return _select_samples(samples, limit=limit, start_index=start_index)
 
 
 @task

@@ -5,6 +5,7 @@ import json
 import os
 import re
 import sys
+from types import SimpleNamespace
 from pathlib import Path
 
 import pytest
@@ -12,7 +13,15 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "inspect"))
 
 from evals import unimoral, value_kaleidoscope, ccd_bench, denevil, smid
-from evals._benchmark_utils import canonicalize_label, extract_consequence_generation, generation_plan
+from evals._benchmark_utils import (
+    canonicalize_label,
+    canonicalize_label_from_output,
+    consequence_text_from_output,
+    extract_consequence_generation,
+    generation_plan,
+    text_from_sample_output,
+)
+from scripts import build_unimoral_artifacts, compute_unimoral_bertscore
 
 
 def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
@@ -52,6 +61,7 @@ def clear_env(monkeypatch):
         "UNIMORAL_DATA_DIR",
         "UNIMORAL_LANGUAGE",
         "UNIMORAL_MODE",
+        "UNIMORAL_SAMPLE_INDICES",
         "VALUEPRISM_DATA_FILE",
         "VALUEPRISM_RELEVANCE_FILE",
         "VALUEPRISM_VALENCE_FILE",
@@ -110,6 +120,25 @@ def test_unimoral_action_prediction_samples(tmp_path, monkeypatch):
     assert len(samples) == 2
     assert samples[0].target == "b"
     assert "Selected action is <a or b>" in samples[0].input
+
+
+def test_unimoral_data_loader_accepts_formatted_huggingface_files(tmp_path, monkeypatch):
+    rows = [
+        _unimoral_long_row(scenario_id="1", annotator_id="ann1"),
+        _unimoral_long_row(scenario_id="2", annotator_id="ann1"),
+    ]
+    _write_csv(tmp_path / "English_long_formatted.csv", rows)
+    _write_csv(tmp_path / "English_short_formatted.csv", rows[:1])
+    monkeypatch.setenv("UNIMORAL_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("UNIMORAL_LANGUAGE", "English")
+
+    long_path, short_path = unimoral._language_files("English")
+    samples = unimoral._make_typology_samples(limit=1)
+
+    assert long_path.name == "English_long_formatted.csv"
+    assert short_path.name == "English_short_formatted.csv"
+    assert len(samples) == 1
+    assert samples[0].target == ["Utilitarianism", "Rights-based"]
 
 
 def test_unimoral_action_prediction_samples_apply_prompt_prefix(tmp_path, monkeypatch):
@@ -197,6 +226,42 @@ def test_unimoral_factor_samples_use_contributing_factor_targets(tmp_path, monke
     assert re.search(r"\[[A-Z0-9_]+\]", samples[0].input) is None
 
 
+def test_unimoral_sample_indices_select_exact_global_rows(tmp_path, monkeypatch):
+    rows = [
+        _unimoral_long_row(scenario_id="1"),
+        _unimoral_long_row(scenario_id="2"),
+        _unimoral_long_row(scenario_id="3"),
+        _unimoral_long_row(scenario_id="4"),
+    ]
+    _write_csv(tmp_path / "English_long.csv", rows)
+    monkeypatch.setenv("UNIMORAL_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("UNIMORAL_LANGUAGE", "English")
+    monkeypatch.setenv("UNIMORAL_MODE", "np")
+    monkeypatch.setenv("UNIMORAL_SAMPLE_INDICES", "1,3")
+
+    samples = unimoral._make_factor_samples()
+
+    assert [sample.metadata["scenario_id"] for sample in samples] == ["2", "4"]
+
+
+def test_unimoral_sample_indices_support_end_exclusive_ranges(tmp_path, monkeypatch):
+    rows = [
+        _unimoral_long_row(scenario_id="1"),
+        _unimoral_long_row(scenario_id="2"),
+        _unimoral_long_row(scenario_id="3"),
+        _unimoral_long_row(scenario_id="4"),
+    ]
+    _write_csv(tmp_path / "English_long.csv", rows)
+    monkeypatch.setenv("UNIMORAL_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("UNIMORAL_LANGUAGE", "English")
+    monkeypatch.setenv("UNIMORAL_MODE", "np")
+    monkeypatch.setenv("UNIMORAL_SAMPLE_INDICES", "1:3")
+
+    samples = unimoral._make_typology_samples()
+
+    assert [sample.metadata["scenario_id"] for sample in samples] == ["2", "3"]
+
+
 def test_unimoral_consequence_samples_skip_missing_and_normalize_refs(tmp_path, monkeypatch):
     rows = [
         _unimoral_long_row(scenario_id="1", consequence="[They lose trust.]"),
@@ -231,6 +296,434 @@ def test_unimoral_label_and_consequence_parsers_are_typo_tolerant():
     assert canonicalize_label("Selected action is Deonological.", unimoral.TYPOLOGY_PATTERNS) == "Deontological"
     assert canonicalize_label("Selected action is Sacred values.", unimoral.FACTOR_PATTERNS) == "Sacred values"
     assert extract_consequence_generation("Consequence of the action is they lose trust.") == "they lose trust."
+
+
+def test_unimoral_scorers_can_use_openrouter_reasoning_tail_when_visible_is_truncated():
+    output = SimpleNamespace(
+        completion="Selected action",
+        choices=[
+            SimpleNamespace(
+                message=SimpleNamespace(
+                    content=[
+                        SimpleNamespace(
+                            type="reasoning",
+                            reasoning="The prompt lists options, but the final answer is: Selected action is <'Moral'>.",
+                        ),
+                        SimpleNamespace(type="text", text="Selected action"),
+                    ]
+                )
+            )
+        ],
+    )
+
+    answer, _, source = canonicalize_label_from_output(output, unimoral.FACTOR_PATTERNS)
+
+    assert answer == "Moral"
+    assert source == "reasoning_tail"
+
+
+def test_unimoral_consequence_scorer_uses_only_explicit_reasoning_consequence():
+    output = SimpleNamespace(
+        completion="",
+        choices=[
+            SimpleNamespace(
+                message=SimpleNamespace(
+                    content=[
+                        SimpleNamespace(
+                            type="reasoning",
+                            reasoning="Thinking through the dilemma. Consequence of the action is trust declines.",
+                        )
+                    ]
+                )
+            )
+        ],
+    )
+
+    prediction, _, source = consequence_text_from_output(output)
+
+    assert prediction == "trust declines."
+    assert source == "reasoning_tail"
+
+
+def test_unimoral_artifact_builder_merges_complete_bertscore_lookup():
+    samples = [{"id": "sample-1"}, {"id": "sample-2"}]
+    lookup = {
+        ("Qwen-S", "unimoral_consequence_generation", "sample-1"): 0.8,
+        ("Qwen-S", "unimoral_consequence_generation", "sample-2"): 0.6,
+    }
+
+    assert build_unimoral_artifacts.sample_bertscore_average(
+        line_label="Qwen-S",
+        task_name="unimoral_consequence_generation",
+        samples=samples,
+        lookup=lookup,
+    ) == pytest.approx(0.7)
+
+
+def test_unimoral_artifact_builder_requires_complete_bertscore_lookup():
+    samples = [{"id": "sample-1"}, {"id": "sample-2"}]
+    lookup = {
+        ("Qwen-S", "unimoral_consequence_generation", "sample-1"): 0.8,
+    }
+
+    assert (
+        build_unimoral_artifacts.sample_bertscore_average(
+            line_label="Qwen-S",
+            task_name="unimoral_consequence_generation",
+            samples=samples,
+            lookup=lookup,
+        )
+        is None
+    )
+
+
+def test_unimoral_artifact_builder_detects_tracked_csv_fallback(tmp_path):
+    release_dir = tmp_path / "release"
+    release_dir.mkdir()
+    for filename in [
+        "unimoral-full-benchmark.csv",
+        "unimoral-coverage.csv",
+        "unimoral-task-spread.csv",
+        "unimoral-model-rankings.csv",
+        "unimoral-sample-predictions.csv",
+        "unimoral-failure-checklist.csv",
+    ]:
+        (release_dir / filename).write_text("header\nvalue\n", encoding="utf-8")
+
+    assert not build_unimoral_artifacts.log_root_has_evals(tmp_path / "missing-logs")
+    assert build_unimoral_artifacts.existing_release_tables_available(release_dir)
+
+
+def test_unimoral_bertscore_script_takes_max_reference_score():
+    rows = [
+        {
+            "line_label": "Qwen-S",
+            "task_name": "unimoral_consequence_generation",
+            "sample_id": "sample-1",
+            "language": "English",
+            "prediction": "one prediction",
+            "target_json": json.dumps(["weak reference", "strong reference"]),
+        }
+    ]
+
+    def fake_score(predictions, references, **_kwargs):
+        assert predictions == ["one prediction", "one prediction"]
+        assert references == ["weak reference", "strong reference"]
+
+        class FakeScores:
+            def tolist(self):
+                return [0.2, 0.9]
+
+        return None, None, FakeScores()
+
+    output = compute_unimoral_bertscore.compute_rows(rows, score_fn=fake_score, batch_size=8)
+
+    assert output == [
+        {
+            "line_label": "Qwen-S",
+            "task_name": "unimoral_consequence_generation",
+            "sample_id": "sample-1",
+            "language": "English",
+            "bert_score_f1": 0.9,
+        }
+    ]
+
+
+def test_unimoral_bertscore_script_keeps_empty_predictions_as_zero():
+    rows = [
+        {
+            "line_label": "Qwen-S",
+            "task_name": "unimoral_consequence_generation",
+            "sample_id": "sample-1",
+            "language": "English",
+            "prediction": "",
+            "target_json": json.dumps(["reference"]),
+        }
+    ]
+
+    output = compute_unimoral_bertscore.compute_rows(
+        compute_unimoral_bertscore.rq4_rows(rows),
+        score_fn=lambda *_args, **_kwargs: pytest.fail("empty predictions should not be scored"),
+        batch_size=8,
+    )
+
+    assert output == [
+        {
+            "line_label": "Qwen-S",
+            "task_name": "unimoral_consequence_generation",
+            "sample_id": "sample-1",
+            "language": "English",
+            "bert_score_f1": 0.0,
+        }
+    ]
+
+
+def test_unimoral_artifact_fallback_scores_unparseable_targeted_samples_as_zero():
+    assert build_unimoral_artifacts.fallback_sample_score(
+        "unimoral_moral_typology",
+        "",
+        ["Virtuous"],
+    ) == 0.0
+    assert build_unimoral_artifacts.fallback_sample_score(
+        "unimoral_consequence_generation",
+        "",
+        ["trust declines."],
+    ) == 0.0
+    assert build_unimoral_artifacts.fallback_sample_score(
+        "unimoral_consequence_generation",
+        "",
+        [],
+    ) == ""
+
+
+def test_unimoral_artifact_builder_prefers_parseable_duplicate_without_using_target():
+    parseable = {
+        "id": "sample-1",
+        "target": ["Rights-based"],
+        "output": {"completion": "Selected action is Deontological."},
+    }
+    unparseable = {
+        "id": "sample-1",
+        "target": ["Rights-based"],
+        "output": {"completion": "Selected action"},
+    }
+
+    assert (
+        build_unimoral_artifacts.prefer_sample_for_task(
+            "unimoral_moral_typology",
+            parseable,
+            unparseable,
+        )
+        is parseable
+    )
+    assert (
+        build_unimoral_artifacts.prefer_sample_for_task(
+            "unimoral_moral_typology",
+            unparseable,
+            parseable,
+        )
+        is parseable
+    )
+
+
+def test_unimoral_failure_rows_route_minimax_retries_through_openrouter():
+    failures = build_unimoral_artifacts.failure_rows(
+        [
+            {
+                "line_label": "MiniMax-L",
+                "task_name": "unimoral_factor_attribution",
+                "status": "partial",
+                "expected_samples": "3492",
+                "completed_samples": "1800",
+                "parsed_count": "1784",
+                "log_path": "",
+            }
+        ]
+    )
+
+    assert "UNIMORAL_ROUTE_MODE=openrouter" in failures[0]["next_action"]
+    assert "FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1" in failures[0]["next_action"]
+    assert "MODEL_FILTER='MiniMax-L'" in failures[0]["next_action"]
+
+
+def test_unimoral_artifact_reader_prefers_visible_text_before_reasoning():
+    output = {
+        "completion": "",
+        "choices": [
+            {
+                "message": {
+                    "content": [
+                        {"type": "reasoning", "reasoning": "Selected action is <'Moral'>."},
+                        {"type": "text", "text": "Selected action is <'Relationships'>."},
+                    ]
+                }
+            }
+        ],
+    }
+
+    assert text_from_sample_output(output) == "Selected action is <'Relationships'>."
+
+
+def test_unimoral_output_parser_uses_reasoning_when_saved_visible_text_is_unparseable():
+    output = {
+        "completion": "",
+        "choices": [
+            {
+                "message": {
+                    "content": [
+                        {"type": "reasoning", "reasoning": "Final answer: Selected action is <'Deontological'>."},
+                        {"type": "text", "text": "Selected action"},
+                    ]
+                }
+            }
+        ],
+    }
+
+    answer, _, source = canonicalize_label_from_output(output, unimoral.TYPOLOGY_PATTERNS)
+
+    assert answer == "Deontological"
+    assert source == "reasoning_tail"
+
+
+def test_unimoral_output_parser_accepts_conclusion_cue_reasoning_labels():
+    typology_output = {
+        "completion": "Selected action is",
+        "choices": [
+            {
+                "message": {
+                    "content": [
+                        {
+                            "type": "reasoning",
+                            "reasoning": "Considering the options. Thus I would argue that the action is Deontological.",
+                        },
+                        {"type": "text", "text": ""},
+                    ]
+                }
+            }
+        ],
+    }
+    factor_output = {
+        "completion": "",
+        "choices": [
+            {
+                "message": {
+                    "content": [
+                        {
+                            "type": "reasoning",
+                            "reasoning": "Several factors matter. The most important factor is Relationships.",
+                        }
+                    ]
+                }
+            }
+        ],
+    }
+
+    typology_answer, _, typology_source = canonicalize_label_from_output(typology_output, unimoral.TYPOLOGY_PATTERNS)
+    factor_answer, _, factor_source = canonicalize_label_from_output(factor_output, unimoral.FACTOR_PATTERNS)
+
+    assert typology_answer == "Deontological"
+    assert typology_source == "reasoning_tail"
+    assert factor_answer == "Relationships"
+    assert factor_source == "reasoning_tail"
+
+
+def test_unimoral_output_parser_accepts_chinese_conclusion_cues():
+    output = {
+        "completion": "",
+        "choices": [
+            {
+                "message": {
+                    "content": [
+                        {
+                            "type": "reasoning",
+                            "reasoning": "前面分析了所有选项。最终，我选择Utilitarianism。",
+                        }
+                    ]
+                }
+            }
+        ],
+    }
+
+    answer, _, source = canonicalize_label_from_output(output, unimoral.TYPOLOGY_PATTERNS)
+
+    assert answer == "Utilitarianism"
+    assert source == "reasoning_tail"
+
+
+def test_unimoral_output_parser_accepts_direct_conclusion_label():
+    output = {
+        "completion": "Selected action is",
+        "choices": [
+            {
+                "message": {
+                    "content": [
+                        {
+                            "type": "reasoning",
+                            "reasoning": 'Several frameworks are possible. So "Virtous"',
+                        },
+                        {"type": "text", "text": "Selected action"},
+                    ]
+                }
+            }
+        ],
+    }
+
+    answer, _, source = canonicalize_label_from_output(output, unimoral.TYPOLOGY_PATTERNS)
+
+    assert answer == "Virtuous"
+    assert source == "reasoning_tail"
+
+
+def test_unimoral_output_parser_accepts_arabic_answer_cues():
+    output = {
+        "completion": "Selected action is",
+        "choices": [
+            {
+                "message": {
+                    "content": [
+                        {
+                            "type": "reasoning",
+                            "reasoning": 'بعد تحليل العوامل، لذلك، الإجابة هي "Responsibilities".',
+                        },
+                        {"type": "text", "text": "Selected action"},
+                    ]
+                }
+            }
+        ],
+    }
+
+    answer, _, source = canonicalize_label_from_output(output, unimoral.FACTOR_PATTERNS)
+
+    assert answer == "Responsibilities"
+    assert source == "reasoning_tail"
+
+
+def test_unimoral_output_parser_accepts_prompt_native_fancy_quotes():
+    output = {
+        "completion": "Selected action is",
+        "choices": [
+            {
+                "message": {
+                    "content": [
+                        {
+                            "type": "reasoning",
+                            "reasoning": "Follow the required format: Selected action is <‘Rights-based’>.",
+                        },
+                        {"type": "text", "text": "Selected action is"},
+                    ]
+                }
+            }
+        ],
+    }
+
+    answer, _, source = canonicalize_label_from_output(output, unimoral.TYPOLOGY_PATTERNS)
+
+    assert answer == "Rights-based"
+    assert source == "reasoning_tail"
+
+
+def test_unimoral_output_parser_accepts_answer_should_be_cue():
+    output = {
+        "completion": "Selected action is",
+        "choices": [
+            {
+                "message": {
+                    "content": [
+                        {
+                            "type": "reasoning",
+                            "reasoning": "After comparing the options, the answer should be Deontological.",
+                        },
+                        {"type": "text", "text": "Selected action is"},
+                    ]
+                }
+            }
+        ],
+    }
+
+    answer, _, source = canonicalize_label_from_output(output, unimoral.TYPOLOGY_PATTERNS)
+
+    assert answer == "Deontological"
+    assert source == "reasoning_tail"
 
 
 def test_value_prism_sample_builders(tmp_path, monkeypatch):
@@ -463,3 +956,101 @@ def test_generation_plan_respects_min_max_tokens(monkeypatch):
     kwargs = params.get("kwargs", params)
     assert kwargs["max_tokens"] == 128
     assert kwargs["temperature"] == pytest.approx(0.2)
+
+
+def test_unimoral_overview_tables_update_metadata_when_incomplete(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        build_unimoral_artifacts,
+        "TASKS",
+        {
+            "unimoral_action_prediction": {"expected": 10},
+            "unimoral_moral_typology": {"expected": 4},
+        },
+    )
+    monkeypatch.setattr(
+        build_unimoral_artifacts,
+        "MODEL_LINES",
+        [
+            ("Alpha-S", "Alpha", "S", "alpha_s"),
+            ("Beta-S", "Beta", "S", "beta_s"),
+        ],
+    )
+    _write_csv(
+        tmp_path / "benchmark-summary.csv",
+        [
+            {
+                "benchmark": "UniMoral",
+                "task_types": "1",
+                "evaluated_lines": "1",
+                "models_covered": "1",
+                "samples": "10",
+                "modes": "benchmark_faithful",
+            }
+        ],
+    )
+    _write_csv(
+        tmp_path / "benchmark-catalog.csv",
+        [
+            {
+                "benchmark": "UniMoral",
+                "current_release_mode": "benchmark_faithful",
+                "models_in_release": "Alpha",
+                "samples_in_release": "10",
+                "repo_readout": "old",
+                "release_interpretation": "old",
+            }
+        ],
+    )
+    _write_csv(
+        tmp_path / "coverage-matrix.csv",
+        [
+            {
+                "model_family": "Alpha",
+                "benchmark": "UniMoral",
+                "status": "benchmark_faithful",
+                "completed_tasks": "1",
+                "expected_tasks": "2",
+                "label": "1/2",
+            }
+        ],
+    )
+    _write_csv(
+        tmp_path / "model-roster.csv",
+        [
+            {
+                "model_family": "Alpha",
+                "benchmarks": "UniMoral",
+                "tasks": "unimoral_action_prediction",
+                "samples": "10",
+            }
+        ],
+    )
+
+    build_unimoral_artifacts.update_release_overview_tables(
+        tmp_path,
+        [
+            {"status": "complete"},
+            {"status": "incomplete"},
+        ],
+    )
+
+    summary = list(csv.DictReader((tmp_path / "benchmark-summary.csv").open(newline="", encoding="utf-8")))[0]
+    assert summary["task_types"] == "2"
+    assert summary["evaluated_lines"] == "4"
+    assert summary["models_covered"] == "2"
+    assert summary["samples"] == "28"
+    assert summary["modes"] == "benchmark_faithful; documented_incomplete"
+
+    catalog = list(csv.DictReader((tmp_path / "benchmark-catalog.csv").open(newline="", encoding="utf-8")))[0]
+    assert catalog["current_release_mode"] == "benchmark_faithful; documented_incomplete"
+    assert catalog["models_in_release"] == "Alpha; Beta"
+    assert catalog["samples_in_release"] == "28"
+    assert "incomplete or parse-limited" in catalog["release_interpretation"]
+
+    coverage = list(csv.DictReader((tmp_path / "coverage-matrix.csv").open(newline="", encoding="utf-8")))[0]
+    assert coverage["completed_tasks"] == "1"
+    assert coverage["label"] == "1/2"
+
+    roster = list(csv.DictReader((tmp_path / "model-roster.csv").open(newline="", encoding="utf-8")))[0]
+    assert roster["tasks"] == "unimoral_action_prediction"
+    assert roster["samples"] == "10"
