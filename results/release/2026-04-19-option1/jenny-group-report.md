@@ -376,6 +376,7 @@ The release now implements all four UniMoral task definitions and exports scored
 | RQ4 | Consequence generation | incomplete | 14/16 | 15/16 | meteor | 0.116 | 0.081 | Llama-L (0.157) | moderately diagnostic |
 
 Sample-level predictions for RQ2/RQ3/RQ4 are exported in `unimoral-sample-predictions.csv`; full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.
+The provider-free MiniMax handoff is tracked in [`unimoral-minimax-resume-plan.md`](unimoral-minimax-resume-plan.md).
 
 | Task | What it measures | Scoring note |
 | --- | --- | --- |
