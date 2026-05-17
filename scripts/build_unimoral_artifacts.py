@@ -1109,6 +1109,8 @@ def write_minimax_resume_plan(release_dir: Path, failures: list[dict[str, object
                 "",
                 "A follow-up provider-free filesystem search across the local Desktop and Inspect application-support paths found the current full-run logs, those tiny smoke/probe logs, older UniMoral action-prediction logs, and unrelated MiniMax benchmark logs, but no additional full MiniMax RQ2/RQ3/RQ4 archives that close the remaining blockers.",
                 "",
+                "Spotlight metadata search found only the current repo artifacts/caches plus an older `~/Desktop/moral-psych-harness/CEI-openai-update` checkout. That checkout contains UniMoral action-prediction exploratory summaries and prompts, but no UniMoral RQ2/RQ3/RQ4 eval archives or release prediction CSVs.",
+                "",
                 "Local Git branches, remote refs, stashes, and reflog-retained artifact commits were checked. Every retained `unimoral-sample-predictions.csv` snapshot still has 136782 rows, 1800 MiniMax-L factor-attribution rows, and 0 MiniMax-L consequence-generation rows; no historical release artifact closes the remaining MiniMax blockers.",
                 "",
                 "An exact home-directory search for duplicate UniMoral release CSVs and likely UniMoral/CEI release archives found only the current repo's release/full-run files and no alternate CSV set or compressed bundle to recover from.",
