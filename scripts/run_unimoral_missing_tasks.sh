@@ -19,6 +19,7 @@ FORCE_RERUN="${FORCE_RERUN:-0}"
 UNIMORAL_ROUTE_MODE="${UNIMORAL_ROUTE_MODE:-auto}"
 UNIMORAL_DRY_RUN="${UNIMORAL_DRY_RUN:-0}"
 UNIMORAL_RERUN_UNPARSED="${UNIMORAL_RERUN_UNPARSED:-0}"
+UNIMORAL_ALLOW_MINIMAX="${UNIMORAL_ALLOW_MINIMAX:-0}"
 
 mkdir -p "$LOG_BASE" "$RUN_BASE"
 
@@ -91,6 +92,11 @@ skip_model_line() {
   local profile="$4"
   local haystack="$line_label|$slug|$route|$profile"
   [[ -n "$UNIMORAL_SKIP_MODEL_REGEX" && "$haystack" =~ $UNIMORAL_SKIP_MODEL_REGEX ]]
+}
+
+minimax_execution_allowed() {
+  local profile="$1"
+  [[ "$profile" != "minimax_reasoning" || "$UNIMORAL_ALLOW_MINIMAX" == "1" ]]
 }
 
 normalize_routing_model() {
@@ -517,6 +523,12 @@ run_one() {
     read -r prefix_progress logged_count parseable_count coverage_expected <<< "$(sample_coverage_for_task "$log_dir" "$task_name")"
     echo "[$(now_iso)] DRY_RUN line=$line_label task=$task_name route=$route routed_model=$ROUTED_MODEL provider=$ROUTED_PROVIDER key_var=$ROUTED_KEY_VAR key_state=$ROUTED_KEY_STATE prefix_progress=$prefix_progress logged=$logged_count parseable=$parseable_count expected=$coverage_expected ranges=${range_summary:-none}"
     return 0
+  fi
+
+  if ! minimax_execution_allowed "$profile"; then
+    echo "[$(now_iso)] BLOCK line=$line_label task=$task_name reason=minimax_requires_UNIMORAL_ALLOW_MINIMAX"
+    write_failure "$line_label" "$task_name" "minimax_requires_UNIMORAL_ALLOW_MINIMAX" "$stdout_path" "approval"
+    return 1
   fi
 
   start_at="$(now_iso)"

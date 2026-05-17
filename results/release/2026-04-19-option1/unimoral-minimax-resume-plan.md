@@ -2,7 +2,7 @@
 
 This file is a provider-free handoff for the remaining UniMoral RQ2/RQ3/RQ4 blockers. It documents the current MiniMax gaps without granting permission to run MiniMax.
 
-Run these only after MiniMax runs are explicitly allowed and a valid `OPENROUTER_API_KEY` or direct MiniMax route is available.
+Run these only after MiniMax runs are explicitly allowed, `UNIMORAL_ALLOW_MINIMAX=1` is set, and a valid `OPENROUTER_API_KEY` or direct MiniMax route is available.
 
 ## Current State
 
@@ -96,7 +96,7 @@ Run cells separately so a MiniMax failure does not hide which cell advanced:
 ### MiniMax-S / unimoral_moral_typology
 
 ```bash
-UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-S' TASK_FILTER='unimoral_moral_typology' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
+UNIMORAL_ALLOW_MINIMAX=1 UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-S' TASK_FILTER='unimoral_moral_typology' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
 ```
 
 Range detail: `Use the dry-run command above to print the full 54-range list.`
@@ -104,7 +104,7 @@ Range detail: `Use the dry-run command above to print the full 54-range list.`
 ### MiniMax-S / unimoral_factor_attribution
 
 ```bash
-UNIMORAL_RERUN_UNPARSED_MAX_GAP=3 UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-S' TASK_FILTER='unimoral_factor_attribution' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
+UNIMORAL_RERUN_UNPARSED_MAX_GAP=3 UNIMORAL_ALLOW_MINIMAX=1 UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-S' TASK_FILTER='unimoral_factor_attribution' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
 ```
 
 Range detail: `0 304;308 387;393 604;608 619;623 626;630 834;838 857;861 1026;1031 1238;1242 2369;2373 2651;2656 3077;3081 3472;3476 3492`
@@ -112,7 +112,7 @@ Range detail: `0 304;308 387;393 604;608 619;623 626;630 834;838 857;861 1026;10
 ### MiniMax-S / unimoral_consequence_generation
 
 ```bash
-UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-S' TASK_FILTER='unimoral_consequence_generation' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
+UNIMORAL_ALLOW_MINIMAX=1 UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-S' TASK_FILTER='unimoral_consequence_generation' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
 ```
 
 Range detail: `1120 1121`
@@ -120,7 +120,7 @@ Range detail: `1120 1121`
 ### MiniMax-M / unimoral_factor_attribution
 
 ```bash
-UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-M' TASK_FILTER='unimoral_factor_attribution' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
+UNIMORAL_ALLOW_MINIMAX=1 UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-M' TASK_FILTER='unimoral_factor_attribution' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
 ```
 
 Range detail: `1981 1982`
@@ -128,7 +128,7 @@ Range detail: `1981 1982`
 ### MiniMax-M / unimoral_consequence_generation
 
 ```bash
-UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-M' TASK_FILTER='unimoral_consequence_generation' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
+UNIMORAL_ALLOW_MINIMAX=1 UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-M' TASK_FILTER='unimoral_consequence_generation' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
 ```
 
 Range detail: `1111 1112;1172 1173;1334 1335;1465 1466;1468 1476`
@@ -136,7 +136,7 @@ Range detail: `1111 1112;1172 1173;1334 1335;1465 1466;1468 1476`
 ### MiniMax-L / unimoral_factor_attribution
 
 ```bash
-UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-L' TASK_FILTER='unimoral_factor_attribution' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
+UNIMORAL_ALLOW_MINIMAX=1 UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-L' TASK_FILTER='unimoral_factor_attribution' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
 ```
 
 Range detail: `379 380;715 717;721 722;725 1750;2774 2775;2811 2812;2814 2817;2818 3492`
@@ -144,7 +144,7 @@ Range detail: `379 380;715 717;721 722;725 1750;2774 2775;2811 2812;2814 2817;28
 ### MiniMax-L / unimoral_consequence_generation
 
 ```bash
-UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-L' TASK_FILTER='unimoral_consequence_generation' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
+UNIMORAL_ALLOW_MINIMAX=1 UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='MiniMax-L' TASK_FILTER='unimoral_consequence_generation' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
 ```
 
 Range detail: `0 1782`

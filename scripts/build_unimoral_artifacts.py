@@ -755,8 +755,8 @@ def failure_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
         task_filter = row["task_name"]
         model_filter = row["line_label"]
         is_minimax = str(model_filter).lower().startswith("minimax")
-        route_prefix = "UNIMORAL_ROUTE_MODE=openrouter " if is_minimax else ""
-        provider_clause = "when MiniMax is allowed and OPENROUTER_API_KEY is available, " if is_minimax else ""
+        route_prefix = "UNIMORAL_ALLOW_MINIMAX=1 UNIMORAL_ROUTE_MODE=openrouter " if is_minimax else ""
+        provider_clause = "with MiniMax explicitly allowed and OPENROUTER_API_KEY available, " if is_minimax else ""
         if category == "format/parsing":
             next_action = (
                 f"Rerun parse gaps only {provider_clause}with "
@@ -1028,7 +1028,7 @@ def write_minimax_resume_plan(release_dir: Path, failures: list[dict[str, object
         "",
         "This file is a provider-free handoff for the remaining UniMoral RQ2/RQ3/RQ4 blockers. It documents the current MiniMax gaps without granting permission to run MiniMax.",
         "",
-        "Run these only after MiniMax runs are explicitly allowed and a valid `OPENROUTER_API_KEY` or direct MiniMax route is available.",
+        "Run these only after MiniMax runs are explicitly allowed, `UNIMORAL_ALLOW_MINIMAX=1` is set, and a valid `OPENROUTER_API_KEY` or direct MiniMax route is available.",
         "",
         "## Current State",
         "",
@@ -1150,7 +1150,7 @@ def write_minimax_resume_plan(release_dir: Path, failures: list[dict[str, object
                     f"### {key[0]} / {key[1]}",
                     "",
                     "```bash",
-                    f"{recommended_env}UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='{key[0]}' TASK_FILTER='{key[1]}' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh",
+                    f"{recommended_env}UNIMORAL_ALLOW_MINIMAX=1 UNIMORAL_ROUTE_MODE=openrouter FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='{key[0]}' TASK_FILTER='{key[1]}' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh",
                     "```",
                     "",
                     f"Range detail: `{plan.get('range_detail', 'refresh with UNIMORAL_DRY_RUN=1 before executing')}`",

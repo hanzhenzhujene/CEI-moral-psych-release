@@ -593,6 +593,7 @@ def verify_release(
                     "Do not infer labels from hidden reasoning",
                     "Local Samplebuffer Audit",
                     "Google Drive was searched",
+                    "UNIMORAL_ALLOW_MINIMAX=1",
                     "UNIMORAL_RERUN_UNPARSED_MAX_GAP=3` on May 17, 2026",
                     "key_state=missing",
                     "MiniMax-L` | `unimoral_consequence_generation",

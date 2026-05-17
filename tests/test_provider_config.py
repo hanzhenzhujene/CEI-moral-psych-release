@@ -189,6 +189,18 @@ def test_unimoral_launcher_can_skip_minimax_lines_before_routing() -> None:
     assert output == ["skip", "run"]
 
 
+def test_unimoral_launcher_requires_explicit_minimax_execution_opt_in() -> None:
+    output = run_provider_script(
+        'UNIMORAL_SOURCE_ONLY=1 source "./scripts/run_unimoral_missing_tasks.sh" >/dev/null 2>/dev/null; '
+        'if minimax_execution_allowed "minimax_reasoning"; then echo run; else echo block; fi; '
+        'UNIMORAL_ALLOW_MINIMAX=1; '
+        'if minimax_execution_allowed "minimax_reasoning"; then echo run; else echo block; fi; '
+        'if minimax_execution_allowed "plain"; then echo run; else echo block; fi'
+    ).splitlines()
+
+    assert output == ["block", "run", "run"]
+
+
 def test_unimoral_launcher_guards_empty_extra_args_under_nounset() -> None:
     script = (ROOT / "scripts" / "run_unimoral_missing_tasks.sh").read_text(encoding="utf-8")
 
