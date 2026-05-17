@@ -51,6 +51,8 @@ The broader Inspect application-support trace directory was checked as well. Tho
 
 Redacted shell-history and older-checkout breadcrumbs were checked too. The history points to UniMoral dataset setup under `~/Desktop/moral-psych-data/unimoral` and an older `~/Desktop/moral-psychology-benchmark` checkout, but not to completed RQ2/RQ3/RQ4 MiniMax result artifacts. The older checkout contains UniMoral RQ2/RQ3/RQ4 task-builder code and prompts, while its saved Inspect UniMoral logs are action-prediction runs only.
 
+The sibling `~/Desktop/cei-jenny-main-sync` checkout was also inspected. Its release catalog reports UniMoral as "Action prediction only", and the checkout contains RQ2/RQ3/RQ4 task-builder code/prompts but no saved MiniMax RQ2/RQ3/RQ4 release artifacts or Inspect logs.
+
 Local Time Machine snapshots were listed for May 17, 2026, but no browsable backup content was mounted under `/Volumes/.timemachine`. Do not attempt a snapshot restore or mount operation without explicit user approval.
 
 The `results/inspect/full-runs/2026-05-16-unimoral-full/minimax_l/` transcripts were checked after a Spotlight index search. They contain run starts and one old `args[@]: unbound variable` shell failure for MiniMax-L factor attribution, but no model predictions. The current launcher keeps the empty-args expansion guarded under `set -u`, with a regression test in `tests/test_provider_config.py`.
