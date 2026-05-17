@@ -110,6 +110,14 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         "No MiniMax blockers are listed in the fixture failure checklist.\n",
         encoding="utf-8",
     )
+    release.joinpath("unimoral-completion-audit.md").write_text(
+        "# UniMoral Completion Audit\n\n"
+        "Status: **achieved**.\n\n"
+        "## Prompt-to-Artifact Checklist\n\n"
+        "Strict completion is achieved in this fixture.\n\n"
+        "No MiniMax provider calls are made by generating this audit.\n",
+        encoding="utf-8",
+    )
 
     for name in [
         "option1_unimoral_task_heatmap.svg",
@@ -265,6 +273,7 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
                     "unimoral_model_rankings": "results/release/unimoral-model-rankings.csv",
                     "unimoral_sample_predictions": "results/release/unimoral-sample-predictions.csv",
                     "unimoral_failure_checklist": "results/release/unimoral-failure-checklist.csv",
+                    "unimoral_completion_audit": "results/release/unimoral-completion-audit.md",
                     "unimoral_minimax_resume_plan": "results/release/unimoral-minimax-resume-plan.md",
                     "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
                     "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",

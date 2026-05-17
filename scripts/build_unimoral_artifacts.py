@@ -982,6 +982,7 @@ def update_manifest(release_dir: Path) -> None:
             "unimoral_model_rankings": "results/release/2026-04-19-option1/unimoral-model-rankings.csv",
             "unimoral_sample_predictions": "results/release/2026-04-19-option1/unimoral-sample-predictions.csv",
             "unimoral_failure_checklist": "results/release/2026-04-19-option1/unimoral-failure-checklist.csv",
+            "unimoral_completion_audit": "results/release/2026-04-19-option1/unimoral-completion-audit.md",
             "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
             "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
             "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
@@ -999,6 +1000,7 @@ def update_manifest(release_dir: Path) -> None:
             "unimoral-model-rankings.csv",
             "unimoral-sample-predictions.csv",
             "unimoral-failure-checklist.csv",
+            "unimoral-completion-audit.md",
             "unimoral-minimax-resume-plan.md",
             *(["unimoral-rq4-bertscore.csv"] if bertscore_path.exists() and bertscore_path.stat().st_size > 0 else []),
         ],
@@ -1176,6 +1178,66 @@ def write_minimax_resume_plan(release_dir: Path, failures: list[dict[str, object
     path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
 
+def write_completion_audit(
+    release_dir: Path,
+    coverage: list[dict[str, object]],
+    failures: list[dict[str, object]],
+) -> None:
+    path = release_dir / "unimoral-completion-audit.md"
+    sample_predictions = release_dir / "unimoral-sample-predictions.csv"
+    sample_rows = max(0, sum(1 for _ in sample_predictions.open(encoding="utf-8")) - 1) if sample_predictions.exists() else 0
+    expected_prediction_rows = sum(
+        int(task["expected"])
+        for task_name, task in TASKS.items()
+        if task_name != "unimoral_action_prediction"
+    ) * len(MODEL_LINES)
+    strict_complete = bool(coverage) and all(row.get("status") == "complete" for row in coverage) and not failures
+    coverage_summary = ", ".join(
+        f"{row.get('task_name')} {row.get('complete_model_lines')}/{row.get('expected_model_lines')} {row.get('status')}"
+        for row in coverage
+    )
+    failure_summary = "; ".join(
+        f"{row.get('line_label')} {row.get('task_name')} {row.get('status')} {row.get('completed_samples')}/{row.get('expected_samples')} parsed={row.get('parsed_count')}"
+        for row in failures
+    ) or "none"
+    status = "achieved" if strict_complete else "not achieved"
+    gate_sentence = (
+        "Strict completion is achieved by `scripts/verify_unimoral_completion.py`; `unimoral-failure-checklist.csv` is empty and `unimoral-coverage.csv` has complete RQ2/RQ3/RQ4 rows."
+        if strict_complete
+        else "Strict completion is blocked by MiniMax-only saved-artifact gaps. Do not mark the objective complete while `scripts/verify_unimoral_completion.py` fails, `unimoral-failure-checklist.csv` is nonempty, or `unimoral-coverage.csv` has incomplete RQ2/RQ3/RQ4 rows."
+    )
+    lines = [
+        "# UniMoral Completion Audit",
+        "",
+        f"Status: **{status}**.",
+        "",
+        "Objective: complete UniMoral RQ2/RQ3/RQ4 for the existing release model set, update code/results/figures/docs, validate consistency, and commit/push a clean branch.",
+        "",
+        "## Prompt-to-Artifact Checklist",
+        "",
+        "| Requirement | Evidence artifact or command | Current evidence | Status |",
+        "| --- | --- | --- | --- |",
+        "| RQ2/RQ3/RQ4 task definitions exist | `src/inspect/evals/unimoral.py`, `src/inspect/evals/moral_psych.py`, `scripts/verify_unimoral_task_builders.py` | Provider-free task-builder verification covers RQ1-RQ4 registry entries. | structurally covered |",
+        "| Results cover existing model set | `unimoral-coverage.csv`, `unimoral-full-benchmark.csv`, strict `scripts/verify_unimoral_completion.py` | "
+        + coverage_summary
+        + " | incomplete |",
+        "| Sample-level predictions are complete for RQ2/RQ3/RQ4 | `unimoral-sample-predictions.csv` | "
+        + f"{sample_rows} rows present; strict expected count is {expected_prediction_rows}. | incomplete |",
+        "| Known failures are empty | `unimoral-failure-checklist.csv` | "
+        + f"{len(failures)} rows: {failure_summary}. | incomplete |",
+        "| Figures and release docs rebuild from tracked artifacts | `scripts/build_unimoral_artifacts.py`, `make audit` | Structural release gate allows documented incomplete cells until MiniMax blockers are resolved. | covered with caveat |",
+        "| MiniMax is not run without explicit authorization | `scripts/run_unimoral_missing_tasks.sh`, `tests/test_provider_config.py` | Non-dry-run MiniMax lines require `UNIMORAL_ALLOW_MINIMAX=1`; current user instruction forbids MiniMax runs. | guarded |",
+        "| Clean committed branch | `git status --short --branch`, `git rev-list --left-right --count HEAD...@{upstream}` | Verify after commit/push. | pending at generation time |",
+        "",
+        "## Completion Gate",
+        "",
+        gate_sentence,
+        "",
+        "No MiniMax provider calls are made by generating this audit.",
+    ]
+    path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+
+
 def log_root_has_evals(log_root: Path) -> bool:
     return any(log_root.glob("*.eval")) or any(log_root.glob("*/*.eval"))
 
@@ -1276,6 +1338,7 @@ def build_markdown_section(
     *,
     figure_prefix: str,
     resume_plan_link: str,
+    completion_audit_link: str,
 ) -> str:
     spread_by_task = {row["task_name"]: row for row in spreads}
     top_by_task = {row["task_name"]: row for row in rankings if str(row["rank"]) == "1"}
@@ -1320,6 +1383,7 @@ def build_markdown_section(
             "",
             "Sample-level predictions for RQ2/RQ3/RQ4 are exported in `unimoral-sample-predictions.csv`; full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.",
             f"The provider-free MiniMax handoff is tracked in [`unimoral-minimax-resume-plan.md`]({resume_plan_link}).",
+            f"The prompt-to-artifact completion audit is tracked in [`unimoral-completion-audit.md`]({completion_audit_link}).",
             "",
             "| Task | What it measures | Scoring note |",
             "| --- | --- | --- |",
@@ -1366,6 +1430,7 @@ def update_markdown_reports(
         rankings,
         figure_prefix="figures/release/",
         resume_plan_link="results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md",
+        completion_audit_link="results/release/2026-04-19-option1/unimoral-completion-audit.md",
     )
     release_section = build_markdown_section(
         coverage,
@@ -1373,6 +1438,7 @@ def update_markdown_reports(
         rankings,
         figure_prefix="../../../figures/release/",
         resume_plan_link="unimoral-minimax-resume-plan.md",
+        completion_audit_link="unimoral-completion-audit.md",
     )
     update_markdown(ROOT / "README.md", root_section)
     update_markdown(release_dir / "README.md", release_section)
@@ -1403,6 +1469,7 @@ def main() -> None:
         svg_rankings(rankings, args.figure_dir / "option1_unimoral_task_rankings.svg")
         svg_spread(spreads, args.figure_dir / "option1_unimoral_task_spread.svg")
         write_minimax_resume_plan(args.release_dir, failures)
+        write_completion_audit(args.release_dir, coverage, failures)
         update_manifest(args.release_dir)
         update_release_overview_tables(args.release_dir, coverage)
         update_markdown_reports(args.release_dir, coverage, spreads, rankings)
@@ -1485,6 +1552,7 @@ def main() -> None:
     svg_rankings(rankings, args.figure_dir / "option1_unimoral_task_rankings.svg")
     svg_spread(spreads, args.figure_dir / "option1_unimoral_task_spread.svg")
     write_minimax_resume_plan(args.release_dir, failures)
+    write_completion_audit(args.release_dir, coverage, failures)
     update_manifest(args.release_dir)
     update_release_overview_tables(args.release_dir, coverage)
     update_markdown_reports(args.release_dir, coverage, spreads, rankings)

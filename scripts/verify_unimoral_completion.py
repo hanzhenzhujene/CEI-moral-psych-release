@@ -567,6 +567,7 @@ def verify_release(
         "unimoral_model_rankings",
         "unimoral_sample_predictions",
         "unimoral_failure_checklist",
+        "unimoral_completion_audit",
         "unimoral_minimax_resume_plan",
         "unimoral_rq4_bertscore",
         "unimoral_task_heatmap_figure",
@@ -601,6 +602,20 @@ def verify_release(
                 for phrase in required_phrases:
                     if phrase not in resume_plan_text:
                         fail(errors, f"unimoral-minimax-resume-plan.md missing required phrase: {phrase!r}")
+
+    completion_audit_entry = entry_points.get("unimoral_completion_audit")
+    if completion_audit_entry:
+        completion_audit_path = _resolve_manifest_path(str(completion_audit_entry), release_dir, figure_dir)
+        if completion_audit_path is not None:
+            completion_audit_text = completion_audit_path.read_text(encoding="utf-8")
+            required_phrases = [
+                "Prompt-to-Artifact Checklist",
+                "Strict completion is",
+                "No MiniMax provider calls are made by generating this audit.",
+            ]
+            for phrase in required_phrases:
+                if phrase not in completion_audit_text:
+                    fail(errors, f"unimoral-completion-audit.md missing required phrase: {phrase!r}")
 
     stale_phrases = [
         "current model-line matrix is not yet fully complete",
