@@ -480,7 +480,7 @@ def verify_release(
             full_row = full_by_pair.get(pair)
             if full_row is None:
                 continue
-            for field in ("status", "completed_samples", "expected_samples", "parsed_count"):
+            for field in ("status", "completed_samples", "expected_samples", "parsed_count", "log_path"):
                 if row.get(field) != full_row.get(field):
                     fail(
                         errors,

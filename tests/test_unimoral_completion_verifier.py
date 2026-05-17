@@ -645,7 +645,7 @@ def test_unimoral_completion_verifier_validates_failure_checklist_detail(tmp_pat
             "category": "unknown",
             "reason": "",
             "next_action": "rerun fixture",
-            "log_path": "results/inspect/logs/example.eval",
+            "log_path": "results/inspect/logs/stale.eval",
         }
     ]
     _write_csv(release / "unimoral-failure-checklist.csv", failure_rows, list(failure_rows[0]))
@@ -653,6 +653,7 @@ def test_unimoral_completion_verifier_validates_failure_checklist_detail(tmp_pat
     errors = verifier.verify_release(release, figures, allow_incomplete=True)
 
     assert any("failure checklist completed_samples='2' does not match benchmark row '1'" in error for error in errors)
+    assert any("failure checklist log_path='results/inspect/logs/stale.eval' does not match benchmark row" in error for error in errors)
     assert any("failure checklist category='unknown' is not recognized" in error for error in errors)
     assert any("failure checklist missing reason" in error for error in errors)
 
