@@ -1217,6 +1217,39 @@ def write_completion_audit(
         f"{row.get('line_label')} {row.get('task_name')} {row.get('status')} {row.get('completed_samples')}/{row.get('expected_samples')} parsed={row.get('parsed_count')}"
         for row in failures
     ) or "none"
+    full_rows = read_csv(release_dir / "unimoral-full-benchmark.csv") if (release_dir / "unimoral-full-benchmark.csv").exists() else []
+    prediction_rows = read_csv(sample_predictions) if sample_predictions.exists() else []
+    full_by_pair = {
+        (str(row.get("line_label", "")), str(row.get("task_name", ""))): row
+        for row in full_rows
+    }
+    prediction_counts: dict[tuple[str, str], int] = {}
+    for row in prediction_rows:
+        key = (str(row.get("line_label", "")), str(row.get("task_name", "")))
+        prediction_counts[key] = prediction_counts.get(key, 0) + 1
+
+    total_prediction_gap = 0
+    strict_blocker_lines: list[str] = []
+    for line_label, _, _, _ in MODEL_LINES:
+        for task_name, task in TASKS.items():
+            if task_name == "unimoral_action_prediction":
+                continue
+            expected = int(task["expected"])
+            prediction_count = prediction_counts.get((line_label, task_name), 0)
+            row = full_by_pair.get((line_label, task_name))
+            status_value = str(row.get("status", "missing_row")) if row else "missing_row"
+            gap = max(0, expected - prediction_count)
+            if gap:
+                total_prediction_gap += gap
+                strict_blocker_lines.append(
+                    f"- `{line_label}` `{task_name}`: {gap} sample predictions missing "
+                    f"({prediction_count}/{expected}); status `{status_value}`."
+                )
+            elif status_value != "complete":
+                strict_blocker_lines.append(
+                    f"- `{line_label}` `{task_name}`: no sample-count gap "
+                    f"({prediction_count}/{expected}) but status `{status_value}` prevents strict completion."
+                )
     status = "achieved" if strict_complete else "not achieved"
     gate_sentence = (
         "Strict completion is achieved by `scripts/verify_unimoral_completion.py`; `unimoral-failure-checklist.csv` is empty and `unimoral-coverage.csv` has complete RQ2/RQ3/RQ4 rows."
@@ -1246,6 +1279,12 @@ def write_completion_audit(
         "| MiniMax is not run without explicit authorization | `make unimoral-missing-plan`, `scripts/run_unimoral_missing_tasks.sh`, `tests/test_provider_config.py` | `make unimoral-missing-plan` is dry-run only; non-dry-run MiniMax lines require `UNIMORAL_ALLOW_MINIMAX=1`; current user instruction forbids MiniMax runs. | guarded |",
         "| Secrets or credentials are not introduced | Branch diff credential-pattern scan against `origin/main...HEAD` | No literal provider keys or tokens were found; provider key references are environment-variable names only. | covered |",
         "| Clean committed branch | `git status --short --branch`, `git rev-list --left-right --count HEAD...@{upstream}` | Post-generation check required: this generated artifact cannot prove the final commit/push state; the final operator report must cite clean status and 0/0 ahead-behind after the last push. | external final check |",
+        "",
+        "## CSV-Level Strict Blockers",
+        "",
+        f"Total strict sample prediction gap: **{total_prediction_gap}** rows.",
+        "",
+        *(strict_blocker_lines or ["No CSV-level strict blockers remain; `scripts/verify_unimoral_completion.py` remains the source of truth."]),
         "",
         "## Completion Gate",
         "",

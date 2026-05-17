@@ -17,6 +17,16 @@ Objective: complete UniMoral RQ2/RQ3/RQ4 for the existing release model set, upd
 | Secrets or credentials are not introduced | Branch diff credential-pattern scan against `origin/main...HEAD` | No literal provider keys or tokens were found; provider key references are environment-variable names only. | covered |
 | Clean committed branch | `git status --short --branch`, `git rev-list --left-right --count HEAD...@{upstream}` | Post-generation check required: this generated artifact cannot prove the final commit/push state; the final operator report must cite clean status and 0/0 ahead-behind after the last push. | external final check |
 
+## CSV-Level Strict Blockers
+
+Total strict sample prediction gap: **3474** rows.
+
+- `MiniMax-S` `unimoral_moral_typology`: no sample-count gap (3492/3492) but status `complete_recovered_logs` prevents strict completion.
+- `MiniMax-S` `unimoral_factor_attribution`: no sample-count gap (3492/3492) but status `complete_parse_gap` prevents strict completion.
+- `MiniMax-M` `unimoral_consequence_generation`: no sample-count gap (1782/1782) but status `complete_recovered_logs` prevents strict completion.
+- `MiniMax-L` `unimoral_factor_attribution`: 1692 sample predictions missing (1800/3492); status `partial`.
+- `MiniMax-L` `unimoral_consequence_generation`: 1782 sample predictions missing (0/1782); status `partial`.
+
 ## Completion Gate
 
 Strict completion is blocked by MiniMax-only saved-artifact gaps. Do not mark the objective complete while `scripts/verify_unimoral_completion.py` fails, `unimoral-failure-checklist.csv` is nonempty, or `unimoral-coverage.csv` has incomplete RQ2/RQ3/RQ4 rows.
