@@ -123,6 +123,9 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         "`git rev-list --left-right --count HEAD...@{upstream}` | "
         "Post-generation check required: the final operator report must cite "
         "clean status and 0/0 ahead-behind after the last push. | external final check |\n\n"
+        "## CSV-Level Strict Blockers\n\n"
+        "Total strict sample prediction gap: **0** rows.\n\n"
+        "No CSV-level strict blockers remain; `scripts/verify_unimoral_completion.py` remains the source of truth.\n\n"
         "No MiniMax provider calls are made by generating this audit.\n",
         encoding="utf-8",
     )
@@ -420,6 +423,9 @@ def test_unimoral_completion_verifier_allow_incomplete_keeps_structural_checks(t
         "`git rev-list --left-right --count HEAD...@{upstream}` | "
         "Post-generation check required: the final operator report must cite "
         "clean status and 0/0 ahead-behind after the last push. | external final check |\n\n"
+        "## CSV-Level Strict Blockers\n\n"
+        "Total strict sample prediction gap: **1** rows.\n\n"
+        "- `Line-A` `unimoral_moral_typology`: 1 sample predictions missing (1/2); status `partial`.\n\n"
         "No MiniMax provider calls are made by generating this audit.\n",
         encoding="utf-8",
     )

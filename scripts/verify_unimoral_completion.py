@@ -335,6 +335,7 @@ def verify_release(
         for row in coverage_rows
         if row.get("task_name") in PREDICTION_TASKS and row.get("status") != "complete"
     }
+    full_by_pair = {(row["line_label"], row["task_name"]): row for row in full_rows}
     referenced_logs_available = _any_referenced_log_exists(full_rows, release_dir)
 
     expected_pairs = {(line, task) for line in MODEL_LINES for task in TASKS}
@@ -408,6 +409,8 @@ def verify_release(
     predictions_by_pair: dict[tuple[str, str], list[dict[str, str]]] = {}
     for row in prediction_rows:
         predictions_by_pair.setdefault((row["line_label"], row["task_name"]), []).append(row)
+    strict_prediction_gap = 0
+    completion_audit_blocker_phrases: list[str] = []
     for line in MODEL_LINES:
         for task_name, task in PREDICTION_TASKS.items():
             rows_for_pair = predictions_by_pair.get((line, task_name), [])
@@ -416,6 +419,19 @@ def verify_release(
             empty_scores = sum(1 for row in rows_for_pair if row.get("score_value") in {None, ""})
             if empty_scores:
                 fail(errors, f"{line} {task_name} has {empty_scores} empty sample score values")
+            full_row = full_by_pair.get((line, task_name), {})
+            status_value = str(full_row.get("status", "missing_row"))
+            prediction_gap = max(0, int(task["expected"]) - len(rows_for_pair))
+            if prediction_gap:
+                strict_prediction_gap += prediction_gap
+                completion_audit_blocker_phrases.append(
+                    f"`{line}` `{task_name}`: {prediction_gap} sample predictions missing"
+                )
+            elif status_value != "complete":
+                completion_audit_blocker_phrases.append(
+                    f"`{line}` `{task_name}`: no sample-count gap "
+                    f"({len(rows_for_pair)}/{task['expected']}) but status `{status_value}` prevents strict completion"
+                )
     all_tasks_complete = all(row.get("status") == "complete" for row in coverage_rows)
     if all_tasks_complete:
         rq4_rows = [row for row in full_rows if row.get("task_name") == "unimoral_consequence_generation"]
@@ -436,7 +452,6 @@ def verify_release(
             fail(errors, f"incomplete model-task rows missing from failure checklist: {undocumented_pairs[:10]}")
         if stale_failure_pairs:
             fail(errors, f"failure checklist contains rows that are now complete or missing: {stale_failure_pairs[:10]}")
-        full_by_pair = {(row["line_label"], row["task_name"]): row for row in full_rows}
         for row in failure_rows:
             pair = (row.get("line_label", ""), row.get("task_name", ""))
             task_name = pair[1]
@@ -635,6 +650,8 @@ def verify_release(
                 "0/0 ahead-behind",
                 "final operator report",
                 "external final check",
+                "CSV-Level Strict Blockers",
+                "Total strict sample prediction gap",
             ]
             for phrase in required_phrases:
                 if phrase not in completion_audit_text:
@@ -644,6 +661,15 @@ def verify_release(
                 fail(errors, "unimoral-completion-audit.md does not mark strict-complete artifacts as achieved")
             if not strict_complete and "Status: **not achieved**." not in completion_audit_text:
                 fail(errors, "unimoral-completion-audit.md does not mark incomplete artifacts as not achieved")
+            gap_phrase = f"Total strict sample prediction gap: **{strict_prediction_gap}** rows."
+            if gap_phrase not in completion_audit_text:
+                fail(errors, f"unimoral-completion-audit.md missing current strict prediction gap: {gap_phrase!r}")
+            if completion_audit_blocker_phrases:
+                for phrase in completion_audit_blocker_phrases:
+                    if phrase not in completion_audit_text:
+                        fail(errors, f"unimoral-completion-audit.md missing CSV blocker phrase: {phrase!r}")
+            elif "No CSV-level strict blockers remain" not in completion_audit_text:
+                fail(errors, "unimoral-completion-audit.md does not say CSV-level strict blockers are clear")
 
     stale_phrases = [
         "current model-line matrix is not yet fully complete",
