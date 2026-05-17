@@ -186,10 +186,10 @@ def _eval_status(path: Path) -> str:
     return str(header.get("status") or "unknown")
 
 
-def _manifest_path_exists(path_text: str, release_dir: Path, figure_dir: Path) -> bool:
+def _resolve_manifest_path(path_text: str, release_dir: Path, figure_dir: Path) -> Path | None:
     path = Path(path_text)
     if path.is_absolute():
-        return path.exists()
+        return path if path.exists() else None
     candidates = [
         ROOT / path,
         release_dir / path,
@@ -197,7 +197,11 @@ def _manifest_path_exists(path_text: str, release_dir: Path, figure_dir: Path) -
         release_dir / path.name,
         figure_dir / path.name,
     ]
-    return any(candidate.exists() for candidate in candidates)
+    return next((candidate for candidate in candidates if candidate.exists()), None)
+
+
+def _manifest_path_exists(path_text: str, release_dir: Path, figure_dir: Path) -> bool:
+    return _resolve_manifest_path(path_text, release_dir, figure_dir) is not None
 
 
 def _any_referenced_log_exists(full_rows: list[dict[str, str]], release_dir: Path) -> bool:
@@ -576,6 +580,22 @@ def verify_release(
             continue
         if not _manifest_path_exists(str(entry_points[key]), release_dir, figure_dir):
             fail(errors, f"release-manifest.json entry_points.{key} points to missing artifact: {entry_points[key]}")
+
+    resume_plan_entry = entry_points.get("unimoral_minimax_resume_plan")
+    if resume_plan_entry:
+        resume_plan_path = _resolve_manifest_path(str(resume_plan_entry), release_dir, figure_dir)
+        if resume_plan_path is not None:
+            resume_plan_text = resume_plan_path.read_text(encoding="utf-8")
+            if "No MiniMax blockers are listed" not in resume_plan_text:
+                required_phrases = [
+                    "without granting permission to run MiniMax",
+                    "UNIMORAL_DRY_RUN=1",
+                    "Do not infer labels from hidden reasoning",
+                    "MiniMax-L` | `unimoral_consequence_generation",
+                ]
+                for phrase in required_phrases:
+                    if phrase not in resume_plan_text:
+                        fail(errors, f"unimoral-minimax-resume-plan.md missing required phrase: {phrase!r}")
 
     stale_phrases = [
         "current model-line matrix is not yet fully complete",

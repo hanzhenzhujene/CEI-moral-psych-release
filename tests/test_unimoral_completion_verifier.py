@@ -476,6 +476,21 @@ def test_unimoral_completion_verifier_requires_minimax_resume_plan_manifest_entr
     assert any("release-manifest.json missing entry_points.unimoral_minimax_resume_plan" in error for error in errors)
 
 
+def test_unimoral_completion_verifier_checks_minimax_resume_plan_content(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+    (release / "unimoral-minimax-resume-plan.md").write_text(
+        "# UniMoral MiniMax Resume Plan\n\nMiniMax reruns are pending.\n",
+        encoding="utf-8",
+    )
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("unimoral-minimax-resume-plan.md missing required phrase" in error for error in errors)
+    assert any("without granting permission to run MiniMax" in error for error in errors)
+
+
 def test_unimoral_completion_verifier_checks_required_csv_columns(tmp_path, monkeypatch):
     _set_tiny_verifier_constants(monkeypatch)
     release, figures = _write_minimal_complete_artifacts(tmp_path)
