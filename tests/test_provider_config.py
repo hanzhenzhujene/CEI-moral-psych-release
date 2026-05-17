@@ -187,3 +187,10 @@ def test_unimoral_launcher_can_skip_minimax_lines_before_routing() -> None:
     ).splitlines()
 
     assert output == ["skip", "run"]
+
+
+def test_unimoral_launcher_guards_empty_extra_args_under_nounset() -> None:
+    script = (ROOT / "scripts" / "run_unimoral_missing_tasks.sh").read_text(encoding="utf-8")
+
+    assert '${args[@]+"${args[@]}"}' in script
+    assert "\n          ${args[@]}\n" not in script

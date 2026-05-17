@@ -53,6 +53,8 @@ Redacted shell-history and older-checkout breadcrumbs were checked too. The hist
 
 Local Time Machine snapshots were listed for May 17, 2026, but no browsable backup content was mounted under `/Volumes/.timemachine`. Do not attempt a snapshot restore or mount operation without explicit user approval.
 
+The `results/inspect/full-runs/2026-05-16-unimoral-full/minimax_l/` transcripts were checked after a Spotlight index search. They contain run starts and one old `args[@]: unbound variable` shell failure for MiniMax-L factor attribution, but no model predictions. The current launcher keeps the empty-args expansion guarded under `set -u`, with a regression test in `tests/test_provider_config.py`.
+
 ## Dry-Run Check
 
 Use this before any provider call to refresh the planned ranges:
