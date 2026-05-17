@@ -239,8 +239,8 @@
     "unimoral-model-rankings.csv",
     "unimoral-sample-predictions.csv",
     "unimoral-failure-checklist.csv",
-    "unimoral-rq4-bertscore.csv",
-    "unimoral-minimax-resume-plan.md"
+    "unimoral-minimax-resume-plan.md",
+    "unimoral-rq4-bertscore.csv"
   ],
   "target_matrix": {
     "benchmarks": 5,

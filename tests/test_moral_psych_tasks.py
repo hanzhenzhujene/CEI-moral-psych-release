@@ -424,9 +424,11 @@ def test_unimoral_markdown_top_line_accepts_csv_rank_strings():
             }
         ],
         figure_prefix="figures/release/",
+        resume_plan_link="results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md",
     )
 
     assert "Model-A (0.750)" in section
+    assert "unimoral-minimax-resume-plan.md" in section
 
 
 def test_unimoral_bertscore_script_takes_max_reference_score():
@@ -559,6 +561,42 @@ def test_unimoral_failure_rows_route_minimax_retries_through_openrouter():
     assert "UNIMORAL_ROUTE_MODE=openrouter" in failures[0]["next_action"]
     assert "FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1" in failures[0]["next_action"]
     assert "MODEL_FILTER='MiniMax-L'" in failures[0]["next_action"]
+
+
+def test_unimoral_minimax_resume_plan_registers_handoff_artifact(tmp_path):
+    release_dir = tmp_path / "release"
+    release_dir.mkdir()
+    (release_dir / "release-manifest.json").write_text(
+        json.dumps({"benchmarks": [], "counts": {}, "entry_points": {}, "figures": [], "tables": []}) + "\n",
+        encoding="utf-8",
+    )
+    failures = [
+        {
+            "line_label": "MiniMax-L",
+            "task_name": "unimoral_factor_attribution",
+            "status": "partial",
+            "completed_samples": "1800",
+            "expected_samples": "3492",
+            "parsed_count": "1784",
+        }
+    ]
+
+    build_unimoral_artifacts.write_minimax_resume_plan(release_dir, failures)
+    build_unimoral_artifacts.update_manifest(release_dir)
+
+    plan = (release_dir / "unimoral-minimax-resume-plan.md").read_text(encoding="utf-8")
+    assert "without granting permission to run MiniMax" in plan
+    assert "`MiniMax-L` | `unimoral_factor_attribution`" in plan
+    assert "`MiniMax-S` | `unimoral_consequence_generation` | `parse_gap_dry_run`" in plan
+    assert "UNIMORAL_RERUN_UNPARSED_MAX_GAP=3" in plan
+    assert "0 1782" in plan
+
+    manifest = json.loads((release_dir / "release-manifest.json").read_text(encoding="utf-8"))
+    assert (
+        manifest["entry_points"]["unimoral_minimax_resume_plan"]
+        == "results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md"
+    )
+    assert "unimoral-minimax-resume-plan.md" in manifest["tables"]
 
 
 def test_unimoral_artifact_reader_prefers_visible_text_before_reasoning():
