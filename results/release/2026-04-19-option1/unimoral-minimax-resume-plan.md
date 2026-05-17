@@ -47,6 +47,8 @@ Inspect's local samplebuffer cache was also checked under `~/Library/Application
 
 The MiniMax trace files for the failed consequence-generation run contained request telemetry only. The eval config had `log_samples=true` but `log_model_api=false`, and no response-body fields such as `choices`, `messages`, `content`, `prompt`, `completion`, or `sample_id` were present in the MiniMax trace files.
 
+The broader Inspect application-support trace directory was checked as well. Those global traces had no matching `MiniMax`, failed RQ4 eval ID, or response-body fields, so they do not provide an alternate recovery source.
+
 ## Dry-Run Check
 
 Use this before any provider call to refresh the planned ranges:
