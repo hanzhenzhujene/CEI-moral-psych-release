@@ -106,6 +106,10 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
     root.joinpath("README.md").write_text("The release now scores all four UniMoral tasks.\n", encoding="utf-8")
     release.joinpath("README.md").write_text("The release now scores all four UniMoral tasks.\n", encoding="utf-8")
     release.joinpath("jenny-group-report.md").write_text("The release now scores all four UniMoral tasks.\n", encoding="utf-8")
+    release.joinpath("unimoral-minimax-resume-plan.md").write_text(
+        "No MiniMax blockers are listed in the fixture failure checklist.\n",
+        encoding="utf-8",
+    )
 
     for name in [
         "option1_unimoral_task_heatmap.svg",
@@ -261,6 +265,7 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
                     "unimoral_model_rankings": "results/release/unimoral-model-rankings.csv",
                     "unimoral_sample_predictions": "results/release/unimoral-sample-predictions.csv",
                     "unimoral_failure_checklist": "results/release/unimoral-failure-checklist.csv",
+                    "unimoral_minimax_resume_plan": "results/release/unimoral-minimax-resume-plan.md",
                     "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
                     "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
                     "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
@@ -455,6 +460,20 @@ def test_unimoral_completion_verifier_checks_manifest_paths(tmp_path, monkeypatc
     errors = verifier.verify_release(release, figures, allow_incomplete=True)
 
     assert any("unimoral_task_heatmap_figure points to missing artifact" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_requires_minimax_resume_plan_manifest_entry(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    manifest = json.loads((release / "release-manifest.json").read_text(encoding="utf-8"))
+    del manifest["entry_points"]["unimoral_minimax_resume_plan"]
+    (release / "release-manifest.json").write_text(json.dumps(manifest) + "\n", encoding="utf-8")
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("release-manifest.json missing entry_points.unimoral_minimax_resume_plan" in error for error in errors)
 
 
 def test_unimoral_completion_verifier_checks_required_csv_columns(tmp_path, monkeypatch):

@@ -563,6 +563,7 @@ def verify_release(
         "unimoral_model_rankings",
         "unimoral_sample_predictions",
         "unimoral_failure_checklist",
+        "unimoral_minimax_resume_plan",
         "unimoral_rq4_bertscore",
         "unimoral_task_heatmap_figure",
         "unimoral_task_rankings_figure",
