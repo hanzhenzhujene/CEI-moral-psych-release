@@ -634,6 +634,18 @@ def verify_release(
         resume_plan_path = _resolve_manifest_path(str(resume_plan_entry), release_dir, figure_dir)
         if resume_plan_path is not None:
             resume_plan_text = resume_plan_path.read_text(encoding="utf-8")
+            minimax_failure_rows = [
+                row
+                for row in failure_rows
+                if str(row.get("line_label") or "").startswith("MiniMax")
+                and str(row.get("status") or "") != "complete"
+            ]
+            if minimax_failure_rows and "No MiniMax blockers are listed" in resume_plan_text:
+                fail(
+                    errors,
+                    "unimoral-minimax-resume-plan.md says no MiniMax blockers while "
+                    f"failure checklist has {len(minimax_failure_rows)} MiniMax rows",
+                )
             if "No MiniMax blockers are listed" not in resume_plan_text:
                 required_phrases = [
                     "without granting permission to run MiniMax",
@@ -650,6 +662,19 @@ def verify_release(
                 for phrase in required_phrases:
                     if phrase not in resume_plan_text:
                         fail(errors, f"unimoral-minimax-resume-plan.md missing required phrase: {phrase!r}")
+                for row in minimax_failure_rows:
+                    expected = row.get("expected_samples", "")
+                    required_row = (
+                        f"| `{row.get('line_label', '')}` | `{row.get('task_name', '')}` | "
+                        f"`{row.get('status', '')}` | {row.get('completed_samples', '')}/{expected} logged; "
+                        f"{row.get('parsed_count', '')}/{expected} parseable |"
+                    )
+                    if required_row not in resume_plan_text:
+                        fail(
+                            errors,
+                            "unimoral-minimax-resume-plan.md missing current blocker row: "
+                            f"{required_row}",
+                        )
 
     completion_audit_entry = entry_points.get("unimoral_completion_audit")
     if completion_audit_entry:

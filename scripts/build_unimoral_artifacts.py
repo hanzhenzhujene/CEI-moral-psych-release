@@ -1056,7 +1056,11 @@ def write_minimax_resume_plan(release_dir: Path, failures: list[dict[str, object
             completed = row.get("completed_samples", "")
             expected = row.get("expected_samples", "")
             parsed = row.get("parsed_count", "")
-            coverage = plan.get("evidence") or f"{completed}/{expected} logged; {parsed}/{expected} parseable"
+            coverage = (
+                f"{completed}/{expected} logged; {parsed}/{expected} parseable"
+                if key in failure_by_key
+                else plan.get("evidence") or f"{completed}/{expected} logged; {parsed}/{expected} parseable"
+            )
             range_summary = plan.get("range_summary", "Run the dry-run command below to print current ranges.")
             lines.append(
                 f"| `{row.get('line_label', '')}` | `{row.get('task_name', '')}` | `{row.get('status', '')}` | {coverage} | {range_summary} |"

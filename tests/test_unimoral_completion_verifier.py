@@ -695,6 +695,89 @@ def test_unimoral_completion_verifier_requires_minimax_safety_wording(tmp_path, 
     assert any("next_action missing MiniMax safety phrase: 'OPENROUTER_API_KEY'" in error for error in errors)
 
 
+def test_unimoral_completion_verifier_requires_current_minimax_resume_plan_row(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    monkeypatch.setattr(verifier, "MODEL_LINES", ["MiniMax-S"])
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+    _write_overview_metadata(release, documented_incomplete=True)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    for row in rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "partial"
+            row["completed_samples"] = "1"
+            row["parsed_count"] = "1"
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+    coverage_rows = list(csv.DictReader((release / "unimoral-coverage.csv").open(newline="", encoding="utf-8")))
+    for row in coverage_rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "incomplete"
+            row["complete_model_lines"] = "0"
+            row["reported_model_lines"] = "0"
+    _write_csv(release / "unimoral-coverage.csv", coverage_rows, list(coverage_rows[0]))
+    prediction_rows = list(csv.DictReader((release / "unimoral-sample-predictions.csv").open(newline="", encoding="utf-8")))
+    _write_csv(release / "unimoral-sample-predictions.csv", prediction_rows[:1], list(prediction_rows[0]))
+    failure_rows = [
+        {
+            "line_label": "MiniMax-S",
+            "task_name": "unimoral_moral_typology",
+            "status": "partial",
+            "completed_samples": "1",
+            "expected_samples": "2",
+            "parsed_count": "1",
+            "category": "runtime",
+            "reason": "fixture incomplete",
+            "next_action": (
+                "Refresh planned ranges first with `make unimoral-missing-plan`, then rerun with "
+                "MiniMax explicitly allowed and OPENROUTER_API_KEY available using UNIMORAL_ALLOW_MINIMAX=1."
+            ),
+            "log_path": "results/inspect/logs/example.eval",
+        }
+    ]
+    _write_csv(release / "unimoral-failure-checklist.csv", failure_rows, list(failure_rows[0]))
+    tmp_path.joinpath("README.md").write_text("current model-line matrix is not yet fully complete\n", encoding="utf-8")
+    release.joinpath("unimoral-completion-audit.md").write_text(
+        "# UniMoral Completion Audit\n\n"
+        "Status: **not achieved**.\n\n"
+        "## Prompt-to-Artifact Checklist\n\n"
+        "Strict completion is blocked in this fixture.\n\n"
+        "1 rows present; strict expected count is 2.\n\n"
+        "| MiniMax is not run without explicit authorization | "
+        "`make unimoral-missing-plan` | `make unimoral-missing-plan` is "
+        "dry-run only; non-dry-run MiniMax lines require "
+        "`UNIMORAL_ALLOW_MINIMAX=1`. | guarded |\n\n"
+        "| Clean committed branch | `git status --short --branch`, "
+        "`git rev-list --left-right --count HEAD...@{upstream}` | "
+        "Post-generation check required: the final operator report must cite "
+        "clean status and 0/0 ahead-behind after the last push. | external final check |\n\n"
+        "## CSV-Level Strict Blockers\n\n"
+        "Total strict sample prediction gap: **1** rows.\n\n"
+        "- `MiniMax-S` `unimoral_moral_typology`: 1 sample predictions missing (1/2); status `partial`.\n\n"
+        "No MiniMax provider calls are made by generating this audit.\n",
+        encoding="utf-8",
+    )
+    release.joinpath("unimoral-minimax-resume-plan.md").write_text(
+        "# UniMoral MiniMax Resume Plan\n\n"
+        "This file documents current blockers without granting permission to run MiniMax.\n\n"
+        "Run these only after `UNIMORAL_ALLOW_MINIMAX=1` is set.\n\n"
+        "## Current State\n\n"
+        "| Line | Task | Failure status | Saved coverage | Dry-run range plan |\n"
+        "| --- | --- | --- | --- | --- |\n"
+        "| `MiniMax-S` | `unimoral_moral_typology` | `partial` | 2/2 logged; 2/2 parseable | stale fixture row |\n\n"
+        "Use `make unimoral-missing-plan` with `UNIMORAL_DRY_RUN=1` before provider work.\n\n"
+        "A provider-free scan found no safe recovery path. Do not infer labels from hidden reasoning.\n\n"
+        "## Local Samplebuffer Audit\n\n"
+        "Google Drive was searched. `UNIMORAL_RERUN_UNPARSED_MAX_GAP=3` on May 17, 2026. "
+        "`key_state=missing`. `MiniMax-L` | `unimoral_consequence_generation`.\n",
+        encoding="utf-8",
+    )
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("unimoral-minimax-resume-plan.md missing current blocker row" in error for error in errors)
+
+
 def test_unimoral_completion_verifier_checks_manifest_paths(tmp_path, monkeypatch):
     _set_tiny_verifier_constants(monkeypatch)
     release, figures = _write_minimal_complete_artifacts(tmp_path)
