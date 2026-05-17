@@ -133,12 +133,11 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         encoding="utf-8",
     )
 
-    for name in [
-        "option1_unimoral_task_heatmap.svg",
-        "option1_unimoral_task_rankings.svg",
-        "option1_unimoral_task_spread.svg",
-    ]:
-        figures.joinpath(name).write_text("<svg></svg>\n", encoding="utf-8")
+    for name, title in verifier.REQUIRED_FIGURE_MARKERS.items():
+        figures.joinpath(name).write_text(
+            f"<svg><text>{title}</text></svg>\n",
+            encoding="utf-8",
+        )
 
     _write_success_eval(root / "results" / "inspect" / "logs" / "example.eval")
     full_rows = []
@@ -791,6 +790,18 @@ def test_unimoral_completion_verifier_checks_manifest_paths(tmp_path, monkeypatc
     errors = verifier.verify_release(release, figures, allow_incomplete=True)
 
     assert any("unimoral_task_heatmap_figure points to missing artifact" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_rejects_placeholder_figures(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    figures.joinpath("option1_unimoral_task_heatmap.svg").write_text("<svg></svg>\n", encoding="utf-8")
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("option1_unimoral_task_heatmap.svg missing expected figure title" in error for error in errors)
 
 
 def test_unimoral_completion_verifier_requires_minimax_resume_plan_manifest_entry(tmp_path, monkeypatch):

@@ -140,6 +140,12 @@ REQUIRED_CSV_COLUMNS = {
     },
 }
 
+REQUIRED_FIGURE_MARKERS = {
+    "option1_unimoral_task_heatmap.svg": "UniMoral task scores by model line",
+    "option1_unimoral_task_rankings.svg": "UniMoral per-task model rankings",
+    "option1_unimoral_task_spread.svg": "UniMoral task spread and saturation",
+}
+
 
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
@@ -302,6 +308,13 @@ def verify_release(
 
     if errors:
         return errors
+
+    for filename, marker in REQUIRED_FIGURE_MARKERS.items():
+        text = (figure_dir / filename).read_text(encoding="utf-8")
+        if "<svg" not in text or "</svg>" not in text:
+            fail(errors, f"{filename} is not a complete SVG")
+        if marker not in text:
+            fail(errors, f"{filename} missing expected figure title: {marker!r}")
 
     for filename, required_columns in REQUIRED_CSV_COLUMNS.items():
         if filename == "unimoral-rq4-bertscore.csv" and "unimoral_consequence_generation" not in TASKS:
