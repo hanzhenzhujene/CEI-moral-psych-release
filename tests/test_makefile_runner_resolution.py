@@ -334,7 +334,35 @@ def test_makefile_unimoral_missing_plan_is_provider_free(tmp_path: Path) -> None
     assert "UNIMORAL_ROUTE_MODE=openrouter" in result.stdout
     assert "MODEL_FILTER='MiniMax-S,MiniMax-M,MiniMax-L'" in result.stdout
     assert f'VENV_PYTHON="{fake_python}"' in result.stdout
-    assert "scripts/run_unimoral_missing_tasks.sh" in result.stdout
+    assert "bash scripts/run_unimoral_missing_tasks.sh" in result.stdout
+    assert "UNIMORAL_ALLOW_MINIMAX=1" not in result.stdout
+
+
+def test_makefile_unimoral_missing_plan_uses_uv_environment_when_available(tmp_path: Path) -> None:
+    fake_uv = _write_fake_executable(tmp_path / "fake-uv", "#!/bin/sh\nexit 0\n")
+
+    env = os.environ.copy()
+    env["PATH"] = f"{tmp_path}:{env['PATH']}"
+
+    result = subprocess.run(
+        [
+            "make",
+            "-f",
+            str(MAKEFILE),
+            "-n",
+            "unimoral-missing-plan",
+            "UV=fake-uv",
+        ],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0
+    assert "UNIMORAL_DRY_RUN=1" in result.stdout
+    assert 'VENV_PYTHON="python"' in result.stdout
+    assert "fake-uv run --frozen bash scripts/run_unimoral_missing_tasks.sh" in result.stdout
     assert "UNIMORAL_ALLOW_MINIMAX=1" not in result.stdout
 
 

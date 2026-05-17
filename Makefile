@@ -10,11 +10,15 @@ ifneq ($(shell command -v $(UV) 2>/dev/null),)
 RUN_PYTHON = $(UV) run --frozen python
 RUN_PYTEST = $(UV) run --frozen pytest
 RUN_INSPECT = $(UV) run --frozen --package cei-inspect python
+RUN_BASH = $(UV) run --frozen bash
+SCRIPT_PYTHON = python
 RUNNER_NOTE = uv
 else
 RUN_PYTHON = $(VENV_PYTHON)
 RUN_PYTEST = $(VENV_PYTHON) -m pytest
 RUN_INSPECT = $(VENV_PYTHON)
+RUN_BASH = bash
+SCRIPT_PYTHON = $(VENV_PYTHON)
 RUNNER_NOTE = $(VENV_PYTHON)
 endif
 
@@ -87,8 +91,8 @@ unimoral-missing-plan: ensure-runner
 	UNIMORAL_RERUN_UNPARSED_MAX_GAP=3 \
 	UNIMORAL_ROUTE_MODE=openrouter \
 	MODEL_FILTER='MiniMax-S,MiniMax-M,MiniMax-L' \
-	VENV_PYTHON="$(VENV_PYTHON)" \
-	scripts/run_unimoral_missing_tasks.sh
+	VENV_PYTHON="$(SCRIPT_PYTHON)" \
+	$(RUN_BASH) scripts/run_unimoral_missing_tasks.sh
 
 unimoral-bertscore: ensure-runner
 	$(RUN_PYTHON) scripts/compute_unimoral_bertscore.py \
