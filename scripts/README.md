@@ -3,7 +3,7 @@
 The public release has one canonical reporting path:
 
 - run `make release` to regenerate the tracked deliverable
-- run `make bootstrap` to verify the deliverable end to end
+- run `make bootstrap` to verify the public QA deliverable; strict UniMoral completion is `make verify-unimoral`
 - optionally run `make unimoral-bertscore` after installing `bert_score` to fill the official RQ4 BERTScore column and rebuild UniMoral artifacts
 
 Everything below supports that path, but not every script is meant to be a public entrypoint.

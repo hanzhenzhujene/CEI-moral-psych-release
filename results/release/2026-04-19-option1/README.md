@@ -421,7 +421,7 @@ make release
 make audit
 ```
 
-`make release` rebuilds this public package from the tracked source snapshot. `make audit` runs the public QA gate and rebuilds the package together.
+`make release` rebuilds this public package from the tracked source snapshot. `make audit` runs the public QA gate and rebuilds the package together, but it is not the strict UniMoral completion gate; use `make verify-unimoral` for that.
 
 <!-- UNIMORAL_FULL_BENCHMARK_START -->
 ## UniMoral Full Benchmark Coverage

@@ -10332,10 +10332,10 @@ def append_public_quickstart(lines: list[str]) -> None:
             "",
             "| Goal | Command | Requires secrets or local datasets? |",
             "| --- | --- | --- |",
-            "| Verify the public deliverable end to end | `make bootstrap` | No |",
+            "| Verify the public QA deliverable | `make bootstrap` | No |",
             "| Run a live benchmark smoke test | `make setup && cp .env.example .env && make smoke` | Yes |",
             "",
-            "`make bootstrap` is the reviewer-safe path. It rebuilds the tracked release package and runs the full QA gate from a clean checkout without requiring `OPENROUTER_API_KEY` or local benchmark data.",
+            "`make bootstrap` is the reviewer-safe path. It rebuilds the tracked release package and runs the full public QA gate from a clean checkout without requiring `OPENROUTER_API_KEY` or local benchmark data. It is not the strict UniMoral completion gate; use `make verify-unimoral` for that.",
             "",
         ]
     )
@@ -10731,7 +10731,7 @@ def build_repo_readme(
             "make bootstrap",
             "```",
             "",
-            "This is the default reproducibility path for the research deliverable. It installs the pinned environment, runs the full test suite, and rebuilds the tracked release artifacts from the committed authoritative snapshot.",
+            "This is the default reproducibility path for the public QA deliverable. It installs the pinned environment, runs the full test suite, and rebuilds the tracked release artifacts from the committed authoritative snapshot. It is not the strict UniMoral completion gate; use `make verify-unimoral` for that.",
             "",
             "It does **not** require `.env`, API keys, or local benchmark datasets.",
             "",
@@ -11020,7 +11020,7 @@ def build_release_readme(
             "make audit",
             "```",
             "",
-            "`make release` rebuilds this public package from the tracked source snapshot. `make audit` runs the public QA gate and rebuilds the package together.",
+            "`make release` rebuilds this public package from the tracked source snapshot. `make audit` runs the public QA gate and rebuilds the package together, but it is not the strict UniMoral completion gate; use `make verify-unimoral` for that.",
         ]
     )
     return "\n".join(lines) + "\n"

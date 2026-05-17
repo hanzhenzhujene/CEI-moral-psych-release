@@ -7,19 +7,20 @@ This document describes both:
 
 ## Public QA First
 
-For a clean-checkout verification of the public deliverable, run:
+For a clean-checkout verification of the public QA deliverable, run:
 
 ```bash
 make bootstrap
 ```
 
-This is the shortest trustworthy path for reviewers and collaborators. It:
+This is the shortest trustworthy public-QA path for reviewers and collaborators. It:
 
 - installs the pinned environment from `uv.lock`
 - runs the full test suite
 - rebuilds the tracked release package from the committed authoritative snapshot
 
 It does **not** require API keys or local benchmark datasets.
+It is not the strict UniMoral completion gate; use `make verify-unimoral` for that.
 
 ## Environment
 
@@ -68,7 +69,7 @@ For the public QA gate used in CI, run:
 make audit
 ```
 
-This is the fastest end-to-end public check because it runs the full test suite and refreshes the tracked release artifacts in one command.
+This is the fastest end-to-end public QA check because it runs the full test suite and refreshes the tracked release artifacts in one command. It allows documented incomplete UniMoral cells; strict UniMoral completion is checked separately with `make verify-unimoral`.
 
 ## Rebuild the Public Release
 

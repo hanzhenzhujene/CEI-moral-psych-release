@@ -106,10 +106,10 @@ This repo has two distinct entrypoints:
 
 | Goal | Command | Requires secrets or local datasets? |
 | --- | --- | --- |
-| Verify the public deliverable end to end | `make bootstrap` | No |
+| Verify the public QA deliverable | `make bootstrap` | No |
 | Run a live benchmark smoke test | `make setup && cp .env.example .env && make smoke` | Yes |
 
-`make bootstrap` is the reviewer-safe path. It rebuilds the tracked release package and runs the full QA gate from a clean checkout without requiring `OPENROUTER_API_KEY` or local benchmark data.
+`make bootstrap` is the reviewer-safe path. It rebuilds the tracked release package and runs the full public QA gate from a clean checkout without requiring `OPENROUTER_API_KEY` or local benchmark data. It is not the strict UniMoral completion gate; use `make verify-unimoral` for that.
 
 ## Navigate This Repo
 
