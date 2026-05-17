@@ -394,6 +394,41 @@ def test_unimoral_artifact_builder_detects_tracked_csv_fallback(tmp_path):
     assert build_unimoral_artifacts.existing_release_tables_available(release_dir)
 
 
+def test_unimoral_markdown_top_line_accepts_csv_rank_strings():
+    section = build_unimoral_artifacts.build_markdown_section(
+        coverage=[
+            {
+                "rq": "RQ1",
+                "task_name": "unimoral_action_prediction",
+                "task_label": "Action prediction",
+                "status": "complete",
+                "complete_model_lines": "1",
+                "reported_model_lines": "1",
+                "expected_model_lines": "1",
+            }
+        ],
+        spreads=[
+            {
+                "task_name": "unimoral_action_prediction",
+                "mean": "0.5",
+                "range": "0.1",
+                "diagnostic_read": "diagnostic",
+            }
+        ],
+        rankings=[
+            {
+                "task_name": "unimoral_action_prediction",
+                "rank": "1",
+                "line_label": "Model-A",
+                "value": "0.75",
+            }
+        ],
+        figure_prefix="figures/release/",
+    )
+
+    assert "Model-A (0.750)" in section
+
+
 def test_unimoral_bertscore_script_takes_max_reference_score():
     rows = [
         {

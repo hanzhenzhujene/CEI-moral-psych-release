@@ -1002,7 +1002,7 @@ def build_markdown_section(
     figure_prefix: str,
 ) -> str:
     spread_by_task = {row["task_name"]: row for row in spreads}
-    top_by_task = {row["task_name"]: row for row in rankings if row["rank"] == 1}
+    top_by_task = {row["task_name"]: row for row in rankings if str(row["rank"]) == "1"}
     all_complete = all(row["status"] == "complete" for row in coverage)
     if all_complete:
         summary = "The release has clean scored coverage for all four UniMoral tasks: action prediction, moral typology classification, factor attribution, and consequence generation. Action prediction remains the legacy comparable scalar and is retained as RQ1; the added RQ2/RQ3/RQ4 artifacts expose the more diagnostic typology, attribution, and generation surfaces."
