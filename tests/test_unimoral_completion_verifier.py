@@ -29,6 +29,21 @@ def _set_tiny_verifier_constants(monkeypatch) -> None:
     monkeypatch.setattr(verifier, "EXPECTED_SAMPLE_PREDICTION_ROWS", 2)
 
 
+def _set_tiny_rq4_verifier_constants(monkeypatch) -> None:
+    tasks = {
+        "unimoral_action_prediction": {"rq": "RQ1", "expected": 3, "metric": "accuracy"},
+        "unimoral_consequence_generation": {"rq": "RQ4", "expected": 2, "metric": "meteor"},
+    }
+    monkeypatch.setattr(verifier, "MODEL_LINES", ["Line-A"])
+    monkeypatch.setattr(verifier, "TASKS", tasks)
+    monkeypatch.setattr(
+        verifier,
+        "PREDICTION_TASKS",
+        {"unimoral_consequence_generation": tasks["unimoral_consequence_generation"]},
+    )
+    monkeypatch.setattr(verifier, "EXPECTED_SAMPLE_PREDICTION_ROWS", 2)
+
+
 def _write_success_eval(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(path, "w") as archive:
@@ -158,7 +173,7 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
                 "official_weighted_f1": "0.5" if task["metric"] == "official_weighted_f1" else "",
                 "bleu": "",
                 "meteor": "0.1" if task["metric"] == "meteor" else "",
-                "bert_score_f1": "",
+                "bert_score_f1": "0.9" if task_name == "unimoral_consequence_generation" else "",
                 "rouge_l": "",
                 "parsed_count": task["expected"],
                 "log_path": "" if task_name == "unimoral_action_prediction" else "results/inspect/logs/example.eval",
@@ -204,28 +219,31 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         }
     ]
     _write_csv(release / "unimoral-model-rankings.csv", ranking_rows, list(ranking_rows[0]))
-    _write_csv(
-        release / "unimoral-sample-predictions.csv",
-        [
+    prediction_rows = []
+    for task_name, task in verifier.PREDICTION_TASKS.items():
+        prediction_rows.extend(
             {
                 "line_label": "Line-A",
                 "family": "Line",
                 "size_slot": "",
-                "task_name": "unimoral_moral_typology",
-                "rq": "RQ2",
-                "sample_id": f"sample-{idx}",
+                "task_name": task_name,
+                "rq": task["rq"],
+                "sample_id": f"{task_name}-sample-{idx}",
                 "language": "English",
                 "scenario_id": str(idx),
                 "target_json": '["answer"]',
                 "prediction": "answer",
                 "score_value": "1",
-                "bert_score_f1": "",
+                "bert_score_f1": "0.9" if task_name == "unimoral_consequence_generation" else "",
                 "answer_source": "visible",
                 "source_log_dir": "results/inspect/logs",
                 "source_log_count": "1",
             }
-            for idx in range(verifier.PREDICTION_TASKS["unimoral_moral_typology"]["expected"])
-        ],
+            for idx in range(task["expected"])
+        )
+    _write_csv(
+        release / "unimoral-sample-predictions.csv",
+        prediction_rows,
         [
             "line_label",
             "family",
@@ -244,6 +262,26 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
             "source_log_count",
         ],
     )
+    if "unimoral_consequence_generation" in verifier.PREDICTION_TASKS:
+        rq4_rows = [
+            row
+            for row in prediction_rows
+            if row["task_name"] == "unimoral_consequence_generation"
+        ]
+        _write_csv(
+            release / "unimoral-rq4-bertscore.csv",
+            [
+                {
+                    "line_label": row["line_label"],
+                    "task_name": row["task_name"],
+                    "sample_id": row["sample_id"],
+                    "language": row["language"],
+                    "bert_score_f1": row["bert_score_f1"],
+                }
+                for row in rq4_rows
+            ],
+            ["line_label", "task_name", "sample_id", "language", "bert_score_f1"],
+        )
     _write_csv(
         release / "unimoral-failure-checklist.csv",
         [],
@@ -260,6 +298,22 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
             "log_path",
         ],
     )
+    entry_points = {
+        "unimoral_full_benchmark": "results/release/unimoral-full-benchmark.csv",
+        "unimoral_coverage": "results/release/unimoral-coverage.csv",
+        "unimoral_task_spread": "results/release/unimoral-task-spread.csv",
+        "unimoral_model_rankings": "results/release/unimoral-model-rankings.csv",
+        "unimoral_sample_predictions": "results/release/unimoral-sample-predictions.csv",
+        "unimoral_failure_checklist": "results/release/unimoral-failure-checklist.csv",
+        "unimoral_completion_audit": "results/release/unimoral-completion-audit.md",
+        "unimoral_minimax_resume_plan": "results/release/unimoral-minimax-resume-plan.md",
+        "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
+        "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
+        "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
+    }
+    if "unimoral_consequence_generation" in verifier.TASKS:
+        entry_points["unimoral_rq4_bertscore"] = "results/release/unimoral-rq4-bertscore.csv"
+
     release.joinpath("release-manifest.json").write_text(
         json.dumps(
             {
@@ -279,19 +333,7 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
                     "proxy_tasks": 0,
                     "total_samples": len(verifier.MODEL_LINES) * sum(task["expected"] for task in verifier.TASKS.values())
                 },
-                "entry_points": {
-                    "unimoral_full_benchmark": "results/release/unimoral-full-benchmark.csv",
-                    "unimoral_coverage": "results/release/unimoral-coverage.csv",
-                    "unimoral_task_spread": "results/release/unimoral-task-spread.csv",
-                    "unimoral_model_rankings": "results/release/unimoral-model-rankings.csv",
-                    "unimoral_sample_predictions": "results/release/unimoral-sample-predictions.csv",
-                    "unimoral_failure_checklist": "results/release/unimoral-failure-checklist.csv",
-                    "unimoral_completion_audit": "results/release/unimoral-completion-audit.md",
-                    "unimoral_minimax_resume_plan": "results/release/unimoral-minimax-resume-plan.md",
-                    "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
-                    "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
-                    "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
-                }
+                "entry_points": entry_points,
             }
         )
         + "\n",
@@ -601,6 +643,28 @@ def test_unimoral_completion_verifier_allow_incomplete_fails_duplicate_predictio
 
     assert any("contains duplicate line/task/sample rows" in error for error in errors)
     assert any("missing CSV blocker phrase" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_checks_rq4_bertscore_alignment(tmp_path, monkeypatch):
+    _set_tiny_rq4_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    assert verifier.verify_release(release, figures, allow_incomplete=False) == []
+
+    rows = list(csv.DictReader((release / "unimoral-rq4-bertscore.csv").open(newline="", encoding="utf-8")))
+    rows[0]["bert_score_f1"] = "0.1"
+    _write_csv(release / "unimoral-rq4-bertscore.csv", rows, list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=False)
+
+    assert any("does not match sample predictions" in error for error in errors)
+
+    _write_csv(release / "unimoral-rq4-bertscore.csv", rows[1:], list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=False)
+
+    assert any("unimoral-rq4-bertscore.csv missing RQ4 prediction rows" in error for error in errors)
 
 
 def test_unimoral_completion_verifier_allow_incomplete_requires_failure_checklist_row(tmp_path, monkeypatch):

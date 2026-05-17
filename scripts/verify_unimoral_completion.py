@@ -331,6 +331,11 @@ def verify_release(
     coverage_rows = read_csv(release_dir / "unimoral-coverage.csv")
     prediction_rows = read_csv(release_dir / "unimoral-sample-predictions.csv")
     failure_rows = read_csv(release_dir / "unimoral-failure-checklist.csv")
+    rq4_bertscore_rows = (
+        read_csv(release_dir / "unimoral-rq4-bertscore.csv")
+        if "unimoral_consequence_generation" in TASKS
+        else []
+    )
     benchmark_summary_rows = read_csv(release_dir / "benchmark-summary.csv")
     benchmark_catalog_rows = read_csv(release_dir / "benchmark-catalog.csv")
     incomplete_pairs = {
@@ -423,6 +428,41 @@ def verify_release(
     predictions_by_pair: dict[tuple[str, str], list[dict[str, str]]] = {}
     for row in prediction_rows:
         predictions_by_pair.setdefault((row["line_label"], row["task_name"]), []).append(row)
+    if "unimoral_consequence_generation" in TASKS:
+        rq4_prediction_rows = [
+            row
+            for row in prediction_rows
+            if row.get("task_name") == "unimoral_consequence_generation"
+        ]
+        rq4_prediction_by_key = {
+            (row["line_label"], row["task_name"], row["sample_id"]): row
+            for row in rq4_prediction_rows
+        }
+        rq4_bertscore_keys = [
+            (row["line_label"], row["task_name"], row["sample_id"])
+            for row in rq4_bertscore_rows
+        ]
+        duplicate_bertscore_count = len(rq4_bertscore_keys) - len(set(rq4_bertscore_keys))
+        if duplicate_bertscore_count:
+            fail(errors, f"unimoral-rq4-bertscore.csv contains {duplicate_bertscore_count} duplicate line/task/sample rows")
+        missing_bertscore_keys = sorted(set(rq4_prediction_by_key) - set(rq4_bertscore_keys))
+        extra_bertscore_keys = sorted(set(rq4_bertscore_keys) - set(rq4_prediction_by_key))
+        if missing_bertscore_keys:
+            fail(errors, f"unimoral-rq4-bertscore.csv missing RQ4 prediction rows: {missing_bertscore_keys[:10]}")
+        if extra_bertscore_keys:
+            fail(errors, f"unimoral-rq4-bertscore.csv contains rows absent from RQ4 predictions: {extra_bertscore_keys[:10]}")
+        for row in rq4_bertscore_rows:
+            key = (row["line_label"], row["task_name"], row["sample_id"])
+            value = row.get("bert_score_f1")
+            if value in {None, ""}:
+                fail(errors, f"unimoral-rq4-bertscore.csv has empty BERTScore for {key}")
+            prediction_value = rq4_prediction_by_key.get(key, {}).get("bert_score_f1")
+            if key in rq4_prediction_by_key and prediction_value != value:
+                fail(
+                    errors,
+                    f"unimoral-rq4-bertscore.csv value {value!r} does not match sample predictions "
+                    f"{prediction_value!r} for {key}",
+                )
     strict_prediction_gap = 0
     completion_audit_blocker_phrases: list[str] = []
     if missing_pairs:
