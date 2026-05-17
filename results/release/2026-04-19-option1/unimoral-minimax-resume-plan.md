@@ -49,6 +49,10 @@ The MiniMax trace files for the failed consequence-generation run contained requ
 
 The broader Inspect application-support trace directory was checked as well. Those global traces had no matching `MiniMax`, failed RQ4 eval ID, or response-body fields, so they do not provide an alternate recovery source.
 
+Redacted shell-history and older-checkout breadcrumbs were checked too. The history points to UniMoral dataset setup under `~/Desktop/moral-psych-data/unimoral` and an older `~/Desktop/moral-psychology-benchmark` checkout, but not to completed RQ2/RQ3/RQ4 MiniMax result artifacts. The older checkout contains UniMoral RQ2/RQ3/RQ4 task-builder code and prompts, while its saved Inspect UniMoral logs are action-prediction runs only.
+
+Local Time Machine snapshots were listed for May 17, 2026, but no browsable backup content was mounted under `/Volumes/.timemachine`. Do not attempt a snapshot restore or mount operation without explicit user approval.
+
 ## Dry-Run Check
 
 Use this before any provider call to refresh the planned ranges:
