@@ -647,6 +647,65 @@ def test_unimoral_completion_audit_records_csv_level_blockers(tmp_path, monkeypa
     assert "`Line-B` `unimoral_moral_typology`: 1 sample predictions missing (1/2); status `partial`." in audit
 
 
+def test_unimoral_completion_audit_marks_complete_artifacts_achieved(tmp_path, monkeypatch):
+    release_dir = tmp_path / "release"
+    release_dir.mkdir()
+    monkeypatch.setattr(
+        build_unimoral_artifacts,
+        "MODEL_LINES",
+        [("Line-A", "Line", "A", "line_a")],
+    )
+    monkeypatch.setattr(
+        build_unimoral_artifacts,
+        "TASKS",
+        {
+            "unimoral_action_prediction": {"rq": "RQ1", "label": "Action", "metric": "accuracy", "expected": 3},
+            "unimoral_moral_typology": {"rq": "RQ2", "label": "Typology", "metric": "official_weighted_f1", "expected": 2},
+        },
+    )
+    _write_csv(
+        release_dir / "unimoral-full-benchmark.csv",
+        [
+            {"line_label": "Line-A", "task_name": "unimoral_action_prediction", "status": "complete"},
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "status": "complete"},
+        ],
+    )
+    _write_csv(
+        release_dir / "unimoral-sample-predictions.csv",
+        [
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "sample_id": "a-1"},
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "sample_id": "a-2"},
+        ],
+    )
+
+    build_unimoral_artifacts.write_completion_audit(
+        release_dir,
+        [
+            {
+                "task_name": "unimoral_action_prediction",
+                "complete_model_lines": "1",
+                "expected_model_lines": "1",
+                "status": "complete",
+            },
+            {
+                "task_name": "unimoral_moral_typology",
+                "complete_model_lines": "1",
+                "expected_model_lines": "1",
+                "status": "complete",
+            },
+        ],
+        [],
+    )
+
+    audit = (release_dir / "unimoral-completion-audit.md").read_text(encoding="utf-8")
+    assert "Status: **achieved**." in audit
+    assert "unimoral_moral_typology 1/1 complete | achieved |" in audit
+    assert "2 rows present; strict expected count is 2. | achieved |" in audit
+    assert "0 rows: none. | achieved |" in audit
+    assert "No CSV-level strict blockers remain" in audit
+    assert "current user instruction" not in audit
+
+
 def test_unimoral_minimax_resume_plan_registers_handoff_artifact(tmp_path):
     release_dir = tmp_path / "release"
     release_dir.mkdir()

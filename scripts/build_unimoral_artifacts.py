@@ -1208,7 +1208,7 @@ def write_completion_audit(
         for task_name, task in TASKS.items()
         if task_name != "unimoral_action_prediction"
     ) * len(MODEL_LINES)
-    strict_complete = bool(coverage) and all(row.get("status") == "complete" for row in coverage) and not failures
+    coverage_complete = bool(coverage) and all(row.get("status") == "complete" for row in coverage)
     coverage_summary = ", ".join(
         f"{row.get('task_name')} {row.get('complete_model_lines')}/{row.get('expected_model_lines')} {row.get('status')}"
         for row in coverage
@@ -1250,7 +1250,15 @@ def write_completion_audit(
                     f"- `{line_label}` `{task_name}`: no sample-count gap "
                     f"({prediction_count}/{expected}) but status `{status_value}` prevents strict completion."
                 )
+    sample_predictions_complete = sample_rows == expected_prediction_rows
+    failures_clear = not failures
+    strict_complete = coverage_complete and sample_predictions_complete and failures_clear and not strict_blocker_lines
     status = "achieved" if strict_complete else "not achieved"
+    figures_evidence = (
+        "Structural release gate can run without documented incomplete-cell caveats once artifacts are regenerated."
+        if strict_complete
+        else "Structural release gate allows documented incomplete cells until MiniMax blockers are resolved."
+    )
     gate_sentence = (
         "Strict completion is achieved by `scripts/verify_unimoral_completion.py`; `unimoral-failure-checklist.csv` is empty and `unimoral-coverage.csv` has complete RQ2/RQ3/RQ4 rows."
         if strict_complete
@@ -1270,13 +1278,13 @@ def write_completion_audit(
         "| RQ2/RQ3/RQ4 task definitions exist | `src/inspect/evals/unimoral.py`, `src/inspect/evals/moral_psych.py`, `scripts/verify_unimoral_task_builders.py` | Provider-free task-builder verification covers RQ1-RQ4 registry entries. | structurally covered |",
         "| Results cover existing model set | `unimoral-coverage.csv`, `unimoral-full-benchmark.csv`, strict `scripts/verify_unimoral_completion.py` | "
         + coverage_summary
-        + " | incomplete |",
+        + f" | {'achieved' if coverage_complete else 'incomplete'} |",
         "| Sample-level predictions are complete for RQ2/RQ3/RQ4 | `unimoral-sample-predictions.csv` | "
-        + f"{sample_rows} rows present; strict expected count is {expected_prediction_rows}. | incomplete |",
+        + f"{sample_rows} rows present; strict expected count is {expected_prediction_rows}. | {'achieved' if sample_predictions_complete else 'incomplete'} |",
         "| Known failures are empty | `unimoral-failure-checklist.csv` | "
-        + f"{len(failures)} rows: {failure_summary}. | incomplete |",
-        "| Figures and release docs rebuild from tracked artifacts | `scripts/build_unimoral_artifacts.py`, `make audit` | Structural release gate allows documented incomplete cells until MiniMax blockers are resolved. | covered with caveat |",
-        "| MiniMax is not run without explicit authorization | `make unimoral-missing-plan`, `scripts/run_unimoral_missing_tasks.sh`, `tests/test_provider_config.py` | `make unimoral-missing-plan` is dry-run only; non-dry-run MiniMax lines require `UNIMORAL_ALLOW_MINIMAX=1`; current user instruction forbids MiniMax runs. | guarded |",
+        + f"{len(failures)} rows: {failure_summary}. | {'achieved' if failures_clear else 'incomplete'} |",
+        f"| Figures and release docs rebuild from tracked artifacts | `scripts/build_unimoral_artifacts.py`, `make audit` | {figures_evidence} | {'covered' if strict_complete else 'covered with caveat'} |",
+        "| MiniMax is not run without explicit authorization | `make unimoral-missing-plan`, `scripts/run_unimoral_missing_tasks.sh`, `tests/test_provider_config.py` | `make unimoral-missing-plan` is dry-run only; non-dry-run MiniMax lines require `UNIMORAL_ALLOW_MINIMAX=1` and explicit authorization. | guarded |",
         "| Secrets or credentials are not introduced | Branch diff credential-pattern scan against `origin/main...HEAD` | No literal provider keys or tokens were found; provider key references are environment-variable names only. | covered |",
         "| Clean committed branch | `git status --short --branch`, `git rev-list --left-right --count HEAD...@{upstream}` | Post-generation check required: this generated artifact cannot prove the final commit/push state; the final operator report must cite clean status and 0/0 ahead-behind after the last push. | external final check |",
         "",
