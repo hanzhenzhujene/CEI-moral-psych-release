@@ -55,6 +55,8 @@ Local Time Machine snapshots were listed for May 17, 2026, but no browsable back
 
 The `results/inspect/full-runs/2026-05-16-unimoral-full/minimax_l/` transcripts were checked after a Spotlight index search. They contain run starts and one old `args[@]: unbound variable` shell failure for MiniMax-L factor attribution, but no model predictions. The current launcher keeps the empty-args expansion guarded under `set -u`, with a regression test in `tests/test_provider_config.py`.
 
+Git LFS and ignored local payloads were checked. There are no Git LFS files or local LFS objects. The ignored MiniMax-L full-run `.eval` files match the release tables exactly: `unimoral_factor_attribution` has 1800 unique logged samples locally and 1800 release prediction rows, while `unimoral_consequence_generation` has 0 local samples and 0 release prediction rows. No ignored success shard was omitted from `unimoral-sample-predictions.csv`.
+
 ## Dry-Run Check
 
 Use this before any provider call to refresh the planned ranges:
