@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1050" viewBox="0 0 1100 1050">
+<style>text{font-family:Arial,sans-serif;font-size:12px}.title{font-size:18px;font-weight:700}.axis{font-weight:700}</style>
+<rect width="100%" height="100%" fill="white"/>
+<text x="20" y="30" class="title">UniMoral per-task model rankings</text>
+<text x="20" y="60" class="axis">Action prediction</text>
+<text x="35" y="94">1. DeepSeek-M</text>
+<rect x="210" y="80" width="760.0" height="18" fill="#6aa84f"/>
+<text x="980.0" y="94">0.684</text>
+<text x="35" y="118">2. GPT4 only</text>
+<rect x="210" y="104" width="747.9" height="18" fill="#6aa84f"/>
+<text x="967.9" y="118">0.673</text>
+<text x="35" y="142">3. Llama-M</text>
+<rect x="210" y="128" width="744.7" height="18" fill="#6aa84f"/>
+<text x="964.7" y="142">0.670</text>
+<text x="35" y="166">4. Qwen-L</text>
+<rect x="210" y="152" width="739.6" height="18" fill="#6aa84f"/>
+<text x="959.6" y="166">0.665</text>
+<text x="35" y="190">5. Qwen-M</text>
+<rect x="210" y="176" width="738.7" height="18" fill="#6aa84f"/>
+<text x="958.7" y="190">0.665</text>
+<text x="35" y="214">6. Gemma-M</text>
+<rect x="210" y="200" width="736.6" height="18" fill="#6aa84f"/>
+<text x="956.6" y="214">0.663</text>
+<text x="35" y="238">7. Gemma-L</text>
+<rect x="210" y="224" width="734.9" height="18" fill="#6aa84f"/>
+<text x="954.9" y="238">0.661</text>
+<text x="35" y="262">8. MiniMax-S</text>
+<rect x="210" y="248" width="734.7" height="18" fill="#6aa84f"/>
+<text x="954.7" y="262">0.661</text>
+<text x="20" y="310" class="axis">Moral typology</text>
+<text x="35" y="344">1. Gemma-S</text>
+<rect x="210" y="330" width="760.0" height="18" fill="#6aa84f"/>
+<text x="980.0" y="344">0.599</text>
+<text x="35" y="368">2. Llama-S</text>
+<rect x="210" y="354" width="759.3" height="18" fill="#6aa84f"/>
+<text x="979.3" y="368">0.598</text>
+<text x="35" y="392">3. Qwen-L</text>
+<rect x="210" y="378" width="757.5" height="18" fill="#6aa84f"/>
+<text x="977.5" y="392">0.597</text>
+<text x="35" y="416">4. Llama-M</text>
+<rect x="210" y="402" width="750.2" height="18" fill="#6aa84f"/>
+<text x="970.2" y="416">0.591</text>
+<text x="35" y="440">5. DeepSeek-S</text>
+<rect x="210" y="426" width="748.4" height="18" fill="#6aa84f"/>
+<text x="968.4" y="440">0.589</text>
+<text x="35" y="464">6. Qwen-M</text>
+<rect x="210" y="450" width="747.6" height="18" fill="#6aa84f"/>
+<text x="967.6" y="464">0.589</text>
+<text x="35" y="488">7. Gemma-M</text>
+<rect x="210" y="474" width="733.8" height="18" fill="#6aa84f"/>
+<text x="953.8" y="488">0.578</text>
+<text x="35" y="512">8. Llama-L</text>
+<rect x="210" y="498" width="729.1" height="18" fill="#6aa84f"/>
+<text x="949.1" y="512">0.574</text>
+<text x="20" y="560" class="axis">Factor attribution</text>
+<text x="35" y="594">1. Llama-M</text>
+<rect x="210" y="580" width="760.0" height="18" fill="#6aa84f"/>
+<text x="980.0" y="594">0.631</text>
+<text x="35" y="618">2. Gemma-L</text>
+<rect x="210" y="604" width="740.7" height="18" fill="#6aa84f"/>
+<text x="960.7" y="618">0.615</text>
+<text x="35" y="642">3. Qwen-L</text>
+<rect x="210" y="628" width="734.1" height="18" fill="#6aa84f"/>
+<text x="954.1" y="642">0.609</text>
+<text x="35" y="666">4. Qwen-M</text>
+<rect x="210" y="652" width="728.9" height="18" fill="#6aa84f"/>
+<text x="948.9" y="666">0.605</text>
+<text x="35" y="690">5. Llama-S</text>
+<rect x="210" y="676" width="724.5" height="18" fill="#6aa84f"/>
+<text x="944.5" y="690">0.601</text>
+<text x="35" y="714">6. Gemma-M</text>
+<rect x="210" y="700" width="722.7" height="18" fill="#6aa84f"/>
+<text x="942.7" y="714">0.600</text>
+<text x="35" y="738">7. DeepSeek-M</text>
+<rect x="210" y="724" width="718.6" height="18" fill="#6aa84f"/>
+<text x="938.6" y="738">0.596</text>
+<text x="35" y="762">8. GPT4 only</text>
+<rect x="210" y="748" width="714.1" height="18" fill="#6aa84f"/>
+<text x="934.1" y="762">0.592</text>
+<text x="20" y="810" class="axis">Consequence generation</text>
+<text x="35" y="844">1. Llama-L</text>
+<rect x="210" y="830" width="760.0" height="18" fill="#6aa84f"/>
+<text x="980.0" y="844">0.157</text>
+<text x="35" y="868">2. Llama-M</text>
+<rect x="210" y="854" width="742.8" height="18" fill="#6aa84f"/>
+<text x="962.8" y="868">0.154</text>
+<text x="35" y="892">3. Qwen-M</text>
+<rect x="210" y="878" width="727.5" height="18" fill="#6aa84f"/>
+<text x="947.5" y="892">0.151</text>
+<text x="35" y="916">4. GPT4 only</text>
+<rect x="210" y="902" width="706.1" height="18" fill="#6aa84f"/>
+<text x="926.1" y="916">0.146</text>
+<text x="35" y="940">5. Qwen-L</text>
+<rect x="210" y="926" width="651.7" height="18" fill="#6aa84f"/>
+<text x="871.7" y="940">0.135</text>
+<text x="35" y="964">6. Llama-S</text>
+<rect x="210" y="950" width="631.7" height="18" fill="#6aa84f"/>
+<text x="851.7" y="964">0.131</text>
+<text x="35" y="988">7. Qwen-S</text>
+<rect x="210" y="974" width="579.0" height="18" fill="#6aa84f"/>
+<text x="799.0" y="988">0.120</text>
+<text x="35" y="1012">8. Gemma-M</text>
+<rect x="210" y="998" width="484.3" height="18" fill="#6aa84f"/>
+<text x="704.3" y="1012">0.100</text>
+</svg>

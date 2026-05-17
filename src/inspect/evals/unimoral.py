@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ast
 import csv
+import re
 from collections import defaultdict
 from pathlib import Path
 
@@ -16,12 +17,13 @@ from evals._benchmark_utils import (
     extract_action_choice,
     format_ab_choices,
     generation_plan,
+    label_membership_scorer,
     normalize_possible_actions,
     normalize_whitespace,
     parsed_label_scorer,
     resume_start_index,
-    rouge_l_max_scorer,
     selected_action_text,
+    unimoral_consequence_scorer,
 )
 
 PROMPTS_DIR = Path(__file__).parent / "data" / "unimoral"
@@ -34,10 +36,10 @@ LANGUAGE_CODES = {
     "Spanish": "spa",
 }
 TYPOLOGY_PATTERNS = {
-    "Deontological": [r"deontolog"],
+    "Deontological": [r"deontolog", r"deonolog"],
     "Utilitarianism": [r"utilitarian"],
     "Rights-based": [r"rights?[- ]based", r"\bright\b"],
-    "Virtuous": [r"virtu"],
+    "Virtuous": [r"virtu", r"virtou"],
 }
 FACTOR_PATTERNS = {
     "Emotions": [r"emotion"],
@@ -160,6 +162,9 @@ def _fill_prompt(template: str, replacements: dict[str, str]) -> str:
     rendered = template
     for key, value in replacements.items():
         rendered = rendered.replace(key, value)
+    leftovers = sorted(set(re.findall(r"\[[A-Z0-9_]+\]", rendered)))
+    if leftovers:
+        raise ValueError(f"Unfilled UniMoral prompt placeholders: {', '.join(leftovers)}")
     return apply_prompt_prefix(normalize_whitespace(rendered))
 
 
@@ -180,6 +185,64 @@ def _common_replacements(row: dict[str, str]) -> dict[str, str]:
     for index, label in enumerate(culture_order, start=1):
         replacements[f"[CULTURAL_VALUE_{index}]"] = label
     return replacements
+
+
+def _first_label_examples(rows: list[dict[str, str]], field: str, labels: list[str]) -> dict[str, dict[str, str]]:
+    examples: dict[str, dict[str, str]] = {}
+    for row in rows:
+        for label in _list_targets(row[field], labels):
+            examples.setdefault(label, row)
+        if len(examples) == len(labels):
+            break
+    fallback = rows[0]
+    for label in labels:
+        examples.setdefault(label, fallback)
+    return examples
+
+
+def _action_or_letter(row: dict[str, str], mode: str) -> str:
+    if mode == "fs":
+        return selected_action_text(row["Possible_actions"], row["Selected_action"])
+    return _action_target(row["Selected_action"])
+
+
+def _add_typology_examples(replacements: dict[str, str], examples: dict[str, dict[str, str]]) -> None:
+    prefixes = {
+        "Deontological": "DEO",
+        "Utilitarianism": "UTI",
+        "Rights-based": "RIG",
+        "Virtuous": "VIR",
+    }
+    for label, prefix in prefixes.items():
+        row = examples[label]
+        replacements[f"[{prefix}_SCENARIO]"] = row["Scenario"]
+        replacements[f"[{prefix}_GT]"] = selected_action_text(row["Possible_actions"], row["Selected_action"])
+
+
+def _add_factor_examples(replacements: dict[str, str], examples: dict[str, dict[str, str]]) -> None:
+    prefixes = {
+        "Emotions": "EMO",
+        "Moral": "MOR",
+        "Culture": "CUL",
+        "Responsibilities": "RES",
+        "Relationships": "REL",
+        "Legality": "LEG",
+        "Politeness": "POL",
+        "Sacred values": "SAC",
+    }
+    for label, prefix in prefixes.items():
+        row = examples[label]
+        replacements[f"[{prefix}_SCENARIO]"] = row["Scenario"]
+        replacements[f"[{prefix}_GT]"] = selected_action_text(row["Possible_actions"], row["Selected_action"])
+
+
+def _clean_consequence_reference(raw_value: str) -> str | None:
+    value = normalize_whitespace(str(raw_value or "")).strip()
+    if not value or value.lower() in {"nan", "none", "null"}:
+        return None
+    value = value.replace("[", "").replace("]", "")
+    value = normalize_whitespace(value).lower()
+    return value or None
 
 
 def _make_action_prediction_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
@@ -217,7 +280,7 @@ def _make_action_prediction_samples(limit: int | None = None, start_index: int =
     return samples
 
 
-def _make_typology_samples(limit: int | None = None) -> list[Sample]:
+def _make_typology_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
     prompts = _load_prompt_dict("PROMPTS2.txt")
     mode = env_str("UNIMORAL_MODE", "np")
     samples: list[Sample] = []
@@ -225,17 +288,18 @@ def _make_typology_samples(limit: int | None = None) -> list[Sample]:
         long_path, _ = _language_files(language)
         rows = _load_csv_rows(long_path)
         fs_map = _fewshot_by_annotator(rows, 1)
+        label_examples = _first_label_examples(rows, "Action_criteria", TYPOLOGY_LABELS)
         prompt_key = _prompt_key(mode, language, 2)
         if prompt_key not in prompts:
             raise KeyError(f"Prompt key {prompt_key!r} not found in PROMPTS2.txt")
-        selected_rows = rows[:limit] if limit is not None else rows
-        for sample_index, row in enumerate(selected_rows):
+        for sample_index, row in enumerate(rows):
             replacements = _common_replacements(row)
-            replacements["[SELECTED_ACTION]"] = _action_target(row["Selected_action"]) if mode != "fs" else selected_action_text(row["Possible_actions"], row["Selected_action"])
+            replacements["[SELECTED_ACTION]"] = _action_or_letter(row, mode)
             fs_row = fs_map[(row["Annotator_id"], row["Scenario_id"])][0]
             replacements["[FS_SCENARIO]"] = fs_row["Scenario"]
             replacements["[FS_ACTION]"] = selected_action_text(fs_row["Possible_actions"], fs_row["Selected_action"])
             replacements["[FS_ACTION_TYPE]"] = ", ".join(_list_targets(fs_row["Action_criteria"], TYPOLOGY_LABELS))
+            _add_typology_examples(replacements, label_examples)
             rendered = _fill_prompt(prompts[prompt_key], replacements)
             samples.append(
                 Sample(
@@ -245,10 +309,14 @@ def _make_typology_samples(limit: int | None = None) -> list[Sample]:
                     metadata={"language": language, "scenario_id": row["Scenario_id"], "annotator_id": row["Annotator_id"], "sample_index": sample_index},
                 )
             )
+    if start_index:
+        samples = samples[start_index:]
+    if limit is not None:
+        samples = samples[:limit]
     return samples
 
 
-def _make_factor_samples(limit: int | None = None) -> list[Sample]:
+def _make_factor_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
     prompts = _load_prompt_dict("PROMPTS3.txt")
     mode = env_str("UNIMORAL_MODE", "np")
     samples: list[Sample] = []
@@ -256,17 +324,18 @@ def _make_factor_samples(limit: int | None = None) -> list[Sample]:
         long_path, _ = _language_files(language)
         rows = _load_csv_rows(long_path)
         fs_map = _fewshot_by_annotator(rows, 1)
+        label_examples = _first_label_examples(rows, "Contributing_factors", FACTOR_LABELS)
         prompt_key = _prompt_key(mode, language, 3)
         if prompt_key not in prompts:
             raise KeyError(f"Prompt key {prompt_key!r} not found in PROMPTS3.txt")
-        selected_rows = rows[:limit] if limit is not None else rows
-        for sample_index, row in enumerate(selected_rows):
+        for sample_index, row in enumerate(rows):
             replacements = _common_replacements(row)
-            replacements["[SELECTED_ACTION]"] = _action_target(row["Selected_action"]) if mode != "fs" else selected_action_text(row["Possible_actions"], row["Selected_action"])
+            replacements["[SELECTED_ACTION]"] = _action_or_letter(row, mode)
             fs_row = fs_map[(row["Annotator_id"], row["Scenario_id"])][0]
             replacements["[FS_SCENARIO]"] = fs_row["Scenario"]
             replacements["[FS_ACTION]"] = selected_action_text(fs_row["Possible_actions"], fs_row["Selected_action"])
             replacements["[FS_CONTRIBUTING_FACTOR]"] = ", ".join(_list_targets(fs_row["Contributing_factors"], FACTOR_LABELS))
+            _add_factor_examples(replacements, label_examples)
             rendered = _fill_prompt(prompts[prompt_key], replacements)
             samples.append(
                 Sample(
@@ -276,10 +345,14 @@ def _make_factor_samples(limit: int | None = None) -> list[Sample]:
                     metadata={"language": language, "scenario_id": row["Scenario_id"], "annotator_id": row["Annotator_id"], "sample_index": sample_index},
                 )
             )
+    if start_index:
+        samples = samples[start_index:]
+    if limit is not None:
+        samples = samples[:limit]
     return samples
 
 
-def _make_consequence_samples(limit: int | None = None) -> list[Sample]:
+def _make_consequence_samples(limit: int | None = None, start_index: int = 0) -> list[Sample]:
     prompts = _load_prompt_dict("PROMPTS4.txt")
     samples: list[Sample] = []
     for language in _unimoral_languages():
@@ -292,16 +365,16 @@ def _make_consequence_samples(limit: int | None = None) -> list[Sample]:
                 scenario_key,
                 {"scenario": row["Scenario"], "action": selected_action_text(row["Possible_actions"], row["Selected_action"]), "consequences": []},
             )
-            consequence = normalize_whitespace(str(row.get("Consequence", ""))).strip("[]")
-            if consequence:
+            consequence = _clean_consequence_reference(row.get("Consequence", ""))
+            if consequence is not None:
                 consequences["consequences"].append(consequence)
         prompt_key = f"prompt_{LANGUAGE_CODES[language]}_rq4"
         if prompt_key not in prompts:
             raise KeyError(f"Prompt key {prompt_key!r} not found in PROMPTS4.txt")
         values = list(grouped.items())
-        if limit is not None:
-            values = values[:limit]
         for (scenario_id, action_label), payload in values:
+            if not payload["consequences"]:
+                continue
             rendered = _fill_prompt(
                 prompts[prompt_key],
                 {
@@ -317,6 +390,10 @@ def _make_consequence_samples(limit: int | None = None) -> list[Sample]:
                     metadata={"language": language, "scenario_id": scenario_id, "selected_action": action_label},
                 )
             )
+    if start_index:
+        samples = samples[start_index:]
+    if limit is not None:
+        samples = samples[:limit]
     return samples
 
 
@@ -332,15 +409,33 @@ def unimoral_action_prediction(limit: int | None = None, start_index: int | None
 
 
 @task
-def unimoral_moral_typology(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_typology_samples(limit=limit)), plan=generation_plan(max_tokens=96), scorer=label_membership_scorer(TYPOLOGY_PATTERNS))
+def unimoral_moral_typology(limit: int | None = None, start_index: int | None = None) -> Task:
+    if start_index is None:
+        start_index = resume_start_index("UNIMORAL_TYPOLOGY_RESUME_COUNT")
+    return Task(
+        dataset=MemoryDataset(_make_typology_samples(limit=limit, start_index=start_index)),
+        plan=generation_plan(max_tokens=512),
+        scorer=label_membership_scorer(TYPOLOGY_PATTERNS),
+    )
 
 
 @task
-def unimoral_factor_attribution(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_factor_samples(limit=limit)), plan=generation_plan(max_tokens=96), scorer=label_membership_scorer(FACTOR_PATTERNS))
+def unimoral_factor_attribution(limit: int | None = None, start_index: int | None = None) -> Task:
+    if start_index is None:
+        start_index = resume_start_index("UNIMORAL_FACTOR_RESUME_COUNT")
+    return Task(
+        dataset=MemoryDataset(_make_factor_samples(limit=limit, start_index=start_index)),
+        plan=generation_plan(max_tokens=512),
+        scorer=label_membership_scorer(FACTOR_PATTERNS),
+    )
 
 
 @task
-def unimoral_consequence_generation(limit: int | None = None) -> Task:
-    return Task(dataset=MemoryDataset(_make_consequence_samples(limit=limit)), plan=generation_plan(max_tokens=256), scorer=rouge_l_max_scorer())
+def unimoral_consequence_generation(limit: int | None = None, start_index: int | None = None) -> Task:
+    if start_index is None:
+        start_index = resume_start_index("UNIMORAL_CONSEQUENCE_RESUME_COUNT")
+    return Task(
+        dataset=MemoryDataset(_make_consequence_samples(limit=limit, start_index=start_index)),
+        plan=generation_plan(max_tokens=512),
+        scorer=unimoral_consequence_scorer(),
+    )

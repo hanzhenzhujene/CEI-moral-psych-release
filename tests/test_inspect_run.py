@@ -127,6 +127,9 @@ def test_load_tasks_from_registry_file_discovers_curated_suite():
 
     task_names = {task.__name__ for task in tasks}
     assert "unimoral_action_prediction" in task_names
+    assert "unimoral_moral_typology" in task_names
+    assert "unimoral_factor_attribution" in task_names
+    assert "unimoral_consequence_generation" in task_names
     assert "smid_moral_rating" in task_names
     assert "value_prism_relevance" in task_names
     assert "ccd_bench_selection" in task_names

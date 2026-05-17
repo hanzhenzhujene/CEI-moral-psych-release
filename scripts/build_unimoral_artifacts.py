@@ -1,0 +1,778 @@
+"""Build UniMoral full-benchmark result tables and SVG figures from Inspect logs."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import html
+import json
+import sys
+from pathlib import Path
+from statistics import mean
+from zipfile import BadZipFile, ZipFile
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src" / "inspect"))
+
+from evals._benchmark_utils import (  # noqa: E402
+    canonicalize_label,
+    extract_consequence_generation,
+    meteor_score,
+    normalize_whitespace,
+    sentence_bleu_score,
+)
+from evals.unimoral import FACTOR_PATTERNS, TYPOLOGY_PATTERNS  # noqa: E402
+from rouge_score import rouge_scorer  # noqa: E402
+
+MODEL_LINES = [
+    ("Qwen-S", "Qwen", "S", "qwen_s"),
+    ("Qwen-M", "Qwen", "M", "qwen_m"),
+    ("Qwen-L", "Qwen", "L", "qwen_l"),
+    ("MiniMax-S", "MiniMax", "S", "minimax_s"),
+    ("MiniMax-M", "MiniMax", "M", "minimax_m"),
+    ("MiniMax-L", "MiniMax", "L", "minimax_l"),
+    ("DeepSeek-S", "DeepSeek", "S", "deepseek_s"),
+    ("DeepSeek-M", "DeepSeek", "M", "deepseek_m"),
+    ("DeepSeek-L", "DeepSeek", "L", "deepseek_l"),
+    ("Llama-S", "Llama", "S", "llama_s"),
+    ("Llama-M", "Llama", "M", "llama_m"),
+    ("Llama-L", "Llama", "L", "llama_l"),
+    ("Gemma-S", "Gemma", "S", "gemma_s"),
+    ("Gemma-M", "Gemma", "M", "gemma_m"),
+    ("Gemma-L", "Gemma", "L", "gemma_l"),
+    ("GPT4 only", "GPT4 only", "Ref", "gpt4_only"),
+]
+
+TASKS = {
+    "unimoral_action_prediction": {
+        "rq": "RQ1",
+        "label": "Action prediction",
+        "metric": "accuracy",
+        "expected": 8784,
+    },
+    "unimoral_moral_typology": {
+        "rq": "RQ2",
+        "label": "Moral typology",
+        "metric": "accuracy",
+        "expected": 3492,
+    },
+    "unimoral_factor_attribution": {
+        "rq": "RQ3",
+        "label": "Factor attribution",
+        "metric": "accuracy",
+        "expected": 3492,
+    },
+    "unimoral_consequence_generation": {
+        "rq": "RQ4",
+        "label": "Consequence generation",
+        "metric": "meteor",
+        "expected": 1782,
+    },
+}
+
+
+def read_csv(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="", encoding="utf-8") as handle:
+        return list(csv.DictReader(handle))
+
+
+def write_csv(path: Path, rows: list[dict[str, object]], fieldnames: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def eval_header(path: Path) -> dict | None:
+    try:
+        with ZipFile(path) as zf:
+            if "header.json" not in zf.namelist():
+                return None
+            header = json.loads(zf.read("header.json").decode("utf-8"))
+    except (BadZipFile, KeyError, json.JSONDecodeError):
+        return None
+    return header if isinstance(header, dict) else None
+
+
+def successful_eval(log_dir: Path, task_name: str) -> Path | None:
+    candidates = []
+    for path in log_dir.glob("*.eval"):
+        header = eval_header(path)
+        if header is None or header.get("status") != "success":
+            continue
+        eval_meta = header.get("eval") if isinstance(header.get("eval"), dict) else {}
+        if eval_meta.get("task") == task_name:
+            candidates.append(path)
+    if not candidates:
+        return None
+    return max(candidates, key=lambda path: path.stat().st_mtime)
+
+
+def eval_task_name(path: Path) -> str | None:
+    try:
+        with ZipFile(path) as zf:
+            names = zf.namelist()
+            if "header.json" in names:
+                header = json.loads(zf.read("header.json").decode("utf-8"))
+                if header.get("status") not in {"success", "cancelled"}:
+                    return None
+                eval_meta = header.get("eval") if isinstance(header.get("eval"), dict) else {}
+                return eval_meta.get("task")
+            if "_journal/start.json" in names:
+                start = json.loads(zf.read("_journal/start.json").decode("utf-8"))
+                eval_meta = start.get("eval") if isinstance(start.get("eval"), dict) else {}
+                return eval_meta.get("task")
+    except (BadZipFile, KeyError, json.JSONDecodeError):
+        return None
+    return None
+
+
+def eval_status(path: Path) -> str:
+    try:
+        with ZipFile(path) as zf:
+            names = zf.namelist()
+            if "header.json" in names:
+                header = json.loads(zf.read("header.json").decode("utf-8"))
+                return str(header.get("status") or "unknown")
+            if "_journal/start.json" in names:
+                return "interrupted"
+    except (BadZipFile, KeyError, json.JSONDecodeError):
+        return "unreadable"
+    return "unknown"
+
+
+def eval_paths_for_task(log_dir: Path, task_name: str) -> list[Path]:
+    paths = [
+        path
+        for path in log_dir.glob("*.eval")
+        if eval_task_name(path) == task_name
+    ]
+    return sorted(paths, key=lambda path: path.stat().st_mtime)
+
+
+def iter_samples(eval_path: Path) -> list[dict]:
+    samples = []
+    try:
+        with ZipFile(eval_path) as zf:
+            for name in sorted(zf.namelist()):
+                if not name.startswith("samples/") or not name.endswith(".json"):
+                    continue
+                sample = json.loads(zf.read(name).decode("utf-8"))
+                if isinstance(sample, dict):
+                    samples.append(sample)
+    except (BadZipFile, KeyError, json.JSONDecodeError):
+        return []
+    return samples
+
+
+def combined_samples(eval_paths: list[Path]) -> list[dict]:
+    samples_by_id: dict[str, dict] = {}
+    for eval_path in eval_paths:
+        for sample in iter_samples(eval_path):
+            sample_id = str(sample.get("id") or sample.get("uuid") or "")
+            if not sample_id:
+                sample_id = f"{eval_path.name}:{len(samples_by_id)}"
+            samples_by_id[sample_id] = sample
+    return [samples_by_id[key] for key in sorted(samples_by_id)]
+
+
+def score_record(sample: dict) -> dict:
+    scores = sample.get("scores")
+    if not isinstance(scores, dict):
+        return {}
+    for value in scores.values():
+        if isinstance(value, dict):
+            return value
+    return {}
+
+
+def answer_text(sample: dict) -> str:
+    output = sample.get("output") if isinstance(sample.get("output"), dict) else {}
+    completion = output.get("completion")
+    if isinstance(completion, str) and completion.strip():
+        return completion
+    choices = output.get("choices")
+    if isinstance(choices, list) and choices:
+        message = choices[0].get("message") if isinstance(choices[0], dict) else {}
+        content = message.get("content") if isinstance(message, dict) else ""
+        if isinstance(content, list):
+            return " ".join(str(item.get("text", "")) for item in content if isinstance(item, dict))
+        return str(content or "")
+    return ""
+
+
+def target_list(sample: dict) -> list[str]:
+    target = sample.get("target")
+    if isinstance(target, list):
+        return [str(item) for item in target if item not in {None, ""}]
+    if target in {None, ""}:
+        return []
+    return [str(target)]
+
+
+def classification_summary(samples: list[dict], patterns: dict[str, list[str]]) -> dict[str, object]:
+    labels = list(patterns)
+    per_class = {label: {"tp": 0, "fp": 0, "fn": 0, "support": 0} for label in labels}
+    correct = 0
+    parsed = 0
+    for sample in samples:
+        targets = set(target_list(sample))
+        answer = str(score_record(sample).get("answer") or "").strip()
+        prediction = answer if answer in labels else canonicalize_label(answer_text(sample), patterns)
+        if prediction:
+            parsed += 1
+        if prediction in targets:
+            correct += 1
+        for label in labels:
+            if label in targets:
+                per_class[label]["support"] += 1
+            if prediction == label and label in targets:
+                per_class[label]["tp"] += 1
+            elif prediction == label and label not in targets:
+                per_class[label]["fp"] += 1
+            elif prediction != label and label in targets:
+                per_class[label]["fn"] += 1
+    total_support = sum(values["support"] for values in per_class.values())
+    weighted_f1 = 0.0
+    for values in per_class.values():
+        tp = values["tp"]
+        precision = tp / (tp + values["fp"]) if tp + values["fp"] else 0.0
+        recall = tp / (tp + values["fn"]) if tp + values["fn"] else 0.0
+        f1 = (2 * precision * recall / (precision + recall)) if precision + recall else 0.0
+        weighted_f1 += f1 * values["support"]
+    return {
+        "samples": len(samples),
+        "parsed": parsed,
+        "accuracy": correct / len(samples) if samples else None,
+        "official_weighted_f1": weighted_f1 / total_support if total_support else None,
+    }
+
+
+def consequence_summary(samples: list[dict]) -> dict[str, object]:
+    rouge = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
+    bleu_values = []
+    meteor_values = []
+    rouge_values = []
+    parsed = 0
+    for sample in samples:
+        prediction = normalize_whitespace(extract_consequence_generation(answer_text(sample)).lower())
+        refs = [normalize_whitespace(reference).lower() for reference in target_list(sample)]
+        if prediction:
+            parsed += 1
+        if not prediction or not refs:
+            bleu_values.append(0.0)
+            meteor_values.append(0.0)
+            rouge_values.append(0.0)
+            continue
+        bleu_values.append(max(sentence_bleu_score(ref, prediction) for ref in refs))
+        meteor_values.append(max(meteor_score(ref, prediction) for ref in refs))
+        rouge_values.append(max(rouge.score(ref, prediction)["rougeL"].fmeasure for ref in refs))
+    return {
+        "samples": len(samples),
+        "parsed": parsed,
+        "bleu": mean(bleu_values) if bleu_values else None,
+        "meteor": mean(meteor_values) if meteor_values else None,
+        "rouge_l": mean(rouge_values) if rouge_values else None,
+        "bert_score_f1": None,
+    }
+
+
+def action_lookup(release_dir: Path) -> dict[str, float]:
+    lookup: dict[str, float] = {}
+    for row in read_csv(release_dir / "benchmark-comparison.csv"):
+        value = row.get("unimoral_action_accuracy")
+        if value:
+            lookup[row["line_label"]] = float(value)
+    return lookup
+
+
+def build_rows(log_root: Path, release_dir: Path) -> list[dict[str, object]]:
+    action = action_lookup(release_dir)
+    rows: list[dict[str, object]] = []
+    for line_label, family, size_slot, slug in MODEL_LINES:
+        for task_name, task in TASKS.items():
+            base = {
+                "line_label": line_label,
+                "family": family,
+                "size_slot": size_slot,
+                "task_name": task_name,
+                "rq": task["rq"],
+                "task_label": task["label"],
+                "primary_metric": task["metric"],
+                "expected_samples": task["expected"],
+                "completed_samples": 0,
+                "status": "missing",
+                "log_path": "",
+                "accuracy": "",
+                "official_weighted_f1": "",
+                "bleu": "",
+                "meteor": "",
+                "bert_score_f1": "",
+                "rouge_l": "",
+                "parsed_count": "",
+            }
+            if task_name == "unimoral_action_prediction":
+                value = action.get(line_label)
+                base.update(
+                    {
+                        "completed_samples": task["expected"] if value is not None else 0,
+                        "status": "complete" if value is not None else "missing",
+                        "accuracy": "" if value is None else round(value, 6),
+                        "parsed_count": task["expected"] if value is not None else "",
+                    }
+                )
+                rows.append(base)
+                continue
+            eval_paths = eval_paths_for_task(log_root / slug, task_name)
+            if not eval_paths:
+                rows.append(base)
+                continue
+            success_paths = [path for path in eval_paths if eval_status(path) == "success"]
+            success_samples = combined_samples(success_paths)
+            if len(success_samples) == task["expected"]:
+                samples = success_samples
+                scoring_paths = success_paths
+            else:
+                samples = combined_samples(eval_paths)
+                scoring_paths = eval_paths
+            if task_name == "unimoral_moral_typology":
+                summary = classification_summary(samples, TYPOLOGY_PATTERNS)
+            elif task_name == "unimoral_factor_attribution":
+                summary = classification_summary(samples, FACTOR_PATTERNS)
+            else:
+                summary = consequence_summary(samples)
+            complete = summary["samples"] == task["expected"]
+            parse_rate = (int(summary["parsed"]) / int(summary["samples"])) if summary["samples"] else 0.0
+            has_success_full_coverage = len(success_samples) == task["expected"]
+            if not complete:
+                status = "partial"
+            elif parse_rate < 0.95:
+                status = "complete_parse_gap"
+            elif not has_success_full_coverage:
+                status = "complete_with_interrupted_logs"
+            else:
+                status = "complete"
+            base.update(
+                {
+                    "completed_samples": summary["samples"],
+                    "status": status,
+                    "log_path": ";".join(str(path.relative_to(ROOT)) for path in scoring_paths),
+                    "parsed_count": summary["parsed"],
+                }
+            )
+            for key in ("accuracy", "official_weighted_f1", "bleu", "meteor", "bert_score_f1", "rouge_l"):
+                value = summary.get(key)
+                base[key] = "" if value is None else round(float(value), 6)
+            rows.append(base)
+    return rows
+
+
+def metric_value(row: dict[str, object]) -> float | None:
+    key = str(row["primary_metric"])
+    value = row.get(key)
+    if value in {None, ""}:
+        return None
+    return float(value)
+
+
+def coverage_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    output = []
+    for task_name, task in TASKS.items():
+        task_rows = [row for row in rows if row["task_name"] == task_name]
+        complete = sum(1 for row in task_rows if row["status"] == "complete")
+        reported = sum(1 for row in task_rows if str(row["status"]).startswith("complete"))
+        output.append(
+            {
+                "rq": task["rq"],
+                "task_name": task_name,
+                "task_label": task["label"],
+                "status": "complete" if complete == len(MODEL_LINES) else "incomplete",
+                "complete_model_lines": complete,
+                "reported_model_lines": reported,
+                "expected_model_lines": len(MODEL_LINES),
+                "expected_samples_per_model": task["expected"],
+            }
+        )
+    return output
+
+
+def failure_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    output = []
+    for row in rows:
+        if row["status"] == "complete":
+            continue
+        expected = int(row["expected_samples"] or 0)
+        completed = int(row["completed_samples"] or 0)
+        parsed = int(row["parsed_count"] or 0) if row["parsed_count"] != "" else 0
+        if completed == 0:
+            category = "runtime"
+            reason = "no usable eval log completed"
+        elif completed < expected:
+            category = "api/runtime"
+            reason = f"provider run stalled or was interrupted after saving {completed}/{expected} samples"
+        elif parsed < int(0.95 * expected):
+            category = "format/parsing"
+            reason = f"only {parsed}/{expected} samples had a parseable visible answer"
+        else:
+            category = "runtime"
+            reason = "full sample coverage exists only across interrupted logs"
+        output.append(
+            {
+                "line_label": row["line_label"],
+                "task_name": row["task_name"],
+                "status": row["status"],
+                "completed_samples": completed,
+                "expected_samples": expected,
+                "parsed_count": parsed,
+                "category": category,
+                "reason": reason,
+                "log_path": row["log_path"],
+            }
+        )
+    return output
+
+
+def spread_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    output = []
+    for task_name, task in TASKS.items():
+        values = [metric_value(row) for row in rows if row["task_name"] == task_name and row["status"] == "complete"]
+        values = [value for value in values if value is not None]
+        if not values:
+            output.append({"task_name": task_name, "task_label": task["label"], "model_lines": 0, "mean": "", "min": "", "max": "", "range": "", "diagnostic_read": "missing"})
+            continue
+        spread = max(values) - min(values)
+        if spread < 0.05:
+            diagnostic = "saturated"
+        elif spread < 0.10:
+            diagnostic = "moderately diagnostic"
+        else:
+            diagnostic = "diagnostic"
+        output.append(
+            {
+                "task_name": task_name,
+                "task_label": task["label"],
+                "model_lines": len(values),
+                "mean": round(mean(values), 6),
+                "min": round(min(values), 6),
+                "max": round(max(values), 6),
+                "range": round(spread, 6),
+                "diagnostic_read": diagnostic,
+            }
+        )
+    return output
+
+
+def ranking_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    output = []
+    for task_name, task in TASKS.items():
+        task_rows = [(row, metric_value(row)) for row in rows if row["task_name"] == task_name and row["status"] == "complete"]
+        task_rows = [(row, value) for row, value in task_rows if value is not None]
+        task_rows.sort(key=lambda item: item[1], reverse=True)
+        for rank, (row, value) in enumerate(task_rows, start=1):
+            output.append(
+                {
+                    "task_name": task_name,
+                    "task_label": task["label"],
+                    "rank": rank,
+                    "line_label": row["line_label"],
+                    "metric": task["metric"],
+                    "value": round(value, 6),
+                }
+            )
+    return output
+
+
+def color(value: float | None) -> str:
+    if value is None:
+        return "#f2f2f2"
+    value = max(0.0, min(1.0, value))
+    red = int(248 - 110 * value)
+    green = int(248 - 35 * value)
+    blue = int(248 - 140 * value)
+    return f"#{red:02x}{green:02x}{blue:02x}"
+
+
+def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
+    task_names = list(TASKS)
+    lines = [line for line, _, _, _ in MODEL_LINES]
+    row_lookup = {(row["line_label"], row["task_name"]): row for row in rows}
+    cell_w, cell_h = 142, 28
+    left, top = 150, 70
+    width = left + cell_w * len(task_names) + 30
+    height = top + cell_h * len(lines) + 50
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
+    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px}.title{font-size:18px;font-weight:700}.axis{font-weight:700}</style>")
+    parts.append('<rect width="100%" height="100%" fill="white"/>')
+    parts.append('<text x="20" y="30" class="title">UniMoral task scores by model line</text>')
+    for col, task_name in enumerate(task_names):
+        x = left + col * cell_w
+        parts.append(f'<text x="{x + 6}" y="{top - 18}" class="axis">{html.escape(TASKS[task_name]["label"])}</text>')
+    for row_index, line in enumerate(lines):
+        y = top + row_index * cell_h
+        parts.append(f'<text x="20" y="{y + 18}" class="axis">{html.escape(line)}</text>')
+        for col, task_name in enumerate(task_names):
+            x = left + col * cell_w
+            row = row_lookup.get((line, task_name), {})
+            value = metric_value(row) if row else None
+            label = "" if value is None else f"{value:.3f}"
+            parts.append(f'<rect x="{x}" y="{y}" width="{cell_w - 4}" height="{cell_h - 4}" fill="{color(value)}" stroke="#d0d0d0"/>')
+            parts.append(f'<text x="{x + 8}" y="{y + 17}">{label}</text>')
+    parts.append("</svg>")
+    path.write_text("\n".join(parts), encoding="utf-8")
+
+
+def svg_rankings(rankings: list[dict[str, object]], path: Path) -> None:
+    width = 1100
+    panel_h = 250
+    height = 50 + panel_h * len(TASKS)
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
+    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px}.title{font-size:18px;font-weight:700}.axis{font-weight:700}</style>")
+    parts.append('<rect width="100%" height="100%" fill="white"/>')
+    parts.append('<text x="20" y="30" class="title">UniMoral per-task model rankings</text>')
+    for panel_index, (task_name, task) in enumerate(TASKS.items()):
+        y0 = 60 + panel_index * panel_h
+        task_rows = [row for row in rankings if row["task_name"] == task_name][:8]
+        parts.append(f'<text x="20" y="{y0}" class="axis">{html.escape(task["label"])}</text>')
+        max_value = max((float(row["value"]) for row in task_rows), default=1.0)
+        for idx, row in enumerate(task_rows):
+            y = y0 + 20 + idx * 24
+            value = float(row["value"])
+            bar_w = 760 * value / max_value if max_value else 0
+            parts.append(f'<text x="35" y="{y + 14}">{row["rank"]}. {html.escape(str(row["line_label"]))}</text>')
+            parts.append(f'<rect x="210" y="{y}" width="{bar_w:.1f}" height="18" fill="#6aa84f"/>')
+            parts.append(f'<text x="{220 + bar_w:.1f}" y="{y + 14}">{value:.3f}</text>')
+    parts.append("</svg>")
+    path.write_text("\n".join(parts), encoding="utf-8")
+
+
+def svg_spread(spreads: list[dict[str, object]], path: Path) -> None:
+    width, height = 820, 300
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
+    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px}.title{font-size:18px;font-weight:700}.axis{font-weight:700}</style>")
+    parts.append('<rect width="100%" height="100%" fill="white"/>')
+    parts.append('<text x="20" y="30" class="title">UniMoral task spread and saturation</text>')
+    max_range = max((float(row["range"]) for row in spreads if row["range"] != ""), default=1.0)
+    for idx, row in enumerate(spreads):
+        y = 70 + idx * 48
+        spread = 0.0 if row["range"] == "" else float(row["range"])
+        bar_w = 560 * spread / max_range if max_range else 0
+        parts.append(f'<text x="35" y="{y + 14}" class="axis">{html.escape(str(row["task_label"]))}</text>')
+        parts.append(f'<rect x="230" y="{y}" width="{bar_w:.1f}" height="20" fill="#3c78d8"/>')
+        parts.append(f'<text x="{240 + bar_w:.1f}" y="{y + 15}">range {spread:.3f} · {html.escape(str(row["diagnostic_read"]))}</text>')
+    parts.append("</svg>")
+    path.write_text("\n".join(parts), encoding="utf-8")
+
+
+def update_manifest(release_dir: Path) -> None:
+    manifest_path = release_dir / "release-manifest.json"
+    if not manifest_path.exists():
+        return
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    entry_points = manifest.setdefault("entry_points", {})
+    entry_points.update(
+        {
+            "unimoral_full_benchmark": "results/release/2026-04-19-option1/unimoral-full-benchmark.csv",
+            "unimoral_coverage": "results/release/2026-04-19-option1/unimoral-coverage.csv",
+            "unimoral_task_spread": "results/release/2026-04-19-option1/unimoral-task-spread.csv",
+            "unimoral_model_rankings": "results/release/2026-04-19-option1/unimoral-model-rankings.csv",
+            "unimoral_failure_checklist": "results/release/2026-04-19-option1/unimoral-failure-checklist.csv",
+            "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
+            "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
+            "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
+        }
+    )
+    for key, values in {
+        "tables": [
+            "unimoral-full-benchmark.csv",
+            "unimoral-coverage.csv",
+            "unimoral-task-spread.csv",
+            "unimoral-model-rankings.csv",
+            "unimoral-failure-checklist.csv",
+        ],
+        "figures": [
+            "figures/release/option1_unimoral_task_heatmap.svg",
+            "figures/release/option1_unimoral_task_rankings.svg",
+            "figures/release/option1_unimoral_task_spread.svg",
+        ],
+    }.items():
+        existing = manifest.setdefault(key, [])
+        for value in values:
+            if value not in existing:
+                existing.append(value)
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def format_value(value: object) -> str:
+    if value in {None, ""}:
+        return ""
+    return f"{float(value):.3f}"
+
+
+def build_markdown_section(
+    coverage: list[dict[str, object]],
+    spreads: list[dict[str, object]],
+    rankings: list[dict[str, object]],
+    *,
+    figure_prefix: str,
+) -> str:
+    spread_by_task = {row["task_name"]: row for row in spreads}
+    top_by_task = {row["task_name"]: row for row in rankings if row["rank"] == 1}
+    all_complete = all(row["status"] == "complete" for row in coverage)
+    if all_complete:
+        summary = "The release has clean scored coverage for all four UniMoral tasks: action prediction, moral typology classification, factor attribution, and consequence generation. Action prediction remains the legacy comparable scalar and is retained as RQ1; the added RQ2/RQ3/RQ4 artifacts expose the more diagnostic typology, attribution, and generation surfaces."
+    else:
+        summary = "The release now implements all four UniMoral task definitions and exports scored artifacts where model runs completed, but the current model-line matrix is not yet fully complete. Incomplete or parse-limited cells are listed in `unimoral-failure-checklist.csv`; action prediction remains the legacy comparable scalar and is retained as RQ1."
+    lines = [
+        "## UniMoral Full Benchmark Coverage",
+        "",
+        summary,
+        "",
+        "| RQ | Task | Status | Strict complete | Reported cells | Primary metric | Mean | Range | Top line | Diagnostic read |",
+        "| --- | --- | --- | ---: | ---: | --- | ---: | ---: | --- | --- |",
+    ]
+    for item in coverage:
+        task_name = str(item["task_name"])
+        task = TASKS[task_name]
+        spread = spread_by_task[task_name]
+        top = top_by_task.get(task_name, {})
+        top_cell = ""
+        if top:
+            top_cell = f"{top['line_label']} ({format_value(top['value'])})"
+        lines.append(
+            "| {rq} | {task_label} | {status} | {complete}/{expected} | {reported}/{expected} | {metric} | {mean} | {range_} | {top} | {diagnostic} |".format(
+                rq=item["rq"],
+                task_label=item["task_label"],
+                status=item["status"],
+                complete=item["complete_model_lines"],
+                reported=item["reported_model_lines"],
+                expected=item["expected_model_lines"],
+                metric=task["metric"],
+                mean=format_value(spread["mean"]),
+                range_=format_value(spread["range"]),
+                top=top_cell,
+                diagnostic=spread["diagnostic_read"],
+            )
+        )
+    lines.extend(
+        [
+            "",
+            "| Task | What it measures | Scoring note |",
+            "| --- | --- | --- |",
+            "| RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | Accuracy from the existing release matrix. |",
+            "| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Exact-match membership accuracy plus official-style weighted F1 in `unimoral-full-benchmark.csv`. |",
+            "| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Exact-match membership accuracy plus official-style weighted F1 in `unimoral-full-benchmark.csv`. |",
+            "| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar; BLEU and ROUGE-L are exported beside it. The official BERTScore column is retained for offline scoring but is not computed by the default live scorer. |",
+            "",
+            f"![UniMoral task heatmap]({figure_prefix}option1_unimoral_task_heatmap.svg)",
+            "",
+            f"![UniMoral task spread]({figure_prefix}option1_unimoral_task_spread.svg)",
+            "",
+            f"![UniMoral task rankings]({figure_prefix}option1_unimoral_task_rankings.svg)",
+        ]
+    )
+    return "\n".join(lines).strip() + "\n"
+
+
+def update_markdown(path: Path, section: str) -> None:
+    if not path.exists():
+        return
+    start = "<!-- UNIMORAL_FULL_BENCHMARK_START -->"
+    end = "<!-- UNIMORAL_FULL_BENCHMARK_END -->"
+    block = f"{start}\n{section}{end}\n"
+    text = path.read_text(encoding="utf-8")
+    if start in text and end in text:
+        before, rest = text.split(start, 1)
+        _, after = rest.split(end, 1)
+        updated = before.rstrip() + "\n\n" + block + after
+    else:
+        updated = text.rstrip() + "\n\n" + block
+    path.write_text(updated, encoding="utf-8")
+
+
+def update_markdown_reports(
+    release_dir: Path,
+    coverage: list[dict[str, object]],
+    spreads: list[dict[str, object]],
+    rankings: list[dict[str, object]],
+) -> None:
+    root_section = build_markdown_section(
+        coverage,
+        spreads,
+        rankings,
+        figure_prefix="figures/release/",
+    )
+    release_section = build_markdown_section(
+        coverage,
+        spreads,
+        rankings,
+        figure_prefix="../../../figures/release/",
+    )
+    update_markdown(ROOT / "README.md", root_section)
+    update_markdown(release_dir / "README.md", release_section)
+    update_markdown(release_dir / "jenny-group-report.md", release_section)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--log-root", default=ROOT / "results" / "inspect" / "logs" / "2026-05-16-unimoral-full", type=Path)
+    parser.add_argument("--release-dir", default=ROOT / "results" / "release" / "2026-04-19-option1", type=Path)
+    parser.add_argument("--figure-dir", default=ROOT / "figures" / "release", type=Path)
+    args = parser.parse_args()
+
+    rows = build_rows(args.log_root, args.release_dir)
+    coverage = coverage_rows(rows)
+    spreads = spread_rows(rows)
+    rankings = ranking_rows(rows)
+    failures = failure_rows(rows)
+
+    result_fields = [
+        "line_label",
+        "family",
+        "size_slot",
+        "task_name",
+        "rq",
+        "task_label",
+        "primary_metric",
+        "expected_samples",
+        "completed_samples",
+        "status",
+        "accuracy",
+        "official_weighted_f1",
+        "bleu",
+        "meteor",
+        "bert_score_f1",
+        "rouge_l",
+        "parsed_count",
+        "log_path",
+    ]
+    write_csv(args.release_dir / "unimoral-full-benchmark.csv", rows, result_fields)
+    write_csv(args.release_dir / "unimoral-coverage.csv", coverage, list(coverage[0]))
+    write_csv(args.release_dir / "unimoral-task-spread.csv", spreads, list(spreads[0]))
+    write_csv(args.release_dir / "unimoral-model-rankings.csv", rankings, list(rankings[0]) if rankings else ["task_name", "task_label", "rank", "line_label", "metric", "value"])
+    write_csv(
+        args.release_dir / "unimoral-failure-checklist.csv",
+        failures,
+        [
+            "line_label",
+            "task_name",
+            "status",
+            "completed_samples",
+            "expected_samples",
+            "parsed_count",
+            "category",
+            "reason",
+            "log_path",
+        ],
+    )
+
+    args.figure_dir.mkdir(parents=True, exist_ok=True)
+    svg_heatmap(rows, args.figure_dir / "option1_unimoral_task_heatmap.svg")
+    svg_rankings(rankings, args.figure_dir / "option1_unimoral_task_rankings.svg")
+    svg_spread(spreads, args.figure_dir / "option1_unimoral_task_spread.svg")
+    update_manifest(args.release_dir)
+    update_markdown_reports(args.release_dir, coverage, spreads, rankings)
+
+
+if __name__ == "__main__":
+    main()

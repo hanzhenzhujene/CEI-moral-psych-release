@@ -62,6 +62,7 @@ test: ensure-runner
 
 release: ensure-runner
 	$(RUN_PYTHON) scripts/build_release_artifacts.py --input $(RELEASE_SOURCE)
+	$(RUN_PYTHON) scripts/build_unimoral_artifacts.py
 
 audit: test release
 

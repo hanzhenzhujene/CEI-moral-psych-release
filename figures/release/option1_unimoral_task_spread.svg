@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="300" viewBox="0 0 820 300">
+<style>text{font-family:Arial,sans-serif;font-size:12px}.title{font-size:18px;font-weight:700}.axis{font-weight:700}</style>
+<rect width="100%" height="100%" fill="white"/>
+<text x="20" y="30" class="title">UniMoral task spread and saturation</text>
+<text x="35" y="84" class="axis">Action prediction</text>
+<rect x="230" y="70" width="560.0" height="20" fill="#3c78d8"/>
+<text x="800.0" y="85">range 0.121 · diagnostic</text>
+<text x="35" y="132" class="axis">Moral typology</text>
+<rect x="230" y="118" width="207.9" height="20" fill="#3c78d8"/>
+<text x="447.9" y="133">range 0.045 · saturated</text>
+<text x="35" y="180" class="axis">Factor attribution</text>
+<rect x="230" y="166" width="321.8" height="20" fill="#3c78d8"/>
+<text x="561.8" y="181">range 0.070 · moderately diagnostic</text>
+<text x="35" y="228" class="axis">Consequence generation</text>
+<rect x="230" y="214" width="320.8" height="20" fill="#3c78d8"/>
+<text x="560.8" y="229">range 0.069 · moderately diagnostic</text>
+</svg>

@@ -3,6 +3,7 @@
 import csv
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -11,7 +12,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "inspect"))
 
 from evals import unimoral, value_kaleidoscope, ccd_bench, denevil, smid
-from evals._benchmark_utils import generation_plan
+from evals._benchmark_utils import canonicalize_label, extract_consequence_generation, generation_plan
 
 
 def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
@@ -19,6 +20,30 @@ def _write_csv(path: Path, rows: list[dict[str, str]]) -> None:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
         writer.writeheader()
         writer.writerows(rows)
+
+
+def _unimoral_long_row(
+    *,
+    scenario_id: str,
+    annotator_id: str = "ann1",
+    selected_action: str = "2",
+    action_criteria: str = "[1, 3, 3, 0]",
+    contributing_factors: str = "[0, 0, 1, 4, 4, 0, 0, 0]",
+    consequence: str = "[They lose trust.]",
+) -> dict[str, str]:
+    return {
+        "Scenario_id": scenario_id,
+        "Annotator_id": annotator_id,
+        "Scenario": f"Scenario {scenario_id}",
+        "Possible_actions": json.dumps(["Do the harmful thing", "Choose the careful option"]),
+        "Selected_action": selected_action,
+        "Action_criteria": action_criteria,
+        "Contributing_factors": contributing_factors,
+        "Consequence": consequence,
+        "Moral_values": json.dumps({"Care": 1, "Equality": 2, "Proportionality": 3, "Loyalty": 4, "Authority": 5, "Purity": 6}),
+        "Cultural_values": json.dumps({"Power Distance": 1, "Individualism": 2, "Motivation": 3, "Uncertainty Avoidance": 4, "Long Term Orientation": 5, "Indulgence": 6}),
+        "Annotator_self_description": "I value honesty.",
+    }
 
 
 @pytest.fixture(autouse=True)
@@ -42,6 +67,9 @@ def clear_env(monkeypatch):
         "SMID_MORAL_RESUME_COUNT",
         "SMID_FOUNDATION_RESUME_COUNT",
         "UNIMORAL_ACTION_RESUME_COUNT",
+        "UNIMORAL_TYPOLOGY_RESUME_COUNT",
+        "UNIMORAL_FACTOR_RESUME_COUNT",
+        "UNIMORAL_CONSEQUENCE_RESUME_COUNT",
         "VALUEPRISM_RELEVANCE_RESUME_COUNT",
         "VALUEPRISM_VALENCE_RESUME_COUNT",
     ]:
@@ -131,6 +159,78 @@ def test_unimoral_action_prediction_sample_ids_are_unique_with_duplicate_rows(tm
 
     assert len(sample_ids) == 3
     assert len(sample_ids) == len(set(sample_ids))
+
+
+def test_unimoral_typology_samples_use_action_criteria_targets(tmp_path, monkeypatch):
+    rows = [
+        _unimoral_long_row(scenario_id="1", action_criteria="[1, 3, 3, 0]"),
+        _unimoral_long_row(scenario_id="2", action_criteria="[4, 0, 0, 0]"),
+    ]
+    _write_csv(tmp_path / "English_long.csv", rows)
+    monkeypatch.setenv("UNIMORAL_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("UNIMORAL_LANGUAGE", "English")
+    monkeypatch.setenv("UNIMORAL_MODE", "np")
+
+    samples = unimoral._make_typology_samples(limit=1)
+
+    assert len(samples) == 1
+    assert samples[0].target == ["Utilitarianism", "Rights-based"]
+    assert "Selected action is <" in samples[0].input
+    assert re.search(r"\[[A-Z0-9_]+\]", samples[0].input) is None
+
+
+def test_unimoral_factor_samples_use_contributing_factor_targets(tmp_path, monkeypatch):
+    rows = [
+        _unimoral_long_row(scenario_id="1", contributing_factors="[0, 0, 1, 4, 4, 0, 0, 0]"),
+        _unimoral_long_row(scenario_id="2", contributing_factors="[0, 0, 0, 0, 0, 5, 0, 0]"),
+    ]
+    _write_csv(tmp_path / "English_long.csv", rows)
+    monkeypatch.setenv("UNIMORAL_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("UNIMORAL_LANGUAGE", "English")
+    monkeypatch.setenv("UNIMORAL_MODE", "np")
+
+    samples = unimoral._make_factor_samples(limit=1)
+
+    assert len(samples) == 1
+    assert samples[0].target == ["Responsibilities", "Relationships"]
+    assert "Selected action is <" in samples[0].input
+    assert re.search(r"\[[A-Z0-9_]+\]", samples[0].input) is None
+
+
+def test_unimoral_consequence_samples_skip_missing_and_normalize_refs(tmp_path, monkeypatch):
+    rows = [
+        _unimoral_long_row(scenario_id="1", consequence="[They lose trust.]"),
+        _unimoral_long_row(scenario_id="1", consequence="nan"),
+        _unimoral_long_row(scenario_id="2", selected_action="1", consequence=" A good outcome follows. "),
+    ]
+    _write_csv(tmp_path / "English_long.csv", rows)
+    monkeypatch.setenv("UNIMORAL_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("UNIMORAL_LANGUAGE", "English")
+
+    samples = unimoral._make_consequence_samples(limit=1)
+
+    assert len(samples) == 1
+    assert samples[0].target == ["they lose trust."]
+    assert "Consequence of the action is" in samples[0].input
+
+
+def test_unimoral_missing_tasks_construct_from_fixtures(tmp_path, monkeypatch):
+    rows = [_unimoral_long_row(scenario_id="1"), _unimoral_long_row(scenario_id="2")]
+    _write_csv(tmp_path / "English_long.csv", rows)
+    monkeypatch.setenv("UNIMORAL_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("UNIMORAL_LANGUAGE", "English")
+    monkeypatch.setenv("UNIMORAL_MODE", "np")
+
+    assert unimoral.unimoral_moral_typology(limit=1).dataset
+    assert unimoral.unimoral_factor_attribution(limit=1).dataset
+    assert unimoral.unimoral_consequence_generation(limit=1).dataset
+
+
+def test_unimoral_label_and_consequence_parsers_are_typo_tolerant():
+    assert canonicalize_label("Selected action is Virtous.", unimoral.TYPOLOGY_PATTERNS) == "Virtuous"
+    assert canonicalize_label("Selected action is Deonological.", unimoral.TYPOLOGY_PATTERNS) == "Deontological"
+    assert canonicalize_label("Selected action is Sacred values.", unimoral.FACTOR_PATTERNS) == "Sacred values"
+    assert extract_consequence_generation("Consequence of the action is they lose trust.") == "they lose trust."
 
 
 def test_value_prism_sample_builders(tmp_path, monkeypatch):

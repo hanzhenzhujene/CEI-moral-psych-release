@@ -11,12 +11,20 @@ from evals.moral_circuits import moral_circuits_judgment, moral_circuits_reasoni
 from evals.morallens import morallens_cot, morallens_double_standard, morallens_posthoc
 from evals.morebench import morebench_advisor, morebench_agent
 from evals.smid import smid_foundation_classification, smid_moral_rating
-from evals.unimoral import unimoral_action_prediction
+from evals.unimoral import (
+    unimoral_action_prediction,
+    unimoral_consequence_generation,
+    unimoral_factor_attribution,
+    unimoral_moral_typology,
+)
 from evals.value_kaleidoscope import value_prism_relevance, value_prism_valence
 
 TASK_EXPORTS = [
     # Jenny's benchmarks
     unimoral_action_prediction,
+    unimoral_moral_typology,
+    unimoral_factor_attribution,
+    unimoral_consequence_generation,
     smid_moral_rating,
     smid_foundation_classification,
     value_prism_relevance,

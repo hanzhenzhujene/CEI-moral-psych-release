@@ -284,7 +284,7 @@ Before comparing charts, anchor each benchmark to its source paper. These benchm
 
 | Benchmark | What the paper is really testing | What this repo currently scores | How to read the current result |
 | --- | --- | --- | --- |
-| `UniMoral` | A unified multilingual moral-reasoning resource spanning action choice, typology, factor attribution, and consequence generation under culturally varied dilemmas. | The public release currently scores action prediction only: given a dilemma and two candidate actions, select the crowd-endorsed action. | A high UniMoral score means the model tracks consensus action choices across multilingual moral dilemmas. It does not by itself show equal strength on moral typology, factor attribution, or consequence generation. |
+| `UniMoral` | A unified multilingual moral-reasoning resource spanning action choice, typology, factor attribution, and consequence generation under culturally varied dilemmas. | This repo now implements all four UniMoral task definitions. Action prediction remains the legacy comparable scalar; RQ2/RQ3/RQ4 completion status is tracked in the UniMoral coverage and failure artifacts. | A high action-prediction score means the model tracks consensus action choices across multilingual moral dilemmas. The added RQ2/RQ3/RQ4 artifacts should be read separately because several provider cells remain incomplete or parse-limited. |
 | `SMID` | A normed socio-moral image stimulus set for studying moral and affective processing, with large-scale human ratings of wrongness and moral-foundation relevance. | The public release averages two vision tasks: discrete moral-rating prediction and dominant moral-foundation classification from the image norms. | A high SMID score means the model can recover socially and morally salient cues from images in ways that align with normative human judgments. Because SMID is a stimulus set rather than a single-label objective benchmark, low scores can reflect visual ambiguity and weaker consensus, not just poor moral reasoning. |
 | `Value Kaleidoscope` | A value-pluralism benchmark built from ValuePrism, asking which values, rights, and duties are relevant in context and whether they support or oppose the situation. | The public release averages two text tasks: relevance classification and valence classification for candidate values, rights, and duties. | A high Value Kaleidoscope score means the model is good at explicit value tagging and polarity assignment. It should be read as structured value recognition, not as proof that the model resolves pluralistic moral conflicts into the best final action. |
 | `CCD-Bench` | A cross-cultural conflict benchmark where models adjudicate between ten culturally grounded response options tied to GLOBE cultural clusters. | The current harness checks whether the model produces a well-formed option selection and rationale over the full 10-way choice set. | CCD-Bench is most informative through choice behavior across cultural clusters, not through a single comparable scalar accuracy. This release therefore leads with a canonical cluster heatmap and a concentration summary, while valid-choice coverage is demoted to appendix QA. None of these CCD surfaces should be read as universal accuracy. |
@@ -482,7 +482,7 @@ The same matrix is also saved as [family-size-progress.csv](results/release/2026
 
 | Benchmark | Paper | Dataset / access | Modality | What this repo tests now |
 | --- | --- | --- | --- | --- |
-| `UniMoral` | [Kumar et al. (ACL 2025 Findings)](https://aclanthology.org/2025.acl-long.294/) | [Hugging Face dataset card](https://huggingface.co/datasets/shivaniku/UniMoral) | Text, multilingual moral reasoning | Action prediction only |
+| `UniMoral` | [Kumar et al. (ACL 2025 Findings)](https://aclanthology.org/2025.acl-long.294/) | [Hugging Face dataset card](https://huggingface.co/datasets/shivaniku/UniMoral) | Text, multilingual moral reasoning | Action prediction plus RQ2/RQ3/RQ4 artifacts with coverage caveats |
 | `SMID` | [Crone et al. (PLOS ONE 2018)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0190954) | [OSF project page](https://osf.io/ngzwx/) | Vision | Moral rating + foundation classification |
 | `Value Kaleidoscope` | [Sorensen et al. (AAAI 2024 / arXiv 2023)](https://arxiv.org/abs/2309.00779) | [Hugging Face dataset card](https://huggingface.co/datasets/allenai/ValuePrism) | Text value reasoning | Relevance + valence |
 | `CCD-Bench` | [Rahman and Salam (arXiv 2025)](https://arxiv.org/abs/2510.03553) | [GitHub repo](https://github.com/smartlab-nyu/CCD-Bench); [JSON](https://raw.githubusercontent.com/smartlab-nyu/CCD-Bench/main/datasets/CCD-Bench.json) | Text response selection | Selection |
@@ -555,3 +555,32 @@ If this repo informs a paper, proposal, slide deck, or benchmark comparison, cit
 - `Llama-S` is a completed local line and is intentionally shown outside the frozen Option 1 snapshot counts.
 - `Denevil` is still proxy-only in the public release because the original paper-faithful `MoralPrompt` export is not available locally; proxy-only coverage and traceability evidence; moralprompt unavailable; not benchmark-faithful ethical-quality scoring.
 - The detailed appendix lives in [results/release/2026-04-19-option1/](results/release/2026-04-19-option1/).
+
+<!-- UNIMORAL_FULL_BENCHMARK_START -->
+## UniMoral Full Benchmark Coverage
+
+The release now implements all four UniMoral task definitions and exports scored artifacts where model runs completed, but the current model-line matrix is not yet fully complete. Incomplete or parse-limited cells are listed in `unimoral-failure-checklist.csv`; action prediction remains the legacy comparable scalar and is retained as RQ1.
+
+| RQ | Task | Status | Strict complete | Reported cells | Primary metric | Mean | Range | Top line | Diagnostic read |
+| --- | --- | --- | ---: | ---: | --- | ---: | ---: | --- | --- |
+| RQ1 | Action prediction | complete | 16/16 | 16/16 | accuracy | 0.655 | 0.121 | DeepSeek-M (0.684) | diagnostic |
+| RQ2 | Moral typology | incomplete | 12/16 | 14/16 | accuracy | 0.580 | 0.045 | Gemma-S (0.599) | saturated |
+| RQ3 | Factor attribution | incomplete | 11/16 | 13/16 | accuracy | 0.596 | 0.070 | Llama-M (0.631) | moderately diagnostic |
+| RQ4 | Consequence generation | incomplete | 10/16 | 13/16 | meteor | 0.127 | 0.069 | Llama-L (0.157) | moderately diagnostic |
+
+| Task | What it measures | Scoring note |
+| --- | --- | --- |
+| RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | Accuracy from the existing release matrix. |
+| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Exact-match membership accuracy plus official-style weighted F1 in `unimoral-full-benchmark.csv`. |
+| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Exact-match membership accuracy plus official-style weighted F1 in `unimoral-full-benchmark.csv`. |
+| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar; BLEU and ROUGE-L are exported beside it. The official BERTScore column is retained for offline scoring but is not computed by the default live scorer. |
+
+![UniMoral task heatmap](figures/release/option1_unimoral_task_heatmap.svg)
+
+![UniMoral task spread](figures/release/option1_unimoral_task_spread.svg)
+
+![UniMoral task rankings](figures/release/option1_unimoral_task_rankings.svg)
+<!-- UNIMORAL_FULL_BENCHMARK_END -->
+
+
+

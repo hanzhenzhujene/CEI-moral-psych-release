@@ -11,6 +11,7 @@ import ast
 import asyncio
 import base64
 import json
+import math
 import mimetypes
 import os
 import random
@@ -439,6 +440,7 @@ def extract_explicit_label(text: str, patterns: Mapping[str, Sequence[str]]) -> 
 
     labeled_patterns = [
         rf"\b(?:final\s+answer|answer|label|response|classification|category)\s*(?:is|=|:)?\s*({alias_union})\b",
+        rf"\b(?:selected\s+action)\s*(?:is|=|:)?\s*({alias_union})\b",
         rf"\b(?:dominant\s+(?:moral\s+)?foundation)\s*(?:is|=|:|appears\s+to\s+be)\s*({alias_union})\b",
         rf"\b({alias_union})\b\s*(?:is\s+the\s+(?:final\s+)?answer|is\s+the\s+dominant\s+(?:moral\s+)?foundation)\b",
     ]
@@ -498,6 +500,102 @@ def canonicalize_label(text: str, patterns: Mapping[str, Sequence[str]]) -> str 
         return None
     matches.sort(key=lambda item: item[0])
     return matches[-1][1]
+
+
+def extract_consequence_generation(text: str) -> str:
+    normalized = normalize_whitespace(text)
+    if not normalized:
+        return ""
+    match = re.search(r"\bconsequence\s+of\s+the\s+action\s+is\b\s*:?\s*(.*)", normalized, flags=re.IGNORECASE)
+    if match is not None:
+        return normalize_whitespace(match.group(1)).strip()
+    return normalized
+
+
+def _ngram_counts(tokens: Sequence[str], n: int) -> dict[tuple[str, ...], int]:
+    counts: dict[tuple[str, ...], int] = {}
+    if len(tokens) < n:
+        return counts
+    for index in range(len(tokens) - n + 1):
+        ngram = tuple(tokens[index : index + n])
+        counts[ngram] = counts.get(ngram, 0) + 1
+    return counts
+
+
+def _fallback_bleu(reference_tokens: Sequence[str], prediction_tokens: Sequence[str]) -> float:
+    if not reference_tokens or not prediction_tokens:
+        return 0.0
+    precisions = []
+    for n in range(1, 5):
+        pred_counts = _ngram_counts(prediction_tokens, n)
+        ref_counts = _ngram_counts(reference_tokens, n)
+        if not pred_counts:
+            precisions.append(0.1)
+            continue
+        overlap = 0
+        total = 0
+        for ngram, count in pred_counts.items():
+            overlap += min(count, ref_counts.get(ngram, 0))
+            total += count
+        precisions.append((overlap + 0.1) / (total + 0.1))
+    geo_mean = math.exp(sum(math.log(value) for value in precisions) / 4)
+    brevity = 1.0
+    if len(prediction_tokens) < len(reference_tokens):
+        brevity = math.exp(1 - len(reference_tokens) / max(1, len(prediction_tokens)))
+    return float(brevity * geo_mean)
+
+
+def sentence_bleu_score(reference: str, prediction: str) -> float:
+    reference_tokens = reference.split()
+    prediction_tokens = prediction.split()
+    if not reference_tokens or not prediction_tokens:
+        return 0.0
+    try:
+        from nltk.translate.bleu_score import SmoothingFunction, sentence_bleu
+
+        return float(
+            sentence_bleu(
+                [reference_tokens],
+                prediction_tokens,
+                smoothing_function=SmoothingFunction().method1,
+            )
+        )
+    except Exception:
+        return _fallback_bleu(reference_tokens, prediction_tokens)
+
+
+def _fallback_meteor(reference_tokens: Sequence[str], prediction_tokens: Sequence[str]) -> float:
+    if not reference_tokens or not prediction_tokens:
+        return 0.0
+    reference_counts: dict[str, int] = {}
+    for token in reference_tokens:
+        reference_counts[token] = reference_counts.get(token, 0) + 1
+    overlap = 0
+    for token in prediction_tokens:
+        count = reference_counts.get(token, 0)
+        if count:
+            overlap += 1
+            reference_counts[token] = count - 1
+    if overlap == 0:
+        return 0.0
+    precision = overlap / len(prediction_tokens)
+    recall = overlap / len(reference_tokens)
+    if precision == 0.0 or recall == 0.0:
+        return 0.0
+    return float((10 * precision * recall) / (recall + 9 * precision))
+
+
+def meteor_score(reference: str, prediction: str) -> float:
+    reference_tokens = reference.split()
+    prediction_tokens = prediction.split()
+    if not reference_tokens or not prediction_tokens:
+        return 0.0
+    try:
+        from nltk.translate.meteor_score import single_meteor_score
+
+        return float(single_meteor_score(reference_tokens, prediction_tokens))
+    except Exception:
+        return _fallback_meteor(reference_tokens, prediction_tokens)
 
 
 def first_matching_key(row: Mapping[str, Any], *candidates: str) -> str | None:
@@ -668,6 +766,49 @@ def rouge_l_max_scorer():
             answer=prediction,
             explanation=best_reference,
             metadata={"best_reference": best_reference},
+        )
+
+    return score
+
+
+@scorer(metrics=[mean(), stderr()])
+def unimoral_consequence_scorer():
+    rouge = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
+
+    async def score(state: TaskState, target: Target) -> Score:
+        prediction = normalize_whitespace(extract_consequence_generation(state.output.completion).lower())
+        references = [normalize_whitespace(reference).lower() for reference in target.target if reference]
+        if not prediction or not references:
+            return Score(
+                value=0.0,
+                answer=prediction,
+                explanation=state.output.completion,
+                metadata={"bleu": 0.0, "meteor": 0.0, "rouge_l": 0.0, "best_reference": ""},
+            )
+
+        per_reference = []
+        for reference in references:
+            per_reference.append(
+                {
+                    "reference": reference,
+                    "bleu": sentence_bleu_score(reference, prediction),
+                    "meteor": meteor_score(reference, prediction),
+                    "rouge_l": rouge.score(reference, prediction)["rougeL"].fmeasure,
+                }
+            )
+        best_by_meteor = max(per_reference, key=lambda item: item["meteor"])
+        return Score(
+            value=best_by_meteor["meteor"],
+            answer=prediction,
+            explanation=best_by_meteor["reference"],
+            metadata={
+                "bleu": max(item["bleu"] for item in per_reference),
+                "meteor": best_by_meteor["meteor"],
+                "rouge_l": max(item["rouge_l"] for item in per_reference),
+                "best_reference": best_by_meteor["reference"],
+                "bert_score_f1": None,
+                "bert_score_status": "not_computed_in_live_scorer_use_offline_release_metric_script",
+            },
         )
 
     return score

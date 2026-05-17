@@ -185,7 +185,7 @@ FAMILY_SIZE_STATUS_LABELS = {
     "denevil": "Denevil",
 }
 BENCHMARK_TASK_COUNTS = {
-    "UniMoral": 1,
+    "UniMoral": 4,
     "SMID": 2,
     "Value Kaleidoscope": 2,
     "CCD-Bench": 1,
@@ -193,6 +193,9 @@ BENCHMARK_TASK_COUNTS = {
 }
 TASK_EXPECTED_SAMPLE_TOTALS = {
     "unimoral_action_prediction": 8784,
+    "unimoral_moral_typology": 3492,
+    "unimoral_factor_attribution": 3492,
+    "unimoral_consequence_generation": 1782,
     "smid_moral_rating": 2941,
     "smid_foundation_classification": 2941,
     "value_prism_relevance": 43680,
@@ -291,11 +294,11 @@ BENCHMARK_METADATA = {
             "unimoral_factor_attribution",
             "unimoral_consequence_generation",
         ],
-        "current_release_scope": "Action prediction only",
+        "current_release_scope": "Action prediction, moral typology, factor attribution, and consequence generation",
         "dataset_note": "This repo still expects a local export path via UNIMORAL_DATA_DIR.",
         "paper_focus": "A unified multilingual moral-reasoning resource spanning action choice, typology, factor attribution, and consequence generation under culturally varied dilemmas.",
-        "repo_readout": "The public release currently scores action prediction only: given a dilemma and two candidate actions, select the crowd-endorsed action.",
-        "release_interpretation": "A high UniMoral score means the model tracks consensus action choices across multilingual moral dilemmas. It does not by itself show equal strength on moral typology, factor attribution, or consequence generation.",
+        "repo_readout": "The code now implements all four UniMoral task definitions: action prediction, moral typology classification, factor attribution, and consequence generation. The UniMoral coverage artifacts record which model-line cells completed cleanly.",
+        "release_interpretation": "Action prediction remains the original comparable UniMoral scalar in the legacy topline table and is near-saturated; the added UniMoral artifacts expose typology, attribution, and generation separately, with incomplete or parse-limited provider cells tracked in the failure checklist.",
     },
     "SMID": {
         "paper_title": "The Socio-Moral Image Database (SMID): A Novel Stimulus Set for the Study of Social, Moral, and Affective Processes",
