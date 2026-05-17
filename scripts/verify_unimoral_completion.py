@@ -464,6 +464,18 @@ def verify_release(
             for field in ("reason", "next_action", "log_path"):
                 if not str(row.get(field) or "").strip():
                     fail(errors, f"{pair[0]} {task_name} failure checklist missing {field}")
+            next_action = str(row.get("next_action") or "")
+            if pair[0].startswith("MiniMax-"):
+                for phrase in (
+                    "MiniMax explicitly allowed",
+                    "UNIMORAL_ALLOW_MINIMAX=1",
+                    "OPENROUTER_API_KEY",
+                ):
+                    if phrase not in next_action:
+                        fail(
+                            errors,
+                            f"{pair[0]} {task_name} failure checklist next_action missing MiniMax safety phrase: {phrase!r}",
+                        )
 
     summary_row = next((row for row in benchmark_summary_rows if row.get("benchmark") == "UniMoral"), None)
     if summary_row is None:

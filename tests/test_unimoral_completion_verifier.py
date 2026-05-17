@@ -493,6 +493,43 @@ def test_unimoral_completion_verifier_validates_failure_checklist_detail(tmp_pat
     assert any("failure checklist missing reason" in error for error in errors)
 
 
+def test_unimoral_completion_verifier_requires_minimax_safety_wording(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    monkeypatch.setattr(verifier, "MODEL_LINES", ["MiniMax-S"])
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+    _write_overview_metadata(release, documented_incomplete=True)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    for row in rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "partial"
+            row["completed_samples"] = "1"
+            row["parsed_count"] = "1"
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+    failure_rows = [
+        {
+            "line_label": "MiniMax-S",
+            "task_name": "unimoral_moral_typology",
+            "status": "partial",
+            "completed_samples": "1",
+            "expected_samples": "2",
+            "parsed_count": "1",
+            "category": "runtime",
+            "reason": "fixture incomplete",
+            "next_action": "rerun fixture",
+            "log_path": "results/inspect/logs/example.eval",
+        }
+    ]
+    _write_csv(release / "unimoral-failure-checklist.csv", failure_rows, list(failure_rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("next_action missing MiniMax safety phrase: 'MiniMax explicitly allowed'" in error for error in errors)
+    assert any("next_action missing MiniMax safety phrase: 'UNIMORAL_ALLOW_MINIMAX=1'" in error for error in errors)
+    assert any("next_action missing MiniMax safety phrase: 'OPENROUTER_API_KEY'" in error for error in errors)
+
+
 def test_unimoral_completion_verifier_checks_manifest_paths(tmp_path, monkeypatch):
     _set_tiny_verifier_constants(monkeypatch)
     release, figures = _write_minimal_complete_artifacts(tmp_path)
