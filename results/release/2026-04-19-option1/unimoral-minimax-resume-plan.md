@@ -57,6 +57,8 @@ The `results/inspect/full-runs/2026-05-16-unimoral-full/minimax_l/` transcripts 
 
 Git LFS and ignored local payloads were checked. There are no Git LFS files or local LFS objects. The ignored MiniMax-L full-run `.eval` files match the release tables exactly: `unimoral_factor_attribution` has 1800 unique logged samples locally and 1800 release prediction rows, while `unimoral_consequence_generation` has 0 local samples and 0 release prediction rows. No ignored success shard was omitted from `unimoral-sample-predictions.csv`.
 
+The MiniMax smoke/probe logs under `results/inspect/logs/2026-05-16-unimoral-smoke/` and `results/inspect/logs/2026-05-17-unimoral-smoke/` were checked. They contain 22 tiny MiniMax eval archives, map only to MiniMax-S/M model routes, and do not add any same-line sample IDs missing from the release tables. They should not be used to fill the MiniMax-L blockers.
+
 ## Dry-Run Check
 
 Use this before any provider call to refresh the planned ranges:
