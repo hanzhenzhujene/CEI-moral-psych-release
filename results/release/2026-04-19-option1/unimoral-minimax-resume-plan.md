@@ -75,6 +75,16 @@ For `MiniMax-S` factor attribution, the unmerged plan has 511 tiny ranges. The b
 UNIMORAL_DRY_RUN=1 FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 UNIMORAL_RERUN_UNPARSED_MAX_GAP=3 UNIMORAL_ROUTE_MODE=openrouter MODEL_FILTER='MiniMax-S' TASK_FILTER='unimoral_factor_attribution' VENV_PYTHON=/opt/anaconda3/bin/python scripts/run_unimoral_missing_tasks.sh
 ```
 
+A full MiniMax provider-free refresh with `UNIMORAL_RERUN_UNPARSED_MAX_GAP=3` on May 17, 2026 kept the same missing cells but merged nearby gaps for other cells too. Notable compact ranges were:
+
+| Line | Task | `max_gap=3` dry-run ranges |
+| --- | --- | --- |
+| `MiniMax-S` | `unimoral_moral_typology` | `2613 2614;3298 3300;3304 3395;3399 3423;3431 3481;3485 3492` |
+| `MiniMax-M` | `unimoral_consequence_generation` | `1111 1112;1172 1173;1334 1335;1465 1476` |
+| `MiniMax-L` | `unimoral_factor_attribution` | `379 380;715 717;721 1750;2774 2775;2811 3492` |
+
+Use these compact ranges only when you intentionally want to rerun a few already-parseable samples between close gaps to reduce process startup overhead.
+
 ## Recommended Execution
 
 Run cells separately so a MiniMax failure does not hide which cell advanced:
