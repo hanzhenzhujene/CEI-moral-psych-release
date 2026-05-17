@@ -467,6 +467,7 @@ def verify_release(
             next_action = str(row.get("next_action") or "")
             if pair[0].startswith("MiniMax-"):
                 for phrase in (
+                    "make unimoral-missing-plan",
                     "MiniMax explicitly allowed",
                     "UNIMORAL_ALLOW_MINIMAX=1",
                     "OPENROUTER_API_KEY",

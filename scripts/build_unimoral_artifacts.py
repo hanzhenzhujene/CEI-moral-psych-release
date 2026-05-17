@@ -757,26 +757,27 @@ def failure_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
         is_minimax = str(model_filter).lower().startswith("minimax")
         route_prefix = "UNIMORAL_ALLOW_MINIMAX=1 UNIMORAL_ROUTE_MODE=openrouter " if is_minimax else ""
         provider_clause = "with MiniMax explicitly allowed and OPENROUTER_API_KEY available, " if is_minimax else ""
+        preflight_clause = "Refresh planned ranges first with `make unimoral-missing-plan`, then " if is_minimax else ""
         if category == "format/parsing":
             next_action = (
-                f"Rerun parse gaps only {provider_clause}with "
+                f"{preflight_clause}rerun parse gaps only {provider_clause}with "
                 f"{route_prefix}FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='{model_filter}' TASK_FILTER='{task_filter}' "
                 "scripts/run_unimoral_missing_tasks.sh."
             )
         elif completed == 0:
             next_action = (
-                f"Run the full missing task {provider_clause}with "
+                f"{preflight_clause}run the full missing task {provider_clause}with "
                 f"{route_prefix}MODEL_FILTER='{model_filter}' TASK_FILTER='{task_filter}' scripts/run_unimoral_missing_tasks.sh."
             )
         elif completed < expected:
             next_action = (
-                f"Resume missing and parse-limited sample ranges after provider/API issue is resolved {provider_clause}with "
+                f"{preflight_clause}resume missing and parse-limited sample ranges after provider/API issue is resolved {provider_clause}with "
                 f"{route_prefix}FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='{model_filter}' TASK_FILTER='{task_filter}' "
                 "scripts/run_unimoral_missing_tasks.sh."
             )
         else:
             next_action = (
-                f"Rerun non-success or unparseable saved samples {provider_clause}to replace interrupted/error logs with "
+                f"{preflight_clause}rerun non-success or unparseable saved samples {provider_clause}to replace interrupted/error logs with "
                 f"{route_prefix}FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1 MODEL_FILTER='{model_filter}' TASK_FILTER='{task_filter}' "
                 "scripts/run_unimoral_missing_tasks.sh."
             )

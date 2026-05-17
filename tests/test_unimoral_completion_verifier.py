@@ -533,6 +533,7 @@ def test_unimoral_completion_verifier_requires_minimax_safety_wording(tmp_path, 
 
     errors = verifier.verify_release(release, figures, allow_incomplete=True)
 
+    assert any("next_action missing MiniMax safety phrase: 'make unimoral-missing-plan'" in error for error in errors)
     assert any("next_action missing MiniMax safety phrase: 'MiniMax explicitly allowed'" in error for error in errors)
     assert any("next_action missing MiniMax safety phrase: 'UNIMORAL_ALLOW_MINIMAX=1'" in error for error in errors)
     assert any("next_action missing MiniMax safety phrase: 'OPENROUTER_API_KEY'" in error for error in errors)

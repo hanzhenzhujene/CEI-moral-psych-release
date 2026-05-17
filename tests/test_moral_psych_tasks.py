@@ -560,6 +560,7 @@ def test_unimoral_failure_rows_route_minimax_retries_through_openrouter():
     )
 
     assert "UNIMORAL_ROUTE_MODE=openrouter" in failures[0]["next_action"]
+    assert "make unimoral-missing-plan" in failures[0]["next_action"]
     assert "FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1" in failures[0]["next_action"]
     assert "MODEL_FILTER='MiniMax-L'" in failures[0]["next_action"]
 
