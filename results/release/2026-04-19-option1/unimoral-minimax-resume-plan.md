@@ -32,6 +32,21 @@ A provider-free scan of the remaining MiniMax gaps found no safe scorer-only rec
 | `MiniMax-L` | `unimoral_factor_attribution` | 1692 missing samples plus 16 unparseable saved samples; remaining saved gaps are provider/error-text records or one incomplete visible fragment |
 | `MiniMax-L` | `unimoral_consequence_generation` | 1782 missing samples; no usable saved samples to recover |
 
+## Local Samplebuffer Audit
+
+Inspect's local samplebuffer cache was also checked under `~/Library/Application Support/inspect_ai/samplebuffer/`. This found small interrupted-shard buffers, but no provider-free path to close the remaining MiniMax blockers.
+
+| Line | Task | Buffered state | Release impact |
+| --- | --- | --- | --- |
+| `MiniMax-S` | `unimoral_moral_typology` | 3 DBs; 31 buffered samples; 11 scored samples | All scored rows already appear in `unimoral-sample-predictions.csv` |
+| `MiniMax-M` | `unimoral_moral_typology` | 1 DB; 10 buffered samples; 9 scored samples | Non-blocking cell; no missing release rows |
+| `MiniMax-M` | `unimoral_factor_attribution` | 1 DB; 15 buffered samples; 7 scored samples | Non-blocking cell; no missing release rows |
+| `MiniMax-L` | `unimoral_moral_typology` | 3 DBs; 17 buffered samples; 3 scored samples | Non-blocking cell; no missing release rows |
+| `MiniMax-L` | `unimoral_factor_attribution` | no matching factor-attribution samplebuffer DBs | Cannot recover the 1692 missing samples |
+| `MiniMax-L` | `unimoral_consequence_generation` | no samplebuffer DB for `2026-05-17T03-30-30-00-00_unimoral-consequence-generation_Ax9iEsGjvHYpAKRrpnqexK.eval` | Cannot recover the 1782 missing samples |
+
+The MiniMax trace files for the failed consequence-generation run contained request telemetry only. The eval config had `log_samples=true` but `log_model_api=false`, and no response-body fields such as `choices`, `messages`, `content`, `prompt`, `completion`, or `sample_id` were present in the MiniMax trace files.
+
 ## Dry-Run Check
 
 Use this before any provider call to refresh the planned ranges:
