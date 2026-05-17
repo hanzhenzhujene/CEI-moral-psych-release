@@ -1113,6 +1113,8 @@ def write_minimax_resume_plan(release_dir: Path, failures: list[dict[str, object
                 "",
                 "An exact home-directory search for duplicate UniMoral release CSVs and likely UniMoral/CEI release archives found only the current repo's release/full-run files and no alternate CSV set or compressed bundle to recover from.",
                 "",
+                "GitHub remote-side recovery was checked too: the release repo currently has zero Actions artifacts, code search found no separate `unimoral-sample-predictions` artifact, and merged PR #1 has no comments or attachment links with recoverable UniMoral RQ2/RQ3/RQ4 outputs.",
+                "",
                 'Google Drive was searched for exported or shared UniMoral artifacts using exact and broad terms including `unimoral sample predictions`, `unimoral full benchmark`, `unimoral-rq4-bertscore`, `unimoral_factor_attribution`, `unimoral_consequence_generation`, `MiniMax-L factor attribution`, `MiniMax-L consequence generation`, `CEI moral psych release`, and the failed MiniMax-L consequence-generation eval ID. The only relevant hits were the May 2026 working doc/deck materials, which state the extra UniMoral tasks were still "not yet scored" or action items to check; no Drive result contained saved MiniMax RQ2/RQ3/RQ4 predictions or release CSV artifacts.',
                 "",
                 "## Dry-Run Check",
