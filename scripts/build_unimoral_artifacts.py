@@ -1111,6 +1111,8 @@ def write_minimax_resume_plan(release_dir: Path, failures: list[dict[str, object
                 "",
                 "Local Git branches, remote refs, stashes, and reflog-retained artifact commits were checked. Every retained `unimoral-sample-predictions.csv` snapshot still has 136782 rows, 1800 MiniMax-L factor-attribution rows, and 0 MiniMax-L consequence-generation rows; no historical release artifact closes the remaining MiniMax blockers.",
                 "",
+                "An exact home-directory search for duplicate UniMoral release CSVs and likely UniMoral/CEI release archives found only the current repo's release/full-run files and no alternate CSV set or compressed bundle to recover from.",
+                "",
                 'Google Drive was searched for exported or shared UniMoral artifacts using exact and broad terms including `unimoral sample predictions`, `unimoral full benchmark`, `unimoral-rq4-bertscore`, `unimoral_factor_attribution`, `unimoral_consequence_generation`, `MiniMax-L factor attribution`, `MiniMax-L consequence generation`, `CEI moral psych release`, and the failed MiniMax-L consequence-generation eval ID. The only relevant hits were the May 2026 working doc/deck materials, which state the extra UniMoral tasks were still "not yet scored" or action items to check; no Drive result contained saved MiniMax RQ2/RQ3/RQ4 predictions or release CSV artifacts.',
                 "",
                 "## Dry-Run Check",
