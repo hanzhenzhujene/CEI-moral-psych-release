@@ -641,6 +641,7 @@ def test_unimoral_completion_audit_records_csv_level_blockers(tmp_path, monkeypa
 
     audit = (release_dir / "unimoral-completion-audit.md").read_text(encoding="utf-8")
     assert "## CSV-Level Strict Blockers" in audit
+    assert "3 rows present; strict expected count is 4." in audit
     assert "Total strict sample prediction gap: **1** rows." in audit
     assert "`Line-A` `unimoral_moral_typology`: no sample-count gap (2/2) but status `complete_recovered_logs` prevents strict completion." in audit
     assert "`Line-B` `unimoral_moral_typology`: 1 sample predictions missing (1/2); status `partial`." in audit
