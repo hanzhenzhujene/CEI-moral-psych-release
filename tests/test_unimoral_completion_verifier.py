@@ -115,6 +115,7 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         "Status: **achieved**.\n\n"
         "## Prompt-to-Artifact Checklist\n\n"
         "Strict completion is achieved in this fixture.\n\n"
+        "2 rows present; strict expected count is 2.\n\n"
         "| MiniMax is not run without explicit authorization | "
         "`make unimoral-missing-plan` | `make unimoral-missing-plan` is "
         "dry-run only; non-dry-run MiniMax lines require "
@@ -415,6 +416,7 @@ def test_unimoral_completion_verifier_allow_incomplete_keeps_structural_checks(t
         "Status: **not achieved**.\n\n"
         "## Prompt-to-Artifact Checklist\n\n"
         "Strict completion is blocked in this fixture.\n\n"
+        "1 rows present; strict expected count is 2.\n\n"
         "| MiniMax is not run without explicit authorization | "
         "`make unimoral-missing-plan` | `make unimoral-missing-plan` is "
         "dry-run only; non-dry-run MiniMax lines require "
@@ -517,6 +519,7 @@ def test_unimoral_completion_verifier_fails_stale_csv_blocker_audit(tmp_path, mo
 
     errors = verifier.verify_release(release, figures, allow_incomplete=True)
 
+    assert any("missing current sample prediction count" in error for error in errors)
     assert any("missing current strict prediction gap" in error for error in errors)
     assert any("missing CSV blocker phrase" in error for error in errors)
 

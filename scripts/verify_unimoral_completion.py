@@ -661,6 +661,11 @@ def verify_release(
                 fail(errors, "unimoral-completion-audit.md does not mark strict-complete artifacts as achieved")
             if not strict_complete and "Status: **not achieved**." not in completion_audit_text:
                 fail(errors, "unimoral-completion-audit.md does not mark incomplete artifacts as not achieved")
+            sample_count_phrase = (
+                f"{len(prediction_rows)} rows present; strict expected count is {EXPECTED_SAMPLE_PREDICTION_ROWS}."
+            )
+            if sample_count_phrase not in completion_audit_text:
+                fail(errors, f"unimoral-completion-audit.md missing current sample prediction count: {sample_count_phrase!r}")
             gap_phrase = f"Total strict sample prediction gap: **{strict_prediction_gap}** rows."
             if gap_phrase not in completion_audit_text:
                 fail(errors, f"unimoral-completion-audit.md missing current strict prediction gap: {gap_phrase!r}")
