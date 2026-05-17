@@ -193,10 +193,10 @@ def test_makefile_bootstrap_combines_setup_and_audit_when_uv_is_available(tmp_pa
 
     assert result.returncode == 0
     assert "fake-uv sync --frozen" in result.stdout
-    assert "fake-uv run pytest tests -q" in result.stdout
-    assert "fake-uv run python scripts/build_release_artifacts.py --input" in result.stdout
-    assert "fake-uv run python scripts/verify_unimoral_task_builders.py" in result.stdout
-    assert "fake-uv run python scripts/verify_unimoral_completion.py --allow-incomplete" in result.stdout
+    assert "fake-uv run --frozen pytest tests -q" in result.stdout
+    assert "fake-uv run --frozen python scripts/build_release_artifacts.py --input" in result.stdout
+    assert "fake-uv run --frozen python scripts/verify_unimoral_task_builders.py" in result.stdout
+    assert "fake-uv run --frozen python scripts/verify_unimoral_completion.py --allow-incomplete" in result.stdout
 
 
 def test_makefile_bootstrap_reuses_fallback_python_when_uv_is_missing(tmp_path: Path) -> None:
@@ -356,4 +356,4 @@ def test_makefile_smoke_keeps_cei_inspect_package_when_uv_is_available(tmp_path:
     )
 
     assert result.returncode == 0
-    assert "fake-uv run --package cei-inspect python src/inspect/run.py" in result.stdout
+    assert "fake-uv run --frozen --package cei-inspect python src/inspect/run.py" in result.stdout

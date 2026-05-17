@@ -7,9 +7,9 @@ UV ?= uv
 VENV_PYTHON ?= .venv/bin/python
 
 ifneq ($(shell command -v $(UV) 2>/dev/null),)
-RUN_PYTHON = $(UV) run python
-RUN_PYTEST = $(UV) run pytest
-RUN_INSPECT = $(UV) run --package cei-inspect python
+RUN_PYTHON = $(UV) run --frozen python
+RUN_PYTEST = $(UV) run --frozen pytest
+RUN_INSPECT = $(UV) run --frozen --package cei-inspect python
 RUNNER_NOTE = uv
 else
 RUN_PYTHON = $(VENV_PYTHON)
@@ -62,7 +62,7 @@ ensure-runner:
 	fi
 
 test: ensure-runner
-	$(RUN_PYTEST) tests -q
+	PYTHONPATH="$(CURDIR)$${PYTHONPATH:+:$${PYTHONPATH}}" $(RUN_PYTEST) tests -q
 
 release: ensure-runner
 	$(RUN_PYTHON) scripts/build_release_artifacts.py --input $(RELEASE_SOURCE)
