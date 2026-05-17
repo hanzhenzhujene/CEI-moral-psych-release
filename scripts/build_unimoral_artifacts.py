@@ -1223,6 +1223,8 @@ def write_completion_audit(
         (str(row.get("line_label", "")), str(row.get("task_name", ""))): row
         for row in full_rows
     }
+    expected_pairs = {(line_label, task_name) for line_label, _, _, _ in MODEL_LINES for task_name in TASKS}
+    actual_pairs = set(full_by_pair)
     prediction_counts: dict[tuple[str, str], int] = {}
     prediction_keys: list[tuple[str, str, str]] = []
     for row in prediction_rows:
@@ -1232,6 +1234,21 @@ def write_completion_audit(
 
     total_prediction_gap = 0
     strict_blocker_lines: list[str] = []
+    missing_pairs = sorted(expected_pairs - actual_pairs)
+    extra_pairs = sorted(actual_pairs - expected_pairs)
+    duplicate_model_task_count = len(full_rows) - len(actual_pairs)
+    if missing_pairs:
+        strict_blocker_lines.append(
+            f"- `unimoral-full-benchmark.csv`: {len(missing_pairs)} expected model-task rows missing."
+        )
+    if extra_pairs:
+        strict_blocker_lines.append(
+            f"- `unimoral-full-benchmark.csv`: {len(extra_pairs)} unexpected model-task rows present."
+        )
+    if duplicate_model_task_count:
+        strict_blocker_lines.append(
+            f"- `unimoral-full-benchmark.csv`: {duplicate_model_task_count} duplicate model-task rows prevent strict completion."
+        )
     duplicate_prediction_count = len(prediction_keys) - len(set(prediction_keys))
     if duplicate_prediction_count:
         strict_blocker_lines.append(

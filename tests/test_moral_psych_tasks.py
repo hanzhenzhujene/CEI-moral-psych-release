@@ -762,6 +762,135 @@ def test_unimoral_completion_audit_blocks_duplicate_prediction_keys(tmp_path, mo
     assert "`unimoral-sample-predictions.csv`: 1 duplicate line/task/sample prediction rows prevent strict completion." in audit
 
 
+def test_unimoral_completion_audit_blocks_duplicate_model_task_rows(tmp_path, monkeypatch):
+    release_dir = tmp_path / "release"
+    release_dir.mkdir()
+    monkeypatch.setattr(
+        build_unimoral_artifacts,
+        "MODEL_LINES",
+        [("Line-A", "Line", "A", "line_a")],
+    )
+    monkeypatch.setattr(
+        build_unimoral_artifacts,
+        "TASKS",
+        {
+            "unimoral_action_prediction": {"rq": "RQ1", "label": "Action", "metric": "accuracy", "expected": 3},
+            "unimoral_moral_typology": {"rq": "RQ2", "label": "Typology", "metric": "official_weighted_f1", "expected": 2},
+        },
+    )
+    _write_csv(
+        release_dir / "unimoral-full-benchmark.csv",
+        [
+            {"line_label": "Line-A", "task_name": "unimoral_action_prediction", "status": "complete"},
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "status": "complete"},
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "status": "complete"},
+        ],
+    )
+    _write_csv(
+        release_dir / "unimoral-sample-predictions.csv",
+        [
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "sample_id": "a-1"},
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "sample_id": "a-2"},
+        ],
+    )
+
+    build_unimoral_artifacts.write_completion_audit(
+        release_dir,
+        [
+            {
+                "task_name": "unimoral_action_prediction",
+                "complete_model_lines": "1",
+                "expected_model_lines": "1",
+                "status": "complete",
+            },
+            {
+                "task_name": "unimoral_moral_typology",
+                "complete_model_lines": "1",
+                "expected_model_lines": "1",
+                "status": "complete",
+            },
+        ],
+        [],
+    )
+
+    audit = (release_dir / "unimoral-completion-audit.md").read_text(encoding="utf-8")
+    assert "Status: **not achieved**." in audit
+    assert "`unimoral-full-benchmark.csv`: 1 duplicate model-task rows prevent strict completion." in audit
+
+
+@pytest.mark.parametrize(
+    ("full_rows", "expected_phrase"),
+    [
+        (
+            [
+                {"line_label": "Line-A", "task_name": "unimoral_action_prediction", "status": "complete"},
+            ],
+            "`unimoral-full-benchmark.csv`: 1 expected model-task rows missing.",
+        ),
+        (
+            [
+                {"line_label": "Line-A", "task_name": "unimoral_action_prediction", "status": "complete"},
+                {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "status": "complete"},
+                {"line_label": "Line-B", "task_name": "unimoral_moral_typology", "status": "complete"},
+            ],
+            "`unimoral-full-benchmark.csv`: 1 unexpected model-task rows present.",
+        ),
+    ],
+)
+def test_unimoral_completion_audit_blocks_missing_or_unexpected_model_task_rows(
+    tmp_path,
+    monkeypatch,
+    full_rows,
+    expected_phrase,
+):
+    release_dir = tmp_path / "release"
+    release_dir.mkdir()
+    monkeypatch.setattr(
+        build_unimoral_artifacts,
+        "MODEL_LINES",
+        [("Line-A", "Line", "A", "line_a")],
+    )
+    monkeypatch.setattr(
+        build_unimoral_artifacts,
+        "TASKS",
+        {
+            "unimoral_action_prediction": {"rq": "RQ1", "label": "Action", "metric": "accuracy", "expected": 3},
+            "unimoral_moral_typology": {"rq": "RQ2", "label": "Typology", "metric": "official_weighted_f1", "expected": 2},
+        },
+    )
+    _write_csv(release_dir / "unimoral-full-benchmark.csv", full_rows)
+    _write_csv(
+        release_dir / "unimoral-sample-predictions.csv",
+        [
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "sample_id": "a-1"},
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "sample_id": "a-2"},
+        ],
+    )
+
+    build_unimoral_artifacts.write_completion_audit(
+        release_dir,
+        [
+            {
+                "task_name": "unimoral_action_prediction",
+                "complete_model_lines": "1",
+                "expected_model_lines": "1",
+                "status": "complete",
+            },
+            {
+                "task_name": "unimoral_moral_typology",
+                "complete_model_lines": "1",
+                "expected_model_lines": "1",
+                "status": "complete",
+            },
+        ],
+        [],
+    )
+
+    audit = (release_dir / "unimoral-completion-audit.md").read_text(encoding="utf-8")
+    assert "Status: **not achieved**." in audit
+    assert expected_phrase in audit
+
+
 def test_unimoral_minimax_resume_plan_registers_handoff_artifact(tmp_path):
     release_dir = tmp_path / "release"
     release_dir.mkdir()

@@ -5,6 +5,8 @@ import json
 import zipfile
 from pathlib import Path
 
+import pytest
+
 from scripts import verify_unimoral_completion as verifier
 
 
@@ -357,6 +359,53 @@ def test_unimoral_completion_verifier_fails_incomplete_status(tmp_path, monkeypa
 
     assert any("status=partial expected complete" in error for error in errors)
     assert any("completed_samples=1" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_requires_model_task_blocker_audit(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    rows.append(dict(rows[0]))
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("contains duplicate model-task rows" in error for error in errors)
+    assert any("missing CSV blocker phrase" in error for error in errors)
+
+
+@pytest.mark.parametrize(
+    ("case", "expected_error"),
+    [
+        ("missing", "missing model-task rows"),
+        ("unexpected", "unexpected model-task rows"),
+    ],
+)
+def test_unimoral_completion_verifier_requires_missing_or_unexpected_model_task_blocker_audit(
+    tmp_path,
+    monkeypatch,
+    case,
+    expected_error,
+):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    if case == "missing":
+        rows.pop()
+    else:
+        extra = dict(rows[0])
+        extra["line_label"] = "Line-B"
+        rows.append(extra)
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any(expected_error in error for error in errors)
+    assert any("missing CSV blocker phrase" in error for error in errors)
 
 
 def test_unimoral_completion_verifier_allow_incomplete_skips_absent_raw_logs(tmp_path, monkeypatch):

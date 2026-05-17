@@ -412,6 +412,19 @@ def verify_release(
         predictions_by_pair.setdefault((row["line_label"], row["task_name"]), []).append(row)
     strict_prediction_gap = 0
     completion_audit_blocker_phrases: list[str] = []
+    if missing_pairs:
+        completion_audit_blocker_phrases.append(
+            f"`unimoral-full-benchmark.csv`: {len(missing_pairs)} expected model-task rows missing"
+        )
+    if extra_pairs:
+        completion_audit_blocker_phrases.append(
+            f"`unimoral-full-benchmark.csv`: {len(extra_pairs)} unexpected model-task rows present"
+        )
+    duplicate_model_task_count = len(full_rows) - len(actual_pairs)
+    if duplicate_model_task_count:
+        completion_audit_blocker_phrases.append(
+            f"`unimoral-full-benchmark.csv`: {duplicate_model_task_count} duplicate model-task rows prevent strict completion"
+        )
     if duplicate_prediction_count:
         completion_audit_blocker_phrases.append(
             f"`unimoral-sample-predictions.csv`: {duplicate_prediction_count} duplicate "
