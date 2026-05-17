@@ -87,6 +87,8 @@ A full MiniMax provider-free refresh with `UNIMORAL_RERUN_UNPARSED_MAX_GAP=3` on
 
 Use these compact ranges only when you intentionally want to rerun a few already-parseable samples between close gaps to reduce process startup overhead.
 
+A fresh provider-free preflight on May 17, 2026 at 15:05 America/New_York confirmed the same compact ranges and reported `key_state=missing` for the OpenRouter MiniMax route. No provider calls were made during that preflight.
+
 ## Recommended Execution
 
 Run cells separately so a MiniMax failure does not hide which cell advanced:
