@@ -33,7 +33,7 @@ make setup
 ```
 
 If `uv` is installed outside your shell `PATH`, use `make UV=/absolute/path/to/uv <target>`.
-If `uv` is not on `PATH` but the checked-in `.venv` already exists, `make test`, `make release`, `make refresh-authoritative`, `make smoke`, and `make audit` will fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If the fallback interpreter lives somewhere else, pass `VENV_PYTHON=/absolute/path/to/python`. If neither runner is available, the Makefile now stops immediately with a clear setup error instead of a raw shell failure.
+If `uv` is not on `PATH` but the checked-in `.venv` already exists, runner-backed targets including `make test`, `make release`, `make refresh-authoritative`, `make smoke`, `make audit`, `make bootstrap`, and `make unimoral-missing-plan` will fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If the fallback interpreter lives somewhere else, pass `VENV_PYTHON=/absolute/path/to/python`. If neither runner is available, the Makefile now stops immediately with a clear setup error instead of a raw shell failure.
 
 If you want to run a live benchmark task rather than just regenerate the public release, create `.env`:
 
