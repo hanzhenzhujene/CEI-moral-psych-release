@@ -437,7 +437,7 @@ The release now implements all four UniMoral task definitions and exports scored
 
 Sample-level predictions for RQ2/RQ3/RQ4 are exported in `unimoral-sample-predictions.csv`; full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.
 The provider-free MiniMax handoff is tracked in [`unimoral-minimax-resume-plan.md`](unimoral-minimax-resume-plan.md).
-The prompt-to-artifact completion audit is tracked in [`unimoral-completion-audit.md`](unimoral-completion-audit.md).
+The prompt-to-artifact completion audit, including the verifier-checked CSV-level strict blocker inventory, is tracked in [`unimoral-completion-audit.md`](unimoral-completion-audit.md).
 
 | Task | What it measures | Scoring note |
 | --- | --- | --- |

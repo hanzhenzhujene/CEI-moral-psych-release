@@ -430,6 +430,7 @@ def test_unimoral_markdown_top_line_accepts_csv_rank_strings():
 
     assert "Model-A (0.750)" in section
     assert "unimoral-minimax-resume-plan.md" in section
+    assert "CSV-level strict blocker inventory" in section
 
 
 def test_unimoral_bertscore_script_takes_max_reference_score():

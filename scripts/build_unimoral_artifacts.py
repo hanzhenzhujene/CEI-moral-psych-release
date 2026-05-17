@@ -1440,7 +1440,7 @@ def build_markdown_section(
             "",
             "Sample-level predictions for RQ2/RQ3/RQ4 are exported in `unimoral-sample-predictions.csv`; full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.",
             f"The provider-free MiniMax handoff is tracked in [`unimoral-minimax-resume-plan.md`]({resume_plan_link}).",
-            f"The prompt-to-artifact completion audit is tracked in [`unimoral-completion-audit.md`]({completion_audit_link}).",
+            f"The prompt-to-artifact completion audit, including the verifier-checked CSV-level strict blocker inventory, is tracked in [`unimoral-completion-audit.md`]({completion_audit_link}).",
             "",
             "| Task | What it measures | Scoring note |",
             "| --- | --- | --- |",

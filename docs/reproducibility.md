@@ -162,8 +162,8 @@ For provider-free coverage of the full UniMoral registry, run
 `make verify-unimoral-task-builders`; it instantiates RQ1/RQ2/RQ3/RQ4 through
 `src/inspect/evals/moral_psych.py` using a tiny temporary fixture. For release
 artifacts, `make verify-unimoral-artifacts` checks the generated RQ1-RQ4 tables,
-sample predictions, BERTScore export, figures, manifest entries, and documented
-failure checklist.
+sample predictions, BERTScore export, figures, manifest entries, documented
+failure checklist, and the completion audit's CSV-level strict blocker inventory.
 For provider-free planning of the remaining UniMoral MiniMax cells, run
 `make unimoral-missing-plan`; it wraps the missing-task launcher with
 `UNIMORAL_DRY_RUN=1` and prints planned ranges without granting MiniMax execution
