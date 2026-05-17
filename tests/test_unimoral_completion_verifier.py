@@ -327,6 +327,22 @@ def test_unimoral_completion_verifier_checks_branch_audit_contract(tmp_path, mon
     assert any("Clean committed branch" in error for error in errors)
 
 
+def test_unimoral_completion_verifier_rejects_transient_operator_context(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    audit_path = release / "unimoral-completion-audit.md"
+    audit_path.write_text(
+        audit_path.read_text(encoding="utf-8") + "\nThe current user instruction forbids MiniMax runs.\n",
+        encoding="utf-8",
+    )
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=False)
+
+    assert any("stale operator-context phrase" in error for error in errors)
+
+
 def test_unimoral_completion_verifier_fails_incomplete_status(tmp_path, monkeypatch):
     _set_tiny_verifier_constants(monkeypatch)
     release, figures = _write_minimal_complete_artifacts(tmp_path)

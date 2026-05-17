@@ -675,6 +675,13 @@ def verify_release(
                         fail(errors, f"unimoral-completion-audit.md missing CSV blocker phrase: {phrase!r}")
             elif "No CSV-level strict blockers remain" not in completion_audit_text:
                 fail(errors, "unimoral-completion-audit.md does not say CSV-level strict blockers are clear")
+            stale_audit_phrases = [
+                "current user instruction",
+                "forbids MiniMax runs",
+            ]
+            for phrase in stale_audit_phrases:
+                if phrase in completion_audit_text:
+                    fail(errors, f"unimoral-completion-audit.md contains stale operator-context phrase: {phrase!r}")
 
     stale_phrases = [
         "current model-line matrix is not yet fully complete",
