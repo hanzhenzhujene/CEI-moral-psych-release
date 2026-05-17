@@ -201,6 +201,17 @@ def test_unimoral_launcher_requires_explicit_minimax_execution_opt_in() -> None:
     assert output == ["block", "run", "run"]
 
 
+def test_unimoral_launcher_blocks_minimax_before_execution_side_effects() -> None:
+    script = (ROOT / "scripts" / "run_unimoral_missing_tasks.sh").read_text(encoding="utf-8")
+
+    block_idx = script.index('reason=minimax_requires_UNIMORAL_ALLOW_MINIMAX')
+    record_idx = script.index('record_routing_metadata "$slug" "$task_name" "$start_at"')
+    missing_key_idx = script.index('reason=missing_provider_api_key')
+
+    assert block_idx < record_idx
+    assert block_idx < missing_key_idx
+
+
 def test_unimoral_launcher_guards_empty_extra_args_under_nounset() -> None:
     script = (ROOT / "scripts" / "run_unimoral_missing_tasks.sh").read_text(encoding="utf-8")
 
