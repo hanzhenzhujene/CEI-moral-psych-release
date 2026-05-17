@@ -565,6 +565,86 @@ def test_unimoral_failure_rows_route_minimax_retries_through_openrouter():
     assert "MODEL_FILTER='MiniMax-L'" in failures[0]["next_action"]
 
 
+def test_unimoral_completion_audit_records_csv_level_blockers(tmp_path, monkeypatch):
+    release_dir = tmp_path / "release"
+    release_dir.mkdir()
+    monkeypatch.setattr(
+        build_unimoral_artifacts,
+        "MODEL_LINES",
+        [
+            ("Line-A", "Line", "A", "line_a"),
+            ("Line-B", "Line", "B", "line_b"),
+        ],
+    )
+    monkeypatch.setattr(
+        build_unimoral_artifacts,
+        "TASKS",
+        {
+            "unimoral_action_prediction": {"rq": "RQ1", "label": "Action", "metric": "accuracy", "expected": 3},
+            "unimoral_moral_typology": {"rq": "RQ2", "label": "Typology", "metric": "official_weighted_f1", "expected": 2},
+        },
+    )
+    _write_csv(
+        release_dir / "unimoral-full-benchmark.csv",
+        [
+            {"line_label": "Line-A", "task_name": "unimoral_action_prediction", "status": "complete"},
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "status": "complete_recovered_logs"},
+            {"line_label": "Line-B", "task_name": "unimoral_action_prediction", "status": "complete"},
+            {"line_label": "Line-B", "task_name": "unimoral_moral_typology", "status": "partial"},
+        ],
+    )
+    _write_csv(
+        release_dir / "unimoral-sample-predictions.csv",
+        [
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "sample_id": "a-1"},
+            {"line_label": "Line-A", "task_name": "unimoral_moral_typology", "sample_id": "a-2"},
+            {"line_label": "Line-B", "task_name": "unimoral_moral_typology", "sample_id": "b-1"},
+        ],
+    )
+
+    build_unimoral_artifacts.write_completion_audit(
+        release_dir,
+        [
+            {
+                "task_name": "unimoral_action_prediction",
+                "complete_model_lines": "2",
+                "expected_model_lines": "2",
+                "status": "complete",
+            },
+            {
+                "task_name": "unimoral_moral_typology",
+                "complete_model_lines": "0",
+                "expected_model_lines": "2",
+                "status": "incomplete",
+            },
+        ],
+        [
+            {
+                "line_label": "Line-A",
+                "task_name": "unimoral_moral_typology",
+                "status": "complete_recovered_logs",
+                "completed_samples": "2",
+                "expected_samples": "2",
+                "parsed_count": "1",
+            },
+            {
+                "line_label": "Line-B",
+                "task_name": "unimoral_moral_typology",
+                "status": "partial",
+                "completed_samples": "1",
+                "expected_samples": "2",
+                "parsed_count": "1",
+            },
+        ],
+    )
+
+    audit = (release_dir / "unimoral-completion-audit.md").read_text(encoding="utf-8")
+    assert "## CSV-Level Strict Blockers" in audit
+    assert "Total strict sample prediction gap: **1** rows." in audit
+    assert "`Line-A` `unimoral_moral_typology`: no sample-count gap (2/2) but status `complete_recovered_logs` prevents strict completion." in audit
+    assert "`Line-B` `unimoral_moral_typology`: 1 sample predictions missing (1/2); status `partial`." in audit
+
+
 def test_unimoral_minimax_resume_plan_registers_handoff_artifact(tmp_path):
     release_dir = tmp_path / "release"
     release_dir.mkdir()
