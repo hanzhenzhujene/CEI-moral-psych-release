@@ -297,6 +297,21 @@ def test_unimoral_completion_verifier_fails_incomplete_status(tmp_path, monkeypa
     assert any("completed_samples=1" in error for error in errors)
 
 
+def test_unimoral_completion_verifier_allow_incomplete_skips_absent_raw_logs(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    for path in tmp_path.glob("results/inspect/logs/*.eval"):
+        path.unlink()
+
+    assert verifier.verify_release(release, figures, allow_incomplete=True) == []
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=False)
+
+    assert any("status=unreadable expected success" in error for error in errors)
+
+
 def test_unimoral_completion_verifier_allow_incomplete_keeps_structural_checks(tmp_path, monkeypatch):
     _set_tiny_verifier_constants(monkeypatch)
     release, figures = _write_minimal_complete_artifacts(tmp_path)

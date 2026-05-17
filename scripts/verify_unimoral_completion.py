@@ -200,6 +200,16 @@ def _manifest_path_exists(path_text: str, release_dir: Path, figure_dir: Path) -
     return any(candidate.exists() for candidate in candidates)
 
 
+def _any_referenced_log_exists(full_rows: list[dict[str, str]], release_dir: Path) -> bool:
+    for row in full_rows:
+        if row.get("task_name") not in PREDICTION_TASKS:
+            continue
+        for path_text in str(row.get("log_path") or "").split(";"):
+            if path_text and _resolve_release_path(path_text, release_dir).exists():
+                return True
+    return False
+
+
 def _message_pair(message: str) -> tuple[str, str] | None:
     parts = message.split(maxsplit=2)
     if len(parts) < 2:
@@ -321,6 +331,7 @@ def verify_release(
         for row in coverage_rows
         if row.get("task_name") in PREDICTION_TASKS and row.get("status") != "complete"
     }
+    referenced_logs_available = _any_referenced_log_exists(full_rows, release_dir)
 
     expected_pairs = {(line, task) for line in MODEL_LINES for task in TASKS}
     actual_pairs = {(row["line_label"], row["task_name"]) for row in full_rows}
@@ -357,6 +368,8 @@ def verify_release(
             log_paths = [path for path in str(row.get("log_path") or "").split(";") if path]
             if not log_paths:
                 fail(errors, f"{row['line_label']} {task_name} missing Inspect log_path")
+            if allow_incomplete and not referenced_logs_available:
+                continue
             for path_text in log_paths:
                 path = _resolve_release_path(path_text, release_dir)
                 status = _eval_status(path)
