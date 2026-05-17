@@ -14,6 +14,7 @@ Objective: complete UniMoral RQ2/RQ3/RQ4 for the existing release model set, upd
 | Known failures are empty | `unimoral-failure-checklist.csv` | 5 rows: MiniMax-S unimoral_moral_typology complete_recovered_logs 3492/3492 parsed=3383; MiniMax-S unimoral_factor_attribution complete_parse_gap 3492/3492 parsed=719; MiniMax-M unimoral_consequence_generation complete_recovered_logs 1782/1782 parsed=1770; MiniMax-L unimoral_factor_attribution partial 1800/3492 parsed=1784; MiniMax-L unimoral_consequence_generation partial 0/1782 parsed=0. | incomplete |
 | Figures and release docs rebuild from tracked artifacts | `scripts/build_unimoral_artifacts.py`, `make audit` | Structural release gate allows documented incomplete cells until MiniMax blockers are resolved. | covered with caveat |
 | MiniMax is not run without explicit authorization | `scripts/run_unimoral_missing_tasks.sh`, `tests/test_provider_config.py` | Non-dry-run MiniMax lines require `UNIMORAL_ALLOW_MINIMAX=1`; current user instruction forbids MiniMax runs. | guarded |
+| Secrets or credentials are not introduced | Branch diff credential-pattern scan against `origin/main...HEAD` | No literal provider keys or tokens were found; provider key references are environment-variable names only. | covered |
 | Clean committed branch | `git status --short --branch`, `git rev-list --left-right --count HEAD...@{upstream}` | Verify after commit/push. | pending at generation time |
 
 ## Completion Gate
