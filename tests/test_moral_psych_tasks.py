@@ -588,6 +588,8 @@ def test_unimoral_minimax_resume_plan_registers_handoff_artifact(tmp_path):
     assert "without granting permission to run MiniMax" in plan
     assert "`MiniMax-L` | `unimoral_factor_attribution`" in plan
     assert "`MiniMax-S` | `unimoral_consequence_generation` | `parse_gap_dry_run`" in plan
+    assert "Do not infer labels from hidden reasoning" in plan
+    assert "2773 unparseable saved samples; all reasoning-only completions" in plan
     assert "UNIMORAL_RERUN_UNPARSED_MAX_GAP=3" in plan
     assert "0 1782" in plan
 

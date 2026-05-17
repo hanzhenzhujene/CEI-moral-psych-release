@@ -18,6 +18,20 @@ Run these only after MiniMax runs are explicitly allowed and a valid `OPENROUTER
 
 Rows marked `parse_gap_dry_run` were not severe enough to appear in `unimoral-failure-checklist.csv`, but the provider-free launcher dry-run still found parse-limited samples worth replacing during the MiniMax cleanup pass.
 
+## Parser Recovery Audit
+
+A provider-free scan of the remaining MiniMax gaps found no safe scorer-only recovery path. Do not infer labels from hidden reasoning, prompt context, model IDs, or incomplete visible fragments.
+
+| Line | Task | Unrecoverable saved-state evidence |
+| --- | --- | --- |
+| `MiniMax-S` | `unimoral_moral_typology` | 109 unparseable saved samples; all reasoning-only completions |
+| `MiniMax-S` | `unimoral_factor_attribution` | 2773 unparseable saved samples; all reasoning-only completions |
+| `MiniMax-S` | `unimoral_consequence_generation` | 1 unparseable saved sample; reasoning-only completion |
+| `MiniMax-M` | `unimoral_factor_attribution` | 1 unparseable saved sample; reasoning-only completion |
+| `MiniMax-M` | `unimoral_consequence_generation` | 12 unparseable saved samples; 3 reasoning-only and 9 provider/error-text records |
+| `MiniMax-L` | `unimoral_factor_attribution` | 1692 missing samples plus 16 unparseable saved samples; remaining saved gaps are provider/error-text records or one incomplete visible fragment |
+| `MiniMax-L` | `unimoral_consequence_generation` | 1782 missing samples; no usable saved samples to recover |
+
 ## Dry-Run Check
 
 Use this before any provider call to refresh the planned ranges:
