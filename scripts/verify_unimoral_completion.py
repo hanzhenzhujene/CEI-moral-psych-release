@@ -612,6 +612,10 @@ def verify_release(
                 "Prompt-to-Artifact Checklist",
                 "Strict completion is",
                 "No MiniMax provider calls are made by generating this audit.",
+                "Clean committed branch",
+                "`git status --short --branch`",
+                "`git rev-list --left-right --count HEAD...@{upstream}`",
+                "external final check",
             ]
             for phrase in required_phrases:
                 if phrase not in completion_audit_text:

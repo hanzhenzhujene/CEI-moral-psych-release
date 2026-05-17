@@ -115,6 +115,9 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         "Status: **achieved**.\n\n"
         "## Prompt-to-Artifact Checklist\n\n"
         "Strict completion is achieved in this fixture.\n\n"
+        "| Clean committed branch | `git status --short --branch`, "
+        "`git rev-list --left-right --count HEAD...@{upstream}` | "
+        "Post-generation check required. | external final check |\n\n"
         "No MiniMax provider calls are made by generating this audit.\n",
         encoding="utf-8",
     )
@@ -295,6 +298,26 @@ def test_unimoral_completion_verifier_passes_complete_artifacts(tmp_path, monkey
     assert verifier.verify_release(release, figures, allow_incomplete=False) == []
 
 
+def test_unimoral_completion_verifier_checks_branch_audit_contract(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    audit_path = release / "unimoral-completion-audit.md"
+    audit_path.write_text(
+        "# UniMoral Completion Audit\n\n"
+        "Status: **achieved**.\n\n"
+        "## Prompt-to-Artifact Checklist\n\n"
+        "Strict completion is achieved in this fixture.\n\n"
+        "No MiniMax provider calls are made by generating this audit.\n",
+        encoding="utf-8",
+    )
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=False)
+
+    assert any("Clean committed branch" in error for error in errors)
+
+
 def test_unimoral_completion_verifier_fails_incomplete_status(tmp_path, monkeypatch):
     _set_tiny_verifier_constants(monkeypatch)
     release, figures = _write_minimal_complete_artifacts(tmp_path)
@@ -384,6 +407,9 @@ def test_unimoral_completion_verifier_allow_incomplete_keeps_structural_checks(t
         "Status: **not achieved**.\n\n"
         "## Prompt-to-Artifact Checklist\n\n"
         "Strict completion is blocked in this fixture.\n\n"
+        "| Clean committed branch | `git status --short --branch`, "
+        "`git rev-list --left-right --count HEAD...@{upstream}` | "
+        "Post-generation check required. | external final check |\n\n"
         "No MiniMax provider calls are made by generating this audit.\n",
         encoding="utf-8",
     )
