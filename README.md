@@ -507,6 +507,7 @@ This is the default reproducibility path for the research deliverable. It instal
 It does **not** require `.env`, API keys, or local benchmark datasets.
 
 For UniMoral-specific provider-free checks, `make verify-unimoral-task-builders` verifies the RQ1-RQ4 registry entries with a tiny temporary fixture, and `make verify-unimoral-artifacts` checks the generated full-benchmark artifacts while allowing documented incomplete cells.
+For provider-free planning of the remaining MiniMax UniMoral cells, `make unimoral-missing-plan` prints the dry-run ranges without granting MiniMax execution permission.
 The UniMoral artifact builder can refresh docs and figures from the tracked UniMoral CSVs when the ignored raw `.eval` logs are not present.
 
 ### 2. Live benchmark smoke test

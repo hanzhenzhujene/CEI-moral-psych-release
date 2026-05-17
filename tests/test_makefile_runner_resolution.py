@@ -305,6 +305,39 @@ def test_makefile_verify_unimoral_artifacts_uses_allow_incomplete(tmp_path: Path
     assert "fake-python invoked scripts/verify_unimoral_completion.py --allow-incomplete" in result.stdout
 
 
+def test_makefile_unimoral_missing_plan_is_provider_free(tmp_path: Path) -> None:
+    fake_python = _write_fake_executable(
+        tmp_path / "fake-python",
+        "#!/bin/sh\nprintf 'fake-python invoked %s\\n' \"$*\"\n",
+    )
+
+    result = subprocess.run(
+        [
+            "make",
+            "-f",
+            str(MAKEFILE),
+            "-n",
+            "unimoral-missing-plan",
+            "UV=definitely-not-a-real-uv",
+            f"VENV_PYTHON={fake_python}",
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0
+    assert "UNIMORAL_DRY_RUN=1" in result.stdout
+    assert "FORCE_RERUN=1" in result.stdout
+    assert "UNIMORAL_RERUN_UNPARSED=1" in result.stdout
+    assert "UNIMORAL_RERUN_UNPARSED_MAX_GAP=3" in result.stdout
+    assert "UNIMORAL_ROUTE_MODE=openrouter" in result.stdout
+    assert "MODEL_FILTER='MiniMax-S,MiniMax-M,MiniMax-L'" in result.stdout
+    assert f'VENV_PYTHON="{fake_python}"' in result.stdout
+    assert "scripts/run_unimoral_missing_tasks.sh" in result.stdout
+    assert "UNIMORAL_ALLOW_MINIMAX=1" not in result.stdout
+
+
 def test_makefile_unimoral_bertscore_uses_fallback_python_and_rebuilds_artifacts(tmp_path: Path) -> None:
     fake_python = _write_fake_executable(
         tmp_path / "fake-python",

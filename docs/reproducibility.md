@@ -164,6 +164,10 @@ For provider-free coverage of the full UniMoral registry, run
 artifacts, `make verify-unimoral-artifacts` checks the generated RQ1-RQ4 tables,
 sample predictions, BERTScore export, figures, manifest entries, and documented
 failure checklist.
+For provider-free planning of the remaining UniMoral MiniMax cells, run
+`make unimoral-missing-plan`; it wraps the missing-task launcher with
+`UNIMORAL_DRY_RUN=1` and prints planned ranges without granting MiniMax execution
+permission.
 
 ### Expected Output Location
 

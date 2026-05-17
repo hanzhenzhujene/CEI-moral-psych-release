@@ -11020,7 +11020,7 @@ def build_release_readme(
             "make audit",
             "```",
             "",
-            "`make release` rebuilds this public package from the tracked source snapshot. `make audit` runs the public QA gate and rebuilds the package together, but it is not the strict UniMoral completion gate; use `make verify-unimoral` for that.",
+            "`make release` rebuilds this public package from the tracked source snapshot. `make audit` runs the public QA gate and rebuilds the package together, but it is not the strict UniMoral completion gate; use `make verify-unimoral` for that. `make unimoral-missing-plan` is the provider-free dry-run preflight for the remaining MiniMax UniMoral cells.",
         ]
     )
     return "\n".join(lines) + "\n"

@@ -1,4 +1,4 @@
-.PHONY: help bootstrap setup ensure-runner test release refresh-authoritative smoke audit verify-unimoral verify-unimoral-artifacts verify-unimoral-task-builders unimoral-bertscore clean-release
+.PHONY: help bootstrap setup ensure-runner test release refresh-authoritative smoke audit verify-unimoral verify-unimoral-artifacts verify-unimoral-task-builders unimoral-missing-plan unimoral-bertscore clean-release
 
 RELEASE_DIR := results/release/2026-04-19-option1
 RELEASE_SOURCE := $(RELEASE_DIR)/source/authoritative-summary.csv
@@ -30,6 +30,7 @@ help:
 	@echo "  make verify-unimoral  Strict UniMoral RQ1-RQ4 completion gate; fails while documented incomplete cells remain"
 	@echo "  make verify-unimoral-artifacts  Structural UniMoral artifact gate allowing documented incomplete cells"
 	@echo "  make verify-unimoral-task-builders  Provider-free task-builder dry run for UniMoral registry entries"
+	@echo "  make unimoral-missing-plan  Provider-free MiniMax missing-cell dry run; prints planned ranges only"
 	@echo "  make unimoral-bertscore  Optional offline RQ4 BERTScore pass, then rebuild UniMoral artifacts"
 	@echo "  make clean-release Remove generated release tables and figures"
 
@@ -78,6 +79,16 @@ verify-unimoral-artifacts: ensure-runner
 
 verify-unimoral-task-builders: ensure-runner
 	$(RUN_PYTHON) scripts/verify_unimoral_task_builders.py
+
+unimoral-missing-plan: ensure-runner
+	UNIMORAL_DRY_RUN=1 \
+	FORCE_RERUN=1 \
+	UNIMORAL_RERUN_UNPARSED=1 \
+	UNIMORAL_RERUN_UNPARSED_MAX_GAP=3 \
+	UNIMORAL_ROUTE_MODE=openrouter \
+	MODEL_FILTER='MiniMax-S,MiniMax-M,MiniMax-L' \
+	VENV_PYTHON="$(VENV_PYTHON)" \
+	scripts/run_unimoral_missing_tasks.sh
 
 unimoral-bertscore: ensure-runner
 	$(RUN_PYTHON) scripts/compute_unimoral_bertscore.py \
