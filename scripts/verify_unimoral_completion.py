@@ -615,6 +615,8 @@ def verify_release(
                 "Clean committed branch",
                 "`git status --short --branch`",
                 "`git rev-list --left-right --count HEAD...@{upstream}`",
+                "0/0 ahead-behind",
+                "final operator report",
                 "external final check",
             ]
             for phrase in required_phrases:

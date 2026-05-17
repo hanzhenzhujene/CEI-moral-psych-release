@@ -117,7 +117,8 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         "Strict completion is achieved in this fixture.\n\n"
         "| Clean committed branch | `git status --short --branch`, "
         "`git rev-list --left-right --count HEAD...@{upstream}` | "
-        "Post-generation check required. | external final check |\n\n"
+        "Post-generation check required: the final operator report must cite "
+        "clean status and 0/0 ahead-behind after the last push. | external final check |\n\n"
         "No MiniMax provider calls are made by generating this audit.\n",
         encoding="utf-8",
     )
@@ -409,7 +410,8 @@ def test_unimoral_completion_verifier_allow_incomplete_keeps_structural_checks(t
         "Strict completion is blocked in this fixture.\n\n"
         "| Clean committed branch | `git status --short --branch`, "
         "`git rev-list --left-right --count HEAD...@{upstream}` | "
-        "Post-generation check required. | external final check |\n\n"
+        "Post-generation check required: the final operator report must cite "
+        "clean status and 0/0 ahead-behind after the last push. | external final check |\n\n"
         "No MiniMax provider calls are made by generating this audit.\n",
         encoding="utf-8",
     )
