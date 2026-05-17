@@ -440,6 +440,87 @@ def test_unimoral_completion_verifier_allow_incomplete_keeps_structural_checks(t
     assert any("has rq=WRONG" in error for error in errors)
 
 
+def test_unimoral_completion_verifier_fails_stale_csv_blocker_audit(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+    _write_overview_metadata(release, documented_incomplete=True)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    for row in rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "partial"
+            row["completed_samples"] = "1"
+            row["parsed_count"] = "1"
+            row["accuracy"] = ""
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+
+    coverage_rows = list(csv.DictReader((release / "unimoral-coverage.csv").open(newline="", encoding="utf-8")))
+    for row in coverage_rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "incomplete"
+            row["complete_model_lines"] = "0"
+            row["reported_model_lines"] = "0"
+    _write_csv(release / "unimoral-coverage.csv", coverage_rows, list(coverage_rows[0]))
+
+    prediction_rows = list(csv.DictReader((release / "unimoral-sample-predictions.csv").open(newline="", encoding="utf-8")))
+    _write_csv(release / "unimoral-sample-predictions.csv", prediction_rows[:1], list(prediction_rows[0]))
+    _write_csv(
+        release / "unimoral-failure-checklist.csv",
+        [
+            {
+                "line_label": "Line-A",
+                "task_name": "unimoral_moral_typology",
+                "status": "partial",
+                "completed_samples": "1",
+                "expected_samples": "2",
+                "parsed_count": "1",
+                "category": "runtime",
+                "reason": "fixture incomplete",
+                "next_action": "rerun fixture",
+                "log_path": "results/inspect/logs/example.eval",
+            }
+        ],
+        [
+            "line_label",
+            "task_name",
+            "status",
+            "completed_samples",
+            "expected_samples",
+            "parsed_count",
+            "category",
+            "reason",
+            "next_action",
+            "log_path",
+        ],
+    )
+    tmp_path.joinpath("README.md").write_text("current model-line matrix is not yet fully complete\n", encoding="utf-8")
+    release.joinpath("unimoral-completion-audit.md").write_text(
+        "# UniMoral Completion Audit\n\n"
+        "Status: **not achieved**.\n\n"
+        "## Prompt-to-Artifact Checklist\n\n"
+        "Strict completion is blocked in this fixture.\n\n"
+        "| MiniMax is not run without explicit authorization | "
+        "`make unimoral-missing-plan` | `make unimoral-missing-plan` is "
+        "dry-run only; non-dry-run MiniMax lines require "
+        "`UNIMORAL_ALLOW_MINIMAX=1`. | guarded |\n\n"
+        "| Clean committed branch | `git status --short --branch`, "
+        "`git rev-list --left-right --count HEAD...@{upstream}` | "
+        "Post-generation check required: the final operator report must cite "
+        "clean status and 0/0 ahead-behind after the last push. | external final check |\n\n"
+        "## CSV-Level Strict Blockers\n\n"
+        "Total strict sample prediction gap: **0** rows.\n\n"
+        "No CSV-level strict blockers remain; `scripts/verify_unimoral_completion.py` remains the source of truth.\n\n"
+        "No MiniMax provider calls are made by generating this audit.\n",
+        encoding="utf-8",
+    )
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("missing current strict prediction gap" in error for error in errors)
+    assert any("missing CSV blocker phrase" in error for error in errors)
+
+
 def test_unimoral_completion_verifier_allow_incomplete_fails_duplicate_predictions(tmp_path, monkeypatch):
     _set_tiny_verifier_constants(monkeypatch)
     release, figures = _write_minimal_complete_artifacts(tmp_path)
