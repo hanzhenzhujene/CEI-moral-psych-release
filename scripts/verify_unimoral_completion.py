@@ -616,6 +616,11 @@ def verify_release(
             for phrase in required_phrases:
                 if phrase not in completion_audit_text:
                     fail(errors, f"unimoral-completion-audit.md missing required phrase: {phrase!r}")
+            strict_complete = not failure_rows and not incomplete_tasks
+            if strict_complete and "Status: **achieved**." not in completion_audit_text:
+                fail(errors, "unimoral-completion-audit.md does not mark strict-complete artifacts as achieved")
+            if not strict_complete and "Status: **not achieved**." not in completion_audit_text:
+                fail(errors, "unimoral-completion-audit.md does not mark incomplete artifacts as not achieved")
 
     stale_phrases = [
         "current model-line matrix is not yet fully complete",

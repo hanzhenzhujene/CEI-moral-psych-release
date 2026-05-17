@@ -379,6 +379,14 @@ def test_unimoral_completion_verifier_allow_incomplete_keeps_structural_checks(t
         ],
     )
     tmp_path.joinpath("README.md").write_text("current model-line matrix is not yet fully complete\n", encoding="utf-8")
+    release.joinpath("unimoral-completion-audit.md").write_text(
+        "# UniMoral Completion Audit\n\n"
+        "Status: **not achieved**.\n\n"
+        "## Prompt-to-Artifact Checklist\n\n"
+        "Strict completion is blocked in this fixture.\n\n"
+        "No MiniMax provider calls are made by generating this audit.\n",
+        encoding="utf-8",
+    )
 
     assert verifier.verify_release(release, figures, allow_incomplete=True) == []
 
