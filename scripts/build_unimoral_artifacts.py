@@ -1242,7 +1242,7 @@ def write_completion_audit(
         "| Known failures are empty | `unimoral-failure-checklist.csv` | "
         + f"{len(failures)} rows: {failure_summary}. | incomplete |",
         "| Figures and release docs rebuild from tracked artifacts | `scripts/build_unimoral_artifacts.py`, `make audit` | Structural release gate allows documented incomplete cells until MiniMax blockers are resolved. | covered with caveat |",
-        "| MiniMax is not run without explicit authorization | `scripts/run_unimoral_missing_tasks.sh`, `tests/test_provider_config.py` | Non-dry-run MiniMax lines require `UNIMORAL_ALLOW_MINIMAX=1`; current user instruction forbids MiniMax runs. | guarded |",
+        "| MiniMax is not run without explicit authorization | `make unimoral-missing-plan`, `scripts/run_unimoral_missing_tasks.sh`, `tests/test_provider_config.py` | `make unimoral-missing-plan` is dry-run only; non-dry-run MiniMax lines require `UNIMORAL_ALLOW_MINIMAX=1`; current user instruction forbids MiniMax runs. | guarded |",
         "| Secrets or credentials are not introduced | Branch diff credential-pattern scan against `origin/main...HEAD` | No literal provider keys or tokens were found; provider key references are environment-variable names only. | covered |",
         "| Clean committed branch | `git status --short --branch`, `git rev-list --left-right --count HEAD...@{upstream}` | Post-generation check required: this generated artifact cannot prove the final commit/push state; the final operator report must cite clean status and 0/0 ahead-behind after the last push. | external final check |",
         "",
