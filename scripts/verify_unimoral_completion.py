@@ -392,6 +392,39 @@ def verify_release(
     if len(actual_pairs) != len(full_rows):
         fail(errors, "unimoral-full-benchmark.csv contains duplicate model-task rows")
 
+    coverage_by_task = {row["task_name"]: row for row in coverage_rows}
+    if len(coverage_by_task) != len(coverage_rows):
+        fail(errors, "unimoral-coverage.csv contains duplicate task rows")
+    coverage_tasks = set(coverage_by_task)
+    missing_coverage_tasks = sorted(set(TASKS) - coverage_tasks)
+    extra_coverage_tasks = sorted(coverage_tasks - set(TASKS))
+    if missing_coverage_tasks:
+        fail(errors, f"unimoral-coverage.csv missing task rows: {missing_coverage_tasks}")
+    if extra_coverage_tasks:
+        fail(errors, f"unimoral-coverage.csv contains unexpected task rows: {extra_coverage_tasks}")
+    for task_name, task in TASKS.items():
+        row = coverage_by_task.get(task_name)
+        if row is None:
+            continue
+        task_full_rows = [full_row for full_row in full_rows if full_row["task_name"] == task_name]
+        complete_model_lines = sum(1 for full_row in task_full_rows if full_row.get("status") == "complete")
+        reported_model_lines = sum(1 for full_row in task_full_rows if str(full_row.get("status", "")).startswith("complete"))
+        expected_coverage = {
+            "rq": task["rq"],
+            "complete_model_lines": str(complete_model_lines),
+            "reported_model_lines": str(reported_model_lines),
+            "expected_model_lines": str(len(MODEL_LINES)),
+            "expected_samples_per_model": str(task["expected"]),
+            "status": "complete" if complete_model_lines == len(MODEL_LINES) else "incomplete",
+        }
+        for field, expected_value in expected_coverage.items():
+            if row.get(field) != expected_value:
+                fail(
+                    errors,
+                    f"unimoral-coverage.csv {task_name} {field}={row.get(field)!r} "
+                    f"expected current {expected_value!r}",
+                )
+
     spread_by_task = {row["task_name"]: row for row in spread_rows}
     if len(spread_by_task) != len(spread_rows):
         fail(errors, "unimoral-task-spread.csv contains duplicate task rows")
@@ -493,7 +526,6 @@ def verify_release(
                 if status != "success":
                     fail(errors, f"{row['line_label']} {task_name} log {path_text} status={status} expected success")
 
-    coverage_by_task = {row["task_name"]: row for row in coverage_rows}
     for task_name, task in TASKS.items():
         row = coverage_by_task.get(task_name)
         if row is None:

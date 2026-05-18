@@ -573,6 +573,23 @@ def test_unimoral_completion_verifier_allow_incomplete_keeps_structural_checks(t
 
     assert verifier.verify_release(release, figures, allow_incomplete=True) == []
 
+    stale_coverage_rows = [dict(row) for row in coverage_rows]
+    for row in stale_coverage_rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "complete"
+            row["complete_model_lines"] = "1"
+            row["reported_model_lines"] = "1"
+    _write_csv(release / "unimoral-coverage.csv", stale_coverage_rows, list(stale_coverage_rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any(
+        "unimoral-coverage.csv unimoral_moral_typology status='complete' expected current 'incomplete'" in error
+        for error in errors
+    )
+
+    _write_csv(release / "unimoral-coverage.csv", coverage_rows, list(coverage_rows[0]))
+
     rows[0]["rq"] = "WRONG"
     _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
 
