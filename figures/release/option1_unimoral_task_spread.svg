@@ -1,17 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="820" height="300" viewBox="0 0 820 300">
-<style>text{font-family:Arial,sans-serif;font-size:12px}.title{font-size:18px;font-weight:700}.axis{font-weight:700}</style>
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="330" viewBox="0 0 980 330">
+<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:20px;font-weight:700}.subtitle{font-size:12px;fill:#4b5563}.axis{font-weight:700}</style>
 <rect width="100%" height="100%" fill="white"/>
-<text x="20" y="30" class="title">UniMoral task spread and saturation</text>
-<text x="35" y="84" class="axis">Action prediction</text>
-<rect x="230" y="70" width="560.0" height="20" fill="#3c78d8"/>
-<text x="800.0" y="85">range 0.121 · diagnostic</text>
-<text x="35" y="132" class="axis">Moral typology</text>
-<rect x="230" y="118" width="369.3" height="20" fill="#3c78d8"/>
-<text x="609.3" y="133">range 0.080 · moderately diagnostic</text>
-<text x="35" y="180" class="axis">Factor attribution</text>
-<rect x="230" y="166" width="103.2" height="20" fill="#3c78d8"/>
-<text x="343.2" y="181">range 0.022 · saturated</text>
-<text x="35" y="228" class="axis">Consequence generation</text>
-<rect x="230" y="214" width="373.0" height="20" fill="#3c78d8"/>
-<text x="613.0" y="229">range 0.081 · moderately diagnostic</text>
+<text x="24" y="34" class="title">UniMoral task spread and saturation</text>
+<text x="24" y="58" class="subtitle">Longer bars mean more cross-line separation; short bars indicate a task is close to saturated in the current public slice.</text>
+<text x="36" y="107" class="axis">Action prediction</text>
+<rect x="250" y="92" width="460.0" height="22" fill="#3c78d8" rx="3"/>
+<text x="732" y="108">range 0.121 · diagnostic</text>
+<text x="36" y="157" class="axis">Moral typology</text>
+<rect x="250" y="142" width="303.3" height="22" fill="#3c78d8" rx="3"/>
+<text x="732" y="158">range 0.080 · moderately diagnostic</text>
+<text x="36" y="207" class="axis">Factor attribution</text>
+<rect x="250" y="192" width="84.7" height="22" fill="#3c78d8" rx="3"/>
+<text x="732" y="208">range 0.022 · saturated</text>
+<text x="36" y="257" class="axis">Consequence generation</text>
+<rect x="250" y="242" width="306.4" height="22" fill="#3c78d8" rx="3"/>
+<text x="732" y="258">range 0.081 · moderately diagnostic</text>
 </svg>

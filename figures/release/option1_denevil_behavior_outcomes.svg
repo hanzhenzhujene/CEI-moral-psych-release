@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1780 1154" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1780 1194" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,8 +35,8 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1780" height="1154" class="canvas"/>
-<rect x="24" y="24" width="1732" height="1106" rx="22" class="panel"/>
+<rect x="0" y="0" width="1780" height="1194" class="canvas"/>
+<rect x="24" y="24" width="1732" height="1146" rx="22" class="panel"/>
 <title>DeNEVIL proxy behavioral outcomes, not accuracy</title>
 <desc>Horizontal stacked bars summarizing visible behavioral outcomes in the released DeNEVIL FULCRA-backed proxy archives. Segments show protective refusals, redirects, corrective/contextual responses, direct task answers, potentially risky continuations, ambiguous visible answers, and empty traces. This is proxy behavioral evidence, not benchmark-faithful ethical-quality scoring.</desc>
 <text x="48" y="64" class="title">DeNEVIL proxy behavioral outcomes, not accuracy</text>
@@ -291,21 +291,21 @@
 <rect x="1178.00" y="890" width="12.00" height="30" fill="#d97706" stroke="#ffffff" stroke-width="1"/>
 <text x="1214" y="906.00" class="label">Corrective / contextual response</text>
 <text x="1214" y="921.00" class="small">protective 98.3%</text>
-<rect x="48" y="974" width="1684" height="138" rx="18" class="legend-card"/>
+<rect x="48" y="974" width="1684" height="168" rx="18" class="legend-card"/>
 <text x="72" y="998" class="tiny">BEHAVIOR LEGEND</text>
-<rect x="72" y="1013" width="16" height="16" rx="4" fill="#2563eb"/>
-<text x="96" y="1025" class="small">Protective refusal</text>
-<rect x="542" y="1013" width="16" height="16" rx="4" fill="#0f766e"/>
-<text x="566" y="1025" class="small">Protective redirect</text>
-<rect x="1012" y="1013" width="16" height="16" rx="4" fill="#2f855a"/>
-<text x="1036" y="1025" class="small">Corrective / contextual response</text>
-<rect x="72" y="1043" width="16" height="16" rx="4" fill="#6b7280"/>
-<text x="96" y="1055" class="small">Direct task answer</text>
-<rect x="542" y="1043" width="16" height="16" rx="4" fill="#dc2626"/>
-<text x="566" y="1055" class="small">Potentially risky continuation</text>
-<rect x="1012" y="1043" width="16" height="16" rx="4" fill="#d97706"/>
-<text x="1036" y="1055" class="small">Ambiguous visible answer</text>
-<rect x="72" y="1073" width="16" height="16" rx="4" fill="#cbd5e1"/>
-<text x="96" y="1085" class="small">No visible answer</text>
-<text x="72" y="1088" class="body">This is the headline proxy-result view for DeNEVIL in the public release. Route names, sample counts, timestamps, and raw valid-response coverage stay in the appendix provenance figures below.</text>
+<rect x="72" y="1015" width="16" height="16" rx="4" fill="#2563eb"/>
+<text x="96" y="1027" class="small">Protective refusal</text>
+<rect x="482" y="1015" width="16" height="16" rx="4" fill="#0f766e"/>
+<text x="506" y="1027" class="small">Protective redirect</text>
+<rect x="892" y="1015" width="16" height="16" rx="4" fill="#2f855a"/>
+<text x="916" y="1027" class="small">Corrective / contextual response</text>
+<rect x="1302" y="1015" width="16" height="16" rx="4" fill="#6b7280"/>
+<text x="1326" y="1027" class="small">Direct task answer</text>
+<rect x="72" y="1047" width="16" height="16" rx="4" fill="#dc2626"/>
+<text x="96" y="1059" class="small">Potentially risky continuation</text>
+<rect x="482" y="1047" width="16" height="16" rx="4" fill="#d97706"/>
+<text x="506" y="1059" class="small">Ambiguous visible answer</text>
+<rect x="892" y="1047" width="16" height="16" rx="4" fill="#cbd5e1"/>
+<text x="916" y="1059" class="small">No visible answer</text>
+<text x="72" y="1102" class="body">This is the headline proxy-result view for DeNEVIL in the public release. Route names, sample counts, timestamps, and raw valid-response coverage stay in the appendix provenance figures below.</text>
 </svg>

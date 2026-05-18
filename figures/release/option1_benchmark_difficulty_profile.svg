@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1220 620" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1220 650" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,22 +35,22 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1220" height="620" class="canvas"/>
-<rect x="24" y="24" width="1172" height="572" rx="22" class="panel"/>
+<rect x="0" y="0" width="1220" height="650" class="canvas"/>
+<rect x="24" y="24" width="1172" height="602" rx="22" class="panel"/>
 <title>Benchmark difficulty and spread</title>
 <desc>Mean, minimum, and maximum comparable accuracy for UniMoral action prediction, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>
 <text x="48" y="64" class="title">Benchmark Difficulty And Spread</text>
 <text x="48" y="88" class="subtitle">Lower means and wider ranges indicate a harder or less stable benchmark in the current comparable slice. These summaries intentionally</text>
 <text x="48" y="108" class="subtitle">exclude proxy-only Denevil and non-comparable CCD-Bench.</text>
-<line x1="280.00" y1="158" x2="280.00" y2="482" class="guide"/>
+<line x1="280.00" y1="158" x2="280.00" y2="512" class="guide"/>
 <text x="280.00" y="148" text-anchor="middle" class="small">0%</text>
-<line x1="415.00" y1="158" x2="415.00" y2="482" class="guide"/>
+<line x1="415.00" y1="158" x2="415.00" y2="512" class="guide"/>
 <text x="415.00" y="148" text-anchor="middle" class="small">20%</text>
-<line x1="550.00" y1="158" x2="550.00" y2="482" class="guide"/>
+<line x1="550.00" y1="158" x2="550.00" y2="512" class="guide"/>
 <text x="550.00" y="148" text-anchor="middle" class="small">40%</text>
-<line x1="685.00" y1="158" x2="685.00" y2="482" class="guide"/>
+<line x1="685.00" y1="158" x2="685.00" y2="512" class="guide"/>
 <text x="685.00" y="148" text-anchor="middle" class="small">60%</text>
-<line x1="820.00" y1="158" x2="820.00" y2="482" class="guide"/>
+<line x1="820.00" y1="158" x2="820.00" y2="512" class="guide"/>
 <text x="820.00" y="148" text-anchor="middle" class="small">80%</text>
 <rect x="42" y="158" width="1136" height="82" rx="18" class="subpanel"/>
 <text x="48" y="186" class="axis">UniMoral</text>
@@ -94,9 +94,9 @@
 <text x="878" y="412" class="body">Best: MiniMax-L (74.1%)</text>
 <text x="878" y="432" class="body">Lowest: Llama-S (52.9%)</text>
 <text x="878" y="452" class="small">Spread: 21.3% absolute accuracy points</text>
-<rect x="48" y="472" width="1096" height="94" rx="18" class="legend-card"/>
+<rect x="48" y="472" width="1096" height="116" rx="18" class="legend-card"/>
 <text x="72" y="500" class="tiny">READ THIS FIGURE</text>
 <text x="72" y="524" class="body">Hardest current comparable benchmark: SMID with a mean of 36.4%.</text>
 <text x="72" y="544" class="body">Widest cross-line spread: SMID at 28.5% from low to high.</text>
-<text x="72" y="564" class="body">Tightest spread: UniMoral at 12.1%; current lines cluster closely there.</text>
+<text x="72" y="568" class="body">Tightest spread: UniMoral at 12.1%; current lines cluster closely there.</text>
 </svg>

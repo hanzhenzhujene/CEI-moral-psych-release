@@ -47,6 +47,24 @@ The figure set is intentionally split between:
 
 That split is especially important for `CCD-Bench` and `DeNEVIL`: headline figures show model behavior, while coverage, parsing, route, and trace-surfacing diagnostics stay in appendix-only visuals.
 
+## Visual QA
+
+Before pushing publication-facing figure changes, render every release SVG to PNG and inspect both a contact sheet and the key headline figures at full size. The visual pass should confirm:
+
+- no clipped labels, overlapping legend text, or family-group boxes extending past their rows
+- figure titles state the interpretation boundary (`accuracy`, `not accuracy`, `proxy`, or `appendix QA`) directly in the image
+- the first UniMoral view shows all four task surfaces (`RQ1`-`RQ4`) rather than only action prediction
+- appendix/provenance charts remain readable but do not become the primary evidence for accuracy claims
+
+One local render command used for QA is:
+
+```bash
+mkdir -p /tmp/cei-figure-qa/png
+for f in figures/release/*.svg; do
+  rsvg-convert -w 1400 -o "/tmp/cei-figure-qa/png/$(basename "$f" .svg).png" "$f"
+done
+```
+
 ## Exploratory Figures
 
 Follow-up model-sweep figures use `figures/exploratory/`.

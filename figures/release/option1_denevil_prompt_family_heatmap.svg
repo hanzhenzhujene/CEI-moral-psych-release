@@ -57,20 +57,20 @@
 <text x="1195.00" y="214" text-anchor="middle" class="tiny">political judgment</text>
 <text x="1365.00" y="198" text-anchor="middle" class="tiny">Drug or</text>
 <text x="1365.00" y="214" text-anchor="middle" class="tiny">self-endangerment</text>
-<rect x="48" y="230" width="118" height="972" rx="18" fill="#d8eeec" stroke="#0d9488" stroke-width="1.2"/>
-<text x="107.00" y="721.00" text-anchor="middle" class="label">Qwen</text>
-<rect x="48" y="1202" width="118" height="972" rx="18" fill="#f9e9d7" stroke="#d97706" stroke-width="1.2"/>
-<text x="107.00" y="1693.00" text-anchor="middle" class="label">MiniMax</text>
-<line x1="48" y1="1192.00" x2="1732" y2="1192.00" class="baseline"/>
-<rect x="48" y="2174" width="118" height="972" rx="18" fill="#dce6fc" stroke="#2563eb" stroke-width="1.2"/>
-<text x="107.00" y="2665.00" text-anchor="middle" class="label">DeepSeek</text>
-<line x1="48" y1="2164.00" x2="1732" y2="2164.00" class="baseline"/>
-<rect x="48" y="3146" width="118" height="972" rx="18" fill="#fce4d8" stroke="#ea580c" stroke-width="1.2"/>
-<text x="107.00" y="3637.00" text-anchor="middle" class="label">Llama</text>
-<line x1="48" y1="3136.00" x2="1732" y2="3136.00" class="baseline"/>
-<rect x="48" y="4118" width="118" height="972" rx="18" fill="#ece5fe" stroke="#8b5cf6" stroke-width="1.2"/>
-<text x="107.00" y="4609.00" text-anchor="middle" class="label">Gemma</text>
-<line x1="48" y1="4108.00" x2="1732" y2="4108.00" class="baseline"/>
+<rect x="48" y="230" width="118" height="162" rx="18" fill="#d8eeec" stroke="#0d9488" stroke-width="1.2"/>
+<text x="107.00" y="316.00" text-anchor="middle" class="label">Qwen</text>
+<rect x="48" y="392" width="118" height="162" rx="18" fill="#f9e9d7" stroke="#d97706" stroke-width="1.2"/>
+<text x="107.00" y="478.00" text-anchor="middle" class="label">MiniMax</text>
+<line x1="48" y1="382.00" x2="1732" y2="382.00" class="baseline"/>
+<rect x="48" y="554" width="118" height="162" rx="18" fill="#dce6fc" stroke="#2563eb" stroke-width="1.2"/>
+<text x="107.00" y="640.00" text-anchor="middle" class="label">DeepSeek</text>
+<line x1="48" y1="544.00" x2="1732" y2="544.00" class="baseline"/>
+<rect x="48" y="716" width="118" height="162" rx="18" fill="#fce4d8" stroke="#ea580c" stroke-width="1.2"/>
+<text x="107.00" y="802.00" text-anchor="middle" class="label">Llama</text>
+<line x1="48" y1="706.00" x2="1732" y2="706.00" class="baseline"/>
+<rect x="48" y="878" width="118" height="162" rx="18" fill="#ece5fe" stroke="#8b5cf6" stroke-width="1.2"/>
+<text x="107.00" y="964.00" text-anchor="middle" class="label">Gemma</text>
+<line x1="48" y1="868.00" x2="1732" y2="868.00" class="baseline"/>
 <rect x="184" y="242" width="56" height="30" rx="12" fill="#0f766e"/>
 <text x="212.00" y="263.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="263.00" class="label">Qwen-S</text>

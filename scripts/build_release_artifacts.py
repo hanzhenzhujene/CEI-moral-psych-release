@@ -8174,7 +8174,7 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
 
 
 def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
-    width, height = 1220, 620
+    width, height = 1220, 650
     axis_left, axis_width = 280, 540
     top, row_gap, row_height = 188, 112, 40
     summary_x = 860
@@ -8235,7 +8235,7 @@ def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_p
         lines.append(f'<text x="{summary_x + 18}" y="{y + 20}" class="body">Lowest: {escape_xml(row["weakest_line"])} ({fmt_pct(row["min_accuracy"])})</text>')
         lines.append(f'<text x="{summary_x + 18}" y="{y + 40}" class="small">Spread: {fmt_pct(row["spread"])} absolute accuracy points</text>')
 
-    lines.append('<rect x="48" y="472" width="1096" height="94" rx="18" class="legend-card"/>')
+    lines.append('<rect x="48" y="472" width="1096" height="116" rx="18" class="legend-card"/>')
     lines.append('<text x="72" y="500" class="tiny">READ THIS FIGURE</text>')
     lines.append(
         f'<text x="72" y="524" class="body">Hardest current comparable benchmark: {escape_xml(lowest_mean["benchmark"])} '
@@ -8246,7 +8246,7 @@ def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_p
         f'at {fmt_pct(widest_spread["spread"])} from low to high.</text>'
     )
     lines.append(
-        f'<text x="72" y="564" class="body">Tightest spread: {escape_xml(tightest_spread["benchmark"])} '
+        f'<text x="72" y="568" class="body">Tightest spread: {escape_xml(tightest_spread["benchmark"])} '
         f'at {fmt_pct(tightest_spread["spread"])}; current lines cluster closely there.</text>'
     )
 
@@ -8372,9 +8372,7 @@ def render_family_scaling_profile_svg(
                     f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{label_anchor}" class="small">{escape_xml(family + "-" + only_row["size_slot"])}</text>'
                 )
 
-        lines.append(
-            f'<text x="{panel_x + 18}" y="{panel_y + top_panel_height - 14}" class="small">Dashed connectors skip missing size slots; no point means no public comparable score.</text>'
-        )
+        lines.append(f'<text x="{panel_x + 18}" y="{panel_y + top_panel_height - 14}" class="small">Dashed lines skip missing size slots.</text>')
 
     lines.append('<rect x="48" y="644" width="1184" height="360" rx="18" class="legend-card"/>')
     lines.append('<text x="72" y="670" class="tiny">HOW TO READ THIS FIGURE</text>')
@@ -8758,7 +8756,7 @@ def render_denevil_behavior_outcomes_svg(rows: list[dict[str, Any]], output_path
     chart_right = chart_left + chart_width
     top = 218
     legend_top = top + len(rows) * (row_height + row_gap) + 36
-    height = legend_top + 180
+    height = legend_top + 220
 
     lines = svg_header(width, height)
     lines.extend(
@@ -8850,16 +8848,16 @@ def render_denevil_behavior_outcomes_svg(rows: list[dict[str, Any]], output_path
             f'<text x="{chart_right + 24}" y="{y_center + 16:.2f}" class="small">protective {fmt_pct(row["protective_response_rate"], 1) or "n/a"}</text>'
         )
 
-    lines.append(f'<rect x="48" y="{legend_top}" width="{width - 96}" height="138" rx="18" class="legend-card"/>')
+    lines.append(f'<rect x="48" y="{legend_top}" width="{width - 96}" height="168" rx="18" class="legend-card"/>')
     lines.append(f'<text x="72" y="{legend_top + 24}" class="tiny">BEHAVIOR LEGEND</text>')
     for index, behavior_label in enumerate(DENEVIL_BEHAVIOR_ORDER):
-        x = 72 + (index % 3) * 470
-        y = legend_top + 50 + (index // 3) * 30
+        x = 72 + (index % 4) * 410
+        y = legend_top + 52 + (index // 4) * 32
         fill = DENEVIL_BEHAVIOR_COLORS[behavior_label]
         lines.append(f'<rect x="{x}" y="{y - 11}" width="16" height="16" rx="4" fill="{fill}"/>')
         lines.append(f'<text x="{x + 24}" y="{y + 1}" class="small">{escape_xml(behavior_label)}</text>')
     lines.append(
-        f'<text x="72" y="{legend_top + 114}" class="body">This is the headline proxy-result view for DeNEVIL in the public release. Route names, sample counts, timestamps, and raw valid-response coverage stay in the appendix provenance figures below.</text>'
+        f'<text x="72" y="{legend_top + 128}" class="body">This is the headline proxy-result view for DeNEVIL in the public release. Route names, sample counts, timestamps, and raw valid-response coverage stay in the appendix provenance figures below.</text>'
     )
 
     lines.append("</svg>")
@@ -8925,7 +8923,18 @@ def render_denevil_prompt_family_heatmap_svg(rows: list[dict[str, Any]], output_
                 f'<text x="{x + cell_width / 2:.2f}" y="{chart_top - 38 + header_index * 16}" text-anchor="middle" class="tiny">{escape_xml(header_line)}</text>'
             )
 
-    group_spans = family_group_spans(rows, family_key="model_family")
+    line_meta = []
+    for line_label in line_order:
+        cells = grouped.get(line_label, {})
+        family_name = next((cell["model_family"] for cell in cells.values()), "")
+        size_slot = next((cell["size_slot"] for cell in cells.values()), "")
+        if not family_name:
+            family_name = next((row["model_family"] for row in rows if row["model_line"] == line_label), "")
+        if not size_slot:
+            size_slot = next((row["size_slot"] for row in rows if row["model_line"] == line_label), "")
+        line_meta.append({"model_line": line_label, "model_family": family_name, "size_slot": size_slot})
+
+    group_spans = family_group_spans(line_meta, family_key="model_family")
     for family, start_index, end_index in group_spans:
         group_y = chart_top + start_index * (row_height + row_gap) - 6
         group_height = (end_index - start_index + 1) * row_height + (end_index - start_index) * row_gap + 12

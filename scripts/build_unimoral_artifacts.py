@@ -1068,19 +1068,20 @@ def svg_rankings(rankings: list[dict[str, object]], path: Path) -> None:
 
 
 def svg_spread(spreads: list[dict[str, object]], path: Path) -> None:
-    width, height = 820, 300
+    width, height = 980, 330
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
-    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px}.title{font-size:18px;font-weight:700}.axis{font-weight:700}</style>")
+    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:20px;font-weight:700}.subtitle{font-size:12px;fill:#4b5563}.axis{font-weight:700}</style>")
     parts.append('<rect width="100%" height="100%" fill="white"/>')
-    parts.append('<text x="20" y="30" class="title">UniMoral task spread and saturation</text>')
+    parts.append('<text x="24" y="34" class="title">UniMoral task spread and saturation</text>')
+    parts.append('<text x="24" y="58" class="subtitle">Longer bars mean more cross-line separation; short bars indicate a task is close to saturated in the current public slice.</text>')
     max_range = max((float(row["range"]) for row in spreads if row["range"] != ""), default=1.0)
     for idx, row in enumerate(spreads):
-        y = 70 + idx * 48
+        y = 92 + idx * 50
         spread = 0.0 if row["range"] == "" else float(row["range"])
-        bar_w = 560 * spread / max_range if max_range else 0
-        parts.append(f'<text x="35" y="{y + 14}" class="axis">{html.escape(str(row["task_label"]))}</text>')
-        parts.append(f'<rect x="230" y="{y}" width="{bar_w:.1f}" height="20" fill="#3c78d8"/>')
-        parts.append(f'<text x="{240 + bar_w:.1f}" y="{y + 15}">range {spread:.3f} · {html.escape(str(row["diagnostic_read"]))}</text>')
+        bar_w = 460 * spread / max_range if max_range else 0
+        parts.append(f'<text x="36" y="{y + 15}" class="axis">{html.escape(str(row["task_label"]))}</text>')
+        parts.append(f'<rect x="250" y="{y}" width="{bar_w:.1f}" height="22" fill="#3c78d8" rx="3"/>')
+        parts.append(f'<text x="732" y="{y + 16}">range {spread:.3f} · {html.escape(str(row["diagnostic_read"]))}</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
