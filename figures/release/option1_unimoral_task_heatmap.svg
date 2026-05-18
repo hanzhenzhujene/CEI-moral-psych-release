@@ -40,7 +40,7 @@
 <text x="406" y="230" class="axis">0.647</text>
 <rect x="612" y="204" width="212" height="34" fill="#c5e2e2" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="230" class="axis">0.563</text>
-<rect x="832" y="204" width="212" height="34" fill="#3e9ea0" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="204" width="212" height="34" fill="#f1f8f8" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="230" class="axis">0.561</text>
 <rect x="150" y="251" width="58" height="26" fill="#2f6f9f" rx="13"/>
 <text x="179.0" y="270" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
@@ -49,7 +49,7 @@
 <text x="406" y="272" class="axis">0.665</text>
 <rect x="612" y="246" width="212" height="34" fill="#50a7a8" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="272" class="axis">0.589</text>
-<rect x="832" y="246" width="212" height="34" fill="#2d9597" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="246" width="212" height="34" fill="#6fb7b8" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="272" class="axis">0.605</text>
 <rect x="150" y="293" width="58" height="26" fill="#2f6f9f" rx="13"/>
 <text x="179.0" y="312" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
@@ -58,17 +58,17 @@
 <text x="406" y="314" class="axis">0.665</text>
 <rect x="612" y="288" width="212" height="34" fill="#2d9597" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="314" class="axis">0.597</text>
-<rect x="832" y="288" width="212" height="34" fill="#2c9597" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="288" width="212" height="34" fill="#63b0b2" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="314" class="axis">0.609</text>
 <rect x="150" y="335" width="58" height="26" fill="#8a5a44" rx="13"/>
 <text x="179.0" y="354" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
 <text x="228" y="355" class="axis">MiniMax-S</text>
 <rect x="392" y="330" width="212" height="34" fill="#4aa4a5" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="406" y="356" class="axis">0.661</text>
-<rect x="612" y="330" width="212" height="34" fill="#d4e9e9" stroke="#d97706" stroke-width="1.2" stroke-dasharray="5 3" rx="4"/>
-<text x="626" y="356" class="axis">0.560*</text>
-<rect x="832" y="330" width="212" height="34" fill="#f1f8f8" stroke="#d97706" stroke-width="1.2" stroke-dasharray="5 3" rx="4"/>
-<text x="846" y="356" class="axis">0.090*</text>
+<rect x="612" y="330" width="212" height="34" fill="#f2f2f2" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<text x="626" y="356" class="axis">n/a</text>
+<rect x="832" y="330" width="212" height="34" fill="#f2f2f2" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<text x="846" y="356" class="axis">n/a</text>
 <rect x="150" y="377" width="58" height="26" fill="#8a5a44" rx="13"/>
 <text x="179.0" y="396" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
 <text x="228" y="397" class="axis">MiniMax-M</text>
@@ -76,7 +76,7 @@
 <text x="406" y="398" class="axis">0.659</text>
 <rect x="612" y="372" width="212" height="34" fill="#5aacae" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="398" class="axis">0.586</text>
-<rect x="832" y="372" width="212" height="34" fill="#2f9698" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="372" width="212" height="34" fill="#7dbdbf" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="398" class="axis">0.600</text>
 <rect x="150" y="419" width="58" height="26" fill="#8a5a44" rx="13"/>
 <text x="179.0" y="438" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
@@ -85,8 +85,8 @@
 <text x="406" y="440" class="axis">0.661</text>
 <rect x="612" y="414" width="212" height="34" fill="#73b9ba" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="440" class="axis">0.581</text>
-<rect x="832" y="414" width="212" height="34" fill="#399c9d" stroke="#d97706" stroke-width="1.2" stroke-dasharray="5 3" rx="4"/>
-<text x="846" y="440" class="axis">0.573*</text>
+<rect x="832" y="414" width="212" height="34" fill="#f2f2f2" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<text x="846" y="440" class="axis">n/a</text>
 <rect x="150" y="461" width="58" height="26" fill="#4f7d45" rx="13"/>
 <text x="179.0" y="480" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
 <text x="228" y="481" class="axis">DeepSeek-S</text>
@@ -94,7 +94,7 @@
 <text x="406" y="482" class="axis">0.661</text>
 <rect x="612" y="456" width="212" height="34" fill="#4da5a7" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="482" class="axis">0.589</text>
-<rect x="832" y="456" width="212" height="34" fill="#3d9d9f" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="456" width="212" height="34" fill="#e8f3f3" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="482" class="axis">0.564</text>
 <rect x="150" y="503" width="58" height="26" fill="#4f7d45" rx="13"/>
 <text x="179.0" y="522" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
@@ -103,7 +103,7 @@
 <text x="406" y="524" class="axis">0.684</text>
 <rect x="612" y="498" width="212" height="34" fill="#e5f2f2" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="524" class="axis">0.556</text>
-<rect x="832" y="498" width="212" height="34" fill="#319799" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="498" width="212" height="34" fill="#89c3c4" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="524" class="axis">0.596</text>
 <rect x="150" y="545" width="58" height="26" fill="#4f7d45" rx="13"/>
 <text x="179.0" y="564" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
@@ -112,7 +112,7 @@
 <text x="406" y="566" class="axis">0.563</text>
 <rect x="612" y="540" width="212" height="34" fill="#56aaac" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="566" class="axis">0.587</text>
-<rect x="832" y="540" width="212" height="34" fill="#399b9d" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="540" width="212" height="34" fill="#cae4e4" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="566" class="axis">0.574</text>
 <rect x="150" y="587" width="58" height="26" fill="#b56a33" rx="13"/>
 <text x="179.0" y="606" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
@@ -121,7 +121,7 @@
 <text x="406" y="608" class="axis">0.648</text>
 <rect x="612" y="582" width="212" height="34" fill="#269294" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="608" class="axis">0.598</text>
-<rect x="832" y="582" width="212" height="34" fill="#2f9698" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="582" width="212" height="34" fill="#7abcbd" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="608" class="axis">0.601</text>
 <rect x="150" y="629" width="58" height="26" fill="#b56a33" rx="13"/>
 <text x="179.0" y="648" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
@@ -139,7 +139,7 @@
 <text x="406" y="692" class="axis">0.660</text>
 <rect x="612" y="666" width="212" height="34" fill="#92c8c9" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="692" class="axis">0.574</text>
-<rect x="832" y="666" width="212" height="34" fill="#3c9d9e" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="666" width="212" height="34" fill="#e0efef" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="692" class="axis">0.567</text>
 <rect x="150" y="713" width="58" height="26" fill="#7b62a3" rx="13"/>
 <text x="179.0" y="732" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
@@ -148,7 +148,7 @@
 <text x="406" y="734" class="axis">0.635</text>
 <rect x="612" y="708" width="212" height="34" fill="#249193" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="734" class="axis">0.599</text>
-<rect x="832" y="708" width="212" height="34" fill="#379a9c" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="708" width="212" height="34" fill="#bbdddd" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="734" class="axis">0.579</text>
 <rect x="150" y="755" width="58" height="26" fill="#7b62a3" rx="13"/>
 <text x="179.0" y="774" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
@@ -157,7 +157,7 @@
 <text x="406" y="776" class="axis">0.663</text>
 <rect x="612" y="750" width="212" height="34" fill="#82c0c1" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="776" class="axis">0.578</text>
-<rect x="832" y="750" width="212" height="34" fill="#2f9698" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="750" width="212" height="34" fill="#7fbebf" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="776" class="axis">0.600</text>
 <rect x="150" y="797" width="58" height="26" fill="#7b62a3" rx="13"/>
 <text x="179.0" y="816" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
@@ -166,7 +166,7 @@
 <text x="406" y="818" class="axis">0.661</text>
 <rect x="612" y="792" width="212" height="34" fill="#9ececf" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="818" class="axis">0.572</text>
-<rect x="832" y="792" width="212" height="34" fill="#2a9495" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="792" width="212" height="34" fill="#53a8aa" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="818" class="axis">0.615</text>
 <rect x="150" y="839" width="58" height="26" fill="#6b7280" rx="13"/>
 <text x="179.0" y="858" text-anchor="middle" fill="#ffffff" font-weight="700">Ref</text>
@@ -175,8 +175,8 @@
 <text x="406" y="860" class="axis">0.673</text>
 <rect x="612" y="834" width="212" height="34" fill="#f1f8f8" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="626" y="860" class="axis">0.554</text>
-<rect x="832" y="834" width="212" height="34" fill="#32989a" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
+<rect x="832" y="834" width="212" height="34" fill="#94c9ca" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>
 <text x="846" y="860" class="axis">0.592</text>
 <text x="28" y="952" class="small">Rows include all public model lines plus the GPT4 reference. S/M/L are planning slots for within-family scaling, not a universal vendor taxonomy.</text>
-<text x="28" y="976" class="small">* marks reported-but-not-strict cells. This main figure uses exact-match accuracy only.</text>
+<text x="28" y="976" class="small">This main figure uses strict-complete exact-match accuracy cells only; parse gaps remain in the audit tables.</text>
 </svg>

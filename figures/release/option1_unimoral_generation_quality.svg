@@ -1,130 +1,162 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1124" viewBox="0 0 1120 1124">
-<style>text{font-family:Arial,sans-serif;font-size:15px;fill:#17202a}.title{font-size:28px;font-weight:700}.subtitle{font-size:16px;fill:#334155}.axis{font-weight:700}.small{font-size:13px;fill:#334155}.tiny{font-size:12px;fill:#475569;font-weight:700}</style>
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="1126" viewBox="0 0 1220 1126">
+<style>text{font-family:Arial,sans-serif;font-size:15px;fill:#17202a}.title{font-size:30px;font-weight:700}.metric{font-size:18px;font-weight:700;fill:#17202a}.subtitle{font-size:16px;fill:#334155}.axis{font-weight:700}.small{font-size:13px;fill:#334155}.tiny{font-size:12px;fill:#475569;font-weight:700}</style>
 <rect width="100%" height="100%" fill="white"/>
 <text x="36" y="42" class="title">UniMoral RQ4 generation quality</text>
 <text x="36" y="74" class="subtitle">RQ4 asks models to generate consequences, so it is not mixed with the RQ1-RQ3 accuracy chart.</text>
-<text x="36" y="100" class="subtitle">Primary read: BERTScore F1, a semantic similarity score where higher is better; METEOR is a lexical side metric.</text>
-<text x="258" y="124" class="tiny">BERTSCORE F1</text>
-<text x="870" y="124" class="tiny">SIDE METRIC</text>
-<line x1="258.00" y1="158" x2="258.00" y2="1046" stroke="#e5e7eb"/>
-<text x="258.00" y="150" text-anchor="middle" class="small">0.00</text>
-<line x1="444.67" y1="158" x2="444.67" y2="1046" stroke="#e5e7eb"/>
-<text x="444.67" y="150" text-anchor="middle" class="small">0.25</text>
-<line x1="631.33" y1="158" x2="631.33" y2="1046" stroke="#e5e7eb"/>
-<text x="631.33" y="150" text-anchor="middle" class="small">0.50</text>
-<line x1="818.00" y1="158" x2="818.00" y2="1046" stroke="#e5e7eb"/>
-<text x="818.00" y="150" text-anchor="middle" class="small">0.75</text>
-<text x="42" y="193" class="axis">Llama-M</text>
-<rect x="190" y="174" width="46" height="24" fill="#b56a33" rx="12"/>
-<text x="213" y="192" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
-<rect x="258" y="170" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="170" width="545.1" height="34" fill="#b56a33" rx="8"/>
-<text x="811.1" y="193" class="axis">0.730</text>
-<text x="870" y="193" class="small">METEOR 0.154</text>
-<text x="42" y="245" class="axis">Llama-S</text>
-<rect x="190" y="226" width="46" height="24" fill="#b56a33" rx="12"/>
-<text x="213" y="244" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
-<rect x="258" y="222" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="222" width="543.1" height="34" fill="#b56a33" rx="8"/>
-<text x="809.1" y="245" class="axis">0.727</text>
-<text x="870" y="245" class="small">METEOR 0.131</text>
-<text x="42" y="297" class="axis">Llama-L</text>
-<rect x="190" y="278" width="46" height="24" fill="#b56a33" rx="12"/>
-<text x="213" y="296" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
-<rect x="258" y="274" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="274" width="541.4" height="34" fill="#b56a33" rx="8"/>
-<text x="807.4" y="297" class="axis">0.725</text>
-<text x="870" y="297" class="small">METEOR 0.157</text>
-<text x="42" y="349" class="axis">Gemma-S</text>
-<rect x="190" y="330" width="46" height="24" fill="#7b62a3" rx="12"/>
-<text x="213" y="348" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
-<rect x="258" y="326" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="326" width="535.5" height="34" fill="#7b62a3" rx="8"/>
-<text x="801.5" y="349" class="axis">0.717</text>
-<text x="870" y="349" class="small">METEOR 0.092</text>
-<text x="42" y="401" class="axis">GPT4 only</text>
-<rect x="190" y="382" width="46" height="24" fill="#6b7280" rx="12"/>
-<text x="213" y="400" text-anchor="middle" fill="#ffffff" font-weight="700">Ref</text>
-<rect x="258" y="378" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="378" width="530.6" height="34" fill="#6b7280" rx="8"/>
-<text x="796.6" y="401" class="axis">0.711</text>
-<text x="870" y="401" class="small">METEOR 0.146</text>
-<text x="42" y="453" class="axis">Gemma-L</text>
-<rect x="190" y="434" width="46" height="24" fill="#7b62a3" rx="12"/>
-<text x="213" y="452" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
-<rect x="258" y="430" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="430" width="527.2" height="34" fill="#7b62a3" rx="8"/>
-<text x="793.2" y="453" class="axis">0.706</text>
-<text x="870" y="453" class="small">METEOR 0.088</text>
-<text x="42" y="505" class="axis">Gemma-M</text>
-<rect x="190" y="486" width="46" height="24" fill="#7b62a3" rx="12"/>
-<text x="213" y="504" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
-<rect x="258" y="482" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="482" width="522.1" height="34" fill="#7b62a3" rx="8"/>
-<text x="788.1" y="505" class="axis">0.699</text>
-<text x="870" y="505" class="small">METEOR 0.100</text>
-<text x="42" y="557" class="axis">Qwen-M</text>
-<rect x="190" y="538" width="46" height="24" fill="#2f6f9f" rx="12"/>
-<text x="213" y="556" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
-<rect x="258" y="534" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="534" width="521.7" height="34" fill="#2f6f9f" rx="8"/>
-<text x="787.7" y="557" class="axis">0.699</text>
-<text x="870" y="557" class="small">METEOR 0.151</text>
-<text x="42" y="609" class="axis">Qwen-S</text>
-<rect x="190" y="590" width="46" height="24" fill="#2f6f9f" rx="12"/>
-<text x="213" y="608" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
-<rect x="258" y="586" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="586" width="519.8" height="34" fill="#2f6f9f" rx="8"/>
-<text x="785.8" y="609" class="axis">0.696</text>
-<text x="870" y="609" class="small">METEOR 0.120</text>
-<text x="42" y="661" class="axis">Qwen-L</text>
-<rect x="190" y="642" width="46" height="24" fill="#2f6f9f" rx="12"/>
-<text x="213" y="660" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
-<rect x="258" y="638" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="638" width="515.7" height="34" fill="#2f6f9f" rx="8"/>
-<text x="781.7" y="661" class="axis">0.691</text>
-<text x="870" y="661" class="small">METEOR 0.135</text>
-<text x="42" y="713" class="axis">DeepSeek-S</text>
-<rect x="190" y="694" width="46" height="24" fill="#4f7d45" rx="12"/>
-<text x="213" y="712" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
-<rect x="258" y="690" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="690" width="508.3" height="34" fill="#4f7d45" rx="8"/>
-<text x="774.3" y="713" class="axis">0.681</text>
-<text x="870" y="713" class="small">METEOR 0.088</text>
-<text x="42" y="765" class="axis">MiniMax-M</text>
-<rect x="190" y="746" width="46" height="24" fill="#8a5a44" rx="12"/>
-<text x="213" y="764" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
-<rect x="258" y="742" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="742" width="476.1" height="34" fill="#8a5a44" rx="8"/>
-<text x="742.1" y="765" class="axis">0.638</text>
-<text x="870" y="765" class="small">METEOR 0.090 *</text>
-<text x="42" y="817" class="axis">DeepSeek-L</text>
-<rect x="190" y="798" width="46" height="24" fill="#4f7d45" rx="12"/>
-<text x="213" y="816" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
-<rect x="258" y="794" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="794" width="474.9" height="34" fill="#4f7d45" rx="8"/>
-<text x="740.9" y="817" class="axis">0.636</text>
-<text x="870" y="817" class="small">METEOR 0.077</text>
-<text x="42" y="869" class="axis">MiniMax-S</text>
-<rect x="190" y="850" width="46" height="24" fill="#8a5a44" rx="12"/>
-<text x="213" y="868" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
-<rect x="258" y="846" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="846" width="472.2" height="34" fill="#8a5a44" rx="8"/>
-<text x="738.2" y="869" class="axis">0.632</text>
-<text x="870" y="869" class="small">METEOR 0.078</text>
-<text x="42" y="921" class="axis">DeepSeek-M</text>
-<rect x="190" y="902" width="46" height="24" fill="#4f7d45" rx="12"/>
-<text x="213" y="920" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
-<rect x="258" y="898" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="898" width="469.6" height="34" fill="#4f7d45" rx="8"/>
-<text x="735.6" y="921" class="axis">0.629</text>
-<text x="870" y="921" class="small">METEOR 0.105</text>
-<text x="42" y="973" class="axis">MiniMax-L</text>
-<rect x="190" y="954" width="46" height="24" fill="#8a5a44" rx="12"/>
-<text x="213" y="972" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
-<rect x="258" y="950" width="560" height="34" fill="#e5e7eb" rx="8"/>
-<rect x="258" y="950" width="560" height="34" fill="#f8fafc" stroke="#c9cdd1" rx="8"/>
-<text x="808" y="973" text-anchor="end" class="small">n/a</text>
-<text x="870" y="973" class="small">METEOR n/a *</text>
-<text x="36" y="1072" class="small">* marks reported-but-not-strict cells. This figure is intentionally separate from the RQ1-RQ3 accuracy figure.</text>
+<text x="36" y="100" class="subtitle">Both metrics are higher-better. BERTScore F1 reads semantic similarity; METEOR reads lexical overlap.</text>
+<text x="36" y="124" class="subtitle">Each metric panel uses its own axis so within-metric differences are visible.</text>
+<text x="268" y="146" class="metric">BERTScore F1</text>
+<text x="804" y="146" class="metric">METEOR</text>
+<line x1="268.00" y1="178" x2="268.00" y2="1050" stroke="#e5e7eb"/>
+<text x="268.00" y="170" text-anchor="middle" class="small">0.60</text>
+<line x1="408.00" y1="178" x2="408.00" y2="1050" stroke="#e5e7eb"/>
+<text x="408.00" y="170" text-anchor="middle" class="small">0.65</text>
+<line x1="548.00" y1="178" x2="548.00" y2="1050" stroke="#e5e7eb"/>
+<text x="548.00" y="170" text-anchor="middle" class="small">0.70</text>
+<line x1="688.00" y1="178" x2="688.00" y2="1050" stroke="#e5e7eb"/>
+<text x="688.00" y="170" text-anchor="middle" class="small">0.75</text>
+<line x1="804.00" y1="178" x2="804.00" y2="1050" stroke="#e5e7eb"/>
+<text x="804.00" y="170" text-anchor="middle" class="small">0.07</text>
+<line x1="894.00" y1="178" x2="894.00" y2="1050" stroke="#e5e7eb"/>
+<text x="894.00" y="170" text-anchor="middle" class="small">0.10</text>
+<line x1="984.00" y1="178" x2="984.00" y2="1050" stroke="#e5e7eb"/>
+<text x="984.00" y="170" text-anchor="middle" class="small">0.13</text>
+<line x1="1074.00" y1="178" x2="1074.00" y2="1050" stroke="#e5e7eb"/>
+<text x="1074.00" y="170" text-anchor="middle" class="small">0.16</text>
+<text x="42" y="217" class="axis">Llama-M</text>
+<rect x="186" y="198" width="46" height="24" fill="#b56a33" rx="12"/>
+<text x="209" y="216" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="268" y="195" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="195" width="364.1" height="34" fill="#b56a33" rx="8"/>
+<text x="700" y="218" class="axis">0.730</text>
+<rect x="804" y="195" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="195" width="251.0" height="34" fill="#b56a33" opacity="0.72" rx="8"/>
+<text x="1086" y="218" class="axis">0.154</text>
+<text x="42" y="271" class="axis">Llama-S</text>
+<rect x="186" y="252" width="46" height="24" fill="#b56a33" rx="12"/>
+<text x="209" y="270" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="268" y="249" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="249" width="356.7" height="34" fill="#b56a33" rx="8"/>
+<text x="700" y="272" class="axis">0.727</text>
+<rect x="804" y="249" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="249" width="182.1" height="34" fill="#b56a33" opacity="0.72" rx="8"/>
+<text x="1086" y="272" class="axis">0.131</text>
+<text x="42" y="325" class="axis">Llama-L</text>
+<rect x="186" y="306" width="46" height="24" fill="#b56a33" rx="12"/>
+<text x="209" y="324" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="268" y="303" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="303" width="350.4" height="34" fill="#b56a33" rx="8"/>
+<text x="700" y="326" class="axis">0.725</text>
+<rect x="804" y="303" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="303" width="261.7" height="34" fill="#b56a33" opacity="0.72" rx="8"/>
+<text x="1086" y="326" class="axis">0.157</text>
+<text x="42" y="379" class="axis">Gemma-S</text>
+<rect x="186" y="360" width="46" height="24" fill="#7b62a3" rx="12"/>
+<text x="209" y="378" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="268" y="357" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="357" width="328.2" height="34" fill="#7b62a3" rx="8"/>
+<text x="700" y="380" class="axis">0.717</text>
+<rect x="804" y="357" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="357" width="67.0" height="34" fill="#7b62a3" opacity="0.72" rx="8"/>
+<text x="1086" y="380" class="axis">0.092</text>
+<text x="42" y="433" class="axis">GPT4 only</text>
+<rect x="186" y="414" width="46" height="24" fill="#6b7280" rx="12"/>
+<text x="209" y="432" text-anchor="middle" fill="#ffffff" font-weight="700">Ref</text>
+<rect x="268" y="411" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="411" width="309.9" height="34" fill="#6b7280" rx="8"/>
+<text x="700" y="434" class="axis">0.711</text>
+<rect x="804" y="411" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="411" width="228.2" height="34" fill="#6b7280" opacity="0.72" rx="8"/>
+<text x="1086" y="434" class="axis">0.146</text>
+<text x="42" y="487" class="axis">Gemma-L</text>
+<rect x="186" y="468" width="46" height="24" fill="#7b62a3" rx="12"/>
+<text x="209" y="486" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="268" y="465" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="465" width="296.9" height="34" fill="#7b62a3" rx="8"/>
+<text x="700" y="488" class="axis">0.706</text>
+<rect x="804" y="465" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="465" width="53.6" height="34" fill="#7b62a3" opacity="0.72" rx="8"/>
+<text x="1086" y="488" class="axis">0.088</text>
+<text x="42" y="541" class="axis">Gemma-M</text>
+<rect x="186" y="522" width="46" height="24" fill="#7b62a3" rx="12"/>
+<text x="209" y="540" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="268" y="519" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="519" width="277.9" height="34" fill="#7b62a3" rx="8"/>
+<text x="700" y="542" class="axis">0.699</text>
+<rect x="804" y="519" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="519" width="90.6" height="34" fill="#7b62a3" opacity="0.72" rx="8"/>
+<text x="1086" y="542" class="axis">0.100</text>
+<text x="42" y="595" class="axis">Qwen-M</text>
+<rect x="186" y="576" width="46" height="24" fill="#2f6f9f" rx="12"/>
+<text x="209" y="594" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="268" y="573" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="573" width="276.5" height="34" fill="#2f6f9f" rx="8"/>
+<text x="700" y="596" class="axis">0.699</text>
+<rect x="804" y="573" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="573" width="241.6" height="34" fill="#2f6f9f" opacity="0.72" rx="8"/>
+<text x="1086" y="596" class="axis">0.151</text>
+<text x="42" y="649" class="axis">Qwen-S</text>
+<rect x="186" y="630" width="46" height="24" fill="#2f6f9f" rx="12"/>
+<text x="209" y="648" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="268" y="627" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="627" width="269.1" height="34" fill="#2f6f9f" rx="8"/>
+<text x="700" y="650" class="axis">0.696</text>
+<rect x="804" y="627" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="627" width="149.3" height="34" fill="#2f6f9f" opacity="0.72" rx="8"/>
+<text x="1086" y="650" class="axis">0.120</text>
+<text x="42" y="703" class="axis">Qwen-L</text>
+<rect x="186" y="684" width="46" height="24" fill="#2f6f9f" rx="12"/>
+<text x="209" y="702" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="268" y="681" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="681" width="254.0" height="34" fill="#2f6f9f" rx="8"/>
+<text x="700" y="704" class="axis">0.691</text>
+<rect x="804" y="681" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="681" width="194.5" height="34" fill="#2f6f9f" opacity="0.72" rx="8"/>
+<text x="1086" y="704" class="axis">0.135</text>
+<text x="42" y="757" class="axis">DeepSeek-S</text>
+<rect x="186" y="738" width="46" height="24" fill="#4f7d45" rx="12"/>
+<text x="209" y="756" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="268" y="735" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="735" width="226.2" height="34" fill="#4f7d45" rx="8"/>
+<text x="700" y="758" class="axis">0.681</text>
+<rect x="804" y="735" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="735" width="53.9" height="34" fill="#4f7d45" opacity="0.72" rx="8"/>
+<text x="1086" y="758" class="axis">0.088</text>
+<text x="42" y="811" class="axis">MiniMax-M</text>
+<rect x="186" y="792" width="46" height="24" fill="#8a5a44" rx="12"/>
+<text x="209" y="810" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="268" y="789" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="789" width="105.3" height="34" fill="#8a5a44" rx="8"/>
+<text x="700" y="812" class="axis">0.638</text>
+<rect x="804" y="789" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="789" width="61.0" height="34" fill="#8a5a44" opacity="0.72" rx="8"/>
+<text x="1086" y="812" class="axis">0.090</text>
+<text x="42" y="865" class="axis">DeepSeek-L</text>
+<rect x="186" y="846" width="46" height="24" fill="#4f7d45" rx="12"/>
+<text x="209" y="864" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="268" y="843" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="843" width="101.0" height="34" fill="#4f7d45" rx="8"/>
+<text x="700" y="866" class="axis">0.636</text>
+<rect x="804" y="843" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="843" width="19.8" height="34" fill="#4f7d45" opacity="0.72" rx="8"/>
+<text x="1086" y="866" class="axis">0.077</text>
+<text x="42" y="919" class="axis">MiniMax-S</text>
+<rect x="186" y="900" width="46" height="24" fill="#8a5a44" rx="12"/>
+<text x="209" y="918" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="268" y="897" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="897" width="90.9" height="34" fill="#8a5a44" rx="8"/>
+<text x="700" y="920" class="axis">0.632</text>
+<rect x="804" y="897" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="897" width="24.8" height="34" fill="#8a5a44" opacity="0.72" rx="8"/>
+<text x="1086" y="920" class="axis">0.078</text>
+<text x="42" y="973" class="axis">DeepSeek-M</text>
+<rect x="186" y="954" width="46" height="24" fill="#4f7d45" rx="12"/>
+<text x="209" y="972" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="268" y="951" width="420" height="34" fill="#eef2f7" rx="8"/>
+<rect x="268" y="951" width="80.9" height="34" fill="#4f7d45" rx="8"/>
+<text x="700" y="974" class="axis">0.629</text>
+<rect x="804" y="951" width="270" height="34" fill="#eef2f7" rx="8"/>
+<rect x="804" y="951" width="103.6" height="34" fill="#4f7d45" opacity="0.72" rx="8"/>
+<text x="1086" y="974" class="axis">0.105</text>
+<text x="36" y="1074" class="small">Rows require usable BERTScore F1 and METEOR values. This figure is intentionally separate from the RQ1-RQ3 accuracy figure.</text>
 </svg>

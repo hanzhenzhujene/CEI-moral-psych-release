@@ -673,9 +673,12 @@ def sample_prediction_rows(
                 record = score_record(sample)
                 answer, answer_source = parsed_answer_for_task(task_name, sample)
                 metadata = sample.get("metadata") if isinstance(sample.get("metadata"), dict) else {}
-                score_value = record.get("value", "")
-                if score_value in {None, ""}:
+                if task_name in {"unimoral_moral_typology", "unimoral_factor_attribution"}:
                     score_value = fallback_sample_score(task_name, answer, target_list(sample))
+                else:
+                    score_value = record.get("value", "")
+                    if score_value in {None, ""}:
+                        score_value = fallback_sample_score(task_name, answer, target_list(sample))
                 rows.append(
                     {
                         "line_label": line_label,
@@ -907,20 +910,6 @@ def task_metric_ranges(rows: list[dict[str, object]]) -> dict[str, tuple[float, 
     return ranges
 
 
-def _status_suffix(row: dict[str, object] | None) -> str:
-    if not row:
-        return ""
-    return "" if row.get("status") == "complete" else "*"
-
-
-def _status_stroke(row: dict[str, object] | None) -> tuple[str, str]:
-    if not row or metric_value(row) is None:
-        return "#c9cdd1", ""
-    if row.get("status") == "complete":
-        return "#c9cdd1", ""
-    return "#d97706", " stroke-dasharray=\"5 3\""
-
-
 def complete_values(rows: list[dict[str, object]], task_name: str, field: str) -> list[float]:
     values = []
     for row in rows:
@@ -1085,7 +1074,7 @@ def svg_four_task_dashboard(
         parts.append(f'<text x="{x + 40}" y="{chip_y + 22}" class="axis">{html.escape(family)}</text>')
         parts.append(f'<text x="{x + 40}" y="{chip_y + 42}" class="small">{html.escape(label)}</text>')
     parts.append(f'<text x="60" y="{y0 + 214}" class="small">All run lines are shown in the full score heatmap and all-line ranking below: Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus GPT4 Ref.</text>')
-    parts.append(f'<text x="60" y="{y0 + 238}" class="small">* marks reported-but-not-strict cells; MiniMax remaining gaps are documented in unimoral-failure-checklist.csv.</text>')
+    parts.append(f'<text x="60" y="{y0 + 238}" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; the main figures avoid special cell markers.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
@@ -1098,7 +1087,11 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
     for task_name in task_names:
         values = [
             value
-            for value in (field_value(row, "accuracy") for row in rows if row["task_name"] == task_name)
+            for value in (
+                field_value(row, "accuracy")
+                for row in rows
+                if row["task_name"] == task_name and row.get("status") == "complete"
+            )
             if value is not None
         ]
         ranges[task_name] = (min(values), max(values)) if values else (0.0, 1.0)
@@ -1143,72 +1136,82 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
         for col, task_name in enumerate(task_names):
             x = left + col * cell_w
             row = row_lookup.get((line, task_name))
-            value = field_value(row, "accuracy")
+            value = field_value(row, "accuracy") if row and row.get("status") == "complete" else None
             low, high = ranges[task_name]
-            label = "n/a" if value is None else f"{value:.3f}{_status_suffix(row)}"
-            stroke = "#c9cdd1" if (row and row.get("status") == "complete") else "#d97706"
-            dash = "" if (row and row.get("status") == "complete") else ' stroke-dasharray="5 3"'
-            if value is None:
-                stroke, dash = "#c9cdd1", ""
-            parts.append(f'<rect x="{x}" y="{y}" width="{cell_w - 8}" height="{cell_h - 8}" fill="{color(value, low, high)}" stroke="{stroke}" stroke-width="1.2"{dash} rx="4"/>')
+            label = "n/a" if value is None else f"{value:.3f}"
+            parts.append(f'<rect x="{x}" y="{y}" width="{cell_w - 8}" height="{cell_h - 8}" fill="{color(value, low, high)}" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>')
             parts.append(f'<text x="{x + 14}" y="{y + 26}" class="axis">{label}</text>')
     parts.append(f'<text x="28" y="{height - 52}" class="small">Rows include all public model lines plus the GPT4 reference. S/M/L are planning slots for within-family scaling, not a universal vendor taxonomy.</text>')
-    parts.append(f'<text x="28" y="{height - 28}" class="small">* marks reported-but-not-strict cells. This main figure uses exact-match accuracy only.</text>')
+    parts.append(f'<text x="28" y="{height - 28}" class="small">This main figure uses strict-complete exact-match accuracy cells only; parse gaps remain in the audit tables.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
 
 def svg_generation_quality(rows: list[dict[str, object]], path: Path) -> None:
     task_name = GENERATION_TASK_NAME
-    task_rows = [row for row in rows if row["task_name"] == task_name]
+    task_rows = [
+        row
+        for row in rows
+        if row["task_name"] == task_name
+        and field_value(row, "bert_score_f1") is not None
+        and field_value(row, "meteor") is not None
+    ]
     task_rows.sort(key=lambda row: field_value(row, "bert_score_f1") or -1.0, reverse=True)
-    width = 1120
-    top = 166
-    row_h = 42
+    width = 1220
+    top = 190
+    row_h = 44
     row_gap = 10
     height = top + len(task_rows) * (row_h + row_gap) + 126
     label_x = 42
-    size_x = 190
-    bar_x = 258
-    bar_w = 560
-    side_x = 870
-    max_value = max((field_value(row, "bert_score_f1") or 0.0 for row in task_rows), default=1.0)
-    max_value = max(max_value, 0.001)
+    size_x = 186
+    bert_x = 268
+    bert_w = 420
+    meteor_x = 804
+    meteor_w = 270
+    bert_min, bert_max = 0.60, 0.75
+    meteor_min, meteor_max = 0.07, 0.16
+
+    def scaled_width(value: float | None, low: float, high: float, width_value: int) -> float:
+        if value is None or high <= low:
+            return 0.0
+        position = max(0.0, min(1.0, (value - low) / (high - low)))
+        return width_value * position
 
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
-    parts.append("<style>text{font-family:Arial,sans-serif;font-size:15px;fill:#17202a}.title{font-size:28px;font-weight:700}.subtitle{font-size:16px;fill:#334155}.axis{font-weight:700}.small{font-size:13px;fill:#334155}.tiny{font-size:12px;fill:#475569;font-weight:700}</style>")
+    parts.append("<style>text{font-family:Arial,sans-serif;font-size:15px;fill:#17202a}.title{font-size:30px;font-weight:700}.metric{font-size:18px;font-weight:700;fill:#17202a}.subtitle{font-size:16px;fill:#334155}.axis{font-weight:700}.small{font-size:13px;fill:#334155}.tiny{font-size:12px;fill:#475569;font-weight:700}</style>")
     parts.append('<rect width="100%" height="100%" fill="white"/>')
     parts.append('<text x="36" y="42" class="title">UniMoral RQ4 generation quality</text>')
     parts.append('<text x="36" y="74" class="subtitle">RQ4 asks models to generate consequences, so it is not mixed with the RQ1-RQ3 accuracy chart.</text>')
-    parts.append('<text x="36" y="100" class="subtitle">Primary read: BERTScore F1, a semantic similarity score where higher is better; METEOR is a lexical side metric.</text>')
-    parts.append(f'<text x="{bar_x}" y="{top - 42}" class="tiny">BERTSCORE F1</text>')
-    parts.append(f'<text x="{side_x}" y="{top - 42}" class="tiny">SIDE METRIC</text>')
-    for tick in (0.0, 0.25, 0.5, 0.75):
-        x = bar_x + bar_w * tick / 0.75
-        parts.append(f'<line x1="{x:.2f}" y1="{top - 8}" x2="{x:.2f}" y2="{height - 78}" stroke="#e5e7eb"/>')
-        parts.append(f'<text x="{x:.2f}" y="{top - 16}" text-anchor="middle" class="small">{tick:.2f}</text>')
+    parts.append('<text x="36" y="100" class="subtitle">Both metrics are higher-better. BERTScore F1 reads semantic similarity; METEOR reads lexical overlap.</text>')
+    parts.append('<text x="36" y="124" class="subtitle">Each metric panel uses its own axis so within-metric differences are visible.</text>')
+    parts.append(f'<text x="{bert_x}" y="{top - 44}" class="metric">BERTScore F1</text>')
+    parts.append(f'<text x="{meteor_x}" y="{top - 44}" class="metric">METEOR</text>')
+    for tick in (0.60, 0.65, 0.70, 0.75):
+        x = bert_x + bert_w * ((tick - bert_min) / (bert_max - bert_min))
+        parts.append(f'<line x1="{x:.2f}" y1="{top - 12}" x2="{x:.2f}" y2="{height - 76}" stroke="#e5e7eb"/>')
+        parts.append(f'<text x="{x:.2f}" y="{top - 20}" text-anchor="middle" class="small">{tick:.2f}</text>')
+    for tick in (0.07, 0.10, 0.13, 0.16):
+        x = meteor_x + meteor_w * ((tick - meteor_min) / (meteor_max - meteor_min))
+        parts.append(f'<line x1="{x:.2f}" y1="{top - 12}" x2="{x:.2f}" y2="{height - 76}" stroke="#e5e7eb"/>')
+        parts.append(f'<text x="{x:.2f}" y="{top - 20}" text-anchor="middle" class="small">{tick:.2f}</text>')
     for index, row in enumerate(task_rows):
         y = top + index * (row_h + row_gap)
         family, size_slot = line_meta_for(str(row["line_label"]))
         fill = FAMILY_COLORS.get(family, "#6b7280")
-        value = field_value(row, "bert_score_f1")
+        bert_value = field_value(row, "bert_score_f1")
         meteor = field_value(row, "meteor")
         parts.append(f'<text x="{label_x}" y="{y + 27}" class="axis">{html.escape(str(row["line_label"]))}</text>')
         parts.append(f'<rect x="{size_x}" y="{y + 8}" width="46" height="24" fill="{fill}" rx="12"/>')
         parts.append(f'<text x="{size_x + 23}" y="{y + 26}" text-anchor="middle" fill="#ffffff" font-weight="700">{html.escape(size_slot)}</text>')
-        parts.append(f'<rect x="{bar_x}" y="{y + 4}" width="{bar_w}" height="{row_h - 8}" fill="#e5e7eb" rx="8"/>')
-        if value is None:
-            parts.append(f'<rect x="{bar_x}" y="{y + 4}" width="{bar_w}" height="{row_h - 8}" fill="#f8fafc" stroke="#c9cdd1" rx="8"/>')
-            parts.append(f'<text x="{bar_x + bar_w - 10}" y="{y + 27}" text-anchor="end" class="small">n/a</text>')
-        else:
-            value_w = min(bar_w, bar_w * value / 0.75)
-            parts.append(f'<rect x="{bar_x}" y="{y + 4}" width="{value_w:.1f}" height="{row_h - 8}" fill="{fill}" rx="8"/>')
-            parts.append(f'<text x="{bar_x + value_w + 8:.1f}" y="{y + 27}" class="axis">{value:.3f}</text>')
-        side_text = "METEOR n/a" if meteor is None else f"METEOR {meteor:.3f}"
-        if row.get("status") != "complete":
-            side_text += " *"
-        parts.append(f'<text x="{side_x}" y="{y + 27}" class="small">{html.escape(side_text)}</text>')
-    parts.append(f'<text x="36" y="{height - 52}" class="small">* marks reported-but-not-strict cells. This figure is intentionally separate from the RQ1-RQ3 accuracy figure.</text>')
+        parts.append(f'<rect x="{bert_x}" y="{y + 5}" width="{bert_w}" height="{row_h - 10}" fill="#eef2f7" rx="8"/>')
+        bert_bar_w = scaled_width(bert_value, bert_min, bert_max, bert_w)
+        parts.append(f'<rect x="{bert_x}" y="{y + 5}" width="{bert_bar_w:.1f}" height="{row_h - 10}" fill="{fill}" rx="8"/>')
+        parts.append(f'<text x="{bert_x + bert_w + 12}" y="{y + 28}" class="axis">{bert_value:.3f}</text>')
+        parts.append(f'<rect x="{meteor_x}" y="{y + 5}" width="{meteor_w}" height="{row_h - 10}" fill="#eef2f7" rx="8"/>')
+        meteor_bar_w = scaled_width(meteor, meteor_min, meteor_max, meteor_w)
+        parts.append(f'<rect x="{meteor_x}" y="{y + 5}" width="{meteor_bar_w:.1f}" height="{row_h - 10}" fill="{fill}" opacity="0.72" rx="8"/>')
+        parts.append(f'<text x="{meteor_x + meteor_w + 12}" y="{y + 28}" class="axis">{meteor:.3f}</text>')
+    parts.append(f'<text x="36" y="{height - 52}" class="small">Rows require usable BERTScore F1 and METEOR values. This figure is intentionally separate from the RQ1-RQ3 accuracy figure.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 

@@ -70,5 +70,5 @@
 <text x="1500" y="866" class="axis">MiniMax</text>
 <text x="1500" y="886" class="small">caveats: see failure checklist</text>
 <text x="60" y="934" class="small">All run lines are shown in the full score heatmap and all-line ranking below: Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus GPT4 Ref.</text>
-<text x="60" y="958" class="small">* marks reported-but-not-strict cells; MiniMax remaining gaps are documented in unimoral-failure-checklist.csv.</text>
+<text x="60" y="958" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; the main figures avoid special cell markers.</text>
 </svg>
