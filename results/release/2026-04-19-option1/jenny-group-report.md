@@ -8,11 +8,11 @@ This report covers Jenny Zhu's five assigned moral-psych benchmark papers under 
 
 ## TL;DR
 
-If you only read one section, read these key takeaways:
+Key takeaways:
 
 - **Best like-for-like line:** `MiniMax-S` is the strongest fully comparable line, averaging 0.611 across UniMoral action 0.661, SMID 0.432, and Value 0.740. This is the cleanest overall topline because all three comparable metrics are observed on the same line.
 - **Best text-only line:** `MiniMax-M` is the strongest pure text line, reaching UniMoral 0.659 and Value 0.740. It should not be called the best all-around line because there is no public SMID route on that line.
-- **GPT-4o-mini reference line:** `GPT-4o-mini Ref` is added as a single text-only reference point with 76,486/76,486 parsed prompts: UniMoral 0.673, Value 0.701, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`.
+- **OpenAI reference interpretation:** `GPT-4o-mini Ref` is a text-only calibration anchor: competitive on UniMoral and Value, but it does not change the main conclusion because it is not an S/M/L curve and has no SMID or DeNEVIL evidence.
 - **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.364) and widest spread (0.285), while `UniMoral` is tightly clustered (0.121 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
 - **UniMoral RQ-level interpretation:** The four-task view should not be collapsed into one scalar: task winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `Gemma-S` 0.599, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `Llama-L` 0.157. That pattern supports task-specific moral-reasoning strengths rather than a simple bigger-is-better family scaling story.
 - **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.

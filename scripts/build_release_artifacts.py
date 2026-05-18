@@ -9888,7 +9888,7 @@ def append_tldr_section(
         [
             "## TL;DR",
             "",
-            "If you only read one section, read these key takeaways:",
+            "Key takeaways:",
             "",
         ]
     )
@@ -9902,7 +9902,7 @@ def append_tldr_section(
         )
     if openai_reference_line is not None:
         lines.append(
-            f"- **GPT-4o-mini reference line:** `{OPENAI_REFERENCE_LINE_LABEL}` is added as a single text-only reference point with {OPENAI_REFERENCE_PARSED_SAMPLES:,}/{OPENAI_REFERENCE_TOTAL_SAMPLES:,} parsed prompts: UniMoral {fmt_float(as_float(openai_reference_line['unimoral_action_accuracy']))}, Value {fmt_float(as_float(openai_reference_line['value_average_accuracy']))}, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`."
+            f"- **OpenAI reference interpretation:** `{OPENAI_REFERENCE_LINE_LABEL}` is a text-only calibration anchor: competitive on UniMoral and Value, but it does not change the main conclusion because it is not an S/M/L curve and has no SMID or DeNEVIL evidence."
         )
     lines.append(
         f"- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy ({fmt_float(as_float(smid_summary['mean_accuracy']))}) and widest spread ({fmt_float(as_float(smid_summary['spread']))}), while `UniMoral` is tightly clustered ({fmt_float(as_float(unimoral_summary['spread']))} spread). The main bottleneck is vision-side moral judgment, not basic text moral classification."

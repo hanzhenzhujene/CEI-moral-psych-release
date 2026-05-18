@@ -961,8 +961,13 @@ def test_release_builder_emits_expected_files(tmp_path):
     topline_summary = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     for text in (report_text, release_readme):
         assert "## TL;DR" in text
+        assert "Key takeaways:" in text
         assert "Best like-for-like line" in text
         assert "Best text-only line" in text
+        assert "OpenAI reference interpretation" in text
+        assert "text-only calibration anchor" in text
+        assert "GPT-4o-mini reference line" not in text
+        assert "76,486/76,486 parsed prompts" not in text
         assert "The hardest benchmark is SMID" in text
         assert "There is no universal scaling law" in text
         if "CCD-Bench shows cultural choice style, not accuracy" in text:
@@ -1095,6 +1100,11 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "denevil-proxy-examples.csv" in release_readme
 
     assert "## TL;DR" in topline_summary
+    assert "Key takeaways:" in topline_summary
+    assert "OpenAI reference interpretation" in topline_summary
+    assert "text-only calibration anchor" in topline_summary
+    assert "GPT-4o-mini reference line" not in topline_summary
+    assert "76,486/76,486 parsed prompts" not in topline_summary
     assert "## Frozen Snapshot Scope" in topline_summary
     assert "Best like-for-like line" in topline_summary
     if "CCD-Bench shows cultural choice style, not accuracy" in topline_summary:
