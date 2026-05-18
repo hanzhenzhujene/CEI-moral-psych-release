@@ -53,8 +53,8 @@
 <circle cx="362" cy="871" r="7" fill="#84ad78"/>
 <text x="380" y="866" class="axis">DeepSeek</text>
 <text x="380" y="886" class="small">S/M/L: 4 tasks complete</text>
-<rect x="620" y="844" width="260" height="54" fill="white" stroke="#d7a06b" stroke-width="2" rx="8"/>
-<circle cx="642" cy="871" r="7" fill="#d7a06b"/>
+<rect x="620" y="844" width="260" height="54" fill="white" stroke="#dc2626" stroke-width="2" rx="8"/>
+<circle cx="642" cy="871" r="7" fill="#dc2626"/>
 <text x="660" y="866" class="axis">Llama</text>
 <text x="660" y="886" class="small">S/M/L: 4 tasks complete</text>
 <rect x="900" y="844" width="260" height="54" fill="white" stroke="#ad9ad0" stroke-width="2" rx="8"/>

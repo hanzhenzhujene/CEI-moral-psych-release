@@ -65,7 +65,7 @@
 <rect x="48" y="554" width="118" height="162" rx="18" fill="#e9f1fb" stroke="#78a8e6" stroke-width="1.2"/>
 <text x="107.00" y="640.00" text-anchor="middle" class="label">DeepSeek</text>
 <line x1="48" y1="544.00" x2="1732" y2="544.00" class="baseline"/>
-<rect x="48" y="716" width="118" height="162" rx="18" fill="#fcf0e7" stroke="#eba069" stroke-width="1.2"/>
+<rect x="48" y="716" width="118" height="162" rx="18" fill="#f9dcdc" stroke="#dc2626" stroke-width="1.2"/>
 <text x="107.00" y="802.00" text-anchor="middle" class="label">Llama</text>
 <line x1="48" y1="706.00" x2="1732" y2="706.00" class="baseline"/>
 <rect x="48" y="878" width="118" height="162" rx="18" fill="#f1eefb" stroke="#a996e3" stroke-width="1.2"/>
@@ -206,7 +206,7 @@
 <text x="1195.00" y="695.00" text-anchor="middle" class="celltext-dark">18%</text>
 <rect x="1280" y="668" width="170" height="42" fill="#92c096" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1365.00" y="695.00" text-anchor="middle" class="celltext-dark">88%</text>
-<rect x="184" y="728" width="56" height="30" rx="12" fill="#e0a37a"/>
+<rect x="184" y="728" width="56" height="30" rx="12" fill="#f87171"/>
 <text x="212.00" y="749.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="749.00" class="label">Llama-S</text>
 <rect x="430" y="722" width="170" height="42" fill="#85b98b" stroke="#ffffff" stroke-width="1.2"/>
@@ -221,8 +221,8 @@
 <text x="1195.00" y="749.00" text-anchor="middle" class="celltext-dark">100%</text>
 <rect x="1280" y="722" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1365.00" y="749.00" text-anchor="middle" class="celltext-dark">100%</text>
-<rect x="184" y="782" width="56" height="30" rx="12" fill="#eba069"/>
-<text x="212.00" y="803.00" text-anchor="middle" class="celltext-dark">M</text>
+<rect x="184" y="782" width="56" height="30" rx="12" fill="#dc2626"/>
+<text x="212.00" y="803.00" text-anchor="middle" class="celltext">M</text>
 <text x="258" y="803.00" class="label">Llama-M</text>
 <rect x="430" y="776" width="170" height="42" fill="#84b98b" stroke="#ffffff" stroke-width="1.2"/>
 <text x="515.00" y="803.00" text-anchor="middle" class="celltext-dark">98%</text>
@@ -236,8 +236,8 @@
 <text x="1195.00" y="803.00" text-anchor="middle" class="celltext-dark">100%</text>
 <rect x="1280" y="776" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1365.00" y="803.00" text-anchor="middle" class="celltext-dark">100%</text>
-<rect x="184" y="836" width="56" height="30" rx="12" fill="#f2b883"/>
-<text x="212.00" y="857.00" text-anchor="middle" class="celltext-dark">L</text>
+<rect x="184" y="836" width="56" height="30" rx="12" fill="#991b1b"/>
+<text x="212.00" y="857.00" text-anchor="middle" class="celltext">L</text>
 <text x="258" y="857.00" class="label">Llama-L</text>
 <rect x="430" y="830" width="170" height="42" fill="#84b98b" stroke="#ffffff" stroke-width="1.2"/>
 <text x="515.00" y="857.00" text-anchor="middle" class="celltext-dark">98%</text>

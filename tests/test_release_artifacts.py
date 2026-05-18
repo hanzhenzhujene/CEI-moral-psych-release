@@ -1146,7 +1146,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence." in family_scaling_svg
     assert "GPT-4o-mini Ref is drawn as a dashed horizontal reference line, not an S/M/L point." in family_scaling_svg
     assert "GPT-4o-mini Ref 70.1%" in family_scaling_svg
-    assert "GPT-4o-mini Ref: no SMID route" in family_scaling_svg
+    assert "GPT-4o-mini Ref: no SMID route" not in family_scaling_svg
+    assert "#dc2626" in family_scaling_svg
     assert ">Ref<" not in family_scaling_svg
     assert "#4 CCD-Bench" not in family_scaling_svg
     assert "#5 Denevil" not in family_scaling_svg

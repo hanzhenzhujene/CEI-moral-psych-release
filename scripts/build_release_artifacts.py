@@ -1559,7 +1559,7 @@ reroot_task_source_rows(LOCAL_COMPARISON_LINE_SOURCES)
 FAMILY_COLOR_SCALES = {
     "Qwen": {"S": "#8fc7bd", "M": "#65b8ac", "L": "#3fc7b8"},
     "DeepSeek": {"S": "#94b8e8", "M": "#78a8e6", "L": "#a8c7f0"},
-    "Llama": {"S": "#e0a37a", "M": "#eba069", "L": "#f2b883"},
+    "Llama": {"S": "#f87171", "M": "#dc2626", "L": "#991b1b"},
     "Gemma": {"S": "#b8a5df", "M": "#a996e3", "L": "#cfc3f0"},
     "MiniMax": {"S": "#d4a46e", "M": "#e0ad68", "L": "#f3cf82"},
     OPENAI_REFERENCE_FAMILY_LABEL: {"Ref": "#9ca3af"},
@@ -8392,7 +8392,7 @@ def render_family_scaling_profile_svg(
         if reference_row is not None:
             reference_value = float(reference_row[field])
             reference_y = y_for(panel_y, reference_value)
-            label_y = max(chart_top + 18, min(chart_bottom - 10, reference_y - 10))
+            label_y = max(panel_y + 54, min(chart_bottom - 10, reference_y - 52))
             lines.append(
                 f'<line x1="{chart_left}" y1="{reference_y:.2f}" x2="{chart_right}" y2="{reference_y:.2f}" '
                 'stroke="#6b7280" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 7"/>'
@@ -8403,15 +8403,13 @@ def render_family_scaling_profile_svg(
             lines.append(
                 f'<text x="{chart_right - 88}" y="{label_y:.2f}" text-anchor="middle" class="axis">GPT-4o-mini Ref {fmt_pct(reference_value)}</text>'
             )
-        elif benchmark == "SMID":
-            lines.append(
-                f'<rect x="{chart_right - 250}" y="{chart_top + 10}" width="242" height="24" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>'
-            )
-            lines.append(
-                f'<text x="{chart_right - 129}" y="{chart_top + 27}" text-anchor="middle" class="axis">GPT-4o-mini Ref: no SMID route</text>'
-            )
 
-        lines.append(f'<text x="{panel_x + 18}" y="{panel_y + top_panel_height - 14}" class="small">Dashed colored segments skip missing size slots; gray dashed line is GPT-4o-mini Ref.</text>')
+        footer_text = (
+            "Dashed colored segments skip missing size slots; gray dashed line is GPT-4o-mini Ref."
+            if reference_row is not None
+            else "Dashed colored segments skip missing size slots."
+        )
+        lines.append(f'<text x="{panel_x + 18}" y="{panel_y + top_panel_height - 14}" class="small">{footer_text}</text>')
 
     lines.append('<rect x="48" y="644" width="1184" height="360" rx="18" class="legend-card"/>')
     lines.append('<text x="72" y="670" class="tiny">HOW TO READ THIS FIGURE</text>')

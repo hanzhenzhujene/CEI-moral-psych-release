@@ -100,18 +100,18 @@
 <text x="1092" y="599.00" class="label">valid 2,109 / 2,182</text>
 <text x="292" y="645.00" text-anchor="end" class="label">Llama-S</text>
 <rect x="310" y="626" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="626" width="760.00" height="28" rx="10" fill="#e0a37a" stroke="#ffffff" stroke-width="1"/>
+<rect x="310" y="626" width="760.00" height="28" rx="10" fill="#f87171" stroke="#ffffff" stroke-width="1"/>
 <text x="1060.00" y="645.00" text-anchor="end" class="celltext-dark">100.0%</text>
 <text x="1092" y="645.00" class="label">valid 2,182 / 2,182</text>
 <text x="292" y="691.00" text-anchor="end" class="label">Llama-M</text>
 <rect x="310" y="672" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="672" width="742.24" height="28" rx="10" fill="#eba069" stroke="#ffffff" stroke-width="1"/>
-<text x="1042.24" y="691.00" text-anchor="end" class="celltext-dark">97.66%</text>
+<rect x="310" y="672" width="742.24" height="28" rx="10" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+<text x="1042.24" y="691.00" text-anchor="end" class="celltext">97.66%</text>
 <text x="1092" y="691.00" class="label">valid 2,131 / 2,182</text>
 <text x="292" y="737.00" text-anchor="end" class="label">Llama-L</text>
 <rect x="310" y="718" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="718" width="701.14" height="28" rx="10" fill="#f2b883" stroke="#ffffff" stroke-width="1"/>
-<text x="1001.14" y="737.00" text-anchor="end" class="celltext-dark">92.3%</text>
+<rect x="310" y="718" width="701.14" height="28" rx="10" fill="#991b1b" stroke="#ffffff" stroke-width="1"/>
+<text x="1001.14" y="737.00" text-anchor="end" class="celltext">92.3%</text>
 <text x="1092" y="737.00" class="label">valid 2,013 / 2,182</text>
 <text x="292" y="783.00" text-anchor="end" class="label">Gemma-S</text>
 <rect x="310" y="764" width="760" height="28" rx="10" class="muted-bar"/>

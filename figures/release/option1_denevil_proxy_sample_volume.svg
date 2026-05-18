@@ -90,15 +90,15 @@
 <text x="1092" y="607.00" class="label">visible 20,331 / 20,518</text>
 <text x="292" y="653.00" text-anchor="end" class="label">Llama-S</text>
 <rect x="310" y="634" width="519.79" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="634" width="519.79" height="28" rx="10" fill="#e0a37a" stroke="#ffffff" stroke-width="1"/>
+<rect x="310" y="634" width="519.79" height="28" rx="10" fill="#f87171" stroke="#ffffff" stroke-width="1"/>
 <text x="1092" y="653.00" class="label">visible 20,518 / 20,518</text>
 <text x="292" y="699.00" text-anchor="end" class="label">Llama-M</text>
 <rect x="310" y="680" width="519.79" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="680" width="519.79" height="28" rx="10" fill="#eba069" stroke="#ffffff" stroke-width="1"/>
+<rect x="310" y="680" width="519.79" height="28" rx="10" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
 <text x="1092" y="699.00" class="label">visible 20,518 / 20,518</text>
 <text x="292" y="745.00" text-anchor="end" class="label">Llama-L</text>
 <rect x="310" y="726" width="519.79" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="726" width="519.79" height="28" rx="10" fill="#f2b883" stroke="#ffffff" stroke-width="1"/>
+<rect x="310" y="726" width="519.79" height="28" rx="10" fill="#991b1b" stroke="#ffffff" stroke-width="1"/>
 <text x="1092" y="745.00" class="label">visible 20,518 / 20,518</text>
 <text x="292" y="791.00" text-anchor="end" class="label">Gemma-S</text>
 <rect x="310" y="772" width="519.79" height="28" rx="10" class="muted-bar"/>

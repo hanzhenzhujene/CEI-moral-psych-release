@@ -100,6 +100,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "GPT-4o-mini Ref 0.711" in unimoral_family_scaling_svg
     assert ">Ref<" not in unimoral_family_scaling_svg
     assert "OpenAI Ref" in unimoral_family_scaling_svg
+    assert "#dc2626" in unimoral_family_scaling_svg
 
 
 def test_repository_root_keeps_legacy_files_archived():

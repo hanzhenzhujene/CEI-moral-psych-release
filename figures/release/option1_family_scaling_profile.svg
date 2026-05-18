@@ -76,11 +76,11 @@
 <circle cx="546.00" cy="479.62" r="8" fill="#ffffff" stroke="#e0ad68" stroke-width="3.4"/>
 <circle cx="546.00" cy="479.62" r="4.2" fill="#e0ad68"/>
 <line x1="138.00" y1="473.90" x2="576.00" y2="420.51" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
-<line x1="138.00" y1="473.90" x2="576.00" y2="420.51" stroke="#eba069" stroke-width="4.0" stroke-linecap="round" stroke-dasharray="7 6"/>
-<circle cx="138.00" cy="473.90" r="8" fill="#ffffff" stroke="#eba069" stroke-width="3.4"/>
-<circle cx="138.00" cy="473.90" r="4.2" fill="#eba069"/>
-<circle cx="576.00" cy="420.51" r="8" fill="#ffffff" stroke="#eba069" stroke-width="3.4"/>
-<circle cx="576.00" cy="420.51" r="4.2" fill="#eba069"/>
+<line x1="138.00" y1="473.90" x2="576.00" y2="420.51" stroke="#dc2626" stroke-width="4.0" stroke-linecap="round" stroke-dasharray="7 6"/>
+<circle cx="138.00" cy="473.90" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3.4"/>
+<circle cx="138.00" cy="473.90" r="4.2" fill="#dc2626"/>
+<circle cx="576.00" cy="420.51" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3.4"/>
+<circle cx="576.00" cy="420.51" r="4.2" fill="#dc2626"/>
 <line x1="148.00" y1="410.83" x2="367.00" y2="427.57" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
 <line x1="148.00" y1="410.83" x2="367.00" y2="427.57" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
 <line x1="367.00" y1="427.57" x2="586.00" y2="412.27" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
@@ -97,9 +97,7 @@
 <circle cx="118.00" cy="426.18" r="4.2" fill="#65b8ac"/>
 <circle cx="556.00" cy="390.07" r="8" fill="#ffffff" stroke="#65b8ac" stroke-width="3.4"/>
 <circle cx="556.00" cy="390.07" r="4.2" fill="#65b8ac"/>
-<rect x="316" y="316" width="242" height="24" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="437" y="333" text-anchor="middle" class="axis">GPT-4o-mini Ref: no SMID route</text>
-<text x="90" y="590" class="small">Dashed colored segments skip missing size slots; gray dashed line is GPT-4o-mini Ref.</text>
+<text x="90" y="590" class="small">Dashed colored segments skip missing size slots.</text>
 <rect x="656" y="244" width="540" height="360" rx="20" class="subpanel"/>
 <rect x="1108" y="260" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
 <text x="1141" y="274" text-anchor="middle" class="tiny">SCORED</text>
@@ -144,15 +142,15 @@
 <circle cx="1150.00" cy="327.82" r="8" fill="#ffffff" stroke="#78a8e6" stroke-width="3.4"/>
 <circle cx="1150.00" cy="327.82" r="4.2" fill="#78a8e6"/>
 <line x1="722.00" y1="375.67" x2="941.00" y2="314.30" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
-<line x1="722.00" y1="375.67" x2="941.00" y2="314.30" stroke="#eba069" stroke-width="4.0" stroke-linecap="round"/>
+<line x1="722.00" y1="375.67" x2="941.00" y2="314.30" stroke="#dc2626" stroke-width="4.0" stroke-linecap="round"/>
 <line x1="941.00" y1="314.30" x2="1160.00" y2="324.15" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
-<line x1="941.00" y1="314.30" x2="1160.00" y2="324.15" stroke="#eba069" stroke-width="4.0" stroke-linecap="round"/>
-<circle cx="722.00" cy="375.67" r="8" fill="#ffffff" stroke="#eba069" stroke-width="3.4"/>
-<circle cx="722.00" cy="375.67" r="4.2" fill="#eba069"/>
-<circle cx="941.00" cy="314.30" r="8" fill="#ffffff" stroke="#eba069" stroke-width="3.4"/>
-<circle cx="941.00" cy="314.30" r="4.2" fill="#eba069"/>
-<circle cx="1160.00" cy="324.15" r="8" fill="#ffffff" stroke="#eba069" stroke-width="3.4"/>
-<circle cx="1160.00" cy="324.15" r="4.2" fill="#eba069"/>
+<line x1="941.00" y1="314.30" x2="1160.00" y2="324.15" stroke="#dc2626" stroke-width="4.0" stroke-linecap="round"/>
+<circle cx="722.00" cy="375.67" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3.4"/>
+<circle cx="722.00" cy="375.67" r="4.2" fill="#dc2626"/>
+<circle cx="941.00" cy="314.30" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3.4"/>
+<circle cx="941.00" cy="314.30" r="4.2" fill="#dc2626"/>
+<circle cx="1160.00" cy="324.15" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3.4"/>
+<circle cx="1160.00" cy="324.15" r="4.2" fill="#dc2626"/>
 <line x1="732.00" y1="355.51" x2="951.00" y2="333.17" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
 <line x1="732.00" y1="355.51" x2="951.00" y2="333.17" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
 <line x1="951.00" y1="333.17" x2="1170.00" y2="335.58" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
@@ -174,8 +172,8 @@
 <circle cx="1140.00" cy="336.47" r="8" fill="#ffffff" stroke="#65b8ac" stroke-width="3.4"/>
 <circle cx="1140.00" cy="336.47" r="4.2" fill="#65b8ac"/>
 <line x1="712" y1="321.51" x2="1150" y2="321.51" stroke="#6b7280" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 7"/>
-<rect x="982" y="308.00" width="160" height="22" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="1062" y="324.00" text-anchor="middle" class="axis">GPT-4o-mini Ref 70.1%</text>
+<rect x="982" y="282.00" width="160" height="22" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+<text x="1062" y="298.00" text-anchor="middle" class="axis">GPT-4o-mini Ref 70.1%</text>
 <text x="674" y="590" class="small">Dashed colored segments skip missing size slots; gray dashed line is GPT-4o-mini Ref.</text>
 <rect x="48" y="644" width="1184" height="360" rx="18" class="legend-card"/>
 <text x="72" y="670" class="tiny">HOW TO READ THIS FIGURE</text>
@@ -199,7 +197,7 @@
 <rect x="656" y="774" width="18" height="18" rx="5" fill="#78a8e6"/>
 <text x="684" y="788" class="axis">DeepSeek</text>
 <text x="794" y="788" class="body">Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists.</text>
-<rect x="656" y="808" width="18" height="18" rx="5" fill="#eba069"/>
+<rect x="656" y="808" width="18" height="18" rx="5" fill="#dc2626"/>
 <text x="684" y="822" class="axis">Llama</text>
 <text x="794" y="822" class="body">Value scored at S/M/L; SMID at S/L.</text>
 <rect x="656" y="842" width="18" height="18" rx="5" fill="#a996e3"/>

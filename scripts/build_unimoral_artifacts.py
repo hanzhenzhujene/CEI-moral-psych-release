@@ -910,7 +910,7 @@ FAMILY_COLORS = {
     "Qwen": "#6fa8c7",
     "MiniMax": "#bf977a",
     "DeepSeek": "#84ad78",
-    "Llama": "#d7a06b",
+    "Llama": "#dc2626",
     "Gemma": "#ad9ad0",
     "GPT4 only": "#aab2bd",
 }

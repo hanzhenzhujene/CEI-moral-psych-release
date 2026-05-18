@@ -65,7 +65,7 @@
 <rect x="48" y="500" width="118" height="138" rx="18" fill="#e9f1fb" stroke="#78a8e6" stroke-width="1.2"/>
 <text x="107.00" y="574.00" text-anchor="middle" class="label">DeepSeek</text>
 <line x1="48" y1="490.00" x2="1732" y2="490.00" class="baseline"/>
-<rect x="48" y="644" width="118" height="138" rx="18" fill="#fcf0e7" stroke="#eba069" stroke-width="1.2"/>
+<rect x="48" y="644" width="118" height="138" rx="18" fill="#f9dcdc" stroke="#dc2626" stroke-width="1.2"/>
 <text x="107.00" y="718.00" text-anchor="middle" class="label">Llama</text>
 <line x1="48" y1="634.00" x2="1732" y2="634.00" class="baseline"/>
 <rect x="48" y="788" width="118" height="138" rx="18" fill="#f1eefb" stroke="#a996e3" stroke-width="1.2"/>
@@ -204,7 +204,7 @@
 <rect x="1183.07" y="602" width="6.93" height="30" fill="#cbd5e1" stroke="#ffffff" stroke-width="1"/>
 <text x="1214" y="618.00" class="label">Corrective / contextual response</text>
 <text x="1214" y="633.00" class="small">protective 94.9%</text>
-<rect x="184" y="654" width="56" height="22" rx="12" fill="#e0a37a"/>
+<rect x="184" y="654" width="56" height="22" rx="12" fill="#f87171"/>
 <text x="212.00" y="670.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="670.00" class="label">Llama-S</text>
 <rect x="430" y="650" width="760" height="30" rx="10" class="muted-bar"/>
@@ -218,8 +218,8 @@
 <rect x="1180.59" y="650" width="9.41" height="30" fill="#e2b56f" stroke="#ffffff" stroke-width="1"/>
 <text x="1214" y="666.00" class="label">Corrective / contextual response</text>
 <text x="1214" y="681.00" class="small">protective 98.7%</text>
-<rect x="184" y="702" width="56" height="22" rx="12" fill="#eba069"/>
-<text x="212.00" y="718.00" text-anchor="middle" class="celltext-dark">M</text>
+<rect x="184" y="702" width="56" height="22" rx="12" fill="#dc2626"/>
+<text x="212.00" y="718.00" text-anchor="middle" class="celltext">M</text>
 <text x="258" y="718.00" class="label">Llama-M</text>
 <rect x="430" y="698" width="760" height="30" rx="10" class="muted-bar"/>
 <rect x="430.00" y="698" width="197.57" height="30" fill="#7fa8e8" stroke="#ffffff" stroke-width="1"/>
@@ -232,8 +232,8 @@
 <rect x="1178.04" y="698" width="11.96" height="30" fill="#e2b56f" stroke="#ffffff" stroke-width="1"/>
 <text x="1214" y="714.00" class="label">Corrective / contextual response</text>
 <text x="1214" y="729.00" class="small">protective 98.3%</text>
-<rect x="184" y="750" width="56" height="22" rx="12" fill="#f2b883"/>
-<text x="212.00" y="766.00" text-anchor="middle" class="celltext-dark">L</text>
+<rect x="184" y="750" width="56" height="22" rx="12" fill="#991b1b"/>
+<text x="212.00" y="766.00" text-anchor="middle" class="celltext">L</text>
 <text x="258" y="766.00" class="label">Llama-L</text>
 <rect x="430" y="746" width="760" height="30" rx="10" class="muted-bar"/>
 <rect x="430.00" y="746" width="173.91" height="30" fill="#7fa8e8" stroke="#ffffff" stroke-width="1"/>

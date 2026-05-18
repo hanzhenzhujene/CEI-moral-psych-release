@@ -107,21 +107,21 @@
 <rect x="280" y="546" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="546" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="565" text-anchor="end" class="small">no SMID vision route</text>
-<rect x="56" y="593" width="10" height="10" rx="3" fill="#e0a37a"/>
+<rect x="56" y="593" width="10" height="10" rx="3" fill="#f87171"/>
 <text x="78" y="607" class="label">Llama-S</text>
 <rect x="280" y="588" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="588" width="173.14" height="28" rx="10" fill="#e0a37a"/>
+<rect x="280" y="588" width="173.14" height="28" rx="10" fill="#f87171"/>
 <text x="463.14" y="607" text-anchor="start" class="label">21.6%</text>
-<rect x="56" y="635" width="10" height="10" rx="3" fill="#eba069"/>
+<rect x="56" y="635" width="10" height="10" rx="3" fill="#dc2626"/>
 <text x="78" y="649" class="label">Llama-M</text>
 <rect x="280" y="630" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="630" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="630" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="649" text-anchor="end" class="small">no SMID vision route</text>
-<rect x="56" y="677" width="10" height="10" rx="3" fill="#f2b883"/>
+<rect x="56" y="677" width="10" height="10" rx="3" fill="#991b1b"/>
 <text x="78" y="691" class="label">Llama-L</text>
 <rect x="280" y="672" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="672" width="308.87" height="28" rx="10" fill="#f2b883"/>
+<rect x="280" y="672" width="308.87" height="28" rx="10" fill="#991b1b"/>
 <text x="598.87" y="691" text-anchor="start" class="label">38.6%</text>
 <rect x="56" y="719" width="10" height="10" rx="3" fill="#b8a5df"/>
 <text x="78" y="733" class="label">Gemma-S</text>
@@ -203,20 +203,20 @@
 <rect x="280" y="1330" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1330" width="544.53" height="28" rx="10" fill="#a8c7f0"/>
 <text x="834.53" y="1349" text-anchor="start" class="label">68.1%</text>
-<rect x="56" y="1377" width="10" height="10" rx="3" fill="#e0a37a"/>
+<rect x="56" y="1377" width="10" height="10" rx="3" fill="#f87171"/>
 <text x="78" y="1391" class="label">Llama-S</text>
 <rect x="280" y="1372" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1372" width="422.87" height="28" rx="10" fill="#e0a37a"/>
+<rect x="280" y="1372" width="422.87" height="28" rx="10" fill="#f87171"/>
 <text x="712.87" y="1391" text-anchor="start" class="label">52.9%</text>
-<rect x="56" y="1419" width="10" height="10" rx="3" fill="#eba069"/>
+<rect x="56" y="1419" width="10" height="10" rx="3" fill="#dc2626"/>
 <text x="78" y="1433" class="label">Llama-M</text>
 <rect x="280" y="1414" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1414" width="578.91" height="28" rx="10" fill="#eba069"/>
+<rect x="280" y="1414" width="578.91" height="28" rx="10" fill="#dc2626"/>
 <text x="868.91" y="1433" text-anchor="start" class="label">72.4%</text>
-<rect x="56" y="1461" width="10" height="10" rx="3" fill="#f2b883"/>
+<rect x="56" y="1461" width="10" height="10" rx="3" fill="#991b1b"/>
 <text x="78" y="1475" class="label">Llama-L</text>
 <rect x="280" y="1456" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1456" width="553.86" height="28" rx="10" fill="#f2b883"/>
+<rect x="280" y="1456" width="553.86" height="28" rx="10" fill="#991b1b"/>
 <text x="843.86" y="1475" text-anchor="start" class="label">69.2%</text>
 <rect x="56" y="1503" width="10" height="10" rx="3" fill="#b8a5df"/>
 <text x="78" y="1517" class="label">Gemma-S</text>

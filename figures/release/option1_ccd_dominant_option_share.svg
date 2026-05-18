@@ -64,7 +64,7 @@
 <rect x="48" y="478" width="118" height="132" rx="18" fill="#e9f1fb" stroke="#78a8e6" stroke-width="1.2"/>
 <text x="107.00" y="549.00" text-anchor="middle" class="label">DeepSeek</text>
 <line x1="48" y1="468.00" x2="1632" y2="468.00" class="baseline"/>
-<rect x="48" y="616" width="118" height="132" rx="18" fill="#fcf0e7" stroke="#eba069" stroke-width="1.2"/>
+<rect x="48" y="616" width="118" height="132" rx="18" fill="#f9dcdc" stroke="#dc2626" stroke-width="1.2"/>
 <text x="107.00" y="687.00" text-anchor="middle" class="label">Llama</text>
 <line x1="48" y1="606.00" x2="1632" y2="606.00" class="baseline"/>
 <rect x="48" y="754" width="118" height="132" rx="18" fill="#f1eefb" stroke="#a996e3" stroke-width="1.2"/>
@@ -145,7 +145,7 @@
 <text x="559.19" y="595.00" text-anchor="end" class="celltext">20.7%</text>
 <text x="1162" y="591.00" class="label">option_6 (Nordic Europe)</text>
 <text x="1162" y="606.00" class="small">effective clusters 8.68</text>
-<rect x="184" y="626" width="56" height="20" rx="12" fill="#e0a37a"/>
+<rect x="184" y="626" width="56" height="20" rx="12" fill="#f87171"/>
 <text x="212.00" y="641.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="641.00" class="label">Llama-S</text>
 <rect x="420" y="622" width="720" height="28" rx="10" class="muted-bar"/>
@@ -153,16 +153,16 @@
 <text x="582.25" y="641.00" text-anchor="end" class="celltext">23.9%</text>
 <text x="1162" y="637.00" class="label">option_6 (Nordic Europe)</text>
 <text x="1162" y="652.00" class="small">effective clusters 7.24</text>
-<rect x="184" y="672" width="56" height="20" rx="12" fill="#eba069"/>
-<text x="212.00" y="687.00" text-anchor="middle" class="celltext-dark">M</text>
+<rect x="184" y="672" width="56" height="20" rx="12" fill="#dc2626"/>
+<text x="212.00" y="687.00" text-anchor="middle" class="celltext">M</text>
 <text x="258" y="687.00" class="label">Llama-M</text>
 <rect x="420" y="668" width="720" height="28" rx="10" class="muted-bar"/>
 <rect x="420" y="668" width="147.99" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
 <text x="557.99" y="687.00" text-anchor="end" class="celltext">20.6%</text>
 <text x="1162" y="683.00" class="label">option_6 (Nordic Europe)</text>
 <text x="1162" y="698.00" class="small">effective clusters 8.03</text>
-<rect x="184" y="718" width="56" height="20" rx="12" fill="#f2b883"/>
-<text x="212.00" y="733.00" text-anchor="middle" class="celltext-dark">L</text>
+<rect x="184" y="718" width="56" height="20" rx="12" fill="#991b1b"/>
+<text x="212.00" y="733.00" text-anchor="middle" class="celltext">L</text>
 <text x="258" y="733.00" class="label">Llama-L</text>
 <rect x="420" y="714" width="720" height="28" rx="10" class="muted-bar"/>
 <rect x="420" y="714" width="169.54" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>

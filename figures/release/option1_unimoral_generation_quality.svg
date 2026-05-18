@@ -24,31 +24,31 @@
 <line x1="1074.00" y1="178" x2="1074.00" y2="1050" stroke="#e5e7eb"/>
 <text x="1074.00" y="170" text-anchor="middle" class="small">0.16</text>
 <text x="42" y="217" class="axis">Llama-M</text>
-<rect x="186" y="198" width="46" height="24" fill="#d7a06b" rx="12"/>
+<rect x="186" y="198" width="46" height="24" fill="#dc2626" rx="12"/>
 <text x="209" y="216" text-anchor="middle" fill="#17202a" font-weight="700">M</text>
 <rect x="268" y="195" width="420" height="34" fill="#eef2f7" rx="8"/>
-<rect x="268" y="195" width="364.1" height="34" fill="#d7a06b" rx="8"/>
+<rect x="268" y="195" width="364.1" height="34" fill="#dc2626" rx="8"/>
 <text x="700" y="218" class="axis">0.730</text>
 <rect x="804" y="195" width="270" height="34" fill="#eef2f7" rx="8"/>
-<rect x="804" y="195" width="251.0" height="34" fill="#d7a06b" opacity="0.72" rx="8"/>
+<rect x="804" y="195" width="251.0" height="34" fill="#dc2626" opacity="0.72" rx="8"/>
 <text x="1086" y="218" class="axis">0.154</text>
 <text x="42" y="271" class="axis">Llama-S</text>
-<rect x="186" y="252" width="46" height="24" fill="#d7a06b" rx="12"/>
+<rect x="186" y="252" width="46" height="24" fill="#dc2626" rx="12"/>
 <text x="209" y="270" text-anchor="middle" fill="#17202a" font-weight="700">S</text>
 <rect x="268" y="249" width="420" height="34" fill="#eef2f7" rx="8"/>
-<rect x="268" y="249" width="356.7" height="34" fill="#d7a06b" rx="8"/>
+<rect x="268" y="249" width="356.7" height="34" fill="#dc2626" rx="8"/>
 <text x="700" y="272" class="axis">0.727</text>
 <rect x="804" y="249" width="270" height="34" fill="#eef2f7" rx="8"/>
-<rect x="804" y="249" width="182.1" height="34" fill="#d7a06b" opacity="0.72" rx="8"/>
+<rect x="804" y="249" width="182.1" height="34" fill="#dc2626" opacity="0.72" rx="8"/>
 <text x="1086" y="272" class="axis">0.131</text>
 <text x="42" y="325" class="axis">Llama-L</text>
-<rect x="186" y="306" width="46" height="24" fill="#d7a06b" rx="12"/>
+<rect x="186" y="306" width="46" height="24" fill="#dc2626" rx="12"/>
 <text x="209" y="324" text-anchor="middle" fill="#17202a" font-weight="700">L</text>
 <rect x="268" y="303" width="420" height="34" fill="#eef2f7" rx="8"/>
-<rect x="268" y="303" width="350.4" height="34" fill="#d7a06b" rx="8"/>
+<rect x="268" y="303" width="350.4" height="34" fill="#dc2626" rx="8"/>
 <text x="700" y="326" class="axis">0.725</text>
 <rect x="804" y="303" width="270" height="34" fill="#eef2f7" rx="8"/>
-<rect x="804" y="303" width="261.7" height="34" fill="#d7a06b" opacity="0.72" rx="8"/>
+<rect x="804" y="303" width="261.7" height="34" fill="#dc2626" opacity="0.72" rx="8"/>
 <text x="1086" y="326" class="axis">0.157</text>
 <text x="42" y="379" class="axis">Gemma-S</text>
 <rect x="186" y="360" width="46" height="24" fill="#ad9ad0" rx="12"/>
