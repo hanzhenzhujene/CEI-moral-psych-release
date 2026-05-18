@@ -38,9 +38,9 @@
 <rect x="0" y="0" width="1280" height="1100" class="canvas"/>
 <rect x="24" y="24" width="1232" height="1052" rx="22" class="panel"/>
 <title>Family scaling profile by benchmark</title>
-<desc>Two-panel family scaling view for SMID and Value Kaleidoscope after the separate UniMoral RQ1-RQ4 dashboard. GPT4 only is plotted as a one-model text-only reference point rather than a size curve. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
+<desc>Two-panel family scaling view for SMID and Value Kaleidoscope after the separate UniMoral accuracy and generation figures. GPT4 only is plotted as a one-model text-only reference point rather than a size curve. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
 <text x="48" y="64" class="title">Family Scaling Profile</text>
-<text x="48" y="92" class="subtitle">UniMoral RQ1-RQ4 is shown separately above; these comparable panels start at SMID.</text>
+<text x="48" y="92" class="subtitle">UniMoral is shown separately above; these comparable panels start at SMID.</text>
 <text x="48" y="114" class="subtitle">Two comparable benchmark panels here: SMID and Value Kaleidoscope.</text>
 <text x="48" y="136" class="subtitle">This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.</text>
 <text x="48" y="158" class="subtitle">GPT4 only is a one-model text-only reference point, not an S/M/L family-size curve.</text>
@@ -205,7 +205,7 @@
 <rect x="656" y="860" width="14" height="14" rx="4" fill="#111827"/>
 <text x="680" y="871" class="small">GPT4 only: GPT4-only reference point; no GPT4 S/M/L or SMID route is claimed.</text>
 <text x="656" y="910" class="tiny">EVIDENCE BOUNDARY</text>
-<text x="656" y="936" class="body">This figure starts after the UniMoral RQ1-RQ4 dashboard.</text>
+<text x="656" y="936" class="body">This figure starts after the separate UniMoral accuracy and generation figures.</text>
 <text x="656" y="964" class="body">It stops at SMID + Value to avoid repeating UniMoral.</text>
 <text x="656" y="992" class="body">That avoids mixing comparable accuracy with coverage or proxy evidence.</text>
 <text x="72" y="1044" class="small">Takeaway: current evidence supports task-specific scaling statements on SMID and Value, while UniMoral scaling is handled in the RQ1-RQ4 panel.</text>

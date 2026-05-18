@@ -27,37 +27,43 @@ If you want the benchmark results before the tables, start here. These visuals p
 
 `GPT4 only` is shown as a single text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as a GPT4 S/M/L scaling series, and it has no SMID or DeNEVIL row.
 
-### 1. UniMoral RQ1-RQ4: full four-task dashboard
+### 1. UniMoral RQ1-RQ3: exact-match accuracy
 
-![UniMoral RQ1-RQ4 dashboard](../../../figures/release/option1_unimoral_four_task_dashboard.svg)
+![UniMoral RQ1-RQ3 exact-match accuracy](../../../figures/release/option1_unimoral_task_heatmap.svg)
 
-_This is the updated UniMoral result view. RQ1 action prediction is only one of four UniMoral surfaces; RQ2 moral typology, RQ3 factor attribution, and RQ4 consequence generation are shown separately with MiniMax caveats marked._
+_This is the main UniMoral classification view. RQ1, RQ2, and RQ3 all use exact-match accuracy here so the reader can compare the three task surfaces directly._
 
-### 2. SMID / Value Kaleidoscope: topline comparable accuracy
+### 2. UniMoral RQ4: generation quality
+
+![UniMoral RQ4 generation quality](../../../figures/release/option1_unimoral_generation_quality.svg)
+
+_RQ4 is a generation task, so it is separated from the accuracy chart and read with BERTScore F1 plus METEOR._
+
+### 3. SMID / Value Kaleidoscope: topline comparable accuracy
 
 ![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
 
-_UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
+_UniMoral is handled in Figures 1-2; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
 
-### 3. SMID / Value Kaleidoscope: family-size scaling
+### 4. SMID / Value Kaleidoscope: family-size scaling
 
 ![Family scaling profile](../../../figures/release/option1_family_scaling_profile.svg)
 
-_Use this second to compare size effects on SMID and Value after the separate UniMoral RQ1-RQ4 view, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
+_Use this next to compare size effects on SMID and Value after the separate UniMoral views, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
 
-### 4. CCD-Bench: cultural-cluster choice behavior
+### 5. CCD-Bench: cultural-cluster choice behavior
 
 ![CCD choice distribution](../../../figures/release/option1_ccd_choice_distribution.svg)
 
 _This is the main CCD-Bench result: deviation from the 10% uniform baseline across the ten canonical cultural clusters._
 
-### 5. CCD-Bench: dominant-option concentration
+### 6. CCD-Bench: dominant-option concentration
 
 ![CCD dominant-option share](../../../figures/release/option1_ccd_dominant_option_share.svg)
 
 _This is the compact CCD-Bench summary: how much each line collapses onto one dominant cluster, and how broadly it still spreads across the option set._
 
-### 6. DeNEVIL: proxy behavioral outcomes
+### 7. DeNEVIL: proxy behavioral outcomes
 
 ![DeNEVIL proxy behavioral outcomes](../../../figures/release/option1_denevil_behavior_outcomes.svg)
 
@@ -337,8 +343,9 @@ This checkpoint summarizes the broader family-size expansion separately from the
 
 ### Figures
 
-- [UniMoral RQ1-RQ4 dashboard](../../../figures/release/option1_unimoral_four_task_dashboard.svg): four-task UniMoral view with MiniMax caveats marked
-- [grouped bar chart](../../../figures/release/option1_benchmark_accuracy_bars.svg): SMID/Value cross-model comparison after the UniMoral RQ figure
+- [UniMoral RQ1-RQ3 accuracy](../../../figures/release/option1_unimoral_task_heatmap.svg): main classification view using one shared exact-match accuracy metric
+- [UniMoral RQ4 generation quality](../../../figures/release/option1_unimoral_generation_quality.svg): separate generation-quality view using BERTScore F1 and METEOR
+- [grouped bar chart](../../../figures/release/option1_benchmark_accuracy_bars.svg): SMID/Value cross-model comparison after the UniMoral figures
 - [benchmark difficulty profile](../../../figures/release/option1_benchmark_difficulty_profile.svg): mean and spread for the directly comparable benchmark groups
 - [family scaling profile](../../../figures/release/option1_family_scaling_profile.svg): family-size scaling across SMID and Value only
 - [CCD choice heatmap](../../../figures/release/option1_ccd_choice_distribution.svg): main CCD-Bench result showing deviation from the 10% uniform baseline across the ten canonical clusters
@@ -435,13 +442,13 @@ make audit
 
 The release now implements all four UniMoral task definitions and exports scored artifacts where model runs completed, but the current model-line matrix is not yet fully complete. Incomplete or parse-limited cells are listed in `unimoral-failure-checklist.csv`; action prediction remains the legacy comparable scalar and is retained as RQ1.
 
-Metric sanity check: F1 is a 0-1 classification score where higher is better; it balances precision and recall instead of only counting exact matches. UniMoral has four RQs. RQ1-RQ3 can be read together with exact-match accuracy, while the paper-facing classification metric is weighted F1. In the current strict-complete cells, exact-match accuracy spans RQ2 0.554-0.599 and RQ3 0.561-0.631. RQ4 is a generation task, so it is separated and read with semantic similarity instead of accuracy: BERTScore F1 spans 0.629-0.730, with METEOR 0.077-0.157 as a lexical side metric.
+Metric sanity check: UniMoral has four RQs. Because the frozen RQ1 source exposes only aggregate action accuracy, the main RQ1-RQ3 comparison uses one shared exact-match accuracy metric. In the current strict-complete cells, exact-match accuracy spans RQ2 0.554-0.599 and RQ3 0.561-0.631. RQ4 is a generation task, so it is separated and read with semantic similarity instead of accuracy: BERTScore F1 spans 0.629-0.730, with METEOR 0.077-0.157 as a lexical side metric.
 
 | RQ | Task | Status | Strict complete | Reported cells | Primary metric | Mean | Range | Top line | Diagnostic read |
 | --- | --- | --- | ---: | ---: | --- | ---: | ---: | --- | --- |
 | RQ1 | Action prediction | complete | 16/16 | 16/16 | accuracy | 0.655 | 0.121 | DeepSeek-M (0.684) | diagnostic |
-| RQ2 | Moral typology | incomplete | 15/16 | 16/16 | official_weighted_f1 | 0.315 | 0.080 | Llama-S (0.354) | moderately diagnostic |
-| RQ3 | Factor attribution | incomplete | 14/16 | 15/16 | official_weighted_f1 | 0.256 | 0.022 | DeepSeek-S (0.264) | saturated |
+| RQ2 | Moral typology | incomplete | 15/16 | 16/16 | accuracy | 0.581 | 0.045 | Gemma-S (0.599) | saturated |
+| RQ3 | Factor attribution | incomplete | 14/16 | 15/16 | accuracy | 0.592 | 0.070 | Llama-M (0.631) | moderately diagnostic |
 | RQ4 | Consequence generation | incomplete | 14/16 | 15/16 | bert_score_f1 | 0.691 | 0.101 | Llama-M (0.730) | diagnostic |
 
 Sample-level predictions for RQ2/RQ3/RQ4 are exported in `unimoral-sample-predictions.csv`; full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.
@@ -450,20 +457,12 @@ The prompt-to-artifact completion audit, including the verifier-checked CSV-leve
 
 | Task | What it measures | Scoring note |
 | --- | --- | --- |
-| RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | The UniMoral paper reports weighted F1 for action prediction; the frozen release source currently exposes the legacy exact-match accuracy scalar, so the F1 figure marks RQ1 F1 as unavailable rather than inventing it. |
-| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Weighted F1 is the paper-facing metric; exact-match membership accuracy is exported beside it for intuitive comparison with RQ1/RQ3. |
-| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Weighted F1 is the paper-facing metric; exact-match membership accuracy is exported beside it for intuitive comparison with RQ1/RQ2. |
-| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | BERTScore F1 is the paper-facing semantic-similarity metric; METEOR, BLEU, and ROUGE-L are lexical side metrics. RQ4 is kept separate from classification accuracy/F1 charts. |
-
-![UniMoral RQ1-RQ4 dashboard](../../../figures/release/option1_unimoral_four_task_dashboard.svg)
+| RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | Main figure uses exact-match accuracy because the frozen release source exposes only aggregate action accuracy. |
+| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Main figure uses exact-match accuracy for horizontal comparison with RQ1/RQ3. |
+| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Main figure uses exact-match accuracy for horizontal comparison with RQ1/RQ2. |
+| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | BERTScore F1 is the semantic-similarity metric; METEOR, BLEU, and ROUGE-L are lexical side metrics. RQ4 is kept separate from classification accuracy charts. |
 
 ![UniMoral classification accuracy heatmap](../../../figures/release/option1_unimoral_task_heatmap.svg)
 
-![UniMoral classification weighted F1](../../../figures/release/option1_unimoral_classification_f1.svg)
-
 ![UniMoral RQ4 generation quality](../../../figures/release/option1_unimoral_generation_quality.svg)
-
-![UniMoral task spread](../../../figures/release/option1_unimoral_task_spread.svg)
-
-![UniMoral task rankings](../../../figures/release/option1_unimoral_task_rankings.svg)
 <!-- UNIMORAL_FULL_BENCHMARK_END -->

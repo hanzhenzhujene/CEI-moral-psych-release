@@ -9,20 +9,20 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 
 ## Headline comparison figures
 
-- `option1_unimoral_four_task_dashboard.svg`: main UniMoral RQ1-RQ4 dashboard, showing the four task surfaces separately and marking MiniMax caveats
+- `option1_unimoral_task_heatmap.svg`: main UniMoral classification figure, showing RQ1-RQ3 with one shared exact-match accuracy metric
+- `option1_unimoral_generation_quality.svg`: separate UniMoral RQ4 generation-quality figure, using BERTScore F1 and METEOR
 - `option1_family_size_progress_overview.svg`: line-level completion overview across the published family-size matrix
-- `option1_benchmark_accuracy_bars.svg`: benchmark-faithful comparable-accuracy comparison for `SMID` and `Value Kaleidoscope`; UniMoral RQ1-RQ4 is handled in the separate dashboard
+- `option1_benchmark_accuracy_bars.svg`: benchmark-faithful comparable-accuracy comparison for `SMID` and `Value Kaleidoscope`; UniMoral is handled in the separate accuracy/generation figures
 - `option1_benchmark_difficulty_profile.svg`: benchmark-level mean / range summary for the comparable slice
-- `option1_family_scaling_profile.svg`: family-size comparison for `SMID` and `Value Kaleidoscope`; UniMoral scaling is shown in the RQ1-RQ4 dashboard
+- `option1_family_scaling_profile.svg`: family-size comparison for `SMID` and `Value Kaleidoscope`; UniMoral is shown in the separate RQ figures
 - `option1_accuracy_heatmap.svg`: compact heatmap of the currently comparable benchmark results
 - `option1_coverage_matrix.svg`: release-level coverage map showing paper-setup, proxy-only, and unavailable cells
 - `option1_sample_volume.svg`: where the evaluated sample volume is concentrated
 
 ## UniMoral figures
 
-- `option1_unimoral_four_task_dashboard.svg`: executive-facing dashboard for RQ1 action prediction, RQ2 moral typology, RQ3 factor attribution, and RQ4 consequence generation
-- `option1_unimoral_task_heatmap.svg`: all model/reference lines across RQ1-RQ3 using one shared exact-match accuracy metric, with family blocks and S/M/L badges
-- `option1_unimoral_classification_f1.svg`: paper-facing RQ1-RQ3 weighted F1 view, with RQ1 marked as unavailable when the frozen source exposes accuracy only
+- `option1_unimoral_four_task_dashboard.svg`: supporting UniMoral RQ1-RQ4 dashboard, showing coverage and metric boundaries
+- `option1_unimoral_task_heatmap.svg`: main all-line view across RQ1-RQ3 using one shared exact-match accuracy metric, with family blocks and S/M/L badges
 - `option1_unimoral_generation_quality.svg`: RQ4 consequence-generation quality view, using BERTScore F1 as the main semantic metric and METEOR as a side metric
 - `option1_unimoral_task_spread.svg`: exact-match accuracy spread readout for the RQ1-RQ3 classification tasks
 - `option1_unimoral_task_rankings.svg`: per-task exact-match accuracy rankings for the completed UniMoral classification cells
@@ -55,8 +55,8 @@ Before pushing publication-facing figure changes, render every release SVG to PN
 
 - no clipped labels, overlapping legend text, or family-group boxes extending past their rows
 - figure titles state the interpretation boundary (`accuracy`, `not accuracy`, `proxy`, or `appendix QA`) directly in the image
-- the first UniMoral view shows all four task surfaces (`RQ1`-`RQ4`) rather than only action prediction
-- UniMoral classification figures do not mix accuracy, weighted F1, and generation metrics in the same chart
+- the first UniMoral view shows RQ1-RQ3 exact-match accuracy clearly, with readable row labels and values
+- UniMoral classification figures use exact-match accuracy only; RQ4 stays in a separate generation-metric chart
 - appendix/provenance charts remain readable but do not become the primary evidence for accuracy claims
 
 One local render command used for QA is:

@@ -36,8 +36,8 @@ MODEL_LINES = [
 
 TASKS = {
     "unimoral_action_prediction": {"rq": "RQ1", "expected": 8784, "metric": "accuracy"},
-    "unimoral_moral_typology": {"rq": "RQ2", "expected": 3492, "metric": "official_weighted_f1"},
-    "unimoral_factor_attribution": {"rq": "RQ3", "expected": 3492, "metric": "official_weighted_f1"},
+    "unimoral_moral_typology": {"rq": "RQ2", "expected": 3492, "metric": "accuracy"},
+    "unimoral_factor_attribution": {"rq": "RQ3", "expected": 3492, "metric": "accuracy"},
     "unimoral_consequence_generation": {"rq": "RQ4", "expected": 1782, "metric": "bert_score_f1"},
 }
 
@@ -142,7 +142,8 @@ REQUIRED_CSV_COLUMNS = {
 
 REQUIRED_FIGURE_MARKERS = {
     "option1_unimoral_four_task_dashboard.svg": "UniMoral RQ1-RQ4 dashboard",
-    "option1_unimoral_task_heatmap.svg": "UniMoral task scores by model line",
+    "option1_unimoral_task_heatmap.svg": "UniMoral RQ1-RQ3 exact-match accuracy",
+    "option1_unimoral_generation_quality.svg": "UniMoral RQ4 generation quality",
     "option1_unimoral_task_rankings.svg": "UniMoral per-task model rankings",
     "option1_unimoral_task_spread.svg": "UniMoral task spread and saturation",
 }
@@ -800,6 +801,7 @@ def verify_release(
         "unimoral_rq4_bertscore",
         "unimoral_four_task_dashboard_figure",
         "unimoral_task_heatmap_figure",
+        "unimoral_generation_quality_figure",
         "unimoral_task_rankings_figure",
         "unimoral_task_spread_figure",
     ]:

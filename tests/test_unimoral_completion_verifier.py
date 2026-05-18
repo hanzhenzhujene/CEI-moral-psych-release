@@ -21,7 +21,7 @@ def _write_csv(path: Path, rows: list[dict[str, object]], fieldnames: list[str])
 def _set_tiny_verifier_constants(monkeypatch) -> None:
     tasks = {
         "unimoral_action_prediction": {"rq": "RQ1", "expected": 3, "metric": "accuracy"},
-        "unimoral_moral_typology": {"rq": "RQ2", "expected": 2, "metric": "official_weighted_f1"},
+        "unimoral_moral_typology": {"rq": "RQ2", "expected": 2, "metric": "accuracy"},
     }
     monkeypatch.setattr(verifier, "MODEL_LINES", ["Line-A"])
     monkeypatch.setattr(verifier, "TASKS", tasks)
@@ -341,6 +341,7 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         "unimoral_minimax_resume_plan": "results/release/unimoral-minimax-resume-plan.md",
         "unimoral_four_task_dashboard_figure": "figures/release/option1_unimoral_four_task_dashboard.svg",
         "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
+        "unimoral_generation_quality_figure": "figures/release/option1_unimoral_generation_quality.svg",
         "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
         "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
     }

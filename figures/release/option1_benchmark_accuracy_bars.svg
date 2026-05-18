@@ -38,10 +38,11 @@
 <rect x="0" y="0" width="1220" height="1810" class="canvas"/>
 <rect x="24" y="24" width="1172" height="1762" rx="22" class="panel"/>
 <title>SMID and Value accuracy by benchmark</title>
-<desc>Horizontal bar panels comparing the latest available family-size lines on SMID and Value Kaleidoscope after the separate UniMoral RQ1-RQ4 dashboard. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>
+<desc>Horizontal bar panels comparing the latest available family-size lines on SMID and Value Kaleidoscope after the separate UniMoral accuracy and generation figures. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>
 <text x="48" y="64" class="title">SMID And Value Accuracy By Benchmark</text>
-<text x="48" y="88" class="subtitle">UniMoral RQ1-RQ4 is shown in the first figure, so this comparison starts at SMID. Each panel keeps the same current lines. Hatched rows</text>
-<text x="48" y="108" class="subtitle">mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format validation.</text>
+<text x="48" y="88" class="subtitle">UniMoral is shown in separate accuracy and generation figures, so this comparison starts at SMID. Each panel keeps the same current</text>
+<text x="48" y="108" class="subtitle">lines. Hatched rows mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format</text>
+<text x="48" y="128" class="subtitle">validation.</text>
 <rect x="42" y="136" width="1136" height="750" rx="18" class="subpanel"/>
 <text x="48" y="164" class="axis">SMID</text>
 <text x="48" y="184" class="subtitle">Average of moral rating and foundation classification</text>

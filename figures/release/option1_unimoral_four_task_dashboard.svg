@@ -3,7 +3,7 @@
 <rect width="100%" height="100%" fill="#ffffff"/>
 <text x="36" y="44" class="title">UniMoral RQ1-RQ4 dashboard</text>
 <text x="36" y="70" class="subtitle">Updated UniMoral view: action prediction is only RQ1; RQ2 typology, RQ3 attribution, and RQ4 consequence generation are shown separately.</text>
-<text x="36" y="92" class="subtitle">There are four RQs. Classification accuracy is separated from paper F1 and RQ4 generation quality so readers do not compare mixed metrics in one chart.</text>
+<text x="36" y="92" class="subtitle">There are four RQs. RQ1-RQ3 use one shared accuracy readout; RQ4 generation quality is kept separate so readers do not compare mixed metrics in one chart.</text>
 <rect x="36" y="122" width="410" height="132" class="card"/>
 <text x="54" y="152" class="axis">RQ1: Action prediction</text>
 <text x="54" y="178" class="small">Metric: accuracy</text>
@@ -12,16 +12,16 @@
 <text x="54" y="244" class="small">Top line: DeepSeek-M (0.684)</text>
 <rect x="466" y="122" width="410" height="132" class="card"/>
 <text x="484" y="152" class="axis">RQ2: Moral typology</text>
-<text x="484" y="178" class="small">Metric: paper weighted F1; accuracy 0.554-0.599</text>
+<text x="484" y="178" class="small">Metric: exact-match accuracy</text>
 <text x="484" y="200" class="small">Strict complete: 15/16; reported: 16/16</text>
-<text x="484" y="222" class="small">Mean/range: 0.315 / 0.080</text>
-<text x="484" y="244" class="small">Top line: Llama-S (0.354)</text>
+<text x="484" y="222" class="small">Mean/range: 0.581 / 0.045</text>
+<text x="484" y="244" class="small">Top line: Gemma-S (0.599)</text>
 <rect x="896" y="122" width="410" height="132" class="card"/>
 <text x="914" y="152" class="axis">RQ3: Factor attribution</text>
-<text x="914" y="178" class="small">Metric: paper weighted F1; accuracy 0.561-0.631</text>
+<text x="914" y="178" class="small">Metric: exact-match accuracy</text>
 <text x="914" y="200" class="small">Strict complete: 14/16; reported: 15/16</text>
-<text x="914" y="222" class="small">Mean/range: 0.256 / 0.022</text>
-<text x="914" y="244" class="small">Top line: DeepSeek-S (0.264)</text>
+<text x="914" y="222" class="small">Mean/range: 0.592 / 0.070</text>
+<text x="914" y="244" class="small">Top line: Llama-M (0.631)</text>
 <rect x="1326" y="122" width="410" height="132" class="card"/>
 <text x="1344" y="152" class="axis">RQ4: Consequence generation</text>
 <text x="1344" y="178" class="small">Metric: BERTScore; METEOR 0.077-0.157</text>
@@ -30,17 +30,16 @@
 <text x="1344" y="244" class="small">Top line: Llama-M (0.730)</text>
 <rect x="36" y="286" width="840" height="382" class="panel"/>
 <text x="60" y="320" class="axis">Metric guide</text>
-<text x="72" y="360" class="subtitle">F1 is a 0-1 score where higher is better; it balances precision and recall.</text>
-<text x="72" y="394" class="subtitle">Weighted F1 averages each class F1 by class frequency, matching the paper&#x27;s class-imbalance readout.</text>
-<text x="72" y="428" class="subtitle">RQ1-RQ3 are classification-style tasks; use the next heatmap for one shared exact-match accuracy view.</text>
-<text x="72" y="462" class="subtitle">RQ2/RQ3 still keep weighted F1 in tables because that is the paper-facing metric.</text>
-<text x="72" y="496" class="subtitle">RQ4 is generation, so it is not an accuracy/F1 classification task; read it separately.</text>
+<text x="72" y="360" class="subtitle">RQ1 has only aggregate action accuracy in the frozen release source.</text>
+<text x="72" y="394" class="subtitle">RQ2/RQ3 use the same accuracy readout in the main comparison.</text>
+<text x="72" y="428" class="subtitle">RQ1-RQ3 can be read horizontally because they share the same metric.</text>
+<text x="72" y="462" class="subtitle">RQ4 is generation, so it is not an exact-match accuracy task; read it separately.</text>
 <rect x="916" y="286" width="848" height="382" class="panel"/>
 <text x="940" y="320" class="axis">Figure guide</text>
 <text x="952" y="360" class="subtitle">1. This dashboard: four RQs, coverage, and metric boundary.</text>
-<text x="952" y="394" class="subtitle">2. Classification heatmap: RQ1-RQ3 exact-match accuracy only.</text>
-<text x="952" y="428" class="subtitle">3. Classification rankings/spread: same exact-match accuracy only.</text>
-<text x="952" y="462" class="subtitle">4. Generation quality: RQ4 BERTScore F1 and METEOR, separate from accuracy.</text>
+<text x="952" y="394" class="subtitle">2. Main UniMoral figure: RQ1-RQ3 exact-match accuracy only.</text>
+<text x="952" y="428" class="subtitle">3. Generation figure: RQ4 BERTScore F1 and METEOR, separate from accuracy.</text>
+<text x="952" y="462" class="subtitle">4. Classification rankings/spread use the same RQ1-RQ3 accuracy metric.</text>
 <text x="952" y="496" class="subtitle">All public/reference model lines remain listed: Qwen, MiniMax, DeepSeek, Llama, Gemma S/M/L plus GPT4 Ref.</text>
 <rect x="36" y="720" width="1728" height="292" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>
 <text x="60" y="754" class="axis">Coverage readout</text>
