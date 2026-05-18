@@ -10287,9 +10287,9 @@ def append_repo_navigation(lines: list[str]) -> None:
             "| Cite the repo as a software artifact | [CITATION.cff](CITATION.cff) |",
             "| Understand how raw runs become public artifacts | [Data Flow](#data-flow) |",
             "| Go straight to the five benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |",
-            "| Read the May 13 additional-model follow-up | [Latest Additional Model Sweep](#latest-additional-model-sweep) |",
             "| Jump straight to the live summary | [Results First](#results-first) |",
-            "| Check the exact full-matrix status | [Family-Size Progress Matrix](#family-size-progress-matrix) |",
+            "| Check the exact full-matrix status | [Release Status and Artifacts](#release-status-and-artifacts) |",
+            "| Read the May 13 additional-model follow-up | [Exploratory sweep folder](results/exploratory/2026-05-13-additional-model-sweep/) |",
             "| Rebuild or verify the public package locally | [Reproducibility](#reproducibility) |",
             "",
         ]
@@ -10481,7 +10481,7 @@ def append_models_section(lines: list[str], rows: list[dict[str, Any]]) -> None:
     lines.extend(
         [
             "",
-            "_Exact per-line status lives below in Results First and the Family-Size Progress Matrix._",
+            "_Exact per-line status is exported in `results/release/2026-04-19-option1/family-size-progress.csv` and summarized in the release appendix._",
             "",
         ]
     )
@@ -10535,6 +10535,38 @@ def append_data_flow_section(lines: list[str]) -> None:
     )
 
 
+def append_release_status_and_artifacts_section(
+    lines: list[str],
+    public_family_count: int,
+    public_families_label: str,
+) -> None:
+    lines.extend(
+        [
+            "## Release Status and Artifacts",
+            "",
+            "For the main audience, the README stays focused on claims and figures. The full audit trail is still tracked in the release appendix and CSV artifacts.",
+            "",
+            "| Question | Short answer | Where to verify |",
+            "| --- | --- | --- |",
+            f"| Which model families are in the public matrix? | {public_family_count} families: {public_families_label}. | `results/release/2026-04-19-option1/family-size-progress.csv` |",
+            "| Are any published reruns currently live? | No currently published line is shown as live. | `results/release/2026-04-19-option1/README.md` |",
+            "| Are all comparable non-generation result surfaces regenerated? | Yes: root README, release tables, reports, and SVG figures are generated from tracked artifacts. | `make release`; `make audit` |",
+            "| Is strict UniMoral RQ1-RQ4 completion achieved? | Not yet; documented MiniMax RQ2/RQ3/RQ4 saved-artifact gaps remain. | `unimoral-failure-checklist.csv`; `unimoral-completion-audit.md` |",
+            "| Does the May 13 exploratory sweep change the main story? | No; it adds a small-model capability-floor check and leaves the release interpretation unchanged. | `results/exploratory/2026-05-13-additional-model-sweep/` |",
+            "",
+            "Key files for reviewers and collaborators:",
+            "",
+            "- [Release appendix](results/release/2026-04-19-option1/README.md): detailed matrices, tables, figure index, and regeneration notes.",
+            "- [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv): exact per-line status across the `5 x 5 x 3` matrix.",
+            "- [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv): the numeric source for the comparable-accuracy chart.",
+            "- [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) and [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv): behavioral/proxy evidence that should not be collapsed into macro-accuracy.",
+            "- [unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [unimoral-failure-checklist.csv](results/release/2026-04-19-option1/unimoral-failure-checklist.csv), and [unimoral-completion-audit.md](results/release/2026-04-19-option1/unimoral-completion-audit.md): the current RQ1-RQ4 UniMoral status and strict-completion boundary.",
+            "- [release-manifest.json](results/release/2026-04-19-option1/release-manifest.json): machine-readable index of tables, figures, and caveats.",
+            "",
+        ]
+    )
+
+
 def build_repo_readme(
     model_summary: list[dict[str, Any]],
     benchmark_catalog: list[dict[str, Any]],
@@ -10550,7 +10582,6 @@ def build_repo_readme(
     denevil_proxy_examples: list[dict[str, Any]],
     deepseek_sm_readout: list[dict[str, Any]],
 ) -> str:
-    llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
     public_families, public_families_label, public_family_count = public_family_summary(family_size_progress)
     lines = [
         "# CEI Moral-Psych Benchmark Suite",
@@ -10575,7 +10606,6 @@ def build_repo_readme(
         ccd_choice_distribution,
         denevil_behavior_summary,
     )
-    append_latest_additional_model_sweep_section(lines)
     lines.extend(
         [
             "## Research Goal",
@@ -10608,13 +10638,7 @@ def build_repo_readme(
         [
             "## Results First",
             "",
-            "This is the fastest way to understand the deliverable: which lines already have usable results, what is directly comparable now, and which family-size expansions are complete versus partial.",
-            "",
-        ]
-    )
-    append_current_result_lines_table(lines)
-    lines.extend(
-        [
+            "This is the compact result read for a PI, reviewer, or collaborator: start with the comparable-accuracy table, then use the interpretation sections for benchmark-specific caveats. Detailed per-line status moved to the release appendix so the root README does not repeat the same matrix in three formats.",
             "",
             "### Current Comparable Accuracy Snapshot",
             "",
@@ -10645,70 +10669,9 @@ def build_repo_readme(
         benchmark_catalog,
         "figures/release",
     )
+    append_release_status_and_artifacts_section(lines, public_family_count, public_families_label)
     lines.extend(
         [
-            "## Snapshot",
-            "",
-        ]
-    )
-    append_report_snapshot_table(
-        lines,
-        [
-            ("Report owner", f"`{REPORT_OWNER}`"),
-            ("Repo update date", f"`{REPORT_DATE_LONG}`"),
-            ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
-            ("Current project total cost", f"`{REPORT_CURRENT_TOTAL_COST}`"),
-            ("Total cost breakdown", REPORT_CURRENT_COST_BREAKDOWN),
-            ("Cost scope", REPORT_CURRENT_COST_SCOPE),
-            ("Intended use", REPORT_PURPOSE),
-            ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
-            ("Benchmarks in scope", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
-            ("Model families in scope", public_families_label),
-            ("Frozen families already in Option 1", "`Qwen`, `DeepSeek`, `Gemma`"),
-            (
-                "Extra completed local line",
-                f"`Llama-S`, complete locally across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks",
-            ),
-            ("Run setting", "`OpenRouter` + direct `MiniMax` + `OpenAI`, `temperature=0`"),
-            ("Current live reruns", REPORT_LIVE_RERUNS_SUMMARY),
-            ("Next restart focus", REPORT_NEXT_ACTION_SUMMARY),
-            ("Release guardrail", REPORT_RELEASE_GUARDRAIL_SUMMARY),
-        ],
-    )
-    append_current_operations_highlights(lines)
-    lines.extend(
-        [
-            "",
-            "## Local Expansion Checkpoint",
-            "",
-            "This checkpoint summarizes the broader family-size expansion separately from the frozen Option 1 counts. It is a curated snapshot rather than a live dashboard.",
-            "",
-        ]
-    )
-    append_local_expansion_checkpoint_table(lines)
-    lines.extend(
-        [
-            "",
-            "## Status Key",
-            "",
-        ]
-    )
-    append_status_key(lines)
-    lines.extend(
-        [
-            "",
-            "## Family-Size Progress Matrix",
-            "",
-            "This is the main public status table for the current published matrix.",
-            "",
-        ]
-    )
-    append_family_size_progress_table(lines, family_size_progress)
-    lines.extend(
-        [
-            "",
-            "The same matrix is also saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv).",
-            "",
             "## The Five Benchmark Papers",
             "",
         ]
@@ -10744,7 +10707,7 @@ def build_repo_readme(
             "```",
             "",
             "Populate `.env` only with the API keys and dataset paths needed for the benchmarks you want to run, such as `OPENROUTER_API_KEY`, `UNIMORAL_DATA_DIR`, and `SMID_DATA_DIR`.",
-            "If `uv` is not on `PATH` but the repo `.venv` already exists, runner-backed targets including `make test`, `make release`, `make audit`, `make bootstrap`, `make refresh-authoritative`, `make smoke`, and `make unimoral-missing-plan` fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If neither runner is available, those targets fail early with a clear setup error; you can also override the fallback path with `VENV_PYTHON=/absolute/path/to/python`.",
+            "If `uv` is not on `PATH` but the repo `.venv` already exists, runner-backed targets including `make test`, `make release`, `make audit`, `make bootstrap`, `make refresh-authoritative`, and `make smoke` fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If neither runner is available, those targets fail early with a clear setup error; you can also override the fallback path with `VENV_PYTHON=/absolute/path/to/python`.",
             "",
             "### 3. Rebuild the public package directly",
             "",
