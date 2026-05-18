@@ -848,41 +848,197 @@ def ranking_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
     return output
 
 
-def color(value: float | None) -> str:
+FAMILY_COLORS = {
+    "Qwen": "#2f6f9f",
+    "MiniMax": "#8a5a44",
+    "DeepSeek": "#4f7d45",
+    "Llama": "#b56a33",
+    "Gemma": "#7b62a3",
+    "GPT4 only": "#6b7280",
+}
+
+
+def family_for_line(line_label: str) -> str:
+    for label, family, _, _ in MODEL_LINES:
+        if label == line_label:
+            return family
+    return ""
+
+
+def color(value: float | None, low: float = 0.0, high: float = 1.0) -> str:
     if value is None:
         return "#f2f2f2"
+    if high <= low:
+        value = 0.72
+    else:
+        value = (value - low) / (high - low)
     value = max(0.0, min(1.0, value))
-    red = int(248 - 110 * value)
-    green = int(248 - 35 * value)
-    blue = int(248 - 140 * value)
+    red = int(241 - 205 * value)
+    green = int(248 - 103 * value)
+    blue = int(248 - 101 * value)
     return f"#{red:02x}{green:02x}{blue:02x}"
+
+
+def task_metric_ranges(rows: list[dict[str, object]]) -> dict[str, tuple[float, float]]:
+    ranges: dict[str, tuple[float, float]] = {}
+    for task_name in TASKS:
+        values = [
+            value
+            for value in (metric_value(row) for row in rows if row["task_name"] == task_name)
+            if value is not None
+        ]
+        ranges[task_name] = (min(values), max(values)) if values else (0.0, 1.0)
+    return ranges
+
+
+def _status_suffix(row: dict[str, object] | None) -> str:
+    if not row:
+        return ""
+    return "" if row.get("status") == "complete" else "*"
+
+
+def _status_stroke(row: dict[str, object] | None) -> tuple[str, str]:
+    if not row or metric_value(row) is None:
+        return "#c9cdd1", ""
+    if row.get("status") == "complete":
+        return "#c9cdd1", ""
+    return "#d97706", " stroke-dasharray=\"5 3\""
+
+
+def svg_four_task_dashboard(
+    rows: list[dict[str, object]],
+    coverage: list[dict[str, object]],
+    spreads: list[dict[str, object]],
+    rankings: list[dict[str, object]],
+    path: Path,
+) -> None:
+    width, height = 1800, 1080
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
+    parts.append(
+        "<style>"
+        "text{font-family:Arial,sans-serif;font-size:14px;fill:#17202a}"
+        ".title{font-size:28px;font-weight:700}"
+        ".subtitle{font-size:15px;fill:#4b5563}"
+        ".axis{font-weight:700}"
+        ".small{font-size:12px;fill:#4b5563}"
+        ".card{fill:#fbfcfd;stroke:#d8dee4;rx:8}"
+        ".panel{fill:white;stroke:#d8dee4;rx:8}"
+        "</style>"
+    )
+    parts.append('<rect width="100%" height="100%" fill="#ffffff"/>')
+    parts.append('<text x="36" y="44" class="title">UniMoral RQ1-RQ4 dashboard</text>')
+    parts.append(
+        '<text x="36" y="70" class="subtitle">Updated UniMoral view: action prediction is only RQ1; RQ2 typology, RQ3 attribution, and RQ4 consequence generation are shown separately.</text>'
+    )
+    parts.append(
+        '<text x="36" y="92" class="subtitle">Non-MiniMax model lines plus the GPT4 reference have complete scored artifacts across all four tasks; MiniMax caveats are marked with * and tracked in the failure checklist.</text>'
+    )
+
+    coverage_by_task = {row["task_name"]: row for row in coverage}
+    spread_by_task = {row["task_name"]: row for row in spreads}
+    top_by_task = {row["task_name"]: row for row in rankings if str(row["rank"]) == "1"}
+    card_w, card_h, gap = 410, 132, 20
+    for idx, (task_name, task) in enumerate(TASKS.items()):
+        x = 36 + idx * (card_w + gap)
+        y = 122
+        coverage_row = coverage_by_task.get(task_name, {})
+        spread = spread_by_task.get(task_name, {})
+        top = top_by_task.get(task_name, {})
+        parts.append(f'<rect x="{x}" y="{y}" width="{card_w}" height="{card_h}" class="card"/>')
+        parts.append(f'<text x="{x + 18}" y="{y + 30}" class="axis">{task["rq"]}: {html.escape(task["label"])}</text>')
+        parts.append(f'<text x="{x + 18}" y="{y + 56}" class="small">Metric: {html.escape(str(task["metric"]))}</text>')
+        parts.append(
+            f'<text x="{x + 18}" y="{y + 78}" class="small">Strict complete: {coverage_row.get("complete_model_lines", "")}/{coverage_row.get("expected_model_lines", "")}; reported: {coverage_row.get("reported_model_lines", "")}/{coverage_row.get("expected_model_lines", "")}</text>'
+        )
+        top_text = f'{top.get("line_label", "")} ({format_value(top.get("value", ""))})' if top else ""
+        parts.append(f'<text x="{x + 18}" y="{y + 100}" class="small">Mean/range: {format_value(spread.get("mean", ""))} / {format_value(spread.get("range", ""))}</text>')
+        parts.append(f'<text x="{x + 18}" y="{y + 122}" class="small">Top line: {html.escape(top_text)}</text>')
+
+    panel_y = 286
+    panel_w, panel_h = 410, 382
+    for idx, (task_name, task) in enumerate(TASKS.items()):
+        x = 36 + idx * (panel_w + gap)
+        parts.append(f'<rect x="{x}" y="{panel_y}" width="{panel_w}" height="{panel_h}" class="panel"/>')
+        parts.append(f'<text x="{x + 16}" y="{panel_y + 30}" class="axis">{task["rq"]} top model lines</text>')
+        task_rows = [row for row in rankings if row["task_name"] == task_name][:8]
+        max_value = max((float(row["value"]) for row in task_rows), default=1.0)
+        for row_idx, row in enumerate(task_rows):
+            y = panel_y + 58 + row_idx * 34
+            value = float(row["value"])
+            bar_w = 245 * value / max_value if max_value else 0
+            family = family_for_line(str(row["line_label"]))
+            fill = FAMILY_COLORS.get(family, "#6b7280")
+            parts.append(f'<text x="{x + 18}" y="{y + 15}" class="small">{row["rank"]}. {html.escape(str(row["line_label"]))}</text>')
+            parts.append(f'<rect x="{x + 142}" y="{y}" width="{bar_w:.1f}" height="20" fill="{fill}" rx="3"/>')
+            parts.append(f'<text x="{x + 152 + bar_w:.1f}" y="{y + 15}" class="small">{value:.3f}</text>')
+        parts.append(f'<text x="{x + 16}" y="{panel_y + panel_h - 16}" class="small">Top 8; incomplete cells omitted.</text>')
+
+    y0 = 720
+    parts.append(f'<rect x="36" y="{y0}" width="1728" height="292" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>')
+    parts.append(f'<text x="60" y="{y0 + 34}" class="axis">Coverage readout</text>')
+    parts.append(
+        f'<text x="60" y="{y0 + 62}" class="subtitle">Complete four-task lines outside MiniMax: Qwen-S/M/L, DeepSeek-S/M/L, Llama-S/M/L, Gemma-S/M/L, and GPT4 only (13/13 lines).</text>'
+    )
+    parts.append(
+        f'<text x="60" y="{y0 + 88}" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>'
+    )
+    chip_y = y0 + 124
+    chips = [
+        ("Qwen", "S/M/L: 4 tasks complete"),
+        ("DeepSeek", "S/M/L: 4 tasks complete"),
+        ("Llama", "S/M/L: 4 tasks complete"),
+        ("Gemma", "S/M/L: 4 tasks complete"),
+        ("GPT4 only", "reference: 4 tasks complete"),
+        ("MiniMax", "caveats: see failure checklist"),
+    ]
+    chip_w = 260
+    for idx, (family, label) in enumerate(chips):
+        x = 60 + idx * 280
+        fill = FAMILY_COLORS.get(family, "#6b7280")
+        parts.append(f'<rect x="{x}" y="{chip_y}" width="{chip_w}" height="54" fill="white" stroke="{fill}" stroke-width="2" rx="8"/>')
+        parts.append(f'<circle cx="{x + 22}" cy="{chip_y + 27}" r="7" fill="{fill}"/>')
+        parts.append(f'<text x="{x + 40}" y="{chip_y + 22}" class="axis">{html.escape(family)}</text>')
+        parts.append(f'<text x="{x + 40}" y="{chip_y + 42}" class="small">{html.escape(label)}</text>')
+    parts.append(f'<text x="60" y="{y0 + 214}" class="small">See the full score heatmap below for all 16 public/reference lines and all four RQ columns.</text>')
+    parts.append(f'<text x="60" y="{y0 + 238}" class="small">* marks reported-but-not-strict cells; MiniMax remaining gaps are documented in unimoral-failure-checklist.csv.</text>')
+    parts.append("</svg>")
+    path.write_text("\n".join(parts), encoding="utf-8")
 
 
 def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
     task_names = list(TASKS)
     lines = [line for line, _, _, _ in MODEL_LINES]
     row_lookup = {(row["line_label"], row["task_name"]): row for row in rows}
-    cell_w, cell_h = 142, 28
-    left, top = 150, 70
-    width = left + cell_w * len(task_names) + 30
-    height = top + cell_h * len(lines) + 50
+    ranges = task_metric_ranges(rows)
+    cell_w, cell_h = 205, 34
+    left, top = 188, 154
+    width = left + cell_w * len(task_names) + 48
+    height = top + cell_h * len(lines) + 92
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
-    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px}.title{font-size:18px;font-weight:700}.axis{font-weight:700}</style>")
+    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:22px;font-weight:700}.subtitle{fill:#4b5563}.axis{font-weight:700}.small{font-size:11px;fill:#4b5563}</style>")
     parts.append('<rect width="100%" height="100%" fill="white"/>')
-    parts.append('<text x="20" y="30" class="title">UniMoral task scores by model line</text>')
+    parts.append('<text x="24" y="34" class="title">UniMoral task scores by model line (RQ1-RQ4)</text>')
+    parts.append('<text x="24" y="58" class="subtitle">Each column uses its own task metric and color scale, so RQ4 METEOR is visible instead of washed out by RQ1 accuracy.</text>')
+    parts.append('<text x="24" y="78" class="subtitle">* = reported but not strict complete; missing cells are shown as n/a.</text>')
     for col, task_name in enumerate(task_names):
         x = left + col * cell_w
-        parts.append(f'<text x="{x + 6}" y="{top - 18}" class="axis">{html.escape(TASKS[task_name]["label"])}</text>')
+        task = TASKS[task_name]
+        parts.append(f'<text x="{x + 6}" y="{top - 48}" class="axis">{task["rq"]}</text>')
+        parts.append(f'<text x="{x + 6}" y="{top - 30}" class="axis">{html.escape(task["label"])}</text>')
+        parts.append(f'<text x="{x + 6}" y="{top - 12}" class="small">{html.escape(str(task["metric"]))}</text>')
     for row_index, line in enumerate(lines):
         y = top + row_index * cell_h
         parts.append(f'<text x="20" y="{y + 18}" class="axis">{html.escape(line)}</text>')
         for col, task_name in enumerate(task_names):
             x = left + col * cell_w
-            row = row_lookup.get((line, task_name), {})
+            row = row_lookup.get((line, task_name))
             value = metric_value(row) if row else None
-            label = "" if value is None else f"{value:.3f}"
-            parts.append(f'<rect x="{x}" y="{y}" width="{cell_w - 4}" height="{cell_h - 4}" fill="{color(value)}" stroke="#d0d0d0"/>')
-            parts.append(f'<text x="{x + 8}" y="{y + 17}">{label}</text>')
+            low, high = ranges[task_name]
+            label = "n/a" if value is None else f"{value:.3f}{_status_suffix(row)}"
+            stroke, dash = _status_stroke(row)
+            parts.append(f'<rect x="{x}" y="{y}" width="{cell_w - 6}" height="{cell_h - 6}" fill="{color(value, low, high)}" stroke="{stroke}"{dash} rx="3"/>')
+            parts.append(f'<text x="{x + 10}" y="{y + 20}">{label}</text>')
+    parts.append(f'<text x="24" y="{height - 26}" class="small">Rows include all public model lines plus the GPT4 reference. MiniMax strict blockers remain documented separately; non-MiniMax lines have full four-task coverage.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
@@ -984,6 +1140,7 @@ def update_manifest(release_dir: Path) -> None:
             "unimoral_sample_predictions": "results/release/2026-04-19-option1/unimoral-sample-predictions.csv",
             "unimoral_failure_checklist": "results/release/2026-04-19-option1/unimoral-failure-checklist.csv",
             "unimoral_completion_audit": "results/release/2026-04-19-option1/unimoral-completion-audit.md",
+            "unimoral_four_task_dashboard_figure": "figures/release/option1_unimoral_four_task_dashboard.svg",
             "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
             "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
             "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
@@ -1006,6 +1163,7 @@ def update_manifest(release_dir: Path) -> None:
             *(["unimoral-rq4-bertscore.csv"] if bertscore_path.exists() and bertscore_path.stat().st_size > 0 else []),
         ],
         "figures": [
+            "figures/release/option1_unimoral_four_task_dashboard.svg",
             "figures/release/option1_unimoral_task_heatmap.svg",
             "figures/release/option1_unimoral_task_rankings.svg",
             "figures/release/option1_unimoral_task_spread.svg",
@@ -1486,6 +1644,8 @@ def build_markdown_section(
             "| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Official-style weighted F1 is the primary release metric; exact-match membership accuracy is exported beside it. |",
             "| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar; BLEU and ROUGE-L are exported beside it. Official BERTScore F1 is exported in `unimoral-rq4-bertscore.csv` and merged into completed RQ4 rows when present. |",
             "",
+            f"![UniMoral RQ1-RQ4 dashboard]({figure_prefix}option1_unimoral_four_task_dashboard.svg)",
+            "",
             f"![UniMoral task heatmap]({figure_prefix}option1_unimoral_task_heatmap.svg)",
             "",
             f"![UniMoral task spread]({figure_prefix}option1_unimoral_task_spread.svg)",
@@ -1559,6 +1719,7 @@ def main() -> None:
         rankings = read_csv(args.release_dir / "unimoral-model-rankings.csv")
         failures = read_csv(args.release_dir / "unimoral-failure-checklist.csv")
         args.figure_dir.mkdir(parents=True, exist_ok=True)
+        svg_four_task_dashboard(rows, coverage, spreads, rankings, args.figure_dir / "option1_unimoral_four_task_dashboard.svg")
         svg_heatmap(rows, args.figure_dir / "option1_unimoral_task_heatmap.svg")
         svg_rankings(rankings, args.figure_dir / "option1_unimoral_task_rankings.svg")
         svg_spread(spreads, args.figure_dir / "option1_unimoral_task_spread.svg")
@@ -1642,6 +1803,7 @@ def main() -> None:
     )
 
     args.figure_dir.mkdir(parents=True, exist_ok=True)
+    svg_four_task_dashboard(rows, coverage, spreads, rankings, args.figure_dir / "option1_unimoral_four_task_dashboard.svg")
     svg_heatmap(rows, args.figure_dir / "option1_unimoral_task_heatmap.svg")
     svg_rankings(rankings, args.figure_dir / "option1_unimoral_task_rankings.svg")
     svg_spread(spreads, args.figure_dir / "option1_unimoral_task_spread.svg")

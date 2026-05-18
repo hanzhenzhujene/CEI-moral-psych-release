@@ -339,6 +339,7 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         "unimoral_failure_checklist": "results/release/unimoral-failure-checklist.csv",
         "unimoral_completion_audit": "results/release/unimoral-completion-audit.md",
         "unimoral_minimax_resume_plan": "results/release/unimoral-minimax-resume-plan.md",
+        "unimoral_four_task_dashboard_figure": "figures/release/option1_unimoral_four_task_dashboard.svg",
         "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
         "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
         "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",

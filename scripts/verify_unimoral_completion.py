@@ -141,6 +141,7 @@ REQUIRED_CSV_COLUMNS = {
 }
 
 REQUIRED_FIGURE_MARKERS = {
+    "option1_unimoral_four_task_dashboard.svg": "UniMoral RQ1-RQ4 dashboard",
     "option1_unimoral_task_heatmap.svg": "UniMoral task scores by model line",
     "option1_unimoral_task_rankings.svg": "UniMoral per-task model rankings",
     "option1_unimoral_task_spread.svg": "UniMoral task spread and saturation",
@@ -321,6 +322,7 @@ def verify_release(
         require_file(release_dir / filename, errors)
 
     for filename in [
+        "option1_unimoral_four_task_dashboard.svg",
         "option1_unimoral_task_heatmap.svg",
         "option1_unimoral_task_rankings.svg",
         "option1_unimoral_task_spread.svg",
@@ -796,6 +798,7 @@ def verify_release(
         "unimoral_completion_audit",
         "unimoral_minimax_resume_plan",
         "unimoral_rq4_bertscore",
+        "unimoral_four_task_dashboard_figure",
         "unimoral_task_heatmap_figure",
         "unimoral_task_rankings_figure",
         "unimoral_task_spread_figure",

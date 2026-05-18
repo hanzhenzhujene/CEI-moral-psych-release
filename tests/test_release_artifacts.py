@@ -972,11 +972,12 @@ def test_release_builder_emits_expected_files(tmp_path):
             assert "0.2% no-visible proxy traces" in text
         assert "## Results First" in text
         assert "## Benchmark Result Visuals" in text
-        assert "### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy" in text
-        assert "### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling" in text
-        assert "### 3. CCD-Bench: cultural-cluster choice behavior" in text
-        assert "### 4. CCD-Bench: dominant-option concentration" in text
-        assert "### 5. DeNEVIL: proxy behavioral outcomes" in text
+        assert "### 1. UniMoral RQ1-RQ4: full four-task dashboard" in text
+        assert "### 2. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy" in text
+        assert "### 3. UniMoral / SMID / Value Kaleidoscope: family-size scaling" in text
+        assert "### 4. CCD-Bench: cultural-cluster choice behavior" in text
+        assert "### 5. CCD-Bench: dominant-option concentration" in text
+        assert "### 6. DeNEVIL: proxy behavioral outcomes" in text
         assert "## Interpretation" in text
         assert "### Interpretation At A Glance" in text
         assert "### Benchmark Reading Guide" in text
@@ -1000,6 +1001,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "paper-aligned APV / EVR / MVP are `n/a`" in text
         assert "headline DeNEVIL behavioral-outcomes chart already appears above" in text
         assert "ccd-choice-distribution.csv" in text
+        assert "option1_unimoral_four_task_dashboard.svg" in text
         assert "option1_ccd_choice_distribution.svg" in text
         assert "option1_ccd_dominant_option_share.svg" in text
         assert "option1_denevil_behavior_outcomes.svg" in text

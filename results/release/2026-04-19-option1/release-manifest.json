@@ -83,6 +83,7 @@
     "unimoral_completion_audit": "results/release/2026-04-19-option1/unimoral-completion-audit.md",
     "unimoral_coverage": "results/release/2026-04-19-option1/unimoral-coverage.csv",
     "unimoral_failure_checklist": "results/release/2026-04-19-option1/unimoral-failure-checklist.csv",
+    "unimoral_four_task_dashboard_figure": "figures/release/option1_unimoral_four_task_dashboard.svg",
     "unimoral_full_benchmark": "results/release/2026-04-19-option1/unimoral-full-benchmark.csv",
     "unimoral_minimax_resume_plan": "results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md",
     "unimoral_model_rankings": "results/release/2026-04-19-option1/unimoral-model-rankings.csv",
@@ -110,6 +111,7 @@
     "figures/release/option1_denevil_proxy_valid_response_rate.svg",
     "figures/release/option1_denevil_proxy_pipeline.svg",
     "figures/release/option1_sample_volume.svg",
+    "figures/release/option1_unimoral_four_task_dashboard.svg",
     "figures/release/option1_unimoral_task_heatmap.svg",
     "figures/release/option1_unimoral_task_rankings.svg",
     "figures/release/option1_unimoral_task_spread.svg"

@@ -9,6 +9,7 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 
 ## Headline comparison figures
 
+- `option1_unimoral_four_task_dashboard.svg`: main UniMoral RQ1-RQ4 dashboard, showing the four task surfaces separately and marking MiniMax caveats
 - `option1_family_size_progress_overview.svg`: line-level completion overview across the published family-size matrix
 - `option1_benchmark_accuracy_bars.svg`: benchmark-faithful comparable-accuracy comparison for `UniMoral`, `SMID`, and `Value Kaleidoscope`
 - `option1_benchmark_difficulty_profile.svg`: benchmark-level mean / range summary for the comparable slice
@@ -16,6 +17,13 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 - `option1_accuracy_heatmap.svg`: compact heatmap of the currently comparable benchmark results
 - `option1_coverage_matrix.svg`: release-level coverage map showing paper-setup, proxy-only, and unavailable cells
 - `option1_sample_volume.svg`: where the evaluated sample volume is concentrated
+
+## UniMoral figures
+
+- `option1_unimoral_four_task_dashboard.svg`: executive-facing dashboard for RQ1 action prediction, RQ2 moral typology, RQ3 factor attribution, and RQ4 consequence generation
+- `option1_unimoral_task_heatmap.svg`: all model/reference lines across all four UniMoral tasks, using a task-specific color scale so RQ4 METEOR remains visible
+- `option1_unimoral_task_spread.svg`: mean/range readout for the four UniMoral tasks
+- `option1_unimoral_task_rankings.svg`: per-task model rankings for the completed UniMoral cells
 
 ## CCD-Bench figures
 

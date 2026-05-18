@@ -23,35 +23,41 @@ If you only read one section, read these key takeaways:
 
 ## Benchmark Result Visuals
 
-If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
+If you want the benchmark results before the tables, start here. These visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
 
 `GPT4 only` is shown as a single text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as a GPT4 S/M/L scaling series, and it has no SMID or DeNEVIL row.
 
-### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy
+### 1. UniMoral RQ1-RQ4: full four-task dashboard
+
+![UniMoral RQ1-RQ4 dashboard](../../../figures/release/option1_unimoral_four_task_dashboard.svg)
+
+_This is the updated UniMoral result view. RQ1 action prediction is only one of four UniMoral surfaces; RQ2 moral typology, RQ3 factor attribution, and RQ4 consequence generation are shown separately with MiniMax caveats marked._
+
+### 2. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy
 
 ![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
 
 _Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
 
-### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling
+### 3. UniMoral / SMID / Value Kaleidoscope: family-size scaling
 
 ![Family scaling profile](../../../figures/release/option1_family_scaling_profile.svg)
 
 _Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
 
-### 3. CCD-Bench: cultural-cluster choice behavior
+### 4. CCD-Bench: cultural-cluster choice behavior
 
 ![CCD choice distribution](../../../figures/release/option1_ccd_choice_distribution.svg)
 
 _This is the main CCD-Bench result: deviation from the 10% uniform baseline across the ten canonical cultural clusters._
 
-### 4. CCD-Bench: dominant-option concentration
+### 5. CCD-Bench: dominant-option concentration
 
 ![CCD dominant-option share](../../../figures/release/option1_ccd_dominant_option_share.svg)
 
 _This is the compact CCD-Bench summary: how much each line collapses onto one dominant cluster, and how broadly it still spreads across the option set._
 
-### 5. DeNEVIL: proxy behavioral outcomes
+### 6. DeNEVIL: proxy behavioral outcomes
 
 ![DeNEVIL proxy behavioral outcomes](../../../figures/release/option1_denevil_behavior_outcomes.svg)
 
@@ -331,6 +337,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 
 ### Figures
 
+- [UniMoral RQ1-RQ4 dashboard](../../../figures/release/option1_unimoral_four_task_dashboard.svg): four-task UniMoral view with MiniMax caveats marked
 - [grouped bar chart](../../../figures/release/option1_benchmark_accuracy_bars.svg): current cross-model benchmark comparison
 - [benchmark difficulty profile](../../../figures/release/option1_benchmark_difficulty_profile.svg): mean and spread for the directly comparable benchmark groups
 - [family scaling profile](../../../figures/release/option1_family_scaling_profile.svg): family-size scaling across the three directly comparable accuracy benchmarks only
@@ -445,6 +452,8 @@ The prompt-to-artifact completion audit, including the verifier-checked CSV-leve
 | RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Official-style weighted F1 is the primary release metric; exact-match membership accuracy is exported beside it. |
 | RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Official-style weighted F1 is the primary release metric; exact-match membership accuracy is exported beside it. |
 | RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar; BLEU and ROUGE-L are exported beside it. Official BERTScore F1 is exported in `unimoral-rq4-bertscore.csv` and merged into completed RQ4 rows when present. |
+
+![UniMoral RQ1-RQ4 dashboard](../../../figures/release/option1_unimoral_four_task_dashboard.svg)
 
 ![UniMoral task heatmap](../../../figures/release/option1_unimoral_task_heatmap.svg)
 

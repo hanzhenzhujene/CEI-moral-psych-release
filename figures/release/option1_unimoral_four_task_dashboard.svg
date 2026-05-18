@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1080" viewBox="0 0 1800 1080">
+<style>text{font-family:Arial,sans-serif;font-size:14px;fill:#17202a}.title{font-size:28px;font-weight:700}.subtitle{font-size:15px;fill:#4b5563}.axis{font-weight:700}.small{font-size:12px;fill:#4b5563}.card{fill:#fbfcfd;stroke:#d8dee4;rx:8}.panel{fill:white;stroke:#d8dee4;rx:8}</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="36" y="44" class="title">UniMoral RQ1-RQ4 dashboard</text>
+<text x="36" y="70" class="subtitle">Updated UniMoral view: action prediction is only RQ1; RQ2 typology, RQ3 attribution, and RQ4 consequence generation are shown separately.</text>
+<text x="36" y="92" class="subtitle">Non-MiniMax model lines plus the GPT4 reference have complete scored artifacts across all four tasks; MiniMax caveats are marked with * and tracked in the failure checklist.</text>
+<rect x="36" y="122" width="410" height="132" class="card"/>
+<text x="54" y="152" class="axis">RQ1: Action prediction</text>
+<text x="54" y="178" class="small">Metric: accuracy</text>
+<text x="54" y="200" class="small">Strict complete: 16/16; reported: 16/16</text>
+<text x="54" y="222" class="small">Mean/range: 0.655 / 0.121</text>
+<text x="54" y="244" class="small">Top line: DeepSeek-M (0.684)</text>
+<rect x="466" y="122" width="410" height="132" class="card"/>
+<text x="484" y="152" class="axis">RQ2: Moral typology</text>
+<text x="484" y="178" class="small">Metric: official_weighted_f1</text>
+<text x="484" y="200" class="small">Strict complete: 15/16; reported: 16/16</text>
+<text x="484" y="222" class="small">Mean/range: 0.315 / 0.080</text>
+<text x="484" y="244" class="small">Top line: Llama-S (0.354)</text>
+<rect x="896" y="122" width="410" height="132" class="card"/>
+<text x="914" y="152" class="axis">RQ3: Factor attribution</text>
+<text x="914" y="178" class="small">Metric: official_weighted_f1</text>
+<text x="914" y="200" class="small">Strict complete: 14/16; reported: 15/16</text>
+<text x="914" y="222" class="small">Mean/range: 0.256 / 0.022</text>
+<text x="914" y="244" class="small">Top line: DeepSeek-S (0.264)</text>
+<rect x="1326" y="122" width="410" height="132" class="card"/>
+<text x="1344" y="152" class="axis">RQ4: Consequence generation</text>
+<text x="1344" y="178" class="small">Metric: meteor</text>
+<text x="1344" y="200" class="small">Strict complete: 14/16; reported: 15/16</text>
+<text x="1344" y="222" class="small">Mean/range: 0.116 / 0.081</text>
+<text x="1344" y="244" class="small">Top line: Llama-L (0.157)</text>
+<rect x="36" y="286" width="410" height="382" class="panel"/>
+<text x="52" y="316" class="axis">RQ1 top model lines</text>
+<text x="54" y="359" class="small">1. DeepSeek-M</text>
+<rect x="178" y="344" width="245.0" height="20" fill="#4f7d45" rx="3"/>
+<text x="433.0" y="359" class="small">0.684</text>
+<text x="54" y="393" class="small">2. GPT4 only</text>
+<rect x="178" y="378" width="241.1" height="20" fill="#6b7280" rx="3"/>
+<text x="429.1" y="393" class="small">0.673</text>
+<text x="54" y="427" class="small">3. Llama-M</text>
+<rect x="178" y="412" width="240.1" height="20" fill="#b56a33" rx="3"/>
+<text x="428.1" y="427" class="small">0.670</text>
+<text x="54" y="461" class="small">4. Qwen-L</text>
+<rect x="178" y="446" width="238.4" height="20" fill="#2f6f9f" rx="3"/>
+<text x="426.4" y="461" class="small">0.665</text>
+<text x="54" y="495" class="small">5. Qwen-M</text>
+<rect x="178" y="480" width="238.1" height="20" fill="#2f6f9f" rx="3"/>
+<text x="426.1" y="495" class="small">0.665</text>
+<text x="54" y="529" class="small">6. Gemma-M</text>
+<rect x="178" y="514" width="237.5" height="20" fill="#7b62a3" rx="3"/>
+<text x="425.5" y="529" class="small">0.663</text>
+<text x="54" y="563" class="small">7. Gemma-L</text>
+<rect x="178" y="548" width="236.9" height="20" fill="#7b62a3" rx="3"/>
+<text x="424.9" y="563" class="small">0.661</text>
+<text x="54" y="597" class="small">8. MiniMax-S</text>
+<rect x="178" y="582" width="236.8" height="20" fill="#8a5a44" rx="3"/>
+<text x="424.8" y="597" class="small">0.661</text>
+<text x="52" y="652" class="small">Top 8; incomplete cells omitted.</text>
+<rect x="466" y="286" width="410" height="382" class="panel"/>
+<text x="482" y="316" class="axis">RQ2 top model lines</text>
+<text x="484" y="359" class="small">1. Llama-S</text>
+<rect x="608" y="344" width="245.0" height="20" fill="#b56a33" rx="3"/>
+<text x="863.0" y="359" class="small">0.354</text>
+<text x="484" y="393" class="small">2. Gemma-S</text>
+<rect x="608" y="378" width="242.6" height="20" fill="#7b62a3" rx="3"/>
+<text x="860.6" y="393" class="small">0.351</text>
+<text x="484" y="427" class="small">3. DeepSeek-L</text>
+<rect x="608" y="412" width="231.5" height="20" fill="#4f7d45" rx="3"/>
+<text x="849.5" y="427" class="small">0.335</text>
+<text x="484" y="461" class="small">4. DeepSeek-S</text>
+<rect x="608" y="446" width="229.9" height="20" fill="#4f7d45" rx="3"/>
+<text x="847.9" y="461" class="small">0.332</text>
+<text x="484" y="495" class="small">5. MiniMax-M</text>
+<rect x="608" y="480" width="229.3" height="20" fill="#8a5a44" rx="3"/>
+<text x="847.3" y="495" class="small">0.332</text>
+<text x="484" y="529" class="small">6. MiniMax-L</text>
+<rect x="608" y="514" width="225.8" height="20" fill="#8a5a44" rx="3"/>
+<text x="843.8" y="529" class="small">0.326</text>
+<text x="484" y="563" class="small">7. Qwen-L</text>
+<rect x="608" y="548" width="225.3" height="20" fill="#2f6f9f" rx="3"/>
+<text x="843.3" y="563" class="small">0.326</text>
+<text x="484" y="597" class="small">8. Gemma-M</text>
+<rect x="608" y="582" width="220.2" height="20" fill="#7b62a3" rx="3"/>
+<text x="838.2" y="597" class="small">0.318</text>
+<text x="482" y="652" class="small">Top 8; incomplete cells omitted.</text>
+<rect x="896" y="286" width="410" height="382" class="panel"/>
+<text x="912" y="316" class="axis">RQ3 top model lines</text>
+<text x="914" y="359" class="small">1. DeepSeek-S</text>
+<rect x="1038" y="344" width="245.0" height="20" fill="#4f7d45" rx="3"/>
+<text x="1293.0" y="359" class="small">0.264</text>
+<text x="914" y="393" class="small">2. Llama-M</text>
+<rect x="1038" y="378" width="243.9" height="20" fill="#b56a33" rx="3"/>
+<text x="1291.9" y="393" class="small">0.263</text>
+<text x="914" y="427" class="small">3. Gemma-M</text>
+<rect x="1038" y="412" width="240.8" height="20" fill="#7b62a3" rx="3"/>
+<text x="1288.8" y="427" class="small">0.260</text>
+<text x="914" y="461" class="small">4. MiniMax-M</text>
+<rect x="1038" y="446" width="240.0" height="20" fill="#8a5a44" rx="3"/>
+<text x="1288.0" y="461" class="small">0.259</text>
+<text x="914" y="495" class="small">5. Qwen-M</text>
+<rect x="1038" y="480" width="239.9" height="20" fill="#2f6f9f" rx="3"/>
+<text x="1287.9" y="495" class="small">0.259</text>
+<text x="914" y="529" class="small">6. DeepSeek-M</text>
+<rect x="1038" y="514" width="239.1" height="20" fill="#4f7d45" rx="3"/>
+<text x="1287.1" y="529" class="small">0.258</text>
+<text x="914" y="563" class="small">7. Llama-S</text>
+<rect x="1038" y="548" width="238.5" height="20" fill="#b56a33" rx="3"/>
+<text x="1286.5" y="563" class="small">0.257</text>
+<text x="914" y="597" class="small">8. Qwen-L</text>
+<rect x="1038" y="582" width="238.4" height="20" fill="#2f6f9f" rx="3"/>
+<text x="1286.4" y="597" class="small">0.257</text>
+<text x="912" y="652" class="small">Top 8; incomplete cells omitted.</text>
+<rect x="1326" y="286" width="410" height="382" class="panel"/>
+<text x="1342" y="316" class="axis">RQ4 top model lines</text>
+<text x="1344" y="359" class="small">1. Llama-L</text>
+<rect x="1468" y="344" width="245.0" height="20" fill="#b56a33" rx="3"/>
+<text x="1723.0" y="359" class="small">0.157</text>
+<text x="1344" y="393" class="small">2. Llama-M</text>
+<rect x="1468" y="378" width="239.5" height="20" fill="#b56a33" rx="3"/>
+<text x="1717.5" y="393" class="small">0.154</text>
+<text x="1344" y="427" class="small">3. Qwen-M</text>
+<rect x="1468" y="412" width="234.5" height="20" fill="#2f6f9f" rx="3"/>
+<text x="1712.5" y="427" class="small">0.151</text>
+<text x="1344" y="461" class="small">4. GPT4 only</text>
+<rect x="1468" y="446" width="227.6" height="20" fill="#6b7280" rx="3"/>
+<text x="1705.6" y="461" class="small">0.146</text>
+<text x="1344" y="495" class="small">5. Qwen-L</text>
+<rect x="1468" y="480" width="210.1" height="20" fill="#2f6f9f" rx="3"/>
+<text x="1688.1" y="495" class="small">0.135</text>
+<text x="1344" y="529" class="small">6. Llama-S</text>
+<rect x="1468" y="514" width="203.6" height="20" fill="#b56a33" rx="3"/>
+<text x="1681.6" y="529" class="small">0.131</text>
+<text x="1344" y="563" class="small">7. Qwen-S</text>
+<rect x="1468" y="548" width="186.6" height="20" fill="#2f6f9f" rx="3"/>
+<text x="1664.6" y="563" class="small">0.120</text>
+<text x="1344" y="597" class="small">8. DeepSeek-M</text>
+<rect x="1468" y="582" width="162.9" height="20" fill="#4f7d45" rx="3"/>
+<text x="1640.9" y="597" class="small">0.105</text>
+<text x="1342" y="652" class="small">Top 8; incomplete cells omitted.</text>
+<rect x="36" y="720" width="1728" height="292" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>
+<text x="60" y="754" class="axis">Coverage readout</text>
+<text x="60" y="782" class="subtitle">Complete four-task lines outside MiniMax: Qwen-S/M/L, DeepSeek-S/M/L, Llama-S/M/L, Gemma-S/M/L, and GPT4 only (13/13 lines).</text>
+<text x="60" y="808" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>
+<rect x="60" y="844" width="260" height="54" fill="white" stroke="#2f6f9f" stroke-width="2" rx="8"/>
+<circle cx="82" cy="871" r="7" fill="#2f6f9f"/>
+<text x="100" y="866" class="axis">Qwen</text>
+<text x="100" y="886" class="small">S/M/L: 4 tasks complete</text>
+<rect x="340" y="844" width="260" height="54" fill="white" stroke="#4f7d45" stroke-width="2" rx="8"/>
+<circle cx="362" cy="871" r="7" fill="#4f7d45"/>
+<text x="380" y="866" class="axis">DeepSeek</text>
+<text x="380" y="886" class="small">S/M/L: 4 tasks complete</text>
+<rect x="620" y="844" width="260" height="54" fill="white" stroke="#b56a33" stroke-width="2" rx="8"/>
+<circle cx="642" cy="871" r="7" fill="#b56a33"/>
+<text x="660" y="866" class="axis">Llama</text>
+<text x="660" y="886" class="small">S/M/L: 4 tasks complete</text>
+<rect x="900" y="844" width="260" height="54" fill="white" stroke="#7b62a3" stroke-width="2" rx="8"/>
+<circle cx="922" cy="871" r="7" fill="#7b62a3"/>
+<text x="940" y="866" class="axis">Gemma</text>
+<text x="940" y="886" class="small">S/M/L: 4 tasks complete</text>
+<rect x="1180" y="844" width="260" height="54" fill="white" stroke="#6b7280" stroke-width="2" rx="8"/>
+<circle cx="1202" cy="871" r="7" fill="#6b7280"/>
+<text x="1220" y="866" class="axis">GPT4 only</text>
+<text x="1220" y="886" class="small">reference: 4 tasks complete</text>
+<rect x="1460" y="844" width="260" height="54" fill="white" stroke="#8a5a44" stroke-width="2" rx="8"/>
+<circle cx="1482" cy="871" r="7" fill="#8a5a44"/>
+<text x="1500" y="866" class="axis">MiniMax</text>
+<text x="1500" y="886" class="small">caveats: see failure checklist</text>
+<text x="60" y="934" class="small">See the full score heatmap below for all 16 public/reference lines and all four RQ columns.</text>
+<text x="60" y="958" class="small">* marks reported-but-not-strict cells; MiniMax remaining gaps are documented in unimoral-failure-checklist.csv.</text>
+</svg>

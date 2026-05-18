@@ -108,6 +108,10 @@ Release tables:
 
 Figures:
 
+- `figures/release/option1_unimoral_four_task_dashboard.svg`
+- `figures/release/option1_unimoral_task_heatmap.svg`
+- `figures/release/option1_unimoral_task_spread.svg`
+- `figures/release/option1_unimoral_task_rankings.svg`
 - `figures/release/option1_family_size_progress_overview.svg`
 - `figures/release/option1_benchmark_accuracy_bars.svg`
 - `figures/release/option1_benchmark_difficulty_profile.svg`
@@ -127,6 +131,7 @@ Figures:
 
 Headline interpretation artifacts now include:
 
+- `unimoral-full-benchmark.csv` + `option1_unimoral_four_task_dashboard.svg` for the UniMoral RQ1-RQ4 task surfaces
 - `ccd-choice-distribution.csv` + `option1_ccd_choice_distribution.svg` for CCD-Bench cultural-cluster behavior
 - `denevil-behavior-summary.csv` + `option1_denevil_behavior_outcomes.svg` for DeNEVIL proxy behavioral outcomes
 - appendix QA artifacts such as `denevil-proxy-summary.csv` and `option1_denevil_proxy_status_matrix.svg` for provenance, route, and visible-response diagnostics
