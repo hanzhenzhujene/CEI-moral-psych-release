@@ -42,7 +42,7 @@
 <text x="48" y="64" class="title">CCD-Bench cultural-cluster choice behavior, not accuracy</text>
 <text x="48" y="88" class="subtitle">Cells show deviation from the 10% uniform baseline across the paper&apos;s ten canonical GLOBE cultural clusters, computed over valid visible selections only.</text>
 <text x="48" y="108" class="subtitle">Positive cells mean the line selected that cluster more often than uniform choice; negative cells mean under-indexing. This is CCD choice behavior, not benchmark accuracy.</text>
-<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT4 only is a one-off reference row. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>
+<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT-4o-mini Ref is a one-off reference row. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>
 <text x="48" y="148" class="subtitle">Coverage stays in the appendix QA figure.</text>
 <text x="107.00" y="194" text-anchor="middle" class="tiny">FAMILY</text>
 <text x="212.00" y="194" text-anchor="middle" class="tiny">SIZE</text>
@@ -69,420 +69,420 @@
 <text x="1256.00" y="210" text-anchor="middle" class="small">Middle East</text>
 <text x="1378" y="194" class="tiny">TOP CLUSTER SHARE</text>
 <text x="1548" y="194" class="tiny">EFFECTIVE CLUSTERS</text>
-<rect x="48" y="212" width="118" height="168" rx="18" fill="#d8eeec" stroke="#0d9488" stroke-width="1.2"/>
+<rect x="48" y="212" width="118" height="168" rx="18" fill="#e6f4f2" stroke="#65b8ac" stroke-width="1.2"/>
 <text x="107.00" y="301.00" text-anchor="middle" class="label">Qwen</text>
-<rect x="48" y="380" width="118" height="168" rx="18" fill="#f9e9d7" stroke="#d97706" stroke-width="1.2"/>
+<rect x="48" y="380" width="118" height="168" rx="18" fill="#faf2e7" stroke="#e0ad68" stroke-width="1.2"/>
 <text x="107.00" y="469.00" text-anchor="middle" class="label">MiniMax</text>
 <line x1="48" y1="370.00" x2="1772" y2="370.00" class="baseline"/>
-<rect x="48" y="548" width="118" height="168" rx="18" fill="#dce6fc" stroke="#2563eb" stroke-width="1.2"/>
+<rect x="48" y="548" width="118" height="168" rx="18" fill="#e9f1fb" stroke="#78a8e6" stroke-width="1.2"/>
 <text x="107.00" y="637.00" text-anchor="middle" class="label">DeepSeek</text>
 <line x1="48" y1="538.00" x2="1772" y2="538.00" class="baseline"/>
-<rect x="48" y="716" width="118" height="168" rx="18" fill="#fce4d8" stroke="#ea580c" stroke-width="1.2"/>
+<rect x="48" y="716" width="118" height="168" rx="18" fill="#fcf0e7" stroke="#eba069" stroke-width="1.2"/>
 <text x="107.00" y="805.00" text-anchor="middle" class="label">Llama</text>
 <line x1="48" y1="706.00" x2="1772" y2="706.00" class="baseline"/>
-<rect x="48" y="884" width="118" height="168" rx="18" fill="#ece5fe" stroke="#8b5cf6" stroke-width="1.2"/>
+<rect x="48" y="884" width="118" height="168" rx="18" fill="#f1eefb" stroke="#a996e3" stroke-width="1.2"/>
 <text x="107.00" y="973.00" text-anchor="middle" class="label">Gemma</text>
 <line x1="48" y1="874.00" x2="1772" y2="874.00" class="baseline"/>
-<rect x="48" y="1052" width="118" height="56" rx="18" fill="#d9dadc" stroke="#111827" stroke-width="1.2"/>
-<text x="107.00" y="1085.00" text-anchor="middle" class="label">GPT4 only</text>
+<rect x="48" y="1052" width="118" height="56" rx="18" fill="#eff0f2" stroke="#9ca3af" stroke-width="1.2"/>
+<text x="107.00" y="1085.00" text-anchor="middle" class="label">OpenAI Ref</text>
 <line x1="48" y1="1042.00" x2="1772" y2="1042.00" class="baseline"/>
-<rect x="184" y="224" width="56" height="32" rx="12" fill="#0f766e"/>
-<text x="212.00" y="245.00" text-anchor="middle" class="celltext">S</text>
+<rect x="184" y="224" width="56" height="32" rx="12" fill="#8fc7bd"/>
+<text x="212.00" y="245.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="246.00" class="label">Qwen-S</text>
-<rect x="420" y="218" width="88" height="44" fill="#f1f9f5" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="218" width="88" height="44" fill="#f2f9f5" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="246.00" text-anchor="middle" class="celltext-dark">+0.1</text>
-<rect x="508" y="218" width="88" height="44" fill="#f1d3bf" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="218" width="88" height="44" fill="#f9e4d4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="246.00" text-anchor="middle" class="celltext-dark">-3.4</text>
-<rect x="596" y="218" width="88" height="44" fill="#f7e2d2" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="218" width="88" height="44" fill="#fbecde" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="246.00" text-anchor="middle" class="celltext-dark">-2.0</text>
-<rect x="684" y="218" width="88" height="44" fill="#f5ddcc" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="218" width="88" height="44" fill="#fae9db" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="246.00" text-anchor="middle" class="celltext-dark">-2.4</text>
-<rect x="772" y="218" width="88" height="44" fill="#f9e7d8" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="218" width="88" height="44" fill="#fceee2" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="246.00" text-anchor="middle" class="celltext-dark">-1.5</text>
-<rect x="860" y="218" width="88" height="44" fill="#7bb296" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="218" width="88" height="44" fill="#a8d2be" stroke="#ffffff" stroke-width="1.2"/>
 <text x="904.00" y="246.00" text-anchor="middle" class="celltext-dark">+9.2</text>
-<rect x="948" y="218" width="88" height="44" fill="#d8eae1" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="948" y="218" width="88" height="44" fill="#e2f1ea" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="246.00" text-anchor="middle" class="celltext-dark">+2.1</text>
-<rect x="1036" y="218" width="88" height="44" fill="#e5f1eb" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="218" width="88" height="44" fill="#eaf5ef" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="246.00" text-anchor="middle" class="celltext-dark">+1.1</text>
-<rect x="1124" y="218" width="88" height="44" fill="#fef5eb" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="218" width="88" height="44" fill="#fff6ec" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="246.00" text-anchor="middle" class="celltext-dark">-0.1</text>
-<rect x="1212" y="218" width="88" height="44" fill="#f2d6c3" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="218" width="88" height="44" fill="#f9e5d6" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="246.00" text-anchor="middle" class="celltext-dark">-3.1</text>
 <text x="1378" y="246.00" class="label">19.2%</text>
 <text x="1548" y="246.00" class="label">8.91</text>
-<rect x="184" y="280" width="56" height="32" rx="12" fill="#0d9488"/>
-<text x="212.00" y="301.00" text-anchor="middle" class="celltext">M</text>
+<rect x="184" y="280" width="56" height="32" rx="12" fill="#65b8ac"/>
+<text x="212.00" y="301.00" text-anchor="middle" class="celltext-dark">M</text>
 <text x="258" y="302.00" class="label">Qwen-M</text>
-<rect x="420" y="274" width="88" height="44" fill="#d1e6db" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="274" width="88" height="44" fill="#deefe6" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="302.00" text-anchor="middle" class="celltext-dark">+2.6</text>
-<rect x="508" y="274" width="88" height="44" fill="#eecdb7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="274" width="88" height="44" fill="#f7e0d0" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="302.00" text-anchor="middle" class="celltext-dark">-4.0</text>
-<rect x="596" y="274" width="88" height="44" fill="#f7e3d3" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="274" width="88" height="44" fill="#fbecdf" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="302.00" text-anchor="middle" class="celltext-dark">-1.9</text>
-<rect x="684" y="274" width="88" height="44" fill="#f3d9c7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="274" width="88" height="44" fill="#fae7d8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="302.00" text-anchor="middle" class="celltext-dark">-2.8</text>
-<rect x="772" y="274" width="88" height="44" fill="#f1d3bf" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="274" width="88" height="44" fill="#f8e4d4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="302.00" text-anchor="middle" class="celltext-dark">-3.4</text>
-<rect x="860" y="274" width="88" height="44" fill="#589d7b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="302.00" text-anchor="middle" class="celltext">+11.9</text>
-<rect x="948" y="274" width="88" height="44" fill="#e3f0e9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="274" width="88" height="44" fill="#92c7ae" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="302.00" text-anchor="middle" class="celltext-dark">+11.9</text>
+<rect x="948" y="274" width="88" height="44" fill="#e9f5ef" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="302.00" text-anchor="middle" class="celltext-dark">+1.2</text>
-<rect x="1036" y="274" width="88" height="44" fill="#fbecdf" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="274" width="88" height="44" fill="#fdf1e5" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="302.00" text-anchor="middle" class="celltext-dark">-1.0</text>
-<rect x="1124" y="274" width="88" height="44" fill="#e2f0e8" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="274" width="88" height="44" fill="#e8f4ee" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="302.00" text-anchor="middle" class="celltext-dark">+1.3</text>
-<rect x="1212" y="274" width="88" height="44" fill="#eeccb7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="274" width="88" height="44" fill="#f7e0cf" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="302.00" text-anchor="middle" class="celltext-dark">-4.0</text>
 <text x="1378" y="302.00" class="label">21.9%</text>
 <text x="1548" y="302.00" class="label">8.29</text>
-<rect x="184" y="336" width="56" height="32" rx="12" fill="#2dd4bf"/>
+<rect x="184" y="336" width="56" height="32" rx="12" fill="#3fc7b8"/>
 <text x="212.00" y="357.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="358.00" class="label">Qwen-L</text>
-<rect x="420" y="330" width="88" height="44" fill="#c4ded1" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="330" width="88" height="44" fill="#d6ebe0" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="358.00" text-anchor="middle" class="celltext-dark">+3.6</text>
-<rect x="508" y="330" width="88" height="44" fill="#eecbb5" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="330" width="88" height="44" fill="#f7e0ce" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="358.00" text-anchor="middle" class="celltext-dark">-4.1</text>
-<rect x="596" y="330" width="88" height="44" fill="#f6e0d0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="330" width="88" height="44" fill="#fbebdd" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="358.00" text-anchor="middle" class="celltext-dark">-2.2</text>
-<rect x="684" y="330" width="88" height="44" fill="#f1d2be" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="330" width="88" height="44" fill="#f8e3d3" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="358.00" text-anchor="middle" class="celltext-dark">-3.4</text>
-<rect x="772" y="330" width="88" height="44" fill="#eecdb7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="330" width="88" height="44" fill="#f7e0d0" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="358.00" text-anchor="middle" class="celltext-dark">-4.0</text>
-<rect x="860" y="330" width="88" height="44" fill="#44926b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="358.00" text-anchor="middle" class="celltext">+13.4</text>
-<rect x="948" y="330" width="88" height="44" fill="#f0f8f4" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="330" width="88" height="44" fill="#85c0a5" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="358.00" text-anchor="middle" class="celltext-dark">+13.4</text>
+<rect x="948" y="330" width="88" height="44" fill="#f1f9f5" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="358.00" text-anchor="middle" class="celltext-dark">+0.2</text>
-<rect x="1036" y="330" width="88" height="44" fill="#fdf1e6" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="330" width="88" height="44" fill="#fef4e9" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="358.00" text-anchor="middle" class="celltext-dark">-0.5</text>
-<rect x="1124" y="330" width="88" height="44" fill="#eaf4ee" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="330" width="88" height="44" fill="#edf7f2" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="358.00" text-anchor="middle" class="celltext-dark">+0.7</text>
-<rect x="1212" y="330" width="88" height="44" fill="#efcfba" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="330" width="88" height="44" fill="#f8e2d1" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="358.00" text-anchor="middle" class="celltext-dark">-3.7</text>
 <text x="1378" y="358.00" class="label">23.4%</text>
 <text x="1548" y="358.00" class="label">7.97</text>
-<rect x="184" y="392" width="56" height="32" rx="12" fill="#b45309"/>
-<text x="212.00" y="413.00" text-anchor="middle" class="celltext">S</text>
+<rect x="184" y="392" width="56" height="32" rx="12" fill="#d4a46e"/>
+<text x="212.00" y="413.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="414.00" class="label">MiniMax-S</text>
-<rect x="420" y="386" width="88" height="44" fill="#e4f1ea" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="386" width="88" height="44" fill="#e9f5ef" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="414.00" text-anchor="middle" class="celltext-dark">+1.2</text>
-<rect x="508" y="386" width="88" height="44" fill="#f4dbca" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="386" width="88" height="44" fill="#fae8da" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="414.00" text-anchor="middle" class="celltext-dark">-2.6</text>
-<rect x="596" y="386" width="88" height="44" fill="#faeadd" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="386" width="88" height="44" fill="#fdf0e4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="414.00" text-anchor="middle" class="celltext-dark">-1.2</text>
-<rect x="684" y="386" width="88" height="44" fill="#f4dbc9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="386" width="88" height="44" fill="#fae8d9" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="414.00" text-anchor="middle" class="celltext-dark">-2.6</text>
-<rect x="772" y="386" width="88" height="44" fill="#f4dbca" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="386" width="88" height="44" fill="#fae8da" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="414.00" text-anchor="middle" class="celltext-dark">-2.6</text>
-<rect x="860" y="386" width="88" height="44" fill="#94c1aa" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="386" width="88" height="44" fill="#b7daca" stroke="#ffffff" stroke-width="1.2"/>
 <text x="904.00" y="414.00" text-anchor="middle" class="celltext-dark">+7.3</text>
-<rect x="948" y="386" width="88" height="44" fill="#d4e7dd" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="948" y="386" width="88" height="44" fill="#e0f0e8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="414.00" text-anchor="middle" class="celltext-dark">+2.4</text>
-<rect x="1036" y="386" width="88" height="44" fill="#ebf5f0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="386" width="88" height="44" fill="#eef7f2" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="414.00" text-anchor="middle" class="celltext-dark">+0.6</text>
-<rect x="1124" y="386" width="88" height="44" fill="#fef3e9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="386" width="88" height="44" fill="#fef5eb" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="414.00" text-anchor="middle" class="celltext-dark">-0.3</text>
-<rect x="1212" y="386" width="88" height="44" fill="#f6e0d0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="386" width="88" height="44" fill="#fbebdd" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="414.00" text-anchor="middle" class="celltext-dark">-2.1</text>
 <text x="1378" y="414.00" class="label">17.3%</text>
 <text x="1548" y="414.00" class="label">9.20</text>
-<rect x="184" y="448" width="56" height="32" rx="12" fill="#d97706"/>
-<text x="212.00" y="469.00" text-anchor="middle" class="celltext">M</text>
+<rect x="184" y="448" width="56" height="32" rx="12" fill="#e0ad68"/>
+<text x="212.00" y="469.00" text-anchor="middle" class="celltext-dark">M</text>
 <text x="258" y="470.00" class="label">MiniMax-M</text>
-<rect x="420" y="442" width="88" height="44" fill="#daebe2" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="442" width="88" height="44" fill="#e3f2ea" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="470.00" text-anchor="middle" class="celltext-dark">+1.9</text>
-<rect x="508" y="442" width="88" height="44" fill="#f4dbca" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="442" width="88" height="44" fill="#fae8da" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="470.00" text-anchor="middle" class="celltext-dark">-2.6</text>
-<rect x="596" y="442" width="88" height="44" fill="#f6e0d0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="442" width="88" height="44" fill="#fbebdd" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="470.00" text-anchor="middle" class="celltext-dark">-2.2</text>
-<rect x="684" y="442" width="88" height="44" fill="#f5dccb" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="442" width="88" height="44" fill="#fae9da" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="470.00" text-anchor="middle" class="celltext-dark">-2.5</text>
-<rect x="772" y="442" width="88" height="44" fill="#f1d3bf" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="442" width="88" height="44" fill="#f9e4d4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="470.00" text-anchor="middle" class="celltext-dark">-3.4</text>
-<rect x="860" y="442" width="88" height="44" fill="#86b99f" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="442" width="88" height="44" fill="#afd6c3" stroke="#ffffff" stroke-width="1.2"/>
 <text x="904.00" y="470.00" text-anchor="middle" class="celltext-dark">+8.3</text>
-<rect x="948" y="442" width="88" height="44" fill="#d7e9e0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="948" y="442" width="88" height="44" fill="#e1f1e9" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="470.00" text-anchor="middle" class="celltext-dark">+2.2</text>
-<rect x="1036" y="442" width="88" height="44" fill="#eef7f2" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="442" width="88" height="44" fill="#f0f8f4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="470.00" text-anchor="middle" class="celltext-dark">+0.4</text>
-<rect x="1124" y="442" width="88" height="44" fill="#fef4e9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="442" width="88" height="44" fill="#fef5eb" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="470.00" text-anchor="middle" class="celltext-dark">-0.3</text>
-<rect x="1212" y="442" width="88" height="44" fill="#f7e2d3" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="442" width="88" height="44" fill="#fbecdf" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="470.00" text-anchor="middle" class="celltext-dark">-1.9</text>
 <text x="1378" y="470.00" class="label">18.3%</text>
 <text x="1548" y="470.00" class="label">9.00</text>
-<rect x="184" y="504" width="56" height="32" rx="12" fill="#fbbf24"/>
+<rect x="184" y="504" width="56" height="32" rx="12" fill="#f3cf82"/>
 <text x="212.00" y="525.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="526.00" class="label">MiniMax-L</text>
-<rect x="420" y="498" width="88" height="44" fill="#e3f0e9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="498" width="88" height="44" fill="#e9f5ef" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="526.00" text-anchor="middle" class="celltext-dark">+1.2</text>
-<rect x="508" y="498" width="88" height="44" fill="#f6dfcf" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="498" width="88" height="44" fill="#fbeadd" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="526.00" text-anchor="middle" class="celltext-dark">-2.2</text>
-<rect x="596" y="498" width="88" height="44" fill="#fae9db" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="498" width="88" height="44" fill="#fdf0e3" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="526.00" text-anchor="middle" class="celltext-dark">-1.3</text>
-<rect x="684" y="498" width="88" height="44" fill="#f3d9c7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="498" width="88" height="44" fill="#fae7d8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="526.00" text-anchor="middle" class="celltext-dark">-2.8</text>
-<rect x="772" y="498" width="88" height="44" fill="#f5dccb" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="498" width="88" height="44" fill="#fae9da" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="526.00" text-anchor="middle" class="celltext-dark">-2.5</text>
-<rect x="860" y="498" width="88" height="44" fill="#81b69c" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="498" width="88" height="44" fill="#acd4c1" stroke="#ffffff" stroke-width="1.2"/>
 <text x="904.00" y="526.00" text-anchor="middle" class="celltext-dark">+8.7</text>
-<rect x="948" y="498" width="88" height="44" fill="#d6e9df" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="948" y="498" width="88" height="44" fill="#e1f0e8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="526.00" text-anchor="middle" class="celltext-dark">+2.2</text>
-<rect x="1036" y="498" width="88" height="44" fill="#fef5ea" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="498" width="88" height="44" fill="#fff6ec" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="526.00" text-anchor="middle" class="celltext-dark">-0.2</text>
-<rect x="1124" y="498" width="88" height="44" fill="#fbeee1" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="498" width="88" height="44" fill="#fdf2e6" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="526.00" text-anchor="middle" class="celltext-dark">-0.9</text>
-<rect x="1212" y="498" width="88" height="44" fill="#f5decd" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="498" width="88" height="44" fill="#faeadb" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="526.00" text-anchor="middle" class="celltext-dark">-2.3</text>
 <text x="1378" y="526.00" class="label">18.7%</text>
 <text x="1548" y="526.00" class="label">9.02</text>
-<rect x="184" y="560" width="56" height="32" rx="12" fill="#1d4ed8"/>
-<text x="212.00" y="581.00" text-anchor="middle" class="celltext">S</text>
+<rect x="184" y="560" width="56" height="32" rx="12" fill="#94b8e8"/>
+<text x="212.00" y="581.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="582.00" class="label">DeepSeek-S</text>
-<rect x="420" y="554" width="88" height="44" fill="#fbecdf" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="554" width="88" height="44" fill="#fdf1e5" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="582.00" text-anchor="middle" class="celltext-dark">-1.1</text>
-<rect x="508" y="554" width="88" height="44" fill="#f9e7d8" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="554" width="88" height="44" fill="#fceee2" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="582.00" text-anchor="middle" class="celltext-dark">-1.5</text>
-<rect x="596" y="554" width="88" height="44" fill="#fdf1e6" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="554" width="88" height="44" fill="#fef4e9" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="582.00" text-anchor="middle" class="celltext-dark">-0.6</text>
-<rect x="684" y="554" width="88" height="44" fill="#f6e1d1" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="554" width="88" height="44" fill="#fbebde" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="582.00" text-anchor="middle" class="celltext-dark">-2.1</text>
-<rect x="772" y="554" width="88" height="44" fill="#fef5eb" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="554" width="88" height="44" fill="#fff6ec" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="582.00" text-anchor="middle" class="celltext-dark">-0.2</text>
-<rect x="860" y="554" width="88" height="44" fill="#d4e8de" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="554" width="88" height="44" fill="#e0f0e8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="904.00" y="582.00" text-anchor="middle" class="celltext-dark">+2.3</text>
-<rect x="948" y="554" width="88" height="44" fill="#c2ddcf" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="948" y="554" width="88" height="44" fill="#d4eadf" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="582.00" text-anchor="middle" class="celltext-dark">+3.8</text>
-<rect x="1036" y="554" width="88" height="44" fill="#cce3d7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="554" width="88" height="44" fill="#dbede4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="582.00" text-anchor="middle" class="celltext-dark">+3.0</text>
-<rect x="1124" y="554" width="88" height="44" fill="#f3d9c7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="554" width="88" height="44" fill="#fae7d8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="582.00" text-anchor="middle" class="celltext-dark">-2.8</text>
-<rect x="1212" y="554" width="88" height="44" fill="#fbede1" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="554" width="88" height="44" fill="#fdf2e6" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="582.00" text-anchor="middle" class="celltext-dark">-0.9</text>
 <text x="1378" y="582.00" class="label">13.8%</text>
 <text x="1548" y="582.00" class="label">9.57</text>
-<rect x="184" y="616" width="56" height="32" rx="12" fill="#2563eb"/>
-<text x="212.00" y="637.00" text-anchor="middle" class="celltext">M</text>
+<rect x="184" y="616" width="56" height="32" rx="12" fill="#78a8e6"/>
+<text x="212.00" y="637.00" text-anchor="middle" class="celltext-dark">M</text>
 <text x="258" y="638.00" class="label">DeepSeek-M</text>
-<rect x="420" y="610" width="88" height="44" fill="#b9d7c8" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="610" width="88" height="44" fill="#cfe7db" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="638.00" text-anchor="middle" class="celltext-dark">+4.4</text>
-<rect x="508" y="610" width="88" height="44" fill="#f3d9c6" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="610" width="88" height="44" fill="#fae7d8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="638.00" text-anchor="middle" class="celltext-dark">-2.8</text>
-<rect x="596" y="610" width="88" height="44" fill="#f6e0d0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="610" width="88" height="44" fill="#fbebdd" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="638.00" text-anchor="middle" class="celltext-dark">-2.1</text>
-<rect x="684" y="610" width="88" height="44" fill="#ebc5ad" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="610" width="88" height="44" fill="#f6dcca" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="638.00" text-anchor="middle" class="celltext-dark">-4.7</text>
-<rect x="772" y="610" width="88" height="44" fill="#ebc3ab" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="610" width="88" height="44" fill="#f6dbc9" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="638.00" text-anchor="middle" class="celltext-dark">-4.9</text>
-<rect x="860" y="610" width="88" height="44" fill="#4f9873" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="638.00" text-anchor="middle" class="celltext">+12.6</text>
-<rect x="948" y="610" width="88" height="44" fill="#f6e0d0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="610" width="88" height="44" fill="#8cc4aa" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="638.00" text-anchor="middle" class="celltext-dark">+12.6</text>
+<rect x="948" y="610" width="88" height="44" fill="#fbebdd" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="638.00" text-anchor="middle" class="celltext-dark">-2.1</text>
-<rect x="1036" y="610" width="88" height="44" fill="#f3d8c5" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="610" width="88" height="44" fill="#f9e6d7" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="638.00" text-anchor="middle" class="celltext-dark">-2.9</text>
-<rect x="1124" y="610" width="88" height="44" fill="#e6f2ec" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="610" width="88" height="44" fill="#ebf6f0" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="638.00" text-anchor="middle" class="celltext-dark">+1.0</text>
-<rect x="1212" y="610" width="88" height="44" fill="#deede5" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="610" width="88" height="44" fill="#e6f3ec" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="638.00" text-anchor="middle" class="celltext-dark">+1.6</text>
 <text x="1378" y="638.00" class="label">22.6%</text>
 <text x="1548" y="638.00" class="label">7.99</text>
-<rect x="184" y="672" width="56" height="32" rx="12" fill="#60a5fa"/>
+<rect x="184" y="672" width="56" height="32" rx="12" fill="#a8c7f0"/>
 <text x="212.00" y="693.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="694.00" class="label">DeepSeek-L</text>
-<rect x="420" y="666" width="88" height="44" fill="#deede5" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="666" width="88" height="44" fill="#e6f3ec" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="694.00" text-anchor="middle" class="celltext-dark">+1.6</text>
-<rect x="508" y="666" width="88" height="44" fill="#f3d9c7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="666" width="88" height="44" fill="#fae7d8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="694.00" text-anchor="middle" class="celltext-dark">-2.8</text>
-<rect x="596" y="666" width="88" height="44" fill="#f9e8da" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="666" width="88" height="44" fill="#fcefe3" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="694.00" text-anchor="middle" class="celltext-dark">-1.4</text>
-<rect x="684" y="666" width="88" height="44" fill="#f2d5c2" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="666" width="88" height="44" fill="#f9e5d5" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="694.00" text-anchor="middle" class="celltext-dark">-3.2</text>
-<rect x="772" y="666" width="88" height="44" fill="#f1d4c1" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="666" width="88" height="44" fill="#f9e4d5" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="694.00" text-anchor="middle" class="celltext-dark">-3.3</text>
-<rect x="860" y="666" width="88" height="44" fill="#67a687" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="694.00" text-anchor="middle" class="celltext">+10.7</text>
-<rect x="948" y="666" width="88" height="44" fill="#fcefe3" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="666" width="88" height="44" fill="#9bccb5" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="694.00" text-anchor="middle" class="celltext-dark">+10.7</text>
+<rect x="948" y="666" width="88" height="44" fill="#fef3e8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="694.00" text-anchor="middle" class="celltext-dark">-0.7</text>
-<rect x="1036" y="666" width="88" height="44" fill="#f8e5d6" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="666" width="88" height="44" fill="#fcede0" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="694.00" text-anchor="middle" class="celltext-dark">-1.7</text>
-<rect x="1124" y="666" width="88" height="44" fill="#f2f9f5" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="666" width="88" height="44" fill="#f2faf5" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="694.00" text-anchor="middle" class="celltext-dark">+0.1</text>
-<rect x="1212" y="666" width="88" height="44" fill="#ecf6f0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="666" width="88" height="44" fill="#eef8f3" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="694.00" text-anchor="middle" class="celltext-dark">+0.6</text>
 <text x="1378" y="694.00" class="label">20.7%</text>
 <text x="1548" y="694.00" class="label">8.68</text>
-<rect x="184" y="728" width="56" height="32" rx="12" fill="#c2410c"/>
-<text x="212.00" y="749.00" text-anchor="middle" class="celltext">S</text>
+<rect x="184" y="728" width="56" height="32" rx="12" fill="#e0a37a"/>
+<text x="212.00" y="749.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="750.00" class="label">Llama-S</text>
-<rect x="420" y="722" width="88" height="44" fill="#88baa1" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="722" width="88" height="44" fill="#b0d6c4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="750.00" text-anchor="middle" class="celltext-dark">+8.2</text>
-<rect x="508" y="722" width="88" height="44" fill="#ecc6af" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="722" width="88" height="44" fill="#f6ddcb" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="750.00" text-anchor="middle" class="celltext-dark">-4.5</text>
-<rect x="596" y="722" width="88" height="44" fill="#f1d3c0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="722" width="88" height="44" fill="#f9e4d4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="750.00" text-anchor="middle" class="celltext-dark">-3.3</text>
-<rect x="684" y="722" width="88" height="44" fill="#f3d7c5" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="722" width="88" height="44" fill="#f9e6d7" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="750.00" text-anchor="middle" class="celltext-dark">-2.9</text>
-<rect x="772" y="722" width="88" height="44" fill="#e7bba1" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="722" width="88" height="44" fill="#f4d7c3" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="750.00" text-anchor="middle" class="celltext-dark">-5.6</text>
-<rect x="860" y="722" width="88" height="44" fill="#3d8d65" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="750.00" text-anchor="middle" class="celltext">+13.9</text>
-<rect x="948" y="722" width="88" height="44" fill="#faeadc" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="722" width="88" height="44" fill="#81bea2" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="750.00" text-anchor="middle" class="celltext-dark">+13.9</text>
+<rect x="948" y="722" width="88" height="44" fill="#fdf0e4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="750.00" text-anchor="middle" class="celltext-dark">-1.2</text>
-<rect x="1036" y="722" width="88" height="44" fill="#f6e1d1" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="722" width="88" height="44" fill="#fbebde" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="750.00" text-anchor="middle" class="celltext-dark">-2.0</text>
-<rect x="1124" y="722" width="88" height="44" fill="#c8e0d4" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="722" width="88" height="44" fill="#d8ece2" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="750.00" text-anchor="middle" class="celltext-dark">+3.3</text>
-<rect x="1212" y="722" width="88" height="44" fill="#e7b99f" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="722" width="88" height="44" fill="#f4d6c2" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="750.00" text-anchor="middle" class="celltext-dark">-5.7</text>
 <text x="1378" y="750.00" class="label">23.9%</text>
 <text x="1548" y="750.00" class="label">7.24</text>
-<rect x="184" y="784" width="56" height="32" rx="12" fill="#ea580c"/>
-<text x="212.00" y="805.00" text-anchor="middle" class="celltext">M</text>
+<rect x="184" y="784" width="56" height="32" rx="12" fill="#eba069"/>
+<text x="212.00" y="805.00" text-anchor="middle" class="celltext-dark">M</text>
 <text x="258" y="806.00" class="label">Llama-M</text>
-<rect x="420" y="778" width="88" height="44" fill="#8fbea6" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="778" width="88" height="44" fill="#b4d9c7" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="806.00" text-anchor="middle" class="celltext-dark">+7.7</text>
-<rect x="508" y="778" width="88" height="44" fill="#eeccb7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="778" width="88" height="44" fill="#f7e0cf" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="806.00" text-anchor="middle" class="celltext-dark">-4.0</text>
-<rect x="596" y="778" width="88" height="44" fill="#f2d7c4" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="778" width="88" height="44" fill="#f9e6d7" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="806.00" text-anchor="middle" class="celltext-dark">-3.0</text>
-<rect x="684" y="778" width="88" height="44" fill="#f3d9c7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="778" width="88" height="44" fill="#fae7d8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="806.00" text-anchor="middle" class="celltext-dark">-2.8</text>
-<rect x="772" y="778" width="88" height="44" fill="#edc8b2" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="778" width="88" height="44" fill="#f7decc" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="806.00" text-anchor="middle" class="celltext-dark">-4.4</text>
-<rect x="860" y="778" width="88" height="44" fill="#69a888" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="778" width="88" height="44" fill="#9cccb6" stroke="#ffffff" stroke-width="1.2"/>
 <text x="904.00" y="806.00" text-anchor="middle" class="celltext-dark">+10.6</text>
-<rect x="948" y="778" width="88" height="44" fill="#f1f9f5" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="948" y="778" width="88" height="44" fill="#f2f9f5" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="806.00" text-anchor="middle" class="celltext-dark">+0.1</text>
-<rect x="1036" y="778" width="88" height="44" fill="#fdf3e8" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="778" width="88" height="44" fill="#fef5ea" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="806.00" text-anchor="middle" class="celltext-dark">-0.4</text>
-<rect x="1124" y="778" width="88" height="44" fill="#e7f3ed" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="778" width="88" height="44" fill="#ecf6f1" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="806.00" text-anchor="middle" class="celltext-dark">+0.9</text>
-<rect x="1212" y="778" width="88" height="44" fill="#ebc5ad" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="778" width="88" height="44" fill="#f6dcca" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="806.00" text-anchor="middle" class="celltext-dark">-4.7</text>
 <text x="1378" y="806.00" class="label">20.6%</text>
 <text x="1548" y="806.00" class="label">8.03</text>
-<rect x="184" y="840" width="56" height="32" rx="12" fill="#fb923c"/>
+<rect x="184" y="840" width="56" height="32" rx="12" fill="#f2b883"/>
 <text x="212.00" y="861.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="862.00" class="label">Llama-L</text>
-<rect x="420" y="834" width="88" height="44" fill="#a1c9b5" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="834" width="88" height="44" fill="#bfdfd0" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="862.00" text-anchor="middle" class="celltext-dark">+6.3</text>
-<rect x="508" y="834" width="88" height="44" fill="#edcab4" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="834" width="88" height="44" fill="#f7dfce" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="862.00" text-anchor="middle" class="celltext-dark">-4.2</text>
-<rect x="596" y="834" width="88" height="44" fill="#f2d6c4" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="834" width="88" height="44" fill="#f9e6d6" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="862.00" text-anchor="middle" class="celltext-dark">-3.0</text>
-<rect x="684" y="834" width="88" height="44" fill="#f3d8c6" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="834" width="88" height="44" fill="#f9e6d7" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="862.00" text-anchor="middle" class="celltext-dark">-2.9</text>
-<rect x="772" y="834" width="88" height="44" fill="#eac0a8" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="834" width="88" height="44" fill="#f5dac7" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="862.00" text-anchor="middle" class="celltext-dark">-5.1</text>
-<rect x="860" y="834" width="88" height="44" fill="#429069" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="862.00" text-anchor="middle" class="celltext">+13.5</text>
-<rect x="948" y="834" width="88" height="44" fill="#fcefe3" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="834" width="88" height="44" fill="#84bfa4" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="862.00" text-anchor="middle" class="celltext-dark">+13.5</text>
+<rect x="948" y="834" width="88" height="44" fill="#fef3e8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="862.00" text-anchor="middle" class="celltext-dark">-0.7</text>
-<rect x="1036" y="834" width="88" height="44" fill="#f7e2d2" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="834" width="88" height="44" fill="#fbecde" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="862.00" text-anchor="middle" class="celltext-dark">-2.0</text>
-<rect x="1124" y="834" width="88" height="44" fill="#ddede5" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="834" width="88" height="44" fill="#e5f3ec" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="862.00" text-anchor="middle" class="celltext-dark">+1.7</text>
-<rect x="1212" y="834" width="88" height="44" fill="#f0d0bb" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="834" width="88" height="44" fill="#f8e2d2" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="862.00" text-anchor="middle" class="celltext-dark">-3.6</text>
 <text x="1378" y="862.00" class="label">23.5%</text>
 <text x="1548" y="862.00" class="label">7.67</text>
-<rect x="184" y="896" width="56" height="32" rx="12" fill="#6d28d9"/>
-<text x="212.00" y="917.00" text-anchor="middle" class="celltext">S</text>
+<rect x="184" y="896" width="56" height="32" rx="12" fill="#b8a5df"/>
+<text x="212.00" y="917.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="918.00" class="label">Gemma-S</text>
-<rect x="420" y="890" width="88" height="44" fill="#d4e7dd" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="890" width="88" height="44" fill="#e0f0e8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="918.00" text-anchor="middle" class="celltext-dark">+2.4</text>
-<rect x="508" y="890" width="88" height="44" fill="#f0d2be" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="890" width="88" height="44" fill="#f8e3d3" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="918.00" text-anchor="middle" class="celltext-dark">-3.5</text>
-<rect x="596" y="890" width="88" height="44" fill="#fae9db" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="890" width="88" height="44" fill="#fdf0e3" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="918.00" text-anchor="middle" class="celltext-dark">-1.3</text>
-<rect x="684" y="890" width="88" height="44" fill="#f4dac9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="890" width="88" height="44" fill="#fae8d9" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="918.00" text-anchor="middle" class="celltext-dark">-2.7</text>
-<rect x="772" y="890" width="88" height="44" fill="#efceb9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="890" width="88" height="44" fill="#f8e1d0" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="918.00" text-anchor="middle" class="celltext-dark">-3.9</text>
-<rect x="860" y="890" width="88" height="44" fill="#5b9f7d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="918.00" text-anchor="middle" class="celltext">+11.6</text>
-<rect x="948" y="890" width="88" height="44" fill="#e7f3ed" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="890" width="88" height="44" fill="#94c8af" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="918.00" text-anchor="middle" class="celltext-dark">+11.6</text>
+<rect x="948" y="890" width="88" height="44" fill="#ecf6f0" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="918.00" text-anchor="middle" class="celltext-dark">+0.9</text>
-<rect x="1036" y="890" width="88" height="44" fill="#e4f1ea" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="890" width="88" height="44" fill="#eaf5ef" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="918.00" text-anchor="middle" class="celltext-dark">+1.1</text>
-<rect x="1124" y="890" width="88" height="44" fill="#fbede0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="890" width="88" height="44" fill="#fdf2e6" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="918.00" text-anchor="middle" class="celltext-dark">-0.9</text>
-<rect x="1212" y="890" width="88" height="44" fill="#efceb9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="890" width="88" height="44" fill="#f8e1d1" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="918.00" text-anchor="middle" class="celltext-dark">-3.8</text>
 <text x="1378" y="918.00" class="label">21.6%</text>
 <text x="1548" y="918.00" class="label">8.37</text>
-<rect x="184" y="952" width="56" height="32" rx="12" fill="#8b5cf6"/>
-<text x="212.00" y="973.00" text-anchor="middle" class="celltext">M</text>
+<rect x="184" y="952" width="56" height="32" rx="12" fill="#a996e3"/>
+<text x="212.00" y="973.00" text-anchor="middle" class="celltext-dark">M</text>
 <text x="258" y="974.00" class="label">Gemma-M</text>
-<rect x="420" y="946" width="88" height="44" fill="#f8e6d8" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="946" width="88" height="44" fill="#fceee1" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="974.00" text-anchor="middle" class="celltext-dark">-1.6</text>
-<rect x="508" y="946" width="88" height="44" fill="#f5decd" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="946" width="88" height="44" fill="#faeadb" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="974.00" text-anchor="middle" class="celltext-dark">-2.3</text>
-<rect x="596" y="946" width="88" height="44" fill="#fbede0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="946" width="88" height="44" fill="#fdf2e6" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="974.00" text-anchor="middle" class="celltext-dark">-0.9</text>
-<rect x="684" y="946" width="88" height="44" fill="#efceb9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="946" width="88" height="44" fill="#f8e1d0" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="974.00" text-anchor="middle" class="celltext-dark">-3.9</text>
-<rect x="772" y="946" width="88" height="44" fill="#f5ddcc" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="946" width="88" height="44" fill="#fae9db" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="974.00" text-anchor="middle" class="celltext-dark">-2.4</text>
-<rect x="860" y="946" width="88" height="44" fill="#83b79c" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="946" width="88" height="44" fill="#acd5c2" stroke="#ffffff" stroke-width="1.2"/>
 <text x="904.00" y="974.00" text-anchor="middle" class="celltext-dark">+8.6</text>
-<rect x="948" y="946" width="88" height="44" fill="#bfdbcd" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="948" y="946" width="88" height="44" fill="#d2e9de" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="974.00" text-anchor="middle" class="celltext-dark">+4.0</text>
-<rect x="1036" y="946" width="88" height="44" fill="#e7f3ec" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="946" width="88" height="44" fill="#ebf6f0" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="974.00" text-anchor="middle" class="celltext-dark">+1.0</text>
-<rect x="1124" y="946" width="88" height="44" fill="#f6e0d0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="946" width="88" height="44" fill="#fbebdd" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="974.00" text-anchor="middle" class="celltext-dark">-2.2</text>
-<rect x="1212" y="946" width="88" height="44" fill="#fef4ea" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="946" width="88" height="44" fill="#fff6eb" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="974.00" text-anchor="middle" class="celltext-dark">-0.2</text>
 <text x="1378" y="974.00" class="label">18.6%</text>
 <text x="1548" y="974.00" class="label">8.89</text>
-<rect x="184" y="1008" width="56" height="32" rx="12" fill="#c4b5fd"/>
+<rect x="184" y="1008" width="56" height="32" rx="12" fill="#cfc3f0"/>
 <text x="212.00" y="1029.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="1030.00" class="label">Gemma-L</text>
-<rect x="420" y="1002" width="88" height="44" fill="#fef3e9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="420" y="1002" width="88" height="44" fill="#fef5eb" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="1030.00" text-anchor="middle" class="celltext-dark">-0.3</text>
-<rect x="508" y="1002" width="88" height="44" fill="#f6e0d0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="1002" width="88" height="44" fill="#fbebdd" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="1030.00" text-anchor="middle" class="celltext-dark">-2.1</text>
-<rect x="596" y="1002" width="88" height="44" fill="#e3f0e9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="1002" width="88" height="44" fill="#e9f5ef" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="1030.00" text-anchor="middle" class="celltext-dark">+1.2</text>
-<rect x="684" y="1002" width="88" height="44" fill="#efceb9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="1002" width="88" height="44" fill="#f8e1d0" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="1030.00" text-anchor="middle" class="celltext-dark">-3.9</text>
-<rect x="772" y="1002" width="88" height="44" fill="#f0d2be" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="1002" width="88" height="44" fill="#f8e3d3" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="1030.00" text-anchor="middle" class="celltext-dark">-3.5</text>
-<rect x="860" y="1002" width="88" height="44" fill="#90bfa7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="1002" width="88" height="44" fill="#b5d9c8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="904.00" y="1030.00" text-anchor="middle" class="celltext-dark">+7.6</text>
-<rect x="948" y="1002" width="88" height="44" fill="#deeee5" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="948" y="1002" width="88" height="44" fill="#e6f3ec" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="1030.00" text-anchor="middle" class="celltext-dark">+1.6</text>
-<rect x="1036" y="1002" width="88" height="44" fill="#d9eae1" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="1002" width="88" height="44" fill="#e3f1ea" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="1030.00" text-anchor="middle" class="celltext-dark">+2.0</text>
-<rect x="1124" y="1002" width="88" height="44" fill="#f3d8c6" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="1002" width="88" height="44" fill="#f9e6d7" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="1030.00" text-anchor="middle" class="celltext-dark">-2.9</text>
-<rect x="1212" y="1002" width="88" height="44" fill="#eff8f3" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="1002" width="88" height="44" fill="#f0f9f4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="1030.00" text-anchor="middle" class="celltext-dark">+0.3</text>
 <text x="1378" y="1030.00" class="label">17.6%</text>
 <text x="1548" y="1030.00" class="label">9.05</text>
-<rect x="184" y="1064" width="56" height="32" rx="12" fill="#111827"/>
-<text x="212.00" y="1085.00" text-anchor="middle" class="celltext">Ref</text>
-<text x="258" y="1086.00" class="label">GPT4 only</text>
-<rect x="420" y="1058" width="88" height="44" fill="#bedacc" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="184" y="1064" width="56" height="32" rx="12" fill="#9ca3af"/>
+<text x="212.00" y="1085.00" text-anchor="middle" class="celltext-dark">Ref</text>
+<text x="258" y="1086.00" class="label">GPT-4o-mini Ref</text>
+<rect x="420" y="1058" width="88" height="44" fill="#d2e8dd" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="1086.00" text-anchor="middle" class="celltext-dark">+4.1</text>
-<rect x="508" y="1058" width="88" height="44" fill="#f7e3d3" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="508" y="1058" width="88" height="44" fill="#fbecdf" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="1086.00" text-anchor="middle" class="celltext-dark">-1.9</text>
-<rect x="596" y="1058" width="88" height="44" fill="#fcf0e4" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="596" y="1058" width="88" height="44" fill="#fef3e8" stroke="#ffffff" stroke-width="1.2"/>
 <text x="640.00" y="1086.00" text-anchor="middle" class="celltext-dark">-0.7</text>
-<rect x="684" y="1058" width="88" height="44" fill="#ebc5ad" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="684" y="1058" width="88" height="44" fill="#f6dcca" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="1086.00" text-anchor="middle" class="celltext-dark">-4.7</text>
-<rect x="772" y="1058" width="88" height="44" fill="#f2d5c2" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="772" y="1058" width="88" height="44" fill="#f9e5d6" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="1086.00" text-anchor="middle" class="celltext-dark">-3.1</text>
-<rect x="860" y="1058" width="88" height="44" fill="#96c3ac" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="1058" width="88" height="44" fill="#b9dbcb" stroke="#ffffff" stroke-width="1.2"/>
 <text x="904.00" y="1086.00" text-anchor="middle" class="celltext-dark">+7.1</text>
-<rect x="948" y="1058" width="88" height="44" fill="#d8eae0" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="948" y="1058" width="88" height="44" fill="#e2f1e9" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="1086.00" text-anchor="middle" class="celltext-dark">+2.1</text>
-<rect x="1036" y="1058" width="88" height="44" fill="#e1efe7" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1036" y="1058" width="88" height="44" fill="#e7f4ed" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1080.00" y="1086.00" text-anchor="middle" class="celltext-dark">+1.4</text>
-<rect x="1124" y="1058" width="88" height="44" fill="#f4dac9" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1124" y="1058" width="88" height="44" fill="#fae8d9" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1168.00" y="1086.00" text-anchor="middle" class="celltext-dark">-2.7</text>
-<rect x="1212" y="1058" width="88" height="44" fill="#f8e5d6" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1212" y="1058" width="88" height="44" fill="#fcede1" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="1086.00" text-anchor="middle" class="celltext-dark">-1.7</text>
 <text x="1378" y="1086.00" class="label">17.1%</text>
 <text x="1548" y="1086.00" class="label">8.94</text>

@@ -44,6 +44,18 @@ MODEL_LINES = [
     ("GPT4 only", "GPT4 only", "Ref", "gpt4_only"),
 ]
 
+DISPLAY_LINE_LABELS = {
+    "GPT4 only": "GPT-4o-mini Ref",
+}
+DISPLAY_FAMILY_LABELS = {
+    "GPT4 only": "OpenAI Ref",
+}
+ACTION_LOOKUP_ALIASES = {
+    "GPT-4o-mini Ref": "GPT4 only",
+    "OpenAI-Ref": "GPT4 only",
+}
+PUBLIC_TO_INTERNAL_LINE_LABELS = {public: internal for internal, public in DISPLAY_LINE_LABELS.items()}
+
 TASKS = {
     "unimoral_action_prediction": {
         "rq": "RQ1",
@@ -418,7 +430,11 @@ def load_bertscore_lookup(path: Path | None) -> dict[tuple[str, str, str], float
         value = row.get("bert_score_f1")
         if value in {None, ""}:
             continue
-        key = (str(row.get("line_label") or ""), str(row.get("task_name") or ""), str(row.get("sample_id") or ""))
+        key = (
+            internal_line_label(row.get("line_label") or ""),
+            str(row.get("task_name") or ""),
+            str(row.get("sample_id") or ""),
+        )
         if not all(key):
             continue
         lookup[key] = float(value)
@@ -530,7 +546,10 @@ def action_lookup(release_dir: Path) -> dict[str, float]:
     for row in read_csv(release_dir / "benchmark-comparison.csv"):
         value = row.get("unimoral_action_accuracy")
         if value:
-            lookup[row["line_label"]] = float(value)
+            line_label = str(row["line_label"])
+            lookup[line_label] = float(value)
+            if line_label in ACTION_LOOKUP_ALIASES:
+                lookup[ACTION_LOOKUP_ALIASES[line_label]] = float(value)
     return lookup
 
 
@@ -544,10 +563,12 @@ def build_rows(
     bertscore_lookup = bertscore_lookup or {}
     rows: list[dict[str, object]] = []
     for line_label, family, size_slot, slug in MODEL_LINES:
+        public_label = display_line_label(line_label)
+        public_family = display_family_label(family)
         for task_name, task in TASKS.items():
             base = {
-                "line_label": line_label,
-                "family": family,
+                "line_label": public_label,
+                "family": public_family,
                 "size_slot": size_slot,
                 "task_name": task_name,
                 "rq": task["rq"],
@@ -647,6 +668,8 @@ def sample_prediction_rows(
     bertscore_lookup = bertscore_lookup or {}
     rows: list[dict[str, object]] = []
     for line_label, family, size_slot, slug in MODEL_LINES:
+        public_label = display_line_label(line_label)
+        public_family = display_family_label(family)
         for task_name, task in TASKS.items():
             if task_name == "unimoral_action_prediction":
                 continue
@@ -681,8 +704,8 @@ def sample_prediction_rows(
                         score_value = fallback_sample_score(task_name, answer, target_list(sample))
                 rows.append(
                     {
-                        "line_label": line_label,
-                        "family": family,
+                        "line_label": public_label,
+                        "family": public_family,
                         "size_slot": size_slot,
                         "task_name": task_name,
                         "rq": task["rq"],
@@ -867,19 +890,48 @@ def ranking_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
     return output
 
 
+def publicize_bertscore_file(path: Path) -> None:
+    if not path.exists():
+        return
+    rows = read_csv(path)
+    if not rows:
+        return
+    changed = False
+    for row in rows:
+        public_label = display_line_label(row.get("line_label", ""))
+        if row.get("line_label") != public_label:
+            row["line_label"] = public_label
+            changed = True
+    if changed:
+        write_csv(path, rows, list(rows[0]))
+
+
 FAMILY_COLORS = {
-    "Qwen": "#2f6f9f",
-    "MiniMax": "#8a5a44",
-    "DeepSeek": "#4f7d45",
-    "Llama": "#b56a33",
-    "Gemma": "#7b62a3",
-    "GPT4 only": "#6b7280",
+    "Qwen": "#6fa8c7",
+    "MiniMax": "#bf977a",
+    "DeepSeek": "#84ad78",
+    "Llama": "#d7a06b",
+    "Gemma": "#ad9ad0",
+    "GPT4 only": "#aab2bd",
 }
 
 
+def display_line_label(label: object) -> str:
+    return DISPLAY_LINE_LABELS.get(str(label), str(label))
+
+
+def display_family_label(family: object) -> str:
+    return DISPLAY_FAMILY_LABELS.get(str(family), str(family))
+
+
+def internal_line_label(label: object) -> str:
+    return PUBLIC_TO_INTERNAL_LINE_LABELS.get(str(label), str(label))
+
+
 def family_for_line(line_label: str) -> str:
+    internal_label = internal_line_label(line_label)
     for label, family, _, _ in MODEL_LINES:
-        if label == line_label:
+        if label == internal_label:
             return family
     return ""
 
@@ -892,9 +944,9 @@ def color(value: float | None, low: float = 0.0, high: float = 1.0) -> str:
     else:
         value = (value - low) / (high - low)
     value = max(0.0, min(1.0, value))
-    red = int(241 - 205 * value)
-    green = int(248 - 103 * value)
-    blue = int(248 - 101 * value)
+    red = int(247 - 103 * value)
+    green = int(250 - 59 * value)
+    blue = int(250 - 58 * value)
     return f"#{red:02x}{green:02x}{blue:02x}"
 
 
@@ -951,8 +1003,9 @@ def score_scale_note(rows: list[dict[str, object]]) -> str:
 
 
 def line_meta_for(label: str) -> tuple[str, str]:
+    internal_label = internal_line_label(label)
     for line_label, family, size_slot, _ in MODEL_LINES:
-        if line_label == label:
+        if line_label == internal_label:
             return family, size_slot
     return "", ""
 
@@ -1020,7 +1073,7 @@ def svg_four_task_dashboard(
         parts.append(
             f'<text x="{x + 18}" y="{y + 78}" class="small">Strict complete: {coverage_row.get("complete_model_lines", "")}/{coverage_row.get("expected_model_lines", "")}; reported: {coverage_row.get("reported_model_lines", "")}/{coverage_row.get("expected_model_lines", "")}</text>'
         )
-        top_text = f'{top.get("line_label", "")} ({format_value(top.get("value", ""))})' if top else ""
+        top_text = f'{display_line_label(top.get("line_label", ""))} ({format_value(top.get("value", ""))})' if top else ""
         parts.append(f'<text x="{x + 18}" y="{y + 100}" class="small">Mean/range: {format_value(spread.get("mean", ""))} / {format_value(spread.get("range", ""))}</text>')
         parts.append(f'<text x="{x + 18}" y="{y + 122}" class="small">Top line: {html.escape(top_text)}</text>')
 
@@ -1042,7 +1095,7 @@ def svg_four_task_dashboard(
         "2. Main UniMoral figure: RQ1-RQ3 exact-match accuracy only.",
         "3. Generation figure: RQ4 BERTScore F1 and METEOR, separate from accuracy.",
         "4. Classification rankings/spread use the same RQ1-RQ3 accuracy metric.",
-        "All public/reference model lines remain listed: Qwen, MiniMax, DeepSeek, Llama, Gemma S/M/L plus GPT4 Ref.",
+        "All public/reference model lines remain listed: Qwen, MiniMax, DeepSeek, Llama, Gemma S/M/L plus GPT-4o-mini Ref.",
     ]
     for index, line in enumerate(figure_lines):
         parts.append(f'<text x="952" y="{panel_y + 74 + index * 34}" class="subtitle">{html.escape(line)}</text>')
@@ -1051,7 +1104,7 @@ def svg_four_task_dashboard(
     parts.append(f'<rect x="36" y="{y0}" width="1728" height="292" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>')
     parts.append(f'<text x="60" y="{y0 + 34}" class="axis">Coverage readout</text>')
     parts.append(
-        f'<text x="60" y="{y0 + 62}" class="subtitle">Complete four-task lines outside MiniMax: Qwen-S/M/L, DeepSeek-S/M/L, Llama-S/M/L, Gemma-S/M/L, and GPT4 only (13/13 lines).</text>'
+        f'<text x="60" y="{y0 + 62}" class="subtitle">Complete four-task lines outside MiniMax: Qwen-S/M/L, DeepSeek-S/M/L, Llama-S/M/L, Gemma-S/M/L, and GPT-4o-mini Ref (13/13 lines).</text>'
     )
     parts.append(
         f'<text x="60" y="{y0 + 88}" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>'
@@ -1062,7 +1115,7 @@ def svg_four_task_dashboard(
         ("DeepSeek", "S/M/L: 4 tasks complete"),
         ("Llama", "S/M/L: 4 tasks complete"),
         ("Gemma", "S/M/L: 4 tasks complete"),
-        ("GPT4 only", "reference: 4 tasks complete"),
+        ("GPT4 only", "GPT-4o-mini reference: 4 tasks complete"),
         ("MiniMax", "caveats: see failure checklist"),
     ]
     chip_w = 260
@@ -1071,9 +1124,9 @@ def svg_four_task_dashboard(
         fill = FAMILY_COLORS.get(family, "#6b7280")
         parts.append(f'<rect x="{x}" y="{chip_y}" width="{chip_w}" height="54" fill="white" stroke="{fill}" stroke-width="2" rx="8"/>')
         parts.append(f'<circle cx="{x + 22}" cy="{chip_y + 27}" r="7" fill="{fill}"/>')
-        parts.append(f'<text x="{x + 40}" y="{chip_y + 22}" class="axis">{html.escape(family)}</text>')
+        parts.append(f'<text x="{x + 40}" y="{chip_y + 22}" class="axis">{html.escape(display_family_label(family))}</text>')
         parts.append(f'<text x="{x + 40}" y="{chip_y + 42}" class="small">{html.escape(label)}</text>')
-    parts.append(f'<text x="60" y="{y0 + 214}" class="small">All run lines are shown in the full score heatmap and all-line ranking below: Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus GPT4 Ref.</text>')
+    parts.append(f'<text x="60" y="{y0 + 214}" class="small">All run lines are shown in the full score heatmap and all-line ranking below: Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus GPT-4o-mini Ref.</text>')
     parts.append(f'<text x="60" y="{y0 + 238}" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; the main figures avoid special cell markers.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
@@ -1082,7 +1135,7 @@ def svg_four_task_dashboard(
 def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
     task_names = CLASSIFICATION_TASK_NAMES
     lines = [line for line, _, _, _ in MODEL_LINES]
-    row_lookup = {(row["line_label"], row["task_name"]): row for row in rows}
+    row_lookup = {(internal_line_label(row["line_label"]), row["task_name"]): row for row in rows}
     ranges: dict[str, tuple[float, float]] = {}
     for task_name in task_names:
         values = [
@@ -1122,7 +1175,7 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
         h = (end_index - start_index + 1) * cell_h - 6
         fill = FAMILY_COLORS.get(family, "#6b7280")
         parts.append(f'<rect x="{family_x}" y="{y}" width="{family_w}" height="{h}" fill="{fill}" opacity="0.12" stroke="{fill}" rx="8"/>')
-        parts.append(f'<text x="{family_x + family_w / 2}" y="{y + h / 2 + 4:.1f}" text-anchor="middle" class="axis">{html.escape(family)}</text>')
+        parts.append(f'<text x="{family_x + family_w / 2}" y="{y + h / 2 + 4:.1f}" text-anchor="middle" class="axis">{html.escape(display_family_label(family))}</text>')
         if start_index > 0:
             divider_y = y - 4
             parts.append(f'<line x1="{family_x}" y1="{divider_y}" x2="{width - 30}" y2="{divider_y}" stroke="#d8dee4"/>')
@@ -1131,8 +1184,8 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
         family, size_slot = line_meta_for(line)
         fill = FAMILY_COLORS.get(family, "#6b7280")
         parts.append(f'<rect x="{size_x}" y="{y + 5}" width="{size_w}" height="26" fill="{fill}" rx="13"/>')
-        parts.append(f'<text x="{size_x + size_w / 2}" y="{y + 24}" text-anchor="middle" fill="#ffffff" font-weight="700">{html.escape(size_slot)}</text>')
-        parts.append(f'<text x="{line_x}" y="{y + 25}" class="axis">{html.escape(line)}</text>')
+        parts.append(f'<text x="{size_x + size_w / 2}" y="{y + 24}" text-anchor="middle" fill="#17202a" font-weight="700">{html.escape(size_slot)}</text>')
+        parts.append(f'<text x="{line_x}" y="{y + 25}" class="axis">{html.escape(display_line_label(line))}</text>')
         for col, task_name in enumerate(task_names):
             x = left + col * cell_w
             row = row_lookup.get((line, task_name))
@@ -1141,7 +1194,7 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
             label = "n/a" if value is None else f"{value:.3f}"
             parts.append(f'<rect x="{x}" y="{y}" width="{cell_w - 8}" height="{cell_h - 8}" fill="{color(value, low, high)}" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>')
             parts.append(f'<text x="{x + 14}" y="{y + 26}" class="axis">{label}</text>')
-    parts.append(f'<text x="28" y="{height - 52}" class="small">Rows include all public model lines plus the GPT4 reference. S/M/L are planning slots for within-family scaling, not a universal vendor taxonomy.</text>')
+    parts.append(f'<text x="28" y="{height - 52}" class="small">Rows include all public model lines plus the GPT-4o-mini reference. S/M/L are planning slots for within-family scaling, not a universal vendor taxonomy.</text>')
     parts.append(f'<text x="28" y="{height - 28}" class="small">This main figure uses strict-complete exact-match accuracy cells only; parse gaps remain in the audit tables.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
@@ -1200,9 +1253,9 @@ def svg_generation_quality(rows: list[dict[str, object]], path: Path) -> None:
         fill = FAMILY_COLORS.get(family, "#6b7280")
         bert_value = field_value(row, "bert_score_f1")
         meteor = field_value(row, "meteor")
-        parts.append(f'<text x="{label_x}" y="{y + 27}" class="axis">{html.escape(str(row["line_label"]))}</text>')
+        parts.append(f'<text x="{label_x}" y="{y + 27}" class="axis">{html.escape(display_line_label(row["line_label"]))}</text>')
         parts.append(f'<rect x="{size_x}" y="{y + 8}" width="46" height="24" fill="{fill}" rx="12"/>')
-        parts.append(f'<text x="{size_x + 23}" y="{y + 26}" text-anchor="middle" fill="#ffffff" font-weight="700">{html.escape(size_slot)}</text>')
+        parts.append(f'<text x="{size_x + 23}" y="{y + 26}" text-anchor="middle" fill="#17202a" font-weight="700">{html.escape(size_slot)}</text>')
         parts.append(f'<rect x="{bert_x}" y="{y + 5}" width="{bert_w}" height="{row_h - 10}" fill="#eef2f7" rx="8"/>')
         bert_bar_w = scaled_width(bert_value, bert_min, bert_max, bert_w)
         parts.append(f'<rect x="{bert_x}" y="{y + 5}" width="{bert_bar_w:.1f}" height="{row_h - 10}" fill="{fill}" rx="8"/>')
@@ -1253,9 +1306,9 @@ def svg_rankings(rows: list[dict[str, object]], path: Path) -> None:
             bar_w = 760 * value / max_value if max_value else 0
             family, size_slot = line_meta_for(str(row["line_label"]))
             fill = FAMILY_COLORS.get(family, "#6b7280")
-            parts.append(f'<text x="44" y="{y + 14}">{idx + 1}. {html.escape(str(row["line_label"]))}</text>')
+            parts.append(f'<text x="44" y="{y + 14}">{idx + 1}. {html.escape(display_line_label(row["line_label"]))}</text>')
             parts.append(f'<rect x="178" y="{y + 1}" width="38" height="18" fill="{fill}" rx="9"/>')
-            parts.append(f'<text x="197" y="{y + 14}" text-anchor="middle" fill="#ffffff" font-weight="700">{html.escape(size_slot)}</text>')
+            parts.append(f'<text x="197" y="{y + 14}" text-anchor="middle" fill="#17202a" font-weight="700">{html.escape(size_slot)}</text>')
             parts.append(f'<rect x="246" y="{y}" width="{bar_w:.1f}" height="18" fill="{fill}" rx="3"/>')
             parts.append(f'<text x="{256 + bar_w:.1f}" y="{y + 14}">{value:.3f}</text>')
         y_cursor += panel_h
@@ -1297,7 +1350,7 @@ def update_manifest(release_dir: Path) -> None:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     task_count = len(TASKS)
     model_line_count = len(MODEL_LINES)
-    family_labels = list(dict.fromkeys(family for _, family, _, _ in MODEL_LINES))
+    family_labels = list(dict.fromkeys(display_family_label(family) for _, family, _, _ in MODEL_LINES))
     total_samples = sum(int(task["expected"]) for task in TASKS.values()) * model_line_count
     coverage_path = release_dir / "unimoral-coverage.csv"
     coverage_rows_for_status = read_csv(coverage_path) if coverage_path.exists() else []
@@ -1592,7 +1645,7 @@ def write_completion_audit(
         (str(row.get("line_label", "")), str(row.get("task_name", ""))): row
         for row in full_rows
     }
-    expected_pairs = {(line_label, task_name) for line_label, _, _, _ in MODEL_LINES for task_name in TASKS}
+    expected_pairs = {(display_line_label(line_label), task_name) for line_label, _, _, _ in MODEL_LINES for task_name in TASKS}
     actual_pairs = set(full_by_pair)
     prediction_counts: dict[tuple[str, str], int] = {}
     prediction_keys: list[tuple[str, str, str]] = []
@@ -1625,23 +1678,24 @@ def write_completion_audit(
             "line/task/sample prediction rows prevent strict completion."
         )
     for line_label, _, _, _ in MODEL_LINES:
+        public_label = display_line_label(line_label)
         for task_name, task in TASKS.items():
             if task_name == "unimoral_action_prediction":
                 continue
             expected = int(task["expected"])
-            prediction_count = prediction_counts.get((line_label, task_name), 0)
-            row = full_by_pair.get((line_label, task_name))
+            prediction_count = prediction_counts.get((public_label, task_name), 0)
+            row = full_by_pair.get((public_label, task_name))
             status_value = str(row.get("status", "missing_row")) if row else "missing_row"
             gap = max(0, expected - prediction_count)
             if gap:
                 total_prediction_gap += gap
                 strict_blocker_lines.append(
-                    f"- `{line_label}` `{task_name}`: {gap} sample predictions missing "
+                    f"- `{public_label}` `{task_name}`: {gap} sample predictions missing "
                     f"({prediction_count}/{expected}); status `{status_value}`."
                 )
             elif status_value != "complete":
                 strict_blocker_lines.append(
-                    f"- `{line_label}` `{task_name}`: no sample-count gap "
+                    f"- `{public_label}` `{task_name}`: no sample-count gap "
                     f"({prediction_count}/{expected}) but status `{status_value}` prevents strict completion."
                 )
     sample_predictions_complete = sample_rows == expected_prediction_rows and duplicate_prediction_count == 0
@@ -1717,7 +1771,7 @@ def update_release_overview_tables(release_dir: Path, coverage: list[dict[str, o
     all_complete = all(row["status"] == "complete" for row in coverage)
     task_count = len(TASKS)
     model_line_count = len(MODEL_LINES)
-    family_labels = list(dict.fromkeys(family for _, family, _, _ in MODEL_LINES))
+    family_labels = list(dict.fromkeys(display_family_label(family) for _, family, _, _ in MODEL_LINES))
     total_samples = sum(int(task["expected"]) for task in TASKS.values()) * model_line_count
     per_line_unimoral_samples = sum(int(task["expected"]) for task in TASKS.values())
     added_unimoral_samples = per_line_unimoral_samples - int(TASKS["unimoral_action_prediction"]["expected"])
@@ -1825,7 +1879,7 @@ def build_markdown_section(
         top = top_by_task.get(task_name, {})
         top_cell = ""
         if top:
-            top_cell = f"{top['line_label']} ({format_value(top['value'])})"
+            top_cell = f"{display_line_label(top['line_label'])} ({format_value(top['value'])})"
         lines.append(
             "| {rq} | {task_label} | {status} | {complete}/{expected} | {reported}/{expected} | {metric} | {mean} | {range_} | {top} | {diagnostic} |".format(
                 rq=item["rq"],
@@ -2012,6 +2066,8 @@ def main() -> None:
             "log_path",
         ],
     )
+    if bertscore_file.resolve() == (args.release_dir / "unimoral-rq4-bertscore.csv").resolve():
+        publicize_bertscore_file(bertscore_file)
 
     args.figure_dir.mkdir(parents=True, exist_ok=True)
     svg_four_task_dashboard(rows, coverage, spreads, rankings, args.figure_dir / "option1_unimoral_four_task_dashboard.svg")

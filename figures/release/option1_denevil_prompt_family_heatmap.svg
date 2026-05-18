@@ -57,245 +57,245 @@
 <text x="1195.00" y="214" text-anchor="middle" class="tiny">political judgment</text>
 <text x="1365.00" y="198" text-anchor="middle" class="tiny">Drug or</text>
 <text x="1365.00" y="214" text-anchor="middle" class="tiny">self-endangerment</text>
-<rect x="48" y="230" width="118" height="162" rx="18" fill="#d8eeec" stroke="#0d9488" stroke-width="1.2"/>
+<rect x="48" y="230" width="118" height="162" rx="18" fill="#e6f4f2" stroke="#65b8ac" stroke-width="1.2"/>
 <text x="107.00" y="316.00" text-anchor="middle" class="label">Qwen</text>
-<rect x="48" y="392" width="118" height="162" rx="18" fill="#f9e9d7" stroke="#d97706" stroke-width="1.2"/>
+<rect x="48" y="392" width="118" height="162" rx="18" fill="#faf2e7" stroke="#e0ad68" stroke-width="1.2"/>
 <text x="107.00" y="478.00" text-anchor="middle" class="label">MiniMax</text>
 <line x1="48" y1="382.00" x2="1732" y2="382.00" class="baseline"/>
-<rect x="48" y="554" width="118" height="162" rx="18" fill="#dce6fc" stroke="#2563eb" stroke-width="1.2"/>
+<rect x="48" y="554" width="118" height="162" rx="18" fill="#e9f1fb" stroke="#78a8e6" stroke-width="1.2"/>
 <text x="107.00" y="640.00" text-anchor="middle" class="label">DeepSeek</text>
 <line x1="48" y1="544.00" x2="1732" y2="544.00" class="baseline"/>
-<rect x="48" y="716" width="118" height="162" rx="18" fill="#fce4d8" stroke="#ea580c" stroke-width="1.2"/>
+<rect x="48" y="716" width="118" height="162" rx="18" fill="#fcf0e7" stroke="#eba069" stroke-width="1.2"/>
 <text x="107.00" y="802.00" text-anchor="middle" class="label">Llama</text>
 <line x1="48" y1="706.00" x2="1732" y2="706.00" class="baseline"/>
-<rect x="48" y="878" width="118" height="162" rx="18" fill="#ece5fe" stroke="#8b5cf6" stroke-width="1.2"/>
+<rect x="48" y="878" width="118" height="162" rx="18" fill="#f1eefb" stroke="#a996e3" stroke-width="1.2"/>
 <text x="107.00" y="964.00" text-anchor="middle" class="label">Gemma</text>
 <line x1="48" y1="868.00" x2="1732" y2="868.00" class="baseline"/>
-<rect x="184" y="242" width="56" height="30" rx="12" fill="#0f766e"/>
-<text x="212.00" y="263.00" text-anchor="middle" class="celltext">S</text>
+<rect x="184" y="242" width="56" height="30" rx="12" fill="#8fc7bd"/>
+<text x="212.00" y="263.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="263.00" class="label">Qwen-S</text>
-<rect x="430" y="236" width="170" height="42" fill="#33875d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="263.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="600" y="236" width="170" height="42" fill="#30865b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="263.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="770" y="236" width="170" height="42" fill="#33875d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="263.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="940" y="236" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="263.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="236" width="170" height="42" fill="#32875c" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="263.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="1280" y="236" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="263.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="184" y="296" width="56" height="30" rx="12" fill="#0d9488"/>
-<text x="212.00" y="317.00" text-anchor="middle" class="celltext">M</text>
+<rect x="430" y="236" width="170" height="42" fill="#84b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="263.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="600" y="236" width="170" height="42" fill="#83b88a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="263.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="770" y="236" width="170" height="42" fill="#84b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="263.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="940" y="236" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="263.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="236" width="170" height="42" fill="#84b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="263.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="1280" y="236" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="263.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="184" y="296" width="56" height="30" rx="12" fill="#65b8ac"/>
+<text x="212.00" y="317.00" text-anchor="middle" class="celltext-dark">M</text>
 <text x="258" y="317.00" class="label">Qwen-M</text>
-<rect x="430" y="290" width="170" height="42" fill="#33875d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="317.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="600" y="290" width="170" height="42" fill="#34885d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="317.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="770" y="290" width="170" height="42" fill="#32875c" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="317.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="940" y="290" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="317.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="290" width="170" height="42" fill="#398b61" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="317.00" text-anchor="middle" class="celltext">95%</text>
-<rect x="1280" y="290" width="170" height="42" fill="#3c8c63" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="317.00" text-anchor="middle" class="celltext">94%</text>
-<rect x="184" y="350" width="56" height="30" rx="12" fill="#2dd4bf"/>
+<rect x="430" y="290" width="170" height="42" fill="#85b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="317.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="600" y="290" width="170" height="42" fill="#85b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="317.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="770" y="290" width="170" height="42" fill="#84b98a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="317.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="940" y="290" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="317.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="290" width="170" height="42" fill="#88bb8e" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="317.00" text-anchor="middle" class="celltext-dark">95%</text>
+<rect x="1280" y="290" width="170" height="42" fill="#8abc8f" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="317.00" text-anchor="middle" class="celltext-dark">94%</text>
+<rect x="184" y="350" width="56" height="30" rx="12" fill="#3fc7b8"/>
 <text x="212.00" y="371.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="371.00" class="label">Qwen-L</text>
-<rect x="430" y="344" width="170" height="42" fill="#34885e" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="371.00" text-anchor="middle" class="celltext">97%</text>
-<rect x="600" y="344" width="170" height="42" fill="#36895f" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="371.00" text-anchor="middle" class="celltext">97%</text>
-<rect x="770" y="344" width="170" height="42" fill="#31865c" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="371.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="940" y="344" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="371.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="344" width="170" height="42" fill="#449069" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="371.00" text-anchor="middle" class="celltext">90%</text>
-<rect x="1280" y="344" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="371.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="184" y="404" width="56" height="30" rx="12" fill="#b45309"/>
-<text x="212.00" y="425.00" text-anchor="middle" class="celltext">S</text>
+<rect x="430" y="344" width="170" height="42" fill="#85ba8c" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="371.00" text-anchor="middle" class="celltext-dark">97%</text>
+<rect x="600" y="344" width="170" height="42" fill="#86ba8c" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="371.00" text-anchor="middle" class="celltext-dark">97%</text>
+<rect x="770" y="344" width="170" height="42" fill="#83b98a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="371.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="940" y="344" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="371.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="344" width="170" height="42" fill="#8ebe93" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="371.00" text-anchor="middle" class="celltext-dark">90%</text>
+<rect x="1280" y="344" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="371.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="184" y="404" width="56" height="30" rx="12" fill="#d4a46e"/>
+<text x="212.00" y="425.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="425.00" class="label">MiniMax-S</text>
-<rect x="430" y="398" width="170" height="42" fill="#36895f" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="425.00" text-anchor="middle" class="celltext">97%</text>
-<rect x="600" y="398" width="170" height="42" fill="#3b8b62" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="425.00" text-anchor="middle" class="celltext">94%</text>
-<rect x="770" y="398" width="170" height="42" fill="#31865b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="425.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="940" y="398" width="170" height="42" fill="#74ab8b" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="430" y="398" width="170" height="42" fill="#86ba8c" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="425.00" text-anchor="middle" class="celltext-dark">97%</text>
+<rect x="600" y="398" width="170" height="42" fill="#89bc8f" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="425.00" text-anchor="middle" class="celltext-dark">94%</text>
+<rect x="770" y="398" width="170" height="42" fill="#83b98a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="425.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="940" y="398" width="170" height="42" fill="#accdaa" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1025.00" y="425.00" text-anchor="middle" class="celltext-dark">67%</text>
-<rect x="1110" y="398" width="170" height="42" fill="#74ab8b" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1110" y="398" width="170" height="42" fill="#accdaa" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1195.00" y="425.00" text-anchor="middle" class="celltext-dark">67%</text>
-<rect x="1280" y="398" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="425.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="184" y="458" width="56" height="30" rx="12" fill="#d97706"/>
-<text x="212.00" y="479.00" text-anchor="middle" class="celltext">M</text>
+<rect x="1280" y="398" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="425.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="184" y="458" width="56" height="30" rx="12" fill="#e0ad68"/>
+<text x="212.00" y="479.00" text-anchor="middle" class="celltext-dark">M</text>
 <text x="258" y="479.00" class="label">MiniMax-M</text>
-<rect x="430" y="452" width="170" height="42" fill="#35885e" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="479.00" text-anchor="middle" class="celltext">97%</text>
-<rect x="600" y="452" width="170" height="42" fill="#3d8d64" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="479.00" text-anchor="middle" class="celltext">93%</text>
-<rect x="770" y="452" width="170" height="42" fill="#34885e" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="479.00" text-anchor="middle" class="celltext">97%</text>
-<rect x="940" y="452" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="479.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="452" width="170" height="42" fill="#599c77" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="479.00" text-anchor="middle" class="celltext">80%</text>
-<rect x="1280" y="452" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="479.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="184" y="512" width="56" height="30" rx="12" fill="#fbbf24"/>
+<rect x="430" y="452" width="170" height="42" fill="#86ba8c" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="479.00" text-anchor="middle" class="celltext-dark">97%</text>
+<rect x="600" y="452" width="170" height="42" fill="#8bbc90" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="479.00" text-anchor="middle" class="celltext-dark">93%</text>
+<rect x="770" y="452" width="170" height="42" fill="#85ba8c" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="479.00" text-anchor="middle" class="celltext-dark">97%</text>
+<rect x="940" y="452" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="479.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="452" width="170" height="42" fill="#9bc59d" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="479.00" text-anchor="middle" class="celltext-dark">80%</text>
+<rect x="1280" y="452" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="479.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="184" y="512" width="56" height="30" rx="12" fill="#f3cf82"/>
 <text x="212.00" y="533.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="533.00" class="label">MiniMax-L</text>
-<rect x="430" y="506" width="170" height="42" fill="#35885e" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="533.00" text-anchor="middle" class="celltext">97%</text>
-<rect x="600" y="506" width="170" height="42" fill="#3f8e66" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="533.00" text-anchor="middle" class="celltext">92%</text>
-<rect x="770" y="506" width="170" height="42" fill="#34885d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="533.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="940" y="506" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="533.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="506" width="170" height="42" fill="#60a07c" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="533.00" text-anchor="middle" class="celltext">77%</text>
-<rect x="1280" y="506" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="533.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="184" y="566" width="56" height="30" rx="12" fill="#1d4ed8"/>
-<text x="212.00" y="587.00" text-anchor="middle" class="celltext">S</text>
+<rect x="430" y="506" width="170" height="42" fill="#85ba8c" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="533.00" text-anchor="middle" class="celltext-dark">97%</text>
+<rect x="600" y="506" width="170" height="42" fill="#8cbd91" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="533.00" text-anchor="middle" class="celltext-dark">92%</text>
+<rect x="770" y="506" width="170" height="42" fill="#85b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="533.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="940" y="506" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="533.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="506" width="170" height="42" fill="#9fc7a0" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="533.00" text-anchor="middle" class="celltext-dark">77%</text>
+<rect x="1280" y="506" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="533.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="184" y="566" width="56" height="30" rx="12" fill="#94b8e8"/>
+<text x="212.00" y="587.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="587.00" class="label">DeepSeek-S</text>
-<rect x="430" y="560" width="170" height="42" fill="#49936c" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="587.00" text-anchor="middle" class="celltext">87%</text>
-<rect x="600" y="560" width="170" height="42" fill="#519872" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="587.00" text-anchor="middle" class="celltext">84%</text>
-<rect x="770" y="560" width="170" height="42" fill="#408e66" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="587.00" text-anchor="middle" class="celltext">92%</text>
-<rect x="940" y="560" width="170" height="42" fill="#74ab8b" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="430" y="560" width="170" height="42" fill="#92c096" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="587.00" text-anchor="middle" class="celltext-dark">87%</text>
+<rect x="600" y="560" width="170" height="42" fill="#97c299" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="587.00" text-anchor="middle" class="celltext-dark">84%</text>
+<rect x="770" y="560" width="170" height="42" fill="#8cbd91" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="587.00" text-anchor="middle" class="celltext-dark">92%</text>
+<rect x="940" y="560" width="170" height="42" fill="#accdaa" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1025.00" y="587.00" text-anchor="middle" class="celltext-dark">67%</text>
-<rect x="1110" y="560" width="170" height="42" fill="#eaecde" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1110" y="560" width="170" height="42" fill="#f2f1e3" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1195.00" y="587.00" text-anchor="middle" class="celltext-dark">10%</text>
-<rect x="1280" y="560" width="170" height="42" fill="#3c8c63" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="587.00" text-anchor="middle" class="celltext">94%</text>
-<rect x="184" y="620" width="56" height="30" rx="12" fill="#2563eb"/>
-<text x="212.00" y="641.00" text-anchor="middle" class="celltext">M</text>
+<rect x="1280" y="560" width="170" height="42" fill="#8abc8f" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="587.00" text-anchor="middle" class="celltext-dark">94%</text>
+<rect x="184" y="620" width="56" height="30" rx="12" fill="#78a8e6"/>
+<text x="212.00" y="641.00" text-anchor="middle" class="celltext-dark">M</text>
 <text x="258" y="641.00" class="label">DeepSeek-M</text>
-<rect x="430" y="614" width="170" height="42" fill="#34885e" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="641.00" text-anchor="middle" class="celltext">97%</text>
-<rect x="600" y="614" width="170" height="42" fill="#378960" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="641.00" text-anchor="middle" class="celltext">96%</text>
-<rect x="770" y="614" width="170" height="42" fill="#33875d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="641.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="940" y="614" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="641.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="614" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="641.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1280" y="614" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="641.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="184" y="674" width="56" height="30" rx="12" fill="#60a5fa"/>
+<rect x="430" y="614" width="170" height="42" fill="#85ba8c" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="641.00" text-anchor="middle" class="celltext-dark">97%</text>
+<rect x="600" y="614" width="170" height="42" fill="#87ba8d" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="641.00" text-anchor="middle" class="celltext-dark">96%</text>
+<rect x="770" y="614" width="170" height="42" fill="#84b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="641.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="940" y="614" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="641.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="614" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="641.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1280" y="614" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="641.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="184" y="674" width="56" height="30" rx="12" fill="#a8c7f0"/>
 <text x="212.00" y="695.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="695.00" class="label">DeepSeek-L</text>
-<rect x="430" y="668" width="170" height="42" fill="#439068" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="695.00" text-anchor="middle" class="celltext">90%</text>
-<rect x="600" y="668" width="170" height="42" fill="#4a946d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="695.00" text-anchor="middle" class="celltext">87%</text>
-<rect x="770" y="668" width="170" height="42" fill="#3a8b62" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="695.00" text-anchor="middle" class="celltext">95%</text>
-<rect x="940" y="668" width="170" height="42" fill="#74ab8b" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="430" y="668" width="170" height="42" fill="#8ebe93" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="695.00" text-anchor="middle" class="celltext-dark">90%</text>
+<rect x="600" y="668" width="170" height="42" fill="#92c096" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="695.00" text-anchor="middle" class="celltext-dark">87%</text>
+<rect x="770" y="668" width="170" height="42" fill="#88bb8e" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="695.00" text-anchor="middle" class="celltext-dark">95%</text>
+<rect x="940" y="668" width="170" height="42" fill="#accdaa" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1025.00" y="695.00" text-anchor="middle" class="celltext-dark">67%</text>
-<rect x="1110" y="668" width="170" height="42" fill="#d9e2d2" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="1110" y="668" width="170" height="42" fill="#e8ebdb" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1195.00" y="695.00" text-anchor="middle" class="celltext-dark">18%</text>
-<rect x="1280" y="668" width="170" height="42" fill="#49936c" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="695.00" text-anchor="middle" class="celltext">88%</text>
-<rect x="184" y="728" width="56" height="30" rx="12" fill="#c2410c"/>
-<text x="212.00" y="749.00" text-anchor="middle" class="celltext">S</text>
+<rect x="1280" y="668" width="170" height="42" fill="#92c096" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="695.00" text-anchor="middle" class="celltext-dark">88%</text>
+<rect x="184" y="728" width="56" height="30" rx="12" fill="#e0a37a"/>
+<text x="212.00" y="749.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="749.00" class="label">Llama-S</text>
-<rect x="430" y="722" width="170" height="42" fill="#34885d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="749.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="600" y="722" width="170" height="42" fill="#31865c" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="749.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="770" y="722" width="170" height="42" fill="#31865b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="749.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="940" y="722" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="749.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="722" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="749.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1280" y="722" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="749.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="184" y="782" width="56" height="30" rx="12" fill="#ea580c"/>
-<text x="212.00" y="803.00" text-anchor="middle" class="celltext">M</text>
+<rect x="430" y="722" width="170" height="42" fill="#85b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="749.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="600" y="722" width="170" height="42" fill="#83b98a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="749.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="770" y="722" width="170" height="42" fill="#83b98a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="749.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="940" y="722" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="749.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="722" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="749.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1280" y="722" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="749.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="184" y="782" width="56" height="30" rx="12" fill="#eba069"/>
+<text x="212.00" y="803.00" text-anchor="middle" class="celltext-dark">M</text>
 <text x="258" y="803.00" class="label">Llama-M</text>
-<rect x="430" y="776" width="170" height="42" fill="#33875d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="803.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="600" y="776" width="170" height="42" fill="#34885d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="803.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="770" y="776" width="170" height="42" fill="#33875d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="803.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="940" y="776" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="803.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="776" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="803.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1280" y="776" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="803.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="184" y="836" width="56" height="30" rx="12" fill="#fb923c"/>
+<rect x="430" y="776" width="170" height="42" fill="#84b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="803.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="600" y="776" width="170" height="42" fill="#85b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="803.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="770" y="776" width="170" height="42" fill="#84b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="803.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="940" y="776" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="803.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="776" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="803.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1280" y="776" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="803.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="184" y="836" width="56" height="30" rx="12" fill="#f2b883"/>
 <text x="212.00" y="857.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="857.00" class="label">Llama-L</text>
-<rect x="430" y="830" width="170" height="42" fill="#32875c" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="857.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="600" y="830" width="170" height="42" fill="#33875d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="857.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="770" y="830" width="170" height="42" fill="#36895f" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="857.00" text-anchor="middle" class="celltext">97%</text>
-<rect x="940" y="830" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="857.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="830" width="170" height="42" fill="#449069" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="857.00" text-anchor="middle" class="celltext">90%</text>
-<rect x="1280" y="830" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="857.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="184" y="890" width="56" height="30" rx="12" fill="#6d28d9"/>
-<text x="212.00" y="911.00" text-anchor="middle" class="celltext">S</text>
+<rect x="430" y="830" width="170" height="42" fill="#84b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="857.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="600" y="830" width="170" height="42" fill="#84b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="857.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="770" y="830" width="170" height="42" fill="#86ba8c" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="857.00" text-anchor="middle" class="celltext-dark">97%</text>
+<rect x="940" y="830" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="857.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="830" width="170" height="42" fill="#8ebe93" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="857.00" text-anchor="middle" class="celltext-dark">90%</text>
+<rect x="1280" y="830" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="857.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="184" y="890" width="56" height="30" rx="12" fill="#b8a5df"/>
+<text x="212.00" y="911.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="911.00" class="label">Gemma-S</text>
-<rect x="430" y="884" width="170" height="42" fill="#31865b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="911.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="600" y="884" width="170" height="42" fill="#34885e" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="911.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="770" y="884" width="170" height="42" fill="#30865b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="911.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="940" y="884" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="911.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="884" width="170" height="42" fill="#36895f" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="911.00" text-anchor="middle" class="celltext">97%</text>
-<rect x="1280" y="884" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="911.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="184" y="944" width="56" height="30" rx="12" fill="#8b5cf6"/>
-<text x="212.00" y="965.00" text-anchor="middle" class="celltext">M</text>
+<rect x="430" y="884" width="170" height="42" fill="#83b98a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="911.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="600" y="884" width="170" height="42" fill="#85ba8b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="911.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="770" y="884" width="170" height="42" fill="#83b88a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="911.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="940" y="884" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="911.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="884" width="170" height="42" fill="#86ba8c" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="911.00" text-anchor="middle" class="celltext-dark">97%</text>
+<rect x="1280" y="884" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="911.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="184" y="944" width="56" height="30" rx="12" fill="#a996e3"/>
+<text x="212.00" y="965.00" text-anchor="middle" class="celltext-dark">M</text>
 <text x="258" y="965.00" class="label">Gemma-M</text>
-<rect x="430" y="938" width="170" height="42" fill="#33875d" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="965.00" text-anchor="middle" class="celltext">98%</text>
-<rect x="600" y="938" width="170" height="42" fill="#37895f" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="965.00" text-anchor="middle" class="celltext">96%</text>
-<rect x="770" y="938" width="170" height="42" fill="#31865b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="965.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="940" y="938" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="965.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="938" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="965.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1280" y="938" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="965.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="184" y="998" width="56" height="30" rx="12" fill="#c4b5fd"/>
+<rect x="430" y="938" width="170" height="42" fill="#84b98b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="965.00" text-anchor="middle" class="celltext-dark">98%</text>
+<rect x="600" y="938" width="170" height="42" fill="#87ba8d" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="965.00" text-anchor="middle" class="celltext-dark">96%</text>
+<rect x="770" y="938" width="170" height="42" fill="#83b98a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="965.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="940" y="938" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="965.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="938" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="965.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1280" y="938" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="965.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="184" y="998" width="56" height="30" rx="12" fill="#cfc3f0"/>
 <text x="212.00" y="1019.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="1019.00" class="label">Gemma-L</text>
-<rect x="430" y="992" width="170" height="42" fill="#30865b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="515.00" y="1019.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="600" y="992" width="170" height="42" fill="#32875c" stroke="#ffffff" stroke-width="1.2"/>
-<text x="685.00" y="1019.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="770" y="992" width="170" height="42" fill="#30865b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="855.00" y="1019.00" text-anchor="middle" class="celltext">99%</text>
-<rect x="940" y="992" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1025.00" y="1019.00" text-anchor="middle" class="celltext">100%</text>
-<rect x="1110" y="992" width="170" height="42" fill="#398b61" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1195.00" y="1019.00" text-anchor="middle" class="celltext">95%</text>
-<rect x="1280" y="992" width="170" height="42" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1365.00" y="1019.00" text-anchor="middle" class="celltext">100%</text>
+<rect x="430" y="992" width="170" height="42" fill="#83b88a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="515.00" y="1019.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="600" y="992" width="170" height="42" fill="#84b98a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="685.00" y="1019.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="770" y="992" width="170" height="42" fill="#83b88a" stroke="#ffffff" stroke-width="1.2"/>
+<text x="855.00" y="1019.00" text-anchor="middle" class="celltext-dark">99%</text>
+<rect x="940" y="992" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1025.00" y="1019.00" text-anchor="middle" class="celltext-dark">100%</text>
+<rect x="1110" y="992" width="170" height="42" fill="#88bb8e" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1195.00" y="1019.00" text-anchor="middle" class="celltext-dark">95%</text>
+<rect x="1280" y="992" width="170" height="42" fill="#82b889" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1365.00" y="1019.00" text-anchor="middle" class="celltext-dark">100%</text>
 <rect x="48" y="1080" width="1684" height="112" rx="18" class="legend-card"/>
 <text x="72" y="1104" class="tiny">HOW TO READ THIS HEATMAP</text>
 <text x="72" y="1128" class="body">Protective-response rate = (protective refusal + protective redirect + corrective/contextual response) / (all prompts in that family). It stays a proxy behavioral summary, not benchmark-faithful DeNEVIL scoring.</text>

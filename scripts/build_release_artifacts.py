@@ -134,12 +134,12 @@ DENEVIL_BEHAVIOR_ORDER = [
     "No visible answer",
 ]
 DENEVIL_BEHAVIOR_COLORS = {
-    "Protective refusal": "#2563eb",
-    "Protective redirect": "#0f766e",
-    "Corrective / contextual response": "#2f855a",
-    "Direct task answer": "#6b7280",
-    "Potentially risky continuation": "#dc2626",
-    "Ambiguous visible answer": "#d97706",
+    "Protective refusal": "#7fa8e8",
+    "Protective redirect": "#77b8ad",
+    "Corrective / contextual response": "#82b889",
+    "Direct task answer": "#9ca3af",
+    "Potentially risky continuation": "#e68585",
+    "Ambiguous visible answer": "#e2b56f",
     "No visible answer": "#cbd5e1",
 }
 DENEVIL_PROMPT_FAMILY_ORDER = [
@@ -174,7 +174,7 @@ TEXT_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-text
 IMAGE_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-image-expansion"
 
 MODEL_ORDER = ["Qwen", "DeepSeek", "Gemma"]
-FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT4 only"]
+FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "OpenAI Ref"]
 BENCHMARK_ORDER = ["UniMoral", "SMID", "Value Kaleidoscope", "CCD-Bench", "Denevil"]
 FAMILY_SIZE_STATUS_COLUMNS = ["unimoral", "smid", "value_kaleidoscope", "ccd_bench", "denevil"]
 FAMILY_SIZE_STATUS_LABELS = {
@@ -254,12 +254,12 @@ CCD_OPTION_COLORS = {
     9: "#bcbd22",
     10: "#17becf",
 }
-OPENAI_REFERENCE_LINE_LABEL = "GPT4 only"
-OPENAI_REFERENCE_FAMILY_LABEL = "GPT4 only"
-LEGACY_OPENAI_REFERENCE_LINE_LABELS = {"OpenAI-Ref"}
+OPENAI_REFERENCE_LINE_LABEL = "GPT-4o-mini Ref"
+OPENAI_REFERENCE_FAMILY_LABEL = "OpenAI Ref"
+LEGACY_OPENAI_REFERENCE_LINE_LABELS = {"OpenAI-Ref", "GPT4 only"}
 OPENAI_REFERENCE_ROUTE = "openai/gpt-4o-mini (Responses API + Batch API; text-only reference)"
 OPENAI_REFERENCE_NOTE = (
-    "One-model GPT4-only text reference line; SMID and DeNEVIL are intentionally not run, "
+    "One-model GPT-4o-mini text reference line; SMID and DeNEVIL are intentionally not run, "
     "so this is a reference marker rather than S/M/L scaling evidence."
 )
 OPENAI_REFERENCE_TOTAL_SAMPLES = 76486
@@ -1557,12 +1557,12 @@ reroot_task_source_rows(AUTHORITATIVE_COMPARISON_LINES.values())
 reroot_task_source_rows(LOCAL_COMPARISON_LINE_SOURCES)
 
 FAMILY_COLOR_SCALES = {
-    "Qwen": {"S": "#0f766e", "M": "#0d9488", "L": "#2dd4bf"},
-    "DeepSeek": {"S": "#1d4ed8", "M": "#2563eb", "L": "#60a5fa"},
-    "Llama": {"S": "#c2410c", "M": "#ea580c", "L": "#fb923c"},
-    "Gemma": {"S": "#6d28d9", "M": "#8b5cf6", "L": "#c4b5fd"},
-    "MiniMax": {"S": "#b45309", "M": "#d97706", "L": "#fbbf24"},
-    OPENAI_REFERENCE_FAMILY_LABEL: {"Ref": "#111827"},
+    "Qwen": {"S": "#8fc7bd", "M": "#65b8ac", "L": "#3fc7b8"},
+    "DeepSeek": {"S": "#94b8e8", "M": "#78a8e6", "L": "#a8c7f0"},
+    "Llama": {"S": "#e0a37a", "M": "#eba069", "L": "#f2b883"},
+    "Gemma": {"S": "#b8a5df", "M": "#a996e3", "L": "#cfc3f0"},
+    "MiniMax": {"S": "#d4a46e", "M": "#e0ad68", "L": "#f3cf82"},
+    OPENAI_REFERENCE_FAMILY_LABEL: {"Ref": "#9ca3af"},
 }
 
 STATUS_DISPLAY = {
@@ -6418,7 +6418,7 @@ def add_openai_reference_outputs(
 
 def comparable_snapshot_note(row: dict[str, Any]) -> str:
     if row.get("line_label") == OPENAI_REFERENCE_LINE_LABEL:
-        return "GPT4-only text reference marker; SMID and DeNEVIL intentionally not run."
+        return "GPT-4o-mini text reference marker; SMID and DeNEVIL intentionally not run."
     if (
         row.get("line_label") == "DeepSeek-S"
         and row["unimoral_action_accuracy"] is not None
@@ -7647,7 +7647,7 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
     if family == OPENAI_REFERENCE_FAMILY_LABEL:
         return (
             "Single text-only reference point, not a family-size scaling sweep.",
-            "GPT4 only is plotted as a reference marker on UniMoral action prediction, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about GPT4 family scaling or vision-side SMID performance.",
+            "GPT-4o-mini Ref is plotted as a reference marker on UniMoral action prediction, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about GPT-family scaling or vision-side SMID performance.",
         )
     available_metrics = sum(1 for points in metric_points.values() if points)
     return (
@@ -7978,11 +7978,12 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
                 lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 55}" text-anchor="middle" class="small">{escape_xml(missing_note)}</text>')
                 continue
             weight = 0.0 if math.isclose(max_acc, min_acc) else (value - min_acc) / (max_acc - min_acc)
-            color = interpolate_color("#f2e8cf", "#1f6f78", weight)
+            color = interpolate_color("#f4f0df", "#78aeb4", weight)
             main_class, sub_class = text_classes_for_fill(color)
+            sub_label = row["family"] if row["size_slot"] == "Ref" else f'{row["family"]} {row["size_slot"]}'
             lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="{color}" stroke="#ffffff" stroke-width="1"/>')
             lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 34}" text-anchor="middle" class="{main_class}">{value * 100:.1f}%</text>')
-            lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 55}" text-anchor="middle" class="{sub_class}">{escape_xml(row["family"])} {escape_xml(row["size_slot"])}</text>')
+            lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 55}" text-anchor="middle" class="{sub_class}">{escape_xml(sub_label)}</text>')
 
     legend_x = 560
     legend_y = height - 94
@@ -7993,7 +7994,7 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
     lines.append(f'<text x="{legend_x}" y="{legend_y - 2}" class="small">Lighter cells mean lower accuracy; darker cells mean higher accuracy.</text>')
     for step in range(legend_steps):
         weight = step / (legend_steps - 1)
-        color = interpolate_color("#f2e8cf", "#1f6f78", weight)
+        color = interpolate_color("#f4f0df", "#78aeb4", weight)
         x = legend_x + step * (legend_w / legend_steps)
         lines.append(f'<rect x="{x:.2f}" y="{legend_y + 10}" width="{legend_w / legend_steps + 1:.2f}" height="16" fill="{color}" stroke="#ffffff" stroke-width="0.6"/>')
     lines.append(f'<text x="{legend_x}" y="{legend_y + 44}" class="small">{min_acc * 100:.1f}%</text>')
@@ -8293,7 +8294,7 @@ def render_family_scaling_profile_svg(
         "UniMoral is shown separately above; these comparable panels start at SMID.",
         "Two comparable benchmark panels here: SMID and Value Kaleidoscope.",
         "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.",
-        "GPT4 only is a one-model text-only reference point, not an S/M/L family-size curve.",
+        "GPT-4o-mini Ref is a one-model text-only reference point, not an S/M/L family-size curve.",
         "SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.",
         "Read CCD-Bench and Denevil in their dedicated figures.",
     ]
@@ -8302,7 +8303,7 @@ def render_family_scaling_profile_svg(
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Family scaling profile by benchmark</title>",
-            "<desc>Two-panel family scaling view for SMID and Value Kaleidoscope after the separate UniMoral accuracy and generation figures. GPT4 only is plotted as a one-model text-only reference point rather than a size curve. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
+            "<desc>Two-panel family scaling view for SMID and Value Kaleidoscope after the separate UniMoral accuracy and generation figures. GPT-4o-mini Ref is plotted as a one-model text-only reference point rather than a size curve. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
             '<text x="48" y="64" class="title">Family Scaling Profile</text>',
         ]
     )
@@ -8369,8 +8370,13 @@ def render_family_scaling_profile_svg(
                 label_x = x + label_dx
                 label_y = max(chart_top + 14, min(chart_bottom - 8, y + label_dy))
                 label_anchor = "start" if label_dx >= 0 else "end"
+                singleton_label = (
+                    only_row["line_label"]
+                    if family == OPENAI_REFERENCE_FAMILY_LABEL
+                    else family + "-" + only_row["size_slot"]
+                )
                 lines.append(
-                    f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{label_anchor}" class="small">{escape_xml(family + "-" + only_row["size_slot"])}</text>'
+                    f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{label_anchor}" class="small">{escape_xml(singleton_label)}</text>'
                 )
 
         lines.append(f'<text x="{panel_x + 18}" y="{panel_y + top_panel_height - 14}" class="small">Dashed lines skip missing size slots.</text>')
@@ -8399,7 +8405,7 @@ def render_family_scaling_profile_svg(
         ("DeepSeek", "Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists."),
         ("Llama", "Value scored at S/M/L; SMID at S/L."),
         ("Gemma", "full S/M/L sweep on SMID and Value."),
-        (OPENAI_REFERENCE_FAMILY_LABEL, "GPT4-only reference point; no GPT4 S/M/L or SMID route is claimed."),
+        (OPENAI_REFERENCE_FAMILY_LABEL, "GPT-4o-mini reference point; no GPT family S/M/L or SMID route is claimed."),
     ]
     for index, (family, note) in enumerate(legend_items):
         x = 656
@@ -8521,8 +8527,8 @@ def render_ccd_choice_distribution_svg(rows: list[dict[str, Any]], output_path: 
             return "#ffffff"
         clipped = max(-max_abs_delta, min(max_abs_delta, float(delta_pp)))
         if clipped >= 0:
-            return interpolate_color("#f3faf6", "#2f855a", clipped / max_abs_delta)
-        return interpolate_color("#fff7ed", "#c05621", abs(clipped) / max_abs_delta)
+            return interpolate_color("#f3faf6", "#78b99b", clipped / max_abs_delta)
+        return interpolate_color("#fff7ed", "#e2a17d", abs(clipped) / max_abs_delta)
 
     lines = svg_header(width, height)
     lines.extend(
@@ -8534,7 +8540,7 @@ def render_ccd_choice_distribution_svg(rows: list[dict[str, Any]], output_path: 
             '<text x="48" y="64" class="title">CCD-Bench cultural-cluster choice behavior, not accuracy</text>',
             '<text x="48" y="88" class="subtitle">Cells show deviation from the 10% uniform baseline across the paper&apos;s ten canonical GLOBE cultural clusters, computed over valid visible selections only.</text>',
             '<text x="48" y="108" class="subtitle">Positive cells mean the line selected that cluster more often than uniform choice; negative cells mean under-indexing. This is CCD choice behavior, not benchmark accuracy.</text>',
-            '<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT4 only is a one-off reference row. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>',
+            '<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT-4o-mini Ref is a one-off reference row. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>',
             '<text x="48" y="148" class="subtitle">Coverage stays in the appendix QA figure.</text>',
         ]
     )
@@ -8652,7 +8658,7 @@ def render_ccd_dominant_option_share_svg(rows: list[dict[str, Any]], output_path
             "<desc>Secondary CCD result. Compact CCD-Bench comparison showing how concentrated each line's valid visible selections are on its most frequent canonical cluster. Bars show dominant-cluster share; right-hand labels add effective-cluster count. This is a concentration summary, not accuracy.</desc>",
             '<text x="48" y="64" class="title">CCD-Bench choice-concentration summary, not accuracy</text>',
             '<text x="48" y="88" class="subtitle">Bars show the dominant-cluster share among valid visible CCD selections; the right-hand label adds the effective number of clusters implied by that same distribution.</text>',
-            '<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT4 only is shown only as a one-off reference row. Higher bars mean more concentration on one cluster.</text>',
+            '<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L; GPT-4o-mini Ref is shown only as a one-off reference row. Higher bars mean more concentration on one cluster.</text>',
         ]
     )
 
@@ -8887,7 +8893,7 @@ def render_denevil_prompt_family_heatmap_svg(rows: list[dict[str, Any]], output_
     def heat_fill(rate: float | None) -> str:
         if rate is None:
             return "#ffffff"
-        return interpolate_color("#fff7ed", "#2f855a", float(rate))
+        return interpolate_color("#fff7ed", "#82b889", float(rate))
 
     grouped: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
     for row in rows:
@@ -9806,7 +9812,7 @@ def append_tldr_section(
         )
     if openai_reference_line is not None:
         lines.append(
-            f"- **GPT4-only reference line:** `{OPENAI_REFERENCE_LINE_LABEL}` is added as a single text-only reference point with {OPENAI_REFERENCE_PARSED_SAMPLES:,}/{OPENAI_REFERENCE_TOTAL_SAMPLES:,} parsed prompts: UniMoral {fmt_float(as_float(openai_reference_line['unimoral_action_accuracy']))}, Value {fmt_float(as_float(openai_reference_line['value_average_accuracy']))}, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`."
+            f"- **GPT-4o-mini reference line:** `{OPENAI_REFERENCE_LINE_LABEL}` is added as a single text-only reference point with {OPENAI_REFERENCE_PARSED_SAMPLES:,}/{OPENAI_REFERENCE_TOTAL_SAMPLES:,} parsed prompts: UniMoral {fmt_float(as_float(openai_reference_line['unimoral_action_accuracy']))}, Value {fmt_float(as_float(openai_reference_line['value_average_accuracy']))}, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`."
         )
     lines.append(
         f"- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy ({fmt_float(as_float(smid_summary['mean_accuracy']))}) and widest spread ({fmt_float(as_float(smid_summary['spread']))}), while `UniMoral` is tightly clustered ({fmt_float(as_float(unimoral_summary['spread']))} spread). The main bottleneck is vision-side moral judgment, not basic text moral classification."
@@ -9847,7 +9853,8 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "If you want the benchmark results before the tables, start here. These visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.",
             "",
-            "`GPT4 only` is shown as a single text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as a GPT4 S/M/L scaling series, and it has no SMID or DeNEVIL row.",
+            "`GPT-4o-mini Ref` is shown as a single text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as a GPT-family S/M/L scaling series, and it has no SMID or DeNEVIL row.",
+            "OpenAI/GPT scope: the scored release row is only `openai/gpt-4o-mini`. Other OpenAI route names that appear in setup docs or tests are route examples or historical plans, not additional scored release rows.",
             "",
             "### 1. UniMoral RQ1-RQ3: exact-match accuracy",
             "",
@@ -10004,7 +10011,7 @@ def append_interpretation_sections(
         )
     if openai_reference_line is not None:
         lines.append(
-            f"| GPT4-only reference marker | `{OPENAI_REFERENCE_LINE_LABEL}` parses {OPENAI_REFERENCE_PARSED_SAMPLES:,}/{OPENAI_REFERENCE_TOTAL_SAMPLES:,} prompts, reaches UniMoral {fmt_float(openai_reference_line['unimoral_action_accuracy'])} and Value {fmt_float(openai_reference_line['value_average_accuracy'])}; CCD-Bench valid-choice coverage is 100.0%. | This is a useful external text-only reference, but it is not a GPT4 size-series claim and has no SMID / DeNEVIL evidence in this release. |"
+            f"| GPT-4o-mini reference marker | `{OPENAI_REFERENCE_LINE_LABEL}` parses {OPENAI_REFERENCE_PARSED_SAMPLES:,}/{OPENAI_REFERENCE_TOTAL_SAMPLES:,} prompts, reaches UniMoral {fmt_float(openai_reference_line['unimoral_action_accuracy'])} and Value {fmt_float(openai_reference_line['value_average_accuracy'])}; CCD-Bench valid-choice coverage is 100.0%. | This is a useful external text-only reference, but it is not a GPT-family size-series claim and has no SMID / DeNEVIL evidence in this release. |"
         )
     lines.append(
         f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |"
@@ -10013,7 +10020,7 @@ def append_interpretation_sections(
         f"| Closest thing to saturation | `UniMoral` has the tightest range, from {fmt_float(unimoral_summary['min_accuracy'])} to {fmt_float(unimoral_summary['max_accuracy'])} ({fmt_float(unimoral_summary['spread'])} spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |"
     )
     lines.append(
-        f"| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. `GPT4 only` is a single reference point and is excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
+        f"| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. `{OPENAI_REFERENCE_LINE_LABEL}` is a single reference point and is excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
     )
     lines.extend(
         [
@@ -10103,7 +10110,7 @@ def append_interpretation_sections(
                 else "- If a line appears only in the appendix coverage/provenance panels, read it as a response-format / release-evidence signal rather than a benchmark-faithful accuracy result."
             ),
             f"- Do not call `{best_text_only_line['line_label']}` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line." if best_text_only_line is not None else "- Do not promote any text-only line into an all-around winner claim without a matching SMID route.",
-            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and `GPT4 only` is only a single text-reference marker.",
+            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and `{OPENAI_REFERENCE_LINE_LABEL}` is only a single text-reference marker.",
             f"- Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.",
             f"- Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.",
             "",
@@ -10774,6 +10781,7 @@ def build_repo_readme(
             "## Important Notes",
             "",
             f"- The current public matrix covers {public_family_count} families: {public_families_label}.",
+            f"- `{OPENAI_REFERENCE_LINE_LABEL}` is a separate OpenAI text-only reference marker, not a sixth S/M/L family in the public matrix.",
             "- `Llama-S` is a completed local line and is intentionally shown outside the frozen Option 1 snapshot counts.",
             f"- `Denevil` is still proxy-only in the public release because the original paper-faithful `MoralPrompt` export is not available locally; {DENEVIL_PROXY_LIMITATION_LINE.lower()}",
             "- The detailed appendix lives in [results/release/2026-04-19-option1/](results/release/2026-04-19-option1/).",
@@ -10880,6 +10888,7 @@ def build_release_readme(
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
             ("Benchmarks in scope", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
             ("Model families in scope", public_families_label),
+            ("OpenAI reference marker", f"`{OPENAI_REFERENCE_LINE_LABEL}` via `{OPENAI_REFERENCE_ROUTE}`; not a GPT-family S/M/L scaling row"),
             ("Frozen families already in Option 1", "`Qwen`, `DeepSeek`, `Gemma`"),
             (
                 "Extra completed local line outside release",
@@ -10999,7 +11008,7 @@ def build_release_readme(
             "- `benchmark-difficulty-summary.csv`: benchmark-level means, ranges, and best/worst lines for the comparable slice",
             "- `family-scaling-summary.csv`: cautious scaling notes for each public family",
             "- `benchmark-catalog.csv`: benchmark registry with paper and dataset links",
-            "- `model-roster.csv`: exact OpenRouter routes in the frozen Option 1 snapshot",
+            "- `model-roster.csv`: exact OpenRouter routes in the frozen Option 1 snapshot; the separate OpenAI reference marker is documented in `benchmark-comparison.csv`",
             "- `supplementary-model-progress.csv`: extra local lines outside the frozen snapshot counts",
             "",
             "## Regeneration",
@@ -11115,6 +11124,7 @@ def build_jenny_group_report(
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
             ("Benchmarks being tracked", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
             ("Model families in scope", public_families_label),
+            ("OpenAI reference marker", f"`{OPENAI_REFERENCE_LINE_LABEL}` via `{OPENAI_REFERENCE_ROUTE}`; not a GPT-family S/M/L scaling row"),
             ("What the frozen snapshot actually covers", "one closed `Option 1` slice across `Qwen`, `DeepSeek`, and `Gemma`"),
             (
                 "Extra completed local line outside release",
@@ -11368,7 +11378,7 @@ def build_release_manifest(
             "Denevil is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
             "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
             "DeepSeek-S text metrics come from the May 9 no-thinking saved rerun; it remains text-only because no SMID vision route exists.",
-            "GPT4 only is a text-only reference marker, not a claimed GPT4 family-size sweep.",
+            "GPT-4o-mini Ref is a text-only reference marker, not a claimed GPT-family size sweep.",
             "The completed local Llama small line sits outside the frozen Option 1 totals.",
             "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration.",
         ],

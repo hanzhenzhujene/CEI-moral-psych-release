@@ -57,89 +57,89 @@
 <text x="880.00" y="190" text-anchor="middle" class="small">75%</text>
 <line x1="1080.00" y1="198" x2="1080.00" y2="906" class="guide"/>
 <text x="1080.00" y="190" text-anchor="middle" class="small">100%</text>
-<rect x="56" y="215" width="10" height="10" rx="3" fill="#0f766e"/>
+<rect x="56" y="215" width="10" height="10" rx="3" fill="#8fc7bd"/>
 <text x="78" y="229" class="label">Qwen-S</text>
 <rect x="280" y="210" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="210" width="294.46" height="28" rx="10" fill="#0f766e"/>
+<rect x="280" y="210" width="294.46" height="28" rx="10" fill="#8fc7bd"/>
 <text x="584.46" y="229" text-anchor="start" class="label">36.8%</text>
-<rect x="56" y="257" width="10" height="10" rx="3" fill="#0d9488"/>
+<rect x="56" y="257" width="10" height="10" rx="3" fill="#65b8ac"/>
 <text x="78" y="271" class="label">Qwen-M</text>
 <rect x="280" y="252" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="252" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="252" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="271" text-anchor="end" class="small">no SMID vision route</text>
-<rect x="56" y="299" width="10" height="10" rx="3" fill="#2dd4bf"/>
+<rect x="56" y="299" width="10" height="10" rx="3" fill="#3fc7b8"/>
 <text x="78" y="313" class="label">Qwen-L</text>
 <rect x="280" y="294" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="294" width="386.26" height="28" rx="10" fill="#2dd4bf"/>
+<rect x="280" y="294" width="386.26" height="28" rx="10" fill="#3fc7b8"/>
 <text x="676.26" y="313" text-anchor="start" class="label">48.3%</text>
-<rect x="56" y="341" width="10" height="10" rx="3" fill="#b45309"/>
+<rect x="56" y="341" width="10" height="10" rx="3" fill="#d4a46e"/>
 <text x="78" y="355" class="label">MiniMax-S</text>
 <rect x="280" y="336" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="336" width="345.60" height="28" rx="10" fill="#b45309"/>
+<rect x="280" y="336" width="345.60" height="28" rx="10" fill="#d4a46e"/>
 <text x="635.60" y="355" text-anchor="start" class="label">43.2%</text>
-<rect x="56" y="383" width="10" height="10" rx="3" fill="#d97706"/>
+<rect x="56" y="383" width="10" height="10" rx="3" fill="#e0ad68"/>
 <text x="78" y="397" class="label">MiniMax-M</text>
 <rect x="280" y="378" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="378" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="378" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="397" text-anchor="end" class="small">no SMID vision route</text>
-<rect x="56" y="425" width="10" height="10" rx="3" fill="#fbbf24"/>
+<rect x="56" y="425" width="10" height="10" rx="3" fill="#f3cf82"/>
 <text x="78" y="439" class="label">MiniMax-L</text>
 <rect x="280" y="420" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="420" width="158.59" height="28" rx="10" fill="#fbbf24"/>
+<rect x="280" y="420" width="158.59" height="28" rx="10" fill="#f3cf82"/>
 <text x="448.59" y="439" text-anchor="start" class="label">19.8%</text>
-<rect x="56" y="467" width="10" height="10" rx="3" fill="#1d4ed8"/>
+<rect x="56" y="467" width="10" height="10" rx="3" fill="#94b8e8"/>
 <text x="78" y="481" class="label">DeepSeek-S</text>
 <rect x="280" y="462" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="462" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="462" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="481" text-anchor="end" class="small">no SMID vision route</text>
-<rect x="56" y="509" width="10" height="10" rx="3" fill="#2563eb"/>
+<rect x="56" y="509" width="10" height="10" rx="3" fill="#78a8e6"/>
 <text x="78" y="523" class="label">DeepSeek-M</text>
 <rect x="280" y="504" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="504" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="504" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="523" text-anchor="end" class="small">no SMID vision route</text>
-<rect x="56" y="551" width="10" height="10" rx="3" fill="#60a5fa"/>
+<rect x="56" y="551" width="10" height="10" rx="3" fill="#a8c7f0"/>
 <text x="78" y="565" class="label">DeepSeek-L</text>
 <rect x="280" y="546" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="546" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="546" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="565" text-anchor="end" class="small">no SMID vision route</text>
-<rect x="56" y="593" width="10" height="10" rx="3" fill="#c2410c"/>
+<rect x="56" y="593" width="10" height="10" rx="3" fill="#e0a37a"/>
 <text x="78" y="607" class="label">Llama-S</text>
 <rect x="280" y="588" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="588" width="173.14" height="28" rx="10" fill="#c2410c"/>
+<rect x="280" y="588" width="173.14" height="28" rx="10" fill="#e0a37a"/>
 <text x="463.14" y="607" text-anchor="start" class="label">21.6%</text>
-<rect x="56" y="635" width="10" height="10" rx="3" fill="#ea580c"/>
+<rect x="56" y="635" width="10" height="10" rx="3" fill="#eba069"/>
 <text x="78" y="649" class="label">Llama-M</text>
 <rect x="280" y="630" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="630" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="630" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="649" text-anchor="end" class="small">no SMID vision route</text>
-<rect x="56" y="677" width="10" height="10" rx="3" fill="#fb923c"/>
+<rect x="56" y="677" width="10" height="10" rx="3" fill="#f2b883"/>
 <text x="78" y="691" class="label">Llama-L</text>
 <rect x="280" y="672" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="672" width="308.87" height="28" rx="10" fill="#fb923c"/>
+<rect x="280" y="672" width="308.87" height="28" rx="10" fill="#f2b883"/>
 <text x="598.87" y="691" text-anchor="start" class="label">38.6%</text>
-<rect x="56" y="719" width="10" height="10" rx="3" fill="#6d28d9"/>
+<rect x="56" y="719" width="10" height="10" rx="3" fill="#b8a5df"/>
 <text x="78" y="733" class="label">Gemma-S</text>
 <rect x="280" y="714" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="714" width="333.49" height="28" rx="10" fill="#6d28d9"/>
+<rect x="280" y="714" width="333.49" height="28" rx="10" fill="#b8a5df"/>
 <text x="623.49" y="733" text-anchor="start" class="label">41.7%</text>
-<rect x="56" y="761" width="10" height="10" rx="3" fill="#8b5cf6"/>
+<rect x="56" y="761" width="10" height="10" rx="3" fill="#a996e3"/>
 <text x="78" y="775" class="label">Gemma-M</text>
 <rect x="280" y="756" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="756" width="290.92" height="28" rx="10" fill="#8b5cf6"/>
+<rect x="280" y="756" width="290.92" height="28" rx="10" fill="#a996e3"/>
 <text x="580.92" y="775" text-anchor="start" class="label">36.4%</text>
-<rect x="56" y="803" width="10" height="10" rx="3" fill="#c4b5fd"/>
+<rect x="56" y="803" width="10" height="10" rx="3" fill="#cfc3f0"/>
 <text x="78" y="817" class="label">Gemma-L</text>
 <rect x="280" y="798" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="798" width="329.82" height="28" rx="10" fill="#c4b5fd"/>
+<rect x="280" y="798" width="329.82" height="28" rx="10" fill="#cfc3f0"/>
 <text x="619.82" y="817" text-anchor="start" class="label">41.2%</text>
-<rect x="56" y="845" width="10" height="10" rx="3" fill="#111827"/>
-<text x="78" y="859" class="label">GPT4 only</text>
+<rect x="56" y="845" width="10" height="10" rx="3" fill="#9ca3af"/>
+<text x="78" y="859" class="label">GPT-4o-mini Ref</text>
 <rect x="280" y="840" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="840" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="840" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
@@ -158,84 +158,84 @@
 <text x="880.00" y="974" text-anchor="middle" class="small">75%</text>
 <line x1="1080.00" y1="982" x2="1080.00" y2="1690" class="guide"/>
 <text x="1080.00" y="974" text-anchor="middle" class="small">100%</text>
-<rect x="56" y="999" width="10" height="10" rx="3" fill="#0f766e"/>
+<rect x="56" y="999" width="10" height="10" rx="3" fill="#8fc7bd"/>
 <text x="78" y="1013" class="label">Qwen-S</text>
 <rect x="280" y="994" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="994" width="545.92" height="28" rx="10" fill="#0f766e"/>
+<rect x="280" y="994" width="545.92" height="28" rx="10" fill="#8fc7bd"/>
 <text x="835.92" y="1013" text-anchor="start" class="label">68.2%</text>
-<rect x="56" y="1041" width="10" height="10" rx="3" fill="#0d9488"/>
+<rect x="56" y="1041" width="10" height="10" rx="3" fill="#65b8ac"/>
 <text x="78" y="1055" class="label">Qwen-M</text>
 <rect x="280" y="1036" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1036" width="539.77" height="28" rx="10" fill="#0d9488"/>
+<rect x="280" y="1036" width="539.77" height="28" rx="10" fill="#65b8ac"/>
 <text x="829.77" y="1055" text-anchor="start" class="label">67.5%</text>
-<rect x="56" y="1083" width="10" height="10" rx="3" fill="#2dd4bf"/>
+<rect x="56" y="1083" width="10" height="10" rx="3" fill="#3fc7b8"/>
 <text x="78" y="1097" class="label">Qwen-L</text>
 <rect x="280" y="1078" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1078" width="522.53" height="28" rx="10" fill="#2dd4bf"/>
+<rect x="280" y="1078" width="522.53" height="28" rx="10" fill="#3fc7b8"/>
 <text x="812.53" y="1097" text-anchor="start" class="label">65.3%</text>
-<rect x="56" y="1125" width="10" height="10" rx="3" fill="#b45309"/>
+<rect x="56" y="1125" width="10" height="10" rx="3" fill="#d4a46e"/>
 <text x="78" y="1139" class="label">MiniMax-S</text>
 <rect x="280" y="1120" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1120" width="591.95" height="28" rx="10" fill="#b45309"/>
+<rect x="280" y="1120" width="591.95" height="28" rx="10" fill="#d4a46e"/>
 <text x="881.95" y="1139" text-anchor="start" class="label">74.0%</text>
-<rect x="56" y="1167" width="10" height="10" rx="3" fill="#d97706"/>
+<rect x="56" y="1167" width="10" height="10" rx="3" fill="#e0ad68"/>
 <text x="78" y="1181" class="label">MiniMax-M</text>
 <rect x="280" y="1162" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1162" width="591.82" height="28" rx="10" fill="#d97706"/>
+<rect x="280" y="1162" width="591.82" height="28" rx="10" fill="#e0ad68"/>
 <text x="881.82" y="1181" text-anchor="start" class="label">74.0%</text>
-<rect x="56" y="1209" width="10" height="10" rx="3" fill="#fbbf24"/>
+<rect x="56" y="1209" width="10" height="10" rx="3" fill="#f3cf82"/>
 <text x="78" y="1223" class="label">MiniMax-L</text>
 <rect x="280" y="1204" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1204" width="592.96" height="28" rx="10" fill="#fbbf24"/>
+<rect x="280" y="1204" width="592.96" height="28" rx="10" fill="#f3cf82"/>
 <text x="882.96" y="1223" text-anchor="start" class="label">74.1%</text>
-<rect x="56" y="1251" width="10" height="10" rx="3" fill="#1d4ed8"/>
+<rect x="56" y="1251" width="10" height="10" rx="3" fill="#94b8e8"/>
 <text x="78" y="1265" class="label">DeepSeek-S</text>
 <rect x="280" y="1246" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1246" width="556.16" height="28" rx="10" fill="#1d4ed8"/>
+<rect x="280" y="1246" width="556.16" height="28" rx="10" fill="#94b8e8"/>
 <text x="846.16" y="1265" text-anchor="start" class="label">69.5%</text>
-<rect x="56" y="1293" width="10" height="10" rx="3" fill="#2563eb"/>
+<rect x="56" y="1293" width="10" height="10" rx="3" fill="#78a8e6"/>
 <text x="78" y="1307" class="label">DeepSeek-M</text>
 <rect x="280" y="1288" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1288" width="507.74" height="28" rx="10" fill="#2563eb"/>
+<rect x="280" y="1288" width="507.74" height="28" rx="10" fill="#78a8e6"/>
 <text x="797.74" y="1307" text-anchor="start" class="label">63.5%</text>
-<rect x="56" y="1335" width="10" height="10" rx="3" fill="#60a5fa"/>
+<rect x="56" y="1335" width="10" height="10" rx="3" fill="#a8c7f0"/>
 <text x="78" y="1349" class="label">DeepSeek-L</text>
 <rect x="280" y="1330" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1330" width="544.53" height="28" rx="10" fill="#60a5fa"/>
+<rect x="280" y="1330" width="544.53" height="28" rx="10" fill="#a8c7f0"/>
 <text x="834.53" y="1349" text-anchor="start" class="label">68.1%</text>
-<rect x="56" y="1377" width="10" height="10" rx="3" fill="#c2410c"/>
+<rect x="56" y="1377" width="10" height="10" rx="3" fill="#e0a37a"/>
 <text x="78" y="1391" class="label">Llama-S</text>
 <rect x="280" y="1372" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1372" width="422.87" height="28" rx="10" fill="#c2410c"/>
+<rect x="280" y="1372" width="422.87" height="28" rx="10" fill="#e0a37a"/>
 <text x="712.87" y="1391" text-anchor="start" class="label">52.9%</text>
-<rect x="56" y="1419" width="10" height="10" rx="3" fill="#ea580c"/>
+<rect x="56" y="1419" width="10" height="10" rx="3" fill="#eba069"/>
 <text x="78" y="1433" class="label">Llama-M</text>
 <rect x="280" y="1414" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1414" width="578.91" height="28" rx="10" fill="#ea580c"/>
+<rect x="280" y="1414" width="578.91" height="28" rx="10" fill="#eba069"/>
 <text x="868.91" y="1433" text-anchor="start" class="label">72.4%</text>
-<rect x="56" y="1461" width="10" height="10" rx="3" fill="#fb923c"/>
+<rect x="56" y="1461" width="10" height="10" rx="3" fill="#f2b883"/>
 <text x="78" y="1475" class="label">Llama-L</text>
 <rect x="280" y="1456" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1456" width="553.86" height="28" rx="10" fill="#fb923c"/>
+<rect x="280" y="1456" width="553.86" height="28" rx="10" fill="#f2b883"/>
 <text x="843.86" y="1475" text-anchor="start" class="label">69.2%</text>
-<rect x="56" y="1503" width="10" height="10" rx="3" fill="#6d28d9"/>
+<rect x="56" y="1503" width="10" height="10" rx="3" fill="#b8a5df"/>
 <text x="78" y="1517" class="label">Gemma-S</text>
 <rect x="280" y="1498" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1498" width="474.13" height="28" rx="10" fill="#6d28d9"/>
+<rect x="280" y="1498" width="474.13" height="28" rx="10" fill="#b8a5df"/>
 <text x="764.13" y="1517" text-anchor="start" class="label">59.3%</text>
-<rect x="56" y="1545" width="10" height="10" rx="3" fill="#8b5cf6"/>
+<rect x="56" y="1545" width="10" height="10" rx="3" fill="#a996e3"/>
 <text x="78" y="1559" class="label">Gemma-M</text>
 <rect x="280" y="1540" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1540" width="530.92" height="28" rx="10" fill="#8b5cf6"/>
+<rect x="280" y="1540" width="530.92" height="28" rx="10" fill="#a996e3"/>
 <text x="820.92" y="1559" text-anchor="start" class="label">66.4%</text>
-<rect x="56" y="1587" width="10" height="10" rx="3" fill="#c4b5fd"/>
+<rect x="56" y="1587" width="10" height="10" rx="3" fill="#cfc3f0"/>
 <text x="78" y="1601" class="label">Gemma-L</text>
 <rect x="280" y="1582" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1582" width="524.79" height="28" rx="10" fill="#c4b5fd"/>
+<rect x="280" y="1582" width="524.79" height="28" rx="10" fill="#cfc3f0"/>
 <text x="814.79" y="1601" text-anchor="start" class="label">65.6%</text>
-<rect x="56" y="1629" width="10" height="10" rx="3" fill="#111827"/>
-<text x="78" y="1643" class="label">GPT4 only</text>
+<rect x="56" y="1629" width="10" height="10" rx="3" fill="#9ca3af"/>
+<text x="78" y="1643" class="label">GPT-4o-mini Ref</text>
 <rect x="280" y="1624" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1624" width="560.56" height="28" rx="10" fill="#111827"/>
+<rect x="280" y="1624" width="560.56" height="28" rx="10" fill="#9ca3af"/>
 <text x="850.56" y="1643" text-anchor="start" class="label">70.1%</text>
 </svg>

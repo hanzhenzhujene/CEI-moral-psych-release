@@ -52,12 +52,7 @@ def _write_success_eval(path: Path) -> None:
 
 def _write_overview_metadata(release: Path, *, documented_incomplete: bool = False) -> None:
     total_samples = len(verifier.MODEL_LINES) * sum(task["expected"] for task in verifier.TASKS.values())
-    families = list(
-        dict.fromkeys(
-            "GPT4 only" if line == "GPT4 only" else line.split("-", 1)[0]
-            for line in verifier.MODEL_LINES
-        )
-    )
+    families = list(dict.fromkeys(verifier.family_display_for_line(line) for line in verifier.MODEL_LINES))
     mode = "benchmark_faithful; documented_incomplete" if documented_incomplete else "benchmark_faithful"
     _write_csv(
         release / "benchmark-summary.csv",

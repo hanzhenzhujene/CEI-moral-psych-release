@@ -1,6 +1,6 @@
 task_name,task_label,rank,line_label,metric,value
 unimoral_action_prediction,Action prediction,1,DeepSeek-M,accuracy,0.683629
-unimoral_action_prediction,Action prediction,2,GPT4 only,accuracy,0.6727
+unimoral_action_prediction,Action prediction,2,GPT-4o-mini Ref,accuracy,0.6727
 unimoral_action_prediction,Action prediction,3,Llama-M,accuracy,0.669854
 unimoral_action_prediction,Action prediction,4,Qwen-L,accuracy,0.665301
 unimoral_action_prediction,Action prediction,5,Qwen-M,accuracy,0.664504
@@ -29,7 +29,7 @@ unimoral_moral_typology,Moral typology,11,Llama-L,accuracy,0.57417
 unimoral_moral_typology,Moral typology,12,Gemma-L,accuracy,0.571592
 unimoral_moral_typology,Moral typology,13,Qwen-S,accuracy,0.563001
 unimoral_moral_typology,Moral typology,14,DeepSeek-M,accuracy,0.556128
-unimoral_moral_typology,Moral typology,15,GPT4 only,accuracy,0.553551
+unimoral_moral_typology,Moral typology,15,GPT-4o-mini Ref,accuracy,0.553551
 unimoral_factor_attribution,Factor attribution,1,Llama-M,accuracy,0.630584
 unimoral_factor_attribution,Factor attribution,2,Gemma-L,accuracy,0.614548
 unimoral_factor_attribution,Factor attribution,3,Qwen-L,accuracy,0.609107
@@ -38,7 +38,7 @@ unimoral_factor_attribution,Factor attribution,5,Llama-S,accuracy,0.601088
 unimoral_factor_attribution,Factor attribution,6,MiniMax-M,accuracy,0.600229
 unimoral_factor_attribution,Factor attribution,7,Gemma-M,accuracy,0.599656
 unimoral_factor_attribution,Factor attribution,8,DeepSeek-M,accuracy,0.59622
-unimoral_factor_attribution,Factor attribution,9,GPT4 only,accuracy,0.592497
+unimoral_factor_attribution,Factor attribution,9,GPT-4o-mini Ref,accuracy,0.592497
 unimoral_factor_attribution,Factor attribution,10,Gemma-S,accuracy,0.579038
 unimoral_factor_attribution,Factor attribution,11,DeepSeek-L,accuracy,0.57417
 unimoral_factor_attribution,Factor attribution,12,Llama-L,accuracy,0.566724
@@ -48,7 +48,7 @@ unimoral_consequence_generation,Consequence generation,1,Llama-M,bert_score_f1,0
 unimoral_consequence_generation,Consequence generation,2,Llama-S,bert_score_f1,0.727378
 unimoral_consequence_generation,Consequence generation,3,Llama-L,bert_score_f1,0.72515
 unimoral_consequence_generation,Consequence generation,4,Gemma-S,bert_score_f1,0.717221
-unimoral_consequence_generation,Consequence generation,5,GPT4 only,bert_score_f1,0.710669
+unimoral_consequence_generation,Consequence generation,5,GPT-4o-mini Ref,bert_score_f1,0.710669
 unimoral_consequence_generation,Consequence generation,6,Gemma-L,bert_score_f1,0.706031
 unimoral_consequence_generation,Consequence generation,7,Gemma-M,bert_score_f1,0.699249
 unimoral_consequence_generation,Consequence generation,8,Qwen-M,bert_score_f1,0.698745

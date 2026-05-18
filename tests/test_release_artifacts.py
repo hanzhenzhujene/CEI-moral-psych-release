@@ -131,7 +131,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
-    assert any("GPT4 only" in item and "text-only reference marker" in item for item in manifest["interpretation_guardrails"])
+    assert any("GPT-4o-mini Ref" in item and "text-only reference marker" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
     assert manifest["report_metadata"]["current_total_cost"] == "$759.59"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
@@ -455,13 +455,13 @@ def test_release_builder_emits_expected_files(tmp_path):
             for row in minimax_large_rows
         )
     rows_by_line = {row["line_label"]: row for row in rows}
-    openai_reference = rows_by_line["GPT4 only"]
-    assert openai_reference["family"] == "GPT4 only"
+    openai_reference = rows_by_line["GPT-4o-mini Ref"]
+    assert openai_reference["family"] == "OpenAI Ref"
     assert openai_reference["size_slot"] == "Ref"
     assert openai_reference["unimoral_action_accuracy"] == "0.672700"
     assert openai_reference["smid_average_accuracy"] == ""
     assert openai_reference["value_average_accuracy"] == "0.700698"
-    assert openai_reference["comparison_note"] == "GPT4-only text reference marker; SMID and DeNEVIL intentionally not run."
+    assert openai_reference["comparison_note"] == "GPT-4o-mini text reference marker; SMID and DeNEVIL intentionally not run."
     assert rows_by_line["MiniMax-S"]["unimoral_action_accuracy"] == "0.660861"
     assert rows_by_line["MiniMax-S"]["smid_average_accuracy"] == "0.431996"
     assert rows_by_line["MiniMax-S"]["value_average_accuracy"] == "0.739942"
@@ -613,8 +613,8 @@ def test_release_builder_emits_expected_files(tmp_path):
             assert all(row[f"option_{cluster_id}_pct"] == "n/a" for cluster_id in range(1, 11))
             assert all(row[f"option_{cluster_id}_delta_pp"] == "n/a" for cluster_id in range(1, 11))
     ccd_rows_by_line = {row["line_label"]: row for row in ccd_distribution_rows}
-    openai_ccd = ccd_rows_by_line["GPT4 only"]
-    assert openai_ccd["family"] == "GPT4 only"
+    openai_ccd = ccd_rows_by_line["GPT-4o-mini Ref"]
+    assert openai_ccd["family"] == "OpenAI Ref"
     assert openai_ccd["size_slot"] == "Ref"
     assert openai_ccd["valid_selection_count"] == "2182"
     assert openai_ccd["valid_selection_rate"] == "100.000000"
@@ -895,7 +895,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         reader = csv.DictReader(handle)
         scaling_rows = list(reader)
     assert tuple(row["family"] for row in scaling_rows) in {
-        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT4 only"),
+        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "OpenAI Ref"),
         ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"),
         ("Qwen", "DeepSeek", "Llama", "Gemma"),
     }
@@ -948,11 +948,11 @@ def test_release_builder_emits_expected_files(tmp_path):
         for row in scaling_rows
     )
     assert any(
-        row["family"] == "GPT4 only"
+        row["family"] == "OpenAI Ref"
         and "Single text-only reference point" in row["evidence_scope"]
         and "UniMoral: Ref 0.673" in row["numeric_pattern"]
         and "Value Kaleidoscope: Ref 0.701" in row["numeric_pattern"]
-        and "not be read as evidence about GPT4 family scaling" in row["interpretation"]
+        and "not be read as evidence about GPT-family scaling" in row["interpretation"]
         for row in scaling_rows
     )
 

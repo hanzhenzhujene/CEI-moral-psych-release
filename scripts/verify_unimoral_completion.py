@@ -31,8 +31,12 @@ MODEL_LINES = [
     "Gemma-S",
     "Gemma-M",
     "Gemma-L",
-    "GPT4 only",
+    "GPT-4o-mini Ref",
 ]
+
+DISPLAY_FAMILY_LABELS = {
+    "GPT-4o-mini Ref": "OpenAI Ref",
+}
 
 TASKS = {
     "unimoral_action_prediction": {"rq": "RQ1", "expected": 8784, "metric": "accuracy"},
@@ -194,6 +198,11 @@ def spread_diagnostic(spread: float) -> str:
     return "diagnostic"
 
 
+def family_display_for_line(line: str) -> str:
+    family = "GPT-4o-mini Ref" if line == "GPT-4o-mini Ref" else line.split("-", 1)[0]
+    return DISPLAY_FAMILY_LABELS.get(family, family)
+
+
 def _resolve_release_path(path_text: str, release_dir: Path) -> Path:
     path = Path(path_text)
     if path.is_absolute():
@@ -301,9 +310,7 @@ def verify_release(
     expected_task_count = len(TASKS)
     expected_model_task_rows = len(MODEL_LINES) * expected_task_count
     expected_total_samples = len(MODEL_LINES) * sum(task["expected"] for task in TASKS.values())
-    expected_families = list(
-        dict.fromkeys("GPT4 only" if line == "GPT4 only" else line.split("-", 1)[0] for line in MODEL_LINES)
-    )
+    expected_families = list(dict.fromkeys(family_display_for_line(line) for line in MODEL_LINES))
     required_files = [
         "unimoral-full-benchmark.csv",
         "unimoral-coverage.csv",

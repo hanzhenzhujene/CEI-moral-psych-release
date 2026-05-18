@@ -40,35 +40,35 @@
 <text x="952" y="394" class="subtitle">2. Main UniMoral figure: RQ1-RQ3 exact-match accuracy only.</text>
 <text x="952" y="428" class="subtitle">3. Generation figure: RQ4 BERTScore F1 and METEOR, separate from accuracy.</text>
 <text x="952" y="462" class="subtitle">4. Classification rankings/spread use the same RQ1-RQ3 accuracy metric.</text>
-<text x="952" y="496" class="subtitle">All public/reference model lines remain listed: Qwen, MiniMax, DeepSeek, Llama, Gemma S/M/L plus GPT4 Ref.</text>
+<text x="952" y="496" class="subtitle">All public/reference model lines remain listed: Qwen, MiniMax, DeepSeek, Llama, Gemma S/M/L plus GPT-4o-mini Ref.</text>
 <rect x="36" y="720" width="1728" height="292" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>
 <text x="60" y="754" class="axis">Coverage readout</text>
-<text x="60" y="782" class="subtitle">Complete four-task lines outside MiniMax: Qwen-S/M/L, DeepSeek-S/M/L, Llama-S/M/L, Gemma-S/M/L, and GPT4 only (13/13 lines).</text>
+<text x="60" y="782" class="subtitle">Complete four-task lines outside MiniMax: Qwen-S/M/L, DeepSeek-S/M/L, Llama-S/M/L, Gemma-S/M/L, and GPT-4o-mini Ref (13/13 lines).</text>
 <text x="60" y="808" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>
-<rect x="60" y="844" width="260" height="54" fill="white" stroke="#2f6f9f" stroke-width="2" rx="8"/>
-<circle cx="82" cy="871" r="7" fill="#2f6f9f"/>
+<rect x="60" y="844" width="260" height="54" fill="white" stroke="#6fa8c7" stroke-width="2" rx="8"/>
+<circle cx="82" cy="871" r="7" fill="#6fa8c7"/>
 <text x="100" y="866" class="axis">Qwen</text>
 <text x="100" y="886" class="small">S/M/L: 4 tasks complete</text>
-<rect x="340" y="844" width="260" height="54" fill="white" stroke="#4f7d45" stroke-width="2" rx="8"/>
-<circle cx="362" cy="871" r="7" fill="#4f7d45"/>
+<rect x="340" y="844" width="260" height="54" fill="white" stroke="#84ad78" stroke-width="2" rx="8"/>
+<circle cx="362" cy="871" r="7" fill="#84ad78"/>
 <text x="380" y="866" class="axis">DeepSeek</text>
 <text x="380" y="886" class="small">S/M/L: 4 tasks complete</text>
-<rect x="620" y="844" width="260" height="54" fill="white" stroke="#b56a33" stroke-width="2" rx="8"/>
-<circle cx="642" cy="871" r="7" fill="#b56a33"/>
+<rect x="620" y="844" width="260" height="54" fill="white" stroke="#d7a06b" stroke-width="2" rx="8"/>
+<circle cx="642" cy="871" r="7" fill="#d7a06b"/>
 <text x="660" y="866" class="axis">Llama</text>
 <text x="660" y="886" class="small">S/M/L: 4 tasks complete</text>
-<rect x="900" y="844" width="260" height="54" fill="white" stroke="#7b62a3" stroke-width="2" rx="8"/>
-<circle cx="922" cy="871" r="7" fill="#7b62a3"/>
+<rect x="900" y="844" width="260" height="54" fill="white" stroke="#ad9ad0" stroke-width="2" rx="8"/>
+<circle cx="922" cy="871" r="7" fill="#ad9ad0"/>
 <text x="940" y="866" class="axis">Gemma</text>
 <text x="940" y="886" class="small">S/M/L: 4 tasks complete</text>
-<rect x="1180" y="844" width="260" height="54" fill="white" stroke="#6b7280" stroke-width="2" rx="8"/>
-<circle cx="1202" cy="871" r="7" fill="#6b7280"/>
-<text x="1220" y="866" class="axis">GPT4 only</text>
-<text x="1220" y="886" class="small">reference: 4 tasks complete</text>
-<rect x="1460" y="844" width="260" height="54" fill="white" stroke="#8a5a44" stroke-width="2" rx="8"/>
-<circle cx="1482" cy="871" r="7" fill="#8a5a44"/>
+<rect x="1180" y="844" width="260" height="54" fill="white" stroke="#aab2bd" stroke-width="2" rx="8"/>
+<circle cx="1202" cy="871" r="7" fill="#aab2bd"/>
+<text x="1220" y="866" class="axis">OpenAI Ref</text>
+<text x="1220" y="886" class="small">GPT-4o-mini reference: 4 tasks complete</text>
+<rect x="1460" y="844" width="260" height="54" fill="white" stroke="#bf977a" stroke-width="2" rx="8"/>
+<circle cx="1482" cy="871" r="7" fill="#bf977a"/>
 <text x="1500" y="866" class="axis">MiniMax</text>
 <text x="1500" y="886" class="small">caveats: see failure checklist</text>
-<text x="60" y="934" class="small">All run lines are shown in the full score heatmap and all-line ranking below: Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus GPT4 Ref.</text>
+<text x="60" y="934" class="small">All run lines are shown in the full score heatmap and all-line ranking below: Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus GPT-4o-mini Ref.</text>
 <text x="60" y="958" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; the main figures avoid special cell markers.</text>
 </svg>
