@@ -114,6 +114,61 @@ def _write_overview_metadata(release: Path, *, documented_incomplete: bool = Fal
         manifest_path.write_text(json.dumps(manifest) + "\n", encoding="utf-8")
 
 
+def _write_tiny_summary_artifacts(release: Path, full_rows: list[dict[str, object]]) -> None:
+    spread_rows = []
+    ranking_rows = []
+    for task_name, task in verifier.TASKS.items():
+        task_rows = [row for row in full_rows if row["task_name"] == task_name]
+        complete_rows = [row for row in task_rows if row["status"] == "complete"]
+        valued_rows = [
+            (row, float(row[task["metric"]]))
+            for row in complete_rows
+            if row.get(task["metric"]) not in {None, ""}
+        ]
+        values = [value for _, value in valued_rows]
+        if values:
+            spread = max(values) - min(values)
+            spread_rows.append(
+                {
+                    "task_name": task_name,
+                    "task_label": task_rows[0]["task_label"],
+                    "model_lines": len(values),
+                    "mean": sum(values) / len(values),
+                    "min": min(values),
+                    "max": max(values),
+                    "range": spread,
+                    "diagnostic_read": "saturated",
+                }
+            )
+        else:
+            spread_rows.append(
+                {
+                    "task_name": task_name,
+                    "task_label": task_rows[0]["task_label"],
+                    "model_lines": 0,
+                    "mean": "",
+                    "min": "",
+                    "max": "",
+                    "range": "",
+                    "diagnostic_read": "missing",
+                }
+            )
+        valued_rows.sort(key=lambda item: item[1], reverse=True)
+        for rank, (row, value) in enumerate(valued_rows, start=1):
+            ranking_rows.append(
+                {
+                    "task_name": task_name,
+                    "task_label": row["task_label"],
+                    "rank": rank,
+                    "line_label": row["line_label"],
+                    "metric": task["metric"],
+                    "value": value,
+                }
+            )
+    _write_csv(release / "unimoral-task-spread.csv", spread_rows, list(spread_rows[0]))
+    _write_csv(release / "unimoral-model-rankings.csv", ranking_rows, list(ranking_rows[0]))
+
+
 def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
     release = root / "release"
     figures = root / "figures"
@@ -195,30 +250,7 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         for task_name, task in verifier.TASKS.items()
     ]
     _write_csv(release / "unimoral-coverage.csv", coverage_rows, list(coverage_rows[0]))
-    spread_rows = [
-        {
-            "task_name": "unimoral_moral_typology",
-            "task_label": "Moral typology",
-            "model_lines": "1",
-            "mean": "0.5",
-            "min": "0.5",
-            "max": "0.5",
-            "range": "0.0",
-            "diagnostic_read": "saturated",
-        }
-    ]
-    _write_csv(release / "unimoral-task-spread.csv", spread_rows, list(spread_rows[0]))
-    ranking_rows = [
-        {
-            "task_name": "unimoral_moral_typology",
-            "task_label": "Moral typology",
-            "rank": "1",
-            "line_label": "Line-A",
-            "metric": "official_weighted_f1",
-            "value": "0.5",
-        }
-    ]
-    _write_csv(release / "unimoral-model-rankings.csv", ranking_rows, list(ranking_rows[0]))
+    _write_tiny_summary_artifacts(release, full_rows)
     prediction_rows = []
     for task_name, task in verifier.PREDICTION_TASKS.items():
         prediction_rows.extend(
@@ -478,6 +510,7 @@ def test_unimoral_completion_verifier_allow_incomplete_keeps_structural_checks(t
             row["parsed_count"] = "1"
             row["accuracy"] = ""
     _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+    _write_tiny_summary_artifacts(release, rows)
     coverage_rows = list(csv.DictReader((release / "unimoral-coverage.csv").open(newline="", encoding="utf-8")))
     for row in coverage_rows:
         if row["task_name"] == "unimoral_moral_typology":
@@ -908,6 +941,25 @@ def test_unimoral_completion_verifier_checks_required_csv_columns(tmp_path, monk
     errors = verifier.verify_release(release, figures, allow_incomplete=True)
 
     assert any("unimoral-failure-checklist.csv missing required columns" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_checks_spread_and_ranking_summaries(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    spread_rows = list(csv.DictReader((release / "unimoral-task-spread.csv").open(newline="", encoding="utf-8")))
+    spread_rows[0]["model_lines"] = "0"
+    _write_csv(release / "unimoral-task-spread.csv", spread_rows, list(spread_rows[0]))
+
+    ranking_rows = list(csv.DictReader((release / "unimoral-model-rankings.csv").open(newline="", encoding="utf-8")))
+    ranking_rows[0]["line_label"] = "Stale"
+    _write_csv(release / "unimoral-model-rankings.csv", ranking_rows, list(ranking_rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("unimoral-task-spread.csv unimoral_action_prediction model_lines='0' expected 1" in error for error in errors)
+    assert any("unimoral-model-rankings.csv row 1 line_label='Stale' expected 'Line-A'" in error for error in errors)
 
 
 def test_unimoral_completion_verifier_checks_overview_metadata(tmp_path, monkeypatch):

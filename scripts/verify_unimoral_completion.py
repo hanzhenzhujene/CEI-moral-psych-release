@@ -171,6 +171,27 @@ def require_file(path: Path, errors: list[str]) -> bool:
     return True
 
 
+def row_metric_value(row: dict[str, str]) -> float | None:
+    value = row.get(row.get("primary_metric", ""), "")
+    if value in {None, ""}:
+        return None
+    return float(value)
+
+
+def float_matches(actual: str | None, expected: float) -> bool:
+    if actual in {None, ""}:
+        return False
+    return abs(float(actual) - round(expected, 6)) <= 1e-6
+
+
+def spread_diagnostic(spread: float) -> str:
+    if spread < 0.05:
+        return "saturated"
+    if spread < 0.10:
+        return "moderately diagnostic"
+    return "diagnostic"
+
+
 def _resolve_release_path(path_text: str, release_dir: Path) -> Path:
     path = Path(path_text)
     if path.is_absolute():
@@ -329,6 +350,8 @@ def verify_release(
 
     full_rows = read_csv(release_dir / "unimoral-full-benchmark.csv")
     coverage_rows = read_csv(release_dir / "unimoral-coverage.csv")
+    spread_rows = read_csv(release_dir / "unimoral-task-spread.csv")
+    ranking_rows = read_csv(release_dir / "unimoral-model-rankings.csv")
     prediction_rows = read_csv(release_dir / "unimoral-sample-predictions.csv")
     failure_rows = read_csv(release_dir / "unimoral-failure-checklist.csv")
     rq4_bertscore_rows = (
@@ -368,6 +391,77 @@ def verify_release(
         fail(errors, f"unimoral-full-benchmark.csv has {len(full_rows)} rows, expected {len(expected_pairs)}")
     if len(actual_pairs) != len(full_rows):
         fail(errors, "unimoral-full-benchmark.csv contains duplicate model-task rows")
+
+    spread_by_task = {row["task_name"]: row for row in spread_rows}
+    if len(spread_by_task) != len(spread_rows):
+        fail(errors, "unimoral-task-spread.csv contains duplicate task rows")
+    spread_tasks = set(spread_by_task)
+    missing_spread_tasks = sorted(set(TASKS) - spread_tasks)
+    extra_spread_tasks = sorted(spread_tasks - set(TASKS))
+    if missing_spread_tasks:
+        fail(errors, f"unimoral-task-spread.csv missing task rows: {missing_spread_tasks}")
+    if extra_spread_tasks:
+        fail(errors, f"unimoral-task-spread.csv contains unexpected task rows: {extra_spread_tasks}")
+    expected_rankings: list[tuple[str, str, int, str, str, float]] = []
+    for task_name, task in TASKS.items():
+        task_full_rows = [row for row in full_rows if row["task_name"] == task_name]
+        task_label = task_full_rows[0].get("task_label", "") if task_full_rows else ""
+        complete_values = [
+            (row, value)
+            for row in task_full_rows
+            if row.get("status") == "complete"
+            for value in [row_metric_value(row)]
+            if value is not None
+        ]
+        spread_row = spread_by_task.get(task_name)
+        if spread_row is not None:
+            if spread_row.get("task_label") != task_label:
+                fail(errors, f"unimoral-task-spread.csv {task_name} task_label={spread_row.get('task_label')!r} expected {task_label!r}")
+            if spread_row.get("model_lines") != str(len(complete_values)):
+                fail(errors, f"unimoral-task-spread.csv {task_name} model_lines={spread_row.get('model_lines')!r} expected {len(complete_values)}")
+            if complete_values:
+                values = [value for _, value in complete_values]
+                expected_spread = max(values) - min(values)
+                expected_numbers = {
+                    "mean": sum(values) / len(values),
+                    "min": min(values),
+                    "max": max(values),
+                    "range": expected_spread,
+                }
+                for field, expected in expected_numbers.items():
+                    if not float_matches(spread_row.get(field), expected):
+                        fail(errors, f"unimoral-task-spread.csv {task_name} {field}={spread_row.get(field)!r} expected {round(expected, 6)}")
+                expected_diagnostic = spread_diagnostic(expected_spread)
+                if spread_row.get("diagnostic_read") != expected_diagnostic:
+                    fail(errors, f"unimoral-task-spread.csv {task_name} diagnostic_read={spread_row.get('diagnostic_read')!r} expected {expected_diagnostic!r}")
+            else:
+                for field in ("mean", "min", "max", "range"):
+                    if spread_row.get(field) not in {None, ""}:
+                        fail(errors, f"unimoral-task-spread.csv {task_name} {field}={spread_row.get(field)!r} expected empty")
+                if spread_row.get("diagnostic_read") != "missing":
+                    fail(errors, f"unimoral-task-spread.csv {task_name} diagnostic_read={spread_row.get('diagnostic_read')!r} expected 'missing'")
+        complete_values.sort(key=lambda item: item[1], reverse=True)
+        for rank, (row, value) in enumerate(complete_values, start=1):
+            expected_rankings.append((task_name, task_label, rank, row["line_label"], task["metric"], value))
+    if len(ranking_rows) != len(expected_rankings):
+        fail(errors, f"unimoral-model-rankings.csv has {len(ranking_rows)} rows, expected {len(expected_rankings)}")
+    for index, expected in enumerate(expected_rankings, start=1):
+        if index > len(ranking_rows):
+            break
+        task_name, task_label, rank, line_label, metric, value = expected
+        row = ranking_rows[index - 1]
+        expected_fields = {
+            "task_name": task_name,
+            "task_label": task_label,
+            "rank": str(rank),
+            "line_label": line_label,
+            "metric": metric,
+        }
+        for field, expected_value in expected_fields.items():
+            if row.get(field) != expected_value:
+                fail(errors, f"unimoral-model-rankings.csv row {index} {field}={row.get(field)!r} expected {expected_value!r}")
+        if not float_matches(row.get("value"), value):
+            fail(errors, f"unimoral-model-rankings.csv row {index} value={row.get('value')!r} expected {round(value, 6)}")
 
     for row in full_rows:
         task_name = row.get("task_name", "")
