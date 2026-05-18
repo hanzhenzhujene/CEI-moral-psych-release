@@ -193,19 +193,19 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     for report_name in ("README.md", "jenny-group-report.md"):
         report_text = (release_dir / report_name).read_text(encoding="utf-8")
-        assert "**Current GitHub-facing boundary:**" in report_text
+        tldr_text = report_text.split("## Benchmark Result Visuals", 1)[0]
+        assert "**Current GitHub-facing boundary:**" not in tldr_text
+        assert "**What each benchmark means:**" in tldr_text
         assert "`MiniMax-M`" in report_text
         assert (
-            "intentionally withheld until the clean M2.5 text pass is complete" in report_text
-            or "No MiniMax-M2.5 text benchmark remains live" in report_text
+            "Clean direct MiniMax-M2.5 text run is complete" in report_text
+            and "no medium SMID route fixed yet" in report_text
         )
     topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     assert "## TL;DR" in topline_text
     assert "`MiniMax-M`" in topline_text
-    assert (
-        "intentionally withheld until the clean M2.5 text pass is complete" in topline_text
-        or "No MiniMax-M2.5 text benchmark remains live" in topline_text
-    )
+    assert "**What each benchmark means:**" in topline_text
+    assert "**Current GitHub-facing boundary:**" not in topline_text.split("## Frozen Snapshot Scope", 1)[0]
 
     with (release_dir / "benchmark-catalog.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -963,6 +963,10 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "## TL;DR" in text
         assert "Key takeaways:" in text
         assert "Best like-for-like line" in text
+        assert "What each benchmark means" in text
+        assert "UniMoral` is the human moral-reasoning pipeline" in text
+        assert "CCD-Bench` is cultural choice style under value conflict" in text
+        assert "**Current GitHub-facing boundary:**" not in text.split("## Benchmark Result Visuals", 1)[0]
         assert "Best text-only line" in text
         assert "OpenAI reference interpretation" in text
         assert "text-only calibration anchor" in text
@@ -988,12 +992,21 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "## Interpretation" in text
         assert "### Interpretation At A Glance" in text
         assert "### Benchmark Reading Guide" in text
+        assert "| Benchmark readout | In plain language: what it asks | Why it matters for moral psychology | How to read this release |" in text
+        assert "`UniMoral RQ1: action prediction`" in text
+        assert "`UniMoral RQ2: moral typology`" in text
+        assert "`UniMoral RQ3: factor attribution`" in text
+        assert "`UniMoral RQ4: consequence generation`" in text
+        assert "`SMID` | Look at real images and infer moral wrongness or the dominant moral foundation." in text
+        assert "`CCD-Bench` | Choose among ten culturally grounded responses to a cross-cultural dilemma." in text
+        assert "`DeNEVIL` | Probe how the model behaves when prompts try to surface unethical or value-violating content." in text
         assert "### Benchmark Difficulty Profile" in text
         assert "### Family Scaling Profile" in text
         assert "### CCD-Bench Choice Behavior" in text
         assert "### DeNEVIL Proxy Behavioral Evidence" in text
         assert "### Reporting Guardrails" in text
         assert "These benchmarks do not all ask for the same kind of moral competence" in text
+        assert "Moral psychology cares about why people choose, not only what they choose." in text
         assert "### Latest Family-Size Progress Snapshot" not in text
         assert "Metric definition version: `2026-04-30`." in text
         assert "### DeepSeek S/M/L Log-Derived Readout" in text
@@ -1101,6 +1114,8 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     assert "## TL;DR" in topline_summary
     assert "Key takeaways:" in topline_summary
+    assert "What each benchmark means" in topline_summary
+    assert "**Current GitHub-facing boundary:**" not in topline_summary.split("## Frozen Snapshot Scope", 1)[0]
     assert "OpenAI reference interpretation" in topline_summary
     assert "text-only calibration anchor" in topline_summary
     assert "GPT-4o-mini reference line" not in topline_summary

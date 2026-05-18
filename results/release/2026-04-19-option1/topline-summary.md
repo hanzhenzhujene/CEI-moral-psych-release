@@ -6,6 +6,7 @@ This is the shortest frozen-snapshot readout in the repo: what the closed public
 
 Key takeaways:
 
+- **What each benchmark means:** `UniMoral` is the human moral-reasoning pipeline (choose an action, name the moral frame, identify the decision factor, and generate consequences); `SMID` is moral perception from images; `Value Kaleidoscope` is value/right/duty recognition; `CCD-Bench` is cultural choice style under value conflict; `DeNEVIL` is risky-prompt behavior. That is why only UniMoral, SMID, and Value are treated as comparable accuracy surfaces, while CCD-Bench and DeNEVIL stay behavioral readouts.
 - **Best like-for-like line:** `MiniMax-S` is the strongest fully comparable line, averaging 0.611 across UniMoral action 0.661, SMID 0.432, and Value 0.740. This is the cleanest overall topline because all three comparable metrics are observed on the same line.
 - **Best text-only line:** `MiniMax-M` is the strongest pure text line, reaching UniMoral 0.659 and Value 0.740. It should not be called the best all-around line because there is no public SMID route on that line.
 - **OpenAI reference interpretation:** `GPT-4o-mini Ref` is a text-only calibration anchor: competitive on UniMoral and Value, but it does not change the main conclusion because it is not an S/M/L curve and has no SMID or DeNEVIL evidence.
@@ -14,7 +15,6 @@ Key takeaways:
 - **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
 - **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `Llama-S` at 23.9%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
 - **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates (92.4% to 99.5% protective response rate). `DeepSeek-S` no longer has the old visibility-collapse problem in the May 9 saved rerun (0.2% no-visible proxy traces).
-- **Current GitHub-facing boundary:** No MiniMax-M2.5 text benchmark remains live; the saved MiniMax-M2.5 text/proxy pass is already parsed into the public tables and SVGs. SMID remains `TBD`, so the medium MiniMax line is not a fully comparable all-around line yet.
 
 
 ## Frozen Snapshot Scope

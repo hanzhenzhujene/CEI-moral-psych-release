@@ -9601,16 +9601,66 @@ def append_benchmark_difficulty_table(lines: list[str], rows: list[dict[str, Any
         )
 
 
-def append_benchmark_reading_guide_table(lines: list[str], rows: list[dict[str, Any]]) -> None:
+def append_benchmark_reading_guide_table(lines: list[str], _rows: list[dict[str, Any]]) -> None:
+    guide_rows = [
+        (
+            "UniMoral RQ1: action prediction",
+            "Given a dilemma and two possible actions, predict which action the human annotator chose.",
+            "This is descriptive moral choice: it asks whether the model can track situated human decisions, not whether it can declare the one correct answer.",
+            "Higher accuracy means the model better matched human action choices. The current spread is tight, so RQ1 is useful but partly near-saturated.",
+        ),
+        (
+            "UniMoral RQ2: moral typology",
+            "Given the chosen action, label the reasoning style: deontological, utilitarian, rights-based, or virtuous.",
+            "The same action can come from different moral theories. This task checks whether the model can name the reasoning frame behind a choice.",
+            "Read this separately from RQ1: a model can predict the action while still missing the moral frame humans attached to it.",
+        ),
+        (
+            "UniMoral RQ3: factor attribution",
+            "Identify what shaped the decision, such as emotion, moral values, culture, responsibility, relationships, legality, politeness, or sacred values.",
+            "Moral psychology cares about why people choose, not only what they choose. RQ3 tests whether the model can recover those human explanation factors.",
+            "Higher accuracy means better attribution of the decision driver. Low or uneven scores point to weak explanation modeling rather than only weak action prediction.",
+        ),
+        (
+            "UniMoral RQ4: consequence generation",
+            "Generate likely consequences of the selected action.",
+            "Consequences connect moral choice to expected harm, benefit, social reaction, and future responsibility, which are central to moral reasoning.",
+            "Read RQ4 as generation quality using BERTScore F1 and METEOR. It is not directly comparable to RQ1-RQ3 accuracy.",
+        ),
+        (
+            "SMID",
+            "Look at real images and infer moral wrongness or the dominant moral foundation.",
+            "Moral judgment is often visual, social, and affective. SMID asks whether models can see morally relevant cues in concrete scenes, not only reason over text.",
+            "Higher accuracy means closer alignment with normed human image judgments. Low scores can reflect visual ambiguity and weak human consensus, so treat SMID as the vision-side bottleneck.",
+        ),
+        (
+            "Value Kaleidoscope",
+            "For a situation and a candidate value, right, or duty, decide whether it is relevant and whether it supports, opposes, or fits either way.",
+            "Pluralistic moral judgment often involves several values in tension. This benchmark checks whether the model can recognize that value structure before making any final decision.",
+            "Higher accuracy means better value tagging and polarity assignment. It should not be read as proof that the model resolved the ethical conflict correctly.",
+        ),
+        (
+            "CCD-Bench",
+            "Choose among ten culturally grounded responses to a cross-cultural dilemma.",
+            "Cultural conflict is a moral-psych question because different communities may weigh duties, relationships, hierarchy, autonomy, and social harmony differently.",
+            "Do not read CCD-Bench as universal accuracy. Read the heatmap and concentration figure as the model's cultural choice style and possible over-reliance on one cluster.",
+        ),
+        (
+            "DeNEVIL",
+            "Probe how the model behaves when prompts try to surface unethical or value-violating content.",
+            "This matters for alignment: a model can classify moral labels well but still respond poorly when asked to generate risky behavior.",
+            "This release uses proxy traces, so read protective, contextual, risky, and empty-response categories as behavioral evidence, not as paper-faithful DeNEVIL scoring.",
+        ),
+    ]
     lines.extend(
         [
-            "| Benchmark | What the paper is really testing | What this repo currently scores | How to read the current result |",
+            "| Benchmark readout | In plain language: what it asks | Why it matters for moral psychology | How to read this release |",
             "| --- | --- | --- | --- |",
         ]
     )
-    for row in rows:
+    for benchmark, plain_language, why_matters, release_read in guide_rows:
         lines.append(
-            f"| `{row['benchmark']}` | {row['paper_focus']} | {row['repo_readout']} | {row['release_interpretation']} |"
+            f"| `{benchmark}` | {plain_language} | {why_matters} | {release_read} |"
         )
 
 
@@ -9686,40 +9736,6 @@ def append_denevil_proxy_examples_table(lines: list[str], rows: list[dict[str, A
         lines.append(
             f"| `{row['model_line']}` | {row['proxy_prompt_type']} | {row['shortened_model_output_pattern']} | {row['interpretable_signal']} |"
         )
-
-
-def current_research_group_status_takeaway() -> str | None:
-    """Summarize the one status boundary a reviewer should not miss."""
-    try:
-        minimax_medium = _find_row(FAMILY_SIZE_PROGRESS, "line_label", "MiniMax-M")
-    except KeyError:
-        return None
-
-    status_values = [
-        minimax_medium["unimoral"],
-        minimax_medium["value_kaleidoscope"],
-        minimax_medium["ccd_bench"],
-        minimax_medium["denevil"],
-    ]
-    smid_clause = "SMID remains `TBD`, so the medium MiniMax line is not a fully comparable all-around line yet."
-    summary_note = str(minimax_medium.get("summary_note") or "").strip()
-    if any(status == "live" for status in status_values):
-        return (
-            "- **Current GitHub-facing boundary:** All rows marked `Done` or `Proxy` are already parsed into the public tables and SVGs; "
-            f"`MiniMax-M` is the only line still live. {summary_note} Its comparable accuracy is intentionally withheld until the clean M2.5 text pass is complete. "
-            f"{smid_clause}"
-        )
-    if all(status in {"done", "proxy"} for status in status_values):
-        return (
-            "- **Current GitHub-facing boundary:** No MiniMax-M2.5 text benchmark remains live; the saved MiniMax-M2.5 text/proxy pass is already parsed into the public tables and SVGs. "
-            f"{smid_clause}"
-        )
-    if any(status == "partial" for status in status_values):
-        return (
-            "- **Current GitHub-facing boundary:** `MiniMax-M` has partial saved text checkpoints and is not yet a final result line. "
-            f"{summary_note} Its comparable accuracy is intentionally withheld until the clean M2.5 text pass is complete. {smid_clause}"
-        )
-    return None
 
 
 def unimoral_rq_tldr_takeaway(release_dir: Path | None) -> str | None:
@@ -9890,6 +9906,9 @@ def append_tldr_section(
             "",
         ]
     )
+    lines.append(
+        "- **What each benchmark means:** `UniMoral` is the human moral-reasoning pipeline (choose an action, name the moral frame, identify the decision factor, and generate consequences); `SMID` is moral perception from images; `Value Kaleidoscope` is value/right/duty recognition; `CCD-Bench` is cultural choice style under value conflict; `DeNEVIL` is risky-prompt behavior. That is why only UniMoral, SMID, and Value are treated as comparable accuracy surfaces, while CCD-Bench and DeNEVIL stay behavioral readouts."
+    )
     if best_full_line is not None and best_full_line_mean is not None:
         lines.append(
             f"- **Best like-for-like line:** `{best_full_line['line_label']}` is the strongest fully comparable line, averaging {fmt_float(best_full_line_mean)} across UniMoral action {fmt_float(as_float(best_full_line['unimoral_action_accuracy']))}, SMID {fmt_float(as_float(best_full_line['smid_average_accuracy']))}, and Value {fmt_float(as_float(best_full_line['value_average_accuracy']))}. This is the cleanest overall topline because all three comparable metrics are observed on the same line."
@@ -9931,9 +9950,6 @@ def append_tldr_section(
         lines.append(
             f"- **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates ({fmt_pct(as_float(denevil_min_row['protective_response_rate']), 1)} to {fmt_pct(as_float(denevil_max_row['protective_response_rate']), 1)} protective response rate). {caveat}"
         )
-    research_group_status = current_research_group_status_takeaway()
-    if research_group_status is not None:
-        lines.append(research_group_status)
     lines.extend(["", ""])
 
 
@@ -9951,25 +9967,31 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             f"![UniMoral family-size scaling by RQ]({figure_prefix}/option1_unimoral_family_scaling.svg)",
             "",
-            "_Use this to see whether S/M/L scaling helps within each UniMoral RQ. The short answer is task-specific: the winning line changes across RQs, so UniMoral should not be reduced to one monotonic size curve._",
+            "_What it tests: UniMoral treats moral reasoning as a four-step pipeline. RQ1 asks which action a person would choose, RQ2 asks what kind of moral rule or reasoning frame the action reflects, RQ3 asks which factor shaped the decision, and RQ4 asks what consequences follow from the action._",
+            "",
+            "_Why it matters: moral psychology is about situated human choices and explanations, not just whether a model can label something as right or wrong. Use this figure to see whether S/M/L scaling helps within each part of that pipeline; the winning line changes across RQs, so UniMoral should not be reduced to one monotonic size curve._",
             "",
             f"![UniMoral RQ1-RQ3 exact-match accuracy]({figure_prefix}/option1_unimoral_task_heatmap.svg)",
             "",
-            "_RQ1, RQ2, and RQ3 all use exact-match accuracy here, so the three classification surfaces stay comparable inside the same benchmark block._",
+            "_How to read it: RQ1, RQ2, and RQ3 all use exact-match accuracy, so the three classification surfaces stay comparable inside the same benchmark block. Higher means the model matched the human-labeled action, moral frame, or decision factor more often._",
             "",
             f"![UniMoral RQ4 generation quality]({figure_prefix}/option1_unimoral_generation_quality.svg)",
             "",
-            "_RQ4 is a generation task, so it stays in the UniMoral block but is read with BERTScore F1 plus METEOR rather than accuracy._",
+            "_How to read RQ4: consequence generation is open-ended, so it stays in the UniMoral block but is read with BERTScore F1 plus METEOR rather than accuracy. Treat it as semantic and lexical overlap with reference consequences, not as a moral-correctness score._",
             "",
             "### 2. SMID / Value Kaleidoscope: topline comparable accuracy",
             "",
             f"![Comparable accuracy bars]({figure_prefix}/option1_benchmark_accuracy_bars.svg)",
             "",
-            "_UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._",
+            "_What it tests: SMID asks whether a vision-capable model can read morally and socially salient cues from images; Value Kaleidoscope asks whether a text model can recognize which values, rights, or duties matter in a situation and whether they support or oppose it._",
+            "",
+            "_How to read it: UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._",
             "",
             "### 3. SMID / Value Kaleidoscope: family-size scaling",
             "",
             f"![Family scaling profile]({figure_prefix}/option1_family_scaling_profile.svg)",
+            "",
+            "_Why it matters: if scaling helped moral perception and value recognition uniformly, these lines would rise cleanly from S to M to L. They do not, so the useful read is benchmark-specific scaling rather than one universal bigger-is-better claim._",
             "",
             "_Use this next to compare size effects on SMID and Value after the combined UniMoral block, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._",
             "",
@@ -9977,19 +9999,23 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             f"![CCD choice distribution]({figure_prefix}/option1_ccd_choice_distribution.svg)",
             "",
-            "_This is the main CCD-Bench result: deviation from the 10% uniform baseline across the ten canonical cultural clusters._",
+            "_What it tests: CCD-Bench puts models in explicit value conflicts where ten answer options correspond to different GLOBE cultural clusters. The figure shows deviation from the 10% uniform baseline across those clusters._",
+            "",
+            "_Why it matters: this is not a single right-answer benchmark. It tells a moral-psych reader which culturally grounded response style a model tends to privilege when values conflict._",
             "",
             "### 5. CCD-Bench: dominant-option concentration",
             "",
             f"![CCD dominant-option share]({figure_prefix}/option1_ccd_dominant_option_share.svg)",
             "",
-            "_This is the compact CCD-Bench summary: how much each line collapses onto one dominant cluster, and how broadly it still spreads across the option set._",
+            "_How to read it: this is the compact CCD-Bench summary, showing how much each line collapses onto one dominant cultural cluster and how broadly it still spreads across the option set._",
             "",
             "### 6. DeNEVIL: proxy behavioral outcomes",
             "",
             f"![DeNEVIL proxy behavioral outcomes]({figure_prefix}/option1_denevil_behavior_outcomes.svg)",
             "",
-            "_This is the main DeNEVIL result surface: auditable behavioral categories from proxy traces, not benchmark-faithful accuracy._",
+            "_What it tests: DeNEVIL-style evaluation looks for value vulnerabilities under risky or ethically loaded prompts. In this release the paper-faithful MoralPrompt export is not local, so this figure reports auditable proxy behavior categories from saved traces._",
+            "",
+            "_How to read it: protective refusals and corrective/contextual answers are the main safety-aligned behaviors; potentially risky continuations are the warning sign. This is proxy behavioral evidence, not benchmark-faithful accuracy._",
             "",
             "Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.",
             "",
