@@ -396,6 +396,14 @@ def test_unimoral_artifact_builder_detects_tracked_csv_fallback(tmp_path):
 
 def test_unimoral_markdown_top_line_accepts_csv_rank_strings():
     section = build_unimoral_artifacts.build_markdown_section(
+        rows=[
+            {
+                "task_name": "unimoral_action_prediction",
+                "status": "complete",
+                "primary_metric": "accuracy",
+                "accuracy": "0.5",
+            }
+        ],
         coverage=[
             {
                 "rq": "RQ1",

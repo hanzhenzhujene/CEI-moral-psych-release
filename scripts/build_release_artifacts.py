@@ -215,6 +215,11 @@ COMPARABLE_METRIC_SPECS = [
     ("SMID", "smid_average_accuracy", "Average of moral rating and foundation classification"),
     ("Value Kaleidoscope", "value_average_accuracy", "Average of relevance and valence accuracy"),
 ]
+VISUAL_COMPARABLE_METRIC_SPECS = [
+    (benchmark, field, scope)
+    for benchmark, field, scope in COMPARABLE_METRIC_SPECS
+    if benchmark != "UniMoral"
+]
 COVERAGE_METRIC_SPECS = [
     (
         "CCD-Bench",
@@ -8093,11 +8098,6 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
     row_count = max(len(row_order), 1)
     metric_specs = [
         (
-            "unimoral_action_accuracy",
-            "UniMoral",
-            "Action prediction accuracy",
-        ),
-        (
             "smid_average_accuracy",
             "SMID",
             "Average of moral rating and foundation classification",
@@ -8116,13 +8116,13 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
-            "<title>Comparable accuracy by benchmark</title>",
-            "<desc>Horizontal bar panels comparing the latest available family-size lines on benchmarks with directly comparable accuracy metrics. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>",
-            '<text x="48" y="64" class="title">Comparable Accuracy by Benchmark</text>',
+            "<title>SMID and Value accuracy by benchmark</title>",
+            "<desc>Horizontal bar panels comparing the latest available family-size lines on SMID and Value Kaleidoscope after the separate UniMoral RQ1-RQ4 dashboard. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>",
+            '<text x="48" y="64" class="title">SMID And Value Accuracy By Benchmark</text>',
             *svg_text_block(
                 48,
                 88,
-                "Each panel keeps the same current lines. Hatched rows mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format validation. SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells.",
+                "UniMoral RQ1-RQ4 is shown in the first figure, so this comparison starts at SMID. Each panel keeps the same current lines. Hatched rows mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format validation.",
                 "subtitle",
                 135,
             ),
@@ -8148,8 +8148,8 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
             y = panel_y + 46 + row_index * (bar_height + bar_gap)
             row = row_lookup.get(line_label)
             value = None if row is None else row[field]
-            lines.append(f'<rect x="{panel_left - 158}" y="{y + 5}" width="10" height="10" rx="3" fill="{line_colors.get(line_label, "#475569")}"/>')
-            lines.append(f'<text x="{panel_left - 142}" y="{y + 19}" text-anchor="end" class="label">{escape_xml(line_label)}</text>')
+            lines.append(f'<rect x="{panel_left - 224}" y="{y + 5}" width="10" height="10" rx="3" fill="{line_colors.get(line_label, "#475569")}"/>')
+            lines.append(f'<text x="{panel_left - 202}" y="{y + 19}" class="label">{escape_xml(line_label)}</text>')
             lines.append(f'<rect x="{panel_left}" y="{y}" width="{panel_width}" height="{bar_height}" rx="10" fill="#e2e8f0"/>')
             if value is None:
                 missing_note = comparable_missing_note(row, field) if row is not None else "no current result"
@@ -8260,11 +8260,12 @@ def render_family_scaling_profile_svg(
     output_path: Path,
 ) -> None:
     _ = progress_rows
+    visual_specs = VISUAL_COMPARABLE_METRIC_SPECS
     width, height = 1280, 1100
-    top_panel_left, top_panel_width = 52, 382
-    top_panel_gap = 18
-    top_panel_top, top_panel_height = 248, 356
-    chart_left_pad, chart_right_pad = 46, 36
+    top_panel_left, top_panel_width = 72, 540
+    top_panel_gap = 44
+    top_panel_top, top_panel_height = 244, 360
+    chart_left_pad, chart_right_pad = 56, 46
     chart_top_pad, chart_bottom_pad = 62, 62
     y_min, y_max = 0.0, 0.75
     family_draw_order = ["MiniMax", "DeepSeek", "Llama", "Gemma", "Qwen", OPENAI_REFERENCE_FAMILY_LABEL]
@@ -8279,7 +8280,7 @@ def render_family_scaling_profile_svg(
         OPENAI_REFERENCE_FAMILY_LABEL: (-8, -12),
     }
     rows_by_benchmark: dict[str, list[dict[str, Any]]] = {}
-    for benchmark, field, _ in COMPARABLE_METRIC_SPECS:
+    for benchmark, field, _ in visual_specs:
         rows_by_benchmark[benchmark] = [row for row in rows if row[field] is not None]
 
     def y_for(panel_y: int, value: float) -> float:
@@ -8289,26 +8290,26 @@ def render_family_scaling_profile_svg(
 
     lines = svg_header(width, height)
     intro_lines = [
-        "Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.",
+        "UniMoral RQ1-RQ4 is shown separately above; these comparable panels start at SMID.",
+        "Two comparable benchmark panels here: SMID and Value Kaleidoscope.",
         "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.",
         "GPT4 only is a one-model text-only reference point, not an S/M/L family-size curve.",
         "SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.",
-        "Read CCD-Bench in the dedicated choice-distribution and concentration figures.",
-        "Read Denevil in the dedicated behavioral-outcomes figure.",
+        "Read CCD-Bench and Denevil in their dedicated figures.",
     ]
     lines.extend(
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Family scaling profile by benchmark</title>",
-            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. GPT4 only is plotted as a one-model text-only reference point rather than a size curve. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
+            "<desc>Two-panel family scaling view for SMID and Value Kaleidoscope after the separate UniMoral RQ1-RQ4 dashboard. GPT4 only is plotted as a one-model text-only reference point rather than a size curve. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
             '<text x="48" y="64" class="title">Family Scaling Profile</text>',
         ]
     )
     for intro_index, intro_line in enumerate(intro_lines):
         lines.append(f'<text x="48" y="{92 + intro_index * 22}" class="subtitle">{escape_xml(intro_line)}</text>')
 
-    for panel_index, (benchmark, field, scope_label) in enumerate(COMPARABLE_METRIC_SPECS):
+    for panel_index, (benchmark, field, scope_label) in enumerate(visual_specs):
         panel_x = top_panel_left + panel_index * (top_panel_width + top_panel_gap)
         panel_y = top_panel_top
         chart_left = panel_x + chart_left_pad
@@ -8378,9 +8379,10 @@ def render_family_scaling_profile_svg(
     lines.append('<text x="72" y="670" class="tiny">HOW TO READ THIS FIGURE</text>')
     lines.append('<line x1="618" y1="672" x2="618" y2="982" class="guide"/>')
     left_lines = [
-        "Panels 1-3 show only benchmark-faithful comparable accuracy.",
-        "Use this figure for family-size comparisons on UniMoral,",
-        "SMID, and Value Kaleidoscope.",
+        "Panels 1-2 start at SMID because UniMoral",
+        "has its own RQ1-RQ4 figure above.",
+        "Use this figure for family-size comparisons",
+        "on SMID and Value Kaleidoscope.",
         "CCD-Bench is intentionally excluded here.",
         "Read CCD-Bench in the choice-distribution",
         "and dominant-option concentration figures.",
@@ -8392,11 +8394,11 @@ def render_family_scaling_profile_svg(
 
     lines.append('<text x="656" y="696" class="tiny">FAMILY READ</text>')
     legend_items = [
-        ("MiniMax", "S/M/L are scored on UniMoral and Value; S/L have SMID, while M has no SMID route."),
-        ("Qwen", "text scored at S/M/L; SMID at S/L."),
-        ("DeepSeek", "S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists."),
-        ("Llama", "text scored at S/M/L; SMID at S/L."),
-        ("Gemma", "full S/M/L scored sweep."),
+        ("MiniMax", "Value S/M/L are scored; SMID S/L have routes, while M has no SMID route."),
+        ("Qwen", "Value scored at S/M/L; SMID at S/L."),
+        ("DeepSeek", "Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists."),
+        ("Llama", "Value scored at S/M/L; SMID at S/L."),
+        ("Gemma", "full S/M/L sweep on SMID and Value."),
         (OPENAI_REFERENCE_FAMILY_LABEL, "GPT4-only reference point; no GPT4 S/M/L or SMID route is claimed."),
     ]
     for index, (family, note) in enumerate(legend_items):
@@ -8407,9 +8409,10 @@ def render_family_scaling_profile_svg(
         lines.append(f'<text x="{x + 24}" y="{y - 1}" class="small">{escape_xml(family)}: {escape_xml(note)}</text>')
 
     lines.append('<text x="656" y="910" class="tiny">EVIDENCE BOUNDARY</text>')
-    lines.append('<text x="656" y="936" class="body">This figure stops at the three accuracy-comparable benchmarks.</text>')
-    lines.append('<text x="656" y="964" class="body">That avoids mixing comparable accuracy with coverage or proxy evidence.</text>')
-    lines.append('<text x="72" y="1044" class="small">Takeaway: current evidence supports task-specific scaling statements across the three comparable accuracy benchmarks, not a single universal size law across all five benchmark surfaces.</text>')
+    lines.append('<text x="656" y="936" class="body">This figure starts after the UniMoral RQ1-RQ4 dashboard.</text>')
+    lines.append('<text x="656" y="964" class="body">It stops at SMID + Value to avoid repeating UniMoral.</text>')
+    lines.append('<text x="656" y="992" class="body">That avoids mixing comparable accuracy with coverage or proxy evidence.</text>')
+    lines.append('<text x="72" y="1044" class="small">Takeaway: current evidence supports task-specific scaling statements on SMID and Value, while UniMoral scaling is handled in the RQ1-RQ4 panel.</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -9852,17 +9855,17 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "_This is the updated UniMoral result view. RQ1 action prediction is only one of four UniMoral surfaces; RQ2 moral typology, RQ3 factor attribution, and RQ4 consequence generation are shown separately with MiniMax caveats marked._",
             "",
-            "### 2. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy",
+            "### 2. SMID / Value Kaleidoscope: topline comparable accuracy",
             "",
             f"![Comparable accuracy bars]({figure_prefix}/option1_benchmark_accuracy_bars.svg)",
             "",
-            "_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._",
+            "_UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._",
             "",
-            "### 3. UniMoral / SMID / Value Kaleidoscope: family-size scaling",
+            "### 3. SMID / Value Kaleidoscope: family-size scaling",
             "",
             f"![Family scaling profile]({figure_prefix}/option1_family_scaling_profile.svg)",
             "",
-            "_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._",
+            "_Use this second to compare size effects on SMID and Value after the separate UniMoral RQ1-RQ4 view, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._",
             "",
             "### 4. CCD-Bench: cultural-cluster choice behavior",
             "",
@@ -10230,9 +10233,9 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             "| Figure | Why it matters | File |",
             "| --- | --- | --- |",
             f"| Figure 1 | Latest line-level progress across the current published family-size matrix. | {markdown_link('option1_family_size_progress_overview.svg', f'{figure_prefix}/option1_family_size_progress_overview.svg')} |",
-            f"| Figure 2 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | {markdown_link('option1_benchmark_accuracy_bars.svg', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')} |",
+            f"| Figure 2 | SMID and Value comparison after the UniMoral RQ1-RQ4 figure. | {markdown_link('option1_benchmark_accuracy_bars.svg', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')} |",
             f"| Figure 3 | Benchmark-level difficulty and spread across the current comparable slice. | {markdown_link('option1_benchmark_difficulty_profile.svg', f'{figure_prefix}/option1_benchmark_difficulty_profile.svg')} |",
-            f"| Figure 4 | Family-size scaling view for the three directly comparable accuracy benchmarks only. | {markdown_link('option1_family_scaling_profile.svg', f'{figure_prefix}/option1_family_scaling_profile.svg')} |",
+            f"| Figure 4 | Family-size scaling view for SMID and Value; UniMoral scaling is shown separately. | {markdown_link('option1_family_scaling_profile.svg', f'{figure_prefix}/option1_family_scaling_profile.svg')} |",
             f"| Figure 5 | Main CCD-Bench result: canonical cultural-cluster heatmap showing deviation from the 10% uniform baseline. | {markdown_link('option1_ccd_choice_distribution.svg', f'{figure_prefix}/option1_ccd_choice_distribution.svg')} |",
             f"| Figure 6 | Compact CCD concentration summary: dominant-cluster share plus effective-cluster count. | {markdown_link('option1_ccd_dominant_option_share.svg', f'{figure_prefix}/option1_ccd_dominant_option_share.svg')} |",
             f"| Figure 7 | Appendix QA for CCD only: parseable visible 1-10 choice coverage by model line. | {markdown_link('option1_ccd_valid_choice_coverage.svg', f'{figure_prefix}/option1_ccd_valid_choice_coverage.svg')} |",
@@ -10920,9 +10923,9 @@ def build_release_readme(
             "### Figures",
             "",
             f"- {markdown_link('UniMoral RQ1-RQ4 dashboard', '../../../figures/release/option1_unimoral_four_task_dashboard.svg')}: four-task UniMoral view with MiniMax caveats marked",
-            f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: current cross-model benchmark comparison",
+            f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: SMID/Value cross-model comparison after the UniMoral RQ figure",
             f"- {markdown_link('benchmark difficulty profile', '../../../figures/release/option1_benchmark_difficulty_profile.svg')}: mean and spread for the directly comparable benchmark groups",
-            f"- {markdown_link('family scaling profile', '../../../figures/release/option1_family_scaling_profile.svg')}: family-size scaling across the three directly comparable accuracy benchmarks only",
+            f"- {markdown_link('family scaling profile', '../../../figures/release/option1_family_scaling_profile.svg')}: family-size scaling across SMID and Value only",
             f"- {markdown_link('CCD choice heatmap', '../../../figures/release/option1_ccd_choice_distribution.svg')}: main CCD-Bench result showing deviation from the 10% uniform baseline across the ten canonical clusters",
             f"- {markdown_link('CCD concentration summary', '../../../figures/release/option1_ccd_dominant_option_share.svg')}: dominant-cluster share plus effective-cluster count",
             f"- {markdown_link('DeNEVIL behavioral outcomes', '../../../figures/release/option1_denevil_behavior_outcomes.svg')}: main proxy-result view showing visible behavior categories by model line",

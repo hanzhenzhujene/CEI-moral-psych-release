@@ -1,105 +1,309 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1050" viewBox="0 0 1100 1050">
-<style>text{font-family:Arial,sans-serif;font-size:12px}.title{font-size:18px;font-weight:700}.axis{font-weight:700}</style>
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1786" viewBox="0 0 1240 1786">
+<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:20px;font-weight:700}.subtitle{fill:#4b5563}.axis{font-weight:700}.small{font-size:11px;fill:#4b5563}</style>
 <rect width="100%" height="100%" fill="white"/>
-<text x="20" y="30" class="title">UniMoral per-task model rankings</text>
-<text x="20" y="60" class="axis">Action prediction</text>
-<text x="35" y="94">1. DeepSeek-M</text>
-<rect x="210" y="80" width="760.0" height="18" fill="#6aa84f"/>
-<text x="980.0" y="94">0.684</text>
-<text x="35" y="118">2. GPT4 only</text>
-<rect x="210" y="104" width="747.9" height="18" fill="#6aa84f"/>
-<text x="967.9" y="118">0.673</text>
-<text x="35" y="142">3. Llama-M</text>
-<rect x="210" y="128" width="744.7" height="18" fill="#6aa84f"/>
-<text x="964.7" y="142">0.670</text>
-<text x="35" y="166">4. Qwen-L</text>
-<rect x="210" y="152" width="739.6" height="18" fill="#6aa84f"/>
-<text x="959.6" y="166">0.665</text>
-<text x="35" y="190">5. Qwen-M</text>
-<rect x="210" y="176" width="738.7" height="18" fill="#6aa84f"/>
-<text x="958.7" y="190">0.665</text>
-<text x="35" y="214">6. Gemma-M</text>
-<rect x="210" y="200" width="736.6" height="18" fill="#6aa84f"/>
-<text x="956.6" y="214">0.663</text>
-<text x="35" y="238">7. Gemma-L</text>
-<rect x="210" y="224" width="734.9" height="18" fill="#6aa84f"/>
-<text x="954.9" y="238">0.661</text>
-<text x="35" y="262">8. MiniMax-S</text>
-<rect x="210" y="248" width="734.7" height="18" fill="#6aa84f"/>
-<text x="954.7" y="262">0.661</text>
-<text x="20" y="310" class="axis">Moral typology</text>
-<text x="35" y="344">1. Llama-S</text>
-<rect x="210" y="330" width="760.0" height="18" fill="#6aa84f"/>
-<text x="980.0" y="344">0.354</text>
-<text x="35" y="368">2. Gemma-S</text>
-<rect x="210" y="354" width="752.4" height="18" fill="#6aa84f"/>
-<text x="972.4" y="368">0.351</text>
-<text x="35" y="392">3. DeepSeek-L</text>
-<rect x="210" y="378" width="718.2" height="18" fill="#6aa84f"/>
-<text x="938.2" y="392">0.335</text>
-<text x="35" y="416">4. DeepSeek-S</text>
-<rect x="210" y="402" width="713.0" height="18" fill="#6aa84f"/>
-<text x="933.0" y="416">0.332</text>
-<text x="35" y="440">5. MiniMax-M</text>
-<rect x="210" y="426" width="711.3" height="18" fill="#6aa84f"/>
-<text x="931.3" y="440">0.332</text>
-<text x="35" y="464">6. MiniMax-L</text>
-<rect x="210" y="450" width="700.4" height="18" fill="#6aa84f"/>
-<text x="920.4" y="464">0.326</text>
-<text x="35" y="488">7. Qwen-L</text>
-<rect x="210" y="474" width="698.9" height="18" fill="#6aa84f"/>
-<text x="918.9" y="488">0.326</text>
-<text x="35" y="512">8. Gemma-M</text>
-<rect x="210" y="498" width="683.0" height="18" fill="#6aa84f"/>
-<text x="903.0" y="512">0.318</text>
-<text x="20" y="560" class="axis">Factor attribution</text>
-<text x="35" y="594">1. DeepSeek-S</text>
-<rect x="210" y="580" width="760.0" height="18" fill="#6aa84f"/>
-<text x="980.0" y="594">0.264</text>
-<text x="35" y="618">2. Llama-M</text>
-<rect x="210" y="604" width="756.6" height="18" fill="#6aa84f"/>
-<text x="976.6" y="618">0.263</text>
-<text x="35" y="642">3. Gemma-M</text>
-<rect x="210" y="628" width="747.1" height="18" fill="#6aa84f"/>
-<text x="967.1" y="642">0.260</text>
-<text x="35" y="666">4. MiniMax-M</text>
-<rect x="210" y="652" width="744.6" height="18" fill="#6aa84f"/>
-<text x="964.6" y="666">0.259</text>
-<text x="35" y="690">5. Qwen-M</text>
-<rect x="210" y="676" width="744.3" height="18" fill="#6aa84f"/>
-<text x="964.3" y="690">0.259</text>
-<text x="35" y="714">6. DeepSeek-M</text>
-<rect x="210" y="700" width="741.6" height="18" fill="#6aa84f"/>
-<text x="961.6" y="714">0.258</text>
-<text x="35" y="738">7. Llama-S</text>
-<rect x="210" y="724" width="739.8" height="18" fill="#6aa84f"/>
-<text x="959.8" y="738">0.257</text>
-<text x="35" y="762">8. Qwen-L</text>
-<rect x="210" y="748" width="739.5" height="18" fill="#6aa84f"/>
-<text x="959.5" y="762">0.257</text>
-<text x="20" y="810" class="axis">Consequence generation</text>
-<text x="35" y="844">1. Llama-L</text>
-<rect x="210" y="830" width="760.0" height="18" fill="#6aa84f"/>
-<text x="980.0" y="844">0.157</text>
-<text x="35" y="868">2. Llama-M</text>
-<rect x="210" y="854" width="742.8" height="18" fill="#6aa84f"/>
-<text x="962.8" y="868">0.154</text>
-<text x="35" y="892">3. Qwen-M</text>
-<rect x="210" y="878" width="727.5" height="18" fill="#6aa84f"/>
-<text x="947.5" y="892">0.151</text>
-<text x="35" y="916">4. GPT4 only</text>
-<rect x="210" y="902" width="706.1" height="18" fill="#6aa84f"/>
-<text x="926.1" y="916">0.146</text>
-<text x="35" y="940">5. Qwen-L</text>
-<rect x="210" y="926" width="651.7" height="18" fill="#6aa84f"/>
-<text x="871.7" y="940">0.135</text>
-<text x="35" y="964">6. Llama-S</text>
-<rect x="210" y="950" width="631.7" height="18" fill="#6aa84f"/>
-<text x="851.7" y="964">0.131</text>
-<text x="35" y="988">7. Qwen-S</text>
-<rect x="210" y="974" width="579.0" height="18" fill="#6aa84f"/>
-<text x="799.0" y="988">0.120</text>
-<text x="35" y="1012">8. DeepSeek-M</text>
-<rect x="210" y="998" width="505.3" height="18" fill="#6aa84f"/>
-<text x="725.3" y="1012">0.105</text>
+<text x="24" y="32" class="title">UniMoral per-task model rankings (all scored lines)</text>
+<text x="24" y="52" class="subtitle">No top-8 truncation: each panel lists every model/reference line with a strict-complete score for that task.</text>
+<rect x="20" y="52" width="1200" height="452" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>
+<text x="36" y="74" class="axis">RQ1: Action prediction (accuracy)</text>
+<text x="44" y="114">1. DeepSeek-M</text>
+<rect x="178" y="101" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="114" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="100" width="760.0" height="18" fill="#4f7d45" rx="3"/>
+<text x="1016.0" y="114">0.684</text>
+<text x="44" y="138">2. GPT4 only</text>
+<rect x="178" y="125" width="38" height="18" fill="#6b7280" rx="9"/>
+<text x="197" y="138" text-anchor="middle" fill="#ffffff" font-weight="700">Ref</text>
+<rect x="246" y="124" width="747.9" height="18" fill="#6b7280" rx="3"/>
+<text x="1003.9" y="138">0.673</text>
+<text x="44" y="162">3. Llama-M</text>
+<rect x="178" y="149" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="162" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="148" width="744.7" height="18" fill="#b56a33" rx="3"/>
+<text x="1000.7" y="162">0.670</text>
+<text x="44" y="186">4. Qwen-L</text>
+<rect x="178" y="173" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="186" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="172" width="739.6" height="18" fill="#2f6f9f" rx="3"/>
+<text x="995.6" y="186">0.665</text>
+<text x="44" y="210">5. Qwen-M</text>
+<rect x="178" y="197" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="210" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="196" width="738.7" height="18" fill="#2f6f9f" rx="3"/>
+<text x="994.7" y="210">0.665</text>
+<text x="44" y="234">6. Gemma-M</text>
+<rect x="178" y="221" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="234" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="220" width="736.6" height="18" fill="#7b62a3" rx="3"/>
+<text x="992.6" y="234">0.663</text>
+<text x="44" y="258">7. Gemma-L</text>
+<rect x="178" y="245" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="258" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="244" width="734.9" height="18" fill="#7b62a3" rx="3"/>
+<text x="990.9" y="258">0.661</text>
+<text x="44" y="282">8. MiniMax-S</text>
+<rect x="178" y="269" width="38" height="18" fill="#8a5a44" rx="9"/>
+<text x="197" y="282" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="268" width="734.7" height="18" fill="#8a5a44" rx="3"/>
+<text x="990.7" y="282">0.661</text>
+<text x="44" y="306">9. DeepSeek-S</text>
+<rect x="178" y="293" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="306" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="292" width="734.4" height="18" fill="#4f7d45" rx="3"/>
+<text x="990.4" y="306">0.661</text>
+<text x="44" y="330">10. MiniMax-L</text>
+<rect x="178" y="317" width="38" height="18" fill="#8a5a44" rx="9"/>
+<text x="197" y="330" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="316" width="734.3" height="18" fill="#8a5a44" rx="3"/>
+<text x="990.3" y="330">0.661</text>
+<text x="44" y="354">11. Llama-L</text>
+<rect x="178" y="341" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="354" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="340" width="733.5" height="18" fill="#b56a33" rx="3"/>
+<text x="989.5" y="354">0.660</text>
+<text x="44" y="378">12. MiniMax-M</text>
+<rect x="178" y="365" width="38" height="18" fill="#8a5a44" rx="9"/>
+<text x="197" y="378" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="364" width="732.3" height="18" fill="#8a5a44" rx="3"/>
+<text x="988.3" y="378">0.659</text>
+<text x="44" y="402">13. Llama-S</text>
+<rect x="178" y="389" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="402" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="388" width="720.4" height="18" fill="#b56a33" rx="3"/>
+<text x="976.4" y="402">0.648</text>
+<text x="44" y="426">14. Qwen-S</text>
+<rect x="178" y="413" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="426" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="412" width="719.8" height="18" fill="#2f6f9f" rx="3"/>
+<text x="975.8" y="426">0.647</text>
+<text x="44" y="450">15. Gemma-S</text>
+<rect x="178" y="437" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="450" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="436" width="706.2" height="18" fill="#7b62a3" rx="3"/>
+<text x="962.2" y="450">0.635</text>
+<text x="44" y="474">16. DeepSeek-L</text>
+<rect x="178" y="461" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="474" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="460" width="625.4" height="18" fill="#4f7d45" rx="3"/>
+<text x="881.4" y="474">0.563</text>
+<rect x="20" y="514" width="1200" height="428" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>
+<text x="36" y="536" class="axis">RQ2: Moral typology (official_weighted_f1)</text>
+<text x="44" y="576">1. Llama-S</text>
+<rect x="178" y="563" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="576" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="562" width="760.0" height="18" fill="#b56a33" rx="3"/>
+<text x="1016.0" y="576">0.354</text>
+<text x="44" y="600">2. Gemma-S</text>
+<rect x="178" y="587" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="600" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="586" width="752.4" height="18" fill="#7b62a3" rx="3"/>
+<text x="1008.4" y="600">0.351</text>
+<text x="44" y="624">3. DeepSeek-L</text>
+<rect x="178" y="611" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="624" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="610" width="718.2" height="18" fill="#4f7d45" rx="3"/>
+<text x="974.2" y="624">0.335</text>
+<text x="44" y="648">4. DeepSeek-S</text>
+<rect x="178" y="635" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="648" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="634" width="713.0" height="18" fill="#4f7d45" rx="3"/>
+<text x="969.0" y="648">0.332</text>
+<text x="44" y="672">5. MiniMax-M</text>
+<rect x="178" y="659" width="38" height="18" fill="#8a5a44" rx="9"/>
+<text x="197" y="672" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="658" width="711.3" height="18" fill="#8a5a44" rx="3"/>
+<text x="967.3" y="672">0.332</text>
+<text x="44" y="696">6. MiniMax-L</text>
+<rect x="178" y="683" width="38" height="18" fill="#8a5a44" rx="9"/>
+<text x="197" y="696" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="682" width="700.4" height="18" fill="#8a5a44" rx="3"/>
+<text x="956.4" y="696">0.326</text>
+<text x="44" y="720">7. Qwen-L</text>
+<rect x="178" y="707" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="720" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="706" width="698.9" height="18" fill="#2f6f9f" rx="3"/>
+<text x="954.9" y="720">0.326</text>
+<text x="44" y="744">8. Gemma-M</text>
+<rect x="178" y="731" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="744" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="730" width="683.0" height="18" fill="#7b62a3" rx="3"/>
+<text x="939.0" y="744">0.318</text>
+<text x="44" y="768">9. DeepSeek-M</text>
+<rect x="178" y="755" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="768" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="754" width="662.7" height="18" fill="#4f7d45" rx="3"/>
+<text x="918.7" y="768">0.309</text>
+<text x="44" y="792">10. Llama-M</text>
+<rect x="178" y="779" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="792" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="778" width="646.3" height="18" fill="#b56a33" rx="3"/>
+<text x="902.3" y="792">0.301</text>
+<text x="44" y="816">11. Gemma-L</text>
+<rect x="178" y="803" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="816" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="802" width="644.6" height="18" fill="#7b62a3" rx="3"/>
+<text x="900.6" y="816">0.300</text>
+<text x="44" y="840">12. Qwen-M</text>
+<rect x="178" y="827" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="840" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="826" width="636.4" height="18" fill="#2f6f9f" rx="3"/>
+<text x="892.4" y="840">0.297</text>
+<text x="44" y="864">13. Llama-L</text>
+<rect x="178" y="851" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="864" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="850" width="635.8" height="18" fill="#b56a33" rx="3"/>
+<text x="891.8" y="864">0.296</text>
+<text x="44" y="888">14. Qwen-S</text>
+<rect x="178" y="875" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="888" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="874" width="601.0" height="18" fill="#2f6f9f" rx="3"/>
+<text x="857.0" y="888">0.280</text>
+<text x="44" y="912">15. GPT4 only</text>
+<rect x="178" y="899" width="38" height="18" fill="#6b7280" rx="9"/>
+<text x="197" y="912" text-anchor="middle" fill="#ffffff" font-weight="700">Ref</text>
+<rect x="246" y="898" width="588.7" height="18" fill="#6b7280" rx="3"/>
+<text x="844.7" y="912">0.274</text>
+<rect x="20" y="952" width="1200" height="404" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>
+<text x="36" y="974" class="axis">RQ3: Factor attribution (official_weighted_f1)</text>
+<text x="44" y="1014">1. DeepSeek-S</text>
+<rect x="178" y="1001" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="1014" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="1000" width="760.0" height="18" fill="#4f7d45" rx="3"/>
+<text x="1016.0" y="1014">0.264</text>
+<text x="44" y="1038">2. Llama-M</text>
+<rect x="178" y="1025" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="1038" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="1024" width="756.6" height="18" fill="#b56a33" rx="3"/>
+<text x="1012.6" y="1038">0.263</text>
+<text x="44" y="1062">3. Gemma-M</text>
+<rect x="178" y="1049" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="1062" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="1048" width="747.1" height="18" fill="#7b62a3" rx="3"/>
+<text x="1003.1" y="1062">0.260</text>
+<text x="44" y="1086">4. MiniMax-M</text>
+<rect x="178" y="1073" width="38" height="18" fill="#8a5a44" rx="9"/>
+<text x="197" y="1086" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="1072" width="744.6" height="18" fill="#8a5a44" rx="3"/>
+<text x="1000.6" y="1086">0.259</text>
+<text x="44" y="1110">5. Qwen-M</text>
+<rect x="178" y="1097" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="1110" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="1096" width="744.3" height="18" fill="#2f6f9f" rx="3"/>
+<text x="1000.3" y="1110">0.259</text>
+<text x="44" y="1134">6. DeepSeek-M</text>
+<rect x="178" y="1121" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="1134" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="1120" width="741.6" height="18" fill="#4f7d45" rx="3"/>
+<text x="997.6" y="1134">0.258</text>
+<text x="44" y="1158">7. Llama-S</text>
+<rect x="178" y="1145" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="1158" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="1144" width="739.8" height="18" fill="#b56a33" rx="3"/>
+<text x="995.8" y="1158">0.257</text>
+<text x="44" y="1182">8. Qwen-L</text>
+<rect x="178" y="1169" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="1182" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="1168" width="739.5" height="18" fill="#2f6f9f" rx="3"/>
+<text x="995.5" y="1182">0.257</text>
+<text x="44" y="1206">9. DeepSeek-L</text>
+<rect x="178" y="1193" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="1206" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="1192" width="736.1" height="18" fill="#4f7d45" rx="3"/>
+<text x="992.1" y="1206">0.256</text>
+<text x="44" y="1230">10. Gemma-S</text>
+<rect x="178" y="1217" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="1230" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="1216" width="735.8" height="18" fill="#7b62a3" rx="3"/>
+<text x="991.8" y="1230">0.256</text>
+<text x="44" y="1254">11. GPT4 only</text>
+<rect x="178" y="1241" width="38" height="18" fill="#6b7280" rx="9"/>
+<text x="197" y="1254" text-anchor="middle" fill="#ffffff" font-weight="700">Ref</text>
+<rect x="246" y="1240" width="730.3" height="18" fill="#6b7280" rx="3"/>
+<text x="986.3" y="1254">0.254</text>
+<text x="44" y="1278">12. Gemma-L</text>
+<rect x="178" y="1265" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="1278" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="1264" width="728.4" height="18" fill="#7b62a3" rx="3"/>
+<text x="984.4" y="1278">0.253</text>
+<text x="44" y="1302">13. Llama-L</text>
+<rect x="178" y="1289" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="1302" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="1288" width="719.0" height="18" fill="#b56a33" rx="3"/>
+<text x="975.0" y="1302">0.250</text>
+<text x="44" y="1326">14. Qwen-S</text>
+<rect x="178" y="1313" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="1326" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="1312" width="695.9" height="18" fill="#2f6f9f" rx="3"/>
+<text x="951.9" y="1326">0.242</text>
+<rect x="20" y="1366" width="1200" height="404" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>
+<text x="36" y="1388" class="axis">RQ4: Consequence generation (meteor)</text>
+<text x="44" y="1428">1. Llama-L</text>
+<rect x="178" y="1415" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="1428" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="1414" width="760.0" height="18" fill="#b56a33" rx="3"/>
+<text x="1016.0" y="1428">0.157</text>
+<text x="44" y="1452">2. Llama-M</text>
+<rect x="178" y="1439" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="1452" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="1438" width="742.8" height="18" fill="#b56a33" rx="3"/>
+<text x="998.8" y="1452">0.154</text>
+<text x="44" y="1476">3. Qwen-M</text>
+<rect x="178" y="1463" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="1476" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="1462" width="727.5" height="18" fill="#2f6f9f" rx="3"/>
+<text x="983.5" y="1476">0.151</text>
+<text x="44" y="1500">4. GPT4 only</text>
+<rect x="178" y="1487" width="38" height="18" fill="#6b7280" rx="9"/>
+<text x="197" y="1500" text-anchor="middle" fill="#ffffff" font-weight="700">Ref</text>
+<rect x="246" y="1486" width="706.1" height="18" fill="#6b7280" rx="3"/>
+<text x="962.1" y="1500">0.146</text>
+<text x="44" y="1524">5. Qwen-L</text>
+<rect x="178" y="1511" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="1524" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="1510" width="651.7" height="18" fill="#2f6f9f" rx="3"/>
+<text x="907.7" y="1524">0.135</text>
+<text x="44" y="1548">6. Llama-S</text>
+<rect x="178" y="1535" width="38" height="18" fill="#b56a33" rx="9"/>
+<text x="197" y="1548" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="1534" width="631.7" height="18" fill="#b56a33" rx="3"/>
+<text x="887.7" y="1548">0.131</text>
+<text x="44" y="1572">7. Qwen-S</text>
+<rect x="178" y="1559" width="38" height="18" fill="#2f6f9f" rx="9"/>
+<text x="197" y="1572" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="1558" width="579.0" height="18" fill="#2f6f9f" rx="3"/>
+<text x="835.0" y="1572">0.120</text>
+<text x="44" y="1596">8. DeepSeek-M</text>
+<rect x="178" y="1583" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="1596" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="1582" width="505.3" height="18" fill="#4f7d45" rx="3"/>
+<text x="761.3" y="1596">0.105</text>
+<text x="44" y="1620">9. Gemma-M</text>
+<rect x="178" y="1607" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="1620" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="246" y="1606" width="484.3" height="18" fill="#7b62a3" rx="3"/>
+<text x="740.3" y="1620">0.100</text>
+<text x="44" y="1644">10. Gemma-S</text>
+<rect x="178" y="1631" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="1644" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="1630" width="446.4" height="18" fill="#7b62a3" rx="3"/>
+<text x="702.4" y="1644">0.092</text>
+<text x="44" y="1668">11. DeepSeek-S</text>
+<rect x="178" y="1655" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="1668" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="1654" width="425.2" height="18" fill="#4f7d45" rx="3"/>
+<text x="681.2" y="1668">0.088</text>
+<text x="44" y="1692">12. Gemma-L</text>
+<rect x="178" y="1679" width="38" height="18" fill="#7b62a3" rx="9"/>
+<text x="197" y="1692" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="1678" width="424.7" height="18" fill="#7b62a3" rx="3"/>
+<text x="680.7" y="1692">0.088</text>
+<text x="44" y="1716">13. MiniMax-S</text>
+<rect x="178" y="1703" width="38" height="18" fill="#8a5a44" rx="9"/>
+<text x="197" y="1716" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="246" y="1702" width="378.2" height="18" fill="#8a5a44" rx="3"/>
+<text x="634.2" y="1716">0.078</text>
+<text x="44" y="1740">14. DeepSeek-L</text>
+<rect x="178" y="1727" width="38" height="18" fill="#4f7d45" rx="9"/>
+<text x="197" y="1740" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="246" y="1726" width="370.2" height="18" fill="#4f7d45" rx="3"/>
+<text x="626.2" y="1740">0.077</text>
 </svg>

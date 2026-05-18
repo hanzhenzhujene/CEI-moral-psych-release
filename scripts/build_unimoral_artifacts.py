@@ -905,6 +905,70 @@ def _status_stroke(row: dict[str, object] | None) -> tuple[str, str]:
     return "#d97706", " stroke-dasharray=\"5 3\""
 
 
+def complete_values(rows: list[dict[str, object]], task_name: str, field: str) -> list[float]:
+    values = []
+    for row in rows:
+        if row.get("task_name") != task_name or row.get("status") != "complete":
+            continue
+        value = row.get(field)
+        if value in {None, ""}:
+            continue
+        values.append(float(value))
+    return values
+
+
+def value_range_text(rows: list[dict[str, object]], task_name: str, field: str) -> str:
+    values = complete_values(rows, task_name, field)
+    if not values:
+        return "n/a"
+    return f"{min(values):.3f}-{max(values):.3f}"
+
+
+def card_metric_label(rows: list[dict[str, object]], task_name: str, metric: object) -> str:
+    if task_name in {"unimoral_moral_typology", "unimoral_factor_attribution"}:
+        return f"weighted F1; side acc {value_range_text(rows, task_name, 'accuracy')}"
+    if task_name == "unimoral_consequence_generation":
+        return f"METEOR; BERTScore {value_range_text(rows, task_name, 'bert_score_f1')}"
+    return str(metric)
+
+
+def score_scale_note(rows: list[dict[str, object]]) -> str:
+    rq2_accuracy = value_range_text(rows, "unimoral_moral_typology", "accuracy")
+    rq3_accuracy = value_range_text(rows, "unimoral_factor_attribution", "accuracy")
+    rq4_bertscore = value_range_text(rows, "unimoral_consequence_generation", "bert_score_f1")
+    return (
+        "Score-scale sanity check: RQ2/RQ3 headline values are official weighted F1, not the exact-match accuracy side column "
+        f"(strict-complete side accuracy spans RQ2 {rq2_accuracy}, RQ3 {rq3_accuracy}). RQ4's headline value is METEOR; "
+        f"BERTScore F1 spans {rq4_bertscore}. The lower RQ2/RQ3/RQ4 headline values therefore reflect metric scale and task difficulty, "
+        "not an RQ1-style accuracy collapse."
+    )
+
+
+def line_meta_for(label: str) -> tuple[str, str]:
+    for line_label, family, size_slot, _ in MODEL_LINES:
+        if line_label == label:
+            return family, size_slot
+    return "", ""
+
+
+def family_group_spans() -> list[tuple[str, int, int]]:
+    spans: list[tuple[str, int, int]] = []
+    current_family: str | None = None
+    start_index = 0
+    for index, (_, family, _, _) in enumerate(MODEL_LINES):
+        if current_family is None:
+            current_family = family
+            start_index = index
+            continue
+        if family != current_family:
+            spans.append((current_family, start_index, index - 1))
+            current_family = family
+            start_index = index
+    if current_family is not None:
+        spans.append((current_family, start_index, len(MODEL_LINES) - 1))
+    return spans
+
+
 def svg_four_task_dashboard(
     rows: list[dict[str, object]],
     coverage: list[dict[str, object]],
@@ -931,7 +995,7 @@ def svg_four_task_dashboard(
         '<text x="36" y="70" class="subtitle">Updated UniMoral view: action prediction is only RQ1; RQ2 typology, RQ3 attribution, and RQ4 consequence generation are shown separately.</text>'
     )
     parts.append(
-        '<text x="36" y="92" class="subtitle">Non-MiniMax model lines plus the GPT4 reference have complete scored artifacts across all four tasks; MiniMax caveats are marked with * and tracked in the failure checklist.</text>'
+        '<text x="36" y="92" class="subtitle">RQ2/RQ3 use weighted F1 and RQ4 uses METEOR, so their headline scale is lower than RQ1 accuracy; side metrics are shown in the cards.</text>'
     )
 
     coverage_by_task = {row["task_name"]: row for row in coverage}
@@ -946,7 +1010,7 @@ def svg_four_task_dashboard(
         top = top_by_task.get(task_name, {})
         parts.append(f'<rect x="{x}" y="{y}" width="{card_w}" height="{card_h}" class="card"/>')
         parts.append(f'<text x="{x + 18}" y="{y + 30}" class="axis">{task["rq"]}: {html.escape(task["label"])}</text>')
-        parts.append(f'<text x="{x + 18}" y="{y + 56}" class="small">Metric: {html.escape(str(task["metric"]))}</text>')
+        parts.append(f'<text x="{x + 18}" y="{y + 56}" class="small">Metric: {html.escape(card_metric_label(rows, task_name, task["metric"]))}</text>')
         parts.append(
             f'<text x="{x + 18}" y="{y + 78}" class="small">Strict complete: {coverage_row.get("complete_model_lines", "")}/{coverage_row.get("expected_model_lines", "")}; reported: {coverage_row.get("reported_model_lines", "")}/{coverage_row.get("expected_model_lines", "")}</text>'
         )
@@ -999,7 +1063,7 @@ def svg_four_task_dashboard(
         parts.append(f'<circle cx="{x + 22}" cy="{chip_y + 27}" r="7" fill="{fill}"/>')
         parts.append(f'<text x="{x + 40}" y="{chip_y + 22}" class="axis">{html.escape(family)}</text>')
         parts.append(f'<text x="{x + 40}" y="{chip_y + 42}" class="small">{html.escape(label)}</text>')
-    parts.append(f'<text x="60" y="{y0 + 214}" class="small">See the full score heatmap below for all 16 public/reference lines and all four RQ columns.</text>')
+    parts.append(f'<text x="60" y="{y0 + 214}" class="small">All run lines are shown in the full score heatmap and all-line ranking below: Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus GPT4 Ref.</text>')
     parts.append(f'<text x="60" y="{y0 + 238}" class="small">* marks reported-but-not-strict cells; MiniMax remaining gaps are documented in unimoral-failure-checklist.csv.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
@@ -1011,24 +1075,43 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
     row_lookup = {(row["line_label"], row["task_name"]): row for row in rows}
     ranges = task_metric_ranges(rows)
     cell_w, cell_h = 205, 34
-    left, top = 188, 154
+    family_x, family_w = 20, 98
+    size_x, size_w = 132, 48
+    line_x = 196
+    left, top = 326, 176
     width = left + cell_w * len(task_names) + 48
-    height = top + cell_h * len(lines) + 92
+    height = top + cell_h * len(lines) + 112
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
-    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:22px;font-weight:700}.subtitle{fill:#4b5563}.axis{font-weight:700}.small{font-size:11px;fill:#4b5563}</style>")
+    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:22px;font-weight:700}.subtitle{fill:#4b5563}.axis{font-weight:700}.small{font-size:11px;fill:#4b5563}.tiny{font-size:10px;fill:#6b7280;font-weight:700}</style>")
     parts.append('<rect width="100%" height="100%" fill="white"/>')
-    parts.append('<text x="24" y="34" class="title">UniMoral task scores by model line (RQ1-RQ4)</text>')
-    parts.append('<text x="24" y="58" class="subtitle">Each column uses its own task metric and color scale, so RQ4 METEOR is visible instead of washed out by RQ1 accuracy.</text>')
-    parts.append('<text x="24" y="78" class="subtitle">* = reported but not strict complete; missing cells are shown as n/a.</text>')
+    parts.append('<text x="24" y="34" class="title">UniMoral task scores by model line (all run lines, RQ1-RQ4)</text>')
+    parts.append('<text x="24" y="58" class="subtitle">Rows list every public/reference line that has been run: family blocks, S/M/L size badges, and the GPT4 reference are explicit.</text>')
+    parts.append('<text x="24" y="78" class="subtitle">RQ2/RQ3 are weighted F1; RQ4 is METEOR. Each column uses its own color scale; * = reported but not strict complete; n/a = missing.</text>')
+    parts.append(f'<text x="{family_x + family_w / 2}" y="{top - 52}" text-anchor="middle" class="tiny">FAMILY</text>')
+    parts.append(f'<text x="{size_x + size_w / 2}" y="{top - 52}" text-anchor="middle" class="tiny">SIZE</text>')
+    parts.append(f'<text x="{line_x}" y="{top - 52}" class="tiny">MODEL LINE</text>')
     for col, task_name in enumerate(task_names):
         x = left + col * cell_w
         task = TASKS[task_name]
         parts.append(f'<text x="{x + 6}" y="{top - 48}" class="axis">{task["rq"]}</text>')
         parts.append(f'<text x="{x + 6}" y="{top - 30}" class="axis">{html.escape(task["label"])}</text>')
         parts.append(f'<text x="{x + 6}" y="{top - 12}" class="small">{html.escape(str(task["metric"]))}</text>')
+    for family, start_index, end_index in family_group_spans():
+        y = top + start_index * cell_h - 4
+        h = (end_index - start_index + 1) * cell_h - 6
+        fill = FAMILY_COLORS.get(family, "#6b7280")
+        parts.append(f'<rect x="{family_x}" y="{y}" width="{family_w}" height="{h}" fill="{fill}" opacity="0.12" stroke="{fill}" rx="8"/>')
+        parts.append(f'<text x="{family_x + family_w / 2}" y="{y + h / 2 + 4:.1f}" text-anchor="middle" class="axis">{html.escape(family)}</text>')
+        if start_index > 0:
+            divider_y = y - 4
+            parts.append(f'<line x1="{family_x}" y1="{divider_y}" x2="{width - 30}" y2="{divider_y}" stroke="#d8dee4"/>')
     for row_index, line in enumerate(lines):
         y = top + row_index * cell_h
-        parts.append(f'<text x="20" y="{y + 18}" class="axis">{html.escape(line)}</text>')
+        family, size_slot = line_meta_for(line)
+        fill = FAMILY_COLORS.get(family, "#6b7280")
+        parts.append(f'<rect x="{size_x}" y="{y + 2}" width="{size_w}" height="22" fill="{fill}" rx="11"/>')
+        parts.append(f'<text x="{size_x + size_w / 2}" y="{y + 18}" text-anchor="middle" fill="#ffffff" font-weight="700">{html.escape(size_slot)}</text>')
+        parts.append(f'<text x="{line_x}" y="{y + 18}" class="axis">{html.escape(line)}</text>')
         for col, task_name in enumerate(task_names):
             x = left + col * cell_w
             row = row_lookup.get((line, task_name))
@@ -1038,31 +1121,49 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
             stroke, dash = _status_stroke(row)
             parts.append(f'<rect x="{x}" y="{y}" width="{cell_w - 6}" height="{cell_h - 6}" fill="{color(value, low, high)}" stroke="{stroke}"{dash} rx="3"/>')
             parts.append(f'<text x="{x + 10}" y="{y + 20}">{label}</text>')
-    parts.append(f'<text x="24" y="{height - 26}" class="small">Rows include all public model lines plus the GPT4 reference. MiniMax strict blockers remain documented separately; non-MiniMax lines have full four-task coverage.</text>')
+    parts.append(f'<text x="24" y="{height - 44}" class="small">Rows include all public model lines plus the GPT4 reference. S/M/L are planning slots for within-family scaling, not a universal vendor taxonomy.</text>')
+    parts.append(f'<text x="24" y="{height - 24}" class="small">MiniMax strict blockers remain documented separately; non-MiniMax lines have full four-task coverage.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
 
 def svg_rankings(rankings: list[dict[str, object]], path: Path) -> None:
-    width = 1100
-    panel_h = 250
-    height = 50 + panel_h * len(TASKS)
+    width = 1240
+    row_h = 24
+    task_rows_by_name = {
+        task_name: [row for row in rankings if row["task_name"] == task_name]
+        for task_name in TASKS
+    }
+    panel_heights = {
+        task_name: 54 + max(1, len(task_rows)) * row_h + 24
+        for task_name, task_rows in task_rows_by_name.items()
+    }
+    height = 58 + sum(panel_heights.values())
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
-    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px}.title{font-size:18px;font-weight:700}.axis{font-weight:700}</style>")
+    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:20px;font-weight:700}.subtitle{fill:#4b5563}.axis{font-weight:700}.small{font-size:11px;fill:#4b5563}</style>")
     parts.append('<rect width="100%" height="100%" fill="white"/>')
-    parts.append('<text x="20" y="30" class="title">UniMoral per-task model rankings</text>')
-    for panel_index, (task_name, task) in enumerate(TASKS.items()):
-        y0 = 60 + panel_index * panel_h
-        task_rows = [row for row in rankings if row["task_name"] == task_name][:8]
-        parts.append(f'<text x="20" y="{y0}" class="axis">{html.escape(task["label"])}</text>')
+    parts.append('<text x="24" y="32" class="title">UniMoral per-task model rankings (all scored lines)</text>')
+    parts.append('<text x="24" y="52" class="subtitle">No top-8 truncation: each panel lists every model/reference line with a strict-complete score for that task.</text>')
+    y_cursor = 74
+    for task_name, task in TASKS.items():
+        panel_h = panel_heights[task_name]
+        y0 = y_cursor
+        task_rows = task_rows_by_name[task_name]
+        parts.append(f'<rect x="20" y="{y0 - 22}" width="{width - 40}" height="{panel_h - 10}" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>')
+        parts.append(f'<text x="36" y="{y0}" class="axis">{task["rq"]}: {html.escape(task["label"])} ({html.escape(str(task["metric"]))})</text>')
         max_value = max((float(row["value"]) for row in task_rows), default=1.0)
         for idx, row in enumerate(task_rows):
-            y = y0 + 20 + idx * 24
+            y = y0 + 26 + idx * row_h
             value = float(row["value"])
             bar_w = 760 * value / max_value if max_value else 0
-            parts.append(f'<text x="35" y="{y + 14}">{row["rank"]}. {html.escape(str(row["line_label"]))}</text>')
-            parts.append(f'<rect x="210" y="{y}" width="{bar_w:.1f}" height="18" fill="#6aa84f"/>')
-            parts.append(f'<text x="{220 + bar_w:.1f}" y="{y + 14}">{value:.3f}</text>')
+            family, size_slot = line_meta_for(str(row["line_label"]))
+            fill = FAMILY_COLORS.get(family, "#6b7280")
+            parts.append(f'<text x="44" y="{y + 14}">{row["rank"]}. {html.escape(str(row["line_label"]))}</text>')
+            parts.append(f'<rect x="178" y="{y + 1}" width="38" height="18" fill="{fill}" rx="9"/>')
+            parts.append(f'<text x="197" y="{y + 14}" text-anchor="middle" fill="#ffffff" font-weight="700">{html.escape(size_slot)}</text>')
+            parts.append(f'<rect x="246" y="{y}" width="{bar_w:.1f}" height="18" fill="{fill}" rx="3"/>')
+            parts.append(f'<text x="{256 + bar_w:.1f}" y="{y + 14}">{value:.3f}</text>')
+        y_cursor += panel_h
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
@@ -1585,6 +1686,7 @@ def format_value(value: object) -> str:
 
 
 def build_markdown_section(
+    rows: list[dict[str, object]],
     coverage: list[dict[str, object]],
     spreads: list[dict[str, object]],
     rankings: list[dict[str, object]],
@@ -1600,10 +1702,13 @@ def build_markdown_section(
         summary = "The release has clean scored coverage for all four UniMoral tasks: action prediction, moral typology classification, factor attribution, and consequence generation. Action prediction remains the legacy comparable scalar and is retained as RQ1; the added RQ2/RQ3/RQ4 artifacts expose the more diagnostic typology, attribution, and generation surfaces."
     else:
         summary = "The release now implements all four UniMoral task definitions and exports scored artifacts where model runs completed, but the current model-line matrix is not yet fully complete. Incomplete or parse-limited cells are listed in `unimoral-failure-checklist.csv`; action prediction remains the legacy comparable scalar and is retained as RQ1."
+    score_note = score_scale_note(rows)
     lines = [
         "## UniMoral Full Benchmark Coverage",
         "",
         summary,
+        "",
+        score_note,
         "",
         "| RQ | Task | Status | Strict complete | Reported cells | Primary metric | Mean | Range | Top line | Diagnostic read |",
         "| --- | --- | --- | ---: | ---: | --- | ---: | ---: | --- | --- |",
@@ -1641,9 +1746,9 @@ def build_markdown_section(
             "| Task | What it measures | Scoring note |",
             "| --- | --- | --- |",
             "| RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | Accuracy from the existing release matrix. |",
-            "| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Official-style weighted F1 is the primary release metric; exact-match membership accuracy is exported beside it. |",
-            "| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Official-style weighted F1 is the primary release metric; exact-match membership accuracy is exported beside it. |",
-            "| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar; BLEU and ROUGE-L are exported beside it. Official BERTScore F1 is exported in `unimoral-rq4-bertscore.csv` and merged into completed RQ4 rows when present. |",
+            "| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Official-style weighted F1 is the primary release metric, so the headline scale is lower than RQ1 accuracy; exact-match membership accuracy is exported beside it for interpretability. |",
+            "| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Official-style weighted F1 is the primary release metric, so the headline scale is lower than RQ1 accuracy; exact-match membership accuracy is exported beside it for interpretability. |",
+            "| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar, so the headline scale is much lower than classification accuracy; BLEU, ROUGE-L, and BERTScore F1 are exported beside it. Official BERTScore F1 is exported in `unimoral-rq4-bertscore.csv` and merged into completed RQ4 rows when present. |",
             "",
             f"![UniMoral RQ1-RQ4 dashboard]({figure_prefix}option1_unimoral_four_task_dashboard.svg)",
             "",
@@ -1675,11 +1780,13 @@ def update_markdown(path: Path, section: str) -> None:
 
 def update_markdown_reports(
     release_dir: Path,
+    rows: list[dict[str, object]],
     coverage: list[dict[str, object]],
     spreads: list[dict[str, object]],
     rankings: list[dict[str, object]],
 ) -> None:
     root_section = build_markdown_section(
+        rows,
         coverage,
         spreads,
         rankings,
@@ -1688,6 +1795,7 @@ def update_markdown_reports(
         completion_audit_link="results/release/2026-04-19-option1/unimoral-completion-audit.md",
     )
     release_section = build_markdown_section(
+        rows,
         coverage,
         spreads,
         rankings,
@@ -1728,7 +1836,7 @@ def main() -> None:
         write_completion_audit(args.release_dir, coverage, failures)
         update_manifest(args.release_dir)
         update_release_overview_tables(args.release_dir, coverage)
-        update_markdown_reports(args.release_dir, coverage, spreads, rankings)
+        update_markdown_reports(args.release_dir, rows, coverage, spreads, rankings)
         print(f"No Inspect .eval logs found under {args.log_root}; reused existing tracked UniMoral CSV artifacts.")
         return
 
@@ -1812,7 +1920,7 @@ def main() -> None:
     write_completion_audit(args.release_dir, coverage, failures)
     update_manifest(args.release_dir)
     update_release_overview_tables(args.release_dir, coverage)
-    update_markdown_reports(args.release_dir, coverage, spreads, rankings)
+    update_markdown_reports(args.release_dir, rows, coverage, spreads, rankings)
 
 
 if __name__ == "__main__":

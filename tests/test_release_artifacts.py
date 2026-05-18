@@ -973,8 +973,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "## Results First" in text
         assert "## Benchmark Result Visuals" in text
         assert "### 1. UniMoral RQ1-RQ4: full four-task dashboard" in text
-        assert "### 2. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy" in text
-        assert "### 3. UniMoral / SMID / Value Kaleidoscope: family-size scaling" in text
+        assert "### 2. SMID / Value Kaleidoscope: topline comparable accuracy" in text
+        assert "### 3. SMID / Value Kaleidoscope: family-size scaling" in text
         assert "### 4. CCD-Bench: cultural-cluster choice behavior" in text
         assert "### 5. CCD-Bench: dominant-option concentration" in text
         assert "### 6. DeNEVIL: proxy behavioral outcomes" in text
@@ -1126,7 +1126,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Family Scaling Profile" in family_scaling_svg
     assert 'preserveAspectRatio="xMidYMin meet"' in family_scaling_svg
     assert 'style="max-width:100%;height:auto"' in family_scaling_svg
-    assert "Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope." in family_scaling_svg
+    assert "Two comparable benchmark panels here: SMID and Value Kaleidoscope." in family_scaling_svg
     assert "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence." in family_scaling_svg
     assert "#4 CCD-Bench" not in family_scaling_svg
     assert "#5 Denevil" not in family_scaling_svg
@@ -1138,15 +1138,15 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "and dominant-option concentration figures." in family_scaling_svg
     assert "Read Denevil in the behavioral-outcomes figure." in family_scaling_svg
     assert "Do not mix proxy evidence into accuracy scaling." in family_scaling_svg
-    assert "DeepSeek: S/M/L text metrics are now parsed from saved logs" in family_scaling_svg
+    assert "DeepSeek: Value S/M/L are parsed from saved logs" in family_scaling_svg
     assert "Qwen" in family_scaling_svg
     assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
     if "MiniMax" in family_scaling_svg:
-        assert "MiniMax: S/M/L are scored on UniMoral and Value; S/L have SMID, while M has no SMID route." in family_scaling_svg
-    assert "Qwen: text scored at S/M/L; SMID at S/L." in family_scaling_svg
-    assert "Llama: text scored at S/M/L; SMID at S/L." in family_scaling_svg
-    assert "DeepSeek: S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists." in family_scaling_svg
-    assert "Gemma: full S/M/L scored sweep." in family_scaling_svg
+        assert "MiniMax: Value S/M/L are scored; SMID S/L have routes, while M has no SMID route." in family_scaling_svg
+    assert "Qwen: Value scored at S/M/L; SMID at S/L." in family_scaling_svg
+    assert "Llama: Value scored at S/M/L; SMID at S/L." in family_scaling_svg
+    assert "DeepSeek: Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists." in family_scaling_svg
+    assert "Gemma: full S/M/L sweep on SMID and Value." in family_scaling_svg
     assert "Only the small line is currently comparable." not in family_scaling_svg
 
     ccd_coverage_svg = (figure_dir / "option1_ccd_valid_choice_coverage.svg").read_text(encoding="utf-8")

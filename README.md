@@ -56,17 +56,17 @@ If you want the benchmark results before the tables, start here. These visuals p
 
 _This is the updated UniMoral result view. RQ1 action prediction is only one of four UniMoral surfaces; RQ2 moral typology, RQ3 factor attribution, and RQ4 consequence generation are shown separately with MiniMax caveats marked._
 
-### 2. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy
+### 2. SMID / Value Kaleidoscope: topline comparable accuracy
 
 ![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
 
-_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
+_UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
 
-### 3. UniMoral / SMID / Value Kaleidoscope: family-size scaling
+### 3. SMID / Value Kaleidoscope: family-size scaling
 
 ![Family scaling profile](figures/release/option1_family_scaling_profile.svg)
 
-_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
+_Use this second to compare size effects on SMID and Value after the separate UniMoral RQ1-RQ4 view, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
 
 ### 4. CCD-Bench: cultural-cluster choice behavior
 
@@ -469,6 +469,8 @@ If this repo informs a paper, proposal, slide deck, or benchmark comparison, cit
 
 The release now implements all four UniMoral task definitions and exports scored artifacts where model runs completed, but the current model-line matrix is not yet fully complete. Incomplete or parse-limited cells are listed in `unimoral-failure-checklist.csv`; action prediction remains the legacy comparable scalar and is retained as RQ1.
 
+Score-scale sanity check: RQ2/RQ3 headline values are official weighted F1, not the exact-match accuracy side column (strict-complete side accuracy spans RQ2 0.554-0.599, RQ3 0.561-0.631). RQ4's headline value is METEOR; BERTScore F1 spans 0.629-0.730. The lower RQ2/RQ3/RQ4 headline values therefore reflect metric scale and task difficulty, not an RQ1-style accuracy collapse.
+
 | RQ | Task | Status | Strict complete | Reported cells | Primary metric | Mean | Range | Top line | Diagnostic read |
 | --- | --- | --- | ---: | ---: | --- | ---: | ---: | --- | --- |
 | RQ1 | Action prediction | complete | 16/16 | 16/16 | accuracy | 0.655 | 0.121 | DeepSeek-M (0.684) | diagnostic |
@@ -483,9 +485,9 @@ The prompt-to-artifact completion audit, including the verifier-checked CSV-leve
 | Task | What it measures | Scoring note |
 | --- | --- | --- |
 | RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | Accuracy from the existing release matrix. |
-| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Official-style weighted F1 is the primary release metric; exact-match membership accuracy is exported beside it. |
-| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Official-style weighted F1 is the primary release metric; exact-match membership accuracy is exported beside it. |
-| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar; BLEU and ROUGE-L are exported beside it. Official BERTScore F1 is exported in `unimoral-rq4-bertscore.csv` and merged into completed RQ4 rows when present. |
+| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Official-style weighted F1 is the primary release metric, so the headline scale is lower than RQ1 accuracy; exact-match membership accuracy is exported beside it for interpretability. |
+| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Official-style weighted F1 is the primary release metric, so the headline scale is lower than RQ1 accuracy; exact-match membership accuracy is exported beside it for interpretability. |
+| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar, so the headline scale is much lower than classification accuracy; BLEU, ROUGE-L, and BERTScore F1 are exported beside it. Official BERTScore F1 is exported in `unimoral-rq4-bertscore.csv` and merged into completed RQ4 rows when present. |
 
 ![UniMoral RQ1-RQ4 dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)
 

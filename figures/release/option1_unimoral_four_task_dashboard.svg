@@ -3,7 +3,7 @@
 <rect width="100%" height="100%" fill="#ffffff"/>
 <text x="36" y="44" class="title">UniMoral RQ1-RQ4 dashboard</text>
 <text x="36" y="70" class="subtitle">Updated UniMoral view: action prediction is only RQ1; RQ2 typology, RQ3 attribution, and RQ4 consequence generation are shown separately.</text>
-<text x="36" y="92" class="subtitle">Non-MiniMax model lines plus the GPT4 reference have complete scored artifacts across all four tasks; MiniMax caveats are marked with * and tracked in the failure checklist.</text>
+<text x="36" y="92" class="subtitle">RQ2/RQ3 use weighted F1 and RQ4 uses METEOR, so their headline scale is lower than RQ1 accuracy; side metrics are shown in the cards.</text>
 <rect x="36" y="122" width="410" height="132" class="card"/>
 <text x="54" y="152" class="axis">RQ1: Action prediction</text>
 <text x="54" y="178" class="small">Metric: accuracy</text>
@@ -12,19 +12,19 @@
 <text x="54" y="244" class="small">Top line: DeepSeek-M (0.684)</text>
 <rect x="466" y="122" width="410" height="132" class="card"/>
 <text x="484" y="152" class="axis">RQ2: Moral typology</text>
-<text x="484" y="178" class="small">Metric: official_weighted_f1</text>
+<text x="484" y="178" class="small">Metric: weighted F1; side acc 0.554-0.599</text>
 <text x="484" y="200" class="small">Strict complete: 15/16; reported: 16/16</text>
 <text x="484" y="222" class="small">Mean/range: 0.315 / 0.080</text>
 <text x="484" y="244" class="small">Top line: Llama-S (0.354)</text>
 <rect x="896" y="122" width="410" height="132" class="card"/>
 <text x="914" y="152" class="axis">RQ3: Factor attribution</text>
-<text x="914" y="178" class="small">Metric: official_weighted_f1</text>
+<text x="914" y="178" class="small">Metric: weighted F1; side acc 0.561-0.631</text>
 <text x="914" y="200" class="small">Strict complete: 14/16; reported: 15/16</text>
 <text x="914" y="222" class="small">Mean/range: 0.256 / 0.022</text>
 <text x="914" y="244" class="small">Top line: DeepSeek-S (0.264)</text>
 <rect x="1326" y="122" width="410" height="132" class="card"/>
 <text x="1344" y="152" class="axis">RQ4: Consequence generation</text>
-<text x="1344" y="178" class="small">Metric: meteor</text>
+<text x="1344" y="178" class="small">Metric: METEOR; BERTScore 0.629-0.730</text>
 <text x="1344" y="200" class="small">Strict complete: 14/16; reported: 15/16</text>
 <text x="1344" y="222" class="small">Mean/range: 0.116 / 0.081</text>
 <text x="1344" y="244" class="small">Top line: Llama-L (0.157)</text>
@@ -164,6 +164,6 @@
 <circle cx="1482" cy="871" r="7" fill="#8a5a44"/>
 <text x="1500" y="866" class="axis">MiniMax</text>
 <text x="1500" y="886" class="small">caveats: see failure checklist</text>
-<text x="60" y="934" class="small">See the full score heatmap below for all 16 public/reference lines and all four RQ columns.</text>
+<text x="60" y="934" class="small">All run lines are shown in the full score heatmap and all-line ranking below: Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus GPT4 Ref.</text>
 <text x="60" y="958" class="small">* marks reported-but-not-strict cells; MiniMax remaining gaps are documented in unimoral-failure-checklist.csv.</text>
 </svg>
