@@ -337,6 +337,7 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         "unimoral_four_task_dashboard_figure": "figures/release/option1_unimoral_four_task_dashboard.svg",
         "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
         "unimoral_generation_quality_figure": "figures/release/option1_unimoral_generation_quality.svg",
+        "unimoral_family_scaling_figure": "figures/release/option1_unimoral_family_scaling.svg",
         "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
         "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
     }

@@ -11,6 +11,7 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 
 - `option1_unimoral_task_heatmap.svg`: main UniMoral classification figure, showing RQ1-RQ3 with one shared exact-match accuracy metric
 - `option1_unimoral_generation_quality.svg`: separate UniMoral RQ4 generation-quality figure, using BERTScore F1 and METEOR
+- `option1_unimoral_family_scaling.svg`: UniMoral RQ1-RQ4 family-size line charts, showing S/M/L movement within each task
 - `option1_family_size_progress_overview.svg`: line-level completion overview across the published family-size matrix
 - `option1_benchmark_accuracy_bars.svg`: benchmark-faithful comparable-accuracy comparison for `SMID` and `Value Kaleidoscope`; UniMoral is handled in the separate accuracy/generation figures
 - `option1_benchmark_difficulty_profile.svg`: benchmark-level mean / range summary for the comparable slice
@@ -24,6 +25,7 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 - `option1_unimoral_four_task_dashboard.svg`: supporting UniMoral RQ1-RQ4 dashboard, showing coverage and metric boundaries
 - `option1_unimoral_task_heatmap.svg`: main all-line view across RQ1-RQ3 using one shared exact-match accuracy metric, with family blocks and S/M/L badges
 - `option1_unimoral_generation_quality.svg`: RQ4 consequence-generation quality view, using BERTScore F1 as the main semantic metric and METEOR as a side metric
+- `option1_unimoral_family_scaling.svg`: RQ-by-RQ family-size line charts; read it as task-specific scaling, not as a single UniMoral scalar
 - `option1_unimoral_task_spread.svg`: exact-match accuracy spread readout for the RQ1-RQ3 classification tasks
 - `option1_unimoral_task_rankings.svg`: per-task exact-match accuracy rankings for the completed UniMoral classification cells
 

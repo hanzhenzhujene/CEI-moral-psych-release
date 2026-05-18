@@ -9448,6 +9448,7 @@ def build_topline_summary(
     benchmark_difficulty_summary: list[dict[str, Any]],
     ccd_choice_distribution: list[dict[str, Any]],
     denevil_behavior_summary: list[dict[str, Any]],
+    release_dir: Path | None = None,
 ) -> str:
     total_samples = sum(row["total_samples"] for row in rows)
     faithful_tasks = sum(row["benchmark_mode"] == "benchmark_faithful" for row in rows)
@@ -9465,6 +9466,7 @@ def build_topline_summary(
         benchmark_difficulty_summary,
         ccd_choice_distribution,
         denevil_behavior_summary,
+        release_dir,
     )
     lines.extend(
         [
@@ -9684,12 +9686,62 @@ def current_research_group_status_takeaway() -> str | None:
     return None
 
 
+def unimoral_rq_tldr_takeaway(release_dir: Path | None) -> str | None:
+    if release_dir is None:
+        return None
+    path = release_dir / "unimoral-full-benchmark.csv"
+    if not path.exists():
+        return None
+
+    def value_for(row: dict[str, str], field: str) -> float | None:
+        value = row.get(field)
+        if value in {None, "", "n/a"}:
+            return None
+        return float(value)
+
+    with path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    task_specs = [
+        ("RQ1", "unimoral_action_prediction", "accuracy"),
+        ("RQ2", "unimoral_moral_typology", "accuracy"),
+        ("RQ3", "unimoral_factor_attribution", "accuracy"),
+        ("RQ4 semantic", "unimoral_consequence_generation", "bert_score_f1"),
+        ("RQ4 lexical", "unimoral_consequence_generation", "meteor"),
+    ]
+    winners: list[str] = []
+    for label, task_name, field in task_specs:
+        candidates = []
+        for row in rows:
+            if row.get("task_name") != task_name:
+                continue
+            value = value_for(row, field)
+            if value is None:
+                continue
+            status = str(row.get("status", ""))
+            if field == "accuracy" and status != "complete":
+                continue
+            if field != "accuracy" and not status.startswith("complete"):
+                continue
+            candidates.append((row.get("line_label", ""), value))
+        if candidates:
+            line_label, value = max(candidates, key=lambda item: item[1])
+            winners.append(f"{label} `{line_label}` {fmt_float(value)}")
+    if len(winners) < 4:
+        return None
+    return (
+        "- **UniMoral RQ-level interpretation:** The four-task view should not be collapsed into one scalar: "
+        f"task winners rotate across {', '.join(winners)}. "
+        "That pattern supports task-specific moral-reasoning strengths rather than a simple bigger-is-better family scaling story."
+    )
+
+
 def append_tldr_section(
     lines: list[str],
     benchmark_comparison: list[dict[str, Any]],
     benchmark_difficulty_summary: list[dict[str, Any]],
     ccd_choice_distribution: list[dict[str, Any]],
     denevil_behavior_summary: list[dict[str, Any]],
+    release_dir: Path | None = None,
 ) -> None:
     def as_float(value: Any) -> float | None:
         if value in {None, "", "n/a"}:
@@ -9817,6 +9869,9 @@ def append_tldr_section(
     lines.append(
         f"- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy ({fmt_float(as_float(smid_summary['mean_accuracy']))}) and widest spread ({fmt_float(as_float(smid_summary['spread']))}), while `UniMoral` is tightly clustered ({fmt_float(as_float(unimoral_summary['spread']))} spread). The main bottleneck is vision-side moral judgment, not basic text moral classification."
     )
+    unimoral_takeaway = unimoral_rq_tldr_takeaway(release_dir)
+    if unimoral_takeaway is not None:
+        lines.append(unimoral_takeaway)
     if gemma_s is not None and gemma_m is not None and gemma_l is not None and llama_m is not None and llama_l is not None:
         lines.append(
             f"- **There is no universal scaling law:** `Gemma` is non-monotonic on SMID ({fmt_float(as_float(gemma_s['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_m['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_l['smid_average_accuracy']))}), and `Llama-M` still beats `Llama-L` on Value ({fmt_float(as_float(llama_m['value_average_accuracy']))} vs {fmt_float(as_float(llama_l['value_average_accuracy']))}). Size helps on some tasks, but not in one clean monotonic pattern."
@@ -9868,31 +9923,37 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "_RQ4 is a generation task, so it is separated from the accuracy chart and read with BERTScore F1 plus METEOR._",
             "",
-            "### 3. SMID / Value Kaleidoscope: topline comparable accuracy",
+            "### 3. UniMoral RQ1-RQ4: family-size scaling",
+            "",
+            f"![UniMoral family-size scaling by RQ]({figure_prefix}/option1_unimoral_family_scaling.svg)",
+            "",
+            "_Use this to see whether S/M/L scaling helps within each UniMoral RQ. The short answer is task-specific: the winning line changes across RQs, so UniMoral should not be reduced to one monotonic size curve._",
+            "",
+            "### 4. SMID / Value Kaleidoscope: topline comparable accuracy",
             "",
             f"![Comparable accuracy bars]({figure_prefix}/option1_benchmark_accuracy_bars.svg)",
             "",
-            "_UniMoral is handled in Figures 1-2; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._",
+            "_UniMoral is handled in Figures 1-3; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._",
             "",
-            "### 4. SMID / Value Kaleidoscope: family-size scaling",
+            "### 5. SMID / Value Kaleidoscope: family-size scaling",
             "",
             f"![Family scaling profile]({figure_prefix}/option1_family_scaling_profile.svg)",
             "",
             "_Use this next to compare size effects on SMID and Value after the separate UniMoral views, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._",
             "",
-            "### 5. CCD-Bench: cultural-cluster choice behavior",
+            "### 6. CCD-Bench: cultural-cluster choice behavior",
             "",
             f"![CCD choice distribution]({figure_prefix}/option1_ccd_choice_distribution.svg)",
             "",
             "_This is the main CCD-Bench result: deviation from the 10% uniform baseline across the ten canonical cultural clusters._",
             "",
-            "### 6. CCD-Bench: dominant-option concentration",
+            "### 7. CCD-Bench: dominant-option concentration",
             "",
             f"![CCD dominant-option share]({figure_prefix}/option1_ccd_dominant_option_share.svg)",
             "",
             "_This is the compact CCD-Bench summary: how much each line collapses onto one dominant cluster, and how broadly it still spreads across the option set._",
             "",
-            "### 7. DeNEVIL: proxy behavioral outcomes",
+            "### 8. DeNEVIL: proxy behavioral outcomes",
             "",
             f"![DeNEVIL proxy behavioral outcomes]({figure_prefix}/option1_denevil_behavior_outcomes.svg)",
             "",
@@ -10612,6 +10673,7 @@ def build_repo_readme(
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
     deepseek_sm_readout: list[dict[str, Any]],
+    release_dir: Path | None = None,
 ) -> str:
     public_families, public_families_label, public_family_count = public_family_summary(family_size_progress)
     lines = [
@@ -10636,6 +10698,7 @@ def build_repo_readme(
         benchmark_difficulty_summary,
         ccd_choice_distribution,
         denevil_behavior_summary,
+        release_dir,
     )
     lines.extend(
         [
@@ -10771,6 +10834,7 @@ def build_repo_readme(
             "- `figures/release/option1_denevil_behavior_outcomes.svg`",
             "- `figures/release/option1_unimoral_task_heatmap.svg`",
             "- `figures/release/option1_unimoral_generation_quality.svg`",
+            "- `figures/release/option1_unimoral_family_scaling.svg`",
             "",
             "For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibility.md). For the repo layer map, see [docs/repo-architecture.md](docs/repo-architecture.md).",
             "",
@@ -10806,6 +10870,7 @@ def build_release_readme(
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
     deepseek_sm_readout: list[dict[str, Any]],
+    release_dir: Path | None = None,
 ) -> str:
     llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
     public_families, public_families_label, public_family_count = public_family_summary(family_size_progress)
@@ -10826,6 +10891,7 @@ def build_release_readme(
         benchmark_difficulty_summary,
         ccd_choice_distribution,
         denevil_behavior_summary,
+        release_dir,
     )
     append_benchmark_result_visuals_section(lines, "../../../figures/release")
     lines.extend(
@@ -10940,6 +11006,7 @@ def build_release_readme(
             "",
             f"- {markdown_link('UniMoral RQ1-RQ3 accuracy', '../../../figures/release/option1_unimoral_task_heatmap.svg')}: main classification view using one shared exact-match accuracy metric",
             f"- {markdown_link('UniMoral RQ4 generation quality', '../../../figures/release/option1_unimoral_generation_quality.svg')}: separate generation-quality view using BERTScore F1 and METEOR",
+            f"- {markdown_link('UniMoral family-size scaling', '../../../figures/release/option1_unimoral_family_scaling.svg')}: RQ-by-RQ S/M/L line charts for the UniMoral result surface",
             f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: SMID/Value cross-model comparison after the UniMoral figures",
             f"- {markdown_link('benchmark difficulty profile', '../../../figures/release/option1_benchmark_difficulty_profile.svg')}: mean and spread for the directly comparable benchmark groups",
             f"- {markdown_link('family scaling profile', '../../../figures/release/option1_family_scaling_profile.svg')}: family-size scaling across SMID and Value only",
@@ -11041,6 +11108,7 @@ def build_jenny_group_report(
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
     deepseek_sm_readout: list[dict[str, Any]],
+    release_dir: Path | None = None,
 ) -> str:
     total_samples = sum(row["total_samples"] for row in rows)
     llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
@@ -11062,6 +11130,7 @@ def build_jenny_group_report(
         benchmark_difficulty_summary,
         ccd_choice_distribution,
         denevil_behavior_summary,
+        release_dir,
     )
     append_benchmark_result_visuals_section(lines, "../../../figures/release")
     lines.extend(
@@ -11855,6 +11924,7 @@ def main() -> None:
         benchmark_difficulty_summary,
         ccd_choice_distribution,
         denevil_behavior_summary,
+        args.release_dir,
     )
     write_text(args.release_dir / "topline-summary.md", topline_md)
     write_text(
@@ -11875,6 +11945,7 @@ def main() -> None:
             denevil_proxy_summary,
             denevil_proxy_examples,
             deepseek_sm_readout,
+            args.release_dir,
         ),
     )
     if (
@@ -11898,6 +11969,7 @@ def main() -> None:
                 denevil_proxy_summary,
                 denevil_proxy_examples,
                 deepseek_sm_readout,
+                args.release_dir,
             ),
         )
     write_text(
@@ -11917,6 +11989,7 @@ def main() -> None:
             denevil_proxy_summary,
             denevil_proxy_examples,
             deepseek_sm_readout,
+            args.release_dir,
         ),
     )
     write_text(args.release_dir / "source" / "README.md", build_source_readme())

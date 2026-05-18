@@ -974,11 +974,12 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "## Benchmark Result Visuals" in text
         assert "### 1. UniMoral RQ1-RQ3: exact-match accuracy" in text
         assert "### 2. UniMoral RQ4: generation quality" in text
-        assert "### 3. SMID / Value Kaleidoscope: topline comparable accuracy" in text
-        assert "### 4. SMID / Value Kaleidoscope: family-size scaling" in text
-        assert "### 5. CCD-Bench: cultural-cluster choice behavior" in text
-        assert "### 6. CCD-Bench: dominant-option concentration" in text
-        assert "### 7. DeNEVIL: proxy behavioral outcomes" in text
+        assert "### 3. UniMoral RQ1-RQ4: family-size scaling" in text
+        assert "### 4. SMID / Value Kaleidoscope: topline comparable accuracy" in text
+        assert "### 5. SMID / Value Kaleidoscope: family-size scaling" in text
+        assert "### 6. CCD-Bench: cultural-cluster choice behavior" in text
+        assert "### 7. CCD-Bench: dominant-option concentration" in text
+        assert "### 8. DeNEVIL: proxy behavioral outcomes" in text
         assert "## Interpretation" in text
         assert "### Interpretation At A Glance" in text
         assert "### Benchmark Reading Guide" in text
@@ -1004,6 +1005,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "ccd-choice-distribution.csv" in text
         assert "option1_unimoral_task_heatmap.svg" in text
         assert "option1_unimoral_generation_quality.svg" in text
+        assert "option1_unimoral_family_scaling.svg" in text
         assert "option1_ccd_choice_distribution.svg" in text
         assert "option1_ccd_dominant_option_share.svg" in text
         assert "option1_denevil_behavior_outcomes.svg" in text
@@ -1028,6 +1030,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "Low-level DeNEVIL QA/provenance artifacts remain exported" in text
         assert "## Interpretation Notes" not in text
         assert text.count("![Comparable accuracy bars]") == 1
+        assert text.count("![UniMoral family-size scaling by RQ]") == 1
         assert text.count("![Family scaling profile]") == 1
         assert text.count("![CCD choice distribution]") == 1
         assert text.count("![CCD dominant-option share]") == 1

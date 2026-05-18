@@ -20,6 +20,7 @@ If you only read one section, read these key takeaways:
 - **Best text-only line:** `MiniMax-M` is the strongest pure text line, reaching UniMoral 0.659 and Value 0.740. It should not be called the best all-around line because there is no public SMID route on that line.
 - **GPT-4o-mini reference line:** `GPT-4o-mini Ref` is added as a single text-only reference point with 76,486/76,486 parsed prompts: UniMoral 0.673, Value 0.701, and CCD-Bench 100.0% valid-choice coverage. It is not a size-family curve, and SMID / DeNEVIL remain intentionally `n/a`.
 - **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.364) and widest spread (0.285), while `UniMoral` is tightly clustered (0.121 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
+- **UniMoral RQ-level interpretation:** The four-task view should not be collapsed into one scalar: task winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `Gemma-S` 0.599, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `Llama-L` 0.157. That pattern supports task-specific moral-reasoning strengths rather than a simple bigger-is-better family scaling story.
 - **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
 - **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `Llama-S` at 23.9%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
 - **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates (92.4% to 99.5% protective response rate). `DeepSeek-S` no longer has the old visibility-collapse problem in the May 9 saved rerun (0.2% no-visible proxy traces).
@@ -63,31 +64,37 @@ _This is the main UniMoral classification view. RQ1, RQ2, and RQ3 all use exact-
 
 _RQ4 is a generation task, so it is separated from the accuracy chart and read with BERTScore F1 plus METEOR._
 
-### 3. SMID / Value Kaleidoscope: topline comparable accuracy
+### 3. UniMoral RQ1-RQ4: family-size scaling
+
+![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
+
+_Use this to see whether S/M/L scaling helps within each UniMoral RQ. The short answer is task-specific: the winning line changes across RQs, so UniMoral should not be reduced to one monotonic size curve._
+
+### 4. SMID / Value Kaleidoscope: topline comparable accuracy
 
 ![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
 
-_UniMoral is handled in Figures 1-2; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
+_UniMoral is handled in Figures 1-3; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
 
-### 4. SMID / Value Kaleidoscope: family-size scaling
+### 5. SMID / Value Kaleidoscope: family-size scaling
 
 ![Family scaling profile](figures/release/option1_family_scaling_profile.svg)
 
 _Use this next to compare size effects on SMID and Value after the separate UniMoral views, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
 
-### 5. CCD-Bench: cultural-cluster choice behavior
+### 6. CCD-Bench: cultural-cluster choice behavior
 
 ![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)
 
 _This is the main CCD-Bench result: deviation from the 10% uniform baseline across the ten canonical cultural clusters._
 
-### 6. CCD-Bench: dominant-option concentration
+### 7. CCD-Bench: dominant-option concentration
 
 ![CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)
 
 _This is the compact CCD-Bench summary: how much each line collapses onto one dominant cluster, and how broadly it still spreads across the option set._
 
-### 7. DeNEVIL: proxy behavioral outcomes
+### 8. DeNEVIL: proxy behavioral outcomes
 
 ![DeNEVIL proxy behavioral outcomes](figures/release/option1_denevil_behavior_outcomes.svg)
 
@@ -458,6 +465,7 @@ Expected high-level outputs:
 - `figures/release/option1_denevil_behavior_outcomes.svg`
 - `figures/release/option1_unimoral_task_heatmap.svg`
 - `figures/release/option1_unimoral_generation_quality.svg`
+- `figures/release/option1_unimoral_family_scaling.svg`
 
 For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibility.md). For the repo layer map, see [docs/repo-architecture.md](docs/repo-architecture.md).
 
@@ -501,4 +509,6 @@ The prompt-to-artifact completion audit, including the verifier-checked CSV-leve
 ![UniMoral classification accuracy heatmap](figures/release/option1_unimoral_task_heatmap.svg)
 
 ![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)
+
+![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
 <!-- UNIMORAL_FULL_BENCHMARK_END -->

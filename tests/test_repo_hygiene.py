@@ -84,6 +84,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme
     assert "figures/release/option1_unimoral_task_heatmap.svg" in readme
     assert "figures/release/option1_unimoral_generation_quality.svg" in readme
+    assert "figures/release/option1_unimoral_family_scaling.svg" in readme
     assert "figures/release/option1_family_scaling_profile.svg" in readme
     assert "figures/release/option1_ccd_choice_distribution.svg" in readme
     assert "figures/release/option1_ccd_dominant_option_share.svg" in readme

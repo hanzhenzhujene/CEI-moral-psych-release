@@ -148,6 +148,7 @@ REQUIRED_FIGURE_MARKERS = {
     "option1_unimoral_four_task_dashboard.svg": "UniMoral RQ1-RQ4 dashboard",
     "option1_unimoral_task_heatmap.svg": "UniMoral RQ1-RQ3 exact-match accuracy",
     "option1_unimoral_generation_quality.svg": "UniMoral RQ4 generation quality",
+    "option1_unimoral_family_scaling.svg": "UniMoral family-size scaling by RQ",
     "option1_unimoral_task_rankings.svg": "UniMoral per-task model rankings",
     "option1_unimoral_task_spread.svg": "UniMoral task spread and saturation",
 }
@@ -329,12 +330,7 @@ def verify_release(
     for filename in required_files:
         require_file(release_dir / filename, errors)
 
-    for filename in [
-        "option1_unimoral_four_task_dashboard.svg",
-        "option1_unimoral_task_heatmap.svg",
-        "option1_unimoral_task_rankings.svg",
-        "option1_unimoral_task_spread.svg",
-    ]:
+    for filename in REQUIRED_FIGURE_MARKERS:
         require_file(figure_dir / filename, errors)
 
     if errors:
@@ -809,6 +805,7 @@ def verify_release(
         "unimoral_four_task_dashboard_figure",
         "unimoral_task_heatmap_figure",
         "unimoral_generation_quality_figure",
+        "unimoral_family_scaling_figure",
         "unimoral_task_rankings_figure",
         "unimoral_task_spread_figure",
     ]:

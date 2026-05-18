@@ -1343,6 +1343,138 @@ def svg_spread(rows: list[dict[str, object]], path: Path) -> None:
     path.write_text("\n".join(parts), encoding="utf-8")
 
 
+def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
+    specs = [
+        ("unimoral_action_prediction", "accuracy", "RQ1 action", "Accuracy", 0.55, 0.70, [0.55, 0.60, 0.65, 0.70]),
+        ("unimoral_moral_typology", "accuracy", "RQ2 typology", "Accuracy", 0.54, 0.61, [0.54, 0.56, 0.58, 0.60]),
+        ("unimoral_factor_attribution", "accuracy", "RQ3 attribution", "Accuracy", 0.54, 0.64, [0.54, 0.58, 0.62, 0.64]),
+        ("unimoral_consequence_generation", "bert_score_f1", "RQ4 generation", "BERTScore F1", 0.60, 0.75, [0.60, 0.65, 0.70, 0.75]),
+        ("unimoral_consequence_generation", "meteor", "RQ4 generation", "METEOR", 0.07, 0.16, [0.07, 0.10, 0.13, 0.16]),
+    ]
+    panel_positions = [
+        (48, 160, 500, 300),
+        (590, 160, 500, 300),
+        (1132, 160, 500, 300),
+        (210, 520, 600, 330),
+        (890, 520, 600, 330),
+    ]
+    size_positions = {"S": 0, "M": 1, "L": 2, "Ref": 3}
+    families = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT4 only"]
+    rows_by_task = {}
+    for row in rows:
+        rows_by_task.setdefault(str(row.get("task_name", "")), []).append(row)
+
+    def point_rows(task_name: str, metric: str) -> dict[str, list[tuple[int, str, float]]]:
+        output = {family: [] for family in families}
+        for row in rows_by_task.get(task_name, []):
+            value = field_value(row, metric)
+            if value is None:
+                continue
+            status = str(row.get("status", ""))
+            if metric == "accuracy" and status != "complete":
+                continue
+            if metric != "accuracy" and not status.startswith("complete"):
+                continue
+            family, size_slot = line_meta_for(str(row.get("line_label", "")))
+            if family not in output or size_slot not in size_positions:
+                continue
+            output[family].append((size_positions[size_slot], size_slot, value))
+        for family in output:
+            output[family].sort(key=lambda item: item[0])
+        return output
+
+    def scaled_y(value: float, low: float, high: float, plot_y: float, plot_h: float) -> float:
+        if high <= low:
+            return plot_y + plot_h / 2
+        position = max(0.0, min(1.0, (value - low) / (high - low)))
+        return plot_y + plot_h * (1.0 - position)
+
+    def best_label(task_name: str, metric: str) -> str:
+        candidates = []
+        for row in rows_by_task.get(task_name, []):
+            value = field_value(row, metric)
+            if value is None:
+                continue
+            status = str(row.get("status", ""))
+            if metric == "accuracy" and status != "complete":
+                continue
+            if metric != "accuracy" and not status.startswith("complete"):
+                continue
+            candidates.append((display_line_label(row.get("line_label", "")), value))
+        if not candidates:
+            return "n/a"
+        label, value = max(candidates, key=lambda item: item[1])
+        return f"{label} ({value:.3f})"
+
+    width, height = 1680, 960
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
+    parts.append(
+        "<style>"
+        "text{font-family:Arial,sans-serif;font-size:13px;fill:#17202a}"
+        ".title{font-size:30px;font-weight:700}"
+        ".subtitle{font-size:15px;fill:#334155}"
+        ".axis{font-weight:700}"
+        ".small{font-size:12px;fill:#475569}"
+        ".tiny{font-size:11px;fill:#64748b;font-weight:700}"
+        ".panel{fill:#fbfcfd;stroke:#d8dee4;rx:8}"
+        "</style>"
+    )
+    parts.append('<rect width="100%" height="100%" fill="white"/>')
+    parts.append('<text x="42" y="48" class="title">UniMoral family-size scaling by RQ</text>')
+    parts.append('<text x="42" y="78" class="subtitle">Line charts show how each family moves across S/M/L slots inside each UniMoral task. Higher is better in every panel.</text>')
+    parts.append('<text x="42" y="102" class="subtitle">Classification panels use strict-complete accuracy cells. RQ4 uses rows with usable generation scores; remaining MiniMax caveats stay in the audit tables.</text>')
+    parts.append('<text x="42" y="126" class="subtitle">Each panel has its own y-axis so within-task scaling patterns are visible; read the heatmap for cross-RQ accuracy comparison.</text>')
+
+    for (task_name, metric, title, metric_label, low, high, ticks), (x, y, panel_w, panel_h) in zip(specs, panel_positions):
+        plot_x = x + 72
+        plot_y = y + 70
+        plot_w = panel_w - 118
+        plot_h = panel_h - 128
+        parts.append(f'<rect x="{x}" y="{y}" width="{panel_w}" height="{panel_h}" class="panel"/>')
+        parts.append(f'<text x="{x + 22}" y="{y + 32}" class="axis">{html.escape(title)}</text>')
+        parts.append(f'<text x="{x + 22}" y="{y + 52}" class="small">{html.escape(metric_label)}; top: {html.escape(best_label(task_name, metric))}</text>')
+        for tick in ticks:
+            ty = scaled_y(float(tick), low, high, plot_y, plot_h)
+            parts.append(f'<line x1="{plot_x}" y1="{ty:.1f}" x2="{plot_x + plot_w}" y2="{ty:.1f}" stroke="#e5e7eb"/>')
+            parts.append(f'<text x="{plot_x - 10}" y="{ty + 4:.1f}" text-anchor="end" class="tiny">{tick:.2f}</text>')
+        for label, index in size_positions.items():
+            tx = plot_x + plot_w * index / 3
+            parts.append(f'<line x1="{tx:.1f}" y1="{plot_y}" x2="{tx:.1f}" y2="{plot_y + plot_h}" stroke="#eef2f7"/>')
+            parts.append(f'<text x="{tx:.1f}" y="{plot_y + plot_h + 28}" text-anchor="middle" class="axis">{html.escape(label)}</text>')
+        for family, points in point_rows(task_name, metric).items():
+            if not points:
+                continue
+            fill = FAMILY_COLORS.get(family, "#6b7280")
+            coords = [
+                (
+                    plot_x + plot_w * slot_index / 3,
+                    scaled_y(value, low, high, plot_y, plot_h),
+                    slot_index,
+                    value,
+                )
+                for slot_index, _, value in points
+            ]
+            for previous, current in zip(coords, coords[1:]):
+                dash = ' stroke-dasharray="6 5"' if current[2] - previous[2] > 1 else ""
+                parts.append(
+                    f'<line x1="{previous[0]:.1f}" y1="{previous[1]:.1f}" x2="{current[0]:.1f}" y2="{current[1]:.1f}" '
+                    f'stroke="{fill}" stroke-width="3" stroke-linecap="round"{dash}/>'
+                )
+            for px, py, _, _value in coords:
+                parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="7" fill="white" stroke="{fill}" stroke-width="3"/>')
+                parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="3" fill="{fill}"/>')
+    legend_x, legend_y = 92, 888
+    parts.append(f'<text x="{legend_x}" y="{legend_y}" class="axis">Family legend</text>')
+    for index, family in enumerate(families):
+        x = legend_x + 130 + index * 215
+        fill = FAMILY_COLORS.get(family, "#6b7280")
+        parts.append(f'<circle cx="{x}" cy="{legend_y - 5}" r="7" fill="{fill}"/>')
+        parts.append(f'<text x="{x + 14}" y="{legend_y}" class="small">{html.escape(display_family_label(family))}</text>')
+    parts.append('<text x="92" y="930" class="small">Takeaway: UniMoral scaling is task-specific. Winners rotate across RQs, and GPT-4o-mini Ref is a one-point text reference rather than a GPT S/M/L curve.</text>')
+    parts.append("</svg>")
+    path.write_text("\n".join(parts), encoding="utf-8")
+
+
 def update_manifest(release_dir: Path) -> None:
     manifest_path = release_dir / "release-manifest.json"
     if not manifest_path.exists():
@@ -1401,6 +1533,7 @@ def update_manifest(release_dir: Path) -> None:
             "unimoral_four_task_dashboard_figure": "figures/release/option1_unimoral_four_task_dashboard.svg",
             "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
             "unimoral_generation_quality_figure": "figures/release/option1_unimoral_generation_quality.svg",
+            "unimoral_family_scaling_figure": "figures/release/option1_unimoral_family_scaling.svg",
             "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
             "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
         }
@@ -1425,6 +1558,7 @@ def update_manifest(release_dir: Path) -> None:
             "figures/release/option1_unimoral_four_task_dashboard.svg",
             "figures/release/option1_unimoral_task_heatmap.svg",
             "figures/release/option1_unimoral_generation_quality.svg",
+            "figures/release/option1_unimoral_family_scaling.svg",
             "figures/release/option1_unimoral_task_rankings.svg",
             "figures/release/option1_unimoral_task_spread.svg",
         ],
@@ -1912,6 +2046,8 @@ def build_markdown_section(
             f"![UniMoral classification accuracy heatmap]({figure_prefix}option1_unimoral_task_heatmap.svg)",
             "",
             f"![UniMoral RQ4 generation quality]({figure_prefix}option1_unimoral_generation_quality.svg)",
+            "",
+            f"![UniMoral family-size scaling by RQ]({figure_prefix}option1_unimoral_family_scaling.svg)",
         ]
     )
     return "\n".join(lines).strip() + "\n"
@@ -1986,6 +2122,7 @@ def main() -> None:
         svg_four_task_dashboard(rows, coverage, spreads, rankings, args.figure_dir / "option1_unimoral_four_task_dashboard.svg")
         svg_heatmap(rows, args.figure_dir / "option1_unimoral_task_heatmap.svg")
         svg_generation_quality(rows, args.figure_dir / "option1_unimoral_generation_quality.svg")
+        svg_family_scaling(rows, args.figure_dir / "option1_unimoral_family_scaling.svg")
         svg_rankings(rows, args.figure_dir / "option1_unimoral_task_rankings.svg")
         svg_spread(rows, args.figure_dir / "option1_unimoral_task_spread.svg")
         write_minimax_resume_plan(args.release_dir, failures)
@@ -2073,6 +2210,7 @@ def main() -> None:
     svg_four_task_dashboard(rows, coverage, spreads, rankings, args.figure_dir / "option1_unimoral_four_task_dashboard.svg")
     svg_heatmap(rows, args.figure_dir / "option1_unimoral_task_heatmap.svg")
     svg_generation_quality(rows, args.figure_dir / "option1_unimoral_generation_quality.svg")
+    svg_family_scaling(rows, args.figure_dir / "option1_unimoral_family_scaling.svg")
     svg_rankings(rows, args.figure_dir / "option1_unimoral_task_rankings.svg")
     svg_spread(rows, args.figure_dir / "option1_unimoral_task_spread.svg")
     write_minimax_resume_plan(args.release_dir, failures)
