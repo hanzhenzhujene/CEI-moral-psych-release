@@ -29,49 +29,45 @@ If you want the benchmark results before the tables, start here. These visuals p
 `GPT-4o-mini Ref` is shown as a single text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as a GPT-family S/M/L scaling series, and it has no SMID or DeNEVIL row.
 OpenAI/GPT scope: the scored release row is only `openai/gpt-4o-mini`. Other OpenAI route names that appear in setup docs or tests are route examples or historical plans, not additional scored release rows.
 
-### 1. UniMoral RQ1-RQ3: exact-match accuracy
-
-![UniMoral RQ1-RQ3 exact-match accuracy](../../../figures/release/option1_unimoral_task_heatmap.svg)
-
-_This is the main UniMoral classification view. RQ1, RQ2, and RQ3 all use exact-match accuracy here so the reader can compare the three task surfaces directly._
-
-### 2. UniMoral RQ4: generation quality
-
-![UniMoral RQ4 generation quality](../../../figures/release/option1_unimoral_generation_quality.svg)
-
-_RQ4 is a generation task, so it is separated from the accuracy chart and read with BERTScore F1 plus METEOR._
-
-### 3. UniMoral RQ1-RQ4: family-size scaling
+### 1. UniMoral RQ1-RQ4: family-size scaling and task readout
 
 ![UniMoral family-size scaling by RQ](../../../figures/release/option1_unimoral_family_scaling.svg)
 
 _Use this to see whether S/M/L scaling helps within each UniMoral RQ. The short answer is task-specific: the winning line changes across RQs, so UniMoral should not be reduced to one monotonic size curve._
 
-### 4. SMID / Value Kaleidoscope: topline comparable accuracy
+![UniMoral RQ1-RQ3 exact-match accuracy](../../../figures/release/option1_unimoral_task_heatmap.svg)
+
+_RQ1, RQ2, and RQ3 all use exact-match accuracy here, so the three classification surfaces stay comparable inside the same benchmark block._
+
+![UniMoral RQ4 generation quality](../../../figures/release/option1_unimoral_generation_quality.svg)
+
+_RQ4 is a generation task, so it stays in the UniMoral block but is read with BERTScore F1 plus METEOR rather than accuracy._
+
+### 2. SMID / Value Kaleidoscope: topline comparable accuracy
 
 ![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
 
-_UniMoral is handled in Figures 1-3; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
+_UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
 
-### 5. SMID / Value Kaleidoscope: family-size scaling
+### 3. SMID / Value Kaleidoscope: family-size scaling
 
 ![Family scaling profile](../../../figures/release/option1_family_scaling_profile.svg)
 
-_Use this next to compare size effects on SMID and Value after the separate UniMoral views, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
+_Use this next to compare size effects on SMID and Value after the combined UniMoral block, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
 
-### 6. CCD-Bench: cultural-cluster choice behavior
+### 4. CCD-Bench: cultural-cluster choice behavior
 
 ![CCD choice distribution](../../../figures/release/option1_ccd_choice_distribution.svg)
 
 _This is the main CCD-Bench result: deviation from the 10% uniform baseline across the ten canonical cultural clusters._
 
-### 7. CCD-Bench: dominant-option concentration
+### 5. CCD-Bench: dominant-option concentration
 
 ![CCD dominant-option share](../../../figures/release/option1_ccd_dominant_option_share.svg)
 
 _This is the compact CCD-Bench summary: how much each line collapses onto one dominant cluster, and how broadly it still spreads across the option set._
 
-### 8. DeNEVIL: proxy behavioral outcomes
+### 6. DeNEVIL: proxy behavioral outcomes
 
 ![DeNEVIL proxy behavioral outcomes](../../../figures/release/option1_denevil_behavior_outcomes.svg)
 

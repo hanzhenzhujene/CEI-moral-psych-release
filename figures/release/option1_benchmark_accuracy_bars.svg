@@ -38,7 +38,7 @@
 <rect x="0" y="0" width="1220" height="1810" class="canvas"/>
 <rect x="24" y="24" width="1172" height="1762" rx="22" class="panel"/>
 <title>SMID and Value accuracy by benchmark</title>
-<desc>Horizontal bar panels comparing the latest available family-size lines on SMID and Value Kaleidoscope after the separate UniMoral accuracy and generation figures. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>
+<desc>Horizontal bar panels comparing the latest available family-size lines on SMID and Value Kaleidoscope after the combined UniMoral benchmark block. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>
 <text x="48" y="64" class="title">SMID And Value Accuracy By Benchmark</text>
 <text x="48" y="88" class="subtitle">UniMoral is shown in separate accuracy and generation figures, so this comparison starts at SMID. Each panel keeps the same current</text>
 <text x="48" y="108" class="subtitle">lines. Hatched rows mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format</text>

@@ -972,14 +972,14 @@ def test_release_builder_emits_expected_files(tmp_path):
             assert "0.2% no-visible proxy traces" in text
         assert "## Results First" in text
         assert "## Benchmark Result Visuals" in text
-        assert "### 1. UniMoral RQ1-RQ3: exact-match accuracy" in text
-        assert "### 2. UniMoral RQ4: generation quality" in text
-        assert "### 3. UniMoral RQ1-RQ4: family-size scaling" in text
-        assert "### 4. SMID / Value Kaleidoscope: topline comparable accuracy" in text
-        assert "### 5. SMID / Value Kaleidoscope: family-size scaling" in text
-        assert "### 6. CCD-Bench: cultural-cluster choice behavior" in text
-        assert "### 7. CCD-Bench: dominant-option concentration" in text
-        assert "### 8. DeNEVIL: proxy behavioral outcomes" in text
+        assert "### 1. UniMoral RQ1-RQ4: family-size scaling and task readout" in text
+        assert "### 2. SMID / Value Kaleidoscope: topline comparable accuracy" in text
+        assert "### 3. SMID / Value Kaleidoscope: family-size scaling" in text
+        assert "### 4. CCD-Bench: cultural-cluster choice behavior" in text
+        assert "### 5. CCD-Bench: dominant-option concentration" in text
+        assert "### 6. DeNEVIL: proxy behavioral outcomes" in text
+        assert "### 7. CCD-Bench: dominant-option concentration" not in text
+        assert "### 8. DeNEVIL: proxy behavioral outcomes" not in text
         assert "## Interpretation" in text
         assert "### Interpretation At A Glance" in text
         assert "### Benchmark Reading Guide" in text
@@ -1131,8 +1131,13 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Family Scaling Profile" in family_scaling_svg
     assert 'preserveAspectRatio="xMidYMin meet"' in family_scaling_svg
     assert 'style="max-width:100%;height:auto"' in family_scaling_svg
+    assert "UniMoral is grouped in Figure 1 above" in family_scaling_svg
     assert "Two comparable benchmark panels here: SMID and Value Kaleidoscope." in family_scaling_svg
     assert "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence." in family_scaling_svg
+    assert "GPT-4o-mini Ref is drawn as a dashed horizontal reference line, not an S/M/L point." in family_scaling_svg
+    assert "GPT-4o-mini Ref 70.1%" in family_scaling_svg
+    assert "GPT-4o-mini Ref: no SMID route" in family_scaling_svg
+    assert ">Ref<" not in family_scaling_svg
     assert "#4 CCD-Bench" not in family_scaling_svg
     assert "#5 Denevil" not in family_scaling_svg
     assert "100% coverage" not in family_scaling_svg
@@ -1143,15 +1148,14 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "and dominant-option concentration figures." in family_scaling_svg
     assert "Read Denevil in the behavioral-outcomes figure." in family_scaling_svg
     assert "Do not mix proxy evidence into accuracy scaling." in family_scaling_svg
-    assert "DeepSeek: Value S/M/L are parsed from saved logs" in family_scaling_svg
+    assert "Value S/M/L are parsed from saved logs" in family_scaling_svg
     assert "Qwen" in family_scaling_svg
     assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
     if "MiniMax" in family_scaling_svg:
-        assert "MiniMax: Value S/M/L are scored; SMID S/L have routes, while M has no SMID route." in family_scaling_svg
-    assert "Qwen: Value scored at S/M/L; SMID at S/L." in family_scaling_svg
-    assert "Llama: Value scored at S/M/L; SMID at S/L." in family_scaling_svg
-    assert "DeepSeek: Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists." in family_scaling_svg
-    assert "Gemma: full S/M/L sweep on SMID and Value." in family_scaling_svg
+        assert "Value S/M/L are scored; SMID S/L have routes, while M has no SMID route." in family_scaling_svg
+    assert "Value scored at S/M/L; SMID at S/L." in family_scaling_svg
+    assert "Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists." in family_scaling_svg
+    assert "full S/M/L sweep on SMID and Value." in family_scaling_svg
     assert "Only the small line is currently comparable." not in family_scaling_svg
 
     ccd_coverage_svg = (figure_dir / "option1_ccd_valid_choice_coverage.svg").read_text(encoding="utf-8")

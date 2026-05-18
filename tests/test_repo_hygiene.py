@@ -93,6 +93,14 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "`DeNEVIL` is reported as proxy behavioral evidence" in readme
     assert "`make bootstrap`" in readme or "make audit" in readme
 
+    unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
+    assert "UniMoral family-size scaling by RQ" in unimoral_family_scaling_svg
+    assert "GPT-4o-mini Ref is marked as a dashed horizontal line in each panel" in unimoral_family_scaling_svg
+    assert "GPT-4o-mini Ref 0.673" in unimoral_family_scaling_svg
+    assert "GPT-4o-mini Ref 0.711" in unimoral_family_scaling_svg
+    assert ">Ref<" not in unimoral_family_scaling_svg
+    assert "OpenAI Ref" in unimoral_family_scaling_svg
+
 
 def test_repository_root_keeps_legacy_files_archived():
     legacy_root_files = {

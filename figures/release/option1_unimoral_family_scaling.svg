@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1680" height="960" viewBox="0 0 1680 960">
-<style>text{font-family:Arial,sans-serif;font-size:13px;fill:#17202a}.title{font-size:30px;font-weight:700}.subtitle{font-size:15px;fill:#334155}.axis{font-weight:700}.small{font-size:12px;fill:#475569}.tiny{font-size:11px;fill:#64748b;font-weight:700}.panel{fill:#fbfcfd;stroke:#d8dee4;rx:8}</style>
+<style>text{font-family:Arial,sans-serif;font-size:13px;fill:#17202a}.title{font-size:30px;font-weight:700}.subtitle{font-size:15px;fill:#334155}.axis{font-weight:700}.small{font-size:12px;fill:#475569}.tiny{font-size:11px;fill:#64748b;font-weight:700}.legend{font-size:17px;font-weight:700;fill:#243447}.legend-title{font-size:16px;font-weight:700;fill:#17202a}.panel{fill:#fbfcfd;stroke:#d8dee4;rx:8}</style>
 <rect width="100%" height="100%" fill="white"/>
 <text x="42" y="48" class="title">UniMoral family-size scaling by RQ</text>
 <text x="42" y="78" class="subtitle">Line charts show how each family moves across S/M/L slots inside each UniMoral task. Higher is better in every panel.</text>
 <text x="42" y="102" class="subtitle">Classification panels use strict-complete accuracy cells. RQ4 uses rows with usable generation scores; remaining MiniMax caveats stay in the audit tables.</text>
-<text x="42" y="126" class="subtitle">Each panel has its own y-axis so within-task scaling patterns are visible; read the heatmap for cross-RQ accuracy comparison.</text>
+<text x="42" y="126" class="subtitle">GPT-4o-mini Ref is marked as a dashed horizontal line in each panel, not as a fourth size point after L.</text>
 <rect x="48" y="160" width="500" height="300" class="panel"/>
 <text x="70" y="192" class="axis">RQ1 action</text>
 <text x="70" y="212" class="small">Accuracy; top: DeepSeek-M (0.684)</text>
@@ -18,54 +18,53 @@
 <text x="110" y="234.0" text-anchor="end" class="tiny">0.70</text>
 <line x1="120.0" y1="230" x2="120.0" y2="402" stroke="#eef2f7"/>
 <text x="120.0" y="430" text-anchor="middle" class="axis">S</text>
-<line x1="247.3" y1="230" x2="247.3" y2="402" stroke="#eef2f7"/>
-<text x="247.3" y="430" text-anchor="middle" class="axis">M</text>
-<line x1="374.7" y1="230" x2="374.7" y2="402" stroke="#eef2f7"/>
-<text x="374.7" y="430" text-anchor="middle" class="axis">L</text>
+<line x1="311.0" y1="230" x2="311.0" y2="402" stroke="#eef2f7"/>
+<text x="311.0" y="430" text-anchor="middle" class="axis">M</text>
 <line x1="502.0" y1="230" x2="502.0" y2="402" stroke="#eef2f7"/>
-<text x="502.0" y="430" text-anchor="middle" class="axis">Ref</text>
-<line x1="120.0" y1="290.3" x2="247.3" y2="270.7" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
-<line x1="247.3" y1="270.7" x2="374.7" y2="269.8" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
+<text x="502.0" y="430" text-anchor="middle" class="axis">L</text>
+<line x1="120" y1="261.3" x2="502" y2="261.3" stroke="#6b7280" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 7"/>
+<rect x="320.0" y="234.3" width="174" height="23" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+<text x="407.0" y="251.3" text-anchor="middle" class="axis">GPT-4o-mini Ref 0.673</text>
+<line x1="120.0" y1="290.3" x2="311.0" y2="270.7" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
+<line x1="311.0" y1="270.7" x2="502.0" y2="269.8" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
 <circle cx="120.0" cy="290.3" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
 <circle cx="120.0" cy="290.3" r="3" fill="#6fa8c7"/>
-<circle cx="247.3" cy="270.7" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
-<circle cx="247.3" cy="270.7" r="3" fill="#6fa8c7"/>
-<circle cx="374.7" cy="269.8" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
-<circle cx="374.7" cy="269.8" r="3" fill="#6fa8c7"/>
-<line x1="120.0" y1="274.9" x2="247.3" y2="277.4" stroke="#bf977a" stroke-width="3" stroke-linecap="round"/>
-<line x1="247.3" y1="277.4" x2="374.7" y2="275.3" stroke="#bf977a" stroke-width="3" stroke-linecap="round"/>
+<circle cx="311.0" cy="270.7" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
+<circle cx="311.0" cy="270.7" r="3" fill="#6fa8c7"/>
+<circle cx="502.0" cy="269.8" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
+<circle cx="502.0" cy="269.8" r="3" fill="#6fa8c7"/>
+<line x1="120.0" y1="274.9" x2="311.0" y2="277.4" stroke="#bf977a" stroke-width="3" stroke-linecap="round"/>
+<line x1="311.0" y1="277.4" x2="502.0" y2="275.3" stroke="#bf977a" stroke-width="3" stroke-linecap="round"/>
 <circle cx="120.0" cy="274.9" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
 <circle cx="120.0" cy="274.9" r="3" fill="#bf977a"/>
-<circle cx="247.3" cy="277.4" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
-<circle cx="247.3" cy="277.4" r="3" fill="#bf977a"/>
-<circle cx="374.7" cy="275.3" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
-<circle cx="374.7" cy="275.3" r="3" fill="#bf977a"/>
-<line x1="120.0" y1="275.2" x2="247.3" y2="248.8" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
-<line x1="247.3" y1="248.8" x2="374.7" y2="387.6" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
+<circle cx="311.0" cy="277.4" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
+<circle cx="311.0" cy="277.4" r="3" fill="#bf977a"/>
+<circle cx="502.0" cy="275.3" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
+<circle cx="502.0" cy="275.3" r="3" fill="#bf977a"/>
+<line x1="120.0" y1="275.2" x2="311.0" y2="248.8" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
+<line x1="311.0" y1="248.8" x2="502.0" y2="387.6" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
 <circle cx="120.0" cy="275.2" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
 <circle cx="120.0" cy="275.2" r="3" fill="#84ad78"/>
-<circle cx="247.3" cy="248.8" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
-<circle cx="247.3" cy="248.8" r="3" fill="#84ad78"/>
-<circle cx="374.7" cy="387.6" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
-<circle cx="374.7" cy="387.6" r="3" fill="#84ad78"/>
-<line x1="120.0" y1="289.6" x2="247.3" y2="264.6" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
-<line x1="247.3" y1="264.6" x2="374.7" y2="276.1" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
+<circle cx="311.0" cy="248.8" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
+<circle cx="311.0" cy="248.8" r="3" fill="#84ad78"/>
+<circle cx="502.0" cy="387.6" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
+<circle cx="502.0" cy="387.6" r="3" fill="#84ad78"/>
+<line x1="120.0" y1="289.6" x2="311.0" y2="264.6" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
+<line x1="311.0" y1="264.6" x2="502.0" y2="276.1" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
 <circle cx="120.0" cy="289.6" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
 <circle cx="120.0" cy="289.6" r="3" fill="#d7a06b"/>
-<circle cx="247.3" cy="264.6" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
-<circle cx="247.3" cy="264.6" r="3" fill="#d7a06b"/>
-<circle cx="374.7" cy="276.1" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
-<circle cx="374.7" cy="276.1" r="3" fill="#d7a06b"/>
-<line x1="120.0" y1="304.3" x2="247.3" y2="272.9" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
-<line x1="247.3" y1="272.9" x2="374.7" y2="274.6" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
+<circle cx="311.0" cy="264.6" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
+<circle cx="311.0" cy="264.6" r="3" fill="#d7a06b"/>
+<circle cx="502.0" cy="276.1" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
+<circle cx="502.0" cy="276.1" r="3" fill="#d7a06b"/>
+<line x1="120.0" y1="304.3" x2="311.0" y2="272.9" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
+<line x1="311.0" y1="272.9" x2="502.0" y2="274.6" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
 <circle cx="120.0" cy="304.3" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
 <circle cx="120.0" cy="304.3" r="3" fill="#ad9ad0"/>
-<circle cx="247.3" cy="272.9" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
-<circle cx="247.3" cy="272.9" r="3" fill="#ad9ad0"/>
-<circle cx="374.7" cy="274.6" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
-<circle cx="374.7" cy="274.6" r="3" fill="#ad9ad0"/>
-<circle cx="502.0" cy="261.3" r="7" fill="white" stroke="#aab2bd" stroke-width="3"/>
-<circle cx="502.0" cy="261.3" r="3" fill="#aab2bd"/>
+<circle cx="311.0" cy="272.9" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
+<circle cx="311.0" cy="272.9" r="3" fill="#ad9ad0"/>
+<circle cx="502.0" cy="274.6" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
+<circle cx="502.0" cy="274.6" r="3" fill="#ad9ad0"/>
 <rect x="590" y="160" width="500" height="300" class="panel"/>
 <text x="612" y="192" class="axis">RQ2 typology</text>
 <text x="612" y="212" class="small">Accuracy; top: Gemma-S (0.599)</text>
@@ -79,51 +78,50 @@
 <text x="652" y="258.6" text-anchor="end" class="tiny">0.60</text>
 <line x1="662.0" y1="230" x2="662.0" y2="402" stroke="#eef2f7"/>
 <text x="662.0" y="430" text-anchor="middle" class="axis">S</text>
-<line x1="789.3" y1="230" x2="789.3" y2="402" stroke="#eef2f7"/>
-<text x="789.3" y="430" text-anchor="middle" class="axis">M</text>
-<line x1="916.7" y1="230" x2="916.7" y2="402" stroke="#eef2f7"/>
-<text x="916.7" y="430" text-anchor="middle" class="axis">L</text>
+<line x1="853.0" y1="230" x2="853.0" y2="402" stroke="#eef2f7"/>
+<text x="853.0" y="430" text-anchor="middle" class="axis">M</text>
 <line x1="1044.0" y1="230" x2="1044.0" y2="402" stroke="#eef2f7"/>
-<text x="1044.0" y="430" text-anchor="middle" class="axis">Ref</text>
-<line x1="662.0" y1="345.5" x2="789.3" y2="282.2" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
-<line x1="789.3" y1="282.2" x2="916.7" y2="263.2" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
+<text x="1044.0" y="430" text-anchor="middle" class="axis">L</text>
+<line x1="662" y1="368.7" x2="1044" y2="368.7" stroke="#6b7280" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 7"/>
+<rect x="862.0" y="341.7" width="174" height="23" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+<text x="949.0" y="358.7" text-anchor="middle" class="axis">GPT-4o-mini Ref 0.554</text>
+<line x1="662.0" y1="345.5" x2="853.0" y2="282.2" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
+<line x1="853.0" y1="282.2" x2="1044.0" y2="263.2" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
 <circle cx="662.0" cy="345.5" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
 <circle cx="662.0" cy="345.5" r="3" fill="#6fa8c7"/>
-<circle cx="789.3" cy="282.2" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
-<circle cx="789.3" cy="282.2" r="3" fill="#6fa8c7"/>
-<circle cx="916.7" cy="263.2" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
-<circle cx="916.7" cy="263.2" r="3" fill="#6fa8c7"/>
-<line x1="789.3" y1="287.8" x2="916.7" y2="301.2" stroke="#bf977a" stroke-width="3" stroke-linecap="round"/>
-<circle cx="789.3" cy="287.8" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
-<circle cx="789.3" cy="287.8" r="3" fill="#bf977a"/>
-<circle cx="916.7" cy="301.2" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
-<circle cx="916.7" cy="301.2" r="3" fill="#bf977a"/>
-<line x1="662.0" y1="280.7" x2="789.3" y2="362.4" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
-<line x1="789.3" y1="362.4" x2="916.7" y2="285.7" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
+<circle cx="853.0" cy="282.2" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
+<circle cx="853.0" cy="282.2" r="3" fill="#6fa8c7"/>
+<circle cx="1044.0" cy="263.2" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
+<circle cx="1044.0" cy="263.2" r="3" fill="#6fa8c7"/>
+<line x1="853.0" y1="287.8" x2="1044.0" y2="301.2" stroke="#bf977a" stroke-width="3" stroke-linecap="round"/>
+<circle cx="853.0" cy="287.8" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
+<circle cx="853.0" cy="287.8" r="3" fill="#bf977a"/>
+<circle cx="1044.0" cy="301.2" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
+<circle cx="1044.0" cy="301.2" r="3" fill="#bf977a"/>
+<line x1="662.0" y1="280.7" x2="853.0" y2="362.4" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
+<line x1="853.0" y1="362.4" x2="1044.0" y2="285.7" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
 <circle cx="662.0" cy="280.7" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
 <circle cx="662.0" cy="280.7" r="3" fill="#84ad78"/>
-<circle cx="789.3" cy="362.4" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
-<circle cx="789.3" cy="362.4" r="3" fill="#84ad78"/>
-<circle cx="916.7" cy="285.7" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
-<circle cx="916.7" cy="285.7" r="3" fill="#84ad78"/>
-<line x1="662.0" y1="259.6" x2="789.3" y2="277.2" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
-<line x1="789.3" y1="277.2" x2="916.7" y2="318.0" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
+<circle cx="853.0" cy="362.4" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
+<circle cx="853.0" cy="362.4" r="3" fill="#84ad78"/>
+<circle cx="1044.0" cy="285.7" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
+<circle cx="1044.0" cy="285.7" r="3" fill="#84ad78"/>
+<line x1="662.0" y1="259.6" x2="853.0" y2="277.2" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
+<line x1="853.0" y1="277.2" x2="1044.0" y2="318.0" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
 <circle cx="662.0" cy="259.6" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
 <circle cx="662.0" cy="259.6" r="3" fill="#d7a06b"/>
-<circle cx="789.3" cy="277.2" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
-<circle cx="789.3" cy="277.2" r="3" fill="#d7a06b"/>
-<circle cx="916.7" cy="318.0" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
-<circle cx="916.7" cy="318.0" r="3" fill="#d7a06b"/>
-<line x1="662.0" y1="258.2" x2="789.3" y2="308.9" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
-<line x1="789.3" y1="308.9" x2="916.7" y2="324.4" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
+<circle cx="853.0" cy="277.2" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
+<circle cx="853.0" cy="277.2" r="3" fill="#d7a06b"/>
+<circle cx="1044.0" cy="318.0" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
+<circle cx="1044.0" cy="318.0" r="3" fill="#d7a06b"/>
+<line x1="662.0" y1="258.2" x2="853.0" y2="308.9" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
+<line x1="853.0" y1="308.9" x2="1044.0" y2="324.4" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
 <circle cx="662.0" cy="258.2" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
 <circle cx="662.0" cy="258.2" r="3" fill="#ad9ad0"/>
-<circle cx="789.3" cy="308.9" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
-<circle cx="789.3" cy="308.9" r="3" fill="#ad9ad0"/>
-<circle cx="916.7" cy="324.4" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
-<circle cx="916.7" cy="324.4" r="3" fill="#ad9ad0"/>
-<circle cx="1044.0" cy="368.7" r="7" fill="white" stroke="#aab2bd" stroke-width="3"/>
-<circle cx="1044.0" cy="368.7" r="3" fill="#aab2bd"/>
+<circle cx="853.0" cy="308.9" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
+<circle cx="853.0" cy="308.9" r="3" fill="#ad9ad0"/>
+<circle cx="1044.0" cy="324.4" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
+<circle cx="1044.0" cy="324.4" r="3" fill="#ad9ad0"/>
 <rect x="1132" y="160" width="500" height="300" class="panel"/>
 <text x="1154" y="192" class="axis">RQ3 attribution</text>
 <text x="1154" y="212" class="small">Accuracy; top: Llama-M (0.631)</text>
@@ -137,48 +135,47 @@
 <text x="1194" y="234.0" text-anchor="end" class="tiny">0.64</text>
 <line x1="1204.0" y1="230" x2="1204.0" y2="402" stroke="#eef2f7"/>
 <text x="1204.0" y="430" text-anchor="middle" class="axis">S</text>
-<line x1="1331.3" y1="230" x2="1331.3" y2="402" stroke="#eef2f7"/>
-<text x="1331.3" y="430" text-anchor="middle" class="axis">M</text>
-<line x1="1458.7" y1="230" x2="1458.7" y2="402" stroke="#eef2f7"/>
-<text x="1458.7" y="430" text-anchor="middle" class="axis">L</text>
+<line x1="1395.0" y1="230" x2="1395.0" y2="402" stroke="#eef2f7"/>
+<text x="1395.0" y="430" text-anchor="middle" class="axis">M</text>
 <line x1="1586.0" y1="230" x2="1586.0" y2="402" stroke="#eef2f7"/>
-<text x="1586.0" y="430" text-anchor="middle" class="axis">Ref</text>
-<line x1="1204.0" y1="365.9" x2="1331.3" y2="290.5" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
-<line x1="1331.3" y1="290.5" x2="1458.7" y2="283.1" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
+<text x="1586.0" y="430" text-anchor="middle" class="axis">L</text>
+<line x1="1204" y1="311.7" x2="1586" y2="311.7" stroke="#6b7280" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 7"/>
+<rect x="1404.0" y="284.7" width="174" height="23" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+<text x="1491.0" y="301.7" text-anchor="middle" class="axis">GPT-4o-mini Ref 0.592</text>
+<line x1="1204.0" y1="365.9" x2="1395.0" y2="290.5" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
+<line x1="1395.0" y1="290.5" x2="1586.0" y2="283.1" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
 <circle cx="1204.0" cy="365.9" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
 <circle cx="1204.0" cy="365.9" r="3" fill="#6fa8c7"/>
-<circle cx="1331.3" cy="290.5" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
-<circle cx="1331.3" cy="290.5" r="3" fill="#6fa8c7"/>
-<circle cx="1458.7" cy="283.1" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
-<circle cx="1458.7" cy="283.1" r="3" fill="#6fa8c7"/>
-<circle cx="1331.3" cy="298.4" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
-<circle cx="1331.3" cy="298.4" r="3" fill="#bf977a"/>
-<line x1="1204.0" y1="361.0" x2="1331.3" y2="305.3" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
-<line x1="1331.3" y1="305.3" x2="1458.7" y2="343.2" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
+<circle cx="1395.0" cy="290.5" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
+<circle cx="1395.0" cy="290.5" r="3" fill="#6fa8c7"/>
+<circle cx="1586.0" cy="283.1" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
+<circle cx="1586.0" cy="283.1" r="3" fill="#6fa8c7"/>
+<circle cx="1395.0" cy="298.4" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
+<circle cx="1395.0" cy="298.4" r="3" fill="#bf977a"/>
+<line x1="1204.0" y1="361.0" x2="1395.0" y2="305.3" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
+<line x1="1395.0" y1="305.3" x2="1586.0" y2="343.2" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
 <circle cx="1204.0" cy="361.0" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
 <circle cx="1204.0" cy="361.0" r="3" fill="#84ad78"/>
-<circle cx="1331.3" cy="305.3" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
-<circle cx="1331.3" cy="305.3" r="3" fill="#84ad78"/>
-<circle cx="1458.7" cy="343.2" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
-<circle cx="1458.7" cy="343.2" r="3" fill="#84ad78"/>
-<line x1="1204.0" y1="296.9" x2="1331.3" y2="246.2" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
-<line x1="1331.3" y1="246.2" x2="1458.7" y2="356.0" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
+<circle cx="1395.0" cy="305.3" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
+<circle cx="1395.0" cy="305.3" r="3" fill="#84ad78"/>
+<circle cx="1586.0" cy="343.2" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
+<circle cx="1586.0" cy="343.2" r="3" fill="#84ad78"/>
+<line x1="1204.0" y1="296.9" x2="1395.0" y2="246.2" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
+<line x1="1395.0" y1="246.2" x2="1586.0" y2="356.0" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
 <circle cx="1204.0" cy="296.9" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
 <circle cx="1204.0" cy="296.9" r="3" fill="#d7a06b"/>
-<circle cx="1331.3" cy="246.2" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
-<circle cx="1331.3" cy="246.2" r="3" fill="#d7a06b"/>
-<circle cx="1458.7" cy="356.0" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
-<circle cx="1458.7" cy="356.0" r="3" fill="#d7a06b"/>
-<line x1="1204.0" y1="334.9" x2="1331.3" y2="299.4" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
-<line x1="1331.3" y1="299.4" x2="1458.7" y2="273.8" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
+<circle cx="1395.0" cy="246.2" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
+<circle cx="1395.0" cy="246.2" r="3" fill="#d7a06b"/>
+<circle cx="1586.0" cy="356.0" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
+<circle cx="1586.0" cy="356.0" r="3" fill="#d7a06b"/>
+<line x1="1204.0" y1="334.9" x2="1395.0" y2="299.4" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
+<line x1="1395.0" y1="299.4" x2="1586.0" y2="273.8" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
 <circle cx="1204.0" cy="334.9" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
 <circle cx="1204.0" cy="334.9" r="3" fill="#ad9ad0"/>
-<circle cx="1331.3" cy="299.4" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
-<circle cx="1331.3" cy="299.4" r="3" fill="#ad9ad0"/>
-<circle cx="1458.7" cy="273.8" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
-<circle cx="1458.7" cy="273.8" r="3" fill="#ad9ad0"/>
-<circle cx="1586.0" cy="311.7" r="7" fill="white" stroke="#aab2bd" stroke-width="3"/>
-<circle cx="1586.0" cy="311.7" r="3" fill="#aab2bd"/>
+<circle cx="1395.0" cy="299.4" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
+<circle cx="1395.0" cy="299.4" r="3" fill="#ad9ad0"/>
+<circle cx="1586.0" cy="273.8" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
+<circle cx="1586.0" cy="273.8" r="3" fill="#ad9ad0"/>
 <rect x="210" y="520" width="600" height="330" class="panel"/>
 <text x="232" y="552" class="axis">RQ4 generation</text>
 <text x="232" y="572" class="small">BERTScore F1; top: Llama-M (0.730)</text>
@@ -192,51 +189,50 @@
 <text x="272" y="594.0" text-anchor="end" class="tiny">0.75</text>
 <line x1="282.0" y1="590" x2="282.0" y2="792" stroke="#eef2f7"/>
 <text x="282.0" y="820" text-anchor="middle" class="axis">S</text>
-<line x1="442.7" y1="590" x2="442.7" y2="792" stroke="#eef2f7"/>
-<text x="442.7" y="820" text-anchor="middle" class="axis">M</text>
-<line x1="603.3" y1="590" x2="603.3" y2="792" stroke="#eef2f7"/>
-<text x="603.3" y="820" text-anchor="middle" class="axis">L</text>
+<line x1="523.0" y1="590" x2="523.0" y2="792" stroke="#eef2f7"/>
+<text x="523.0" y="820" text-anchor="middle" class="axis">M</text>
 <line x1="764.0" y1="590" x2="764.0" y2="792" stroke="#eef2f7"/>
-<text x="764.0" y="820" text-anchor="middle" class="axis">Ref</text>
-<line x1="282.0" y1="662.6" x2="442.7" y2="659.0" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
-<line x1="442.7" y1="659.0" x2="603.3" y2="669.8" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
+<text x="764.0" y="820" text-anchor="middle" class="axis">L</text>
+<line x1="282" y1="643.0" x2="764" y2="643.0" stroke="#6b7280" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 7"/>
+<rect x="582.0" y="616.0" width="174" height="23" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+<text x="669.0" y="633.0" text-anchor="middle" class="axis">GPT-4o-mini Ref 0.711</text>
+<line x1="282.0" y1="662.6" x2="523.0" y2="659.0" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
+<line x1="523.0" y1="659.0" x2="764.0" y2="669.8" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
 <circle cx="282.0" cy="662.6" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
 <circle cx="282.0" cy="662.6" r="3" fill="#6fa8c7"/>
-<circle cx="442.7" cy="659.0" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
-<circle cx="442.7" cy="659.0" r="3" fill="#6fa8c7"/>
-<circle cx="603.3" cy="669.8" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
-<circle cx="603.3" cy="669.8" r="3" fill="#6fa8c7"/>
-<line x1="282.0" y1="748.3" x2="442.7" y2="741.4" stroke="#bf977a" stroke-width="3" stroke-linecap="round"/>
+<circle cx="523.0" cy="659.0" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
+<circle cx="523.0" cy="659.0" r="3" fill="#6fa8c7"/>
+<circle cx="764.0" cy="669.8" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
+<circle cx="764.0" cy="669.8" r="3" fill="#6fa8c7"/>
+<line x1="282.0" y1="748.3" x2="523.0" y2="741.4" stroke="#bf977a" stroke-width="3" stroke-linecap="round"/>
 <circle cx="282.0" cy="748.3" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
 <circle cx="282.0" cy="748.3" r="3" fill="#bf977a"/>
-<circle cx="442.7" cy="741.4" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
-<circle cx="442.7" cy="741.4" r="3" fill="#bf977a"/>
-<line x1="282.0" y1="683.2" x2="442.7" y2="753.1" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
-<line x1="442.7" y1="753.1" x2="603.3" y2="743.4" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
+<circle cx="523.0" cy="741.4" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
+<circle cx="523.0" cy="741.4" r="3" fill="#bf977a"/>
+<line x1="282.0" y1="683.2" x2="523.0" y2="753.1" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
+<line x1="523.0" y1="753.1" x2="764.0" y2="743.4" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
 <circle cx="282.0" cy="683.2" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
 <circle cx="282.0" cy="683.2" r="3" fill="#84ad78"/>
-<circle cx="442.7" cy="753.1" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
-<circle cx="442.7" cy="753.1" r="3" fill="#84ad78"/>
-<circle cx="603.3" cy="743.4" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
-<circle cx="603.3" cy="743.4" r="3" fill="#84ad78"/>
-<line x1="282.0" y1="620.5" x2="442.7" y2="616.9" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
-<line x1="442.7" y1="616.9" x2="603.3" y2="623.5" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
+<circle cx="523.0" cy="753.1" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
+<circle cx="523.0" cy="753.1" r="3" fill="#84ad78"/>
+<circle cx="764.0" cy="743.4" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
+<circle cx="764.0" cy="743.4" r="3" fill="#84ad78"/>
+<line x1="282.0" y1="620.5" x2="523.0" y2="616.9" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
+<line x1="523.0" y1="616.9" x2="764.0" y2="623.5" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
 <circle cx="282.0" cy="620.5" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
 <circle cx="282.0" cy="620.5" r="3" fill="#d7a06b"/>
-<circle cx="442.7" cy="616.9" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
-<circle cx="442.7" cy="616.9" r="3" fill="#d7a06b"/>
-<circle cx="603.3" cy="623.5" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
-<circle cx="603.3" cy="623.5" r="3" fill="#d7a06b"/>
-<line x1="282.0" y1="634.1" x2="442.7" y2="658.3" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
-<line x1="442.7" y1="658.3" x2="603.3" y2="649.2" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
+<circle cx="523.0" cy="616.9" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
+<circle cx="523.0" cy="616.9" r="3" fill="#d7a06b"/>
+<circle cx="764.0" cy="623.5" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
+<circle cx="764.0" cy="623.5" r="3" fill="#d7a06b"/>
+<line x1="282.0" y1="634.1" x2="523.0" y2="658.3" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
+<line x1="523.0" y1="658.3" x2="764.0" y2="649.2" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
 <circle cx="282.0" cy="634.1" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
 <circle cx="282.0" cy="634.1" r="3" fill="#ad9ad0"/>
-<circle cx="442.7" cy="658.3" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
-<circle cx="442.7" cy="658.3" r="3" fill="#ad9ad0"/>
-<circle cx="603.3" cy="649.2" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
-<circle cx="603.3" cy="649.2" r="3" fill="#ad9ad0"/>
-<circle cx="764.0" cy="643.0" r="7" fill="white" stroke="#aab2bd" stroke-width="3"/>
-<circle cx="764.0" cy="643.0" r="3" fill="#aab2bd"/>
+<circle cx="523.0" cy="658.3" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
+<circle cx="523.0" cy="658.3" r="3" fill="#ad9ad0"/>
+<circle cx="764.0" cy="649.2" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
+<circle cx="764.0" cy="649.2" r="3" fill="#ad9ad0"/>
 <rect x="890" y="520" width="600" height="330" class="panel"/>
 <text x="912" y="552" class="axis">RQ4 generation</text>
 <text x="912" y="572" class="small">METEOR; top: Llama-L (0.157)</text>
@@ -250,63 +246,62 @@
 <text x="952" y="594.0" text-anchor="end" class="tiny">0.16</text>
 <line x1="962.0" y1="590" x2="962.0" y2="792" stroke="#eef2f7"/>
 <text x="962.0" y="820" text-anchor="middle" class="axis">S</text>
-<line x1="1122.7" y1="590" x2="1122.7" y2="792" stroke="#eef2f7"/>
-<text x="1122.7" y="820" text-anchor="middle" class="axis">M</text>
-<line x1="1283.3" y1="590" x2="1283.3" y2="792" stroke="#eef2f7"/>
-<text x="1283.3" y="820" text-anchor="middle" class="axis">L</text>
+<line x1="1203.0" y1="590" x2="1203.0" y2="792" stroke="#eef2f7"/>
+<text x="1203.0" y="820" text-anchor="middle" class="axis">M</text>
 <line x1="1444.0" y1="590" x2="1444.0" y2="792" stroke="#eef2f7"/>
-<text x="1444.0" y="820" text-anchor="middle" class="axis">Ref</text>
-<line x1="962.0" y1="680.3" x2="1122.7" y2="611.3" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
-<line x1="1122.7" y1="611.3" x2="1283.3" y2="646.5" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
+<text x="1444.0" y="820" text-anchor="middle" class="axis">L</text>
+<line x1="962" y1="621.2" x2="1444" y2="621.2" stroke="#6b7280" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 7"/>
+<rect x="1262.0" y="594.2" width="174" height="23" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+<text x="1349.0" y="611.2" text-anchor="middle" class="axis">GPT-4o-mini Ref 0.146</text>
+<line x1="962.0" y1="680.3" x2="1203.0" y2="611.3" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
+<line x1="1203.0" y1="611.3" x2="1444.0" y2="646.5" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
 <circle cx="962.0" cy="680.3" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
 <circle cx="962.0" cy="680.3" r="3" fill="#6fa8c7"/>
-<circle cx="1122.7" cy="611.3" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
-<circle cx="1122.7" cy="611.3" r="3" fill="#6fa8c7"/>
-<circle cx="1283.3" cy="646.5" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
-<circle cx="1283.3" cy="646.5" r="3" fill="#6fa8c7"/>
-<line x1="962.0" y1="773.5" x2="1122.7" y2="746.4" stroke="#bf977a" stroke-width="3" stroke-linecap="round"/>
+<circle cx="1203.0" cy="611.3" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
+<circle cx="1203.0" cy="611.3" r="3" fill="#6fa8c7"/>
+<circle cx="1444.0" cy="646.5" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
+<circle cx="1444.0" cy="646.5" r="3" fill="#6fa8c7"/>
+<line x1="962.0" y1="773.5" x2="1203.0" y2="746.4" stroke="#bf977a" stroke-width="3" stroke-linecap="round"/>
 <circle cx="962.0" cy="773.5" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
 <circle cx="962.0" cy="773.5" r="3" fill="#bf977a"/>
-<circle cx="1122.7" cy="746.4" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
-<circle cx="1122.7" cy="746.4" r="3" fill="#bf977a"/>
-<line x1="962.0" y1="751.7" x2="1122.7" y2="714.5" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
-<line x1="1122.7" y1="714.5" x2="1283.3" y2="777.2" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
+<circle cx="1203.0" cy="746.4" r="7" fill="white" stroke="#bf977a" stroke-width="3"/>
+<circle cx="1203.0" cy="746.4" r="3" fill="#bf977a"/>
+<line x1="962.0" y1="751.7" x2="1203.0" y2="714.5" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
+<line x1="1203.0" y1="714.5" x2="1444.0" y2="777.2" stroke="#84ad78" stroke-width="3" stroke-linecap="round"/>
 <circle cx="962.0" cy="751.7" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
 <circle cx="962.0" cy="751.7" r="3" fill="#84ad78"/>
-<circle cx="1122.7" cy="714.5" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
-<circle cx="1122.7" cy="714.5" r="3" fill="#84ad78"/>
-<circle cx="1283.3" cy="777.2" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
-<circle cx="1283.3" cy="777.2" r="3" fill="#84ad78"/>
-<line x1="962.0" y1="655.8" x2="1122.7" y2="604.2" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
-<line x1="1122.7" y1="604.2" x2="1283.3" y2="596.2" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
+<circle cx="1203.0" cy="714.5" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
+<circle cx="1203.0" cy="714.5" r="3" fill="#84ad78"/>
+<circle cx="1444.0" cy="777.2" r="7" fill="white" stroke="#84ad78" stroke-width="3"/>
+<circle cx="1444.0" cy="777.2" r="3" fill="#84ad78"/>
+<line x1="962.0" y1="655.8" x2="1203.0" y2="604.2" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
+<line x1="1203.0" y1="604.2" x2="1444.0" y2="596.2" stroke="#d7a06b" stroke-width="3" stroke-linecap="round"/>
 <circle cx="962.0" cy="655.8" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
 <circle cx="962.0" cy="655.8" r="3" fill="#d7a06b"/>
-<circle cx="1122.7" cy="604.2" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
-<circle cx="1122.7" cy="604.2" r="3" fill="#d7a06b"/>
-<circle cx="1283.3" cy="596.2" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
-<circle cx="1283.3" cy="596.2" r="3" fill="#d7a06b"/>
-<line x1="962.0" y1="741.8" x2="1122.7" y2="724.2" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
-<line x1="1122.7" y1="724.2" x2="1283.3" y2="751.9" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
+<circle cx="1203.0" cy="604.2" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
+<circle cx="1203.0" cy="604.2" r="3" fill="#d7a06b"/>
+<circle cx="1444.0" cy="596.2" r="7" fill="white" stroke="#d7a06b" stroke-width="3"/>
+<circle cx="1444.0" cy="596.2" r="3" fill="#d7a06b"/>
+<line x1="962.0" y1="741.8" x2="1203.0" y2="724.2" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
+<line x1="1203.0" y1="724.2" x2="1444.0" y2="751.9" stroke="#ad9ad0" stroke-width="3" stroke-linecap="round"/>
 <circle cx="962.0" cy="741.8" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
 <circle cx="962.0" cy="741.8" r="3" fill="#ad9ad0"/>
-<circle cx="1122.7" cy="724.2" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
-<circle cx="1122.7" cy="724.2" r="3" fill="#ad9ad0"/>
-<circle cx="1283.3" cy="751.9" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
-<circle cx="1283.3" cy="751.9" r="3" fill="#ad9ad0"/>
-<circle cx="1444.0" cy="621.2" r="7" fill="white" stroke="#aab2bd" stroke-width="3"/>
-<circle cx="1444.0" cy="621.2" r="3" fill="#aab2bd"/>
-<text x="92" y="888" class="axis">Family legend</text>
-<circle cx="222" cy="883" r="7" fill="#6fa8c7"/>
-<text x="236" y="888" class="small">Qwen</text>
-<circle cx="437" cy="883" r="7" fill="#bf977a"/>
-<text x="451" y="888" class="small">MiniMax</text>
-<circle cx="652" cy="883" r="7" fill="#84ad78"/>
-<text x="666" y="888" class="small">DeepSeek</text>
-<circle cx="867" cy="883" r="7" fill="#d7a06b"/>
-<text x="881" y="888" class="small">Llama</text>
-<circle cx="1082" cy="883" r="7" fill="#ad9ad0"/>
-<text x="1096" y="888" class="small">Gemma</text>
-<circle cx="1297" cy="883" r="7" fill="#aab2bd"/>
-<text x="1311" y="888" class="small">OpenAI Ref</text>
-<text x="92" y="930" class="small">Takeaway: UniMoral scaling is task-specific. Winners rotate across RQs, and GPT-4o-mini Ref is a one-point text reference rather than a GPT S/M/L curve.</text>
+<circle cx="1203.0" cy="724.2" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
+<circle cx="1203.0" cy="724.2" r="3" fill="#ad9ad0"/>
+<circle cx="1444.0" cy="751.9" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
+<circle cx="1444.0" cy="751.9" r="3" fill="#ad9ad0"/>
+<text x="92" y="888" class="legend-title">Family legend</text>
+<circle cx="242" cy="882" r="9" fill="#6fa8c7"/>
+<text x="258" y="888" class="legend">Qwen</text>
+<circle cx="462" cy="882" r="9" fill="#bf977a"/>
+<text x="478" y="888" class="legend">MiniMax</text>
+<circle cx="682" cy="882" r="9" fill="#84ad78"/>
+<text x="698" y="888" class="legend">DeepSeek</text>
+<circle cx="902" cy="882" r="9" fill="#d7a06b"/>
+<text x="918" y="888" class="legend">Llama</text>
+<circle cx="1122" cy="882" r="9" fill="#ad9ad0"/>
+<text x="1138" y="888" class="legend">Gemma</text>
+<line x1="1338" y1="882" x2="1376" y2="882" stroke="#aab2bd" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 7"/>
+<text x="1388" y="888" class="legend">OpenAI Ref</text>
+<text x="92" y="930" class="small">Takeaway: UniMoral scaling is task-specific. Winners rotate across RQs, and GPT-4o-mini Ref is a dashed text-reference line rather than a GPT S/M/L curve.</text>
 </svg>
