@@ -133,10 +133,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
     assert any("GPT-4o-mini Ref" in item and "text-only reference marker" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_total_cost"] == "$759.59"
+    assert manifest["report_metadata"]["current_total_cost"] == "$831.08"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
         "minimax_api": "$504.66",
-        "openrouter_other_model_family_runs": "$254.17",
+        "openrouter_other_model_family_runs": "$325.66",
         "openai_api_reference_sweep": "$0.76",
     }
     assert "latest saved reruns parsed in this repo" in manifest["report_metadata"]["current_cost_scope"]

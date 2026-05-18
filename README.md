@@ -4,7 +4,7 @@
 
 This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.
 
-> Current project total cost: `$759.59` (MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$254.17`; OpenAI API reference sweep: `$0.76`.)
+> Current project total cost: `$831.08` (MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$325.66`; OpenAI API reference sweep: `$0.76`.)
 
 It combines three things in one clean public surface:
 

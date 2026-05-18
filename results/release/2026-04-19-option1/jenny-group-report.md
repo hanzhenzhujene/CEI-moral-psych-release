@@ -274,8 +274,8 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Report owner | `Jenny Zhu` |
 | Repo update date | `May 18, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
-| Current project total cost | `$759.59` |
-| Total cost breakdown | MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$254.17`; OpenAI API reference sweep: `$0.76`. |
+| Current project total cost | `$831.08` |
+| Total cost breakdown | MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$325.66`; OpenAI API reference sweep: `$0.76`. |
 | Cost scope | User-confirmed total spend through the latest saved reruns parsed in this repo. |
 | Purpose | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
 | Current public matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
