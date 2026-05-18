@@ -21,9 +21,11 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 ## UniMoral figures
 
 - `option1_unimoral_four_task_dashboard.svg`: executive-facing dashboard for RQ1 action prediction, RQ2 moral typology, RQ3 factor attribution, and RQ4 consequence generation
-- `option1_unimoral_task_heatmap.svg`: all model/reference lines across all four UniMoral tasks, with family blocks and S/M/L badges plus task-specific color scales so RQ4 METEOR remains visible
-- `option1_unimoral_task_spread.svg`: mean/range readout for the four UniMoral tasks
-- `option1_unimoral_task_rankings.svg`: per-task model rankings for the completed UniMoral cells
+- `option1_unimoral_task_heatmap.svg`: all model/reference lines across RQ1-RQ3 using one shared exact-match accuracy metric, with family blocks and S/M/L badges
+- `option1_unimoral_classification_f1.svg`: paper-facing RQ1-RQ3 weighted F1 view, with RQ1 marked as unavailable when the frozen source exposes accuracy only
+- `option1_unimoral_generation_quality.svg`: RQ4 consequence-generation quality view, using BERTScore F1 as the main semantic metric and METEOR as a side metric
+- `option1_unimoral_task_spread.svg`: exact-match accuracy spread readout for the RQ1-RQ3 classification tasks
+- `option1_unimoral_task_rankings.svg`: per-task exact-match accuracy rankings for the completed UniMoral classification cells
 
 ## CCD-Bench figures
 
@@ -54,6 +56,7 @@ Before pushing publication-facing figure changes, render every release SVG to PN
 - no clipped labels, overlapping legend text, or family-group boxes extending past their rows
 - figure titles state the interpretation boundary (`accuracy`, `not accuracy`, `proxy`, or `appendix QA`) directly in the image
 - the first UniMoral view shows all four task surfaces (`RQ1`-`RQ4`) rather than only action prediction
+- UniMoral classification figures do not mix accuracy, weighted F1, and generation metrics in the same chart
 - appendix/provenance charts remain readable but do not become the primary evidence for accuracy claims
 
 One local render command used for QA is:

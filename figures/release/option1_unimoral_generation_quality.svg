@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="962" viewBox="0 0 1180 962">
+<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:22px;font-weight:700}.subtitle{fill:#4b5563}.axis{font-weight:700}.small{font-size:11px;fill:#4b5563}.tiny{font-size:10px;fill:#6b7280;font-weight:700}</style>
+<rect width="100%" height="100%" fill="white"/>
+<text x="36" y="36" class="title">UniMoral RQ4 generation quality (separate from accuracy)</text>
+<text x="36" y="62" class="subtitle">RQ4 asks models to generate consequences, so exact-match accuracy/F1 is not the right readout.</text>
+<text x="36" y="84" class="subtitle">Primary read: BERTScore F1, a semantic similarity score where higher is better; METEOR is shown only as a lexical side metric.</text>
+<text x="250" y="128" class="tiny">BERTSCORE F1</text>
+<text x="910" y="128" class="tiny">SIDE METRIC</text>
+<line x1="250.00" y1="138" x2="250.00" y2="884" stroke="#e5e7eb"/>
+<text x="250.00" y="122" text-anchor="middle" class="small">0.00</text>
+<line x1="456.67" y1="138" x2="456.67" y2="884" stroke="#e5e7eb"/>
+<text x="456.67" y="122" text-anchor="middle" class="small">0.25</text>
+<line x1="663.33" y1="138" x2="663.33" y2="884" stroke="#e5e7eb"/>
+<text x="663.33" y="122" text-anchor="middle" class="small">0.50</text>
+<line x1="870.00" y1="138" x2="870.00" y2="884" stroke="#e5e7eb"/>
+<text x="870.00" y="122" text-anchor="middle" class="small">0.75</text>
+<text x="58" y="172" class="axis">Llama-M</text>
+<rect x="188" y="157" width="38" height="20" fill="#b56a33" rx="10"/>
+<text x="207" y="172" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="250" y="153" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="153" width="603.5" height="28" fill="#b56a33" rx="8"/>
+<text x="861.5" y="172" class="axis">0.730</text>
+<text x="910" y="172" class="small">METEOR 0.154</text>
+<text x="58" y="216" class="axis">Llama-S</text>
+<rect x="188" y="201" width="38" height="20" fill="#b56a33" rx="10"/>
+<text x="207" y="216" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="250" y="197" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="197" width="601.3" height="28" fill="#b56a33" rx="8"/>
+<text x="859.3" y="216" class="axis">0.727</text>
+<text x="910" y="216" class="small">METEOR 0.131</text>
+<text x="58" y="260" class="axis">Llama-L</text>
+<rect x="188" y="245" width="38" height="20" fill="#b56a33" rx="10"/>
+<text x="207" y="260" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="250" y="241" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="241" width="599.5" height="28" fill="#b56a33" rx="8"/>
+<text x="857.5" y="260" class="axis">0.725</text>
+<text x="910" y="260" class="small">METEOR 0.157</text>
+<text x="58" y="304" class="axis">Gemma-S</text>
+<rect x="188" y="289" width="38" height="20" fill="#7b62a3" rx="10"/>
+<text x="207" y="304" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="250" y="285" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="285" width="592.9" height="28" fill="#7b62a3" rx="8"/>
+<text x="850.9" y="304" class="axis">0.717</text>
+<text x="910" y="304" class="small">METEOR 0.092</text>
+<text x="58" y="348" class="axis">GPT4 only</text>
+<rect x="188" y="333" width="38" height="20" fill="#6b7280" rx="10"/>
+<text x="207" y="348" text-anchor="middle" fill="#ffffff" font-weight="700">Ref</text>
+<rect x="250" y="329" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="329" width="587.5" height="28" fill="#6b7280" rx="8"/>
+<text x="845.5" y="348" class="axis">0.711</text>
+<text x="910" y="348" class="small">METEOR 0.146</text>
+<text x="58" y="392" class="axis">Gemma-L</text>
+<rect x="188" y="377" width="38" height="20" fill="#7b62a3" rx="10"/>
+<text x="207" y="392" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="250" y="373" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="373" width="583.7" height="28" fill="#7b62a3" rx="8"/>
+<text x="841.7" y="392" class="axis">0.706</text>
+<text x="910" y="392" class="small">METEOR 0.088</text>
+<text x="58" y="436" class="axis">Gemma-M</text>
+<rect x="188" y="421" width="38" height="20" fill="#7b62a3" rx="10"/>
+<text x="207" y="436" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="250" y="417" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="417" width="578.0" height="28" fill="#7b62a3" rx="8"/>
+<text x="836.0" y="436" class="axis">0.699</text>
+<text x="910" y="436" class="small">METEOR 0.100</text>
+<text x="58" y="480" class="axis">Qwen-M</text>
+<rect x="188" y="465" width="38" height="20" fill="#2f6f9f" rx="10"/>
+<text x="207" y="480" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="250" y="461" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="461" width="577.6" height="28" fill="#2f6f9f" rx="8"/>
+<text x="835.6" y="480" class="axis">0.699</text>
+<text x="910" y="480" class="small">METEOR 0.151</text>
+<text x="58" y="524" class="axis">Qwen-S</text>
+<rect x="188" y="509" width="38" height="20" fill="#2f6f9f" rx="10"/>
+<text x="207" y="524" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="250" y="505" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="505" width="575.5" height="28" fill="#2f6f9f" rx="8"/>
+<text x="833.5" y="524" class="axis">0.696</text>
+<text x="910" y="524" class="small">METEOR 0.120</text>
+<text x="58" y="568" class="axis">Qwen-L</text>
+<rect x="188" y="553" width="38" height="20" fill="#2f6f9f" rx="10"/>
+<text x="207" y="568" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="250" y="549" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="549" width="571.0" height="28" fill="#2f6f9f" rx="8"/>
+<text x="829.0" y="568" class="axis">0.691</text>
+<text x="910" y="568" class="small">METEOR 0.135</text>
+<text x="58" y="612" class="axis">DeepSeek-S</text>
+<rect x="188" y="597" width="38" height="20" fill="#4f7d45" rx="10"/>
+<text x="207" y="612" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="250" y="593" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="593" width="562.8" height="28" fill="#4f7d45" rx="8"/>
+<text x="820.8" y="612" class="axis">0.681</text>
+<text x="910" y="612" class="small">METEOR 0.088</text>
+<text x="58" y="656" class="axis">MiniMax-M</text>
+<rect x="188" y="641" width="38" height="20" fill="#8a5a44" rx="10"/>
+<text x="207" y="656" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="250" y="637" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="637" width="527.1" height="28" fill="#8a5a44" rx="8"/>
+<text x="785.1" y="656" class="axis">0.638</text>
+<text x="910" y="656" class="small">METEOR 0.090 *</text>
+<text x="58" y="700" class="axis">DeepSeek-L</text>
+<rect x="188" y="685" width="38" height="20" fill="#4f7d45" rx="10"/>
+<text x="207" y="700" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="250" y="681" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="681" width="525.8" height="28" fill="#4f7d45" rx="8"/>
+<text x="783.8" y="700" class="axis">0.636</text>
+<text x="910" y="700" class="small">METEOR 0.077</text>
+<text x="58" y="744" class="axis">MiniMax-S</text>
+<rect x="188" y="729" width="38" height="20" fill="#8a5a44" rx="10"/>
+<text x="207" y="744" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<rect x="250" y="725" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="725" width="522.8" height="28" fill="#8a5a44" rx="8"/>
+<text x="780.8" y="744" class="axis">0.632</text>
+<text x="910" y="744" class="small">METEOR 0.078</text>
+<text x="58" y="788" class="axis">DeepSeek-M</text>
+<rect x="188" y="773" width="38" height="20" fill="#4f7d45" rx="10"/>
+<text x="207" y="788" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<rect x="250" y="769" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="769" width="519.9" height="28" fill="#4f7d45" rx="8"/>
+<text x="777.9" y="788" class="axis">0.629</text>
+<text x="910" y="788" class="small">METEOR 0.105</text>
+<text x="58" y="832" class="axis">MiniMax-L</text>
+<rect x="188" y="817" width="38" height="20" fill="#8a5a44" rx="10"/>
+<text x="207" y="832" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<rect x="250" y="813" width="620" height="28" fill="#e5e7eb" rx="8"/>
+<rect x="250" y="813" width="620" height="28" fill="#f8fafc" stroke="#c9cdd1" rx="8"/>
+<text x="860" y="832" text-anchor="end" class="small">n/a</text>
+<text x="910" y="832" class="small">METEOR n/a *</text>
+<text x="36" y="916" class="small">* marks reported-but-not-strict cells. This figure is intentionally separate from RQ1-RQ3 accuracy/F1 figures.</text>
+</svg>

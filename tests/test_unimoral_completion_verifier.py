@@ -32,7 +32,7 @@ def _set_tiny_verifier_constants(monkeypatch) -> None:
 def _set_tiny_rq4_verifier_constants(monkeypatch) -> None:
     tasks = {
         "unimoral_action_prediction": {"rq": "RQ1", "expected": 3, "metric": "accuracy"},
-        "unimoral_consequence_generation": {"rq": "RQ4", "expected": 2, "metric": "meteor"},
+        "unimoral_consequence_generation": {"rq": "RQ4", "expected": 2, "metric": "bert_score_f1"},
     }
     monkeypatch.setattr(verifier, "MODEL_LINES", ["Line-A"])
     monkeypatch.setattr(verifier, "TASKS", tasks)

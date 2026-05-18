@@ -1,0 +1,183 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="989" height="866" viewBox="0 0 989 866">
+<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:22px;font-weight:700}.subtitle{fill:#4b5563}.axis{font-weight:700}.small{font-size:11px;fill:#4b5563}.tiny{font-size:10px;fill:#6b7280;font-weight:700}</style>
+<rect width="100%" height="100%" fill="white"/>
+<text x="24" y="34" class="title">UniMoral classification weighted F1 (paper metric, RQ1-RQ3)</text>
+<text x="24" y="58" class="subtitle">F1 is higher-better: it balances precision (right when predicted) and recall (found the right class when present).</text>
+<text x="24" y="78" class="subtitle">The UniMoral paper reports AP/RQ1, MTC/RQ2, and FAA/RQ3 with weighted F1 to handle class variability.</text>
+<text x="24" y="98" class="subtitle">Current frozen RQ1 source exposes action accuracy only, so RQ1 F1 is marked unavailable instead of being fabricated.</text>
+<text x="69.0" y="144" text-anchor="middle" class="tiny">FAMILY</text>
+<text x="156.0" y="144" text-anchor="middle" class="tiny">SIZE</text>
+<text x="196" y="144" class="tiny">MODEL LINE</text>
+<text x="332" y="148" class="axis">RQ1</text>
+<text x="332" y="166" class="axis">Action prediction</text>
+<text x="332" y="184" class="small">weighted F1</text>
+<text x="537" y="148" class="axis">RQ2</text>
+<text x="537" y="166" class="axis">Moral typology</text>
+<text x="537" y="184" class="small">weighted F1</text>
+<text x="742" y="148" class="axis">RQ3</text>
+<text x="742" y="166" class="axis">Factor attribution</text>
+<text x="742" y="184" class="small">weighted F1</text>
+<rect x="20" y="192" width="98" height="96" fill="#2f6f9f" opacity="0.12" stroke="#2f6f9f" rx="8"/>
+<text x="69.0" y="244.0" text-anchor="middle" class="axis">Qwen</text>
+<rect x="20" y="294" width="98" height="96" fill="#8a5a44" opacity="0.12" stroke="#8a5a44" rx="8"/>
+<text x="69.0" y="346.0" text-anchor="middle" class="axis">MiniMax</text>
+<line x1="20" y1="290" x2="959" y2="290" stroke="#d8dee4"/>
+<rect x="20" y="396" width="98" height="96" fill="#4f7d45" opacity="0.12" stroke="#4f7d45" rx="8"/>
+<text x="69.0" y="448.0" text-anchor="middle" class="axis">DeepSeek</text>
+<line x1="20" y1="392" x2="959" y2="392" stroke="#d8dee4"/>
+<rect x="20" y="498" width="98" height="96" fill="#b56a33" opacity="0.12" stroke="#b56a33" rx="8"/>
+<text x="69.0" y="550.0" text-anchor="middle" class="axis">Llama</text>
+<line x1="20" y1="494" x2="959" y2="494" stroke="#d8dee4"/>
+<rect x="20" y="600" width="98" height="96" fill="#7b62a3" opacity="0.12" stroke="#7b62a3" rx="8"/>
+<text x="69.0" y="652.0" text-anchor="middle" class="axis">Gemma</text>
+<line x1="20" y1="596" x2="959" y2="596" stroke="#d8dee4"/>
+<rect x="20" y="702" width="98" height="28" fill="#6b7280" opacity="0.12" stroke="#6b7280" rx="8"/>
+<text x="69.0" y="720.0" text-anchor="middle" class="axis">GPT4 only</text>
+<line x1="20" y1="698" x2="959" y2="698" stroke="#d8dee4"/>
+<rect x="132" y="198" width="48" height="22" fill="#2f6f9f" rx="11"/>
+<text x="156.0" y="214" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<text x="196" y="214" class="axis">Qwen-S</text>
+<rect x="326" y="196" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="216" class="small">F1 needs samples</text>
+<rect x="531" y="196" width="199" height="28" fill="#e2f0f0" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="216" class="">0.280</text>
+<rect x="736" y="196" width="199" height="28" fill="#399b9d" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="216" class="">0.242</text>
+<rect x="132" y="232" width="48" height="22" fill="#2f6f9f" rx="11"/>
+<text x="156.0" y="248" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<text x="196" y="248" class="axis">Qwen-M</text>
+<rect x="326" y="230" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="250" class="small">F1 needs samples</text>
+<rect x="531" y="230" width="199" height="28" fill="#b7dbdb" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="250" class="">0.297</text>
+<rect x="736" y="230" width="199" height="28" fill="#299395" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="250" class="">0.259</text>
+<rect x="132" y="266" width="48" height="22" fill="#2f6f9f" rx="11"/>
+<text x="156.0" y="282" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<text x="196" y="282" class="axis">Qwen-L</text>
+<rect x="326" y="264" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="284" class="small">F1 needs samples</text>
+<rect x="531" y="264" width="199" height="28" fill="#6db5b7" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="284" class="">0.326</text>
+<rect x="736" y="264" width="199" height="28" fill="#2a9496" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="284" class="">0.257</text>
+<rect x="132" y="300" width="48" height="22" fill="#8a5a44" rx="11"/>
+<text x="156.0" y="316" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<text x="196" y="316" class="axis">MiniMax-S</text>
+<rect x="326" y="298" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="318" class="small">F1 needs samples</text>
+<rect x="531" y="298" width="199" height="28" fill="#74b9ba" stroke="#d97706" stroke-dasharray="5 3" rx="3"/>
+<text x="541" y="318" class="">0.323*</text>
+<rect x="736" y="298" width="199" height="28" fill="#f1f8f8" stroke="#d97706" stroke-dasharray="5 3" rx="3"/>
+<text x="746" y="318" class="">0.054*</text>
+<rect x="132" y="334" width="48" height="22" fill="#8a5a44" rx="11"/>
+<text x="156.0" y="350" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<text x="196" y="350" class="axis">MiniMax-M</text>
+<rect x="326" y="332" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="352" class="small">F1 needs samples</text>
+<rect x="531" y="332" width="199" height="28" fill="#5eaeaf" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="352" class="">0.332</text>
+<rect x="736" y="332" width="199" height="28" fill="#299395" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="352" class="">0.259</text>
+<rect x="132" y="368" width="48" height="22" fill="#8a5a44" rx="11"/>
+<text x="156.0" y="384" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<text x="196" y="384" class="axis">MiniMax-L</text>
+<rect x="326" y="366" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="386" class="small">F1 needs samples</text>
+<rect x="531" y="366" width="199" height="28" fill="#6bb4b6" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="386" class="">0.326</text>
+<rect x="736" y="366" width="199" height="28" fill="#3a9c9e" stroke="#d97706" stroke-dasharray="5 3" rx="3"/>
+<text x="746" y="386" class="">0.241*</text>
+<rect x="132" y="402" width="48" height="22" fill="#4f7d45" rx="11"/>
+<text x="156.0" y="418" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<text x="196" y="418" class="axis">DeepSeek-S</text>
+<rect x="326" y="400" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="420" class="small">F1 needs samples</text>
+<rect x="531" y="400" width="199" height="28" fill="#5cadae" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="420" class="">0.332</text>
+<rect x="736" y="400" width="199" height="28" fill="#249193" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="420" class="">0.264</text>
+<rect x="132" y="436" width="48" height="22" fill="#4f7d45" rx="11"/>
+<text x="156.0" y="452" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<text x="196" y="452" class="axis">DeepSeek-M</text>
+<rect x="326" y="434" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="454" class="small">F1 needs samples</text>
+<rect x="531" y="434" width="199" height="28" fill="#98cbcc" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="454" class="">0.309</text>
+<rect x="736" y="434" width="199" height="28" fill="#2a9496" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="454" class="">0.258</text>
+<rect x="132" y="470" width="48" height="22" fill="#4f7d45" rx="11"/>
+<text x="156.0" y="486" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<text x="196" y="486" class="axis">DeepSeek-L</text>
+<rect x="326" y="468" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="488" class="small">F1 needs samples</text>
+<rect x="531" y="468" width="199" height="28" fill="#55aaab" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="488" class="">0.335</text>
+<rect x="736" y="468" width="199" height="28" fill="#2c9596" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="488" class="">0.256</text>
+<rect x="132" y="504" width="48" height="22" fill="#b56a33" rx="11"/>
+<text x="156.0" y="520" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<text x="196" y="520" class="axis">Llama-S</text>
+<rect x="326" y="502" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="522" class="small">F1 needs samples</text>
+<rect x="531" y="502" width="199" height="28" fill="#249193" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="522" class="">0.354</text>
+<rect x="736" y="502" width="199" height="28" fill="#2a9496" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="522" class="">0.257</text>
+<rect x="132" y="538" width="48" height="22" fill="#b56a33" rx="11"/>
+<text x="156.0" y="554" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<text x="196" y="554" class="axis">Llama-M</text>
+<rect x="326" y="536" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="556" class="small">F1 needs samples</text>
+<rect x="531" y="536" width="199" height="28" fill="#acd5d6" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="556" class="">0.301</text>
+<rect x="736" y="536" width="199" height="28" fill="#259193" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="556" class="">0.263</text>
+<rect x="132" y="572" width="48" height="22" fill="#b56a33" rx="11"/>
+<text x="156.0" y="588" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<text x="196" y="588" class="axis">Llama-L</text>
+<rect x="326" y="570" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="590" class="small">F1 needs samples</text>
+<rect x="531" y="570" width="199" height="28" fill="#b8dbdc" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="590" class="">0.296</text>
+<rect x="736" y="570" width="199" height="28" fill="#319799" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="590" class="">0.250</text>
+<rect x="132" y="606" width="48" height="22" fill="#7b62a3" rx="11"/>
+<text x="156.0" y="622" text-anchor="middle" fill="#ffffff" font-weight="700">S</text>
+<text x="196" y="622" class="axis">Gemma-S</text>
+<rect x="326" y="604" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="624" class="small">F1 needs samples</text>
+<rect x="531" y="604" width="199" height="28" fill="#2d9597" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="624" class="">0.351</text>
+<rect x="736" y="604" width="199" height="28" fill="#2c9597" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="624" class="">0.256</text>
+<rect x="132" y="640" width="48" height="22" fill="#7b62a3" rx="11"/>
+<text x="156.0" y="656" text-anchor="middle" fill="#ffffff" font-weight="700">M</text>
+<text x="196" y="656" class="axis">Gemma-M</text>
+<rect x="326" y="638" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="658" class="small">F1 needs samples</text>
+<rect x="531" y="638" width="199" height="28" fill="#80bfc0" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="658" class="">0.318</text>
+<rect x="736" y="638" width="199" height="28" fill="#289395" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="658" class="">0.260</text>
+<rect x="132" y="674" width="48" height="22" fill="#7b62a3" rx="11"/>
+<text x="156.0" y="690" text-anchor="middle" fill="#ffffff" font-weight="700">L</text>
+<text x="196" y="690" class="axis">Gemma-L</text>
+<rect x="326" y="672" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="692" class="small">F1 needs samples</text>
+<rect x="531" y="672" width="199" height="28" fill="#aed6d7" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="692" class="">0.300</text>
+<rect x="736" y="672" width="199" height="28" fill="#2e9698" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="692" class="">0.253</text>
+<rect x="132" y="708" width="48" height="22" fill="#6b7280" rx="11"/>
+<text x="156.0" y="724" text-anchor="middle" fill="#ffffff" font-weight="700">Ref</text>
+<text x="196" y="724" class="axis">GPT4 only</text>
+<rect x="326" y="706" width="199" height="28" fill="#f2f2f2" stroke="#c9cdd1" rx="3"/>
+<text x="336" y="726" class="small">F1 needs samples</text>
+<rect x="531" y="706" width="199" height="28" fill="#f1f8f8" stroke="#c9cdd1" rx="3"/>
+<text x="541" y="726" class="">0.274</text>
+<rect x="736" y="706" width="199" height="28" fill="#2e9697" stroke="#c9cdd1" rx="3"/>
+<text x="746" y="726" class="">0.254</text>
+<text x="24" y="818" class="small">Weighted F1 is the paper-facing classification metric because labels are uneven and precision/recall both matter.</text>
+<text x="24" y="838" class="small">RQ1 F1 requires per-sample action predictions; the frozen release source currently provides only aggregate action accuracy.</text>
+</svg>

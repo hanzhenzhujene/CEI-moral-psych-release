@@ -2,4 +2,4 @@ task_name,task_label,model_lines,mean,min,max,range,diagnostic_read
 unimoral_action_prediction,Action prediction,16,0.654586,0.56255,0.683629,0.121079,diagnostic
 unimoral_moral_typology,Moral typology,15,0.315471,0.27438,0.354226,0.079846,moderately diagnostic
 unimoral_factor_attribution,Factor attribution,14,0.256429,0.242104,0.264409,0.022305,saturated
-unimoral_consequence_generation,Consequence generation,14,0.115755,0.076589,0.157234,0.080645,moderately diagnostic
+unimoral_consequence_generation,Consequence generation,14,0.691394,0.62888,0.730047,0.101167,diagnostic

@@ -469,14 +469,14 @@ If this repo informs a paper, proposal, slide deck, or benchmark comparison, cit
 
 The release now implements all four UniMoral task definitions and exports scored artifacts where model runs completed, but the current model-line matrix is not yet fully complete. Incomplete or parse-limited cells are listed in `unimoral-failure-checklist.csv`; action prediction remains the legacy comparable scalar and is retained as RQ1.
 
-Score-scale sanity check: RQ2/RQ3 headline values are official weighted F1, not the exact-match accuracy side column (strict-complete side accuracy spans RQ2 0.554-0.599, RQ3 0.561-0.631). RQ4's headline value is METEOR; BERTScore F1 spans 0.629-0.730. The lower RQ2/RQ3/RQ4 headline values therefore reflect metric scale and task difficulty, not an RQ1-style accuracy collapse.
+Metric sanity check: F1 is a 0-1 classification score where higher is better; it balances precision and recall instead of only counting exact matches. UniMoral has four RQs. RQ1-RQ3 can be read together with exact-match accuracy, while the paper-facing classification metric is weighted F1. In the current strict-complete cells, exact-match accuracy spans RQ2 0.554-0.599 and RQ3 0.561-0.631. RQ4 is a generation task, so it is separated and read with semantic similarity instead of accuracy: BERTScore F1 spans 0.629-0.730, with METEOR 0.077-0.157 as a lexical side metric.
 
 | RQ | Task | Status | Strict complete | Reported cells | Primary metric | Mean | Range | Top line | Diagnostic read |
 | --- | --- | --- | ---: | ---: | --- | ---: | ---: | --- | --- |
 | RQ1 | Action prediction | complete | 16/16 | 16/16 | accuracy | 0.655 | 0.121 | DeepSeek-M (0.684) | diagnostic |
 | RQ2 | Moral typology | incomplete | 15/16 | 16/16 | official_weighted_f1 | 0.315 | 0.080 | Llama-S (0.354) | moderately diagnostic |
 | RQ3 | Factor attribution | incomplete | 14/16 | 15/16 | official_weighted_f1 | 0.256 | 0.022 | DeepSeek-S (0.264) | saturated |
-| RQ4 | Consequence generation | incomplete | 14/16 | 15/16 | meteor | 0.116 | 0.081 | Llama-L (0.157) | moderately diagnostic |
+| RQ4 | Consequence generation | incomplete | 14/16 | 15/16 | bert_score_f1 | 0.691 | 0.101 | Llama-M (0.730) | diagnostic |
 
 Sample-level predictions for RQ2/RQ3/RQ4 are exported in `unimoral-sample-predictions.csv`; full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.
 The provider-free MiniMax handoff is tracked in [`unimoral-minimax-resume-plan.md`](results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md).
@@ -484,14 +484,18 @@ The prompt-to-artifact completion audit, including the verifier-checked CSV-leve
 
 | Task | What it measures | Scoring note |
 | --- | --- | --- |
-| RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | Accuracy from the existing release matrix. |
-| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Official-style weighted F1 is the primary release metric, so the headline scale is lower than RQ1 accuracy; exact-match membership accuracy is exported beside it for interpretability. |
-| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Official-style weighted F1 is the primary release metric, so the headline scale is lower than RQ1 accuracy; exact-match membership accuracy is exported beside it for interpretability. |
-| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | METEOR is the primary live scalar, so the headline scale is much lower than classification accuracy; BLEU, ROUGE-L, and BERTScore F1 are exported beside it. Official BERTScore F1 is exported in `unimoral-rq4-bertscore.csv` and merged into completed RQ4 rows when present. |
+| RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | The UniMoral paper reports weighted F1 for action prediction; the frozen release source currently exposes the legacy exact-match accuracy scalar, so the F1 figure marks RQ1 F1 as unavailable rather than inventing it. |
+| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Weighted F1 is the paper-facing metric; exact-match membership accuracy is exported beside it for intuitive comparison with RQ1/RQ3. |
+| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Weighted F1 is the paper-facing metric; exact-match membership accuracy is exported beside it for intuitive comparison with RQ1/RQ2. |
+| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | BERTScore F1 is the paper-facing semantic-similarity metric; METEOR, BLEU, and ROUGE-L are lexical side metrics. RQ4 is kept separate from classification accuracy/F1 charts. |
 
 ![UniMoral RQ1-RQ4 dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)
 
-![UniMoral task heatmap](figures/release/option1_unimoral_task_heatmap.svg)
+![UniMoral classification accuracy heatmap](figures/release/option1_unimoral_task_heatmap.svg)
+
+![UniMoral classification weighted F1](figures/release/option1_unimoral_classification_f1.svg)
+
+![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)
 
 ![UniMoral task spread](figures/release/option1_unimoral_task_spread.svg)
 

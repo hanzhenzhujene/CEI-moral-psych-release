@@ -44,17 +44,17 @@ unimoral_factor_attribution,Factor attribution,11,GPT4 only,official_weighted_f1
 unimoral_factor_attribution,Factor attribution,12,Gemma-L,official_weighted_f1,0.253402
 unimoral_factor_attribution,Factor attribution,13,Llama-L,official_weighted_f1,0.250128
 unimoral_factor_attribution,Factor attribution,14,Qwen-S,official_weighted_f1,0.242104
-unimoral_consequence_generation,Consequence generation,1,Llama-L,meteor,0.157234
-unimoral_consequence_generation,Consequence generation,2,Llama-M,meteor,0.15368
-unimoral_consequence_generation,Consequence generation,3,Qwen-M,meteor,0.150518
-unimoral_consequence_generation,Consequence generation,4,GPT4 only,meteor,0.146082
-unimoral_consequence_generation,Consequence generation,5,Qwen-L,meteor,0.134819
-unimoral_consequence_generation,Consequence generation,6,Llama-S,meteor,0.130693
-unimoral_consequence_generation,Consequence generation,7,Qwen-S,meteor,0.119781
-unimoral_consequence_generation,Consequence generation,8,DeepSeek-M,meteor,0.104543
-unimoral_consequence_generation,Consequence generation,9,Gemma-M,meteor,0.100194
-unimoral_consequence_generation,Consequence generation,10,Gemma-S,meteor,0.092345
-unimoral_consequence_generation,Consequence generation,11,DeepSeek-S,meteor,0.08797
-unimoral_consequence_generation,Consequence generation,12,Gemma-L,meteor,0.08787
-unimoral_consequence_generation,Consequence generation,13,MiniMax-S,meteor,0.078254
-unimoral_consequence_generation,Consequence generation,14,DeepSeek-L,meteor,0.076589
+unimoral_consequence_generation,Consequence generation,1,Llama-M,bert_score_f1,0.730047
+unimoral_consequence_generation,Consequence generation,2,Llama-S,bert_score_f1,0.727378
+unimoral_consequence_generation,Consequence generation,3,Llama-L,bert_score_f1,0.72515
+unimoral_consequence_generation,Consequence generation,4,Gemma-S,bert_score_f1,0.717221
+unimoral_consequence_generation,Consequence generation,5,GPT4 only,bert_score_f1,0.710669
+unimoral_consequence_generation,Consequence generation,6,Gemma-L,bert_score_f1,0.706031
+unimoral_consequence_generation,Consequence generation,7,Gemma-M,bert_score_f1,0.699249
+unimoral_consequence_generation,Consequence generation,8,Qwen-M,bert_score_f1,0.698745
+unimoral_consequence_generation,Consequence generation,9,Qwen-S,bert_score_f1,0.696111
+unimoral_consequence_generation,Consequence generation,10,Qwen-L,bert_score_f1,0.690709
+unimoral_consequence_generation,Consequence generation,11,DeepSeek-S,bert_score_f1,0.680803
+unimoral_consequence_generation,Consequence generation,12,DeepSeek-L,bert_score_f1,0.63607
+unimoral_consequence_generation,Consequence generation,13,MiniMax-S,bert_score_f1,0.632457
+unimoral_consequence_generation,Consequence generation,14,DeepSeek-M,bert_score_f1,0.62888

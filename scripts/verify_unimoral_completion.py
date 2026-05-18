@@ -38,7 +38,7 @@ TASKS = {
     "unimoral_action_prediction": {"rq": "RQ1", "expected": 8784, "metric": "accuracy"},
     "unimoral_moral_typology": {"rq": "RQ2", "expected": 3492, "metric": "official_weighted_f1"},
     "unimoral_factor_attribution": {"rq": "RQ3", "expected": 3492, "metric": "official_weighted_f1"},
-    "unimoral_consequence_generation": {"rq": "RQ4", "expected": 1782, "metric": "meteor"},
+    "unimoral_consequence_generation": {"rq": "RQ4", "expected": 1782, "metric": "bert_score_f1"},
 }
 
 EXPECTED_SAMPLE_PREDICTION_ROWS = len(MODEL_LINES) * sum(
