@@ -14,7 +14,13 @@ ROOT = Path(__file__).parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.build_release_artifacts import _sample_correctness_value, build_axis_ticks, nice_tick_step
+from scripts.build_release_artifacts import (
+    _sample_correctness_value,
+    build_axis_ticks,
+    nice_tick_step,
+    preserve_repo_readme_org_tail,
+)
+from scripts.build_unimoral_artifacts import update_markdown
 
 SCRIPT = ROOT / "scripts" / "build_release_artifacts.py"
 SOURCE = ROOT / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
@@ -48,6 +54,54 @@ def test_unimoral_blank_scorer_answer_reparsed_from_visible_completion():
     }
 
     assert _sample_correctness_value(sample, "unimoral_action_prediction") == 1.0
+
+
+def test_root_readme_regeneration_preserves_org_owned_tail_sections():
+    generated = "# CEI Moral-Psych Benchmark Suite\n\n<!-- UNIMORAL_FULL_BENCHMARK_END -->\n"
+    existing = (
+        "# CEI Moral-Psych Benchmark Suite\n\n"
+        "<!-- UNIMORAL_FULL_BENCHMARK_END -->\n\n"
+        "## Claude Code Slash Commands\n\n"
+        "| Command | What it does |\n"
+        "| --- | --- |\n"
+        "| `/validate-results` | Validate results. |\n\n"
+        "## Contributing\n\n"
+        "All changes go through pull requests.\n\n"
+        "## Team\n\n"
+        "| Person | Papers |\n"
+    )
+
+    result = preserve_repo_readme_org_tail(generated, existing)
+
+    assert result.startswith(generated.rstrip())
+    assert "## Claude Code Slash Commands" in result
+    assert "| `/validate-results` | Validate results. |" in result
+    assert "## Contributing" in result
+    assert "## Team" in result
+
+
+def test_unimoral_readme_block_stays_before_org_owned_tail_sections(tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        "# CEI Moral-Psych Benchmark Suite\n\n"
+        "Generated Jenny result surface.\n\n"
+        "## Claude Code Slash Commands\n\n"
+        "| `/validate-results` | Validate results. |\n\n"
+        "## Team\n\n"
+        "| Person | Papers |\n",
+        encoding="utf-8",
+    )
+
+    update_markdown(
+        readme,
+        "## UniMoral Full Benchmark Coverage\n\nUpdated benchmark section.\n",
+        insert_before_headings=("## Claude Code Slash Commands", "## Team"),
+    )
+
+    content = readme.read_text(encoding="utf-8")
+    assert content.index("<!-- UNIMORAL_FULL_BENCHMARK_START -->") < content.index("## Claude Code Slash Commands")
+    assert "| `/validate-results` | Validate results. |" in content
+    assert "## Team" in content
 
 
 def test_release_builder_emits_expected_files(tmp_path):
@@ -131,7 +185,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
-    assert any("GPT-4o-mini Ref" in item and "text-only reference marker" in item for item in manifest["interpretation_guardrails"])
+    assert any("OpenAI reference rows" in item and "text-only markers" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
     assert manifest["report_metadata"]["current_total_cost"] == "$831.08"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
@@ -203,7 +257,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         )
     topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     assert "## TL;DR" in topline_text
-    assert "`MiniMax-M`" in topline_text
+    assert "`GPT-5-mini Ref`" in topline_text
     assert "**What each benchmark means:**" in topline_text
     assert "**Current GitHub-facing boundary:**" not in topline_text.split("## Frozen Snapshot Scope", 1)[0]
 
@@ -444,7 +498,7 @@ def test_release_builder_emits_expected_files(tmp_path):
             "comparison_note",
         ]
         rows = list(reader)
-    assert len(rows) in {10, 11, 12, 13, 14, 15, 16}
+    assert len(rows) == 20
     minimax_large_rows = [row for row in rows if row["line_label"] == "MiniMax-L"]
     if minimax_large_rows:
         assert any(
@@ -455,13 +509,21 @@ def test_release_builder_emits_expected_files(tmp_path):
             for row in minimax_large_rows
         )
     rows_by_line = {row["line_label"]: row for row in rows}
-    openai_reference = rows_by_line["GPT-4o-mini Ref"]
-    assert openai_reference["family"] == "OpenAI Ref"
-    assert openai_reference["size_slot"] == "Ref"
-    assert openai_reference["unimoral_action_accuracy"] == "0.672700"
-    assert openai_reference["smid_average_accuracy"] == ""
-    assert openai_reference["value_average_accuracy"] == "0.700698"
-    assert openai_reference["comparison_note"] == "GPT-4o-mini text reference marker; SMID and DeNEVIL intentionally not run."
+    expected_openai_refs = {
+        "GPT-4o-mini Ref": ("0.672700", "0.700698"),
+        "GPT-5-nano Ref": ("0.653575", "0.617193"),
+        "GPT-4.1-nano Ref": ("0.646289", "0.673043"),
+        "GPT-5-mini Ref": ("0.677937", "0.738897"),
+        "GPT-4.1-mini Ref": ("0.679417", "0.734890"),
+    }
+    for line_label, (unimoral_accuracy, value_accuracy) in expected_openai_refs.items():
+        openai_reference = rows_by_line[line_label]
+        assert openai_reference["family"] == "OpenAI Ref"
+        assert openai_reference["size_slot"] == "Ref"
+        assert openai_reference["unimoral_action_accuracy"] == unimoral_accuracy
+        assert openai_reference["smid_average_accuracy"] == ""
+        assert openai_reference["value_average_accuracy"] == value_accuracy
+        assert openai_reference["comparison_note"] == f"{line_label} text-only OpenAI reference; outside the S/M/L family curves."
     assert rows_by_line["MiniMax-S"]["unimoral_action_accuracy"] == "0.660861"
     assert rows_by_line["MiniMax-S"]["smid_average_accuracy"] == "0.431996"
     assert rows_by_line["MiniMax-S"]["value_average_accuracy"] == "0.739942"
@@ -601,7 +663,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "dominant_option_share" in reader.fieldnames
         assert "distribution_status" in reader.fieldnames
         ccd_distribution_rows = list(reader)
-    assert len(ccd_distribution_rows) == 16
+    assert len(ccd_distribution_rows) == 20
     for row in ccd_distribution_rows:
         valid_rate = row["valid_selection_rate"]
         if valid_rate == "n/a":
@@ -613,14 +675,22 @@ def test_release_builder_emits_expected_files(tmp_path):
             assert all(row[f"option_{cluster_id}_pct"] == "n/a" for cluster_id in range(1, 11))
             assert all(row[f"option_{cluster_id}_delta_pp"] == "n/a" for cluster_id in range(1, 11))
     ccd_rows_by_line = {row["line_label"]: row for row in ccd_distribution_rows}
-    openai_ccd = ccd_rows_by_line["GPT-4o-mini Ref"]
-    assert openai_ccd["family"] == "OpenAI Ref"
-    assert openai_ccd["size_slot"] == "Ref"
-    assert openai_ccd["valid_selection_count"] == "2182"
-    assert openai_ccd["valid_selection_rate"] == "100.000000"
-    assert openai_ccd["option_6_pct"] == "17.094409"
-    assert openai_ccd["dominant_option"] == "option_6 (Nordic Europe)"
-    assert openai_ccd["effective_cluster_count"] == "8.937721"
+    expected_openai_ccd = {
+        "GPT-4o-mini Ref": ("2182", "100.000000", "17.094409", "8.937721"),
+        "GPT-5-nano Ref": ("2181", "99.954170", "27.785420", "6.793151"),
+        "GPT-4.1-nano Ref": ("2182", "100.000000", "21.494042", "8.397459"),
+        "GPT-5-mini Ref": ("2182", "100.000000", "25.297892", "7.131573"),
+        "GPT-4.1-mini Ref": ("2182", "100.000000", "22.410632", "8.069893"),
+    }
+    for line_label, (valid_count, valid_rate, option_6_pct, effective_clusters) in expected_openai_ccd.items():
+        openai_ccd = ccd_rows_by_line[line_label]
+        assert openai_ccd["family"] == "OpenAI Ref"
+        assert openai_ccd["size_slot"] == "Ref"
+        assert openai_ccd["valid_selection_count"] == valid_count
+        assert openai_ccd["valid_selection_rate"] == valid_rate
+        assert openai_ccd["option_6_pct"] == option_6_pct
+        assert openai_ccd["dominant_option"] == "option_6 (Nordic Europe)"
+        assert openai_ccd["effective_cluster_count"] == effective_clusters
     deepseek_small_ccd = ccd_rows_by_line["DeepSeek-S"]
     assert deepseek_small_ccd["distribution_status"] == "ok"
     assert deepseek_small_ccd["valid_selection_count"] == "2180"
@@ -949,10 +1019,12 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     assert any(
         row["family"] == "OpenAI Ref"
-        and "Single text-only reference point" in row["evidence_scope"]
-        and "UniMoral: Ref 0.673" in row["numeric_pattern"]
-        and "Value Kaleidoscope: Ref 0.701" in row["numeric_pattern"]
-        and "not be read as evidence about GPT-family scaling" in row["interpretation"]
+        and "Five text-only reference rows" in row["evidence_scope"]
+        and "UniMoral: range 0.646-0.679" in row["numeric_pattern"]
+        and "best GPT-4.1-mini Ref 0.679" in row["numeric_pattern"]
+        and "Value Kaleidoscope: range 0.617-0.739" in row["numeric_pattern"]
+        and "best GPT-5-mini Ref 0.739" in row["numeric_pattern"]
+        and "not be read as OpenAI S/M/L scaling evidence" in row["interpretation"]
         for row in scaling_rows
     )
 
@@ -968,14 +1040,14 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "CCD-Bench` is cultural choice style under value conflict" in text
         assert "**Current GitHub-facing boundary:**" not in text.split("## Benchmark Result Visuals", 1)[0]
         assert "Best text-only line" in text
-        assert "OpenAI reference interpretation" in text
-        assert "text-only calibration anchor" in text
+        assert "OpenAI text-only references" in text
+        assert "Best OpenAI UniMoral" in text
         assert "GPT-4o-mini reference line" not in text
         assert "76,486/76,486 parsed prompts" not in text
         assert "The hardest benchmark is SMID" in text
         assert "There is no universal scaling law" in text
         if "CCD-Bench shows cultural choice style, not accuracy" in text:
-            assert "`DeepSeek-S` at 13.8% to `Llama-S` at 23.9%" in text
+            assert "`DeepSeek-S` at 13.8% to `GPT-5-nano Ref` at 27.8%" in text
         if "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" in text:
             assert "92.4% to 99.5% protective response rate" in text
             assert "0.2% no-visible proxy traces" in text
@@ -1014,7 +1086,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "`DeepSeek-M` | UniMoral 0.684; Value 0.635" in text
         assert "`DeepSeek-L` | UniMoral 0.563; Value 0.681" in text
         assert "Strongest fully observed comparable line | `MiniMax-S` averages 0.611" in text
-        assert "Strongest text-only comparable line | `MiniMax-M` reaches UniMoral 0.659 and Value 0.740" in text
+        assert "Strongest text-only comparable line | `GPT-5-mini Ref` reaches UniMoral 0.678 and Value 0.739" in text
         assert "Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route" in text
         assert "CCD-Bench should not be flattened into a universal accuracy number." in text
         assert "The repo still lacks a stable local `MoralPrompt` export" in text
@@ -1116,14 +1188,14 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Key takeaways:" in topline_summary
     assert "What each benchmark means" in topline_summary
     assert "**Current GitHub-facing boundary:**" not in topline_summary.split("## Frozen Snapshot Scope", 1)[0]
-    assert "OpenAI reference interpretation" in topline_summary
-    assert "text-only calibration anchor" in topline_summary
+    assert "OpenAI text-only references" in topline_summary
+    assert "Best OpenAI UniMoral" in topline_summary
     assert "GPT-4o-mini reference line" not in topline_summary
     assert "76,486/76,486 parsed prompts" not in topline_summary
     assert "## Frozen Snapshot Scope" in topline_summary
     assert "Best like-for-like line" in topline_summary
     if "CCD-Bench shows cultural choice style, not accuracy" in topline_summary:
-        assert "Llama-S" in topline_summary
+        assert "GPT-5-nano Ref" in topline_summary
     if "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" in topline_summary:
         assert "DeepSeek-S" in topline_summary
     assert "For the full public package, move next to `README.md`" in topline_summary
@@ -1159,8 +1231,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "UniMoral is grouped in Figure 1 above" in family_scaling_svg
     assert "Two comparable benchmark panels here: SMID and Value Kaleidoscope." in family_scaling_svg
     assert "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence." in family_scaling_svg
-    assert "GPT-4o-mini Ref is drawn as a dashed horizontal reference line, not an S/M/L point." in family_scaling_svg
-    assert "GPT-4o-mini Ref 70.1%" in family_scaling_svg
+    assert "OpenAI text refs are drawn as gray dashed reference lines where a text metric exists, not as S/M/L points." in family_scaling_svg
+    assert "OpenAI refs 61.7%-73.9%" in family_scaling_svg
+    assert "Best GPT-5-mini Ref 73.9%" in family_scaling_svg
     assert "GPT-4o-mini Ref: no SMID route" not in family_scaling_svg
     assert "#dc2626" in family_scaling_svg
     assert ">Ref<" not in family_scaling_svg

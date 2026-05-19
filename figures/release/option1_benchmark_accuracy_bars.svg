@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1220 1810" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1220 2146" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,27 +35,27 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1220" height="1810" class="canvas"/>
-<rect x="24" y="24" width="1172" height="1762" rx="22" class="panel"/>
+<rect x="0" y="0" width="1220" height="2146" class="canvas"/>
+<rect x="24" y="24" width="1172" height="2098" rx="22" class="panel"/>
 <title>SMID and Value accuracy by benchmark</title>
 <desc>Horizontal bar panels comparing the latest available family-size lines on SMID and Value Kaleidoscope after the combined UniMoral benchmark block. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>
 <text x="48" y="64" class="title">SMID And Value Accuracy By Benchmark</text>
 <text x="48" y="88" class="subtitle">UniMoral is shown in separate accuracy and generation figures, so this comparison starts at SMID. Each panel keeps the same current</text>
 <text x="48" y="108" class="subtitle">lines. Hatched rows mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format</text>
 <text x="48" y="128" class="subtitle">validation.</text>
-<rect x="42" y="136" width="1136" height="750" rx="18" class="subpanel"/>
+<rect x="42" y="136" width="1136" height="918" rx="18" class="subpanel"/>
 <text x="48" y="164" class="axis">SMID</text>
 <text x="48" y="184" class="subtitle">Average of moral rating and foundation classification</text>
 <text x="1080" y="164" text-anchor="end" class="small">Accuracy</text>
-<line x1="280.00" y1="198" x2="280.00" y2="906" class="guide"/>
+<line x1="280.00" y1="198" x2="280.00" y2="1074" class="guide"/>
 <text x="280.00" y="190" text-anchor="middle" class="small">0%</text>
-<line x1="480.00" y1="198" x2="480.00" y2="906" class="guide"/>
+<line x1="480.00" y1="198" x2="480.00" y2="1074" class="guide"/>
 <text x="480.00" y="190" text-anchor="middle" class="small">25%</text>
-<line x1="680.00" y1="198" x2="680.00" y2="906" class="guide"/>
+<line x1="680.00" y1="198" x2="680.00" y2="1074" class="guide"/>
 <text x="680.00" y="190" text-anchor="middle" class="small">50%</text>
-<line x1="880.00" y1="198" x2="880.00" y2="906" class="guide"/>
+<line x1="880.00" y1="198" x2="880.00" y2="1074" class="guide"/>
 <text x="880.00" y="190" text-anchor="middle" class="small">75%</text>
-<line x1="1080.00" y1="198" x2="1080.00" y2="906" class="guide"/>
+<line x1="1080.00" y1="198" x2="1080.00" y2="1074" class="guide"/>
 <text x="1080.00" y="190" text-anchor="middle" class="small">100%</text>
 <rect x="56" y="215" width="10" height="10" rx="3" fill="#8fc7bd"/>
 <text x="78" y="229" class="label">Qwen-S</text>
@@ -136,106 +136,150 @@
 <rect x="56" y="803" width="10" height="10" rx="3" fill="#cfc3f0"/>
 <text x="78" y="817" class="label">Gemma-L</text>
 <rect x="280" y="798" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="798" width="329.82" height="28" rx="10" fill="#cfc3f0"/>
-<text x="619.82" y="817" text-anchor="start" class="label">41.2%</text>
+<rect x="280" y="798" width="329.68" height="28" rx="10" fill="#cfc3f0"/>
+<text x="619.68" y="817" text-anchor="start" class="label">41.2%</text>
 <rect x="56" y="845" width="10" height="10" rx="3" fill="#9ca3af"/>
 <text x="78" y="859" class="label">GPT-4o-mini Ref</text>
 <rect x="280" y="840" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="840" width="800" height="28" rx="10" class="muted-bar"/>
 <rect x="280" y="840" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
 <text x="1070" y="859" text-anchor="end" class="small">no current result</text>
-<rect x="42" y="920" width="1136" height="750" rx="18" class="subpanel"/>
-<text x="48" y="948" class="axis">Value Kaleidoscope</text>
-<text x="48" y="968" class="subtitle">Average of relevance and valence accuracy</text>
-<text x="1080" y="948" text-anchor="end" class="small">Accuracy</text>
-<line x1="280.00" y1="982" x2="280.00" y2="1690" class="guide"/>
-<text x="280.00" y="974" text-anchor="middle" class="small">0%</text>
-<line x1="480.00" y1="982" x2="480.00" y2="1690" class="guide"/>
-<text x="480.00" y="974" text-anchor="middle" class="small">25%</text>
-<line x1="680.00" y1="982" x2="680.00" y2="1690" class="guide"/>
-<text x="680.00" y="974" text-anchor="middle" class="small">50%</text>
-<line x1="880.00" y1="982" x2="880.00" y2="1690" class="guide"/>
-<text x="880.00" y="974" text-anchor="middle" class="small">75%</text>
-<line x1="1080.00" y1="982" x2="1080.00" y2="1690" class="guide"/>
-<text x="1080.00" y="974" text-anchor="middle" class="small">100%</text>
-<rect x="56" y="999" width="10" height="10" rx="3" fill="#8fc7bd"/>
-<text x="78" y="1013" class="label">Qwen-S</text>
-<rect x="280" y="994" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="994" width="545.92" height="28" rx="10" fill="#8fc7bd"/>
-<text x="835.92" y="1013" text-anchor="start" class="label">68.2%</text>
-<rect x="56" y="1041" width="10" height="10" rx="3" fill="#65b8ac"/>
-<text x="78" y="1055" class="label">Qwen-M</text>
-<rect x="280" y="1036" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1036" width="539.77" height="28" rx="10" fill="#65b8ac"/>
-<text x="829.77" y="1055" text-anchor="start" class="label">67.5%</text>
-<rect x="56" y="1083" width="10" height="10" rx="3" fill="#3fc7b8"/>
-<text x="78" y="1097" class="label">Qwen-L</text>
-<rect x="280" y="1078" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1078" width="522.53" height="28" rx="10" fill="#3fc7b8"/>
-<text x="812.53" y="1097" text-anchor="start" class="label">65.3%</text>
-<rect x="56" y="1125" width="10" height="10" rx="3" fill="#d4a46e"/>
-<text x="78" y="1139" class="label">MiniMax-S</text>
-<rect x="280" y="1120" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1120" width="591.95" height="28" rx="10" fill="#d4a46e"/>
-<text x="881.95" y="1139" text-anchor="start" class="label">74.0%</text>
-<rect x="56" y="1167" width="10" height="10" rx="3" fill="#e0ad68"/>
-<text x="78" y="1181" class="label">MiniMax-M</text>
+<rect x="56" y="887" width="10" height="10" rx="3" fill="#9ca3af"/>
+<text x="78" y="901" class="label">GPT-5-nano Ref</text>
+<rect x="280" y="882" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="882" width="800" height="28" rx="10" class="muted-bar"/>
+<rect x="280" y="882" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
+<text x="1070" y="901" text-anchor="end" class="small">no current result</text>
+<rect x="56" y="929" width="10" height="10" rx="3" fill="#9ca3af"/>
+<text x="78" y="943" class="label">GPT-4.1-nano Ref</text>
+<rect x="280" y="924" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="924" width="800" height="28" rx="10" class="muted-bar"/>
+<rect x="280" y="924" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
+<text x="1070" y="943" text-anchor="end" class="small">no current result</text>
+<rect x="56" y="971" width="10" height="10" rx="3" fill="#9ca3af"/>
+<text x="78" y="985" class="label">GPT-5-mini Ref</text>
+<rect x="280" y="966" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="966" width="800" height="28" rx="10" class="muted-bar"/>
+<rect x="280" y="966" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
+<text x="1070" y="985" text-anchor="end" class="small">no current result</text>
+<rect x="56" y="1013" width="10" height="10" rx="3" fill="#9ca3af"/>
+<text x="78" y="1027" class="label">GPT-4.1-mini Ref</text>
+<rect x="280" y="1008" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1008" width="800" height="28" rx="10" class="muted-bar"/>
+<rect x="280" y="1008" width="800" height="28" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>
+<text x="1070" y="1027" text-anchor="end" class="small">no current result</text>
+<rect x="42" y="1088" width="1136" height="918" rx="18" class="subpanel"/>
+<text x="48" y="1116" class="axis">Value Kaleidoscope</text>
+<text x="48" y="1136" class="subtitle">Average of relevance and valence accuracy</text>
+<text x="1080" y="1116" text-anchor="end" class="small">Accuracy</text>
+<line x1="280.00" y1="1150" x2="280.00" y2="2026" class="guide"/>
+<text x="280.00" y="1142" text-anchor="middle" class="small">0%</text>
+<line x1="480.00" y1="1150" x2="480.00" y2="2026" class="guide"/>
+<text x="480.00" y="1142" text-anchor="middle" class="small">25%</text>
+<line x1="680.00" y1="1150" x2="680.00" y2="2026" class="guide"/>
+<text x="680.00" y="1142" text-anchor="middle" class="small">50%</text>
+<line x1="880.00" y1="1150" x2="880.00" y2="2026" class="guide"/>
+<text x="880.00" y="1142" text-anchor="middle" class="small">75%</text>
+<line x1="1080.00" y1="1150" x2="1080.00" y2="2026" class="guide"/>
+<text x="1080.00" y="1142" text-anchor="middle" class="small">100%</text>
+<rect x="56" y="1167" width="10" height="10" rx="3" fill="#8fc7bd"/>
+<text x="78" y="1181" class="label">Qwen-S</text>
 <rect x="280" y="1162" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1162" width="591.82" height="28" rx="10" fill="#e0ad68"/>
-<text x="881.82" y="1181" text-anchor="start" class="label">74.0%</text>
-<rect x="56" y="1209" width="10" height="10" rx="3" fill="#f3cf82"/>
-<text x="78" y="1223" class="label">MiniMax-L</text>
+<rect x="280" y="1162" width="545.92" height="28" rx="10" fill="#8fc7bd"/>
+<text x="835.92" y="1181" text-anchor="start" class="label">68.2%</text>
+<rect x="56" y="1209" width="10" height="10" rx="3" fill="#65b8ac"/>
+<text x="78" y="1223" class="label">Qwen-M</text>
 <rect x="280" y="1204" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1204" width="592.96" height="28" rx="10" fill="#f3cf82"/>
-<text x="882.96" y="1223" text-anchor="start" class="label">74.1%</text>
-<rect x="56" y="1251" width="10" height="10" rx="3" fill="#94b8e8"/>
-<text x="78" y="1265" class="label">DeepSeek-S</text>
+<rect x="280" y="1204" width="539.77" height="28" rx="10" fill="#65b8ac"/>
+<text x="829.77" y="1223" text-anchor="start" class="label">67.5%</text>
+<rect x="56" y="1251" width="10" height="10" rx="3" fill="#3fc7b8"/>
+<text x="78" y="1265" class="label">Qwen-L</text>
 <rect x="280" y="1246" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1246" width="556.16" height="28" rx="10" fill="#94b8e8"/>
-<text x="846.16" y="1265" text-anchor="start" class="label">69.5%</text>
-<rect x="56" y="1293" width="10" height="10" rx="3" fill="#78a8e6"/>
-<text x="78" y="1307" class="label">DeepSeek-M</text>
+<rect x="280" y="1246" width="522.53" height="28" rx="10" fill="#3fc7b8"/>
+<text x="812.53" y="1265" text-anchor="start" class="label">65.3%</text>
+<rect x="56" y="1293" width="10" height="10" rx="3" fill="#d4a46e"/>
+<text x="78" y="1307" class="label">MiniMax-S</text>
 <rect x="280" y="1288" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1288" width="507.74" height="28" rx="10" fill="#78a8e6"/>
-<text x="797.74" y="1307" text-anchor="start" class="label">63.5%</text>
-<rect x="56" y="1335" width="10" height="10" rx="3" fill="#a8c7f0"/>
-<text x="78" y="1349" class="label">DeepSeek-L</text>
+<rect x="280" y="1288" width="591.95" height="28" rx="10" fill="#d4a46e"/>
+<text x="881.95" y="1307" text-anchor="start" class="label">74.0%</text>
+<rect x="56" y="1335" width="10" height="10" rx="3" fill="#e0ad68"/>
+<text x="78" y="1349" class="label">MiniMax-M</text>
 <rect x="280" y="1330" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1330" width="544.53" height="28" rx="10" fill="#a8c7f0"/>
-<text x="834.53" y="1349" text-anchor="start" class="label">68.1%</text>
-<rect x="56" y="1377" width="10" height="10" rx="3" fill="#f87171"/>
-<text x="78" y="1391" class="label">Llama-S</text>
+<rect x="280" y="1330" width="591.82" height="28" rx="10" fill="#e0ad68"/>
+<text x="881.82" y="1349" text-anchor="start" class="label">74.0%</text>
+<rect x="56" y="1377" width="10" height="10" rx="3" fill="#f3cf82"/>
+<text x="78" y="1391" class="label">MiniMax-L</text>
 <rect x="280" y="1372" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1372" width="422.87" height="28" rx="10" fill="#f87171"/>
-<text x="712.87" y="1391" text-anchor="start" class="label">52.9%</text>
-<rect x="56" y="1419" width="10" height="10" rx="3" fill="#dc2626"/>
-<text x="78" y="1433" class="label">Llama-M</text>
+<rect x="280" y="1372" width="592.96" height="28" rx="10" fill="#f3cf82"/>
+<text x="882.96" y="1391" text-anchor="start" class="label">74.1%</text>
+<rect x="56" y="1419" width="10" height="10" rx="3" fill="#94b8e8"/>
+<text x="78" y="1433" class="label">DeepSeek-S</text>
 <rect x="280" y="1414" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1414" width="578.91" height="28" rx="10" fill="#dc2626"/>
-<text x="868.91" y="1433" text-anchor="start" class="label">72.4%</text>
-<rect x="56" y="1461" width="10" height="10" rx="3" fill="#991b1b"/>
-<text x="78" y="1475" class="label">Llama-L</text>
+<rect x="280" y="1414" width="556.16" height="28" rx="10" fill="#94b8e8"/>
+<text x="846.16" y="1433" text-anchor="start" class="label">69.5%</text>
+<rect x="56" y="1461" width="10" height="10" rx="3" fill="#78a8e6"/>
+<text x="78" y="1475" class="label">DeepSeek-M</text>
 <rect x="280" y="1456" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1456" width="553.86" height="28" rx="10" fill="#991b1b"/>
-<text x="843.86" y="1475" text-anchor="start" class="label">69.2%</text>
-<rect x="56" y="1503" width="10" height="10" rx="3" fill="#b8a5df"/>
-<text x="78" y="1517" class="label">Gemma-S</text>
+<rect x="280" y="1456" width="507.74" height="28" rx="10" fill="#78a8e6"/>
+<text x="797.74" y="1475" text-anchor="start" class="label">63.5%</text>
+<rect x="56" y="1503" width="10" height="10" rx="3" fill="#a8c7f0"/>
+<text x="78" y="1517" class="label">DeepSeek-L</text>
 <rect x="280" y="1498" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1498" width="474.13" height="28" rx="10" fill="#b8a5df"/>
-<text x="764.13" y="1517" text-anchor="start" class="label">59.3%</text>
-<rect x="56" y="1545" width="10" height="10" rx="3" fill="#a996e3"/>
-<text x="78" y="1559" class="label">Gemma-M</text>
+<rect x="280" y="1498" width="544.53" height="28" rx="10" fill="#a8c7f0"/>
+<text x="834.53" y="1517" text-anchor="start" class="label">68.1%</text>
+<rect x="56" y="1545" width="10" height="10" rx="3" fill="#f87171"/>
+<text x="78" y="1559" class="label">Llama-S</text>
 <rect x="280" y="1540" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1540" width="530.92" height="28" rx="10" fill="#a996e3"/>
-<text x="820.92" y="1559" text-anchor="start" class="label">66.4%</text>
-<rect x="56" y="1587" width="10" height="10" rx="3" fill="#cfc3f0"/>
-<text x="78" y="1601" class="label">Gemma-L</text>
+<rect x="280" y="1540" width="422.87" height="28" rx="10" fill="#f87171"/>
+<text x="712.87" y="1559" text-anchor="start" class="label">52.9%</text>
+<rect x="56" y="1587" width="10" height="10" rx="3" fill="#dc2626"/>
+<text x="78" y="1601" class="label">Llama-M</text>
 <rect x="280" y="1582" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1582" width="524.79" height="28" rx="10" fill="#cfc3f0"/>
-<text x="814.79" y="1601" text-anchor="start" class="label">65.6%</text>
-<rect x="56" y="1629" width="10" height="10" rx="3" fill="#9ca3af"/>
-<text x="78" y="1643" class="label">GPT-4o-mini Ref</text>
+<rect x="280" y="1582" width="578.91" height="28" rx="10" fill="#dc2626"/>
+<text x="868.91" y="1601" text-anchor="start" class="label">72.4%</text>
+<rect x="56" y="1629" width="10" height="10" rx="3" fill="#991b1b"/>
+<text x="78" y="1643" class="label">Llama-L</text>
 <rect x="280" y="1624" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1624" width="560.56" height="28" rx="10" fill="#9ca3af"/>
-<text x="850.56" y="1643" text-anchor="start" class="label">70.1%</text>
+<rect x="280" y="1624" width="553.86" height="28" rx="10" fill="#991b1b"/>
+<text x="843.86" y="1643" text-anchor="start" class="label">69.2%</text>
+<rect x="56" y="1671" width="10" height="10" rx="3" fill="#b8a5df"/>
+<text x="78" y="1685" class="label">Gemma-S</text>
+<rect x="280" y="1666" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1666" width="474.13" height="28" rx="10" fill="#b8a5df"/>
+<text x="764.13" y="1685" text-anchor="start" class="label">59.3%</text>
+<rect x="56" y="1713" width="10" height="10" rx="3" fill="#a996e3"/>
+<text x="78" y="1727" class="label">Gemma-M</text>
+<rect x="280" y="1708" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1708" width="530.92" height="28" rx="10" fill="#a996e3"/>
+<text x="820.92" y="1727" text-anchor="start" class="label">66.4%</text>
+<rect x="56" y="1755" width="10" height="10" rx="3" fill="#cfc3f0"/>
+<text x="78" y="1769" class="label">Gemma-L</text>
+<rect x="280" y="1750" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1750" width="524.79" height="28" rx="10" fill="#cfc3f0"/>
+<text x="814.79" y="1769" text-anchor="start" class="label">65.6%</text>
+<rect x="56" y="1797" width="10" height="10" rx="3" fill="#9ca3af"/>
+<text x="78" y="1811" class="label">GPT-4o-mini Ref</text>
+<rect x="280" y="1792" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1792" width="560.56" height="28" rx="10" fill="#9ca3af"/>
+<text x="850.56" y="1811" text-anchor="start" class="label">70.1%</text>
+<rect x="56" y="1839" width="10" height="10" rx="3" fill="#9ca3af"/>
+<text x="78" y="1853" class="label">GPT-5-nano Ref</text>
+<rect x="280" y="1834" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1834" width="493.75" height="28" rx="10" fill="#9ca3af"/>
+<text x="783.75" y="1853" text-anchor="start" class="label">61.7%</text>
+<rect x="56" y="1881" width="10" height="10" rx="3" fill="#9ca3af"/>
+<text x="78" y="1895" class="label">GPT-4.1-nano Ref</text>
+<rect x="280" y="1876" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1876" width="538.43" height="28" rx="10" fill="#9ca3af"/>
+<text x="828.43" y="1895" text-anchor="start" class="label">67.3%</text>
+<rect x="56" y="1923" width="10" height="10" rx="3" fill="#9ca3af"/>
+<text x="78" y="1937" class="label">GPT-5-mini Ref</text>
+<rect x="280" y="1918" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1918" width="591.12" height="28" rx="10" fill="#9ca3af"/>
+<text x="881.12" y="1937" text-anchor="start" class="label">73.9%</text>
+<rect x="56" y="1965" width="10" height="10" rx="3" fill="#9ca3af"/>
+<text x="78" y="1979" class="label">GPT-4.1-mini Ref</text>
+<rect x="280" y="1960" width="800" height="28" rx="10" fill="#e2e8f0"/>
+<rect x="280" y="1960" width="587.91" height="28" rx="10" fill="#9ca3af"/>
+<text x="877.91" y="1979" text-anchor="start" class="label">73.5%</text>
 </svg>

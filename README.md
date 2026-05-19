@@ -18,12 +18,12 @@ Key takeaways:
 
 - **What each benchmark means:** `UniMoral` is the human moral-reasoning pipeline (choose an action, name the moral frame, identify the decision factor, and generate consequences); `SMID` is moral perception from images; `Value Kaleidoscope` is value/right/duty recognition; `CCD-Bench` is cultural choice style under value conflict; `DeNEVIL` is risky-prompt behavior. That is why only UniMoral, SMID, and Value are treated as comparable accuracy surfaces, while CCD-Bench and DeNEVIL stay behavioral readouts.
 - **Best like-for-like line:** `MiniMax-S` is the strongest fully comparable line, averaging 0.611 across UniMoral action 0.661, SMID 0.432, and Value 0.740. This is the cleanest overall topline because all three comparable metrics are observed on the same line.
-- **Best text-only line:** `MiniMax-M` is the strongest pure text line, reaching UniMoral 0.659 and Value 0.740. It should not be called the best all-around line because there is no public SMID route on that line.
-- **OpenAI reference interpretation:** `GPT-4o-mini Ref` is a text-only calibration anchor: competitive on UniMoral and Value, but it does not change the main conclusion because it is not an S/M/L curve and has no SMID or DeNEVIL evidence.
+- **Best text-only line:** `GPT-5-mini Ref` is the strongest pure text line, reaching UniMoral 0.678 and Value 0.739. It should not be called the best all-around line because there is no public SMID route on that line.
+- **OpenAI text-only references:** 5 OpenAI reference rows are integrated. Best OpenAI UniMoral is `GPT-4.1-mini Ref` at 0.679; best OpenAI Value is `GPT-5-mini Ref` at 0.739. These calibrate text moral-reasoning results against OpenAI routes, but they are not S/M/L scaling curves and do not provide SMID or DeNEVIL evidence.
 - **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.364) and widest spread (0.285), while `UniMoral` is tightly clustered (0.121 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
 - **UniMoral RQ-level interpretation:** The four-task view should not be collapsed into one scalar: task winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `Gemma-S` 0.599, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `Llama-L` 0.157. That pattern supports task-specific moral-reasoning strengths rather than a simple bigger-is-better family scaling story.
 - **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
-- **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `Llama-S` at 23.9%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
+- **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `GPT-5-nano Ref` at 27.8%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
 - **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates (92.4% to 99.5% protective response rate). `DeepSeek-S` no longer has the old visibility-collapse problem in the May 9 saved rerun (0.2% no-visible proxy traces).
 
 
@@ -49,8 +49,8 @@ The release follows one consistent evaluation logic:
 
 If you want the benchmark results before the tables, start here. These visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
 
-`GPT-4o-mini Ref` is shown as a single text-only reference marker in the comparable-accuracy and CCD figures. It is not treated as a GPT-family S/M/L scaling series, and it has no SMID or DeNEVIL row.
-OpenAI/GPT scope: the scored release row is only `openai/gpt-4o-mini`. Other OpenAI route names that appear in setup docs or tests are route examples or historical plans, not additional scored release rows.
+OpenAI text-only reference rows are shown in the comparable-accuracy and CCD figures. They are not treated as a GPT/OpenAI S/M/L scaling series, and they have no SMID or DeNEVIL row.
+OpenAI/GPT scope: the scored reference rows are `openai/gpt-4o-mini`, `openai/gpt-5-nano`, `openai/gpt-4.1-nano`, `openai/gpt-5-mini`, and `openai/gpt-4.1-mini`.
 
 ### 1. UniMoral RQ1-RQ4: family-size scaling and task readout
 
@@ -240,7 +240,11 @@ Metric definition version: `2026-04-30`. The visible-answer parsing rules behind
 | `Gemma-S` | 0.635 | 0.417 | 0.593 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Gemma-M` | 0.663 | 0.364 | 0.664 | Comparable on all three benchmark-faithful accuracy panels. |
 | `Gemma-L` | 0.661 | 0.412 | 0.656 | Comparable on all three benchmark-faithful accuracy panels. |
-| `GPT-4o-mini Ref` | 0.673 | n/a | 0.701 | GPT-4o-mini text reference marker; SMID and DeNEVIL intentionally not run. |
+| `GPT-4o-mini Ref` | 0.673 | n/a | 0.701 | GPT-4o-mini Ref text-only OpenAI reference; outside the S/M/L family curves. |
+| `GPT-5-nano Ref` | 0.654 | n/a | 0.617 | GPT-5-nano Ref text-only OpenAI reference; outside the S/M/L family curves. |
+| `GPT-4.1-nano Ref` | 0.646 | n/a | 0.673 | GPT-4.1-nano Ref text-only OpenAI reference; outside the S/M/L family curves. |
+| `GPT-5-mini Ref` | 0.678 | n/a | 0.739 | GPT-5-mini Ref text-only OpenAI reference; outside the S/M/L family curves. |
+| `GPT-4.1-mini Ref` | 0.679 | n/a | 0.735 | GPT-4.1-mini Ref text-only OpenAI reference; outside the S/M/L family curves. |
 
 _The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._
 
@@ -262,11 +266,11 @@ These are the strongest claims the current public evidence supports. They use on
 | Claim | Evidence | Why it matters |
 | --- | --- | --- |
 | Strongest fully observed comparable line | `MiniMax-S` averages 0.611 across UniMoral action 0.661, SMID 0.432, and Value 0.740. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |
-| Strongest text-only comparable line | `MiniMax-M` reaches UniMoral 0.659 and Value 0.740, a two-metric mean of 0.699. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |
-| GPT-4o-mini reference marker | `GPT-4o-mini Ref` parses 76,486/76,486 prompts, reaches UniMoral 0.673 and Value 0.701; CCD-Bench valid-choice coverage is 100.0%. | This is a useful external text-only reference, but it is not a GPT-family size-series claim and has no SMID / DeNEVIL evidence in this release. |
+| Strongest text-only comparable line | `GPT-5-mini Ref` reaches UniMoral 0.678 and Value 0.739, a two-metric mean of 0.708. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |
+| OpenAI text-only reference markers | 5 OpenAI rows are included. Best OpenAI UniMoral: `GPT-4.1-mini Ref` at 0.679; best OpenAI Value: `GPT-5-mini Ref` at 0.739. | These are useful external text references, but they are not OpenAI family-size scaling claims and have no SMID / DeNEVIL evidence in this release. |
 | Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.364 and the widest spread at 0.285. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |
 | Closest thing to saturation | `UniMoral` has the tightest range, from 0.563 to 0.684 (0.121 spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |
-| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. `GPT-4o-mini Ref` is a single reference point and is excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
+| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. The OpenAI rows are reference markers and are excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
 
 ### Benchmark Reading Guide
 
@@ -306,7 +310,7 @@ _The headline family-scaling figure already appears above in **Benchmark Result 
 | `DeepSeek` | The S/M/L text lines are now accuracy-comparable where text-only metrics exist, but no DeepSeek slot has a public SMID route. | UniMoral: S 0.661 -> M 0.684 -> L 0.563<br/>Value Kaleidoscope: S 0.695 -> M 0.635 -> L 0.681 | Read the DeepSeek size curve as text-only evidence: S and L now come from saved shard reruns, M remains the frozen closed-slice line, and all three still omit SMID. |
 | `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic. |
 | `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic. |
-| `OpenAI Ref` | Single text-only reference point, not a family-size scaling sweep. | UniMoral: Ref 0.673<br/>Value Kaleidoscope: Ref 0.701 | GPT-4o-mini Ref is plotted as a reference marker on UniMoral action prediction, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about GPT-family scaling or vision-side SMID performance. |
+| `OpenAI Ref` | Five text-only reference rows, not an OpenAI family-size scaling sweep. | UniMoral: range 0.646-0.679<br/>best GPT-4.1-mini Ref 0.679<br/>Value Kaleidoscope: range 0.617-0.739<br/>best GPT-5-mini Ref 0.739 | The OpenAI rows calibrate text-side UniMoral, Value Kaleidoscope, and CCD-Bench behavior against the open-weight family curves. They should not be read as OpenAI S/M/L scaling evidence or as vision-side SMID evidence. |
 
 ### CCD-Bench Choice Behavior
 
@@ -334,6 +338,10 @@ _The two headline CCD figures already appear above in **Benchmark Result Visuals
 | `Gemma-M` | option_6 (Nordic Europe) | 18.6% | 8.89 | Compare against the heatmap above, not as scalar accuracy. |
 | `Gemma-L` | option_6 (Nordic Europe) | 17.6% | 9.05 | Compare against the heatmap above, not as scalar accuracy. |
 | `GPT-4o-mini Ref` | option_6 (Nordic Europe) | 17.1% | 8.94 | Compare against the heatmap above, not as scalar accuracy. |
+| `GPT-5-nano Ref` | option_6 (Nordic Europe) | 27.8% | 6.79 | Compare against the heatmap above, not as scalar accuracy. |
+| `GPT-4.1-nano Ref` | option_6 (Nordic Europe) | 21.5% | 8.40 | Compare against the heatmap above, not as scalar accuracy. |
+| `GPT-5-mini Ref` | option_6 (Nordic Europe) | 25.3% | 7.13 | Compare against the heatmap above, not as scalar accuracy. |
+| `GPT-4.1-mini Ref` | option_6 (Nordic Europe) | 22.4% | 8.07 | Compare against the heatmap above, not as scalar accuracy. |
 
 ### DeNEVIL Proxy Behavioral Evidence
 
@@ -381,9 +389,9 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 - Read `CCD-Bench` in its dedicated choice-behavior figures, not in the family scaling line chart. `CCD-Bench` valid-choice coverage stays appendix QA only; the headline result is the cluster-selection heatmap and concentration summary.
 - Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
 - Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.
-- Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%`, and `Denevil visible proxy coverage = 99.8%`. These are parser/proxy coverage checks, not CCD or Denevil accuracy.
-- Do not call `MiniMax-M` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
-- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and `GPT-4o-mini Ref` is only a single text-reference marker.
+- Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%` (2,180 / 2,182), and `Denevil visible proxy coverage = 99.8%` (20,474 / 20,518). These are parser/proxy coverage checks, not CCD or Denevil accuracy.
+- Do not call `GPT-5-mini Ref` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
+- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI rows are text-reference markers rather than S/M/L size curves.
 - Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.
 - Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.
 
@@ -485,7 +493,7 @@ If this repo informs a paper, proposal, slide deck, or benchmark comparison, cit
 ## Important Notes
 
 - The current public matrix covers 5 families: `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma`.
-- `GPT-4o-mini Ref` is a separate OpenAI text-only reference marker, not a sixth S/M/L family in the public matrix.
+- The 5 OpenAI text-only reference rows are separate calibration markers, not a sixth S/M/L family in the public matrix.
 - `Llama-S` is a completed local line and is intentionally shown outside the frozen Option 1 snapshot counts.
 - `Denevil` is still proxy-only in the public release because the original paper-faithful `MoralPrompt` export is not available locally; proxy-only coverage and traceability evidence; moralprompt unavailable; not benchmark-faithful ethical-quality scoring.
 - The detailed appendix lives in [results/release/2026-04-19-option1/](results/release/2026-04-19-option1/).
@@ -521,3 +529,66 @@ The prompt-to-artifact completion audit, including the verifier-checked CSV-leve
 
 ![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
 <!-- UNIMORAL_FULL_BENCHMARK_END -->
+## Claude Code Slash Commands
+
+This repo includes project-level [Claude Code](https://claude.com/claude-code) slash commands that any teammate can use. After cloning the repo, open Claude Code in the project directory and type any of these:
+
+| Command | What it does |
+|---------|-------------|
+| `/run-trolleybench` | Run Joseph's TrolleyBench pipeline (run, evaluate, export) |
+| `/run-ethics` | Run Erik's Hendrycks ETHICS benchmark (Inspect AI or lm-eval) |
+| `/run-moral-psych` | Run Jenny's 5 moral-psych benchmarks |
+| `/release` | Build release artifacts (CSVs, SVGs, reports) |
+| `/create-pr` | Create a PR against the org repo with reviewers |
+| `/validate-results` | Validate results against three-tier acceptance criteria and saturation policy |
+
+You can pass arguments after the command, e.g.:
+
+```
+/run-trolleybench -m qwen -s S -t 0.0
+/run-moral-psych --tasks evals/unimoral.py --model openrouter/qwen/qwen3-8b --limit 10
+/run-ethics --model hf/Qwen/Qwen3-0.6B --limit 5
+/create-pr Add new benchmark results
+/validate-results
+/validate-results unimoral smid
+```
+
+The `/validate-results` command checks every model × task cell against a **three-tier status system**:
+
+| Tier | Label | Meaning |
+|------|-------|---------|
+| T1 | Harness complete | A number exists — no guarantee it's meaningful |
+| T2 | Result valid | No format failure, missing modality, or proxy substitution |
+| T3 | Interpretable | Can be cited and compared across models without caveats |
+
+It also checks **saturation** — whether a benchmark still discriminates between models (e.g., UniMoral action prediction was retired at 0.048 spread). Reports are saved to `results/validation/`.
+
+### Setup
+
+1. Install [Claude Code](https://claude.com/claude-code) if you haven't already
+2. Install GitHub CLI (needed for `/create-pr`):
+   ```bash
+   brew install gh
+   gh auth login
+   ```
+3. `cd` into the repo and run `claude` to start a session — the slash commands are available automatically
+
+## Contributing
+
+All changes go through pull requests — no direct pushes to `main`.
+
+1. Create a branch: `git checkout -b my-feature`
+2. Make your changes and commit
+3. Push: `git push -u origin my-feature`
+4. Open a PR and add a teammate as reviewer
+5. Or simply use `/create-pr` in Claude Code to do steps 3-4 for you
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
+
+## Team
+
+| Person | Papers |
+|--------|--------|
+| Joseph | #1-5 (MoReBench, TrolleyBench, Moral Circuits, M3oralBench, MoralLens) |
+| Jenny | #6-10 (UniMoral, SMID, Denevil, Value Kaleidoscope, CCD-Bench) |
+| Erik | #11-13 (Rules Broken, MoralBench, EMNLP Educator) |

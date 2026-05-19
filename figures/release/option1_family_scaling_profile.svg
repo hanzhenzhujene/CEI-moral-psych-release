@@ -38,12 +38,12 @@
 <rect x="0" y="0" width="1280" height="1100" class="canvas"/>
 <rect x="24" y="24" width="1232" height="1052" rx="22" class="panel"/>
 <title>Family scaling profile by benchmark</title>
-<desc>Two-panel family scaling view for SMID and Value Kaleidoscope after the UniMoral benchmark block. GPT-4o-mini Ref is drawn as a dashed horizontal text-only reference line rather than a size point. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
+<desc>Two-panel family scaling view for the visual and text comparable-accuracy panels after the UniMoral benchmark block. Gray dashed OpenAI reference lines are text-only markers rather than size points. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
 <text x="48" y="64" class="title">Family Scaling Profile</text>
 <text x="48" y="92" class="subtitle">UniMoral is grouped in Figure 1 above; these comparable panels start at SMID.</text>
 <text x="48" y="114" class="subtitle">Two comparable benchmark panels here: SMID and Value Kaleidoscope.</text>
 <text x="48" y="136" class="subtitle">This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.</text>
-<text x="48" y="158" class="subtitle">GPT-4o-mini Ref is drawn as a dashed horizontal reference line, not an S/M/L point.</text>
+<text x="48" y="158" class="subtitle">OpenAI text refs are drawn as gray dashed reference lines where a text metric exists, not as S/M/L points.</text>
 <text x="48" y="180" class="subtitle">SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.</text>
 <text x="48" y="202" class="subtitle">Read CCD-Bench and Denevil in their dedicated figures.</text>
 <rect x="72" y="244" width="540" height="360" rx="20" class="subpanel"/>
@@ -83,14 +83,14 @@
 <circle cx="576.00" cy="420.51" r="4.2" fill="#dc2626"/>
 <line x1="148.00" y1="410.83" x2="367.00" y2="427.57" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
 <line x1="148.00" y1="410.83" x2="367.00" y2="427.57" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
-<line x1="367.00" y1="427.57" x2="586.00" y2="412.27" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
-<line x1="367.00" y1="427.57" x2="586.00" y2="412.27" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
+<line x1="367.00" y1="427.57" x2="586.00" y2="412.32" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
+<line x1="367.00" y1="427.57" x2="586.00" y2="412.32" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
 <circle cx="148.00" cy="410.83" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
 <circle cx="148.00" cy="410.83" r="4.2" fill="#a996e3"/>
 <circle cx="367.00" cy="427.57" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
 <circle cx="367.00" cy="427.57" r="4.2" fill="#a996e3"/>
-<circle cx="586.00" cy="412.27" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
-<circle cx="586.00" cy="412.27" r="4.2" fill="#a996e3"/>
+<circle cx="586.00" cy="412.32" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
+<circle cx="586.00" cy="412.32" r="4.2" fill="#a996e3"/>
 <line x1="118.00" y1="426.18" x2="556.00" y2="390.07" stroke="#ffffff" stroke-width="7.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
 <line x1="118.00" y1="426.18" x2="556.00" y2="390.07" stroke="#65b8ac" stroke-width="5.2" stroke-linecap="round" stroke-dasharray="7 6"/>
 <circle cx="118.00" cy="426.18" r="8" fill="#ffffff" stroke="#65b8ac" stroke-width="3.4"/>
@@ -171,10 +171,15 @@
 <circle cx="921.00" cy="329.69" r="4.2" fill="#65b8ac"/>
 <circle cx="1140.00" cy="336.47" r="8" fill="#ffffff" stroke="#65b8ac" stroke-width="3.4"/>
 <circle cx="1140.00" cy="336.47" r="4.2" fill="#65b8ac"/>
-<line x1="712" y1="321.51" x2="1150" y2="321.51" stroke="#6b7280" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 7"/>
-<rect x="982" y="282.00" width="160" height="22" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="1062" y="298.00" text-anchor="middle" class="axis">GPT-4o-mini Ref 70.1%</text>
-<text x="674" y="590" class="small">Dashed colored segments skip missing size slots; gray dashed line is GPT-4o-mini Ref.</text>
+<line x1="712" y1="321.51" x2="1150" y2="321.51" stroke="#6b7280" stroke-width="2.0" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.52"/>
+<line x1="712" y1="347.79" x2="1150" y2="347.79" stroke="#6b7280" stroke-width="2.0" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.52"/>
+<line x1="712" y1="330.22" x2="1150" y2="330.22" stroke="#6b7280" stroke-width="2.0" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.52"/>
+<line x1="712" y1="309.49" x2="1150" y2="309.49" stroke="#6b7280" stroke-width="2.0" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.52"/>
+<line x1="712" y1="310.75" x2="1150" y2="310.75" stroke="#6b7280" stroke-width="2.0" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.52"/>
+<rect x="912" y="304.00" width="230" height="42" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+<text x="1027" y="323.00" text-anchor="middle" class="axis">OpenAI refs 61.7%-73.9%</text>
+<text x="1027" y="340.00" text-anchor="middle" class="small">Best GPT-5-mini Ref 73.9%</text>
+<text x="674" y="590" class="small">Dashed colored segments skip missing size slots; gray dashed lines are OpenAI text refs.</text>
 <rect x="48" y="644" width="1184" height="360" rx="18" class="legend-card"/>
 <text x="72" y="670" class="tiny">HOW TO READ THIS FIGURE</text>
 <line x1="618" y1="672" x2="618" y2="982" class="guide"/>
@@ -205,7 +210,7 @@
 <text x="794" y="856" class="body">full S/M/L sweep on SMID and Value.</text>
 <line x1="656" y1="884" x2="690" y2="884" stroke="#9ca3af" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 7"/>
 <text x="702" y="890" class="axis">OpenAI Ref</text>
-<text x="794" y="890" class="body">GPT-4o-mini reference point; no GPT family S/M/L or SMID route is claimed.</text>
+<text x="794" y="890" class="body">Five text-only refs; dashed where a text metric exists.</text>
 <text x="656" y="912" class="tiny">EVIDENCE BOUNDARY</text>
 <text x="656" y="938" class="body">This figure starts after the combined UniMoral benchmark block.</text>
 <text x="656" y="966" class="body">It stops at SMID + Value to avoid repeating UniMoral.</text>
