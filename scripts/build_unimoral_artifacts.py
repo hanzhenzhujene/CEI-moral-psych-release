@@ -2093,7 +2093,24 @@ def build_markdown_section(
     return "\n".join(lines).strip() + "\n"
 
 
-def update_markdown(path: Path, section: str) -> None:
+ORG_README_TAIL_HEADINGS = (
+    "## Claude Code Slash Commands",
+    "## Contributing",
+    "## Team",
+)
+
+
+def markdown_insertion_index(text: str, headings: tuple[str, ...]) -> int:
+    candidates = [
+        index
+        for heading in headings
+        for index in (text.find(f"\n{heading}"), text.find(heading))
+        if index >= 0
+    ]
+    return min(candidates) if candidates else -1
+
+
+def update_markdown(path: Path, section: str, *, insert_before_headings: tuple[str, ...] = ()) -> None:
     if not path.exists():
         return
     start = "<!-- UNIMORAL_FULL_BENCHMARK_START -->"
@@ -2103,7 +2120,12 @@ def update_markdown(path: Path, section: str) -> None:
     if start in text and end in text:
         before, rest = text.split(start, 1)
         _, after = rest.split(end, 1)
-        updated = before.rstrip() + "\n\n" + block + after
+        text = (before.rstrip() + "\n\n" + after.lstrip()).rstrip()
+    insertion_index = markdown_insertion_index(text, insert_before_headings)
+    if insertion_index >= 0:
+        before = text[:insertion_index].rstrip()
+        after = text[insertion_index:].lstrip()
+        updated = before + "\n\n" + block + after
     else:
         updated = text.rstrip() + "\n\n" + block
     path.write_text(updated.rstrip() + "\n", encoding="utf-8")
@@ -2134,7 +2156,7 @@ def update_markdown_reports(
         resume_plan_link="unimoral-minimax-resume-plan.md",
         completion_audit_link="unimoral-completion-audit.md",
     )
-    update_markdown(ROOT / "README.md", root_section)
+    update_markdown(ROOT / "README.md", root_section, insert_before_headings=ORG_README_TAIL_HEADINGS)
     update_markdown(release_dir / "README.md", release_section)
     update_markdown(release_dir / "jenny-group-report.md", release_section)
 
