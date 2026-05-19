@@ -9915,10 +9915,18 @@ def append_denevil_proxy_examples_table(lines: list[str], rows: list[dict[str, A
 
 def unimoral_rq_tldr_takeaway(release_dir: Path | None) -> str | None:
     if release_dir is None:
-        return None
+        return (
+            "- **UniMoral is not one skill:** a model can match the human action but still miss the moral frame, "
+            "the reason, or the consequence. So the useful story is which part of moral reasoning each family handles, "
+            "not one single moral score."
+        )
     path = release_dir / "unimoral-full-benchmark.csv"
     if not path.exists():
-        return None
+        return (
+            "- **UniMoral is not one skill:** a model can match the human action but still miss the moral frame, "
+            "the reason, or the consequence. So the useful story is which part of moral reasoning each family handles, "
+            "not one single moral score."
+        )
 
     def value_for(row: dict[str, str], field: str) -> float | None:
         value = row.get(field)
@@ -9954,11 +9962,15 @@ def unimoral_rq_tldr_takeaway(release_dir: Path | None) -> str | None:
             line_label, value = max(candidates, key=lambda item: item[1])
             winners.append(f"{label} `{line_label}` {fmt_float(value)}")
     if len(winners) < 4:
-        return None
+        return (
+            "- **UniMoral is not one skill:** a model can match the human action but still miss the moral frame, "
+            "the reason, or the consequence. So the useful story is which part of moral reasoning each family handles, "
+            "not one single moral score."
+        )
     return (
-        "- **UniMoral has different subskills:** do not collapse the four RQs into one moral-reasoning score. "
+        "- **UniMoral is not one skill:** a model can match the human action but still miss the moral frame, the reason, or the consequence. "
         f"Task winners rotate across {', '.join(winners)}. "
-        "That means models can be good at predicting human choices but weaker at naming the moral frame, explaining the decision factor, or generating consequences."
+        "So the useful story is which part of moral reasoning each family handles, not one single moral score."
     )
 
 
@@ -10037,10 +10049,30 @@ def append_tldr_section(
 
     smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
     unimoral_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "UniMoral")
+    value_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "Value Kaleidoscope")
+    best_smid_line = (
+        max(
+            (row for row in benchmark_comparison if as_float(row["smid_average_accuracy"]) is not None),
+            key=lambda row: as_float(row["smid_average_accuracy"]) or float("-inf"),
+        )
+        if benchmark_comparison
+        else None
+    )
+    qwen_s = next((row for row in benchmark_comparison if row["line_label"] == "Qwen-S"), None)
+    qwen_l = next((row for row in benchmark_comparison if row["line_label"] == "Qwen-L"), None)
+    llama_s = next((row for row in benchmark_comparison if row["line_label"] == "Llama-S"), None)
+    llama_m = next((row for row in benchmark_comparison if row["line_label"] == "Llama-M"), None)
+    minimax_l = next((row for row in benchmark_comparison if row["line_label"] == "MiniMax-L"), None)
+    deepseek_m = next((row for row in benchmark_comparison if row["line_label"] == "DeepSeek-M"), None)
+    deepseek_l = next((row for row in benchmark_comparison if row["line_label"] == "DeepSeek-L"), None)
+    gpt_4o_mini = next((row for row in benchmark_comparison if row["line_label"] == "GPT-4o-mini Ref"), None)
+    gpt_5_nano = next((row for row in benchmark_comparison if row["line_label"] == "GPT-5-nano Ref"), None)
+    gpt_5_mini = next((row for row in benchmark_comparison if row["line_label"] == "GPT-5-mini Ref"), None)
+    gpt_41_nano = next((row for row in benchmark_comparison if row["line_label"] == "GPT-4.1-nano Ref"), None)
+    gpt_41_mini = next((row for row in benchmark_comparison if row["line_label"] == "GPT-4.1-mini Ref"), None)
     gemma_s = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-S"), None)
     gemma_m = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-M"), None)
     gemma_l = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-L"), None)
-    llama_m = next((row for row in benchmark_comparison if row["line_label"] == "Llama-M"), None)
     llama_l = next((row for row in benchmark_comparison if row["line_label"] == "Llama-L"), None)
 
     valid_ccd_rows = [
@@ -10061,6 +10093,9 @@ def append_tldr_section(
         else None
     )
     dominant_cluster = next(iter(sorted({row["dominant_option"] for row in valid_ccd_rows})), None)
+    ccd_nordic_count = sum(1 for row in valid_ccd_rows if "Nordic Europe" in row["dominant_option"])
+    deepseek_s_ccd = next((row for row in valid_ccd_rows if row["line_label"] == "DeepSeek-S"), None)
+    gpt_5_nano_ccd = next((row for row in valid_ccd_rows if row["line_label"] == "GPT-5-nano Ref"), None)
 
     usable_denevil_rows = [
         row
@@ -10091,52 +10126,58 @@ def append_tldr_section(
         ]
     )
     lines.append(
-        "- **What each benchmark means:** `UniMoral` asks whether a model can follow a human moral-choice pipeline; `SMID` asks whether it can see moral cues in images; `Value Kaleidoscope` asks whether it recognizes values, rights, and duties in text; `CCD-Bench` asks which cultural response style it chooses under conflict; `DeNEVIL` asks how it behaves on risky prompts. Only UniMoral, SMID, and Value are comparable accuracy surfaces; CCD-Bench and DeNEVIL are behavior readouts."
+        f"- **Main landscape:** text moral reasoning is much stronger than image moral judgment. UniMoral and Value sit around {fmt_float(as_float(unimoral_summary['mean_accuracy']))}-{fmt_float(as_float(value_summary['mean_accuracy']))} mean accuracy, but SMID image accuracy averages only {fmt_float(as_float(smid_summary['mean_accuracy']))}; even the best image line, `{best_smid_line['line_label']}` at {fmt_float(as_float(best_smid_line['smid_average_accuracy']))}, is below 0.50. In plain terms: models can talk through moral choices and values better than they can see morally important cues in images."
     )
     if best_full_line is not None and best_full_line_mean is not None:
         lines.append(
-            f"- **Best like-for-like line:** `{best_full_line['line_label']}` is the cleanest overall comparison because it has all three comparable metrics: UniMoral action {fmt_float(as_float(best_full_line['unimoral_action_accuracy']))}, SMID {fmt_float(as_float(best_full_line['smid_average_accuracy']))}, and Value {fmt_float(as_float(best_full_line['value_average_accuracy']))}, averaging {fmt_float(best_full_line_mean)}. This is the safest single-line topline because it is not missing the vision benchmark."
+            f"- **Best all-around line:** `{best_full_line['line_label']}` is the cleanest overall winner because it is not missing the image benchmark: UniMoral {fmt_float(as_float(best_full_line['unimoral_action_accuracy']))}, SMID {fmt_float(as_float(best_full_line['smid_average_accuracy']))}, Value {fmt_float(as_float(best_full_line['value_average_accuracy']))}, mean {fmt_float(best_full_line_mean)}. The main warning is that the best text-only rows can look stronger, but they do not answer the image problem."
         )
-    if best_text_only_line is not None:
+    if (
+        best_text_only_line is not None
+        and qwen_s is not None
+        and qwen_l is not None
+        and llama_s is not None
+        and llama_m is not None
+        and gemma_s is not None
+        and gemma_m is not None
+        and gemma_l is not None
+        and deepseek_m is not None
+        and deepseek_l is not None
+        and minimax_l is not None
+    ):
         lines.append(
-            f"- **Best text-only line:** `{best_text_only_line['line_label']}` is strongest when the question is only text moral reasoning, reaching UniMoral {fmt_float(as_float(best_text_only_line['unimoral_action_accuracy']))} and Value {fmt_float(as_float(best_text_only_line['value_average_accuracy']))}. It is not an all-around winner because it has no public SMID route."
-        )
-    if best_openai_unimoral is not None and best_openai_value is not None:
-        lines.append(
-            f"- **OpenAI/GPT references:** {len(openai_reference_rows)} OpenAI text rows are now back in the release. Best OpenAI UniMoral is `{best_openai_unimoral['line_label']}` at {fmt_float(as_float(best_openai_unimoral['unimoral_action_accuracy']))}; best OpenAI Value is `{best_openai_value['line_label']}` at {fmt_float(as_float(best_openai_value['value_average_accuracy']))}. Read them as text-side calibration points, not as a GPT S/M/L size curve and not as evidence on SMID."
+            f"- **Scaling law:** there is no reliable bigger-is-better rule. Scale helps in a few places, especially Qwen on images ({fmt_float(as_float(qwen_s['smid_average_accuracy']))} -> {fmt_float(as_float(qwen_l['smid_average_accuracy']))}) and Llama on Value from S to M ({fmt_float(as_float(llama_s['value_average_accuracy']))} -> {fmt_float(as_float(llama_m['value_average_accuracy']))}). But there are clear reversals: Gemma image dips then rebounds ({fmt_float(as_float(gemma_s['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_m['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_l['smid_average_accuracy']))}), DeepSeek UniMoral falls from M to L ({fmt_float(as_float(deepseek_m['unimoral_action_accuracy']))} -> {fmt_float(as_float(deepseek_l['unimoral_action_accuracy']))}), and `MiniMax-L` is an image outlier at {fmt_float(as_float(minimax_l['smid_average_accuracy']))}."
         )
     lines.append(
-        "- **Small-model follow-up:** the May 13 Mistral/Qwen/Llama sweep adds a capability-floor check, not a new leaderboard. `Mistral Nemo` leads that sweep on UniMoral at 0.648, the 7B-12B routes cluster from 0.632 to 0.648, and `Llama 3.2 1B` drops to 0.406 with a lower answer rate. So what: very small routes are risky for human-choice moral reasoning, while several older or mid-sized instruction routes remain usable text/style baselines."
-    )
-    lines.append(
-        f"- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy ({fmt_float(as_float(smid_summary['mean_accuracy']))}) and widest spread ({fmt_float(as_float(smid_summary['spread']))}), while `UniMoral` is tightly clustered ({fmt_float(as_float(unimoral_summary['spread']))} spread). The bottleneck is seeing moral meaning in images, not basic text moral labeling."
+        "- **Family read:** Qwen is the clearest case where size helps vision; Gemma is the cleanest full S/M/L family but still non-monotonic; DeepSeek is useful for text but has no image route and its large line is not automatically better; Llama improves after the small line but M can beat L on text; MiniMax-S is the safest all-around line, while MiniMax-L is the clearest bad image outlier."
     )
     unimoral_takeaway = unimoral_rq_tldr_takeaway(release_dir)
     if unimoral_takeaway is not None:
         lines.append(unimoral_takeaway)
-    if gemma_s is not None and gemma_m is not None and gemma_l is not None and llama_m is not None and llama_l is not None:
+    if (
+        ccd_min_row is not None
+        and ccd_max_row is not None
+        and deepseek_s_ccd is not None
+        and gpt_5_nano_ccd is not None
+    ):
         lines.append(
-            f"- **Bigger is not automatically more moral:** `Gemma` is non-monotonic on SMID ({fmt_float(as_float(gemma_s['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_m['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_l['smid_average_accuracy']))}), and `Llama-M` still beats `Llama-L` on Value ({fmt_float(as_float(llama_m['value_average_accuracy']))} vs {fmt_float(as_float(llama_l['value_average_accuracy']))}). Size helps in some places, but the direction depends on the benchmark."
+            f"- **Cultural-style bias:** CCD-Bench shows a strong Europe/Nordic pull, not a normal accuracy score. {ccd_nordic_count} of {len(valid_ccd_rows)} valid lines choose `Nordic Europe` as their dominant style. `GPT-5-nano Ref` is the most collapsed onto one cluster ({fmt_pct(as_float(gpt_5_nano_ccd['dominant_option_share']), 1)}), while `DeepSeek-S` is the least collapsed and the only non-Nordic dominant line ({fmt_pct(as_float(deepseek_s_ccd['dominant_option_share']), 1)}, `Sub Saharan Africa`)."
         )
-    if ccd_min_row is not None and ccd_max_row is not None and dominant_cluster is not None:
+    if (
+        best_openai_unimoral is not None
+        and best_openai_value is not None
+        and gpt_4o_mini is not None
+        and gpt_5_nano is not None
+        and gpt_5_mini is not None
+        and gpt_41_nano is not None
+        and gpt_41_mini is not None
+    ):
         lines.append(
-            f"- **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `{dominant_cluster}`, but concentration still varies meaningfully, from `{ccd_min_row['line_label']}` at {fmt_pct(as_float(ccd_min_row['dominant_option_share']), 1)} to `{ccd_max_row['line_label']}` at {fmt_pct(as_float(ccd_max_row['dominant_option_share']), 1)}. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest \"accuracy.\""
+            f"- **OpenAI references:** the GPT rows mostly confirm the text baseline instead of changing the story. `GPT-4o-mini Ref` is close to the strong text band (UniMoral {fmt_float(as_float(gpt_4o_mini['unimoral_action_accuracy']))}, Value {fmt_float(as_float(gpt_4o_mini['value_average_accuracy']))}); `GPT-5-mini Ref` beats `GPT-5-nano Ref` ({fmt_float(as_float(gpt_5_mini['value_average_accuracy']))} vs {fmt_float(as_float(gpt_5_nano['value_average_accuracy']))} on Value), and `GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref` ({fmt_float(as_float(gpt_41_mini['unimoral_action_accuracy']))} vs {fmt_float(as_float(gpt_41_nano['unimoral_action_accuracy']))} on UniMoral). None of these rows has SMID, so they do not solve the image weakness."
         )
-    if denevil_min_row is not None and denevil_max_row is not None and deepseek_m_denevil is not None:
-        deepseek_empty_rate = as_float(deepseek_m_denevil["no_visible_answer_rate"]) or 0.0
-        if deepseek_empty_rate >= 0.05:
-            caveat = (
-                f"`DeepSeek-S` is the main visibility caveat because {fmt_pct(deepseek_empty_rate, 1)} "
-                "of prompts surfaced no visible answer, so that line should be read as a trace-surfacing caveat rather than a harmful-behavior result."
-            )
-        else:
-            caveat = (
-                f"`DeepSeek-S` no longer has the old visibility-collapse problem in the May 9 saved rerun "
-                f"({fmt_pct(deepseek_empty_rate, 1)} no-visible proxy traces)."
-            )
-        lines.append(
-            f"- **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates ({fmt_pct(as_float(denevil_min_row['protective_response_rate']), 1)} to {fmt_pct(as_float(denevil_max_row['protective_response_rate']), 1)} protective response rate). {caveat}"
-        )
+    lines.append(
+        "- **Small-model follow-up:** Mistral/Qwen/Llama older routes add one simple takeaway: there is a capability floor. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral from 0.632 to 0.648, but `Llama 3.2 1B` drops to 0.406. So these models are useful baselines, not a new top tier, and the 1B route is too small for this moral-choice setup."
+    )
     lines.extend(["", ""])
 
 

@@ -249,7 +249,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         report_text = (release_dir / report_name).read_text(encoding="utf-8")
         tldr_text = report_text.split("## Benchmark Result Visuals", 1)[0]
         assert "**Current GitHub-facing boundary:**" not in tldr_text
-        assert "**What each benchmark means:**" in tldr_text
+        assert "**Main landscape:**" in tldr_text
+        assert "image moral judgment" in tldr_text
+        assert "**DeNEVIL is proxy behavioral evidence" not in tldr_text
         assert "`MiniMax-M`" in report_text
         assert (
             "Clean direct MiniMax-M2.5 text run is complete" in report_text
@@ -258,7 +260,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     assert "## TL;DR" in topline_text
     assert "`GPT-5-mini Ref`" in topline_text
-    assert "**What each benchmark means:**" in topline_text
+    assert "**Main landscape:**" in topline_text
+    assert "**DeNEVIL is proxy behavioral evidence" not in topline_text
     assert "**Current GitHub-facing boundary:**" not in topline_text.split("## Frozen Snapshot Scope", 1)[0]
 
     with (release_dir / "benchmark-catalog.csv").open(newline="", encoding="utf-8") as handle:
@@ -1034,31 +1037,34 @@ def test_release_builder_emits_expected_files(tmp_path):
     for text in (report_text, release_readme):
         assert "## TL;DR" in text
         assert "Key takeaways:" in text
-        assert "Best like-for-like line" in text
-        assert "What each benchmark means" in text
-        assert "UniMoral` asks whether a model can follow a human moral-choice pipeline" in text
-        assert "CCD-Bench` asks which cultural response style it chooses under conflict" in text
+        tldr_text = text.split("## Benchmark Result Visuals", 1)[0]
+        assert "Best all-around line" in tldr_text
+        assert "Main landscape" in tldr_text
+        assert "models can talk through moral choices and values better than they can see morally important cues in images" in tldr_text
+        assert "Scaling law" in tldr_text
+        assert "there is no reliable bigger-is-better rule" in tldr_text
+        assert "Family read" in tldr_text
+        assert "UniMoral is not one skill" in tldr_text
+        assert "Cultural-style bias" in tldr_text
+        assert "strong Europe/Nordic pull" in tldr_text
         assert "**Current GitHub-facing boundary:**" not in text.split("## Benchmark Result Visuals", 1)[0]
-        assert "Best text-only line" in text
-        assert "OpenAI/GPT references" in text
-        assert "Best OpenAI UniMoral" in text
+        assert "OpenAI references" in tldr_text
+        assert "GPT-4o-mini Ref" in tldr_text
+        assert "`GPT-5-mini Ref` beats `GPT-5-nano Ref`" in tldr_text
+        assert "`GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref`" in tldr_text
         assert "GPT-4o-mini reference line" not in text
         assert "76,486/76,486 parsed prompts" not in text
-        assert "Small-model follow-up" in text
-        assert "May 13 Mistral/Qwen/Llama sweep adds a capability-floor check" in text
+        assert "Small-model follow-up" in tldr_text
+        assert "Mistral/Qwen/Llama older routes add one simple takeaway" in tldr_text
         assert "Small-model capability floor | May 13 follow-up" in text
         assert "### Small-Model Follow-Up: Capability Floor" in text
         assert "`Mistral Nemo` | 12B | 0.648" in text
         assert "additional_model_sweep_unimoral_accuracy.svg" in text
         assert "additional_model_sweep_scaling.svg" in text
         assert "additional_model_sweep_ccd_dominant_share.svg" in text
-        assert "The hardest benchmark is SMID" in text
-        assert "Bigger is not automatically more moral" in text
-        if "CCD-Bench shows cultural choice style, not accuracy" in text:
-            assert "`DeepSeek-S` at 13.8% to `GPT-5-nano Ref` at 27.8%" in text
-        if "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" in text:
-            assert "92.4% to 99.5% protective response rate" in text
-            assert "0.2% no-visible proxy traces" in text
+        assert "The hardest benchmark is SMID" not in tldr_text
+        assert "Bigger is not automatically more moral" not in tldr_text
+        assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" not in tldr_text
         assert "## Results First" in text
         assert "## Benchmark Result Visuals" in text
         assert "### 1. UniMoral RQ1-RQ4: family-size scaling and task readout" in text
@@ -1194,20 +1200,20 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     assert "## TL;DR" in topline_summary
     assert "Key takeaways:" in topline_summary
-    assert "What each benchmark means" in topline_summary
+    assert "Main landscape" in topline_summary
     assert "**Current GitHub-facing boundary:**" not in topline_summary.split("## Frozen Snapshot Scope", 1)[0]
-    assert "OpenAI/GPT references" in topline_summary
-    assert "Best OpenAI UniMoral" in topline_summary
+    assert "OpenAI references" in topline_summary
+    assert "`GPT-5-mini Ref` beats `GPT-5-nano Ref`" in topline_summary
+    assert "`GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref`" in topline_summary
     assert "Small-model follow-up" in topline_summary
     assert "Mistral Nemo" in topline_summary
     assert "GPT-4o-mini reference line" not in topline_summary
     assert "76,486/76,486 parsed prompts" not in topline_summary
     assert "## Frozen Snapshot Scope" in topline_summary
-    assert "Best like-for-like line" in topline_summary
-    if "CCD-Bench shows cultural choice style, not accuracy" in topline_summary:
-        assert "GPT-5-nano Ref" in topline_summary
-    if "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" in topline_summary:
-        assert "DeepSeek-S" in topline_summary
+    assert "Best all-around line" in topline_summary
+    assert "Cultural-style bias" in topline_summary
+    assert "GPT-5-nano Ref" in topline_summary
+    assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" not in topline_summary
     assert "For the full public package, move next to `README.md`" in topline_summary
 
     progress_overview_svg = (figure_dir / "option1_family_size_progress_overview.svg").read_text(encoding="utf-8")
