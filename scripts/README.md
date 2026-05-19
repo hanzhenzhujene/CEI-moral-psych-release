@@ -3,7 +3,9 @@
 The public release has one canonical reporting path:
 
 - run `make release` to regenerate the tracked deliverable
-- run `make bootstrap` to verify the deliverable end to end
+- run `make bootstrap` to verify the public QA deliverable; strict UniMoral completion is `make verify-unimoral`
+- run `make unimoral-missing-plan` to refresh the provider-free MiniMax missing-cell plan without calling providers
+- optionally run `make unimoral-bertscore` after installing `bert_score` to fill the official RQ4 BERTScore column and rebuild UniMoral artifacts
 
 Everything below supports that path, but not every script is meant to be a public entrypoint.
 
@@ -11,6 +13,10 @@ Everything below supports that path, but not every script is meant to be a publi
 
 - `build_authoritative_option1_status.py`: maintainer-only reconciliation step that rebuilds the frozen `Option 1` status table from raw local run folders.
 - `build_release_artifacts.py`: the main public release builder. It converts the tracked frozen source snapshot into release-ready CSV, Markdown, JSON, and SVG outputs, including the README/report surfaces, comparable-accuracy figures, CCD-Bench choice-behavior artifacts, and DeNEVIL proxy evidence package.
+- `build_unimoral_artifacts.py`: rebuilds the UniMoral RQ1-RQ4 coverage tables, sample-level prediction export, failure checklist, completion audit with CSV-level strict blocker inventory, and UniMoral-specific figures from saved Inspect logs. When raw `.eval` logs are absent but the tracked UniMoral CSV artifacts are present, it reuses those CSVs to refresh docs/figures for clone-friendly release rebuilds.
+- `compute_unimoral_bertscore.py`: optional offline RQ4 metric pass. It reads `unimoral-sample-predictions.csv`, computes official-style max-reference BERTScore F1 when the `bert_score` package is installed, writes `unimoral-rq4-bertscore.csv`, and lets `build_unimoral_artifacts.py` merge that column back into the release tables.
+- `verify_unimoral_completion.py`: final gate for the UniMoral completion project. Run it without flags before committing; it fails until every released model line has complete RQ1-RQ4 coverage and the UniMoral failure checklist is empty. Use `make verify-unimoral-artifacts` for the structural checkpoint that allows documented incomplete cells while reruns are still blocked or pending; that checkpoint also verifies the completion audit's CSV-level strict blocker inventory matches the current release CSVs.
+- `verify_unimoral_task_builders.py`: provider-free task-builder dry run for the UniMoral registry entries. It creates a tiny temporary UniMoral fixture and checks that RQ1/RQ2/RQ3/RQ4 instantiate through `moral_psych.py` with datasets and scorers; run via `make verify-unimoral-task-builders`.
 - `summarize_inspect_eval_progress.py`: scans `.eval` artifacts and reports live progress from raw Inspect logs.
 
 ## Diagnostics
@@ -27,8 +33,15 @@ Everything below supports that path, but not every script is meant to be a publi
 - `family_size_image_expansion.sh`: sequential `SMID`-only image expansion launcher for the selected medium / large vision routes.
 - For MiniMax direct reruns, populate `MINIMAX_API_KEY`. The provider router sends `MiniMax-M2.5` text runs directly and maps the `SMID` route to `MiniMax-Text-01` with an inline base64 image prompt because MiniMax's OpenAI-compatible endpoint does not accept `image_url` blocks. Keep `CEI_MIN_MAX_TOKENS=2048` or higher so `MiniMax-M2.5` has enough reasoning-token headroom.
 - `qwen_large_smid_recovery.sh`: safer `Qwen-L` `SMID` recovery launcher using `qwen2.5-vl-72b-instruct` plus explicit non-Alibaba provider routing.
+- `run_unimoral_missing_tasks.sh`: targeted launcher for UniMoral RQ2/RQ3/RQ4 completion. It checks full unique sample coverage before skipping a cell and reruns only missing sample ranges so split/non-prefix recovery runs do not skip gaps or duplicate logged shards; set `FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1` to rerun samples without a parseable scored answer, with optional `UNIMORAL_RERUN_UNPARSED_MAX_GAP` to merge nearby gaps and reduce process startup overhead. It resolves routes through `provider_config.sh` by default (`UNIMORAL_ROUTE_MODE=auto`), falls back to OpenRouter when direct-provider keys are missing, records routing metadata under the run folder, and supports `UNIMORAL_DRY_RUN=1` to print the planned ranges without calling providers. `make unimoral-missing-plan` is the provider-free MiniMax preflight wrapper for those dry-run ranges. Non-dry-run MiniMax lines require the explicit opt-in `UNIMORAL_ALLOW_MINIMAX=1`; use `UNIMORAL_SKIP_MODEL_REGEX='MiniMax|minimax'` when a partial rerun must explicitly avoid MiniMax lines. See `results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md` for the provider-free MiniMax handoff and compact resume commands.
 
 These launchers are historical and operationally useful, but the public release package should be generated from `build_release_artifacts.py` rather than by reading raw run folders directly.
+
+## Legacy Root Launchers
+
+Older one-off OpenRouter scripts that used to live in the repository root are now under `scripts/legacy-openrouter/`. They remain tracked for provenance and recovery workflows, but they are not the canonical public entrypoint.
+
+Standalone OpenRouter/TrolleyBench Python helpers are under `tools/legacy_openrouter/`.
 
 ## Which scripts matter for which audience
 

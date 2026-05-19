@@ -14,7 +14,13 @@ ROOT = Path(__file__).parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.build_release_artifacts import build_axis_ticks, nice_tick_step
+from scripts.build_release_artifacts import (
+    _sample_correctness_value,
+    build_axis_ticks,
+    nice_tick_step,
+    preserve_repo_readme_org_tail,
+)
+from scripts.build_unimoral_artifacts import update_markdown
 
 SCRIPT = ROOT / "scripts" / "build_release_artifacts.py"
 SOURCE = ROOT / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
@@ -25,6 +31,77 @@ def test_axis_tick_helpers_stay_nonzero_for_minimal_clean_state():
     ticks, upper = build_axis_ticks(1, target_ticks=4)
     assert ticks == [0, 1, 2, 3, 4]
     assert upper == 1
+
+
+def test_unimoral_blank_scorer_answer_reparsed_from_visible_completion():
+    sample = {
+        "target": "a",
+        "output": {
+            "choices": [
+                {
+                    "message": {
+                        "content": [
+                            {"internal": "think", "type": "reasoning", "reasoning": "hidden trace"},
+                            {"type": "text", "text": "Selected action is a."},
+                        ]
+                    }
+                }
+            ],
+            "completion": "Selected action is a.",
+        },
+        "score_value": 0,
+        "score_answer": "",
+    }
+
+    assert _sample_correctness_value(sample, "unimoral_action_prediction") == 1.0
+
+
+def test_root_readme_regeneration_preserves_org_owned_tail_sections():
+    generated = "# CEI Moral-Psych Benchmark Suite\n\n<!-- UNIMORAL_FULL_BENCHMARK_END -->\n"
+    existing = (
+        "# CEI Moral-Psych Benchmark Suite\n\n"
+        "<!-- UNIMORAL_FULL_BENCHMARK_END -->\n\n"
+        "## Claude Code Slash Commands\n\n"
+        "| Command | What it does |\n"
+        "| --- | --- |\n"
+        "| `/validate-results` | Validate results. |\n\n"
+        "## Contributing\n\n"
+        "All changes go through pull requests.\n\n"
+        "## Team\n\n"
+        "| Person | Papers |\n"
+    )
+
+    result = preserve_repo_readme_org_tail(generated, existing)
+
+    assert result.startswith(generated.rstrip())
+    assert "## Claude Code Slash Commands" in result
+    assert "| `/validate-results` | Validate results. |" in result
+    assert "## Contributing" in result
+    assert "## Team" in result
+
+
+def test_unimoral_readme_block_stays_before_org_owned_tail_sections(tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        "# CEI Moral-Psych Benchmark Suite\n\n"
+        "Generated Jenny result surface.\n\n"
+        "## Claude Code Slash Commands\n\n"
+        "| `/validate-results` | Validate results. |\n\n"
+        "## Team\n\n"
+        "| Person | Papers |\n",
+        encoding="utf-8",
+    )
+
+    update_markdown(
+        readme,
+        "## UniMoral Full Benchmark Coverage\n\nUpdated benchmark section.\n",
+        insert_before_headings=("## Claude Code Slash Commands", "## Team"),
+    )
+
+    content = readme.read_text(encoding="utf-8")
+    assert content.index("<!-- UNIMORAL_FULL_BENCHMARK_START -->") < content.index("## Claude Code Slash Commands")
+    assert "| `/validate-results` | Validate results. |" in content
+    assert "## Team" in content
 
 
 def test_release_builder_emits_expected_files(tmp_path):
@@ -55,6 +132,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         "denevil-prompt-family-breakdown.csv",
         "denevil-proxy-summary.csv",
         "denevil-proxy-examples.csv",
+        "deepseek-sm-readout.csv",
+        "saved-results-audit.csv",
         "benchmark-difficulty-summary.csv",
         "benchmark-summary.csv",
         "coverage-matrix.csv",
@@ -105,9 +184,16 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["authoritative_tasks"] == 19
     assert manifest["counts"]["proxy_tasks"] == 3
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
+    assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
+    assert any("OpenAI reference rows" in item and "text-only markers" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_cost_estimate"] == "$243.40"
-    assert "later tracked reruns completed in this repo" in manifest["report_metadata"]["current_cost_scope"]
+    assert manifest["report_metadata"]["current_total_cost"] == "$831.08"
+    assert manifest["report_metadata"]["current_cost_breakdown"] == {
+        "minimax_api": "$504.66",
+        "openrouter_other_model_family_runs": "$325.66",
+        "openai_api_reference_sweep": "$0.76",
+    }
+    assert "latest saved reruns parsed in this repo" in manifest["report_metadata"]["current_cost_scope"]
     assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"
     assert "stricter visible-answer parsing" in manifest["report_metadata"]["metric_definition_summary"].lower()
     assert manifest["report_metadata"]["ci_workflow_url"].endswith("/actions/workflows/ci.yml")
@@ -126,6 +212,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         "denevil-prompt-family-breakdown.csv"
     )
     assert manifest["entry_points"]["denevil_proxy_examples"].endswith("denevil-proxy-examples.csv")
+    assert manifest["entry_points"]["deepseek_sm_readout"].endswith("deepseek-sm-readout.csv")
     assert manifest["entry_points"]["benchmark_difficulty_figure"].endswith("option1_benchmark_difficulty_profile.svg")
     assert manifest["entry_points"]["family_scaling_figure"].endswith("option1_family_scaling_profile.svg")
     assert manifest["entry_points"]["ccd_valid_choice_coverage_figure"].endswith("option1_ccd_valid_choice_coverage.svg")
@@ -158,6 +245,25 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "figures/release/option1_denevil_proxy_valid_response_rate.svg" in manifest["figures"]
     assert "figures/release/option1_denevil_proxy_pipeline.svg" in manifest["figures"]
 
+    for report_name in ("README.md", "jenny-group-report.md"):
+        report_text = (release_dir / report_name).read_text(encoding="utf-8")
+        tldr_text = report_text.split("## Benchmark Result Visuals", 1)[0]
+        assert "**Current GitHub-facing boundary:**" not in tldr_text
+        assert "**Main landscape:**" in tldr_text
+        assert "image moral judgment" in tldr_text
+        assert "**DeNEVIL is proxy behavioral evidence" not in tldr_text
+        assert "`MiniMax-M`" in report_text
+        assert (
+            "Clean direct MiniMax-M2.5 text run is complete" in report_text
+            and "no medium SMID route fixed yet" in report_text
+        )
+    topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
+    assert "## TL;DR" in topline_text
+    assert "`GPT-5-mini Ref`" in topline_text
+    assert "**Main landscape:**" in topline_text
+    assert "**DeNEVIL is proxy behavioral evidence" not in topline_text
+    assert "**Current GitHub-facing boundary:**" not in topline_text.split("## Frozen Snapshot Scope", 1)[0]
+
     with (release_dir / "benchmark-catalog.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         assert reader.fieldnames is not None
@@ -184,10 +290,11 @@ def test_release_builder_emits_expected_files(tmp_path):
     minimax_family = next(row for row in rows if row["family"] == "MiniMax")
     assert minimax_family["completed_benchmark_lines"] in {
         "None yet",
-        "UniMoral; SMID",
-        "UniMoral; SMID; CCD-Bench",
-        "UniMoral; SMID; CCD-Bench; Denevil proxy",
-    }
+            "UniMoral; SMID",
+            "UniMoral; SMID; CCD-Bench",
+            "UniMoral; SMID; CCD-Bench; Denevil proxy",
+            "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
+        }
     if minimax_family["completed_benchmark_lines"] == "None yet":
         assert minimax_family["tasks_completed"] == "0"
         assert minimax_family["samples"] == "0"
@@ -244,13 +351,23 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     assert len(rows) == 15
     minimax_small = row_for("MiniMax-S")
-    assert minimax_small["unimoral"] == "error"
-    assert minimax_small["smid"] == "error"
-    assert minimax_small["summary_note"] == "Attempted, but key-limit failures made the line unusable."
+    assert_done_text_progress(
+        minimax_small,
+        smid_status="done",
+        summary_note="Direct MiniMax-M2.1 text rerun complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route.",
+    )
     minimax_medium = row_for("MiniMax-M")
-    assert minimax_medium["unimoral"] == "queue"
+    assert minimax_medium["unimoral"] in {"live", "done"}
     assert minimax_medium["smid"] == "tbd"
-    assert minimax_medium["summary_note"] == "Text queued; no medium SMID route fixed yet."
+    assert minimax_medium["value_kaleidoscope"] in {"live", "done"}
+    assert minimax_medium["ccd_bench"] == "done"
+    assert minimax_medium["denevil"] in {"live", "proxy"}
+    assert minimax_medium["summary_note"].startswith(
+        (
+            "Clean direct MiniMax-M2.5 text run is active; no medium SMID route fixed yet.",
+            "Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet.",
+        )
+    )
     minimax_large = row_for("MiniMax-L")
     assert minimax_large["unimoral"] in {"queue", "done"}
     assert minimax_large["smid"] in {"queue", "done"}
@@ -348,26 +465,26 @@ def test_release_builder_emits_expected_files(tmp_path):
         "SMID done; text is still queued.",
     }
     deepseek_small = row_for("DeepSeek-S")
-    assert_done_text_progress(
-        deepseek_small,
-        smid_status="-",
-        summary_note="No SMID route; local small text rerun finished successfully through the Denevil proxy task (100.0%).",
-    )
+    assert deepseek_small["unimoral"] == "done"
+    assert deepseek_small["smid"] == "-"
+    assert deepseek_small["value_kaleidoscope"] == "done"
+    assert deepseek_small["ccd_bench"] == "done"
+    assert deepseek_small["denevil"] == "proxy"
+    assert deepseek_small["summary_note"] in {
+        "No SMID route; May 9 no-thinking text rerun is complete and visible-answer validated.",
+        "No SMID route; May 9 no-thinking text rerun is complete and passes visible-answer validation for UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy.",
+    }
     deepseek_medium = row_for("DeepSeek-M")
     assert_done_text_progress(
         deepseek_medium,
         smid_status="-",
-        summary_note="Frozen medium text line; no SMID route was included.",
+        summary_note="Frozen medium text line; no SMID route was included. UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses.",
     )
     deepseek_large = row_for("DeepSeek-L")
-    assert deepseek_large["unimoral"] == "queue"
-    assert deepseek_large["smid"] == "-"
-    assert deepseek_large["value_kaleidoscope"] == "queue"
-    assert deepseek_large["ccd_bench"] == "queue"
-    assert deepseek_large["denevil"] == "queue"
-    assert (
-        deepseek_large["summary_note"]
-        == "Large R1 text route reserved to match the org family sizing; benchmark rerun not yet published."
+    assert_done_text_progress(
+        deepseek_large,
+        smid_status="-",
+        summary_note="No SMID route; large R1 text rerun is complete from saved shards with UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed.",
     )
 
     with (release_dir / "benchmark-comparison.csv").open(newline="", encoding="utf-8") as handle:
@@ -384,16 +501,46 @@ def test_release_builder_emits_expected_files(tmp_path):
             "comparison_note",
         ]
         rows = list(reader)
-    assert len(rows) in {10, 11, 12, 13}
+    assert len(rows) == 20
     minimax_large_rows = [row for row in rows if row["line_label"] == "MiniMax-L"]
     if minimax_large_rows:
         assert any(
-            row["route"] == "text: openrouter/minimax/minimax-m2.5; SMID recovery: openrouter/minimax/minimax-01"
-            and row["smid_average_accuracy"] == "0.195923"
-            and row["comparison_note"] == "Partial comparable evidence; see benchmark-specific sections below."
+            row["route"] == "text: minimax-m2.5 via direct MiniMax API; SMID recovery: minimax-01 via direct MiniMax API"
+            and row["unimoral_action_accuracy"] == "0.660519"
+            and row["smid_average_accuracy"] == "0.198232"
+            and row["comparison_note"] == "Comparable on all three benchmark-faithful accuracy panels."
             for row in minimax_large_rows
         )
     rows_by_line = {row["line_label"]: row for row in rows}
+    expected_openai_refs = {
+        "GPT-4o-mini Ref": ("0.672700", "0.700698"),
+        "GPT-5-nano Ref": ("0.653575", "0.617193"),
+        "GPT-4.1-nano Ref": ("0.646289", "0.673043"),
+        "GPT-5-mini Ref": ("0.677937", "0.738897"),
+        "GPT-4.1-mini Ref": ("0.679417", "0.734890"),
+    }
+    for line_label, (unimoral_accuracy, value_accuracy) in expected_openai_refs.items():
+        openai_reference = rows_by_line[line_label]
+        assert openai_reference["family"] == "OpenAI Ref"
+        assert openai_reference["size_slot"] == "Ref"
+        assert openai_reference["unimoral_action_accuracy"] == unimoral_accuracy
+        assert openai_reference["smid_average_accuracy"] == ""
+        assert openai_reference["value_average_accuracy"] == value_accuracy
+        assert openai_reference["comparison_note"] == f"{line_label} text-only OpenAI reference; outside the S/M/L family curves."
+    assert rows_by_line["MiniMax-S"]["unimoral_action_accuracy"] == "0.660861"
+    assert rows_by_line["MiniMax-S"]["smid_average_accuracy"] == "0.431996"
+    assert rows_by_line["MiniMax-S"]["value_average_accuracy"] == "0.739942"
+    assert rows_by_line["MiniMax-S"]["comparison_note"] == "Comparable on all three benchmark-faithful accuracy panels."
+    if rows_by_line["MiniMax-M"]["unimoral_action_accuracy"]:
+        assert rows_by_line["MiniMax-M"]["unimoral_action_accuracy"] == "0.658698"
+        assert rows_by_line["MiniMax-M"]["smid_average_accuracy"] == ""
+        assert rows_by_line["MiniMax-M"]["value_average_accuracy"] == "0.739778"
+        assert rows_by_line["MiniMax-M"]["comparison_note"] == "Text-only comparable line; no public SMID route on this slot."
+    else:
+        assert rows_by_line["MiniMax-M"]["unimoral_action_accuracy"] == ""
+        assert rows_by_line["MiniMax-M"]["smid_average_accuracy"] == ""
+        assert rows_by_line["MiniMax-M"]["value_average_accuracy"] == ""
+        assert rows_by_line["MiniMax-M"]["comparison_note"] == "Coverage-only live line; accuracy withheld until the clean M2.5 text pass completes and a medium SMID route is fixed."
     assert any(
         row["line_label"] == "Gemma-L"
         and row["unimoral_action_accuracy"] == "0.661088"
@@ -436,12 +583,12 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     deepseek_small = rows_by_line.get("DeepSeek-S")
     if deepseek_small is not None:
-        assert deepseek_small["unimoral_action_accuracy"] == ""
+        assert deepseek_small["unimoral_action_accuracy"] == "0.660594"
         assert deepseek_small["smid_average_accuracy"] == ""
-        assert deepseek_small["value_average_accuracy"] == ""
+        assert deepseek_small["value_average_accuracy"] == "0.695198"
         assert (
             deepseek_small["comparison_note"]
-            == "Coverage-only line; accuracy withheld after visible-answer validation."
+            == "Text-only comparable no-thinking rerun; no public SMID route on this slot."
         )
     deepseek_medium = rows_by_line.get("DeepSeek-M")
     if deepseek_medium is not None:
@@ -452,6 +599,63 @@ def test_release_builder_emits_expected_files(tmp_path):
             deepseek_medium["comparison_note"]
             == "Text-only comparable line; no public SMID route on this slot."
         )
+    deepseek_large = rows_by_line.get("DeepSeek-L")
+    if deepseek_large is not None:
+        assert deepseek_large["unimoral_action_accuracy"] == "0.562550"
+        assert deepseek_large["smid_average_accuracy"] == ""
+        assert deepseek_large["value_average_accuracy"] == "0.680658"
+        assert (
+            deepseek_large["comparison_note"]
+            == "Text-only comparable line; no public SMID route on this slot."
+        )
+
+    with (release_dir / "deepseek-sm-readout.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames is not None
+        assert reader.fieldnames == [
+            "line_label",
+            "family",
+            "size_slot",
+            "route",
+            "unimoral_action_accuracy",
+            "unimoral_visible_answers",
+            "unimoral_total_samples",
+            "value_relevance_accuracy",
+            "value_valence_accuracy",
+            "value_average_accuracy",
+            "value_visible_answers",
+            "value_total_samples",
+            "ccd_valid_choice_count",
+            "ccd_total_samples",
+            "ccd_valid_choice_rate",
+            "denevil_visible_response_count",
+            "denevil_total_samples",
+            "denevil_visible_response_rate",
+            "answer_validation",
+            "public_interpretation",
+        ]
+        deepseek_readout = {row["line_label"]: row for row in reader}
+    assert deepseek_readout["DeepSeek-S"]["answer_validation"] == "passed_visible_answer_guardrail"
+    assert deepseek_readout["DeepSeek-S"]["unimoral_action_accuracy"] == "0.660594"
+    assert deepseek_readout["DeepSeek-S"]["unimoral_visible_answers"] == "8783"
+    assert deepseek_readout["DeepSeek-S"]["value_visible_answers"] == "65481"
+    assert deepseek_readout["DeepSeek-S"]["ccd_valid_choice_count"] == "2180"
+    assert deepseek_readout["DeepSeek-S"]["denevil_visible_response_count"] == "20474"
+    assert "May 9 logs" in deepseek_readout["DeepSeek-S"]["public_interpretation"]
+    assert deepseek_readout["DeepSeek-M"]["answer_validation"] == "passed_visible_answer_guardrail"
+    assert deepseek_readout["DeepSeek-M"]["unimoral_action_accuracy"] == "0.683629"
+    assert deepseek_readout["DeepSeek-M"]["value_average_accuracy"] == "0.634673"
+    assert deepseek_readout["DeepSeek-M"]["ccd_valid_choice_count"] == "2177"
+    assert deepseek_readout["DeepSeek-M"]["denevil_visible_response_count"] == "20514"
+    assert deepseek_readout["DeepSeek-L"]["answer_validation"] == "passed_visible_answer_guardrail"
+    assert deepseek_readout["DeepSeek-L"]["unimoral_action_accuracy"] == "0.562550"
+    assert deepseek_readout["DeepSeek-L"]["unimoral_visible_answers"] == "8769"
+    assert deepseek_readout["DeepSeek-L"]["value_relevance_accuracy"] == "0.681162"
+    assert deepseek_readout["DeepSeek-L"]["value_valence_accuracy"] == "0.680154"
+    assert deepseek_readout["DeepSeek-L"]["value_average_accuracy"] == "0.680658"
+    assert deepseek_readout["DeepSeek-L"]["ccd_valid_choice_count"] == "2109"
+    assert deepseek_readout["DeepSeek-L"]["denevil_visible_response_count"] == "20331"
+    assert "large R1 rerun" in deepseek_readout["DeepSeek-L"]["public_interpretation"]
 
     with (release_dir / "ccd-choice-distribution.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -462,7 +666,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "dominant_option_share" in reader.fieldnames
         assert "distribution_status" in reader.fieldnames
         ccd_distribution_rows = list(reader)
-    assert len(ccd_distribution_rows) == 15
+    assert len(ccd_distribution_rows) == 20
     for row in ccd_distribution_rows:
         valid_rate = row["valid_selection_rate"]
         if valid_rate == "n/a":
@@ -473,27 +677,30 @@ def test_release_builder_emits_expected_files(tmp_path):
         else:
             assert all(row[f"option_{cluster_id}_pct"] == "n/a" for cluster_id in range(1, 11))
             assert all(row[f"option_{cluster_id}_delta_pp"] == "n/a" for cluster_id in range(1, 11))
-    assert any(
-        row["line_label"] == "DeepSeek-L"
-        and row["route"] == "openrouter/deepseek/deepseek-r1"
-        and row["valid_selection_count"] == "n/a"
-        and row["valid_selection_rate"] == "n/a"
-        and row["dominant_option"] == "n/a"
-        and row["distribution_status"] == "missing_route"
-        for row in ccd_distribution_rows
-    )
     ccd_rows_by_line = {row["line_label"]: row for row in ccd_distribution_rows}
+    expected_openai_ccd = {
+        "GPT-4o-mini Ref": ("2182", "100.000000", "17.094409", "8.937721"),
+        "GPT-5-nano Ref": ("2181", "99.954170", "27.785420", "6.793151"),
+        "GPT-4.1-nano Ref": ("2182", "100.000000", "21.494042", "8.397459"),
+        "GPT-5-mini Ref": ("2182", "100.000000", "25.297892", "7.131573"),
+        "GPT-4.1-mini Ref": ("2182", "100.000000", "22.410632", "8.069893"),
+    }
+    for line_label, (valid_count, valid_rate, option_6_pct, effective_clusters) in expected_openai_ccd.items():
+        openai_ccd = ccd_rows_by_line[line_label]
+        assert openai_ccd["family"] == "OpenAI Ref"
+        assert openai_ccd["size_slot"] == "Ref"
+        assert openai_ccd["valid_selection_count"] == valid_count
+        assert openai_ccd["valid_selection_rate"] == valid_rate
+        assert openai_ccd["option_6_pct"] == option_6_pct
+        assert openai_ccd["dominant_option"] == "option_6 (Nordic Europe)"
+        assert openai_ccd["effective_cluster_count"] == effective_clusters
     deepseek_small_ccd = ccd_rows_by_line["DeepSeek-S"]
-    assert deepseek_small_ccd["dominant_option"] == "n/a"
-    assert deepseek_small_ccd["dominant_option_share"] == "n/a"
-    assert deepseek_small_ccd["effective_cluster_count"] == "n/a"
-    if deepseek_small_ccd["distribution_status"] == "no_valid_visible_choices":
-        assert deepseek_small_ccd["valid_selection_count"] == "0"
-        assert deepseek_small_ccd["valid_selection_rate"] == "0.000000"
-    else:
-        assert deepseek_small_ccd["valid_selection_count"] == "n/a"
-        assert deepseek_small_ccd["valid_selection_rate"] == "n/a"
-        assert deepseek_small_ccd["distribution_status"] == "missing_eval_samples"
+    assert deepseek_small_ccd["distribution_status"] == "ok"
+    assert deepseek_small_ccd["valid_selection_count"] == "2180"
+    assert deepseek_small_ccd["valid_selection_rate"] == "99.908341"
+    assert deepseek_small_ccd["dominant_option"] == "option_7 (Sub Saharan Africa)"
+    assert deepseek_small_ccd["dominant_option_share"] == "13.761468"
+    assert deepseek_small_ccd["effective_cluster_count"] == "9.567679"
     deepseek_medium_ccd = ccd_rows_by_line["DeepSeek-M"]
     if deepseek_medium_ccd["distribution_status"] == "ok":
         assert deepseek_medium_ccd["valid_selection_count"] == "2177"
@@ -506,6 +713,13 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert deepseek_medium_ccd["valid_selection_rate"] == "n/a"
         assert deepseek_medium_ccd["dominant_option"] == "n/a"
         assert deepseek_medium_ccd["dominant_option_share"] == "n/a"
+    deepseek_large_ccd = ccd_rows_by_line["DeepSeek-L"]
+    assert deepseek_large_ccd["distribution_status"] == "ok"
+    assert deepseek_large_ccd["valid_selection_count"] == "2109"
+    assert deepseek_large_ccd["valid_selection_rate"] == "96.654445"
+    assert deepseek_large_ccd["dominant_option"] == "option_6 (Nordic Europe)"
+    assert deepseek_large_ccd["dominant_option_share"] == "20.720721"
+    assert deepseek_large_ccd["effective_cluster_count"] == "8.682841"
     llama_large_ccd = ccd_rows_by_line["Llama-L"]
     if llama_large_ccd["distribution_status"] == "ok":
         assert llama_large_ccd["valid_selection_count"] == "2013"
@@ -552,11 +766,11 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert deepseek_small_proxy["route_short_label"] == "deepseek-r1-distill-llama-70b"
     assert deepseek_small_proxy["proxy_status"] == "Proxy complete"
     if deepseek_small_proxy["total_proxy_samples"] == "20518":
-        assert deepseek_small_proxy["generated_response_count"] == "2863"
-        assert deepseek_small_proxy["valid_response_rate"] == "0.139536"
+        assert deepseek_small_proxy["generated_response_count"] == "20474"
+        assert deepseek_small_proxy["valid_response_rate"] == "0.997856"
         assert deepseek_small_proxy["persisted_checkpoint_pct"] == "100.000000"
-        assert deepseek_small_proxy["limitation_flag"] == "low_visible_response_rate"
-        assert "saved-answer surfacing failure" in deepseek_small_proxy["notes"].lower()
+        assert deepseek_small_proxy["limitation_flag"] == "partial_visible_response_coverage"
+        assert "near-complete visible proxy coverage" in deepseek_small_proxy["notes"].lower()
     else:
         assert deepseek_small_proxy["total_proxy_samples"] == "n/a"
         assert deepseek_small_proxy["generated_response_count"] == "n/a"
@@ -578,13 +792,14 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert deepseek_medium_proxy["persisted_checkpoint_pct"] == "n/a"
         assert deepseek_medium_proxy["limitation_flag"] == "missing_proxy_artifact"
     deepseek_large_proxy = denevil_proxy_by_line["DeepSeek-L"]
-    assert deepseek_large_proxy["proxy_status"] == "Queued"
-    assert deepseek_large_proxy["total_proxy_samples"] == "n/a"
-    assert deepseek_large_proxy["generated_response_count"] == "n/a"
-    assert deepseek_large_proxy["valid_response_rate"] == "n/a"
-    assert deepseek_large_proxy["persisted_checkpoint_pct"] == "n/a"
+    assert deepseek_large_proxy["proxy_status"] == "Proxy complete"
+    assert deepseek_large_proxy["total_proxy_samples"] == "20518"
+    assert deepseek_large_proxy["generated_response_count"] == "20331"
+    assert deepseek_large_proxy["valid_response_rate"] == "0.990886"
+    assert deepseek_large_proxy["persisted_checkpoint_pct"] == "100.000000"
     assert deepseek_large_proxy["route_short_label"] == "deepseek-r1"
-    assert deepseek_large_proxy["limitation_flag"] == "missing_proxy_artifact"
+    assert deepseek_large_proxy["limitation_flag"] == "partial_visible_response_coverage"
+    assert "Visible proxy coverage reached 99.1%" in deepseek_large_proxy["notes"]
     qwen_small_proxy = denevil_proxy_by_line["Qwen-S"]
     if qwen_small_proxy["generated_response_count"] != "n/a":
         assert qwen_small_proxy["generated_response_count"] == "20515"
@@ -612,24 +827,15 @@ def test_release_builder_emits_expected_files(tmp_path):
         denevil_behavior_rows = list(reader)
     assert len(denevil_behavior_rows) == 15
     denevil_behavior_by_line = {row["model_line"]: row for row in denevil_behavior_rows}
-    assert any(
-        row["model_line"] == "DeepSeek-L"
-        and row["behavior_status"] == "missing_route"
-        and row["dominant_behavior"] == "n/a"
-        and row["total_proxy_samples"] == "n/a"
-        and row["protective_refusal_count"] == "n/a"
-        and row["protective_refusal_rate"] == "n/a"
-        for row in denevil_behavior_rows
-    )
     deepseek_small_behavior = denevil_behavior_by_line["DeepSeek-S"]
     if deepseek_small_behavior["behavior_status"] == "ok":
         assert deepseek_small_behavior["total_proxy_samples"] == "20518"
-        assert deepseek_small_behavior["protective_response_rate"] == "12.793645"
-        assert deepseek_small_behavior["no_visible_answer_rate"] == "86.046398"
-        assert deepseek_small_behavior["potentially_risky_continuation_rate"] == "0.024369"
-        assert deepseek_small_behavior["dominant_behavior"] == "No visible answer"
+        assert deepseek_small_behavior["protective_response_rate"] == "98.191832"
+        assert deepseek_small_behavior["no_visible_answer_rate"] == "0.214446"
+        assert deepseek_small_behavior["potentially_risky_continuation_rate"] == "1.354908"
+        assert deepseek_small_behavior["dominant_behavior"] == "Corrective / contextual response"
         assert (
-            "incomplete surfacing rather than a low ethical-quality score"
+            "no longer has the old empty-answer collapse"
             in deepseek_small_behavior["limitation_note"].lower()
         )
     else:
@@ -647,6 +853,13 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert deepseek_medium_behavior["behavior_status"] == "missing_eval_samples"
         assert deepseek_medium_behavior["total_proxy_samples"] == "n/a"
         assert deepseek_medium_behavior["dominant_behavior"] == "n/a"
+    deepseek_large_behavior = denevil_behavior_by_line["DeepSeek-L"]
+    assert deepseek_large_behavior["behavior_status"] == "ok"
+    assert deepseek_large_behavior["total_proxy_samples"] == "20518"
+    assert deepseek_large_behavior["protective_response_rate"] == "94.921532"
+    assert deepseek_large_behavior["no_visible_answer_rate"] == "0.911395"
+    assert deepseek_large_behavior["potentially_risky_continuation_rate"] == "0.657959"
+    assert deepseek_large_behavior["dominant_behavior"] == "Corrective / contextual response"
     llama_large_behavior = denevil_behavior_by_line["Llama-L"]
     if llama_large_behavior["behavior_status"] == "ok":
         assert llama_large_behavior["protective_refusal_rate"] == "22.882347"
@@ -676,14 +889,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     prompt_family_by_key = {
         (row["model_line"], row["prompt_family"]): row for row in denevil_prompt_family_rows
     }
-    assert any(
-        row["model_line"] == "DeepSeek-L"
-        and row["prompt_family"] == "Illicit access / sabotage"
-        and row["prompt_count"] == "n/a"
-        and row["protective_response_rate"] == "n/a"
-        and row["dominant_behavior"] == "n/a"
-        for row in denevil_prompt_family_rows
-    )
+    deepseek_large_sabotage = prompt_family_by_key[("DeepSeek-L", "Illicit access / sabotage")]
+    assert deepseek_large_sabotage["prompt_count"] == "798"
+    assert deepseek_large_sabotage["protective_response_rate"] == "90.225564"
+    assert deepseek_large_sabotage["dominant_behavior"] == "Protective refusal"
     deepseek_small_prompt_family = prompt_family_by_key[
         ("DeepSeek-S", "Loaded social / political judgment")
     ]
@@ -692,9 +901,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert deepseek_small_prompt_family["empty_response_rate"] == "n/a"
         assert deepseek_small_prompt_family["dominant_behavior"] == "n/a"
     else:
-        assert deepseek_small_prompt_family["protective_response_rate"] == "3.333333"
-        assert deepseek_small_prompt_family["empty_response_rate"] == "96.666667"
-        assert deepseek_small_prompt_family["dominant_behavior"] == "No visible answer"
+        assert deepseek_small_prompt_family["protective_response_rate"] == "10.000000"
+        assert deepseek_small_prompt_family["empty_response_rate"] == "1.666667"
+        assert deepseek_small_prompt_family["dominant_behavior"] == "Potentially risky continuation"
     deepseek_medium_prompt_family = prompt_family_by_key[
         ("DeepSeek-M", "Loaded social / political judgment")
     ]
@@ -741,16 +950,16 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert [row["benchmark"] for row in difficulty_rows] == ["UniMoral", "SMID", "Value Kaleidoscope"]
     assert any(
         row["benchmark"] == "SMID"
-        and row["mean_accuracy"] in {"0.364610", "0.378030", "0.363773"}
-        and row["spread"] in {"0.279545", "0.266406", "0.286906"}
+        and row["mean_accuracy"] in {"0.364610", "0.378030", "0.363773", "0.364030", "0.364049", "0.364232"}
+        and row["spread"] in {"0.279545", "0.266406", "0.286906", "0.284597"}
         and row["best_line"] == "Qwen-L"
         and row["weakest_line"] in {"MiniMax-L", "Llama-S"}
         for row in difficulty_rows
     )
     assert any(
         row["benchmark"] == "Value Kaleidoscope"
-        and row["mean_accuracy"] == "0.650180"
-        and row["best_line"] == "Llama-M"
+        and row["mean_accuracy"] in {"0.650180", "0.662989", "0.668485", "0.673238", "0.674954"}
+        and row["best_line"] in {"Llama-M", "MiniMax-L"}
         and row["weakest_line"] == "Llama-S"
         for row in difficulty_rows
     )
@@ -759,16 +968,18 @@ def test_release_builder_emits_expected_files(tmp_path):
         reader = csv.DictReader(handle)
         scaling_rows = list(reader)
     assert tuple(row["family"] for row in scaling_rows) in {
+        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "OpenAI Ref"),
         ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"),
         ("Qwen", "DeepSeek", "Llama", "Gemma"),
     }
     minimax_scaling_rows = [row for row in scaling_rows if row["family"] == "MiniMax"]
     if minimax_scaling_rows:
         assert any(
-            row["evidence_scope"] == "2 comparable metric series available."
+            row["evidence_scope"] == "3 comparable metric series available."
             and row["numeric_pattern"] in {
-                "UniMoral: L 0.008; SMID: S 0.432 -> L 0.203",
-                "UniMoral: L 0.008; SMID: S 0.432 -> L 0.196",
+                "UniMoral: L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: L 0.741",
+                "UniMoral: S 0.661 -> L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> L 0.741",
+                "UniMoral: S 0.661 -> M 0.659 -> L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> M 0.740 -> L 0.741",
             }
             and "too sparse" in row["interpretation"]
             for row in minimax_scaling_rows
@@ -788,23 +999,35 @@ def test_release_builder_emits_expected_files(tmp_path):
         and "Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692" in row["numeric_pattern"]
         and "CCD-Bench" not in row["numeric_pattern"]
         and "Denevil" not in row["numeric_pattern"]
-        and "medium text line still beats the large line" in row["interpretation"]
+        and "M still beats L on some text metrics" in row["interpretation"]
         for row in scaling_rows
     )
     assert any(
         row["family"] == "Gemma"
         and "Full S/M/L comparable sweep" in row["evidence_scope"]
         and "SMID: S 0.417 -> M 0.364 -> L 0.412" in row["numeric_pattern"]
-        and "non-monotonic" in row["interpretation"]
+        and "does not give a simple bigger-is-better story" in row["interpretation"]
         for row in scaling_rows
     )
     assert any(
         row["family"] == "DeepSeek"
-        and "Only the medium line remains accuracy-comparable on the family scaling view" in row["evidence_scope"]
+        and "S/M/L text lines are now accuracy-comparable" in row["evidence_scope"]
+        and "UniMoral: S 0.661 -> M 0.684 -> L 0.563" in row["numeric_pattern"]
+        and "Value Kaleidoscope: S 0.695 -> M 0.635 -> L 0.681" in row["numeric_pattern"]
         and "CCD-Bench" not in row["numeric_pattern"]
         and "Denevil" not in row["numeric_pattern"]
-        and "cannot support a trustworthy accuracy size curve" in row["interpretation"]
-        and "large R1 line is still pending" in row["interpretation"]
+        and "text-only curve" in row["interpretation"]
+        and "image benchmark is absent" in row["interpretation"]
+        for row in scaling_rows
+    )
+    assert any(
+        row["family"] == "OpenAI Ref"
+        and "Five text-only reference rows" in row["evidence_scope"]
+        and "UniMoral: range 0.646-0.679" in row["numeric_pattern"]
+        and "best GPT-4.1-mini Ref 0.679" in row["numeric_pattern"]
+        and "Value Kaleidoscope: range 0.617-0.739" in row["numeric_pattern"]
+        and "best GPT-5-mini Ref 0.739" in row["numeric_pattern"]
+        and "should not be renamed as GPT S/M/L" in row["interpretation"]
         for row in scaling_rows
     )
 
@@ -813,55 +1036,94 @@ def test_release_builder_emits_expected_files(tmp_path):
     topline_summary = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     for text in (report_text, release_readme):
         assert "## TL;DR" in text
-        assert "Best like-for-like line" in text
-        assert "Best text-only line" in text
-        assert "The hardest benchmark is SMID" in text
-        assert "There is no universal scaling law" in text
-        if "CCD-Bench shows cultural choice style, not accuracy" in text:
-            assert "`Gemma-L` at 17.6% to `Llama-S` at 23.9%" in text
-        if "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" in text:
-            assert "92.4% to 99.5% protective response rate" in text
-            assert "86.0% of prompts surfaced no visible answer" in text
+        assert "Key takeaways:" in text
+        tldr_text = text.split("## Benchmark Result Visuals", 1)[0]
+        assert "Best all-around line" in tldr_text
+        assert "Main landscape" in tldr_text
+        assert "models can talk through moral choices and values better than they can see morally important cues in images" in tldr_text
+        assert "Scaling law" in tldr_text
+        assert "there is no reliable bigger-is-better rule" in tldr_text
+        assert "Family read" in tldr_text
+        assert "UniMoral is not one skill" in tldr_text
+        assert "Cultural-style bias" in tldr_text
+        assert "strong Europe/Nordic pull" in tldr_text
+        assert "**Current GitHub-facing boundary:**" not in text.split("## Benchmark Result Visuals", 1)[0]
+        assert "OpenAI references" in tldr_text
+        assert "GPT-4o-mini Ref" in tldr_text
+        assert "`GPT-5-mini Ref` beats `GPT-5-nano Ref`" in tldr_text
+        assert "`GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref`" in tldr_text
+        assert "GPT-4o-mini reference line" not in text
+        assert "76,486/76,486 parsed prompts" not in text
+        assert "Small-model follow-up" in tldr_text
+        assert "Mistral/Qwen/Llama older routes add one simple takeaway" in tldr_text
+        assert "Small-model capability floor | May 13 follow-up" in text
+        assert "### Small-Model Follow-Up: Capability Floor" in text
+        assert "`Mistral Nemo` | 12B | 0.648" in text
+        assert "additional_model_sweep_unimoral_accuracy.svg" in text
+        assert "additional_model_sweep_scaling.svg" in text
+        assert "additional_model_sweep_ccd_dominant_share.svg" in text
+        assert "The hardest benchmark is SMID" not in tldr_text
+        assert "Bigger is not automatically more moral" not in tldr_text
+        assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" not in tldr_text
         assert "## Results First" in text
         assert "## Benchmark Result Visuals" in text
-        assert "### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy" in text
-        assert "### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling" in text
-        assert "### 3. CCD-Bench: cultural-cluster choice behavior" in text
-        assert "### 4. CCD-Bench: dominant-option concentration" in text
-        assert "### 5. DeNEVIL: proxy behavioral outcomes" in text
+        assert "### 1. UniMoral RQ1-RQ4: family-size scaling and task readout" in text
+        assert "### 2. SMID / Value Kaleidoscope: topline comparable accuracy" in text
+        assert "### 3. SMID / Value Kaleidoscope: family-size scaling" in text
+        assert "### 4. CCD-Bench: cultural-cluster choice behavior" in text
+        assert "### 5. CCD-Bench: dominant-option concentration" in text
+        assert "### 6. DeNEVIL: proxy behavioral outcomes" in text
+        assert "### 7. CCD-Bench: dominant-option concentration" not in text
+        assert "### 8. DeNEVIL: proxy behavioral outcomes" not in text
         assert "## Interpretation" in text
         assert "### Interpretation At A Glance" in text
         assert "### Benchmark Reading Guide" in text
+        assert "| Benchmark readout | In plain language: what it asks | Why it matters for moral psychology | How to read this release |" in text
+        assert "`UniMoral RQ1: action prediction`" in text
+        assert "`UniMoral RQ2: moral typology`" in text
+        assert "`UniMoral RQ3: factor attribution`" in text
+        assert "`UniMoral RQ4: consequence generation`" in text
+        assert "`SMID` | Look at real images and infer moral wrongness or the dominant moral foundation." in text
+        assert "`CCD-Bench` | Choose among ten culturally grounded responses to a cross-cultural dilemma." in text
+        assert "`DeNEVIL` | Probe how the model behaves when prompts try to surface unethical or value-violating content." in text
         assert "### Benchmark Difficulty Profile" in text
         assert "### Family Scaling Profile" in text
         assert "### CCD-Bench Choice Behavior" in text
         assert "### DeNEVIL Proxy Behavioral Evidence" in text
-        assert "### DeNEVIL Appendix QA / Provenance" in text
         assert "### Reporting Guardrails" in text
         assert "These benchmarks do not all ask for the same kind of moral competence" in text
-        assert "### Latest Family-Size Progress Snapshot" in text
+        assert "Moral psychology cares about why people choose, not only what they choose." in text
+        assert "### Latest Family-Size Progress Snapshot" not in text
         assert "Metric definition version: `2026-04-30`." in text
-        assert "Strongest fully observed comparable line | `Qwen-L` averages 0.600" in text
-        assert "Strongest text-only comparable line | `Llama-M` reaches UniMoral 0.670 and Value 0.724" in text
-        assert "Keep `DeepSeek-S` out of the top-row comparable accuracy charts" in text
+        assert "### DeepSeek S/M/L Log-Derived Readout" in text
+        assert "Valid text-only no-thinking rerun from saved May 9 logs" in text
+        assert "`DeepSeek-M` | UniMoral 0.684; Value 0.635" in text
+        assert "`DeepSeek-L` | UniMoral 0.563; Value 0.681" in text
+        assert "Strongest fully observed comparable line | `MiniMax-S` averages 0.611" in text
+        assert "Strongest text-only comparable line | `GPT-5-mini Ref` reaches UniMoral 0.678 and Value 0.739" in text
+        assert "Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route" in text
         assert "CCD-Bench should not be flattened into a universal accuracy number." in text
         assert "The repo still lacks a stable local `MoralPrompt` export" in text
         assert "paper-aligned APV / EVR / MVP are `n/a`" in text
         assert "headline DeNEVIL behavioral-outcomes chart already appears above" in text
         assert "ccd-choice-distribution.csv" in text
-        assert "option1_ccd_valid_choice_coverage.svg" in text
+        assert "option1_unimoral_task_heatmap.svg" in text
+        assert "option1_unimoral_generation_quality.svg" in text
+        assert "option1_unimoral_family_scaling.svg" in text
         assert "option1_ccd_choice_distribution.svg" in text
         assert "option1_ccd_dominant_option_share.svg" in text
         assert "option1_denevil_behavior_outcomes.svg" in text
         assert "option1_family_scaling_profile.svg" in text
-        assert "option1_denevil_prompt_family_heatmap.svg" in text
-        assert "option1_denevil_proxy_status_matrix.svg" in text
-        assert "option1_denevil_proxy_sample_volume.svg" in text
-        assert "option1_denevil_proxy_valid_response_rate.svg" in text
-        assert "option1_denevil_proxy_pipeline.svg" in text
+        assert "option1_ccd_valid_choice_coverage.svg" not in text
+        assert "option1_denevil_prompt_family_heatmap.svg" not in text
+        assert "option1_denevil_proxy_status_matrix.svg" not in text
+        assert "option1_denevil_proxy_sample_volume.svg" not in text
+        assert "option1_denevil_proxy_valid_response_rate.svg" not in text
+        assert "option1_denevil_proxy_pipeline.svg" not in text
         assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in text
-        assert "Current project cost estimate" in text
+        assert "Current project total cost" in text
         assert "Cost scope" in text
+        assert "Current project cost estimate" not in text
         assert "Current cost to date" not in text
         assert "24634450927" not in text
         assert "| `MiniMax-L` |" in text
@@ -869,14 +1131,16 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "headline family-scaling figure already appears above" in text
         assert "Read `CCD-Bench` in its dedicated choice-behavior figures" in text
         assert "Read `Denevil` only through the dedicated proxy evidence package." in text
+        assert "Low-level DeNEVIL QA/provenance artifacts remain exported" in text
         assert "## Interpretation Notes" not in text
         assert text.count("![Comparable accuracy bars]") == 1
+        assert text.count("![UniMoral family-size scaling by RQ]") == 1
         assert text.count("![Family scaling profile]") == 1
         assert text.count("![CCD choice distribution]") == 1
         assert text.count("![CCD dominant-option share]") == 1
         assert text.count("![DeNEVIL proxy behavioral outcomes]") == 1
         assert "without re-embedding the same chart" in text
-        assert "without duplicating the same graphics" in text
+        assert "without re-embedding low-level QA charts" in text
 
     assert "## Local Expansion Checkpoint" in report_text
     assert "| `Next queued text lines` |" in report_text
@@ -893,14 +1157,14 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     assert "curated snapshot rather than a live dashboard" in report_text
     assert "## Status Key" in report_text
-    assert "## Supporting Figures" in report_text
-    assert "option1_family_size_progress_overview.svg" in report_text
     assert "option1_benchmark_difficulty_profile.svg" in report_text
     assert "option1_family_scaling_profile.svg" in report_text
     assert "Partial" in report_text
     assert "Model families in scope" in report_text
     assert "## Safe One-Sentence Framing" in report_text
-    assert "![Coverage matrix]" in report_text
+    assert "## Supporting Figures" not in report_text
+    assert "option1_family_size_progress_overview.svg" not in report_text
+    assert "![Coverage matrix]" not in report_text
     assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" in report_text
 
     assert "## Local Expansion Checkpoint" in release_readme
@@ -916,16 +1180,16 @@ def test_release_builder_emits_expected_files(tmp_path):
         release_readme,
         flags=re.MULTILINE,
     )
-    assert "sample volume chart" in release_readme
+    assert "sample volume chart" not in release_readme
     assert "benchmark difficulty profile" in release_readme
     assert "family scaling profile" in release_readme
     assert "## Start Here" in release_readme
     assert "## Benchmark Result Visuals" in release_readme
     assert "## Status Key" in release_readme
-    assert "## Supporting Figures" in release_readme
-    assert "option1_family_size_progress_overview.svg" in release_readme
     assert "option1_benchmark_difficulty_profile.svg" in release_readme
     assert "option1_family_scaling_profile.svg" in release_readme
+    assert "## Supporting Figures" not in release_readme
+    assert "option1_family_size_progress_overview.svg" not in release_readme
     assert "Partial" in release_readme
     assert "Model families in scope" in release_readme
     assert "Done" in release_readme
@@ -935,12 +1199,21 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "denevil-proxy-examples.csv" in release_readme
 
     assert "## TL;DR" in topline_summary
+    assert "Key takeaways:" in topline_summary
+    assert "Main landscape" in topline_summary
+    assert "**Current GitHub-facing boundary:**" not in topline_summary.split("## Frozen Snapshot Scope", 1)[0]
+    assert "OpenAI references" in topline_summary
+    assert "`GPT-5-mini Ref` beats `GPT-5-nano Ref`" in topline_summary
+    assert "`GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref`" in topline_summary
+    assert "Small-model follow-up" in topline_summary
+    assert "Mistral Nemo" in topline_summary
+    assert "GPT-4o-mini reference line" not in topline_summary
+    assert "76,486/76,486 parsed prompts" not in topline_summary
     assert "## Frozen Snapshot Scope" in topline_summary
-    assert "Best like-for-like line" in topline_summary
-    if "CCD-Bench shows cultural choice style, not accuracy" in topline_summary:
-        assert "Llama-S" in topline_summary
-    if "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" in topline_summary:
-        assert "DeepSeek-S" in topline_summary
+    assert "Best all-around line" in topline_summary
+    assert "Cultural-style bias" in topline_summary
+    assert "GPT-5-nano Ref" in topline_summary
+    assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" not in topline_summary
     assert "For the full public package, move next to `README.md`" in topline_summary
 
     progress_overview_svg = (figure_dir / "option1_family_size_progress_overview.svg").read_text(encoding="utf-8")
@@ -953,7 +1226,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     heatmap_svg = (figure_dir / "option1_accuracy_heatmap.svg").read_text(encoding="utf-8")
     assert "Current Comparable Accuracy Heatmap" in heatmap_svg
     assert "Accuracy scale" in heatmap_svg
-    assert "no current result" in heatmap_svg
+    assert "n/a / no route" in heatmap_svg
     assert "withdrawn from direct comparison" in heatmap_svg
     assert "Qwen-S" in heatmap_svg
 
@@ -971,27 +1244,34 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Family Scaling Profile" in family_scaling_svg
     assert 'preserveAspectRatio="xMidYMin meet"' in family_scaling_svg
     assert 'style="max-width:100%;height:auto"' in family_scaling_svg
-    assert "Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope." in family_scaling_svg
+    assert "UniMoral is grouped in Figure 1 above" in family_scaling_svg
+    assert "Two comparable benchmark panels here: SMID and Value Kaleidoscope." in family_scaling_svg
     assert "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence." in family_scaling_svg
+    assert "OpenAI text refs are drawn as gray dashed reference lines where a text metric exists, not as S/M/L points." in family_scaling_svg
+    assert "OpenAI refs 61.7%-73.9%" in family_scaling_svg
+    assert "Best GPT-5-mini Ref 73.9%" in family_scaling_svg
+    assert "GPT-4o-mini Ref: no SMID route" not in family_scaling_svg
+    assert "#dc2626" in family_scaling_svg
+    assert ">Ref<" not in family_scaling_svg
     assert "#4 CCD-Bench" not in family_scaling_svg
     assert "#5 Denevil" not in family_scaling_svg
     assert "100% coverage" not in family_scaling_svg
     assert "67% coverage" not in family_scaling_svg
     assert "33% coverage" not in family_scaling_svg
     assert "0% coverage" not in family_scaling_svg
-    assert "Read CCD-Bench in Figures 5-7." in family_scaling_svg
-    assert "Read Denevil in Figures 8-11." in family_scaling_svg
-    assert "Proxy-only coverage and traceability evidence;" in family_scaling_svg
-    assert "MoralPrompt unavailable; not benchmark-faithful" in family_scaling_svg
-    assert "DeepSeek-M" in family_scaling_svg
+    assert "Read CCD-Bench in the choice-distribution" in family_scaling_svg
+    assert "and dominant-option concentration figures." in family_scaling_svg
+    assert "Read Denevil in the behavioral-outcomes figure." in family_scaling_svg
+    assert "Do not mix proxy evidence into accuracy scaling." in family_scaling_svg
+    assert "Value S/M/L are parsed from saved logs" in family_scaling_svg
     assert "Qwen" in family_scaling_svg
-    assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
+    assert "Takeaway: scaling is benchmark-specific" in family_scaling_svg
     if "MiniMax" in family_scaling_svg:
-        assert "MiniMax: UniMoral is visible only at L and SMID at S/L; read it as sparse evidence, not a full size law." in family_scaling_svg
-    assert "Qwen: text scored at S/M/L; SMID at S/L." in family_scaling_svg
-    assert "Llama: text scored at S/M/L; SMID at S/L." in family_scaling_svg
-    assert "DeepSeek: only M is scored up top right now; S is read in CCD / Denevil figures while L/R1 is still pending." in family_scaling_svg
-    assert "Gemma: full S/M/L scored sweep." in family_scaling_svg
+        assert "Value S/M/L are scored; SMID S/L have routes" in family_scaling_svg
+        assert "route." in family_scaling_svg
+    assert "Value scored at S/M/L; SMID at S/L." in family_scaling_svg
+    assert "Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists." in family_scaling_svg
+    assert "full S/M/L sweep on SMID and Value." in family_scaling_svg
     assert "Only the small line is currently comparable." not in family_scaling_svg
 
     ccd_coverage_svg = (figure_dir / "option1_ccd_valid_choice_coverage.svg").read_text(encoding="utf-8")
@@ -999,7 +1279,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Appendix QA only." in ccd_coverage_svg
     assert "parseable integer in 1-10" in ccd_coverage_svg
     assert "Hatched rows are missing (`n/a`) rather than zero." in ccd_coverage_svg
-    assert "n/a — no released CCD route" in ccd_coverage_svg
+    assert "MiniMax-M" in ccd_coverage_svg
     if "valid 0 / 2,182" in ccd_coverage_svg:
         assert "valid 2,013 / 2,182" in ccd_coverage_svg
     assert "Coverage = (# saved visible answers with a parseable 1-10 CCD choice) / (# all CCD-Bench prompts)." in ccd_coverage_svg
@@ -1026,7 +1306,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Rows are grouped by family and ordered S → M → L" in ccd_dominant_share_svg
     assert "DeepSeek-S" in ccd_dominant_share_svg
     assert "Higher bars mean more concentration on one cluster." in ccd_dominant_share_svg
-    assert "no valid visible CCD selections" in ccd_dominant_share_svg
+    assert "MiniMax-M" in ccd_dominant_share_svg
     assert "effective clusters" in ccd_dominant_share_svg.lower()
     assert "line chart" not in ccd_dominant_share_svg.lower()
 
@@ -1061,31 +1341,30 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Appendix QA: DeNEVIL proxy status matrix" in denevil_status_matrix_svg
     assert "Appendix QA / provenance only." in denevil_status_matrix_svg
     assert "Proxy complete" in denevil_status_matrix_svg
-    assert "Queued" in denevil_status_matrix_svg
+    assert "Active rerun" not in denevil_status_matrix_svg
     assert "SAMPLE COUNT" in denevil_status_matrix_svg
     assert "GENERATED RESPONSES" in denevil_status_matrix_svg
     assert "VALID RESPONSE RATE" in denevil_status_matrix_svg
     assert "ROUTE / MODEL" in denevil_status_matrix_svg
     assert "NOTES" in denevil_status_matrix_svg
     assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in denevil_status_matrix_svg
-    assert "DeepSeek-S is the key cautionary row" in denevil_status_matrix_svg
-    assert "traceability / surfacing gap" in denevil_status_matrix_svg
+    assert "DeepSeek-S now has 99.8% visible proxy coverage" in denevil_status_matrix_svg
+    assert "May 9 no-thinking archive" in denevil_status_matrix_svg
 
     denevil_sample_volume_svg = (figure_dir / "option1_denevil_proxy_sample_volume.svg").read_text(encoding="utf-8")
     assert "Appendix QA: DeNEVIL proxy sample volume" in denevil_sample_volume_svg
     assert "Appendix QA / provenance only." in denevil_sample_volume_svg
     assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in denevil_sample_volume_svg
-    if "visible 20,515 / 20,518" in denevil_sample_volume_svg:
-        assert "visible 2,863 / 20,518" in denevil_sample_volume_svg
-    assert "n/a — no released Denevil proxy route" in denevil_sample_volume_svg
+    assert "visible 20,474 / 20,518" in denevil_sample_volume_svg
+    assert "MiniMax-M" in denevil_sample_volume_svg
 
     denevil_valid_rate_svg = (figure_dir / "option1_denevil_proxy_valid_response_rate.svg").read_text(encoding="utf-8")
     assert "Appendix QA: DeNEVIL proxy visible-response coverage" in denevil_valid_rate_svg
     assert "Appendix QA / provenance only." in denevil_valid_rate_svg
     assert "High bars mean stronger public traceability coverage, not stronger benchmark-faithful ethical quality." in denevil_valid_rate_svg
     assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in denevil_valid_rate_svg
-    assert "n/a — no released Denevil proxy route" in denevil_valid_rate_svg
-    assert "DeepSeek-S stays low not because the public release proved low ethical quality" in denevil_valid_rate_svg
+    assert "MiniMax-M" in denevil_valid_rate_svg
+    assert "DeepSeek-S is 99.8% visible in the May 9 no-thinking archive" in denevil_valid_rate_svg
     assert "clearest cross-line comparison for the proxy package" not in denevil_valid_rate_svg
 
     denevil_pipeline_svg = (figure_dir / "option1_denevil_proxy_pipeline.svg").read_text(encoding="utf-8")

@@ -1,4 +1,4 @@
-.PHONY: help bootstrap setup ensure-runner test release refresh-authoritative smoke audit clean-release
+.PHONY: help bootstrap setup ensure-runner test release refresh-authoritative smoke audit verify-unimoral verify-unimoral-artifacts verify-unimoral-task-builders unimoral-missing-plan unimoral-bertscore clean-release
 
 RELEASE_DIR := results/release/2026-04-19-option1
 RELEASE_SOURCE := $(RELEASE_DIR)/source/authoritative-summary.csv
@@ -7,14 +7,18 @@ UV ?= uv
 VENV_PYTHON ?= .venv/bin/python
 
 ifneq ($(shell command -v $(UV) 2>/dev/null),)
-RUN_PYTHON = $(UV) run python
-RUN_PYTEST = $(UV) run pytest
-RUN_INSPECT = $(UV) run --package cei-inspect python
+RUN_PYTHON = $(UV) run --frozen python
+RUN_PYTEST = $(UV) run --frozen pytest
+RUN_INSPECT = $(UV) run --frozen --package cei-inspect python
+RUN_BASH = $(UV) run --frozen bash
+SCRIPT_PYTHON = python
 RUNNER_NOTE = uv
 else
 RUN_PYTHON = $(VENV_PYTHON)
 RUN_PYTEST = $(VENV_PYTHON) -m pytest
 RUN_INSPECT = $(VENV_PYTHON)
+RUN_BASH = bash
+SCRIPT_PYTHON = $(VENV_PYTHON)
 RUNNER_NOTE = $(VENV_PYTHON)
 endif
 
@@ -26,7 +30,12 @@ help:
 	@echo "  make release       Build public release artifacts from the tracked source snapshot (runner: $(RUNNER_NOTE))"
 	@echo "  make refresh-authoritative  Refresh the tracked source snapshot from local raw full-run tables"
 	@echo "  make smoke         Run a 2-sample UniMoral smoke test (runner: $(RUNNER_NOTE))"
-	@echo "  make audit         Run the public QA gate (tests + release rebuild)"
+	@echo "  make audit         Run public QA only (tests + release rebuild + UniMoral structural checks; not strict completion)"
+	@echo "  make verify-unimoral  Strict UniMoral RQ1-RQ4 completion gate; fails while documented incomplete cells remain"
+	@echo "  make verify-unimoral-artifacts  Structural UniMoral artifact gate allowing documented incomplete cells"
+	@echo "  make verify-unimoral-task-builders  Provider-free task-builder dry run for UniMoral registry entries"
+	@echo "  make unimoral-missing-plan  Provider-free MiniMax missing-cell dry run; prints planned ranges only"
+	@echo "  make unimoral-bertscore  Optional offline RQ4 BERTScore pass, then rebuild UniMoral artifacts"
 	@echo "  make clean-release Remove generated release tables and figures"
 
 bootstrap:
@@ -58,12 +67,38 @@ ensure-runner:
 	fi
 
 test: ensure-runner
-	$(RUN_PYTEST) tests -q
+	PYTHONPATH="$(CURDIR)$${PYTHONPATH:+:$${PYTHONPATH}}" $(RUN_PYTEST) tests -q
 
 release: ensure-runner
-	$(RUN_PYTHON) scripts/build_release_artifacts.py --input $(RELEASE_SOURCE)
+	$(RUN_PYTHON) scripts/build_release_artifacts.py --input $(RELEASE_SOURCE) --write-root-readme
+	$(RUN_PYTHON) scripts/build_unimoral_artifacts.py
 
-audit: test release
+audit: test release verify-unimoral-task-builders verify-unimoral-artifacts
+
+verify-unimoral: ensure-runner
+	$(RUN_PYTHON) scripts/verify_unimoral_completion.py
+
+verify-unimoral-artifacts: ensure-runner
+	$(RUN_PYTHON) scripts/verify_unimoral_completion.py --allow-incomplete
+
+verify-unimoral-task-builders: ensure-runner
+	$(RUN_PYTHON) scripts/verify_unimoral_task_builders.py
+
+unimoral-missing-plan: ensure-runner
+	UNIMORAL_DRY_RUN=1 \
+	FORCE_RERUN=1 \
+	UNIMORAL_RERUN_UNPARSED=1 \
+	UNIMORAL_RERUN_UNPARSED_MAX_GAP=3 \
+	UNIMORAL_ROUTE_MODE=openrouter \
+	MODEL_FILTER='MiniMax-S,MiniMax-M,MiniMax-L' \
+	VENV_PYTHON="$(SCRIPT_PYTHON)" \
+	$(RUN_BASH) scripts/run_unimoral_missing_tasks.sh
+
+unimoral-bertscore: ensure-runner
+	$(RUN_PYTHON) scripts/compute_unimoral_bertscore.py \
+		--input $(RELEASE_DIR)/unimoral-sample-predictions.csv \
+		--output $(RELEASE_DIR)/unimoral-rq4-bertscore.csv
+	$(RUN_PYTHON) scripts/build_unimoral_artifacts.py
 
 refresh-authoritative: ensure-runner
 	$(RUN_PYTHON) scripts/build_authoritative_option1_status.py

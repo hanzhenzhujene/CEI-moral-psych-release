@@ -108,7 +108,7 @@ def _lm_harness_cmd(config: RunConfig) -> list[str]:
 
 
 def _trolleybench_cmd(config: RunConfig) -> list[str]:
-    cmd = [sys.executable, "run_trolleybench.py"]
+    cmd = [sys.executable, "tools/legacy_openrouter/run_trolleybench.py"]
     # Parse model family and size from model string
     # e.g. "qwen/qwen3-8b" or "qwen-S"
     cmd += config.extra_args

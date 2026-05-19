@@ -48,7 +48,7 @@
 <text x="1012.0" y="136" text-anchor="middle" class="axis">Denevil</text>
 <text x="196" y="203.0" text-anchor="end" class="axis">Qwen</text>
 <rect x="220" y="156" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
-<text x="301.0" y="192" text-anchor="middle" class="celltext">1/1</text>
+<text x="301.0" y="192" text-anchor="middle" class="celltext">1/4</text>
 <text x="301.0" y="214" text-anchor="middle" class="cellsub">paper setup</text>
 <rect x="396" y="156" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
 <text x="477.0" y="192" text-anchor="middle" class="celltext">2/2</text>
@@ -64,7 +64,7 @@
 <text x="1005.0" y="214" text-anchor="middle" class="cellsub">proxy only</text>
 <text x="196" y="285.0" text-anchor="end" class="axis">DeepSeek</text>
 <rect x="220" y="238" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
-<text x="301.0" y="274" text-anchor="middle" class="celltext">1/1</text>
+<text x="301.0" y="274" text-anchor="middle" class="celltext">1/4</text>
 <text x="301.0" y="296" text-anchor="middle" class="cellsub">paper setup</text>
 <rect x="396" y="238" width="162" height="68" rx="18" fill="#cbd5e1" class="outline"/>
 <rect x="396" y="238" width="162" height="68" rx="18" fill="url(#diagonalHatch)" opacity="0.7"/>
@@ -81,7 +81,7 @@
 <text x="1005.0" y="296" text-anchor="middle" class="cellsub">proxy only</text>
 <text x="196" y="367.0" text-anchor="end" class="axis">Gemma</text>
 <rect x="220" y="320" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
-<text x="301.0" y="356" text-anchor="middle" class="celltext">1/1</text>
+<text x="301.0" y="356" text-anchor="middle" class="celltext">1/4</text>
 <text x="301.0" y="378" text-anchor="middle" class="cellsub">paper setup</text>
 <rect x="396" y="320" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
 <text x="477.0" y="356" text-anchor="middle" class="celltext">2/2</text>

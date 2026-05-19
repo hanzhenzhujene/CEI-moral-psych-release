@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470"><style>text{font-family:Arial,Helvetica,sans-serif;fill:#18212f}.title{font-size:26px;font-weight:700}.subtitle{font-size:15px;fill:#536171}.axis{font-size:14px;fill:#536171}.label{font-size:15px}.small{font-size:12px;fill:#536171}.metric{font-size:16px;font-weight:700;fill:#253044}</style>
+<rect width="100%" height="100%" fill="#f8faf7"/>
+<text x="34" y="42" class="title">Small-model follow-up: UniMoral accuracy</text>
+<text x="34" y="68" class="subtitle">Metric: action-prediction accuracy. Higher means closer to human-labeled choices.</text>
+<line x1="210.0" y1="92" x2="210.0" y2="347" stroke="#d6ddd9" stroke-width="1"/>
+<text x="210.0" y="375" text-anchor="middle" class="axis">0.0</text>
+<line x1="395.7" y1="92" x2="395.7" y2="347" stroke="#d6ddd9" stroke-width="1"/>
+<text x="395.7" y="375" text-anchor="middle" class="axis">0.2</text>
+<line x1="581.4" y1="92" x2="581.4" y2="347" stroke="#d6ddd9" stroke-width="1"/>
+<text x="581.4" y="375" text-anchor="middle" class="axis">0.4</text>
+<line x1="767.1" y1="92" x2="767.1" y2="347" stroke="#d6ddd9" stroke-width="1"/>
+<text x="767.1" y="375" text-anchor="middle" class="axis">0.6</text>
+<text x="196" y="122.0" text-anchor="end" class="label">Mistral Nemo</text>
+<rect x="210" y="108.0" width="601.8" height="18" rx="5" fill="#0f766e"/>
+<text x="821.8" y="122.0" class="small">0.648</text>
+<text x="196" y="173.0" text-anchor="end" class="label">Qwen2.5 7B</text>
+<rect x="210" y="159.0" width="594.5" height="18" rx="5" fill="#0f766e"/>
+<text x="814.5" y="173.0" class="small">0.640</text>
+<text x="196" y="224.0" text-anchor="end" class="label">Llama 3.1 8B</text>
+<rect x="210" y="210.0" width="593.1" height="18" rx="5" fill="#0f766e"/>
+<text x="813.1" y="224.0" class="small">0.639</text>
+<text x="196" y="275.0" text-anchor="end" class="label">Llama 3 8B</text>
+<rect x="210" y="261.0" width="586.7" height="18" rx="5" fill="#0f766e"/>
+<text x="806.7" y="275.0" class="small">0.632</text>
+<text x="196" y="326.0" text-anchor="end" class="label">Llama 3.2 1B</text>
+<rect x="210" y="312.0" width="376.7" height="18" rx="5" fill="#94a3b8"/>
+<text x="596.7" y="326.0" class="small">0.406</text>
+<text x="535.0" y="400" text-anchor="middle" class="metric">Metric: UniMoral action accuracy</text>
+<text x="34" y="430" class="subtitle">Takeaway: the 7B-12B routes cluster tightly; Llama 3.2 1B is the clear low line.</text>
+</svg>

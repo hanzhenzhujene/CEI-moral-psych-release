@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1220 1388" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1220 1920" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,172 +35,245 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1220" height="1388" class="canvas"/>
-<rect x="24" y="24" width="1172" height="1340" rx="22" class="panel"/>
+<rect x="0" y="0" width="1220" height="1920" class="canvas"/>
+<rect x="24" y="24" width="1172" height="1872" rx="22" class="panel"/>
 <title>Current comparable accuracy heatmap</title>
-<desc>Heatmap of the latest available comparable accuracy metrics across completed and in-progress family-size lines.</desc>
+<desc>Heatmap of the latest available comparable accuracy metrics across completed and in-progress family-size lines. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation.</desc>
 <text x="48" y="64" class="title">Current Comparable Accuracy Heatmap</text>
-<text x="48" y="88" class="subtitle">Rows cover every line with at least one current comparable metric. Hatched cells mark benchmarks that are incomplete or were withdrawn from direct comparison after response-format validation.</text>
+<text x="48" y="88" class="subtitle">Rows cover current comparable metrics. Hatched cells mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct</text>
+<text x="48" y="108" class="subtitle">comparison after response-format validation.</text>
 <text x="430.0" y="126" text-anchor="middle" class="axis">UniMoral action</text>
 <text x="690.0" y="126" text-anchor="middle" class="axis">SMID average</text>
 <text x="950.0" y="126" text-anchor="middle" class="axis">Value Kaleidoscope average</text>
 <text x="276" y="191.0" text-anchor="end" class="axis">Qwen-S</text>
-<rect x="300" y="148" width="246" height="62" rx="16" fill="#357c81" stroke="#ffffff" stroke-width="1"/>
-<text x="423.0" y="182" text-anchor="middle" class="celltext">64.7%</text>
-<text x="423.0" y="203" text-anchor="middle" class="cellsub">Qwen S</text>
-<rect x="560" y="148" width="246" height="62" rx="16" fill="#88aba3" stroke="#ffffff" stroke-width="1"/>
+<rect x="300" y="148" width="246" height="62" rx="16" fill="#8db9bb" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="182" text-anchor="middle" class="celltext-dark">64.7%</text>
+<text x="423.0" y="203" text-anchor="middle" class="cellsub-dark">Qwen S</text>
+<rect x="560" y="148" width="246" height="62" rx="16" fill="#cddbd2" stroke="#ffffff" stroke-width="1"/>
 <text x="683.0" y="182" text-anchor="middle" class="celltext-dark">36.8%</text>
 <text x="683.0" y="203" text-anchor="middle" class="cellsub-dark">Qwen S</text>
-<rect x="820" y="148" width="246" height="62" rx="16" fill="#2b767d" stroke="#ffffff" stroke-width="1"/>
-<text x="943.0" y="182" text-anchor="middle" class="celltext">68.2%</text>
-<text x="943.0" y="203" text-anchor="middle" class="cellsub">Qwen S</text>
+<rect x="820" y="148" width="246" height="62" rx="16" fill="#85b5b9" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="182" text-anchor="middle" class="celltext-dark">68.2%</text>
+<text x="943.0" y="203" text-anchor="middle" class="cellsub-dark">Qwen S</text>
 <text x="276" y="267.0" text-anchor="end" class="axis">Qwen-M</text>
-<rect x="300" y="224" width="246" height="62" rx="16" fill="#30797f" stroke="#ffffff" stroke-width="1"/>
-<text x="423.0" y="258" text-anchor="middle" class="celltext">66.5%</text>
-<text x="423.0" y="279" text-anchor="middle" class="cellsub">Qwen M</text>
+<rect x="300" y="224" width="246" height="62" rx="16" fill="#8ab7ba" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="258" text-anchor="middle" class="celltext-dark">66.5%</text>
+<text x="423.0" y="279" text-anchor="middle" class="cellsub-dark">Qwen M</text>
 <rect x="560" y="224" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="224" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="258" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="279" text-anchor="middle" class="small">no current result</text>
-<rect x="820" y="224" width="246" height="62" rx="16" fill="#2d777e" stroke="#ffffff" stroke-width="1"/>
-<text x="943.0" y="258" text-anchor="middle" class="celltext">67.5%</text>
-<text x="943.0" y="279" text-anchor="middle" class="cellsub">Qwen M</text>
+<text x="683.0" y="279" text-anchor="middle" class="small">no SMID vision route</text>
+<rect x="820" y="224" width="246" height="62" rx="16" fill="#87b6b9" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="258" text-anchor="middle" class="celltext-dark">67.5%</text>
+<text x="943.0" y="279" text-anchor="middle" class="cellsub-dark">Qwen M</text>
 <text x="276" y="343.0" text-anchor="end" class="axis">Qwen-L</text>
-<rect x="300" y="300" width="246" height="62" rx="16" fill="#30797f" stroke="#ffffff" stroke-width="1"/>
-<text x="423.0" y="334" text-anchor="middle" class="celltext">66.5%</text>
-<text x="423.0" y="355" text-anchor="middle" class="cellsub">Qwen L</text>
-<rect x="560" y="300" width="246" height="62" rx="16" fill="#669895" stroke="#ffffff" stroke-width="1"/>
-<text x="683.0" y="334" text-anchor="middle" class="celltext">48.3%</text>
-<text x="683.0" y="355" text-anchor="middle" class="cellsub">Qwen L</text>
-<rect x="820" y="300" width="246" height="62" rx="16" fill="#347b81" stroke="#ffffff" stroke-width="1"/>
-<text x="943.0" y="334" text-anchor="middle" class="celltext">65.3%</text>
-<text x="943.0" y="355" text-anchor="middle" class="cellsub">Qwen L</text>
+<rect x="300" y="300" width="246" height="62" rx="16" fill="#89b7ba" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="334" text-anchor="middle" class="celltext-dark">66.5%</text>
+<text x="423.0" y="355" text-anchor="middle" class="cellsub-dark">Qwen L</text>
+<rect x="560" y="300" width="246" height="62" rx="16" fill="#b3cdc8" stroke="#ffffff" stroke-width="1"/>
+<text x="683.0" y="334" text-anchor="middle" class="celltext-dark">48.3%</text>
+<text x="683.0" y="355" text-anchor="middle" class="cellsub-dark">Qwen L</text>
+<rect x="820" y="300" width="246" height="62" rx="16" fill="#8cb9bb" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="334" text-anchor="middle" class="celltext-dark">65.3%</text>
+<text x="943.0" y="355" text-anchor="middle" class="cellsub-dark">Qwen L</text>
 <text x="276" y="419.0" text-anchor="end" class="axis">MiniMax-S</text>
-<rect x="300" y="376" width="246" height="62" rx="16" class="muted-cell"/>
-<rect x="300" y="376" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
-<text x="423.0" y="410" text-anchor="middle" class="label">n/a</text>
-<text x="423.0" y="431" text-anchor="middle" class="small">no current result</text>
-<rect x="560" y="376" width="246" height="62" rx="16" fill="#75a09b" stroke="#ffffff" stroke-width="1"/>
-<text x="683.0" y="410" text-anchor="middle" class="celltext">43.2%</text>
-<text x="683.0" y="431" text-anchor="middle" class="cellsub">MiniMax S</text>
-<rect x="820" y="376" width="246" height="62" rx="16" class="muted-cell"/>
-<rect x="820" y="376" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
-<text x="943.0" y="410" text-anchor="middle" class="label">n/a</text>
-<text x="943.0" y="431" text-anchor="middle" class="small">no current result</text>
-<text x="276" y="495.0" text-anchor="end" class="axis">MiniMax-L</text>
-<rect x="300" y="452" width="246" height="62" rx="16" fill="#f2e8cf" stroke="#ffffff" stroke-width="1"/>
-<text x="423.0" y="486" text-anchor="middle" class="celltext-dark">0.8%</text>
-<text x="423.0" y="507" text-anchor="middle" class="cellsub-dark">MiniMax L</text>
-<rect x="560" y="452" width="246" height="62" rx="16" fill="#bbc8b8" stroke="#ffffff" stroke-width="1"/>
-<text x="683.0" y="486" text-anchor="middle" class="celltext-dark">19.6%</text>
-<text x="683.0" y="507" text-anchor="middle" class="cellsub-dark">MiniMax L</text>
-<rect x="820" y="452" width="246" height="62" rx="16" class="muted-cell"/>
-<rect x="820" y="452" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
-<text x="943.0" y="486" text-anchor="middle" class="label">n/a</text>
-<text x="943.0" y="507" text-anchor="middle" class="small">no current result</text>
-<text x="276" y="571.0" text-anchor="end" class="axis">DeepSeek-S</text>
-<rect x="300" y="528" width="246" height="62" rx="16" class="muted-cell"/>
-<rect x="300" y="528" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
-<text x="423.0" y="562" text-anchor="middle" class="label">n/a</text>
-<text x="423.0" y="583" text-anchor="middle" class="small">no current result</text>
-<rect x="560" y="528" width="246" height="62" rx="16" class="muted-cell"/>
-<rect x="560" y="528" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
-<text x="683.0" y="562" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="583" text-anchor="middle" class="small">no current result</text>
-<rect x="820" y="528" width="246" height="62" rx="16" class="muted-cell"/>
-<rect x="820" y="528" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
-<text x="943.0" y="562" text-anchor="middle" class="label">n/a</text>
-<text x="943.0" y="583" text-anchor="middle" class="small">no current result</text>
-<text x="276" y="647.0" text-anchor="end" class="axis">DeepSeek-M</text>
-<rect x="300" y="604" width="246" height="62" rx="16" fill="#2b767d" stroke="#ffffff" stroke-width="1"/>
-<text x="423.0" y="638" text-anchor="middle" class="celltext">68.4%</text>
-<text x="423.0" y="659" text-anchor="middle" class="cellsub">DeepSeek M</text>
+<rect x="300" y="376" width="246" height="62" rx="16" fill="#8ab8ba" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="410" text-anchor="middle" class="celltext-dark">66.1%</text>
+<text x="423.0" y="431" text-anchor="middle" class="cellsub-dark">MiniMax S</text>
+<rect x="560" y="376" width="246" height="62" rx="16" fill="#bfd4cc" stroke="#ffffff" stroke-width="1"/>
+<text x="683.0" y="410" text-anchor="middle" class="celltext-dark">43.2%</text>
+<text x="683.0" y="431" text-anchor="middle" class="cellsub-dark">MiniMax S</text>
+<rect x="820" y="376" width="246" height="62" rx="16" fill="#78aeb4" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="410" text-anchor="middle" class="celltext-dark">74.0%</text>
+<text x="943.0" y="431" text-anchor="middle" class="cellsub-dark">MiniMax S</text>
+<text x="276" y="495.0" text-anchor="end" class="axis">MiniMax-M</text>
+<rect x="300" y="452" width="246" height="62" rx="16" fill="#8bb8bb" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="486" text-anchor="middle" class="celltext-dark">65.9%</text>
+<text x="423.0" y="507" text-anchor="middle" class="cellsub-dark">MiniMax M</text>
+<rect x="560" y="452" width="246" height="62" rx="16" class="muted-cell"/>
+<rect x="560" y="452" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="683.0" y="486" text-anchor="middle" class="label">n/a</text>
+<text x="683.0" y="507" text-anchor="middle" class="small">no SMID vision route</text>
+<rect x="820" y="452" width="246" height="62" rx="16" fill="#78aeb4" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="486" text-anchor="middle" class="celltext-dark">74.0%</text>
+<text x="943.0" y="507" text-anchor="middle" class="cellsub-dark">MiniMax M</text>
+<text x="276" y="571.0" text-anchor="end" class="axis">MiniMax-L</text>
+<rect x="300" y="528" width="246" height="62" rx="16" fill="#8ab8ba" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="562" text-anchor="middle" class="celltext-dark">66.1%</text>
+<text x="423.0" y="583" text-anchor="middle" class="cellsub-dark">MiniMax L</text>
+<rect x="560" y="528" width="246" height="62" rx="16" fill="#f4f0df" stroke="#ffffff" stroke-width="1"/>
+<text x="683.0" y="562" text-anchor="middle" class="celltext-dark">19.8%</text>
+<text x="683.0" y="583" text-anchor="middle" class="cellsub-dark">MiniMax L</text>
+<rect x="820" y="528" width="246" height="62" rx="16" fill="#78aeb4" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="562" text-anchor="middle" class="celltext-dark">74.1%</text>
+<text x="943.0" y="583" text-anchor="middle" class="cellsub-dark">MiniMax L</text>
+<text x="276" y="647.0" text-anchor="end" class="axis">DeepSeek-S</text>
+<rect x="300" y="604" width="246" height="62" rx="16" fill="#8ab8ba" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="638" text-anchor="middle" class="celltext-dark">66.1%</text>
+<text x="423.0" y="659" text-anchor="middle" class="cellsub-dark">DeepSeek S</text>
 <rect x="560" y="604" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="604" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="638" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="659" text-anchor="middle" class="small">no current result</text>
-<rect x="820" y="604" width="246" height="62" rx="16" fill="#397e83" stroke="#ffffff" stroke-width="1"/>
-<text x="943.0" y="638" text-anchor="middle" class="celltext">63.5%</text>
-<text x="943.0" y="659" text-anchor="middle" class="cellsub">DeepSeek M</text>
-<text x="276" y="723.0" text-anchor="end" class="axis">Llama-S</text>
-<rect x="300" y="680" width="246" height="62" rx="16" fill="#357c81" stroke="#ffffff" stroke-width="1"/>
-<text x="423.0" y="714" text-anchor="middle" class="celltext">64.8%</text>
-<text x="423.0" y="735" text-anchor="middle" class="cellsub">Llama S</text>
-<rect x="560" y="680" width="246" height="62" rx="16" fill="#b5c5b6" stroke="#ffffff" stroke-width="1"/>
-<text x="683.0" y="714" text-anchor="middle" class="celltext-dark">21.6%</text>
-<text x="683.0" y="735" text-anchor="middle" class="cellsub-dark">Llama S</text>
-<rect x="820" y="680" width="246" height="62" rx="16" fill="#599090" stroke="#ffffff" stroke-width="1"/>
-<text x="943.0" y="714" text-anchor="middle" class="celltext">52.9%</text>
-<text x="943.0" y="735" text-anchor="middle" class="cellsub">Llama S</text>
-<text x="276" y="799.0" text-anchor="end" class="axis">Llama-M</text>
-<rect x="300" y="756" width="246" height="62" rx="16" fill="#2f787f" stroke="#ffffff" stroke-width="1"/>
-<text x="423.0" y="790" text-anchor="middle" class="celltext">67.0%</text>
-<text x="423.0" y="811" text-anchor="middle" class="cellsub">Llama M</text>
+<text x="683.0" y="659" text-anchor="middle" class="small">no SMID vision route</text>
+<rect x="820" y="604" width="246" height="62" rx="16" fill="#83b4b8" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="638" text-anchor="middle" class="celltext-dark">69.5%</text>
+<text x="943.0" y="659" text-anchor="middle" class="cellsub-dark">DeepSeek S</text>
+<text x="276" y="723.0" text-anchor="end" class="axis">DeepSeek-M</text>
+<rect x="300" y="680" width="246" height="62" rx="16" fill="#85b5b9" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="714" text-anchor="middle" class="celltext-dark">68.4%</text>
+<text x="423.0" y="735" text-anchor="middle" class="cellsub-dark">DeepSeek M</text>
+<rect x="560" y="680" width="246" height="62" rx="16" class="muted-cell"/>
+<rect x="560" y="680" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="683.0" y="714" text-anchor="middle" class="label">n/a</text>
+<text x="683.0" y="735" text-anchor="middle" class="small">no SMID vision route</text>
+<rect x="820" y="680" width="246" height="62" rx="16" fill="#90bbbc" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="714" text-anchor="middle" class="celltext-dark">63.5%</text>
+<text x="943.0" y="735" text-anchor="middle" class="cellsub-dark">DeepSeek M</text>
+<text x="276" y="799.0" text-anchor="end" class="axis">DeepSeek-L</text>
+<rect x="300" y="756" width="246" height="62" rx="16" fill="#a1c4c2" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="790" text-anchor="middle" class="celltext-dark">56.3%</text>
+<text x="423.0" y="811" text-anchor="middle" class="cellsub-dark">DeepSeek L</text>
 <rect x="560" y="756" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="756" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="790" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="811" text-anchor="middle" class="small">no current result</text>
-<rect x="820" y="756" width="246" height="62" rx="16" fill="#1f6f78" stroke="#ffffff" stroke-width="1"/>
-<text x="943.0" y="790" text-anchor="middle" class="celltext">72.4%</text>
-<text x="943.0" y="811" text-anchor="middle" class="cellsub">Llama M</text>
-<text x="276" y="875.0" text-anchor="end" class="axis">Llama-L</text>
-<rect x="300" y="832" width="246" height="62" rx="16" fill="#327a80" stroke="#ffffff" stroke-width="1"/>
-<text x="423.0" y="866" text-anchor="middle" class="celltext">66.0%</text>
-<text x="423.0" y="887" text-anchor="middle" class="cellsub">Llama L</text>
-<rect x="560" y="832" width="246" height="62" rx="16" fill="#83a8a1" stroke="#ffffff" stroke-width="1"/>
-<text x="683.0" y="866" text-anchor="middle" class="celltext-dark">38.6%</text>
-<text x="683.0" y="887" text-anchor="middle" class="cellsub-dark">Llama L</text>
-<rect x="820" y="832" width="246" height="62" rx="16" fill="#28747c" stroke="#ffffff" stroke-width="1"/>
-<text x="943.0" y="866" text-anchor="middle" class="celltext">69.2%</text>
-<text x="943.0" y="887" text-anchor="middle" class="cellsub">Llama L</text>
-<text x="276" y="951.0" text-anchor="end" class="axis">Gemma-S</text>
-<rect x="300" y="908" width="246" height="62" rx="16" fill="#397e83" stroke="#ffffff" stroke-width="1"/>
-<text x="423.0" y="942" text-anchor="middle" class="celltext">63.5%</text>
-<text x="423.0" y="963" text-anchor="middle" class="cellsub">Gemma S</text>
-<rect x="560" y="908" width="246" height="62" rx="16" fill="#79a39d" stroke="#ffffff" stroke-width="1"/>
-<text x="683.0" y="942" text-anchor="middle" class="celltext-dark">41.7%</text>
-<text x="683.0" y="963" text-anchor="middle" class="cellsub-dark">Gemma S</text>
-<rect x="820" y="908" width="246" height="62" rx="16" fill="#468588" stroke="#ffffff" stroke-width="1"/>
-<text x="943.0" y="942" text-anchor="middle" class="celltext">59.3%</text>
-<text x="943.0" y="963" text-anchor="middle" class="cellsub">Gemma S</text>
-<text x="276" y="1027.0" text-anchor="end" class="axis">Gemma-M</text>
-<rect x="300" y="984" width="246" height="62" rx="16" fill="#31797f" stroke="#ffffff" stroke-width="1"/>
-<text x="423.0" y="1018" text-anchor="middle" class="celltext">66.3%</text>
-<text x="423.0" y="1039" text-anchor="middle" class="cellsub">Gemma M</text>
-<rect x="560" y="984" width="246" height="62" rx="16" fill="#89aca4" stroke="#ffffff" stroke-width="1"/>
-<text x="683.0" y="1018" text-anchor="middle" class="celltext-dark">36.4%</text>
-<text x="683.0" y="1039" text-anchor="middle" class="cellsub-dark">Gemma M</text>
-<rect x="820" y="984" width="246" height="62" rx="16" fill="#31797f" stroke="#ffffff" stroke-width="1"/>
-<text x="943.0" y="1018" text-anchor="middle" class="celltext">66.4%</text>
-<text x="943.0" y="1039" text-anchor="middle" class="cellsub">Gemma M</text>
-<text x="276" y="1103.0" text-anchor="end" class="axis">Gemma-L</text>
-<rect x="300" y="1060" width="246" height="62" rx="16" fill="#317a80" stroke="#ffffff" stroke-width="1"/>
-<text x="423.0" y="1094" text-anchor="middle" class="celltext">66.1%</text>
-<text x="423.0" y="1115" text-anchor="middle" class="cellsub">Gemma L</text>
-<rect x="560" y="1060" width="246" height="62" rx="16" fill="#7ba49e" stroke="#ffffff" stroke-width="1"/>
-<text x="683.0" y="1094" text-anchor="middle" class="celltext-dark">41.2%</text>
-<text x="683.0" y="1115" text-anchor="middle" class="cellsub-dark">Gemma L</text>
-<rect x="820" y="1060" width="246" height="62" rx="16" fill="#337a80" stroke="#ffffff" stroke-width="1"/>
-<text x="943.0" y="1094" text-anchor="middle" class="celltext">65.6%</text>
-<text x="943.0" y="1115" text-anchor="middle" class="cellsub">Gemma L</text>
-<rect x="540" y="1258" width="446" height="86" rx="16" class="legend-card"/>
-<text x="560" y="1276" class="axis">Accuracy scale</text>
-<text x="560" y="1292" class="small">Lighter cells mean lower accuracy; darker cells mean higher accuracy.</text>
-<rect x="560.00" y="1304" width="31.00" height="16" fill="#f2e8cf" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="590.00" y="1304" width="31.00" height="16" fill="#dfddc7" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="620.00" y="1304" width="31.00" height="16" fill="#ccd2bf" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="650.00" y="1304" width="31.00" height="16" fill="#b8c7b7" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="680.00" y="1304" width="31.00" height="16" fill="#a5bcaf" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="710.00" y="1304" width="31.00" height="16" fill="#92b1a7" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="740.00" y="1304" width="31.00" height="16" fill="#7fa6a0" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="770.00" y="1304" width="31.00" height="16" fill="#6c9b98" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="800.00" y="1304" width="31.00" height="16" fill="#599090" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="830.00" y="1304" width="31.00" height="16" fill="#458588" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="860.00" y="1304" width="31.00" height="16" fill="#327a80" stroke="#ffffff" stroke-width="0.6"/>
-<rect x="890.00" y="1304" width="31.00" height="16" fill="#1f6f78" stroke="#ffffff" stroke-width="0.6"/>
-<text x="560" y="1338" class="small">0.8%</text>
-<text x="920" y="1338" text-anchor="end" class="small">72.4%</text>
-<rect x="942" y="1300" width="24" height="24" rx="6" class="muted-cell"/>
-<rect x="942" y="1300" width="24" height="24" rx="6" fill="url(#diagonalHatch)" opacity="0.8"/>
-<text x="976" y="1318" class="small">no current result</text>
+<text x="683.0" y="811" text-anchor="middle" class="small">no SMID vision route</text>
+<rect x="820" y="756" width="246" height="62" rx="16" fill="#86b5b9" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="790" text-anchor="middle" class="celltext-dark">68.1%</text>
+<text x="943.0" y="811" text-anchor="middle" class="cellsub-dark">DeepSeek L</text>
+<text x="276" y="875.0" text-anchor="end" class="axis">Llama-S</text>
+<rect x="300" y="832" width="246" height="62" rx="16" fill="#8db9bb" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="866" text-anchor="middle" class="celltext-dark">64.8%</text>
+<text x="423.0" y="887" text-anchor="middle" class="cellsub-dark">Llama S</text>
+<rect x="560" y="832" width="246" height="62" rx="16" fill="#f0eede" stroke="#ffffff" stroke-width="1"/>
+<text x="683.0" y="866" text-anchor="middle" class="celltext-dark">21.6%</text>
+<text x="683.0" y="887" text-anchor="middle" class="cellsub-dark">Llama S</text>
+<rect x="820" y="832" width="246" height="62" rx="16" fill="#a9c8c5" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="866" text-anchor="middle" class="celltext-dark">52.9%</text>
+<text x="943.0" y="887" text-anchor="middle" class="cellsub-dark">Llama S</text>
+<text x="276" y="951.0" text-anchor="end" class="axis">Llama-M</text>
+<rect x="300" y="908" width="246" height="62" rx="16" fill="#88b7ba" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="942" text-anchor="middle" class="celltext-dark">67.0%</text>
+<text x="423.0" y="963" text-anchor="middle" class="cellsub-dark">Llama M</text>
+<rect x="560" y="908" width="246" height="62" rx="16" class="muted-cell"/>
+<rect x="560" y="908" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="683.0" y="942" text-anchor="middle" class="label">n/a</text>
+<text x="683.0" y="963" text-anchor="middle" class="small">no SMID vision route</text>
+<rect x="820" y="908" width="246" height="62" rx="16" fill="#7cb0b5" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="942" text-anchor="middle" class="celltext-dark">72.4%</text>
+<text x="943.0" y="963" text-anchor="middle" class="cellsub-dark">Llama M</text>
+<text x="276" y="1027.0" text-anchor="end" class="axis">Llama-L</text>
+<rect x="300" y="984" width="246" height="62" rx="16" fill="#8bb8ba" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="1018" text-anchor="middle" class="celltext-dark">66.0%</text>
+<text x="423.0" y="1039" text-anchor="middle" class="cellsub-dark">Llama L</text>
+<rect x="560" y="984" width="246" height="62" rx="16" fill="#c9d9d0" stroke="#ffffff" stroke-width="1"/>
+<text x="683.0" y="1018" text-anchor="middle" class="celltext-dark">38.6%</text>
+<text x="683.0" y="1039" text-anchor="middle" class="cellsub-dark">Llama L</text>
+<rect x="820" y="984" width="246" height="62" rx="16" fill="#83b4b8" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="1018" text-anchor="middle" class="celltext-dark">69.2%</text>
+<text x="943.0" y="1039" text-anchor="middle" class="cellsub-dark">Llama L</text>
+<text x="276" y="1103.0" text-anchor="end" class="axis">Gemma-S</text>
+<rect x="300" y="1060" width="246" height="62" rx="16" fill="#90bbbc" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="1094" text-anchor="middle" class="celltext-dark">63.5%</text>
+<text x="423.0" y="1115" text-anchor="middle" class="cellsub-dark">Gemma S</text>
+<rect x="560" y="1060" width="246" height="62" rx="16" fill="#c2d5ce" stroke="#ffffff" stroke-width="1"/>
+<text x="683.0" y="1094" text-anchor="middle" class="celltext-dark">41.7%</text>
+<text x="683.0" y="1115" text-anchor="middle" class="cellsub-dark">Gemma S</text>
+<rect x="820" y="1060" width="246" height="62" rx="16" fill="#9ac0c0" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="1094" text-anchor="middle" class="celltext-dark">59.3%</text>
+<text x="943.0" y="1115" text-anchor="middle" class="cellsub-dark">Gemma S</text>
+<text x="276" y="1179.0" text-anchor="end" class="axis">Gemma-M</text>
+<rect x="300" y="1136" width="246" height="62" rx="16" fill="#8ab8ba" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="1170" text-anchor="middle" class="celltext-dark">66.3%</text>
+<text x="423.0" y="1191" text-anchor="middle" class="cellsub-dark">Gemma M</text>
+<rect x="560" y="1136" width="246" height="62" rx="16" fill="#cedcd2" stroke="#ffffff" stroke-width="1"/>
+<text x="683.0" y="1170" text-anchor="middle" class="celltext-dark">36.4%</text>
+<text x="683.0" y="1191" text-anchor="middle" class="cellsub-dark">Gemma M</text>
+<rect x="820" y="1136" width="246" height="62" rx="16" fill="#8ab7ba" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="1170" text-anchor="middle" class="celltext-dark">66.4%</text>
+<text x="943.0" y="1191" text-anchor="middle" class="cellsub-dark">Gemma M</text>
+<text x="276" y="1255.0" text-anchor="end" class="axis">Gemma-L</text>
+<rect x="300" y="1212" width="246" height="62" rx="16" fill="#8ab8ba" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="1246" text-anchor="middle" class="celltext-dark">66.1%</text>
+<text x="423.0" y="1267" text-anchor="middle" class="cellsub-dark">Gemma L</text>
+<rect x="560" y="1212" width="246" height="62" rx="16" fill="#c3d6ce" stroke="#ffffff" stroke-width="1"/>
+<text x="683.0" y="1246" text-anchor="middle" class="celltext-dark">41.2%</text>
+<text x="683.0" y="1267" text-anchor="middle" class="cellsub-dark">Gemma L</text>
+<rect x="820" y="1212" width="246" height="62" rx="16" fill="#8bb8bb" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="1246" text-anchor="middle" class="celltext-dark">65.6%</text>
+<text x="943.0" y="1267" text-anchor="middle" class="cellsub-dark">Gemma L</text>
+<text x="276" y="1331.0" text-anchor="end" class="axis">GPT-4o-mini Ref</text>
+<rect x="300" y="1288" width="246" height="62" rx="16" fill="#88b6b9" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="1322" text-anchor="middle" class="celltext-dark">67.3%</text>
+<text x="423.0" y="1343" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
+<rect x="560" y="1288" width="246" height="62" rx="16" class="muted-cell"/>
+<rect x="560" y="1288" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="683.0" y="1322" text-anchor="middle" class="label">n/a</text>
+<text x="683.0" y="1343" text-anchor="middle" class="small">no current result</text>
+<rect x="820" y="1288" width="246" height="62" rx="16" fill="#81b3b7" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="1322" text-anchor="middle" class="celltext-dark">70.1%</text>
+<text x="943.0" y="1343" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
+<text x="276" y="1407.0" text-anchor="end" class="axis">GPT-5-nano Ref</text>
+<rect x="300" y="1364" width="246" height="62" rx="16" fill="#8cb9bb" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="1398" text-anchor="middle" class="celltext-dark">65.4%</text>
+<text x="423.0" y="1419" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
+<rect x="560" y="1364" width="246" height="62" rx="16" class="muted-cell"/>
+<rect x="560" y="1364" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="683.0" y="1398" text-anchor="middle" class="label">n/a</text>
+<text x="683.0" y="1419" text-anchor="middle" class="small">no current result</text>
+<rect x="820" y="1364" width="246" height="62" rx="16" fill="#94bdbe" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="1398" text-anchor="middle" class="celltext-dark">61.7%</text>
+<text x="943.0" y="1419" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
+<text x="276" y="1483.0" text-anchor="end" class="axis">GPT-4.1-nano Ref</text>
+<rect x="300" y="1440" width="246" height="62" rx="16" fill="#8ebabc" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="1474" text-anchor="middle" class="celltext-dark">64.6%</text>
+<text x="423.0" y="1495" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
+<rect x="560" y="1440" width="246" height="62" rx="16" class="muted-cell"/>
+<rect x="560" y="1440" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="683.0" y="1474" text-anchor="middle" class="label">n/a</text>
+<text x="683.0" y="1495" text-anchor="middle" class="small">no current result</text>
+<rect x="820" y="1440" width="246" height="62" rx="16" fill="#88b6b9" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="1474" text-anchor="middle" class="celltext-dark">67.3%</text>
+<text x="943.0" y="1495" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
+<text x="276" y="1559.0" text-anchor="end" class="axis">GPT-5-mini Ref</text>
+<rect x="300" y="1516" width="246" height="62" rx="16" fill="#86b6b9" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="1550" text-anchor="middle" class="celltext-dark">67.8%</text>
+<text x="423.0" y="1571" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
+<rect x="560" y="1516" width="246" height="62" rx="16" class="muted-cell"/>
+<rect x="560" y="1516" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="683.0" y="1550" text-anchor="middle" class="label">n/a</text>
+<text x="683.0" y="1571" text-anchor="middle" class="small">no current result</text>
+<rect x="820" y="1516" width="246" height="62" rx="16" fill="#79aeb4" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="1550" text-anchor="middle" class="celltext-dark">73.9%</text>
+<text x="943.0" y="1571" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
+<text x="276" y="1635.0" text-anchor="end" class="axis">GPT-4.1-mini Ref</text>
+<rect x="300" y="1592" width="246" height="62" rx="16" fill="#86b6b9" stroke="#ffffff" stroke-width="1"/>
+<text x="423.0" y="1626" text-anchor="middle" class="celltext-dark">67.9%</text>
+<text x="423.0" y="1647" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
+<rect x="560" y="1592" width="246" height="62" rx="16" class="muted-cell"/>
+<rect x="560" y="1592" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="683.0" y="1626" text-anchor="middle" class="label">n/a</text>
+<text x="683.0" y="1647" text-anchor="middle" class="small">no current result</text>
+<rect x="820" y="1592" width="246" height="62" rx="16" fill="#79afb4" stroke="#ffffff" stroke-width="1"/>
+<text x="943.0" y="1626" text-anchor="middle" class="celltext-dark">73.5%</text>
+<text x="943.0" y="1647" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
+<rect x="540" y="1790" width="446" height="86" rx="16" class="legend-card"/>
+<text x="560" y="1808" class="axis">Accuracy scale</text>
+<text x="560" y="1824" class="small">Lighter cells mean lower accuracy; darker cells mean higher accuracy.</text>
+<rect x="560.00" y="1836" width="31.00" height="16" fill="#f4f0df" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="590.00" y="1836" width="31.00" height="16" fill="#e9eadb" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="620.00" y="1836" width="31.00" height="16" fill="#dde4d7" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="650.00" y="1836" width="31.00" height="16" fill="#d2ded3" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="680.00" y="1836" width="31.00" height="16" fill="#c7d8cf" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="710.00" y="1836" width="31.00" height="16" fill="#bcd2cb" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="740.00" y="1836" width="31.00" height="16" fill="#b0ccc8" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="770.00" y="1836" width="31.00" height="16" fill="#a5c6c4" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="800.00" y="1836" width="31.00" height="16" fill="#9ac0c0" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="830.00" y="1836" width="31.00" height="16" fill="#8fbabc" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="860.00" y="1836" width="31.00" height="16" fill="#83b4b8" stroke="#ffffff" stroke-width="0.6"/>
+<rect x="890.00" y="1836" width="31.00" height="16" fill="#78aeb4" stroke="#ffffff" stroke-width="0.6"/>
+<text x="560" y="1870" class="small">19.8%</text>
+<text x="920" y="1870" text-anchor="end" class="small">74.1%</text>
+<rect x="942" y="1832" width="24" height="24" rx="6" class="muted-cell"/>
+<rect x="942" y="1832" width="24" height="24" rx="6" fill="url(#diagonalHatch)" opacity="0.8"/>
+<text x="976" y="1850" class="small">n/a / no route</text>
 </svg>

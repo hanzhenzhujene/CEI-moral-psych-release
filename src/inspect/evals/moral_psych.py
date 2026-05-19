@@ -4,6 +4,8 @@ This file exists so users can point `src/inspect/run.py` at a single module and
 still obtain tasks implemented across several benchmark files.
 """
 
+from inspect_ai import Task, task
+
 from evals.ccd_bench import ccd_bench_selection
 from evals.denevil import denevil_fulcra_proxy_generation, denevil_generation
 from evals.m3oralbench import m3oralbench_foundation, m3oralbench_judgment, m3oralbench_response
@@ -11,12 +13,41 @@ from evals.moral_circuits import moral_circuits_judgment, moral_circuits_reasoni
 from evals.morallens import morallens_cot, morallens_double_standard, morallens_posthoc
 from evals.morebench import morebench_advisor, morebench_agent
 from evals.smid import smid_foundation_classification, smid_moral_rating
-from evals.unimoral import unimoral_action_prediction
+from evals.unimoral import (
+    unimoral_action_prediction as _unimoral_action_prediction,
+    unimoral_consequence_generation as _unimoral_consequence_generation,
+    unimoral_factor_attribution as _unimoral_factor_attribution,
+    unimoral_moral_typology as _unimoral_moral_typology,
+)
 from evals.value_kaleidoscope import value_prism_relevance, value_prism_valence
+
+
+@task
+def unimoral_action_prediction(limit: int | None = None, start_index: int | None = None) -> Task:
+    return _unimoral_action_prediction(limit=limit, start_index=start_index)
+
+
+@task
+def unimoral_moral_typology(limit: int | None = None, start_index: int | None = None) -> Task:
+    return _unimoral_moral_typology(limit=limit, start_index=start_index)
+
+
+@task
+def unimoral_factor_attribution(limit: int | None = None, start_index: int | None = None) -> Task:
+    return _unimoral_factor_attribution(limit=limit, start_index=start_index)
+
+
+@task
+def unimoral_consequence_generation(limit: int | None = None, start_index: int | None = None) -> Task:
+    return _unimoral_consequence_generation(limit=limit, start_index=start_index)
+
 
 TASK_EXPORTS = [
     # Jenny's benchmarks
     unimoral_action_prediction,
+    unimoral_moral_typology,
+    unimoral_factor_attribution,
+    unimoral_consequence_generation,
     smid_moral_rating,
     smid_foundation_classification,
     value_prism_relevance,

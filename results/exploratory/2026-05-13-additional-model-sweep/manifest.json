@@ -1,0 +1,23 @@
+{
+  "source_log_root": "results/inspect/logs/2026-05-13-additional-model-sweep/full",
+  "result_dir": "results/exploratory/2026-05-13-additional-model-sweep",
+  "figure_dir": "figures/exploratory",
+  "tables": [
+    "ccd-cluster-distribution.csv",
+    "ccd-summary.csv",
+    "sweep-overview.csv",
+    "unimoral-language-breakdown.csv",
+    "unimoral-summary.csv"
+  ],
+  "figures": [
+    "additional_model_sweep_ccd_dominant_share.svg",
+    "additional_model_sweep_scaling.svg",
+    "additional_model_sweep_unimoral_accuracy.svg"
+  ],
+  "counts": {
+    "unimoral_models": 5,
+    "ccd_models": 5,
+    "unimoral_samples_total": 43920,
+    "ccd_samples_total": 10910
+  }
+}

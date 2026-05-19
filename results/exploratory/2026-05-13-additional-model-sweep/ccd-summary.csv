@@ -1,0 +1,6 @@
+model,family,size_b,samples,valid_choice_count,valid_choice_rate,dominant_cluster,dominant_share,effective_cluster_count
+Mistral Nemo,Mistral,12.0,2182,2178,0.998166819431714,Nordic Europe,0.2534435261707989,7.222263837250728
+Llama 3.1 8B,Llama,8.0,2182,2182,1.0,Nordic Europe,0.2470210815765353,7.136169740790369
+Llama 3 8B,Llama,8.0,2182,2182,1.0,Nordic Europe,0.22043996333638863,7.910052699083581
+Qwen2.5 7B,Qwen,7.0,2182,2182,1.0,Nordic Europe,0.1778185151237397,8.7818340108751
+Llama 3.2 1B,Llama,1.0,2182,2182,1.0,Nordic Europe,0.15902841429880843,9.116107192365723

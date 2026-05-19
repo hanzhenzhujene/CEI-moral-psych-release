@@ -39,6 +39,7 @@ resolve_provider() {
         # MiniMax-Text-01 with the image embedded as base64 text because the
         # OpenAI-compatible endpoint rejects image_url content blocks.
         "minimax/minimax-01") echo "minimax|MiniMax-Text-01" ;;
+        "minimax/minimax-m2.1") echo "minimax|MiniMax-M2.1" ;;
         "minimax/minimax-m2.5") echo "minimax|MiniMax-M2.5" ;;
 
         *) return 1 ;;

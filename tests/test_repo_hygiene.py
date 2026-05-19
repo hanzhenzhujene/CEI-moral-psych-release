@@ -73,19 +73,65 @@ def test_env_example_exists_and_documents_core_inputs():
 
 def test_root_readme_points_to_final_moral_psych_deliverable():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "## Moral-Psych Benchmark Suite (Jenny Zhu)" in readme
-    assert "### Final Moral-Psych Deliverable" in readme
+    assert readme.startswith("# CEI Moral-Psych Benchmark Suite")
+    assert "Jenny Zhu's CEI moral-psych benchmark deliverable" in readme
+    assert "## Public Quickstart" in readme
+    assert "## Navigate This Repo" in readme
+    assert "## Results First" in readme
+    assert "### DeepSeek S/M/L Log-Derived Readout" in readme
     assert "results/release/2026-04-19-option1/README.md" in readme
     assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
-    assert "results/release/2026-04-19-option1/topline-summary.md" in readme
     assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme
+    assert "figures/release/option1_unimoral_task_heatmap.svg" in readme
+    assert "figures/release/option1_unimoral_generation_quality.svg" in readme
+    assert "figures/release/option1_unimoral_family_scaling.svg" in readme
     assert "figures/release/option1_family_scaling_profile.svg" in readme
     assert "figures/release/option1_ccd_choice_distribution.svg" in readme
     assert "figures/release/option1_ccd_dominant_option_share.svg" in readme
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
-    assert "`CCD-Bench` as cultural-cluster choice behavior rather than scalar accuracy" in readme
-    assert "`DeNEVIL` as proxy behavioral evidence rather than benchmark-faithful ethical-quality scoring" in readme
+    assert "`CCD-Bench` is reported as cultural-cluster choice behavior" in readme
+    assert "`DeNEVIL` is reported as proxy behavioral evidence" in readme
     assert "`make bootstrap`" in readme or "make audit" in readme
+
+    unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
+    assert "UniMoral family-size scaling by RQ" in unimoral_family_scaling_svg
+    assert "OpenAI reference is GPT-4o-mini only in this UniMoral RQ figure" in unimoral_family_scaling_svg
+    assert "Metric: Accuracy" in unimoral_family_scaling_svg
+    assert "Metric: BERTScore F1" in unimoral_family_scaling_svg
+    assert "Metric: METEOR" in unimoral_family_scaling_svg
+    assert "GPT 4o-mini 0.711" in unimoral_family_scaling_svg
+    assert "GPT 5-mini" not in unimoral_family_scaling_svg
+    assert "GPT 4.1-mini" not in unimoral_family_scaling_svg
+    assert ">Ref<" not in unimoral_family_scaling_svg
+    assert "OpenAI Ref" in unimoral_family_scaling_svg
+    assert "#dc2626" in unimoral_family_scaling_svg
+
+
+def test_repository_root_keeps_legacy_files_archived():
+    legacy_root_files = {
+        "PROGRESS.md",
+        "STATUS.md",
+        "moral-psychology-benchmarks.md",
+        "openrouter-setup.md",
+        "trolleybench-plan.md",
+        "client.py",
+        "config.py",
+        "run_benchmark.py",
+        "run_trolleybench.py",
+        "eval_trolleybench.py",
+        "export_results.py",
+        "run_all_benchmarks.sh",
+        "run_one_model.sh",
+        "run_parallel_remaining.sh",
+    }
+
+    for filename in legacy_root_files:
+        assert not (ROOT / filename).exists(), f"Move legacy root clutter into docs/, scripts/, or tools/: {filename}"
+
+    assert (ROOT / "docs" / "status" / "PROGRESS.md").exists()
+    assert (ROOT / "docs" / "plans" / "trolleybench-plan.md").exists()
+    assert (ROOT / "scripts" / "legacy-openrouter" / "run_all_benchmarks.sh").exists()
+    assert (ROOT / "tools" / "legacy_openrouter" / "run_trolleybench.py").exists()
 
 
 def test_docs_index_mentions_repo_architecture():

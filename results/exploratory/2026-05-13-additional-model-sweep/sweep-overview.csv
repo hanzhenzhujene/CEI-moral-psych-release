@@ -1,0 +1,3 @@
+artifact,models,samples_per_complete_model,status,metric_boundary
+unimoral_action_prediction,5,8784,complete,saved-log A/B action-prediction accuracy
+ccd_bench_selection,5,2182,complete,"valid cultural choice distribution, not accuracy"

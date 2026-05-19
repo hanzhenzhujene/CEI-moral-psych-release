@@ -97,7 +97,10 @@ make release
 
 - `src/inspect/`: Inspect AI harness entrypoints plus benchmark task builders
 - `src/lm-evaluation-harness/`: retained ETHICS baseline path
-- `scripts/`: operational launchers, recovery helpers, and release builders
+- `scripts/`: active operational launchers, recovery helpers, and release builders
+- `scripts/legacy-openrouter/`: older one-off OpenRouter launchers retained for provenance
+- `tools/legacy_openrouter/`: older standalone OpenRouter/TrolleyBench Python utilities
+- `docs/status/`, `docs/plans/`, `docs/setup/`: archived status, planning, and provider notes moved out of the root
 - `tests/`: regression checks for harness tasks, release artifacts, Makefile behavior, and repo hygiene
 
 ## What Is Intentionally Not Claimed

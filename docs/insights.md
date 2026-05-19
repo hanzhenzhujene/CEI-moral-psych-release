@@ -6,14 +6,14 @@ Cross-cutting findings from the CEI moral psychology benchmark evaluation (13 pa
 - [Moral-Psych release report](../results/release/2026-04-19-option1/jenny-group-report.md) — Jenny's 5-benchmark frozen snapshot
 - [Topline summary](../results/release/2026-04-19-option1/topline-summary.md) — Shortest frozen-snapshot readout
 - [TrolleyBench eval report](../results/trolleybench/20260421_100038/eval_report.md) — Multi-turn ethical consistency results
-- [Joseph's progress report](../PROGRESS.md) — Full family-size matrix for all 5 benchmarks (MoReBench, Moral Circuits, M3oralBench, MoralLens, TrolleyBench)
+- [Joseph's progress report](status/PROGRESS.md) — Full family-size matrix for all 5 benchmarks (MoReBench, Moral Circuits, M3oralBench, MoralLens, TrolleyBench)
 - [Faithful metrics CSV](../results/release/2026-04-19-option1/faithful-metrics.csv) — MoralBench + EMNLP Educator results (15 models)
 
 ## 1. Bigger Does Not Mean More Moral
 
 There is no universal scaling law for ethical reasoning. Gemma on vision-moral tasks goes 0.417 -> 0.364 -> 0.412 (S->M->L). Llama-M beats Llama-L on value recognition (0.724 vs 0.692). MiniMax-S outperforms MiniMax-L on advisory tasks (0.716 vs 0.435 agent score). Size helps on some tasks, but the pattern is jagged, not monotonic.
 
-_See: [family scaling profile](../results/release/2026-04-19-option1/jenny-group-report.md#family-scaling-profile), [PROGRESS.md MoReBench column](../PROGRESS.md)_
+_See: [family scaling profile](../results/release/2026-04-19-option1/jenny-group-report.md#family-scaling-profile), [PROGRESS.md MoReBench column](status/PROGRESS.md)_
 
 ## 2. Vision Is the Real Bottleneck
 

@@ -601,6 +601,15 @@ run_task() {
     unimoral_action_prediction)
       task_resume_env="UNIMORAL_ACTION_RESUME_COUNT"
       ;;
+    unimoral_moral_typology)
+      task_resume_env="UNIMORAL_TYPOLOGY_RESUME_COUNT"
+      ;;
+    unimoral_factor_attribution)
+      task_resume_env="UNIMORAL_FACTOR_RESUME_COUNT"
+      ;;
+    unimoral_consequence_generation)
+      task_resume_env="UNIMORAL_CONSEQUENCE_RESUME_COUNT"
+      ;;
     smid_moral_rating)
       task_resume_env="SMID_MORAL_RESUME_COUNT"
       ;;
@@ -701,6 +710,9 @@ run_family() {
       run_task "$family" "value_prism_valence" "src/inspect/evals/value_kaleidoscope.py::value_prism_valence" "$MINIMAX_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
       run_task "$family" "value_prism_relevance" "src/inspect/evals/value_kaleidoscope.py::value_prism_relevance" "$MINIMAX_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
       run_task "$family" "unimoral_action_prediction" "src/inspect/evals/unimoral.py::unimoral_action_prediction" "$MINIMAX_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
+      run_task "$family" "unimoral_moral_typology" "src/inspect/evals/unimoral.py::unimoral_moral_typology" "$MINIMAX_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
+      run_task "$family" "unimoral_factor_attribution" "src/inspect/evals/unimoral.py::unimoral_factor_attribution" "$MINIMAX_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
+      run_task "$family" "unimoral_consequence_generation" "src/inspect/evals/unimoral.py::unimoral_consequence_generation" "$MINIMAX_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
       ;;
     minimax_smid)
       require_dir SMID_DATA_DIR

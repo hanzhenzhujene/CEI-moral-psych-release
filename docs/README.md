@@ -15,6 +15,12 @@
 - [`../results/release/2026-04-19-option1/README.md`](../results/release/2026-04-19-option1/README.md): release artifact index
 - [`../results/release/2026-04-19-option1/source/README.md`](../results/release/2026-04-19-option1/source/README.md): provenance note for the tracked authoritative snapshot
 
+## Archived Planning And Status
+
+- [`status/`](status/): historical progress/status snapshots moved out of the repository root.
+- [`plans/`](plans/): planning notes for older benchmark integration work.
+- [`setup/`](setup/): provider setup notes, including historical OpenRouter guidance.
+
 ## Historical Run Notes
 
 These files are intentionally kept because they document the recovery path from smoke tests to the current authoritative release:
