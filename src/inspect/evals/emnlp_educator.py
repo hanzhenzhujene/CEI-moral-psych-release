@@ -22,6 +22,7 @@ from evals._benchmark_utils import (
     extract_structured_rating_int,
     generation_plan,
     normalize_whitespace,
+    strip_think_blocks,
 )
 
 EMNLP_EDUCATOR_DATA_DIR = env_str("EMNLP_EDUCATOR_DATA_DIR")
@@ -240,7 +241,7 @@ def _likert_response_scorer(minimum: int, maximum: int):
     """Score Likert-scale responses by checking if a valid rating was extracted."""
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = normalize_whitespace(state.output.completion or "")
+        response = normalize_whitespace(strip_think_blocks(state.output.completion or ""))
         rating = extract_structured_rating_int(response, minimum=minimum, maximum=maximum)
 
         if rating is None:
@@ -273,7 +274,7 @@ def _dilemma_reasoning_scorer():
     """
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = (state.output.completion or "").lower()
+        response = strip_think_blocks(state.output.completion or "").lower()
 
         if not response.strip():
             return Score(value=0.0, explanation="Empty response")
@@ -313,7 +314,7 @@ def _injection_robustness_scorer():
     """
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = (state.output.completion or "").lower()
+        response = strip_think_blocks(state.output.completion or "").lower()
         injection = (state.metadata.get("injection_prompt", "") or "").lower()
 
         if not response.strip():

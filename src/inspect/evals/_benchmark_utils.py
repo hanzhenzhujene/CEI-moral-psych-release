@@ -88,6 +88,11 @@ def resume_start_index(env_var: str) -> int:
         raise ValueError(f"{env_var} must be a non-negative integer, got: {raw_value!r}") from exc
 
 
+def strip_think_blocks(text: str) -> str:
+    """Remove <think>...</think> blocks from reasoning model output."""
+    return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
+
+
 def normalize_whitespace(text: str) -> str:
     return " ".join(str(text).split())
 
@@ -282,7 +287,7 @@ def extract_structured_rating_int(text: str, *, minimum: int, maximum: int) -> i
 
 
 def extract_action_choice(text: str) -> str | None:
-    normalized = normalize_whitespace(text)
+    normalized = normalize_whitespace(strip_think_blocks(text))
     if not normalized:
         return None
     patterns = [
@@ -290,6 +295,7 @@ def extract_action_choice(text: str) -> str | None:
         (r"(?:option)\s*([ab])\b", "option"),
         (r"^([ab])$", "exact"),
         (r"\(([ab])\)", "paren"),
+        (r"\b([ab])\s*\.?\s*$", "trailing"),
     ]
     for pattern, _ in patterns:
         match = re.search(pattern, normalized, flags=re.IGNORECASE)
@@ -531,7 +537,7 @@ def ensure_extracted_zip(zip_path: Path) -> Path:
 @scorer(metrics=[accuracy(), stderr()])
 def label_membership_scorer(patterns: Mapping[str, Sequence[str]]):
     async def score(state: TaskState, target: Target) -> Score:
-        answer = canonicalize_label(state.output.completion, patterns)
+        answer = canonicalize_label(strip_think_blocks(state.output.completion), patterns)
         is_correct = answer is not None and answer in target.target
         return Score(
             value=1 if is_correct else 0,
@@ -545,7 +551,7 @@ def label_membership_scorer(patterns: Mapping[str, Sequence[str]]):
 @scorer(metrics=[accuracy(), stderr()])
 def parsed_label_scorer(parser):
     async def score(state: TaskState, target: Target) -> Score:
-        answer = parser(state.output.completion)
+        answer = parser(strip_think_blocks(state.output.completion))
         is_correct = answer is not None and answer in target.target
         return Score(
             value=1 if is_correct else 0,
@@ -559,7 +565,7 @@ def parsed_label_scorer(parser):
 @scorer(metrics=[mean(), stderr()])
 def valid_choice_scorer(minimum: int, maximum: int):
     async def score(state: TaskState, target: Target) -> Score:
-        choice = extract_structured_choice_int(state.output.completion, minimum=minimum, maximum=maximum)
+        choice = extract_structured_choice_int(strip_think_blocks(state.output.completion), minimum=minimum, maximum=maximum)
         return Score(
             value=1.0 if choice is not None else 0.0,
             answer="" if choice is None else str(choice),
@@ -573,7 +579,7 @@ def valid_choice_scorer(minimum: int, maximum: int):
 @scorer(metrics=[accuracy(), stderr()])
 def bounded_integer_scorer(minimum: int, maximum: int):
     async def score(state: TaskState, target: Target) -> Score:
-        rating = extract_structured_rating_int(state.output.completion, minimum=minimum, maximum=maximum)
+        rating = extract_structured_rating_int(strip_think_blocks(state.output.completion), minimum=minimum, maximum=maximum)
         answer = "" if rating is None else str(rating)
         is_correct = answer != "" and answer in target.target
         return Score(
@@ -589,7 +595,7 @@ def bounded_integer_scorer(minimum: int, maximum: int):
 @scorer(metrics=[mean(), stderr()])
 def response_present_scorer():
     async def score(state: TaskState, target: Target) -> Score:
-        answer = normalize_whitespace(state.output.completion)
+        answer = normalize_whitespace(strip_think_blocks(state.output.completion))
         return Score(
             value=1.0 if answer else 0.0,
             answer=answer,
@@ -604,7 +610,7 @@ def rouge_l_max_scorer():
     rouge = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
 
     async def score(state: TaskState, target: Target) -> Score:
-        prediction = normalize_whitespace(state.output.completion)
+        prediction = normalize_whitespace(strip_think_blocks(state.output.completion))
         references = [normalize_whitespace(reference) for reference in target.target if reference]
         if not prediction or not references:
             return Score(value=0.0, answer=prediction, explanation=state.output.completion)

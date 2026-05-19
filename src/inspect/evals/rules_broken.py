@@ -22,6 +22,7 @@ from evals._benchmark_utils import (
     format_ab_choices,
     generation_plan,
     normalize_whitespace,
+    strip_think_blocks,
 )
 from evals.unimoral import (
     _language_files,
@@ -130,7 +131,7 @@ def _kohlberg_stage_scorer():
     """
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = (state.output.completion or "").lower()
+        response = strip_think_blocks(state.output.completion or "").lower()
 
         if not response.strip():
             return Score(value=0.0, explanation="Empty response")

@@ -24,6 +24,7 @@ from evals._benchmark_utils import (
     generation_plan,
     normalize_whitespace,
     parsed_label_scorer,
+    strip_think_blocks,
 )
 
 MORALBENCH_DATA_DIR = env_str("MORALBENCH_DATA_DIR")
@@ -160,7 +161,7 @@ def _moralbench_scorer():
     """
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = normalize_whitespace(state.output.completion or "")
+        response = normalize_whitespace(strip_think_blocks(state.output.completion or ""))
         chosen = extract_action_choice(response)
 
         if chosen is None:

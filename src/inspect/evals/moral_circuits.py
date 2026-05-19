@@ -23,7 +23,7 @@ from inspect_ai.dataset import MemoryDataset, Sample
 from inspect_ai.scorer import Score, Target, accuracy, mean, scorer, stderr
 from inspect_ai.solver import TaskState
 
-from evals._benchmark_utils import env_str, generation_plan
+from evals._benchmark_utils import env_str, generation_plan, strip_think_blocks
 
 
 MORAL_CIRCUITS_DATA_DIR = env_str("MORAL_CIRCUITS_DATA_DIR")
@@ -141,7 +141,7 @@ def _moral_judgment_scorer():
     """Score moral judgment accuracy (acceptable vs unacceptable)."""
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = (state.output.completion or "").lower()
+        response = strip_think_blocks(state.output.completion or "").lower()
         if not response.strip():
             return Score(value=0, answer="", explanation="Empty response")
 
@@ -170,7 +170,7 @@ def _foundation_id_scorer():
     """Score foundation identification accuracy."""
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = (state.output.completion or "").lower()
+        response = strip_think_blocks(state.output.completion or "").lower()
         if not response.strip():
             return Score(value=0, answer="", explanation="Empty response")
 
