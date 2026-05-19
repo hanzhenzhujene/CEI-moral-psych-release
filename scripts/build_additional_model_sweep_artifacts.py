@@ -11,7 +11,6 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import math
 import re
 import zipfile
 from collections import Counter, defaultdict
@@ -24,6 +23,8 @@ ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_LOG_ROOT = ROOT / "results" / "inspect" / "logs" / "2026-05-13-additional-model-sweep" / "full"
 DEFAULT_RESULT_DIR = ROOT / "results" / "exploratory" / "2026-05-13-additional-model-sweep"
 DEFAULT_FIGURE_DIR = ROOT / "figures" / "exploratory"
+UNIMORAL_ACTION_SAMPLE_TOTAL = 8784
+CCD_SELECTION_SAMPLE_TOTAL = 2182
 
 MODEL_LABELS = {
     "meta-llama__llama-3-8b-instruct": "Llama 3 8B",
@@ -218,10 +219,10 @@ def parse_ccd_selected_option(sample: ParsedSample) -> int | None:
     return None
 
 
-def pct(value: float | None) -> str:
-    if value is None or math.isnan(value):
-        return ""
-    return f"{value:.3f}"
+def csv_cell(value: Any) -> Any:
+    if isinstance(value, float):
+        return f"{value:.6f}".rstrip("0").rstrip(".")
+    return value
 
 
 def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> None:
@@ -230,7 +231,7 @@ def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> 
         writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for row in rows:
-            writer.writerow({field: row.get(field, "") for field in fieldnames})
+            writer.writerow({field: csv_cell(row.get(field, "")) for field in fieldnames})
 
 
 def summarize_unimoral(samples: list[ParsedSample]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -389,7 +390,7 @@ def write_unimoral_accuracy_svg(path: Path, rows: list[dict[str, Any]]) -> None:
             "</svg>",
         ]
     )
-    path.write_text("\n".join(parts), encoding="utf-8")
+    path.write_text("\n".join(parts) + "\n", encoding="utf-8")
 
 
 def write_ccd_dominant_svg(path: Path, rows: list[dict[str, Any]]) -> None:
@@ -425,7 +426,7 @@ def write_ccd_dominant_svg(path: Path, rows: list[dict[str, Any]]) -> None:
             "</svg>",
         ]
     )
-    path.write_text("\n".join(parts), encoding="utf-8")
+    path.write_text("\n".join(parts) + "\n", encoding="utf-8")
 
 
 def write_scaling_svg(path: Path, unimoral_rows: list[dict[str, Any]], ccd_rows: list[dict[str, Any]]) -> None:
@@ -502,14 +503,13 @@ def write_scaling_svg(path: Path, unimoral_rows: list[dict[str, Any]], ccd_rows:
             "</svg>",
         ]
     )
-    path.write_text("\n".join(parts), encoding="utf-8")
+    path.write_text("\n".join(parts) + "\n", encoding="utf-8")
 
 
 def write_readme(
     path: Path,
     unimoral_rows: list[dict[str, Any]],
     ccd_rows: list[dict[str, Any]],
-    figure_dir: Path,
 ) -> None:
     best = max(unimoral_rows, key=lambda row: float(row["accuracy"] or 0))
     weakest = min(unimoral_rows, key=lambda row: float(row["accuracy"] or 0))
@@ -588,7 +588,7 @@ def write_readme(
             "",
         ]
     )
-    path.write_text("\n".join(lines), encoding="utf-8")
+    path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
 
 def build(log_root: Path, result_dir: Path, figure_dir: Path) -> None:
@@ -641,14 +641,14 @@ def build(log_root: Path, result_dir: Path, figure_dir: Path) -> None:
             {
                 "artifact": "unimoral_action_prediction",
                 "models": len(unimoral_rows),
-                "samples_per_complete_model": 8784,
+                "samples_per_complete_model": UNIMORAL_ACTION_SAMPLE_TOTAL,
                 "status": "complete",
                 "metric_boundary": "saved-log A/B action-prediction accuracy",
             },
             {
                 "artifact": "ccd_bench_selection",
                 "models": len(ccd_rows),
-                "samples_per_complete_model": 2182,
+                "samples_per_complete_model": CCD_SELECTION_SAMPLE_TOTAL,
                 "status": "complete",
                 "metric_boundary": "valid cultural choice distribution, not accuracy",
             },
@@ -658,7 +658,7 @@ def build(log_root: Path, result_dir: Path, figure_dir: Path) -> None:
     write_unimoral_accuracy_svg(figure_dir / "additional_model_sweep_unimoral_accuracy.svg", unimoral_rows)
     write_ccd_dominant_svg(figure_dir / "additional_model_sweep_ccd_dominant_share.svg", ccd_rows)
     write_scaling_svg(figure_dir / "additional_model_sweep_scaling.svg", unimoral_rows, ccd_rows)
-    write_readme(result_dir / "README.md", unimoral_rows, ccd_rows, figure_dir)
+    write_readme(result_dir / "README.md", unimoral_rows, ccd_rows)
 
     manifest = {
         "source_log_root": str(log_root.relative_to(ROOT)),
@@ -673,7 +673,7 @@ def build(log_root: Path, result_dir: Path, figure_dir: Path) -> None:
             "ccd_samples_total": sum(int(row["samples"]) for row in ccd_rows),
         },
     }
-    (result_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    (result_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
 
 def parse_args() -> argparse.Namespace:

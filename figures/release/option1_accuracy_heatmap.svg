@@ -80,7 +80,7 @@
 <rect x="300" y="376" width="246" height="62" rx="16" fill="#8ab8ba" stroke="#ffffff" stroke-width="1"/>
 <text x="423.0" y="410" text-anchor="middle" class="celltext-dark">66.1%</text>
 <text x="423.0" y="431" text-anchor="middle" class="cellsub-dark">MiniMax S</text>
-<rect x="560" y="376" width="246" height="62" rx="16" fill="#bfd4cc" stroke="#ffffff" stroke-width="1"/>
+<rect x="560" y="376" width="246" height="62" rx="16" fill="#bfd4cd" stroke="#ffffff" stroke-width="1"/>
 <text x="683.0" y="410" text-anchor="middle" class="celltext-dark">43.2%</text>
 <text x="683.0" y="431" text-anchor="middle" class="cellsub-dark">MiniMax S</text>
 <rect x="820" y="376" width="246" height="62" rx="16" fill="#78aeb4" stroke="#ffffff" stroke-width="1"/>
@@ -102,7 +102,7 @@
 <text x="423.0" y="562" text-anchor="middle" class="celltext-dark">66.1%</text>
 <text x="423.0" y="583" text-anchor="middle" class="cellsub-dark">MiniMax L</text>
 <rect x="560" y="528" width="246" height="62" rx="16" fill="#f4f0df" stroke="#ffffff" stroke-width="1"/>
-<text x="683.0" y="562" text-anchor="middle" class="celltext-dark">19.8%</text>
+<text x="683.0" y="562" text-anchor="middle" class="celltext-dark">19.9%</text>
 <text x="683.0" y="583" text-anchor="middle" class="cellsub-dark">MiniMax L</text>
 <rect x="820" y="528" width="246" height="62" rx="16" fill="#78aeb4" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="562" text-anchor="middle" class="celltext-dark">74.1%</text>
@@ -271,7 +271,7 @@
 <rect x="830.00" y="1836" width="31.00" height="16" fill="#8fbabc" stroke="#ffffff" stroke-width="0.6"/>
 <rect x="860.00" y="1836" width="31.00" height="16" fill="#83b4b8" stroke="#ffffff" stroke-width="0.6"/>
 <rect x="890.00" y="1836" width="31.00" height="16" fill="#78aeb4" stroke="#ffffff" stroke-width="0.6"/>
-<text x="560" y="1870" class="small">19.8%</text>
+<text x="560" y="1870" class="small">19.9%</text>
 <text x="920" y="1870" text-anchor="end" class="small">74.1%</text>
 <rect x="942" y="1832" width="24" height="24" rx="6" class="muted-cell"/>
 <rect x="942" y="1832" width="24" height="24" rx="6" fill="url(#diagonalHatch)" opacity="0.8"/>

@@ -87,8 +87,8 @@
 <rect x="56" y="425" width="10" height="10" rx="3" fill="#f3cf82"/>
 <text x="78" y="439" class="label">MiniMax-L</text>
 <rect x="280" y="420" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="420" width="158.59" height="28" rx="10" fill="#f3cf82"/>
-<text x="448.59" y="439" text-anchor="start" class="label">19.8%</text>
+<rect x="280" y="420" width="158.86" height="28" rx="10" fill="#f3cf82"/>
+<text x="448.86" y="439" text-anchor="start" class="label">19.9%</text>
 <rect x="56" y="467" width="10" height="10" rx="3" fill="#94b8e8"/>
 <text x="78" y="481" class="label">DeepSeek-S</text>
 <rect x="280" y="462" width="800" height="28" rx="10" fill="#e2e8f0"/>

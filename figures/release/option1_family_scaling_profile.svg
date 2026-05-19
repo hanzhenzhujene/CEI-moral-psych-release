@@ -70,12 +70,12 @@
 <text x="353.00" y="638" text-anchor="middle" class="axis">M</text>
 <line x1="564.00" y1="334" x2="564.00" y2="614" class="guide"/>
 <text x="564.00" y="638" text-anchor="middle" class="axis">L</text>
-<line x1="122.00" y1="452.72" x2="544.00" y2="539.99" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
-<line x1="122.00" y1="452.72" x2="544.00" y2="539.99" stroke="#e0ad68" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="7 6"/>
+<line x1="122.00" y1="452.72" x2="544.00" y2="539.87" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
+<line x1="122.00" y1="452.72" x2="544.00" y2="539.87" stroke="#e0ad68" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="7 6"/>
 <circle cx="122.00" cy="452.72" r="8" fill="#ffffff" stroke="#e0ad68" stroke-width="3.4"/>
 <circle cx="122.00" cy="452.72" r="4.2" fill="#e0ad68"/>
-<circle cx="544.00" cy="539.99" r="8" fill="#ffffff" stroke="#e0ad68" stroke-width="3.4"/>
-<circle cx="544.00" cy="539.99" r="4.2" fill="#e0ad68"/>
+<circle cx="544.00" cy="539.87" r="8" fill="#ffffff" stroke="#e0ad68" stroke-width="3.4"/>
+<circle cx="544.00" cy="539.87" r="4.2" fill="#e0ad68"/>
 <line x1="152.00" y1="533.20" x2="574.00" y2="469.86" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
 <line x1="152.00" y1="533.20" x2="574.00" y2="469.86" stroke="#dc2626" stroke-width="4.0" stroke-linecap="round" stroke-dasharray="7 6"/>
 <circle cx="152.00" cy="533.20" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3.4"/>

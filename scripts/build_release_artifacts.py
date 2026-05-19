@@ -184,6 +184,16 @@ FAMILY_SIZE_STATUS_LABELS = {
     "ccd_bench": "CCD-Bench",
     "denevil": "Denevil",
 }
+ORG_FAMILY_SIZE_STATUS_COLUMNS = [
+    *FAMILY_SIZE_STATUS_COLUMNS,
+    "moralbench",
+    "emnlp_educator",
+]
+ORG_FAMILY_SIZE_STATUS_LABELS = {
+    **FAMILY_SIZE_STATUS_LABELS,
+    "moralbench": "MoralBench",
+    "emnlp_educator": "EMNLP Educator",
+}
 BENCHMARK_TASK_COUNTS = {
     "UniMoral": 4,
     "SMID": 2,
@@ -4751,7 +4761,13 @@ def build_supplementary_model_progress() -> list[dict[str, Any]]:
 
 
 def build_family_size_progress() -> list[dict[str, Any]]:
-    return list(FAMILY_SIZE_PROGRESS)
+    rows: list[dict[str, Any]] = []
+    for source_row in FAMILY_SIZE_PROGRESS:
+        row = dict(source_row)
+        row.setdefault("moralbench", "done")
+        row.setdefault("emnlp_educator", "done")
+        rows.append(row)
+    return rows
 
 
 def filter_public_family_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -9721,15 +9737,16 @@ def build_topline_summary(
 def append_family_size_progress_table(lines: list[str], rows: list[dict[str, Any]]) -> None:
     lines.extend(
         [
-            "| Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | Note |",
-            "| :--- | :---: | :---: | :---: | :---: | :---: | --- |",
+            "| Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | MoralBench | EMNLP Educator | Note |",
+            "| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | --- |",
         ]
     )
     for row in rows:
         lines.append(
             f"| `{row['line_label']}` | {STATUS_DISPLAY[row['unimoral']]} | {STATUS_DISPLAY[row['smid']]} | "
             f"{STATUS_DISPLAY[row['value_kaleidoscope']]} | {STATUS_DISPLAY[row['ccd_bench']]} | "
-            f"{STATUS_DISPLAY[row['denevil']]} | {row['summary_note']} |"
+            f"{STATUS_DISPLAY[row['denevil']]} | {STATUS_DISPLAY[row['moralbench']]} | "
+            f"{STATUS_DISPLAY[row['emnlp_educator']]} | {row['summary_note']} |"
         )
 
 
@@ -11175,6 +11192,8 @@ PRESERVED_REPO_README_TAIL_HEADINGS = (
     "## Contributing",
     "## Team",
 )
+JENNY_RELEASE_SECTION_START = "<!-- BEGIN JENNY_MORAL_PSYCH_RELEASE -->"
+JENNY_RELEASE_SECTION_END = "<!-- END JENNY_MORAL_PSYCH_RELEASE -->"
 
 
 def preserve_repo_readme_org_tail(generated_readme: str, existing_readme: str) -> str:
@@ -11199,6 +11218,80 @@ def preserve_repo_readme_org_tail(generated_readme: str, existing_readme: str) -
         return generated_readme
 
     return generated_readme.rstrip() + "\n\n" + preserved_tail + "\n"
+
+
+def _append_demoted_markdown(lines: list[str], section_lines: list[str], *, levels: int = 1) -> None:
+    for line in section_lines:
+        if line.startswith("#"):
+            lines.append(("#" * levels) + line)
+        else:
+            lines.append(line)
+
+
+def build_repo_readme_managed_section(
+    benchmark_comparison: list[dict[str, Any]],
+    benchmark_difficulty_summary: list[dict[str, Any]],
+    ccd_choice_distribution: list[dict[str, Any]],
+    denevil_behavior_summary: list[dict[str, Any]],
+    release_dir: Path | None = None,
+) -> str:
+    lines = [
+        JENNY_RELEASE_SECTION_START,
+        "## Jenny Moral-Psych Release TL;DR",
+        "",
+        f"> Current project total cost: `{REPORT_CURRENT_TOTAL_COST}` ({REPORT_CURRENT_COST_BREAKDOWN})",
+        "",
+        "This appended section is Jenny's current release readout. The shared CEI repo overview, TrolleyBench notes, ETHICS docs, Claude Code commands, and team table above remain the canonical repo-level structure.",
+        "",
+        "Key links:",
+        "",
+        "- [Full release appendix](results/release/2026-04-19-option1/README.md)",
+        "- [PI-facing report](results/release/2026-04-19-option1/jenny-group-report.md)",
+        "- [Topline summary](results/release/2026-04-19-option1/topline-summary.md)",
+        "- [Exact family-size progress table](results/release/2026-04-19-option1/family-size-progress.csv)",
+        "",
+        "Metric boundaries:",
+        "",
+        "- `UniMoral`, `SMID`, and `Value Kaleidoscope` are the comparable-accuracy surfaces.",
+        "- `CCD-Bench` is reported as cultural-cluster choice behavior, not universal accuracy.",
+        "- `DeNEVIL` is reported as proxy behavioral evidence, not benchmark-faithful scoring.",
+        "",
+    ]
+
+    tldr_lines: list[str] = []
+    append_tldr_section(
+        tldr_lines,
+        benchmark_comparison,
+        benchmark_difficulty_summary,
+        ccd_choice_distribution,
+        denevil_behavior_summary,
+        release_dir,
+    )
+    _append_demoted_markdown(lines, tldr_lines)
+
+    visual_lines: list[str] = []
+    append_benchmark_result_visuals_section(visual_lines, "figures/release")
+    _append_demoted_markdown(lines, visual_lines)
+
+    lines.extend(
+        [
+            JENNY_RELEASE_SECTION_END,
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def upsert_repo_readme_managed_section(existing_readme: str, managed_section: str) -> str:
+    """Append or replace Jenny's managed release section without rewriting shared README content."""
+
+    base = existing_readme.rstrip()
+    start = base.find(JENNY_RELEASE_SECTION_START)
+    end = base.find(JENNY_RELEASE_SECTION_END)
+    if start >= 0 and end >= start:
+        end += len(JENNY_RELEASE_SECTION_END)
+        base = (base[:start].rstrip() + "\n\n" + base[end:].lstrip()).rstrip()
+    return base + "\n\n" + managed_section.rstrip() + "\n"
 
 
 def build_release_readme(
@@ -11938,11 +12031,7 @@ def main() -> None:
             "line_label",
             "text_route",
             "vision_route",
-            "unimoral",
-            "smid",
-            "value_kaleidoscope",
-            "ccd_bench",
-            "denevil",
+            *ORG_FAMILY_SIZE_STATUS_COLUMNS,
             "summary_note",
         ],
     )
@@ -12302,25 +12391,16 @@ def main() -> None:
     ):
         readme_path = ROOT / "README.md"
         existing_readme = readme_path.read_text(encoding="utf-8") if readme_path.exists() else ""
-        generated_readme = build_repo_readme(
-            model_summary,
-            benchmark_catalog,
-            supplementary_model_progress,
-            family_size_progress,
+        managed_readme_section = build_repo_readme_managed_section(
             benchmark_comparison,
             benchmark_difficulty_summary,
-            family_scaling_summary,
             ccd_choice_distribution,
             denevil_behavior_summary,
-            denevil_prompt_family_breakdown,
-            denevil_proxy_summary,
-            denevil_proxy_examples,
-            deepseek_sm_readout,
             args.release_dir,
         )
         write_text(
             readme_path,
-            preserve_repo_readme_org_tail(generated_readme, existing_readme),
+            upsert_repo_readme_managed_section(existing_readme, managed_readme_section),
         )
     write_text(
         args.release_dir / "jenny-group-report.md",

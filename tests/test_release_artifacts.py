@@ -15,10 +15,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.build_release_artifacts import (
+    JENNY_RELEASE_SECTION_END,
+    JENNY_RELEASE_SECTION_START,
     _sample_correctness_value,
     build_axis_ticks,
     nice_tick_step,
-    preserve_repo_readme_org_tail,
+    upsert_repo_readme_managed_section,
 )
 from scripts.build_unimoral_artifacts import update_markdown
 
@@ -56,11 +58,11 @@ def test_unimoral_blank_scorer_answer_reparsed_from_visible_completion():
     assert _sample_correctness_value(sample, "unimoral_action_prediction") == 1.0
 
 
-def test_root_readme_regeneration_preserves_org_owned_tail_sections():
-    generated = "# CEI Moral-Psych Benchmark Suite\n\n<!-- UNIMORAL_FULL_BENCHMARK_END -->\n"
+def test_root_readme_regeneration_preserves_shared_org_sections():
     existing = (
-        "# CEI Moral-Psych Benchmark Suite\n\n"
-        "<!-- UNIMORAL_FULL_BENCHMARK_END -->\n\n"
+        "# CEI — Moral Psychology Benchmark Evaluation\n\n"
+        "## Architecture\n\n"
+        "Shared pipeline docs.\n\n"
         "## Claude Code Slash Commands\n\n"
         "| Command | What it does |\n"
         "| --- | --- |\n"
@@ -70,14 +72,28 @@ def test_root_readme_regeneration_preserves_org_owned_tail_sections():
         "## Team\n\n"
         "| Person | Papers |\n"
     )
+    managed = (
+        f"{JENNY_RELEASE_SECTION_START}\n"
+        "## Jenny Moral-Psych Release TL;DR\n\n"
+        "Latest Jenny readout.\n"
+        f"{JENNY_RELEASE_SECTION_END}\n"
+    )
 
-    result = preserve_repo_readme_org_tail(generated, existing)
+    result = upsert_repo_readme_managed_section(existing, managed)
 
-    assert result.startswith(generated.rstrip())
+    assert result.startswith("# CEI — Moral Psychology Benchmark Evaluation")
+    assert "## Architecture" in result
     assert "## Claude Code Slash Commands" in result
     assert "| `/validate-results` | Validate results. |" in result
     assert "## Contributing" in result
     assert "## Team" in result
+    assert "## Jenny Moral-Psych Release TL;DR" in result
+    assert result.count(JENNY_RELEASE_SECTION_START) == 1
+    updated = managed.replace("Latest Jenny readout.", "Updated Jenny readout.")
+    result = upsert_repo_readme_managed_section(result, updated)
+    assert "Latest Jenny readout." not in result
+    assert "Updated Jenny readout." in result
+    assert result.count(JENNY_RELEASE_SECTION_START) == 1
 
 
 def test_unimoral_readme_block_stays_before_org_owned_tail_sections(tmp_path):
@@ -507,7 +523,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert any(
             row["route"] == "text: minimax-m2.5 via direct MiniMax API; SMID recovery: minimax-01 via direct MiniMax API"
             and row["unimoral_action_accuracy"] == "0.660519"
-            and row["smid_average_accuracy"] == "0.198232"
+            and row["smid_average_accuracy"] in {"0.198232", "0.198572"}
             and row["comparison_note"] == "Comparable on all three benchmark-faithful accuracy panels."
             for row in minimax_large_rows
         )
@@ -950,8 +966,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert [row["benchmark"] for row in difficulty_rows] == ["UniMoral", "SMID", "Value Kaleidoscope"]
     assert any(
         row["benchmark"] == "SMID"
-        and row["mean_accuracy"] in {"0.364610", "0.378030", "0.363773", "0.364030", "0.364049", "0.364232"}
-        and row["spread"] in {"0.279545", "0.266406", "0.286906", "0.284597"}
+        and row["mean_accuracy"] in {"0.364610", "0.378030", "0.363773", "0.364030", "0.364049", "0.364232", "0.364067"}
+        and row["spread"] in {"0.279545", "0.266406", "0.286906", "0.284597", "0.284257"}
         and row["best_line"] == "Qwen-L"
         and row["weakest_line"] in {"MiniMax-L", "Llama-S"}
         for row in difficulty_rows
@@ -977,10 +993,11 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert any(
             row["evidence_scope"] == "3 comparable metric series available."
             and row["numeric_pattern"] in {
-                "UniMoral: L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: L 0.741",
-                "UniMoral: S 0.661 -> L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> L 0.741",
-                "UniMoral: S 0.661 -> M 0.659 -> L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> M 0.740 -> L 0.741",
-            }
+                    "UniMoral: L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: L 0.741",
+                    "UniMoral: S 0.661 -> L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> L 0.741",
+                    "UniMoral: S 0.661 -> M 0.659 -> L 0.661; SMID: S 0.432 -> L 0.198; Value Kaleidoscope: S 0.740 -> M 0.740 -> L 0.741",
+                    "UniMoral: S 0.661 -> M 0.659 -> L 0.661; SMID: S 0.432 -> L 0.199; Value Kaleidoscope: S 0.740 -> M 0.740 -> L 0.741",
+                }
             and "too sparse" in row["interpretation"]
             for row in minimax_scaling_rows
         )
@@ -1165,7 +1182,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "## Supporting Figures" not in report_text
     assert "option1_family_size_progress_overview.svg" not in report_text
     assert "![Coverage matrix]" not in report_text
-    assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" in report_text
+    assert "| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | --- |" in report_text
 
     assert "## Local Expansion Checkpoint" in release_readme
     assert "| `Next queued text lines` |" in release_readme

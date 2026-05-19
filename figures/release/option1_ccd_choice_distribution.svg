@@ -194,12 +194,12 @@
 <rect x="508" y="442" width="88" height="44" fill="#fae8da" stroke="#ffffff" stroke-width="1.2"/>
 <text x="552.00" y="470.00" text-anchor="middle" class="celltext-dark">-2.6</text>
 <rect x="596" y="442" width="88" height="44" fill="#fbebdd" stroke="#ffffff" stroke-width="1.2"/>
-<text x="640.00" y="470.00" text-anchor="middle" class="celltext-dark">-2.2</text>
+<text x="640.00" y="470.00" text-anchor="middle" class="celltext-dark">-2.1</text>
 <rect x="684" y="442" width="88" height="44" fill="#fae9da" stroke="#ffffff" stroke-width="1.2"/>
 <text x="728.00" y="470.00" text-anchor="middle" class="celltext-dark">-2.5</text>
 <rect x="772" y="442" width="88" height="44" fill="#f9e4d4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="816.00" y="470.00" text-anchor="middle" class="celltext-dark">-3.4</text>
-<rect x="860" y="442" width="88" height="44" fill="#afd6c3" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="860" y="442" width="88" height="44" fill="#afd6c4" stroke="#ffffff" stroke-width="1.2"/>
 <text x="904.00" y="470.00" text-anchor="middle" class="celltext-dark">+8.3</text>
 <rect x="948" y="442" width="88" height="44" fill="#e1f1e9" stroke="#ffffff" stroke-width="1.2"/>
 <text x="992.00" y="470.00" text-anchor="middle" class="celltext-dark">+2.2</text>
@@ -210,7 +210,7 @@
 <rect x="1212" y="442" width="88" height="44" fill="#fbecdf" stroke="#ffffff" stroke-width="1.2"/>
 <text x="1256.00" y="470.00" text-anchor="middle" class="celltext-dark">-1.9</text>
 <text x="1378" y="470.00" class="label">18.3%</text>
-<text x="1548" y="470.00" class="label">9.00</text>
+<text x="1548" y="470.00" class="label">9.01</text>
 <rect x="184" y="504" width="56" height="32" rx="12" fill="#f3cf82"/>
 <text x="212.00" y="525.00" text-anchor="middle" class="celltext-dark">L</text>
 <text x="258" y="526.00" class="label">MiniMax-L</text>

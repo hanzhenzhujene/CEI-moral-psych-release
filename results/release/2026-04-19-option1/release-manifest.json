@@ -201,7 +201,7 @@
       "tasks_completed": 7
     },
     {
-      "benchmark_faithful_macro_accuracy": 0.376442,
+      "benchmark_faithful_macro_accuracy": 0.377121,
       "benchmark_faithful_tasks": 6,
       "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
       "exact_route": "text: minimax-m2.5; SMID recovery: minimax-01",
