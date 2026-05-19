@@ -20,6 +20,7 @@ Key takeaways:
 - **Best like-for-like line:** `MiniMax-S` is the cleanest overall comparison because it has all three comparable metrics: UniMoral action 0.661, SMID 0.432, and Value 0.740, averaging 0.611. This is the safest single-line topline because it is not missing the vision benchmark.
 - **Best text-only line:** `GPT-5-mini Ref` is strongest when the question is only text moral reasoning, reaching UniMoral 0.678 and Value 0.739. It is not an all-around winner because it has no public SMID route.
 - **OpenAI/GPT references:** 5 OpenAI text rows are now back in the release. Best OpenAI UniMoral is `GPT-4.1-mini Ref` at 0.679; best OpenAI Value is `GPT-5-mini Ref` at 0.739. Read them as text-side calibration points, not as a GPT S/M/L size curve and not as evidence on SMID.
+- **Small-model follow-up:** the May 13 Mistral/Qwen/Llama sweep adds a capability-floor check, not a new leaderboard. `Mistral Nemo` leads that sweep on UniMoral at 0.648, the 7B-12B routes cluster from 0.632 to 0.648, and `Llama 3.2 1B` drops to 0.406 with a lower answer rate. So what: very small routes are risky for human-choice moral reasoning, while several older or mid-sized instruction routes remain usable text/style baselines.
 - **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.364) and widest spread (0.285), while `UniMoral` is tightly clustered (0.121 spread). The bottleneck is seeing moral meaning in images, not basic text moral labeling.
 - **UniMoral has different subskills:** do not collapse the four RQs into one moral-reasoning score. Task winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `Gemma-S` 0.599, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `Llama-L` 0.157. That means models can be good at predicting human choices but weaker at naming the moral frame, explaining the decision factor, or generating consequences.
 - **Bigger is not automatically more moral:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps in some places, but the direction depends on the benchmark.
@@ -268,6 +269,7 @@ These are the strongest claims the current public evidence supports. They use on
 | Strongest fully observed comparable line | `MiniMax-S` averages 0.611 across UniMoral action 0.661, SMID 0.432, and Value 0.740. | This is the cleanest all-around topline because it includes text moral reasoning, image moral perception, and value recognition on the same line. |
 | Strongest text-only comparable line | `GPT-5-mini Ref` reaches UniMoral 0.678 and Value 0.739, a two-metric mean of 0.708. | This is the best answer if the PI asks about text moral reasoning only; it is not the all-around winner because SMID is missing. |
 | OpenAI/GPT text references | 5 OpenAI rows are included. Best OpenAI UniMoral: `GPT-4.1-mini Ref` at 0.679; best OpenAI Value: `GPT-5-mini Ref` at 0.739. | These tell us where GPT-style text routes sit relative to the open-weight families; they do not make a GPT S/M/L scaling claim and do not cover SMID. |
+| Small-model capability floor | May 13 follow-up: `Mistral Nemo` reaches 0.648 on UniMoral; the 7B-12B routes sit in a narrow 0.632-0.648 band; `Llama 3.2 1B` falls to 0.406 with only 73.6% answered. | This is the practical capacity warning: below the mid-sized instruction-model range, the model may stop reliably following human moral-choice tasks, but above that floor older routes can still be useful baselines. |
 | Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.364 and the widest spread at 0.285. | The hard part is visual moral perception: models do not just need moral vocabulary, they need to read morally relevant cues in images. |
 | Closest thing to saturation | `UniMoral` has the tightest range, from 0.563 to 0.684 (0.121 spread). | Most text models are already in the same band on the basic human-choice layer, so the more interesting story is which UniMoral subtask each model handles best. |
 | Scaling-law read | `Gemma` is still the cleanest full S/M/L sweep. Even there, UniMoral rises from 0.635 to 0.661, Value rises from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data say scale is useful but task-dependent. Bigger models are not automatically better moral reasoners across every benchmark. |
@@ -311,6 +313,33 @@ _The headline family-scaling figure already appears above in **Benchmark Result 
 | `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama gets much better after the small line, especially on text, and S-to-L also helps SMID. But M still beats L on some text metrics, so the useful story is improvement after S, not a clean monotonic ladder. |
 | `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Gemma is the cleanest size test in this repo, and it still does not give a simple bigger-is-better story: text tasks improve overall, but SMID dips at M and rebounds at L. |
 | `OpenAI Ref` | Five text-only reference rows, not an OpenAI family-size scaling sweep. | UniMoral: range 0.646-0.679<br/>best GPT-4.1-mini Ref 0.679<br/>Value Kaleidoscope: range 0.617-0.739<br/>best GPT-5-mini Ref 0.739 | The OpenAI rows are a sanity check for text-side performance. They show that the best GPT text refs are very competitive on UniMoral and Value, but they do not answer the vision question and should not be renamed as GPT S/M/L. |
+
+### Small-Model Follow-Up: Capability Floor
+
+The May 13 follow-up brings the older/smaller `Mistral`, `Qwen`, and `Llama` routes into the main interpretation. It is not a replacement for the current S/M/L release matrix; it answers a narrower question: where does moral-choice performance start to fall off?
+
+**So what:** `Mistral Nemo` is the top follow-up line on UniMoral at 0.648, but `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` are close behind from 0.632 to 0.640. The real separation is `Llama 3.2 1B` at 0.406 with a lower answer rate. For reporting, say this as a capability-floor result: once models are around the 7B-12B instruction range, several older routes are competitive on text moral-choice/style checks; the 1B route is the line that clearly falls below the floor.
+
+**Compared with the current main results:** this supports the same high-level story rather than changing it. Text moral-choice scores mostly live in a narrow band once the model is capable enough, so the more important differences are benchmark-specific: SMID remains the hard visual-moral bottleneck in the main matrix, while CCD-Bench remains a cultural-choice style readout instead of an accuracy race.
+
+**CCD readout:** all five follow-up lines peak on `Nordic Europe`; the difference is concentration, not correctness. `Llama 3.2 1B` is the most diffuse at 15.9% dominant share, while `Mistral Nemo` is most concentrated at 25.3%. That means the small-model follow-up does not discover a new cultural direction; it shows how sharply each route collapses onto the same dominant cluster.
+
+| Follow-up model | Size slot | UniMoral accuracy | CCD dominant cluster | CCD dominant share | Interpretation |
+| --- | ---: | ---: | --- | ---: | --- |
+| `Mistral Nemo` | 12B | 0.648 | Nordic Europe | 25.3% | Strongest follow-up line, but still part of the same mid-sized text band. |
+| `Qwen2.5 7B` | 7B | 0.640 | Nordic Europe | 17.8% | Close to Mistral on UniMoral with less CCD concentration. |
+| `Llama 3.1 8B` | 8B | 0.639 | Nordic Europe | 24.7% | Similar UniMoral score to Qwen and Llama 3; not a clean size ladder. |
+| `Llama 3 8B` | 8B | 0.632 | Nordic Europe | 22.0% | Slightly lower but still inside the 7B-12B cluster. |
+| `Llama 3.2 1B` | 1B | 0.406 | Nordic Europe | 15.9% | Clear low line; useful as the practical floor warning. |
+
+![Additional model sweep UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg)
+
+![Additional model sweep scaling readout](figures/exploratory/additional_model_sweep_scaling.svg)
+
+![Additional model sweep CCD concentration](figures/exploratory/additional_model_sweep_ccd_dominant_share.svg)
+
+Full tables and provenance remain in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/).
+
 
 ### CCD-Bench Choice Behavior
 
@@ -405,7 +434,7 @@ For the main audience, the README stays focused on claims and figures. The full 
 | Are any published reruns currently live? | No currently published line is shown as live. | `results/release/2026-04-19-option1/README.md` |
 | Are all comparable non-generation result surfaces regenerated? | Yes: root README, release tables, reports, and SVG figures are generated from tracked artifacts. | `make release`; `make audit` |
 | Is strict UniMoral RQ1-RQ4 completion achieved? | Not yet; documented MiniMax RQ2/RQ3/RQ4 saved-artifact gaps remain. | `unimoral-failure-checklist.csv`; `unimoral-completion-audit.md` |
-| Does the May 13 exploratory sweep change the main story? | No; it adds a small-model capability-floor check and leaves the release interpretation unchanged. | `results/exploratory/2026-05-13-additional-model-sweep/` |
+| What does the May 13 Mistral/Qwen/Llama follow-up add? | A capability-floor check: 7B-12B routes cluster near 0.632-0.648 on UniMoral, while Llama 3.2 1B drops to 0.406. | `results/exploratory/2026-05-13-additional-model-sweep/` |
 
 Key files for reviewers and collaborators:
 

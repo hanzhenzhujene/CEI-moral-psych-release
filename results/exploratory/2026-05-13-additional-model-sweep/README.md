@@ -2,7 +2,7 @@
 
 Date: 2026-05-13
 
-This exploratory sweep tested additional OpenRouter model routes on UniMoral action prediction and CCD-Bench cultural choice style. It is intentionally separate from the main Option 1 release package and asks whether older or smaller routes show a different pattern from the main model matrix.
+This follow-up brings five older or smaller OpenRouter routes into the deliverable as a capability-floor check. It asks whether `Mistral`, `Qwen`, and smaller `Llama` routes change the main moral-psych story, or whether they mainly show where text moral-choice performance starts to fall off.
 
 ## Key Findings
 
@@ -10,7 +10,7 @@ This exploratory sweep tested additional OpenRouter model routes on UniMoral act
 - Weakest UniMoral result: **Llama 3.2 1B** at **0.406**; this is the only clear low-performing line.
 - The other four UniMoral lines are tightly clustered from **0.632** to **0.648**, so the main separation is the 1B route versus the 7B-12B routes.
 - CCD-Bench is **not accuracy**. All five lines peak on **Nordic Europe**, but concentration differs: **Llama 3.2 1B** is most diffuse at **15.9%**, while **Mistral Nemo** is most concentrated at **25.3%**.
-- Scaling readout: there is **no clean monotonic scaling law** in this sweep. Llama 3.2 1B is much weaker on UniMoral, but the 7B-12B models are tightly clustered.
+- Scaling readout: this looks like a **capability floor**, not a clean monotonic scaling law. Llama 3.2 1B is much weaker on UniMoral, but the 7B-12B models are tightly clustered.
 
 ## Interpretation
 
@@ -18,9 +18,9 @@ This exploratory sweep tested additional OpenRouter model routes on UniMoral act
 
 **Benchmark-wise:** UniMoral gives a clear performance separation between the very small 1B route and the stronger 7B-12B cluster. CCD-Bench gives a style/concentration readout rather than a correctness score: all models peak on Nordic Europe, but Llama 3.2 1B is most diffuse (15.9% dominant share; 9.12 effective clusters), while Mistral Nemo is most concentrated (25.3%; 7.22 effective clusters).
 
-**Scaling-wise:** There is no clean monotonic scaling law. The move from 1B to 7B+ matters a lot, but above that threshold the 7B-12B models cluster closely rather than improving smoothly with size. This looks more like a capability floor than a simple bigger-is-better trend.
+**Compared with the main release:** the follow-up supports the same high-level interpretation. Once a route is in the mid-sized instruction-model range, text moral-choice scores are close enough that the benchmark-specific story matters more than a simple model-size ranking. The 1B route is the warning case.
 
-**Bottom line:** The additional sweep does not overturn the main release story. It adds one useful detail: very small models can fall off sharply, while several older or mid-sized instruction routes remain competitive on the selected text/style checks.
+**Bottom line:** this is the practical takeaway to report: do not overclaim a universal bigger-is-better trend. Very small routes can fall off sharply, while several older or mid-sized instruction routes remain competitive on selected text moral-choice and cultural-style checks.
 
 ## Result Tables
 
@@ -56,4 +56,4 @@ This exploratory sweep tested additional OpenRouter model routes on UniMoral act
 
 - UniMoral accuracy is computed from the completed run records with the same final A/B scoring rule across all five routes; no new API calls were used.
 - CCD-Bench reports cultural-choice distribution and concentration, not correctness.
-- This is an exploratory sweep, not a replacement for the main release matrix.
+- This follow-up is a capability-floor check, not a replacement for the main release matrix.

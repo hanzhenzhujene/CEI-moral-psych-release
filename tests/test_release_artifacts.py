@@ -1044,6 +1044,14 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "Best OpenAI UniMoral" in text
         assert "GPT-4o-mini reference line" not in text
         assert "76,486/76,486 parsed prompts" not in text
+        assert "Small-model follow-up" in text
+        assert "May 13 Mistral/Qwen/Llama sweep adds a capability-floor check" in text
+        assert "Small-model capability floor | May 13 follow-up" in text
+        assert "### Small-Model Follow-Up: Capability Floor" in text
+        assert "`Mistral Nemo` | 12B | 0.648" in text
+        assert "additional_model_sweep_unimoral_accuracy.svg" in text
+        assert "additional_model_sweep_scaling.svg" in text
+        assert "additional_model_sweep_ccd_dominant_share.svg" in text
         assert "The hardest benchmark is SMID" in text
         assert "Bigger is not automatically more moral" in text
         if "CCD-Bench shows cultural choice style, not accuracy" in text:
@@ -1190,6 +1198,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "**Current GitHub-facing boundary:**" not in topline_summary.split("## Frozen Snapshot Scope", 1)[0]
     assert "OpenAI/GPT references" in topline_summary
     assert "Best OpenAI UniMoral" in topline_summary
+    assert "Small-model follow-up" in topline_summary
+    assert "Mistral Nemo" in topline_summary
     assert "GPT-4o-mini reference line" not in topline_summary
     assert "76,486/76,486 parsed prompts" not in topline_summary
     assert "## Frozen Snapshot Scope" in topline_summary

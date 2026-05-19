@@ -10106,6 +10106,9 @@ def append_tldr_section(
             f"- **OpenAI/GPT references:** {len(openai_reference_rows)} OpenAI text rows are now back in the release. Best OpenAI UniMoral is `{best_openai_unimoral['line_label']}` at {fmt_float(as_float(best_openai_unimoral['unimoral_action_accuracy']))}; best OpenAI Value is `{best_openai_value['line_label']}` at {fmt_float(as_float(best_openai_value['value_average_accuracy']))}. Read them as text-side calibration points, not as a GPT S/M/L size curve and not as evidence on SMID."
         )
     lines.append(
+        "- **Small-model follow-up:** the May 13 Mistral/Qwen/Llama sweep adds a capability-floor check, not a new leaderboard. `Mistral Nemo` leads that sweep on UniMoral at 0.648, the 7B-12B routes cluster from 0.632 to 0.648, and `Llama 3.2 1B` drops to 0.406 with a lower answer rate. So what: very small routes are risky for human-choice moral reasoning, while several older or mid-sized instruction routes remain usable text/style baselines."
+    )
+    lines.append(
         f"- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy ({fmt_float(as_float(smid_summary['mean_accuracy']))}) and widest spread ({fmt_float(as_float(smid_summary['spread']))}), while `UniMoral` is tightly clustered ({fmt_float(as_float(unimoral_summary['spread']))} spread). The bottleneck is seeing moral meaning in images, not basic text moral labeling."
     )
     unimoral_takeaway = unimoral_rq_tldr_takeaway(release_dir)
@@ -10326,6 +10329,9 @@ def append_interpretation_sections(
             f"| OpenAI/GPT text references | {len(openai_reference_rows)} OpenAI rows are included. Best OpenAI UniMoral: `{best_openai_unimoral['line_label']}` at {fmt_float(best_openai_unimoral['unimoral_action_accuracy'])}; best OpenAI Value: `{best_openai_value['line_label']}` at {fmt_float(best_openai_value['value_average_accuracy'])}. | These tell us where GPT-style text routes sit relative to the open-weight families; they do not make a GPT S/M/L scaling claim and do not cover SMID. |"
         )
     lines.append(
+        "| Small-model capability floor | May 13 follow-up: `Mistral Nemo` reaches 0.648 on UniMoral; the 7B-12B routes sit in a narrow 0.632-0.648 band; `Llama 3.2 1B` falls to 0.406 with only 73.6% answered. | This is the practical capacity warning: below the mid-sized instruction-model range, the model may stop reliably following human moral-choice tasks, but above that floor older routes can still be useful baselines. |"
+    )
+    lines.append(
         f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The hard part is visual moral perception: models do not just need moral vocabulary, they need to read morally relevant cues in images. |"
     )
     lines.append(
@@ -10366,6 +10372,7 @@ def append_interpretation_sections(
         ]
     )
     append_family_scaling_summary_table(lines, family_scaling_summary)
+    append_small_model_capability_floor_section(lines, figure_prefix)
     lines.extend(
         [
             "",
@@ -10590,26 +10597,43 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
     )
 
 
-def append_latest_additional_model_sweep_section(lines: list[str]) -> None:
+def append_small_model_capability_floor_section(lines: list[str], release_figure_prefix: str) -> None:
+    base_prefix = (
+        release_figure_prefix[: -len("/release")]
+        if release_figure_prefix.endswith("/release")
+        else release_figure_prefix
+    )
+    exploratory_figure_prefix = f"{base_prefix}/exploratory"
+    repo_prefix = "../../../" if release_figure_prefix.startswith("../") else ""
+    exploratory_result_link = f"{repo_prefix}results/exploratory/2026-05-13-additional-model-sweep/"
     lines.extend(
         [
-            "## Latest Additional Model Sweep",
             "",
-            "The May 13 additional-model sweep tests older or smaller OpenRouter routes on `UniMoral` and `CCD-Bench` to check whether they produce a different pattern from the main model matrix. Full tables and provenance are in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/).",
+            "### Small-Model Follow-Up: Capability Floor",
             "",
-            "**Model-wise:** Mistral Nemo is the top UniMoral line at 0.648, but Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B are close behind from 0.632 to 0.640. Llama 3.2 1B is the clear weak line at 0.406, with a lower answer rate as well.",
+            "The May 13 follow-up brings the older/smaller `Mistral`, `Qwen`, and `Llama` routes into the main interpretation. It is not a replacement for the current S/M/L release matrix; it answers a narrower question: where does moral-choice performance start to fall off?",
             "",
-            "**Benchmark-wise:** UniMoral gives a clear performance separation between the very small 1B route and the stronger 7B-12B cluster. CCD-Bench gives a style/concentration readout rather than a correctness score: all models peak on Nordic Europe, but Llama 3.2 1B is most diffuse (15.9% dominant share; 9.12 effective clusters), while Mistral Nemo is most concentrated (25.3%; 7.22 effective clusters).",
+            "**So what:** `Mistral Nemo` is the top follow-up line on UniMoral at 0.648, but `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` are close behind from 0.632 to 0.640. The real separation is `Llama 3.2 1B` at 0.406 with a lower answer rate. For reporting, say this as a capability-floor result: once models are around the 7B-12B instruction range, several older routes are competitive on text moral-choice/style checks; the 1B route is the line that clearly falls below the floor.",
             "",
-            "**Scaling-wise:** There is no clean monotonic scaling law. The move from 1B to 7B+ matters a lot, but above that threshold the 7B-12B models cluster closely rather than improving smoothly with size. This looks more like a capability floor than a simple bigger-is-better trend.",
+            "**Compared with the current main results:** this supports the same high-level story rather than changing it. Text moral-choice scores mostly live in a narrow band once the model is capable enough, so the more important differences are benchmark-specific: SMID remains the hard visual-moral bottleneck in the main matrix, while CCD-Bench remains a cultural-choice style readout instead of an accuracy race.",
             "",
-            "**Bottom line:** The additional sweep does not overturn the main release story. It adds one useful detail: very small models can fall off sharply, while several older or mid-sized instruction routes remain competitive on the selected text/style checks.",
+            "**CCD readout:** all five follow-up lines peak on `Nordic Europe`; the difference is concentration, not correctness. `Llama 3.2 1B` is the most diffuse at 15.9% dominant share, while `Mistral Nemo` is most concentrated at 25.3%. That means the small-model follow-up does not discover a new cultural direction; it shows how sharply each route collapses onto the same dominant cluster.",
             "",
-            "![Additional model sweep UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg)",
+            "| Follow-up model | Size slot | UniMoral accuracy | CCD dominant cluster | CCD dominant share | Interpretation |",
+            "| --- | ---: | ---: | --- | ---: | --- |",
+            "| `Mistral Nemo` | 12B | 0.648 | Nordic Europe | 25.3% | Strongest follow-up line, but still part of the same mid-sized text band. |",
+            "| `Qwen2.5 7B` | 7B | 0.640 | Nordic Europe | 17.8% | Close to Mistral on UniMoral with less CCD concentration. |",
+            "| `Llama 3.1 8B` | 8B | 0.639 | Nordic Europe | 24.7% | Similar UniMoral score to Qwen and Llama 3; not a clean size ladder. |",
+            "| `Llama 3 8B` | 8B | 0.632 | Nordic Europe | 22.0% | Slightly lower but still inside the 7B-12B cluster. |",
+            "| `Llama 3.2 1B` | 1B | 0.406 | Nordic Europe | 15.9% | Clear low line; useful as the practical floor warning. |",
             "",
-            "![Additional model sweep CCD concentration](figures/exploratory/additional_model_sweep_ccd_dominant_share.svg)",
+            f"![Additional model sweep UniMoral accuracy]({exploratory_figure_prefix}/additional_model_sweep_unimoral_accuracy.svg)",
             "",
-            "![Additional model sweep scaling readout](figures/exploratory/additional_model_sweep_scaling.svg)",
+            f"![Additional model sweep scaling readout]({exploratory_figure_prefix}/additional_model_sweep_scaling.svg)",
+            "",
+            f"![Additional model sweep CCD concentration]({exploratory_figure_prefix}/additional_model_sweep_ccd_dominant_share.svg)",
+            "",
+            f"Full tables and provenance remain in [results/exploratory/2026-05-13-additional-model-sweep]({exploratory_result_link}).",
             "",
         ]
     )
@@ -10895,7 +10919,7 @@ def append_release_status_and_artifacts_section(
             "| Are any published reruns currently live? | No currently published line is shown as live. | `results/release/2026-04-19-option1/README.md` |",
             "| Are all comparable non-generation result surfaces regenerated? | Yes: root README, release tables, reports, and SVG figures are generated from tracked artifacts. | `make release`; `make audit` |",
             "| Is strict UniMoral RQ1-RQ4 completion achieved? | Not yet; documented MiniMax RQ2/RQ3/RQ4 saved-artifact gaps remain. | `unimoral-failure-checklist.csv`; `unimoral-completion-audit.md` |",
-            "| Does the May 13 exploratory sweep change the main story? | No; it adds a small-model capability-floor check and leaves the release interpretation unchanged. | `results/exploratory/2026-05-13-additional-model-sweep/` |",
+            "| What does the May 13 Mistral/Qwen/Llama follow-up add? | A capability-floor check: 7B-12B routes cluster near 0.632-0.648 on UniMoral, while Llama 3.2 1B drops to 0.406. | `results/exploratory/2026-05-13-additional-model-sweep/` |",
             "",
             "Key files for reviewers and collaborators:",
             "",
