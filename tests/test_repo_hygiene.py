@@ -95,9 +95,13 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
 
     unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
     assert "UniMoral family-size scaling by RQ" in unimoral_family_scaling_svg
-    assert "OpenAI references are gray dashed lines where scored" in unimoral_family_scaling_svg
-    assert "GPT 4.1-mini 0.679" in unimoral_family_scaling_svg
+    assert "OpenAI reference is GPT-4o-mini only in this UniMoral RQ figure" in unimoral_family_scaling_svg
+    assert "Metric: Accuracy" in unimoral_family_scaling_svg
+    assert "Metric: BERTScore F1" in unimoral_family_scaling_svg
+    assert "Metric: METEOR" in unimoral_family_scaling_svg
     assert "GPT 4o-mini 0.711" in unimoral_family_scaling_svg
+    assert "GPT 5-mini" not in unimoral_family_scaling_svg
+    assert "GPT 4.1-mini" not in unimoral_family_scaling_svg
     assert ">Ref<" not in unimoral_family_scaling_svg
     assert "OpenAI Ref" in unimoral_family_scaling_svg
     assert "#dc2626" in unimoral_family_scaling_svg

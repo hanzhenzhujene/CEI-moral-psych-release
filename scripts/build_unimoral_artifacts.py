@@ -50,13 +50,6 @@ DISPLAY_LINE_LABELS = {
 DISPLAY_FAMILY_LABELS = {
     "GPT4 only": "OpenAI Ref",
 }
-OPENAI_ACTION_REFERENCE_VALUES = [
-    ("GPT-4o-mini Ref", 0.6727003642987249),
-    ("GPT-5-nano Ref", 5741 / 8784),
-    ("GPT-4.1-nano Ref", 5677 / 8784),
-    ("GPT-5-mini Ref", 5955 / 8784),
-    ("GPT-4.1-mini Ref", 5968 / 8784),
-]
 ACTION_LOOKUP_ALIASES = {
     "GPT-4o-mini Ref": "GPT4 only",
     "OpenAI-Ref": "GPT4 only",
@@ -1163,7 +1156,7 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
     width = left + cell_w * len(task_names) + 52
     height = top + cell_h * len(lines) + 128
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
-    parts.append("<style>text{font-family:Arial,sans-serif;font-size:15px;fill:#17202a}.title{font-size:28px;font-weight:700}.subtitle{font-size:16px;fill:#334155}.axis{font-weight:700}.small{font-size:13px;fill:#334155}.tiny{font-size:12px;fill:#475569;font-weight:700}</style>")
+    parts.append("<style>text{font-family:Arial,sans-serif;font-size:15px;fill:#17202a}.title{font-size:28px;font-weight:700}.subtitle{font-size:16px;fill:#334155}.axis{font-weight:700}.metric-header{font-size:17px;font-weight:800;fill:#17202a}.small{font-size:13px;fill:#334155}.tiny{font-size:12px;fill:#475569;font-weight:700}</style>")
     parts.append('<rect width="100%" height="100%" fill="white"/>')
     parts.append('<text x="28" y="42" class="title">UniMoral RQ1-RQ3 exact-match accuracy</text>')
     parts.append('<text x="28" y="74" class="subtitle">One shared metric for the three classification-style RQs, so values can be compared horizontally. Higher is better.</text>')
@@ -1174,9 +1167,9 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
     for col, task_name in enumerate(task_names):
         x = left + col * cell_w
         task = TASKS[task_name]
-        parts.append(f'<text x="{x + 6}" y="{top - 48}" class="axis">{task["rq"]}</text>')
-        parts.append(f'<text x="{x + 6}" y="{top - 30}" class="axis">{html.escape(task["label"])}</text>')
-        parts.append(f'<text x="{x + 6}" y="{top - 12}" class="small">exact-match accuracy</text>')
+        parts.append(f'<text x="{x + 6}" y="{top - 56}" class="axis">{task["rq"]}</text>')
+        parts.append(f'<text x="{x + 6}" y="{top - 36}" class="axis">{html.escape(task["label"])}</text>')
+        parts.append(f'<text x="{x + 6}" y="{top - 12}" class="metric-header">Metric: Accuracy</text>')
     for family, start_index, end_index in family_group_spans():
         y = top + start_index * cell_h - 4
         h = (end_index - start_index + 1) * cell_h - 6
@@ -1238,14 +1231,14 @@ def svg_generation_quality(rows: list[dict[str, object]], path: Path) -> None:
         return width_value * position
 
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
-    parts.append("<style>text{font-family:Arial,sans-serif;font-size:15px;fill:#17202a}.title{font-size:30px;font-weight:700}.metric{font-size:18px;font-weight:700;fill:#17202a}.subtitle{font-size:16px;fill:#334155}.axis{font-weight:700}.small{font-size:13px;fill:#334155}.tiny{font-size:12px;fill:#475569;font-weight:700}</style>")
+    parts.append("<style>text{font-family:Arial,sans-serif;font-size:15px;fill:#17202a}.title{font-size:30px;font-weight:700}.metric{font-size:24px;font-weight:800;fill:#17202a}.subtitle{font-size:16px;fill:#334155}.axis{font-weight:700}.small{font-size:13px;fill:#334155}.tiny{font-size:12px;fill:#475569;font-weight:700}</style>")
     parts.append('<rect width="100%" height="100%" fill="white"/>')
     parts.append('<text x="36" y="42" class="title">UniMoral RQ4 generation quality</text>')
     parts.append('<text x="36" y="74" class="subtitle">RQ4 asks models to generate consequences, so it is not mixed with the RQ1-RQ3 accuracy chart.</text>')
     parts.append('<text x="36" y="100" class="subtitle">Both metrics are higher-better. BERTScore F1 reads semantic similarity; METEOR reads lexical overlap.</text>')
     parts.append('<text x="36" y="124" class="subtitle">Each metric panel uses its own axis so within-metric differences are visible.</text>')
-    parts.append(f'<text x="{bert_x}" y="{top - 44}" class="metric">BERTScore F1</text>')
-    parts.append(f'<text x="{meteor_x}" y="{top - 44}" class="metric">METEOR</text>')
+    parts.append(f'<text x="{bert_x}" y="{top - 44}" class="metric">Metric: BERTScore F1</text>')
+    parts.append(f'<text x="{meteor_x}" y="{top - 44}" class="metric">Metric: METEOR</text>')
     for tick in (0.60, 0.65, 0.70, 0.75):
         x = bert_x + bert_w * ((tick - bert_min) / (bert_max - bert_min))
         parts.append(f'<line x1="{x:.2f}" y1="{top - 12}" x2="{x:.2f}" y2="{height - 76}" stroke="#e5e7eb"/>')
@@ -1352,11 +1345,11 @@ def svg_spread(rows: list[dict[str, object]], path: Path) -> None:
 
 def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
     specs = [
-        ("unimoral_action_prediction", "accuracy", "RQ1 action", "Accuracy", 0.55, 0.70, [0.55, 0.60, 0.65, 0.70]),
-        ("unimoral_moral_typology", "accuracy", "RQ2 typology", "Accuracy", 0.54, 0.61, [0.54, 0.56, 0.58, 0.60]),
-        ("unimoral_factor_attribution", "accuracy", "RQ3 attribution", "Accuracy", 0.54, 0.64, [0.54, 0.58, 0.62, 0.64]),
-        ("unimoral_consequence_generation", "bert_score_f1", "RQ4 generation", "BERTScore F1", 0.60, 0.75, [0.60, 0.65, 0.70, 0.75]),
-        ("unimoral_consequence_generation", "meteor", "RQ4 generation", "METEOR", 0.07, 0.16, [0.07, 0.10, 0.13, 0.16]),
+        ("unimoral_action_prediction", "accuracy", "RQ1 Action Prediction", "Accuracy", 0.55, 0.70, [0.55, 0.60, 0.65, 0.70]),
+        ("unimoral_moral_typology", "accuracy", "RQ2 Moral Typology", "Accuracy", 0.54, 0.61, [0.54, 0.56, 0.58, 0.60]),
+        ("unimoral_factor_attribution", "accuracy", "RQ3 Factor Attribution", "Accuracy", 0.54, 0.64, [0.54, 0.58, 0.62, 0.64]),
+        ("unimoral_consequence_generation", "bert_score_f1", "RQ4 Consequence Generation", "BERTScore F1", 0.60, 0.75, [0.60, 0.65, 0.70, 0.75]),
+        ("unimoral_consequence_generation", "meteor", "RQ4 Consequence Generation", "METEOR", 0.07, 0.16, [0.07, 0.10, 0.13, 0.16]),
     ]
     panel_positions = [
         (48, 160, 540, 300),
@@ -1392,8 +1385,6 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
         return output
 
     def reference_values(task_name: str, metric: str) -> list[tuple[str, float]]:
-        if task_name == "unimoral_action_prediction" and metric == "accuracy":
-            return list(OPENAI_ACTION_REFERENCE_VALUES)
         values = []
         for row in rows_by_task.get(task_name, []):
             family, _size_slot = line_meta_for(str(row.get("line_label", "")))
@@ -1462,6 +1453,8 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
         ".title{font-size:30px;font-weight:700}"
         ".subtitle{font-size:16px;fill:#334155}"
         ".axis{font-weight:700}"
+        ".panel-title{font-size:21px;font-weight:800;fill:#17202a}"
+        ".metric-label{font-size:18px;font-weight:800;fill:#17202a}"
         ".small{font-size:13px;fill:#475569}"
         ".tiny{font-size:11px;fill:#64748b;font-weight:700}"
         ".legend{font-size:21px;font-weight:700;fill:#243447}"
@@ -1475,16 +1468,17 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
     parts.append('<text x="42" y="48" class="title">UniMoral family-size scaling by RQ</text>')
     parts.append('<text x="42" y="78" class="subtitle">Line charts show how each family moves across S/M/L slots inside each UniMoral task. Higher is better in every panel.</text>')
     parts.append('<text x="42" y="102" class="subtitle">Classification panels use strict-complete accuracy cells. RQ4 uses rows with usable generation scores; remaining MiniMax caveats stay in the audit tables.</text>')
-    parts.append('<text x="42" y="126" class="subtitle">OpenAI references are gray dashed lines where scored: RQ1 has five text refs; RQ2-RQ4 currently have GPT-4o-mini only.</text>')
+    parts.append('<text x="42" y="126" class="subtitle">OpenAI reference is GPT-4o-mini only in this UniMoral RQ figure; other OpenAI rows remain text refs in the broader comparison tables.</text>')
 
     for (task_name, metric, title, metric_label, low, high, ticks), (x, y, panel_w, panel_h) in zip(specs, panel_positions):
         plot_x = x + 72
-        plot_y = y + 70
+        plot_y = y + 92
         plot_w = panel_w - 210
-        plot_h = panel_h - 128
+        plot_h = panel_h - 150
         parts.append(f'<rect x="{x}" y="{y}" width="{panel_w}" height="{panel_h}" class="panel"/>')
-        parts.append(f'<text x="{x + 22}" y="{y + 32}" class="axis">{html.escape(title)}</text>')
-        parts.append(f'<text x="{x + 22}" y="{y + 52}" class="small">{html.escape(metric_label)}; top: {html.escape(best_label(task_name, metric))}</text>')
+        parts.append(f'<text x="{x + 22}" y="{y + 34}" class="panel-title">{html.escape(title)}</text>')
+        parts.append(f'<text x="{x + 22}" y="{y + 59}" class="metric-label">Metric: {html.escape(metric_label)}</text>')
+        parts.append(f'<text x="{x + 22}" y="{y + 78}" class="small">Top line: {html.escape(best_label(task_name, metric))}</text>')
         for tick in ticks:
             ty = scaled_y(float(tick), low, high, plot_y, plot_h)
             parts.append(f'<line x1="{plot_x}" y1="{ty:.1f}" x2="{plot_x + plot_w}" y2="{ty:.1f}" stroke="#e5e7eb"/>')
@@ -1548,7 +1542,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
             text_x = x + 20
         parts.append(f'<text x="{text_x}" y="{legend_y}" class="legend">{html.escape(display_family_label(family))}</text>')
     parts.append('<text x="92" y="980" class="legend-note">Takeaway: UniMoral does not have one simple bigger-is-better curve. The winner changes by task, so report the RQ-specific pattern instead of one averaged moral-reasoning story.</text>')
-    parts.append('<text x="92" y="1012" class="legend-note">OpenAI/GPT references are text-only calibration lines. RQ1 shows the five OpenAI refs; RQ2-RQ4 only have GPT-4o-mini in the current scored UniMoral RQ set.</text>')
+    parts.append('<text x="92" y="1012" class="legend-note">This UniMoral RQ figure uses GPT-4o-mini as the only OpenAI reference line; the other OpenAI rows stay in the broader text-comparison tables.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
