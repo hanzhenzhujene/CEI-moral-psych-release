@@ -126,6 +126,7 @@ def test_unimoral_launcher_routes_minimax_direct_when_key_exists() -> None:
 
     output = run_provider_script(
         'UNIMORAL_SOURCE_ONLY=1 source "./scripts/run_unimoral_missing_tasks.sh" >/dev/null 2>/dev/null; '
+        'unset OPENROUTER_API_KEY; export MINIMAX_API_KEY="dummy-minimax-key"; '
         'configure_routed_model "openrouter/minimax/minimax-m2.5" 2>/dev/null; '
         'printf "%s\\n" "$ROUTED_MODEL" "$ROUTED_PROVIDER" "$ROUTED_BASE_URL" "$ROUTED_KEY_VAR" "$ROUTED_KEY_STATE"',
         env=env,
@@ -147,6 +148,7 @@ def test_unimoral_launcher_falls_back_to_openrouter_in_auto_mode() -> None:
 
     output = run_provider_script(
         'UNIMORAL_SOURCE_ONLY=1 source "./scripts/run_unimoral_missing_tasks.sh" >/dev/null 2>/dev/null; '
+        'unset MINIMAX_API_KEY; export OPENROUTER_API_KEY="dummy-openrouter-key"; '
         'configure_routed_model "openrouter/minimax/minimax-m2.5" 2>/dev/null; '
         'printf "%s\\n" "$ROUTED_MODEL" "$ROUTED_PROVIDER" "$ROUTED_BASE_URL" "$ROUTED_KEY_VAR" "$ROUTED_KEY_STATE"',
         env=env,
