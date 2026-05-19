@@ -50,6 +50,13 @@ DISPLAY_LINE_LABELS = {
 DISPLAY_FAMILY_LABELS = {
     "GPT4 only": "OpenAI Ref",
 }
+OPENAI_ACTION_REFERENCE_VALUES = [
+    ("GPT-4o-mini Ref", 0.6727003642987249),
+    ("GPT-5-nano Ref", 5741 / 8784),
+    ("GPT-4.1-nano Ref", 5677 / 8784),
+    ("GPT-5-mini Ref", 5955 / 8784),
+    ("GPT-4.1-mini Ref", 5968 / 8784),
+]
 ACTION_LOOKUP_ALIASES = {
     "GPT-4o-mini Ref": "GPT4 only",
     "OpenAI-Ref": "GPT4 only",
@@ -1352,11 +1359,11 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
         ("unimoral_consequence_generation", "meteor", "RQ4 generation", "METEOR", 0.07, 0.16, [0.07, 0.10, 0.13, 0.16]),
     ]
     panel_positions = [
-        (48, 160, 500, 300),
-        (590, 160, 500, 300),
-        (1132, 160, 500, 300),
-        (210, 520, 600, 330),
-        (890, 520, 600, 330),
+        (48, 160, 540, 300),
+        (630, 160, 540, 300),
+        (1212, 160, 540, 300),
+        (190, 520, 650, 330),
+        (960, 520, 650, 330),
     ]
     size_positions = {"S": 0, "M": 1, "L": 2}
     curve_families = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"]
@@ -1384,7 +1391,10 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
             output[family].sort(key=lambda item: item[0])
         return output
 
-    def reference_value(task_name: str, metric: str) -> float | None:
+    def reference_values(task_name: str, metric: str) -> list[tuple[str, float]]:
+        if task_name == "unimoral_action_prediction" and metric == "accuracy":
+            return list(OPENAI_ACTION_REFERENCE_VALUES)
+        values = []
         for row in rows_by_task.get(task_name, []):
             family, _size_slot = line_meta_for(str(row.get("line_label", "")))
             if family != "GPT4 only":
@@ -1397,14 +1407,35 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
                 continue
             if metric != "accuracy" and not status.startswith("complete"):
                 continue
-            return value
-        return None
+            values.append((display_line_label(row.get("line_label", "")), value))
+        return values
 
     def scaled_y(value: float, low: float, high: float, plot_y: float, plot_h: float) -> float:
         if high <= low:
             return plot_y + plot_h / 2
         position = max(0.0, min(1.0, (value - low) / (high - low)))
         return plot_y + plot_h * (1.0 - position)
+
+    def spread_reference_labels(items: list[tuple[str, float, float]], top: float, bottom: float) -> list[tuple[str, float, float, float]]:
+        if not items:
+            return []
+        min_gap = 17.0
+        ordered = sorted(items, key=lambda item: item[2])
+        positions = [max(top, min(bottom, item[2])) for item in ordered]
+        for index in range(1, len(positions)):
+            positions[index] = max(positions[index], positions[index - 1] + min_gap)
+        overflow = positions[-1] - bottom
+        if overflow > 0:
+            positions = [position - overflow for position in positions]
+            positions[0] = max(top, positions[0])
+            for index in range(1, len(positions)):
+                positions[index] = max(positions[index], positions[index - 1] + min_gap)
+        for index in range(len(positions) - 2, -1, -1):
+            positions[index] = min(positions[index], positions[index + 1] - min_gap)
+        return [
+            (label, value, natural_y, max(top, min(bottom, label_y)))
+            for (label, value, natural_y), label_y in zip(ordered, positions)
+        ]
 
     def best_label(task_name: str, metric: str) -> str:
         candidates = []
@@ -1423,31 +1454,33 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
         label, value = max(candidates, key=lambda item: item[1])
         return f"{label} ({value:.3f})"
 
-    width, height = 1680, 960
+    width, height = 1800, 1110
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
     parts.append(
         "<style>"
         "text{font-family:Arial,sans-serif;font-size:13px;fill:#17202a}"
         ".title{font-size:30px;font-weight:700}"
-        ".subtitle{font-size:15px;fill:#334155}"
+        ".subtitle{font-size:16px;fill:#334155}"
         ".axis{font-weight:700}"
-        ".small{font-size:12px;fill:#475569}"
+        ".small{font-size:13px;fill:#475569}"
         ".tiny{font-size:11px;fill:#64748b;font-weight:700}"
-        ".legend{font-size:17px;font-weight:700;fill:#243447}"
-        ".legend-title{font-size:16px;font-weight:700;fill:#17202a}"
+        ".legend{font-size:21px;font-weight:700;fill:#243447}"
+        ".legend-note{font-size:14px;font-weight:500;fill:#475569}"
+        ".legend-title{font-size:19px;font-weight:700;fill:#17202a}"
         ".panel{fill:#fbfcfd;stroke:#d8dee4;rx:8}"
+        ".legend-card{fill:#ffffff;stroke:#d8dee4;stroke-width:1.2}"
         "</style>"
     )
     parts.append('<rect width="100%" height="100%" fill="white"/>')
     parts.append('<text x="42" y="48" class="title">UniMoral family-size scaling by RQ</text>')
     parts.append('<text x="42" y="78" class="subtitle">Line charts show how each family moves across S/M/L slots inside each UniMoral task. Higher is better in every panel.</text>')
     parts.append('<text x="42" y="102" class="subtitle">Classification panels use strict-complete accuracy cells. RQ4 uses rows with usable generation scores; remaining MiniMax caveats stay in the audit tables.</text>')
-    parts.append('<text x="42" y="126" class="subtitle">GPT-4o-mini Ref is marked as a dashed horizontal line in each panel, not as a fourth size point after L.</text>')
+    parts.append('<text x="42" y="126" class="subtitle">OpenAI references are gray dashed lines where scored: RQ1 has five text refs; RQ2-RQ4 currently have GPT-4o-mini only.</text>')
 
     for (task_name, metric, title, metric_label, low, high, ticks), (x, y, panel_w, panel_h) in zip(specs, panel_positions):
         plot_x = x + 72
         plot_y = y + 70
-        plot_w = panel_w - 118
+        plot_w = panel_w - 210
         plot_h = panel_h - 128
         parts.append(f'<rect x="{x}" y="{y}" width="{panel_w}" height="{panel_h}" class="panel"/>')
         parts.append(f'<text x="{x + 22}" y="{y + 32}" class="axis">{html.escape(title)}</text>')
@@ -1461,20 +1494,23 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
             parts.append(f'<line x1="{tx:.1f}" y1="{plot_y}" x2="{tx:.1f}" y2="{plot_y + plot_h}" stroke="#eef2f7"/>')
             parts.append(f'<text x="{tx:.1f}" y="{plot_y + plot_h + 28}" text-anchor="middle" class="axis">{html.escape(label)}</text>')
 
-        ref_value = reference_value(task_name, metric)
-        if ref_value is not None:
-            ref_y = scaled_y(ref_value, low, high, plot_y, plot_h)
-            ref_label_y = max(plot_y + 18, min(plot_y + plot_h - 8, ref_y - 10))
-            parts.append(
-                f'<line x1="{plot_x}" y1="{ref_y:.1f}" x2="{plot_x + plot_w}" y2="{ref_y:.1f}" '
-                'stroke="#6b7280" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 7"/>'
-            )
-            parts.append(
-                f'<rect x="{plot_x + plot_w - 182:.1f}" y="{ref_label_y - 17:.1f}" width="174" height="23" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>'
-            )
-            parts.append(
-                f'<text x="{plot_x + plot_w - 95:.1f}" y="{ref_label_y:.1f}" text-anchor="middle" class="axis">GPT-4o-mini Ref {ref_value:.3f}</text>'
-            )
+        ref_items = [
+            (label, value, scaled_y(value, low, high, plot_y, plot_h))
+            for label, value in reference_values(task_name, metric)
+        ]
+        if ref_items:
+            for label, value, ref_y, label_y in spread_reference_labels(ref_items, plot_y + 12, plot_y + plot_h - 6):
+                short_label = label.replace(" Ref", "").replace("GPT-", "GPT ")
+                parts.append(
+                    f'<line x1="{plot_x}" y1="{ref_y:.1f}" x2="{plot_x + plot_w}" y2="{ref_y:.1f}" '
+                    'stroke="#6b7280" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.6"/>'
+                )
+                label_x = plot_x + plot_w + 12
+                parts.append(
+                    f'<line x1="{plot_x + plot_w:.1f}" y1="{ref_y:.1f}" x2="{label_x - 5:.1f}" y2="{label_y - 4:.1f}" '
+                    'stroke="#94a3b8" stroke-width="1.1" opacity="0.75"/>'
+                )
+                parts.append(f'<text x="{label_x:.1f}" y="{label_y:.1f}" class="tiny">{html.escape(short_label)} {value:.3f}</text>')
 
         for family, points in point_rows(task_name, metric).items():
             if not points:
@@ -1498,19 +1534,21 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
             for px, py, _, _value in coords:
                 parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="7" fill="white" stroke="{fill}" stroke-width="3"/>')
                 parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="3" fill="{fill}"/>')
-    legend_x, legend_y = 92, 888
+    legend_x, legend_y = 92, 930
+    parts.append(f'<rect x="48" y="884" width="1704" height="176" rx="18" class="legend-card"/>')
     parts.append(f'<text x="{legend_x}" y="{legend_y}" class="legend-title">Family legend</text>')
     for index, family in enumerate(legend_families):
-        x = legend_x + 150 + index * 220
+        x = legend_x + 190 + index * 245
         fill = FAMILY_COLORS.get(family, "#6b7280")
         if family == "GPT4 only":
-            parts.append(f'<line x1="{x - 4}" y1="{legend_y - 6}" x2="{x + 34}" y2="{legend_y - 6}" stroke="{fill}" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 7"/>')
-            text_x = x + 46
+            parts.append(f'<line x1="{x - 4}" y1="{legend_y - 8}" x2="{x + 46}" y2="{legend_y - 8}" stroke="{fill}" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 8"/>')
+            text_x = x + 60
         else:
-            parts.append(f'<circle cx="{x}" cy="{legend_y - 6}" r="9" fill="{fill}"/>')
-            text_x = x + 16
+            parts.append(f'<circle cx="{x}" cy="{legend_y - 8}" r="11" fill="{fill}"/>')
+            text_x = x + 20
         parts.append(f'<text x="{text_x}" y="{legend_y}" class="legend">{html.escape(display_family_label(family))}</text>')
-    parts.append('<text x="92" y="930" class="small">Takeaway: UniMoral scaling is task-specific. Winners rotate across RQs, and GPT-4o-mini Ref is a dashed text-reference line rather than a GPT S/M/L curve.</text>')
+    parts.append('<text x="92" y="980" class="legend-note">Takeaway: UniMoral does not have one simple bigger-is-better curve. The winner changes by task, so report the RQ-specific pattern instead of one averaged moral-reasoning story.</text>')
+    parts.append('<text x="92" y="1012" class="legend-note">OpenAI/GPT references are text-only calibration lines. RQ1 shows the five OpenAI refs; RQ2-RQ4 only have GPT-4o-mini in the current scored UniMoral RQ set.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 

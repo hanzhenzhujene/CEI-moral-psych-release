@@ -7741,32 +7741,32 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
     if family == "Gemma":
         return (
             "Full S/M/L comparable sweep on all three comparable benchmarks.",
-            "Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic.",
+            "Gemma is the cleanest size test in this repo, and it still does not give a simple bigger-is-better story: text tasks improve overall, but SMID dips at M and rebounds at L.",
         )
     if family == "Llama":
         return (
             "Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence.",
-            "Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic.",
+            "Llama gets much better after the small line, especially on text, and S-to-L also helps SMID. But M still beats L on some text metrics, so the useful story is improvement after S, not a clean monotonic ladder.",
         )
     if family == "Qwen":
         return (
             "Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence after the recovered large line.",
-            "Qwen improves from S to M on text tasks and then largely plateaus at L, while the recovered large SMID line is much stronger than the small line. That supports task-specific scaling, not a single monotonic curve.",
+            "Qwen improves from S to M on text and then mostly plateaus. On SMID, the recovered L vision line is clearly stronger than S. That makes Qwen a case where scale helps some surfaces but not all of them.",
         )
     if family == "DeepSeek":
         return (
             "The S/M/L text lines are now accuracy-comparable where text-only metrics exist, but no DeepSeek slot has a public SMID route.",
-            "Read the DeepSeek size curve as text-only evidence: S and L now come from saved shard reruns, M remains the frozen closed-slice line, and all three still omit SMID.",
+            "DeepSeek should be discussed as a text-only curve. It is useful for UniMoral and Value comparisons, but it cannot support an all-around moral-psych claim because the image benchmark is absent.",
         )
     if family == OPENAI_REFERENCE_FAMILY_LABEL:
         return (
             "Five text-only reference rows, not an OpenAI family-size scaling sweep.",
-            "The OpenAI rows calibrate text-side UniMoral, Value Kaleidoscope, and CCD-Bench behavior against the open-weight family curves. They should not be read as OpenAI S/M/L scaling evidence or as vision-side SMID evidence.",
+            "The OpenAI rows are a sanity check for text-side performance. They show that the best GPT text refs are very competitive on UniMoral and Value, but they do not answer the vision question and should not be renamed as GPT S/M/L.",
         )
     available_metrics = sum(1 for points in metric_points.values() if points)
     return (
         f"{available_metrics} comparable metric series available.",
-        "Current public evidence is too sparse for a stronger within-family scaling claim.",
+        "Current public evidence is too sparse for a stronger within-family scaling claim; report the observed points and avoid turning route gaps into model failures.",
     )
 
 
@@ -8392,12 +8392,12 @@ def render_family_scaling_profile_svg(
 ) -> None:
     _ = progress_rows
     visual_specs = VISUAL_COMPARABLE_METRIC_SPECS
-    width, height = 1280, 1100
-    top_panel_left, top_panel_width = 72, 540
-    top_panel_gap = 44
-    top_panel_top, top_panel_height = 244, 360
-    chart_left_pad, chart_right_pad = 56, 46
-    chart_top_pad, chart_bottom_pad = 62, 62
+    width, height = 1500, 1240
+    top_panel_left, top_panel_width = 72, 650
+    top_panel_gap = 56
+    top_panel_top, top_panel_height = 260, 430
+    chart_left_pad, chart_right_pad = 70, 158
+    chart_top_pad, chart_bottom_pad = 74, 76
     y_min, y_max = 0.0, 0.75
     chart_size_slots = ["S", "M", "L"]
     chart_slot_index = {slot: index for index, slot in enumerate(chart_size_slots)}
@@ -8421,7 +8421,36 @@ def render_family_scaling_profile_svg(
         weight = (value - y_min) / (y_max - y_min)
         return panel_y + top_panel_height - chart_bottom_pad - usable_h * weight
 
+    def spread_reference_labels(items: list[tuple[str, float, float]], top: float, bottom: float) -> list[tuple[str, float, float, float]]:
+        if not items:
+            return []
+        min_gap = 19.0
+        ordered = sorted(items, key=lambda item: item[2])
+        positions = [max(top, min(bottom, item[2])) for item in ordered]
+        for index in range(1, len(positions)):
+            positions[index] = max(positions[index], positions[index - 1] + min_gap)
+        overflow = positions[-1] - bottom
+        if overflow > 0:
+            positions = [position - overflow for position in positions]
+            positions[0] = max(top, positions[0])
+            for index in range(1, len(positions)):
+                positions[index] = max(positions[index], positions[index - 1] + min_gap)
+        for index in range(len(positions) - 2, -1, -1):
+            positions[index] = min(positions[index], positions[index + 1] - min_gap)
+        return [
+            (label, value, natural_y, max(top, min(bottom, label_y)))
+            for (label, value, natural_y), label_y in zip(ordered, positions)
+        ]
+
     lines = svg_header(width, height)
+    lines.append(
+        "<style>"
+        ".ref-title { font: 700 15px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #374151; }"
+        ".ref-label { font: 700 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #4b5563; }"
+        ".legend-big { font: 700 18px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }"
+        ".legend-note { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #34495e; }"
+        "</style>"
+    )
     intro_lines = [
         "UniMoral is grouped in Figure 1 above; these comparable panels start at SMID.",
         "Two comparable benchmark panels here: SMID and Value Kaleidoscope.",
@@ -8519,24 +8548,35 @@ def render_family_scaling_profile_svg(
         if reference_rows:
             reference_rows.sort(key=lambda row: OPENAI_REFERENCE_LINE_ORDER.get(row["line_label"], 99))
             reference_values = [float(row[field]) for row in reference_rows]
-            for reference_row in reference_rows:
-                reference_value = float(reference_row[field])
-                reference_y = y_for(panel_y, reference_value)
+            reference_items = [
+                (reference_row["line_label"], float(reference_row[field]), y_for(panel_y, float(reference_row[field])))
+                for reference_row in reference_rows
+            ]
+            for reference_label, reference_value, reference_y, label_y in spread_reference_labels(
+                reference_items,
+                chart_top + 34,
+                chart_bottom - 4,
+            ):
                 lines.append(
                     f'<line x1="{chart_left}" y1="{reference_y:.2f}" x2="{chart_right}" y2="{reference_y:.2f}" '
-                    'stroke="#6b7280" stroke-width="2.0" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.52"/>'
+                    'stroke="#6b7280" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.62"/>'
+                )
+                label_x = chart_right + 16
+                short_reference_label = reference_label.replace(" Ref", "")
+                lines.append(
+                    f'<line x1="{chart_right:.2f}" y1="{reference_y:.2f}" x2="{label_x - 6:.2f}" y2="{label_y - 4:.2f}" '
+                    'stroke="#94a3b8" stroke-width="1.1" opacity="0.8"/>'
+                )
+                lines.append(
+                    f'<text x="{label_x:.2f}" y="{label_y:.2f}" class="ref-label">{escape_xml(short_reference_label)} {fmt_pct(reference_value)}</text>'
                 )
             best_reference = max(reference_rows, key=lambda row: float(row[field]))
             best_reference_value = float(best_reference[field])
-            label_y = panel_y + 86
             lines.append(
-                f'<rect x="{chart_right - 238}" y="{label_y - 26:.2f}" width="230" height="42" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>'
+                f'<text x="{chart_right + 16}" y="{chart_top - 24:.2f}" class="ref-title">OpenAI refs {fmt_pct(min(reference_values))}-{fmt_pct(max(reference_values))}</text>'
             )
             lines.append(
-                f'<text x="{chart_right - 123}" y="{label_y - 7:.2f}" text-anchor="middle" class="axis">OpenAI refs {fmt_pct(min(reference_values))}-{fmt_pct(max(reference_values))}</text>'
-            )
-            lines.append(
-                f'<text x="{chart_right - 123}" y="{label_y + 10:.2f}" text-anchor="middle" class="small">Best {escape_xml(best_reference["line_label"])} {fmt_pct(best_reference_value)}</text>'
+                f'<text x="{chart_right + 16}" y="{chart_top - 6:.2f}" class="small">Best {escape_xml(best_reference["line_label"])} {fmt_pct(best_reference_value)}</text>'
             )
 
         footer_text = (
@@ -8546,9 +8586,10 @@ def render_family_scaling_profile_svg(
         )
         lines.append(f'<text x="{panel_x + 18}" y="{panel_y + top_panel_height - 14}" class="small">{footer_text}</text>')
 
-    lines.append('<rect x="48" y="644" width="1184" height="360" rx="18" class="legend-card"/>')
-    lines.append('<text x="72" y="670" class="tiny">HOW TO READ THIS FIGURE</text>')
-    lines.append('<line x1="618" y1="672" x2="618" y2="982" class="guide"/>')
+    legend_card_top = 732
+    lines.append(f'<rect x="48" y="{legend_card_top}" width="{width - 96}" height="430" rx="18" class="legend-card"/>')
+    lines.append(f'<text x="72" y="{legend_card_top + 30}" class="tiny">HOW TO READ THIS FIGURE</text>')
+    lines.append(f'<line x1="704" y1="{legend_card_top + 32}" x2="704" y2="{legend_card_top + 386}" class="guide"/>')
     left_lines = [
         "Panels 1-2 start at SMID because UniMoral",
         "has its combined RQ1-RQ4 block above.",
@@ -8561,9 +8602,9 @@ def render_family_scaling_profile_svg(
         "Do not mix proxy evidence into accuracy scaling.",
     ]
     for index, line in enumerate(left_lines):
-        lines.append(f'<text x="72" y="{696 + index * 26}" class="body">{escape_xml(line)}</text>')
+        lines.append(f'<text x="72" y="{legend_card_top + 64 + index * 28}" class="legend-note">{escape_xml(line)}</text>')
 
-    lines.append('<text x="656" y="696" class="tiny">FAMILY READ</text>')
+    lines.append(f'<text x="742" y="{legend_card_top + 64}" class="tiny">FAMILY READ</text>')
     legend_items = [
         ("MiniMax", "Value S/M/L are scored; SMID S/L have routes, while M has no SMID route."),
         ("Qwen", "Value scored at S/M/L; SMID at S/L."),
@@ -8573,23 +8614,22 @@ def render_family_scaling_profile_svg(
         (OPENAI_REFERENCE_FAMILY_LABEL, "Five text-only refs; dashed where a text metric exists."),
     ]
     for index, (family, note) in enumerate(legend_items):
-        x = 656
-        y = 722 + index * 34
+        x = 742
+        y = legend_card_top + 96 + index * 48
         color = family_base_color(family)
         if family == OPENAI_REFERENCE_FAMILY_LABEL:
-            lines.append(f'<line x1="{x}" y1="{y - 8}" x2="{x + 34}" y2="{y - 8}" stroke="{color}" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 7"/>')
-            label_x = x + 46
+            lines.append(f'<line x1="{x}" y1="{y - 10}" x2="{x + 44}" y2="{y - 10}" stroke="{color}" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 8"/>')
+            label_x = x + 58
         else:
-            lines.append(f'<rect x="{x}" y="{y - 16}" width="18" height="18" rx="5" fill="{color}"/>')
-            label_x = x + 28
-        lines.append(f'<text x="{label_x}" y="{y - 2}" class="axis">{escape_xml(family)}</text>')
-        lines.append(f'<text x="{x + 138}" y="{y - 2}" class="body">{escape_xml(note)}</text>')
+            lines.append(f'<rect x="{x}" y="{y - 20}" width="24" height="24" rx="6" fill="{color}"/>')
+            label_x = x + 36
+        lines.append(f'<text x="{label_x}" y="{y - 2}" class="legend-big">{escape_xml(family)}</text>')
+        for note_index, note_line in enumerate(_wrap_svg_text(note, 70)[:2]):
+            lines.append(f'<text x="{x + 170}" y="{y - 2 + note_index * 16}" class="legend-note">{escape_xml(note_line)}</text>')
 
-    lines.append('<text x="656" y="912" class="tiny">EVIDENCE BOUNDARY</text>')
-    lines.append('<text x="656" y="938" class="body">This figure starts after the combined UniMoral benchmark block.</text>')
-    lines.append('<text x="656" y="966" class="body">It stops at SMID + Value to avoid repeating UniMoral.</text>')
-    lines.append('<text x="656" y="994" class="body">That avoids mixing comparable accuracy with coverage or proxy evidence.</text>')
-    lines.append('<text x="72" y="1044" class="small">Takeaway: current evidence supports task-specific scaling statements on SMID and Value, while UniMoral scaling is handled in the RQ1-RQ4 panel.</text>')
+    lines.append(f'<text x="742" y="{legend_card_top + 392}" class="tiny">EVIDENCE BOUNDARY</text>')
+    lines.append(f'<text x="900" y="{legend_card_top + 392}" class="legend-note">This figure stops at SMID + Value so accuracy, coverage, and proxy behavior do not get mixed.</text>')
+    lines.append('<text x="72" y="1206" class="small">Takeaway: scaling is benchmark-specific. SMID and Value do not rise cleanly from S to M to L, and OpenAI/GPT rows are text-reference calibration lines rather than a size-family curve.</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -9742,49 +9782,49 @@ def append_benchmark_reading_guide_table(lines: list[str], _rows: list[dict[str,
             "UniMoral RQ1: action prediction",
             "Given a dilemma and two possible actions, predict which action the human annotator chose.",
             "This is descriptive moral choice: it asks whether the model can track situated human decisions, not whether it can declare the one correct answer.",
-            "Higher accuracy means the model better matched human action choices. The current spread is tight, so RQ1 is useful but partly near-saturated.",
+            "Higher accuracy means the model better matched human choices. Scores are close together, so RQ1 is a useful sanity check but not the whole story.",
         ),
         (
             "UniMoral RQ2: moral typology",
             "Given the chosen action, label the reasoning style: deontological, utilitarian, rights-based, or virtuous.",
             "The same action can come from different moral theories. This task checks whether the model can name the reasoning frame behind a choice.",
-            "Read this separately from RQ1: a model can predict the action while still missing the moral frame humans attached to it.",
+            "Read this separately from RQ1: a model can guess the action while still misunderstanding the moral theory behind it.",
         ),
         (
             "UniMoral RQ3: factor attribution",
             "Identify what shaped the decision, such as emotion, moral values, culture, responsibility, relationships, legality, politeness, or sacred values.",
             "Moral psychology cares about why people choose, not only what they choose. RQ3 tests whether the model can recover those human explanation factors.",
-            "Higher accuracy means better attribution of the decision driver. Low or uneven scores point to weak explanation modeling rather than only weak action prediction.",
+            "Higher accuracy means the model better identifies the reason behind the choice. Low or uneven scores mean the model may know the answer but not the human motive.",
         ),
         (
             "UniMoral RQ4: consequence generation",
             "Generate likely consequences of the selected action.",
             "Consequences connect moral choice to expected harm, benefit, social reaction, and future responsibility, which are central to moral reasoning.",
-            "Read RQ4 as generation quality using BERTScore F1 and METEOR. It is not directly comparable to RQ1-RQ3 accuracy.",
+            "Read RQ4 as generation quality. BERTScore F1 captures meaning overlap; METEOR captures wording overlap. Neither is the same as classification accuracy.",
         ),
         (
             "SMID",
             "Look at real images and infer moral wrongness or the dominant moral foundation.",
             "Moral judgment is often visual, social, and affective. SMID asks whether models can see morally relevant cues in concrete scenes, not only reason over text.",
-            "Higher accuracy means closer alignment with normed human image judgments. Low scores can reflect visual ambiguity and weak human consensus, so treat SMID as the vision-side bottleneck.",
+            "Higher accuracy means closer alignment with human image judgments. This is the current bottleneck because image-based moral cues are harder and more ambiguous than text labels.",
         ),
         (
             "Value Kaleidoscope",
             "For a situation and a candidate value, right, or duty, decide whether it is relevant and whether it supports, opposes, or fits either way.",
             "Pluralistic moral judgment often involves several values in tension. This benchmark checks whether the model can recognize that value structure before making any final decision.",
-            "Higher accuracy means better value tagging and polarity assignment. It should not be read as proof that the model resolved the ethical conflict correctly.",
+            "Higher accuracy means better value tagging and polarity assignment. It shows whether the model sees the value structure, not whether it solved the whole ethical dilemma.",
         ),
         (
             "CCD-Bench",
             "Choose among ten culturally grounded responses to a cross-cultural dilemma.",
             "Cultural conflict is a moral-psych question because different communities may weigh duties, relationships, hierarchy, autonomy, and social harmony differently.",
-            "Do not read CCD-Bench as universal accuracy. Read the heatmap and concentration figure as the model's cultural choice style and possible over-reliance on one cluster.",
+            "Do not read CCD-Bench as universal accuracy. Read it as style: which cultural cluster the model leans toward, and whether it collapses too strongly onto one option.",
         ),
         (
             "DeNEVIL",
             "Probe how the model behaves when prompts try to surface unethical or value-violating content.",
             "This matters for alignment: a model can classify moral labels well but still respond poorly when asked to generate risky behavior.",
-            "This release uses proxy traces, so read protective, contextual, risky, and empty-response categories as behavioral evidence, not as paper-faithful DeNEVIL scoring.",
+            "This release uses proxy traces, so read protective, contextual, risky, and empty-response categories as behavior evidence, not as paper-faithful DeNEVIL scoring.",
         ),
     ]
     lines.extend(
@@ -9916,9 +9956,9 @@ def unimoral_rq_tldr_takeaway(release_dir: Path | None) -> str | None:
     if len(winners) < 4:
         return None
     return (
-        "- **UniMoral RQ-level interpretation:** The four-task view should not be collapsed into one scalar: "
-        f"task winners rotate across {', '.join(winners)}. "
-        "That pattern supports task-specific moral-reasoning strengths rather than a simple bigger-is-better family scaling story."
+        "- **UniMoral has different subskills:** do not collapse the four RQs into one moral-reasoning score. "
+        f"Task winners rotate across {', '.join(winners)}. "
+        "That means models can be good at predicting human choices but weaker at naming the moral frame, explaining the decision factor, or generating consequences."
     )
 
 
@@ -10051,29 +10091,29 @@ def append_tldr_section(
         ]
     )
     lines.append(
-        "- **What each benchmark means:** `UniMoral` is the human moral-reasoning pipeline (choose an action, name the moral frame, identify the decision factor, and generate consequences); `SMID` is moral perception from images; `Value Kaleidoscope` is value/right/duty recognition; `CCD-Bench` is cultural choice style under value conflict; `DeNEVIL` is risky-prompt behavior. That is why only UniMoral, SMID, and Value are treated as comparable accuracy surfaces, while CCD-Bench and DeNEVIL stay behavioral readouts."
+        "- **What each benchmark means:** `UniMoral` asks whether a model can follow a human moral-choice pipeline; `SMID` asks whether it can see moral cues in images; `Value Kaleidoscope` asks whether it recognizes values, rights, and duties in text; `CCD-Bench` asks which cultural response style it chooses under conflict; `DeNEVIL` asks how it behaves on risky prompts. Only UniMoral, SMID, and Value are comparable accuracy surfaces; CCD-Bench and DeNEVIL are behavior readouts."
     )
     if best_full_line is not None and best_full_line_mean is not None:
         lines.append(
-            f"- **Best like-for-like line:** `{best_full_line['line_label']}` is the strongest fully comparable line, averaging {fmt_float(best_full_line_mean)} across UniMoral action {fmt_float(as_float(best_full_line['unimoral_action_accuracy']))}, SMID {fmt_float(as_float(best_full_line['smid_average_accuracy']))}, and Value {fmt_float(as_float(best_full_line['value_average_accuracy']))}. This is the cleanest overall topline because all three comparable metrics are observed on the same line."
+            f"- **Best like-for-like line:** `{best_full_line['line_label']}` is the cleanest overall comparison because it has all three comparable metrics: UniMoral action {fmt_float(as_float(best_full_line['unimoral_action_accuracy']))}, SMID {fmt_float(as_float(best_full_line['smid_average_accuracy']))}, and Value {fmt_float(as_float(best_full_line['value_average_accuracy']))}, averaging {fmt_float(best_full_line_mean)}. This is the safest single-line topline because it is not missing the vision benchmark."
         )
     if best_text_only_line is not None:
         lines.append(
-            f"- **Best text-only line:** `{best_text_only_line['line_label']}` is the strongest pure text line, reaching UniMoral {fmt_float(as_float(best_text_only_line['unimoral_action_accuracy']))} and Value {fmt_float(as_float(best_text_only_line['value_average_accuracy']))}. It should not be called the best all-around line because there is no public SMID route on that line."
+            f"- **Best text-only line:** `{best_text_only_line['line_label']}` is strongest when the question is only text moral reasoning, reaching UniMoral {fmt_float(as_float(best_text_only_line['unimoral_action_accuracy']))} and Value {fmt_float(as_float(best_text_only_line['value_average_accuracy']))}. It is not an all-around winner because it has no public SMID route."
         )
     if best_openai_unimoral is not None and best_openai_value is not None:
         lines.append(
-            f"- **OpenAI text-only references:** {len(openai_reference_rows)} OpenAI reference rows are integrated. Best OpenAI UniMoral is `{best_openai_unimoral['line_label']}` at {fmt_float(as_float(best_openai_unimoral['unimoral_action_accuracy']))}; best OpenAI Value is `{best_openai_value['line_label']}` at {fmt_float(as_float(best_openai_value['value_average_accuracy']))}. These calibrate text moral-reasoning results against OpenAI routes, but they are not S/M/L scaling curves and do not provide SMID or DeNEVIL evidence."
+            f"- **OpenAI/GPT references:** {len(openai_reference_rows)} OpenAI text rows are now back in the release. Best OpenAI UniMoral is `{best_openai_unimoral['line_label']}` at {fmt_float(as_float(best_openai_unimoral['unimoral_action_accuracy']))}; best OpenAI Value is `{best_openai_value['line_label']}` at {fmt_float(as_float(best_openai_value['value_average_accuracy']))}. Read them as text-side calibration points, not as a GPT S/M/L size curve and not as evidence on SMID."
         )
     lines.append(
-        f"- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy ({fmt_float(as_float(smid_summary['mean_accuracy']))}) and widest spread ({fmt_float(as_float(smid_summary['spread']))}), while `UniMoral` is tightly clustered ({fmt_float(as_float(unimoral_summary['spread']))} spread). The main bottleneck is vision-side moral judgment, not basic text moral classification."
+        f"- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy ({fmt_float(as_float(smid_summary['mean_accuracy']))}) and widest spread ({fmt_float(as_float(smid_summary['spread']))}), while `UniMoral` is tightly clustered ({fmt_float(as_float(unimoral_summary['spread']))} spread). The bottleneck is seeing moral meaning in images, not basic text moral labeling."
     )
     unimoral_takeaway = unimoral_rq_tldr_takeaway(release_dir)
     if unimoral_takeaway is not None:
         lines.append(unimoral_takeaway)
     if gemma_s is not None and gemma_m is not None and gemma_l is not None and llama_m is not None and llama_l is not None:
         lines.append(
-            f"- **There is no universal scaling law:** `Gemma` is non-monotonic on SMID ({fmt_float(as_float(gemma_s['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_m['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_l['smid_average_accuracy']))}), and `Llama-M` still beats `Llama-L` on Value ({fmt_float(as_float(llama_m['value_average_accuracy']))} vs {fmt_float(as_float(llama_l['value_average_accuracy']))}). Size helps on some tasks, but not in one clean monotonic pattern."
+            f"- **Bigger is not automatically more moral:** `Gemma` is non-monotonic on SMID ({fmt_float(as_float(gemma_s['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_m['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_l['smid_average_accuracy']))}), and `Llama-M` still beats `Llama-L` on Value ({fmt_float(as_float(llama_m['value_average_accuracy']))} vs {fmt_float(as_float(llama_l['value_average_accuracy']))}). Size helps in some places, but the direction depends on the benchmark."
         )
     if ccd_min_row is not None and ccd_max_row is not None and dominant_cluster is not None:
         lines.append(
@@ -10104,16 +10144,16 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "If you want the benchmark results before the tables, start here. These visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.",
             "",
-            "OpenAI text-only reference rows are shown in the comparable-accuracy and CCD figures. They are not treated as a GPT/OpenAI S/M/L scaling series, and they have no SMID or DeNEVIL row.",
+            "OpenAI text-only reference rows are shown in the comparable-accuracy and CCD figures. They are drawn as gray calibration references, not as a GPT/OpenAI S/M/L size series, and they have no SMID or DeNEVIL row.",
             "OpenAI/GPT scope: the scored reference rows are `openai/gpt-4o-mini`, `openai/gpt-5-nano`, `openai/gpt-4.1-nano`, `openai/gpt-5-mini`, and `openai/gpt-4.1-mini`.",
             "",
             "### 1. UniMoral RQ1-RQ4: family-size scaling and task readout",
             "",
             f"![UniMoral family-size scaling by RQ]({figure_prefix}/option1_unimoral_family_scaling.svg)",
             "",
-            "_What it tests: UniMoral treats moral reasoning as a four-step pipeline. RQ1 asks which action a person would choose, RQ2 asks what kind of moral rule or reasoning frame the action reflects, RQ3 asks which factor shaped the decision, and RQ4 asks what consequences follow from the action._",
+            "_What it tests: UniMoral breaks moral reasoning into four human-facing steps: what action someone chooses, what moral frame the choice reflects, what factor shaped the choice, and what consequences the action may cause._",
             "",
-            "_Why it matters: moral psychology is about situated human choices and explanations, not just whether a model can label something as right or wrong. Use this figure to see whether S/M/L scaling helps within each part of that pipeline; the winning line changes across RQs, so UniMoral should not be reduced to one monotonic size curve._",
+            "_Why it matters: moral psychology is about choices plus explanations, not just a right/wrong label. The figure shows that the winner changes across RQs, so the honest takeaway is not `larger model = better moral reasoner`; it is `different model families handle different parts of moral reasoning differently`._",
             "",
             f"![UniMoral RQ1-RQ3 exact-match accuracy]({figure_prefix}/option1_unimoral_task_heatmap.svg)",
             "",
@@ -10121,13 +10161,13 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             f"![UniMoral RQ4 generation quality]({figure_prefix}/option1_unimoral_generation_quality.svg)",
             "",
-            "_How to read RQ4: consequence generation is open-ended, so it stays in the UniMoral block but is read with BERTScore F1 plus METEOR rather than accuracy. Treat it as semantic and lexical overlap with reference consequences, not as a moral-correctness score._",
+            "_How to read RQ4: consequence generation is open-ended. BERTScore F1 asks whether the model said something semantically close to the reference consequence; METEOR asks whether the wording overlaps. It is not a right/wrong accuracy score._",
             "",
             "### 2. SMID / Value Kaleidoscope: topline comparable accuracy",
             "",
             f"![Comparable accuracy bars]({figure_prefix}/option1_benchmark_accuracy_bars.svg)",
             "",
-            "_What it tests: SMID asks whether a vision-capable model can read morally and socially salient cues from images; Value Kaleidoscope asks whether a text model can recognize which values, rights, or duties matter in a situation and whether they support or oppose it._",
+            "_What it tests: SMID asks whether a vision model can see morally important cues in images. Value Kaleidoscope asks whether a text model can spot which values, rights, or duties matter in a situation and whether they support or oppose the action._",
             "",
             "_How to read it: UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._",
             "",
@@ -10135,7 +10175,7 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             f"![Family scaling profile]({figure_prefix}/option1_family_scaling_profile.svg)",
             "",
-            "_Why it matters: if scaling helped moral perception and value recognition uniformly, these lines would rise cleanly from S to M to L. They do not, so the useful read is benchmark-specific scaling rather than one universal bigger-is-better claim._",
+            "_Why it matters: if scale helped moral perception and value recognition in a simple way, every line would climb from S to M to L. They do not. The useful read is where size helps, where it plateaus, and where it can even hurt._",
             "",
             "_Use this next to compare size effects on SMID and Value after the combined UniMoral block, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._",
             "",
@@ -10143,7 +10183,7 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             f"![CCD choice distribution]({figure_prefix}/option1_ccd_choice_distribution.svg)",
             "",
-            "_What it tests: CCD-Bench puts models in explicit value conflicts where ten answer options correspond to different GLOBE cultural clusters. The figure shows deviation from the 10% uniform baseline across those clusters._",
+            "_What it tests: CCD-Bench puts models in value conflicts where ten answer options map to cultural clusters. The figure shows which cultural response styles each model over-selects or avoids relative to a 10% uniform baseline._",
             "",
             "_Why it matters: this is not a single right-answer benchmark. It tells a moral-psych reader which culturally grounded response style a model tends to privilege when values conflict._",
             "",
@@ -10159,7 +10199,7 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "_What it tests: DeNEVIL-style evaluation looks for value vulnerabilities under risky or ethically loaded prompts. In this release the paper-faithful MoralPrompt export is not local, so this figure reports auditable proxy behavior categories from saved traces._",
             "",
-            "_How to read it: protective refusals and corrective/contextual answers are the main safety-aligned behaviors; potentially risky continuations are the warning sign. This is proxy behavioral evidence, not benchmark-faithful accuracy._",
+            "_How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._",
             "",
             "Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.",
             "",
@@ -10267,7 +10307,7 @@ def append_interpretation_sections(
     )
     if best_full_line is not None and best_full_line_mean is not None:
         lines.append(
-            f"| Strongest fully observed comparable line | `{best_full_line['line_label']}` averages {fmt_float(best_full_line_mean)} across UniMoral action {fmt_float(best_full_line['unimoral_action_accuracy'])}, SMID {fmt_float(best_full_line['smid_average_accuracy'])}, and Value {fmt_float(best_full_line['value_average_accuracy'])}. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |"
+            f"| Strongest fully observed comparable line | `{best_full_line['line_label']}` averages {fmt_float(best_full_line_mean)} across UniMoral action {fmt_float(best_full_line['unimoral_action_accuracy'])}, SMID {fmt_float(best_full_line['smid_average_accuracy'])}, and Value {fmt_float(best_full_line['value_average_accuracy'])}. | This is the cleanest all-around topline because it includes text moral reasoning, image moral perception, and value recognition on the same line. |"
         )
     if best_text_only_line is not None:
         best_text_only_mean = mean(
@@ -10279,20 +10319,20 @@ def append_interpretation_sections(
             if text_only_value is not None
         )
         lines.append(
-            f"| Strongest text-only comparable line | `{best_text_only_line['line_label']}` reaches UniMoral {fmt_float(best_text_only_line['unimoral_action_accuracy'])} and Value {fmt_float(best_text_only_line['value_average_accuracy'])}, a two-metric mean of {fmt_float(best_text_only_mean)}. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |"
+            f"| Strongest text-only comparable line | `{best_text_only_line['line_label']}` reaches UniMoral {fmt_float(best_text_only_line['unimoral_action_accuracy'])} and Value {fmt_float(best_text_only_line['value_average_accuracy'])}, a two-metric mean of {fmt_float(best_text_only_mean)}. | This is the best answer if the PI asks about text moral reasoning only; it is not the all-around winner because SMID is missing. |"
         )
     if best_openai_unimoral is not None and best_openai_value is not None:
         lines.append(
-            f"| OpenAI text-only reference markers | {len(openai_reference_rows)} OpenAI rows are included. Best OpenAI UniMoral: `{best_openai_unimoral['line_label']}` at {fmt_float(best_openai_unimoral['unimoral_action_accuracy'])}; best OpenAI Value: `{best_openai_value['line_label']}` at {fmt_float(best_openai_value['value_average_accuracy'])}. | These are useful external text references, but they are not OpenAI family-size scaling claims and have no SMID / DeNEVIL evidence in this release. |"
+            f"| OpenAI/GPT text references | {len(openai_reference_rows)} OpenAI rows are included. Best OpenAI UniMoral: `{best_openai_unimoral['line_label']}` at {fmt_float(best_openai_unimoral['unimoral_action_accuracy'])}; best OpenAI Value: `{best_openai_value['line_label']}` at {fmt_float(best_openai_value['value_average_accuracy'])}. | These tell us where GPT-style text routes sit relative to the open-weight families; they do not make a GPT S/M/L scaling claim and do not cover SMID. |"
         )
     lines.append(
-        f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |"
+        f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The hard part is visual moral perception: models do not just need moral vocabulary, they need to read morally relevant cues in images. |"
     )
     lines.append(
-        f"| Closest thing to saturation | `UniMoral` has the tightest range, from {fmt_float(unimoral_summary['min_accuracy'])} to {fmt_float(unimoral_summary['max_accuracy'])} ({fmt_float(unimoral_summary['spread'])} spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |"
+        f"| Closest thing to saturation | `UniMoral` has the tightest range, from {fmt_float(unimoral_summary['min_accuracy'])} to {fmt_float(unimoral_summary['max_accuracy'])} ({fmt_float(unimoral_summary['spread'])} spread). | Most text models are already in the same band on the basic human-choice layer, so the more interesting story is which UniMoral subtask each model handles best. |"
     )
     lines.append(
-        f"| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. The OpenAI rows are reference markers and are excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
+        f"| Scaling-law read | `Gemma` is still the cleanest full S/M/L sweep. Even there, UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value rises from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data say scale is useful but task-dependent. Bigger models are not automatically better moral reasoners across every benchmark. |"
     )
     lines.extend(
         [

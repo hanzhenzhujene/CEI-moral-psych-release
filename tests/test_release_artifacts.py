@@ -996,14 +996,14 @@ def test_release_builder_emits_expected_files(tmp_path):
         and "Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692" in row["numeric_pattern"]
         and "CCD-Bench" not in row["numeric_pattern"]
         and "Denevil" not in row["numeric_pattern"]
-        and "medium text line still beats the large line" in row["interpretation"]
+        and "M still beats L on some text metrics" in row["interpretation"]
         for row in scaling_rows
     )
     assert any(
         row["family"] == "Gemma"
         and "Full S/M/L comparable sweep" in row["evidence_scope"]
         and "SMID: S 0.417 -> M 0.364 -> L 0.412" in row["numeric_pattern"]
-        and "non-monotonic" in row["interpretation"]
+        and "does not give a simple bigger-is-better story" in row["interpretation"]
         for row in scaling_rows
     )
     assert any(
@@ -1013,8 +1013,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         and "Value Kaleidoscope: S 0.695 -> M 0.635 -> L 0.681" in row["numeric_pattern"]
         and "CCD-Bench" not in row["numeric_pattern"]
         and "Denevil" not in row["numeric_pattern"]
-        and "text-only evidence" in row["interpretation"]
-        and "all three still omit SMID" in row["interpretation"]
+        and "text-only curve" in row["interpretation"]
+        and "image benchmark is absent" in row["interpretation"]
         for row in scaling_rows
     )
     assert any(
@@ -1024,7 +1024,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         and "best GPT-4.1-mini Ref 0.679" in row["numeric_pattern"]
         and "Value Kaleidoscope: range 0.617-0.739" in row["numeric_pattern"]
         and "best GPT-5-mini Ref 0.739" in row["numeric_pattern"]
-        and "not be read as OpenAI S/M/L scaling evidence" in row["interpretation"]
+        and "should not be renamed as GPT S/M/L" in row["interpretation"]
         for row in scaling_rows
     )
 
@@ -1036,16 +1036,16 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "Key takeaways:" in text
         assert "Best like-for-like line" in text
         assert "What each benchmark means" in text
-        assert "UniMoral` is the human moral-reasoning pipeline" in text
-        assert "CCD-Bench` is cultural choice style under value conflict" in text
+        assert "UniMoral` asks whether a model can follow a human moral-choice pipeline" in text
+        assert "CCD-Bench` asks which cultural response style it chooses under conflict" in text
         assert "**Current GitHub-facing boundary:**" not in text.split("## Benchmark Result Visuals", 1)[0]
         assert "Best text-only line" in text
-        assert "OpenAI text-only references" in text
+        assert "OpenAI/GPT references" in text
         assert "Best OpenAI UniMoral" in text
         assert "GPT-4o-mini reference line" not in text
         assert "76,486/76,486 parsed prompts" not in text
         assert "The hardest benchmark is SMID" in text
-        assert "There is no universal scaling law" in text
+        assert "Bigger is not automatically more moral" in text
         if "CCD-Bench shows cultural choice style, not accuracy" in text:
             assert "`DeepSeek-S` at 13.8% to `GPT-5-nano Ref` at 27.8%" in text
         if "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" in text:
@@ -1188,7 +1188,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Key takeaways:" in topline_summary
     assert "What each benchmark means" in topline_summary
     assert "**Current GitHub-facing boundary:**" not in topline_summary.split("## Frozen Snapshot Scope", 1)[0]
-    assert "OpenAI text-only references" in topline_summary
+    assert "OpenAI/GPT references" in topline_summary
     assert "Best OpenAI UniMoral" in topline_summary
     assert "GPT-4o-mini reference line" not in topline_summary
     assert "76,486/76,486 parsed prompts" not in topline_summary
@@ -1249,9 +1249,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Do not mix proxy evidence into accuracy scaling." in family_scaling_svg
     assert "Value S/M/L are parsed from saved logs" in family_scaling_svg
     assert "Qwen" in family_scaling_svg
-    assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
+    assert "Takeaway: scaling is benchmark-specific" in family_scaling_svg
     if "MiniMax" in family_scaling_svg:
-        assert "Value S/M/L are scored; SMID S/L have routes, while M has no SMID route." in family_scaling_svg
+        assert "Value S/M/L are scored; SMID S/L have routes" in family_scaling_svg
+        assert "route." in family_scaling_svg
     assert "Value scored at S/M/L; SMID at S/L." in family_scaling_svg
     assert "Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists." in family_scaling_svg
     assert "full S/M/L sweep on SMID and Value." in family_scaling_svg

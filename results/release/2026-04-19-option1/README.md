@@ -11,13 +11,13 @@ It separates two things clearly:
 
 Key takeaways:
 
-- **What each benchmark means:** `UniMoral` is the human moral-reasoning pipeline (choose an action, name the moral frame, identify the decision factor, and generate consequences); `SMID` is moral perception from images; `Value Kaleidoscope` is value/right/duty recognition; `CCD-Bench` is cultural choice style under value conflict; `DeNEVIL` is risky-prompt behavior. That is why only UniMoral, SMID, and Value are treated as comparable accuracy surfaces, while CCD-Bench and DeNEVIL stay behavioral readouts.
-- **Best like-for-like line:** `MiniMax-S` is the strongest fully comparable line, averaging 0.611 across UniMoral action 0.661, SMID 0.432, and Value 0.740. This is the cleanest overall topline because all three comparable metrics are observed on the same line.
-- **Best text-only line:** `GPT-5-mini Ref` is the strongest pure text line, reaching UniMoral 0.678 and Value 0.739. It should not be called the best all-around line because there is no public SMID route on that line.
-- **OpenAI text-only references:** 5 OpenAI reference rows are integrated. Best OpenAI UniMoral is `GPT-4.1-mini Ref` at 0.679; best OpenAI Value is `GPT-5-mini Ref` at 0.739. These calibrate text moral-reasoning results against OpenAI routes, but they are not S/M/L scaling curves and do not provide SMID or DeNEVIL evidence.
-- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.364) and widest spread (0.285), while `UniMoral` is tightly clustered (0.121 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
-- **UniMoral RQ-level interpretation:** The four-task view should not be collapsed into one scalar: task winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `Gemma-S` 0.599, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `Llama-L` 0.157. That pattern supports task-specific moral-reasoning strengths rather than a simple bigger-is-better family scaling story.
-- **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
+- **What each benchmark means:** `UniMoral` asks whether a model can follow a human moral-choice pipeline; `SMID` asks whether it can see moral cues in images; `Value Kaleidoscope` asks whether it recognizes values, rights, and duties in text; `CCD-Bench` asks which cultural response style it chooses under conflict; `DeNEVIL` asks how it behaves on risky prompts. Only UniMoral, SMID, and Value are comparable accuracy surfaces; CCD-Bench and DeNEVIL are behavior readouts.
+- **Best like-for-like line:** `MiniMax-S` is the cleanest overall comparison because it has all three comparable metrics: UniMoral action 0.661, SMID 0.432, and Value 0.740, averaging 0.611. This is the safest single-line topline because it is not missing the vision benchmark.
+- **Best text-only line:** `GPT-5-mini Ref` is strongest when the question is only text moral reasoning, reaching UniMoral 0.678 and Value 0.739. It is not an all-around winner because it has no public SMID route.
+- **OpenAI/GPT references:** 5 OpenAI text rows are now back in the release. Best OpenAI UniMoral is `GPT-4.1-mini Ref` at 0.679; best OpenAI Value is `GPT-5-mini Ref` at 0.739. Read them as text-side calibration points, not as a GPT S/M/L size curve and not as evidence on SMID.
+- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.364) and widest spread (0.285), while `UniMoral` is tightly clustered (0.121 spread). The bottleneck is seeing moral meaning in images, not basic text moral labeling.
+- **UniMoral has different subskills:** do not collapse the four RQs into one moral-reasoning score. Task winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `Gemma-S` 0.599, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `Llama-L` 0.157. That means models can be good at predicting human choices but weaker at naming the moral frame, explaining the decision factor, or generating consequences.
+- **Bigger is not automatically more moral:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps in some places, but the direction depends on the benchmark.
 - **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `GPT-5-nano Ref` at 27.8%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
 - **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates (92.4% to 99.5% protective response rate). `DeepSeek-S` no longer has the old visibility-collapse problem in the May 9 saved rerun (0.2% no-visible proxy traces).
 
@@ -26,16 +26,16 @@ Key takeaways:
 
 If you want the benchmark results before the tables, start here. These visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
 
-OpenAI text-only reference rows are shown in the comparable-accuracy and CCD figures. They are not treated as a GPT/OpenAI S/M/L scaling series, and they have no SMID or DeNEVIL row.
+OpenAI text-only reference rows are shown in the comparable-accuracy and CCD figures. They are drawn as gray calibration references, not as a GPT/OpenAI S/M/L size series, and they have no SMID or DeNEVIL row.
 OpenAI/GPT scope: the scored reference rows are `openai/gpt-4o-mini`, `openai/gpt-5-nano`, `openai/gpt-4.1-nano`, `openai/gpt-5-mini`, and `openai/gpt-4.1-mini`.
 
 ### 1. UniMoral RQ1-RQ4: family-size scaling and task readout
 
 ![UniMoral family-size scaling by RQ](../../../figures/release/option1_unimoral_family_scaling.svg)
 
-_What it tests: UniMoral treats moral reasoning as a four-step pipeline. RQ1 asks which action a person would choose, RQ2 asks what kind of moral rule or reasoning frame the action reflects, RQ3 asks which factor shaped the decision, and RQ4 asks what consequences follow from the action._
+_What it tests: UniMoral breaks moral reasoning into four human-facing steps: what action someone chooses, what moral frame the choice reflects, what factor shaped the choice, and what consequences the action may cause._
 
-_Why it matters: moral psychology is about situated human choices and explanations, not just whether a model can label something as right or wrong. Use this figure to see whether S/M/L scaling helps within each part of that pipeline; the winning line changes across RQs, so UniMoral should not be reduced to one monotonic size curve._
+_Why it matters: moral psychology is about choices plus explanations, not just a right/wrong label. The figure shows that the winner changes across RQs, so the honest takeaway is not `larger model = better moral reasoner`; it is `different model families handle different parts of moral reasoning differently`._
 
 ![UniMoral RQ1-RQ3 exact-match accuracy](../../../figures/release/option1_unimoral_task_heatmap.svg)
 
@@ -43,13 +43,13 @@ _How to read it: RQ1, RQ2, and RQ3 all use exact-match accuracy, so the three cl
 
 ![UniMoral RQ4 generation quality](../../../figures/release/option1_unimoral_generation_quality.svg)
 
-_How to read RQ4: consequence generation is open-ended, so it stays in the UniMoral block but is read with BERTScore F1 plus METEOR rather than accuracy. Treat it as semantic and lexical overlap with reference consequences, not as a moral-correctness score._
+_How to read RQ4: consequence generation is open-ended. BERTScore F1 asks whether the model said something semantically close to the reference consequence; METEOR asks whether the wording overlaps. It is not a right/wrong accuracy score._
 
 ### 2. SMID / Value Kaleidoscope: topline comparable accuracy
 
 ![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
 
-_What it tests: SMID asks whether a vision-capable model can read morally and socially salient cues from images; Value Kaleidoscope asks whether a text model can recognize which values, rights, or duties matter in a situation and whether they support or oppose it._
+_What it tests: SMID asks whether a vision model can see morally important cues in images. Value Kaleidoscope asks whether a text model can spot which values, rights, or duties matter in a situation and whether they support or oppose the action._
 
 _How to read it: UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
 
@@ -57,7 +57,7 @@ _How to read it: UniMoral is handled in Figure 1; this chart starts at SMID for 
 
 ![Family scaling profile](../../../figures/release/option1_family_scaling_profile.svg)
 
-_Why it matters: if scaling helped moral perception and value recognition uniformly, these lines would rise cleanly from S to M to L. They do not, so the useful read is benchmark-specific scaling rather than one universal bigger-is-better claim._
+_Why it matters: if scale helped moral perception and value recognition in a simple way, every line would climb from S to M to L. They do not. The useful read is where size helps, where it plateaus, and where it can even hurt._
 
 _Use this next to compare size effects on SMID and Value after the combined UniMoral block, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
 
@@ -65,7 +65,7 @@ _Use this next to compare size effects on SMID and Value after the combined UniM
 
 ![CCD choice distribution](../../../figures/release/option1_ccd_choice_distribution.svg)
 
-_What it tests: CCD-Bench puts models in explicit value conflicts where ten answer options correspond to different GLOBE cultural clusters. The figure shows deviation from the 10% uniform baseline across those clusters._
+_What it tests: CCD-Bench puts models in value conflicts where ten answer options map to cultural clusters. The figure shows which cultural response styles each model over-selects or avoids relative to a 10% uniform baseline._
 
 _Why it matters: this is not a single right-answer benchmark. It tells a moral-psych reader which culturally grounded response style a model tends to privilege when values conflict._
 
@@ -81,7 +81,7 @@ _How to read it: this is the compact CCD-Bench summary, showing how much each li
 
 _What it tests: DeNEVIL-style evaluation looks for value vulnerabilities under risky or ethically loaded prompts. In this release the paper-faithful MoralPrompt export is not local, so this figure reports auditable proxy behavior categories from saved traces._
 
-_How to read it: protective refusals and corrective/contextual answers are the main safety-aligned behaviors; potentially risky continuations are the warning sign. This is proxy behavioral evidence, not benchmark-faithful accuracy._
+_How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._
 
 Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
 
@@ -155,12 +155,12 @@ These are the strongest claims the current public evidence supports. They use on
 
 | Claim | Evidence | Why it matters |
 | --- | --- | --- |
-| Strongest fully observed comparable line | `MiniMax-S` averages 0.611 across UniMoral action 0.661, SMID 0.432, and Value 0.740. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |
-| Strongest text-only comparable line | `GPT-5-mini Ref` reaches UniMoral 0.678 and Value 0.739, a two-metric mean of 0.708. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |
-| OpenAI text-only reference markers | 5 OpenAI rows are included. Best OpenAI UniMoral: `GPT-4.1-mini Ref` at 0.679; best OpenAI Value: `GPT-5-mini Ref` at 0.739. | These are useful external text references, but they are not OpenAI family-size scaling claims and have no SMID / DeNEVIL evidence in this release. |
-| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.364 and the widest spread at 0.285. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |
-| Closest thing to saturation | `UniMoral` has the tightest range, from 0.563 to 0.684 (0.121 spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |
-| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. The OpenAI rows are reference markers and are excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
+| Strongest fully observed comparable line | `MiniMax-S` averages 0.611 across UniMoral action 0.661, SMID 0.432, and Value 0.740. | This is the cleanest all-around topline because it includes text moral reasoning, image moral perception, and value recognition on the same line. |
+| Strongest text-only comparable line | `GPT-5-mini Ref` reaches UniMoral 0.678 and Value 0.739, a two-metric mean of 0.708. | This is the best answer if the PI asks about text moral reasoning only; it is not the all-around winner because SMID is missing. |
+| OpenAI/GPT text references | 5 OpenAI rows are included. Best OpenAI UniMoral: `GPT-4.1-mini Ref` at 0.679; best OpenAI Value: `GPT-5-mini Ref` at 0.739. | These tell us where GPT-style text routes sit relative to the open-weight families; they do not make a GPT S/M/L scaling claim and do not cover SMID. |
+| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.364 and the widest spread at 0.285. | The hard part is visual moral perception: models do not just need moral vocabulary, they need to read morally relevant cues in images. |
+| Closest thing to saturation | `UniMoral` has the tightest range, from 0.563 to 0.684 (0.121 spread). | Most text models are already in the same band on the basic human-choice layer, so the more interesting story is which UniMoral subtask each model handles best. |
+| Scaling-law read | `Gemma` is still the cleanest full S/M/L sweep. Even there, UniMoral rises from 0.635 to 0.661, Value rises from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data say scale is useful but task-dependent. Bigger models are not automatically better moral reasoners across every benchmark. |
 
 ### Benchmark Reading Guide
 
@@ -168,14 +168,14 @@ Before comparing charts, anchor each benchmark to its source paper. These benchm
 
 | Benchmark readout | In plain language: what it asks | Why it matters for moral psychology | How to read this release |
 | --- | --- | --- | --- |
-| `UniMoral RQ1: action prediction` | Given a dilemma and two possible actions, predict which action the human annotator chose. | This is descriptive moral choice: it asks whether the model can track situated human decisions, not whether it can declare the one correct answer. | Higher accuracy means the model better matched human action choices. The current spread is tight, so RQ1 is useful but partly near-saturated. |
-| `UniMoral RQ2: moral typology` | Given the chosen action, label the reasoning style: deontological, utilitarian, rights-based, or virtuous. | The same action can come from different moral theories. This task checks whether the model can name the reasoning frame behind a choice. | Read this separately from RQ1: a model can predict the action while still missing the moral frame humans attached to it. |
-| `UniMoral RQ3: factor attribution` | Identify what shaped the decision, such as emotion, moral values, culture, responsibility, relationships, legality, politeness, or sacred values. | Moral psychology cares about why people choose, not only what they choose. RQ3 tests whether the model can recover those human explanation factors. | Higher accuracy means better attribution of the decision driver. Low or uneven scores point to weak explanation modeling rather than only weak action prediction. |
-| `UniMoral RQ4: consequence generation` | Generate likely consequences of the selected action. | Consequences connect moral choice to expected harm, benefit, social reaction, and future responsibility, which are central to moral reasoning. | Read RQ4 as generation quality using BERTScore F1 and METEOR. It is not directly comparable to RQ1-RQ3 accuracy. |
-| `SMID` | Look at real images and infer moral wrongness or the dominant moral foundation. | Moral judgment is often visual, social, and affective. SMID asks whether models can see morally relevant cues in concrete scenes, not only reason over text. | Higher accuracy means closer alignment with normed human image judgments. Low scores can reflect visual ambiguity and weak human consensus, so treat SMID as the vision-side bottleneck. |
-| `Value Kaleidoscope` | For a situation and a candidate value, right, or duty, decide whether it is relevant and whether it supports, opposes, or fits either way. | Pluralistic moral judgment often involves several values in tension. This benchmark checks whether the model can recognize that value structure before making any final decision. | Higher accuracy means better value tagging and polarity assignment. It should not be read as proof that the model resolved the ethical conflict correctly. |
-| `CCD-Bench` | Choose among ten culturally grounded responses to a cross-cultural dilemma. | Cultural conflict is a moral-psych question because different communities may weigh duties, relationships, hierarchy, autonomy, and social harmony differently. | Do not read CCD-Bench as universal accuracy. Read the heatmap and concentration figure as the model's cultural choice style and possible over-reliance on one cluster. |
-| `DeNEVIL` | Probe how the model behaves when prompts try to surface unethical or value-violating content. | This matters for alignment: a model can classify moral labels well but still respond poorly when asked to generate risky behavior. | This release uses proxy traces, so read protective, contextual, risky, and empty-response categories as behavioral evidence, not as paper-faithful DeNEVIL scoring. |
+| `UniMoral RQ1: action prediction` | Given a dilemma and two possible actions, predict which action the human annotator chose. | This is descriptive moral choice: it asks whether the model can track situated human decisions, not whether it can declare the one correct answer. | Higher accuracy means the model better matched human choices. Scores are close together, so RQ1 is a useful sanity check but not the whole story. |
+| `UniMoral RQ2: moral typology` | Given the chosen action, label the reasoning style: deontological, utilitarian, rights-based, or virtuous. | The same action can come from different moral theories. This task checks whether the model can name the reasoning frame behind a choice. | Read this separately from RQ1: a model can guess the action while still misunderstanding the moral theory behind it. |
+| `UniMoral RQ3: factor attribution` | Identify what shaped the decision, such as emotion, moral values, culture, responsibility, relationships, legality, politeness, or sacred values. | Moral psychology cares about why people choose, not only what they choose. RQ3 tests whether the model can recover those human explanation factors. | Higher accuracy means the model better identifies the reason behind the choice. Low or uneven scores mean the model may know the answer but not the human motive. |
+| `UniMoral RQ4: consequence generation` | Generate likely consequences of the selected action. | Consequences connect moral choice to expected harm, benefit, social reaction, and future responsibility, which are central to moral reasoning. | Read RQ4 as generation quality. BERTScore F1 captures meaning overlap; METEOR captures wording overlap. Neither is the same as classification accuracy. |
+| `SMID` | Look at real images and infer moral wrongness or the dominant moral foundation. | Moral judgment is often visual, social, and affective. SMID asks whether models can see morally relevant cues in concrete scenes, not only reason over text. | Higher accuracy means closer alignment with human image judgments. This is the current bottleneck because image-based moral cues are harder and more ambiguous than text labels. |
+| `Value Kaleidoscope` | For a situation and a candidate value, right, or duty, decide whether it is relevant and whether it supports, opposes, or fits either way. | Pluralistic moral judgment often involves several values in tension. This benchmark checks whether the model can recognize that value structure before making any final decision. | Higher accuracy means better value tagging and polarity assignment. It shows whether the model sees the value structure, not whether it solved the whole ethical dilemma. |
+| `CCD-Bench` | Choose among ten culturally grounded responses to a cross-cultural dilemma. | Cultural conflict is a moral-psych question because different communities may weigh duties, relationships, hierarchy, autonomy, and social harmony differently. | Do not read CCD-Bench as universal accuracy. Read it as style: which cultural cluster the model leans toward, and whether it collapses too strongly onto one option. |
+| `DeNEVIL` | Probe how the model behaves when prompts try to surface unethical or value-violating content. | This matters for alignment: a model can classify moral labels well but still respond poorly when asked to generate risky behavior. | This release uses proxy traces, so read protective, contextual, risky, and empty-response categories as behavior evidence, not as paper-faithful DeNEVIL scoring. |
 
 ### Benchmark Difficulty Profile
 
@@ -195,12 +195,12 @@ _The headline family-scaling figure already appears above in **Benchmark Result 
 
 | Family | Evidence scope | Numeric pattern | Cautious interpretation |
 | --- | --- | --- | --- |
-| `Qwen` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence after the recovered large line. | UniMoral: S 0.647 -> M 0.665 -> L 0.665<br/>SMID: S 0.368 -> L 0.483<br/>Value Kaleidoscope: S 0.682 -> M 0.675 -> L 0.653 | Qwen improves from S to M on text tasks and then largely plateaus at L, while the recovered large SMID line is much stronger than the small line. That supports task-specific scaling, not a single monotonic curve. |
-| `MiniMax` | 3 comparable metric series available. | UniMoral: S 0.661 -> M 0.659 -> L 0.661<br/>SMID: S 0.432 -> L 0.198<br/>Value Kaleidoscope: S 0.740 -> M 0.740 -> L 0.741 | Current public evidence is too sparse for a stronger within-family scaling claim. |
-| `DeepSeek` | The S/M/L text lines are now accuracy-comparable where text-only metrics exist, but no DeepSeek slot has a public SMID route. | UniMoral: S 0.661 -> M 0.684 -> L 0.563<br/>Value Kaleidoscope: S 0.695 -> M 0.635 -> L 0.681 | Read the DeepSeek size curve as text-only evidence: S and L now come from saved shard reruns, M remains the frozen closed-slice line, and all three still omit SMID. |
-| `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic. |
-| `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic. |
-| `OpenAI Ref` | Five text-only reference rows, not an OpenAI family-size scaling sweep. | UniMoral: range 0.646-0.679<br/>best GPT-4.1-mini Ref 0.679<br/>Value Kaleidoscope: range 0.617-0.739<br/>best GPT-5-mini Ref 0.739 | The OpenAI rows calibrate text-side UniMoral, Value Kaleidoscope, and CCD-Bench behavior against the open-weight family curves. They should not be read as OpenAI S/M/L scaling evidence or as vision-side SMID evidence. |
+| `Qwen` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence after the recovered large line. | UniMoral: S 0.647 -> M 0.665 -> L 0.665<br/>SMID: S 0.368 -> L 0.483<br/>Value Kaleidoscope: S 0.682 -> M 0.675 -> L 0.653 | Qwen improves from S to M on text and then mostly plateaus. On SMID, the recovered L vision line is clearly stronger than S. That makes Qwen a case where scale helps some surfaces but not all of them. |
+| `MiniMax` | 3 comparable metric series available. | UniMoral: S 0.661 -> M 0.659 -> L 0.661<br/>SMID: S 0.432 -> L 0.198<br/>Value Kaleidoscope: S 0.740 -> M 0.740 -> L 0.741 | Current public evidence is too sparse for a stronger within-family scaling claim; report the observed points and avoid turning route gaps into model failures. |
+| `DeepSeek` | The S/M/L text lines are now accuracy-comparable where text-only metrics exist, but no DeepSeek slot has a public SMID route. | UniMoral: S 0.661 -> M 0.684 -> L 0.563<br/>Value Kaleidoscope: S 0.695 -> M 0.635 -> L 0.681 | DeepSeek should be discussed as a text-only curve. It is useful for UniMoral and Value comparisons, but it cannot support an all-around moral-psych claim because the image benchmark is absent. |
+| `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama gets much better after the small line, especially on text, and S-to-L also helps SMID. But M still beats L on some text metrics, so the useful story is improvement after S, not a clean monotonic ladder. |
+| `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Gemma is the cleanest size test in this repo, and it still does not give a simple bigger-is-better story: text tasks improve overall, but SMID dips at M and rebounds at L. |
+| `OpenAI Ref` | Five text-only reference rows, not an OpenAI family-size scaling sweep. | UniMoral: range 0.646-0.679<br/>best GPT-4.1-mini Ref 0.679<br/>Value Kaleidoscope: range 0.617-0.739<br/>best GPT-5-mini Ref 0.739 | The OpenAI rows are a sanity check for text-side performance. They show that the best GPT text refs are very competitive on UniMoral and Value, but they do not answer the vision question and should not be renamed as GPT S/M/L. |
 
 ### CCD-Bench Choice Behavior
 
