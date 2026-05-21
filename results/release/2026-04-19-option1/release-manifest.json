@@ -231,7 +231,7 @@
     "Denevil is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
     "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
     "DeepSeek-S text metrics come from the May 9 no-thinking saved rerun; it remains text-only because no SMID vision route exists.",
-    "OpenAI Batch rows are text-only reference markers, not claimed OpenAI family-size sweeps.",
+    "OpenAI GPT-5 rows are labeled as a text-only S/M/L reference series (S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5), but they still omit SMID and DeNEVIL and are not claimed as all-benchmark OpenAI coverage.",
     "Original-paper alignment is separated from current model benchmarking in paper-result-alignment.csv; blocked, proxy-only, saved/prior, and direct-comparison states are not collapsed together.",
     "The completed local Llama small line sits outside the frozen Option 1 totals.",
     "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration."

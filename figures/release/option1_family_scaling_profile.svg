@@ -38,14 +38,15 @@
 <rect x="0" y="0" width="1280" height="1100" class="canvas"/>
 <rect x="24" y="24" width="1232" height="1052" rx="22" class="panel"/>
 <title>Family scaling profile by benchmark</title>
-<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. The GPT-4o mini point is text-only, while the newer OpenAI Batch reference rows are read in the bar and CCD figures rather than as size curves. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
+<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. OpenAI GPT-5 is plotted as a text-only S/M/L series with S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5; the GPT-4o mini and GPT-4.1 rows remain separate text-only references. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, Llama-M, and every OpenAI row have SMID cells unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as choice behavior and proxy evidence rather than benchmark-faithful accuracy.</desc>
 <text x="48" y="64" class="title">Family Scaling Profile</text>
 <text x="48" y="92" class="subtitle">Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.</text>
 <text x="48" y="114" class="subtitle">This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.</text>
-<text x="48" y="136" class="subtitle">The GPT-4o mini marker is text-only; the newer OpenAI Batch rows are read in the bar and CCD figures, not as size curves.</text>
-<text x="48" y="158" class="subtitle">SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.</text>
-<text x="48" y="180" class="subtitle">Read CCD-Bench in the dedicated choice-distribution and concentration figures.</text>
-<text x="48" y="202" class="subtitle">Read Denevil in the dedicated behavioral-outcomes figure.</text>
+<text x="48" y="136" class="subtitle">OpenAI GPT-5 is plotted as a text-only S/M/L series: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5.</text>
+<text x="48" y="158" class="subtitle">GPT-4o mini and GPT-4.1 rows remain separate text-only reference markers; no OpenAI row has SMID or Denevil.</text>
+<text x="48" y="180" class="subtitle">SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.</text>
+<text x="48" y="202" class="subtitle">Read CCD-Bench in the dedicated choice-distribution and concentration figures.</text>
+<text x="48" y="224" class="subtitle">Read Denevil in the dedicated behavioral-outcomes figure.</text>
 <rect x="52" y="248" width="382" height="356" rx="20" class="subpanel"/>
 <rect x="346" y="264" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
 <text x="379" y="278" text-anchor="middle" class="tiny">SCORED</text>
@@ -121,10 +122,19 @@
 <circle cx="188.00" cy="336.45" r="4.2" fill="#0d9488"/>
 <circle cx="288.00" cy="336.20" r="8" fill="#ffffff" stroke="#0d9488" stroke-width="3.4"/>
 <circle cx="288.00" cy="336.20" r="4.2" fill="#0d9488"/>
+<line x1="128.00" y1="339.83" x2="228.00" y2="332.29" stroke="#ffffff" stroke-width="6.6" stroke-linecap="round" opacity="0.95"/>
+<line x1="128.00" y1="339.83" x2="228.00" y2="332.29" stroke="#e11d48" stroke-width="4.6" stroke-linecap="round"/>
+<line x1="228.00" y1="332.29" x2="328.00" y2="330.53" stroke="#ffffff" stroke-width="6.6" stroke-linecap="round" opacity="0.95"/>
+<line x1="228.00" y1="332.29" x2="328.00" y2="330.53" stroke="#e11d48" stroke-width="4.6" stroke-linecap="round"/>
+<circle cx="128.00" cy="339.83" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
+<circle cx="128.00" cy="339.83" r="4.2" fill="#e11d48"/>
+<circle cx="228.00" cy="332.29" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
+<circle cx="228.00" cy="332.29" r="4.2" fill="#e11d48"/>
+<circle cx="328.00" cy="330.53" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
+<circle cx="328.00" cy="330.53" r="4.2" fill="#e11d48"/>
 <circle cx="398.00" cy="333.91" r="8" fill="#ffffff" stroke="#111827" stroke-width="3.4"/>
 <circle cx="398.00" cy="333.91" r="4.2" fill="#111827"/>
-<text x="390.00" y="324.00" text-anchor="end" class="small">GPT-4o mini</text>
-<text x="70" y="590" class="small">Dashed connectors skip missing size slots; no point means no public comparable score.</text>
+<text x="70" y="590" class="small">Dashed = skipped slot; no point = no comparable score.</text>
 <rect x="452" y="248" width="382" height="356" rx="20" class="subpanel"/>
 <rect x="746" y="264" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
 <text x="779" y="278" text-anchor="middle" class="tiny">SCORED</text>
@@ -178,7 +188,7 @@
 <circle cx="488.00" cy="428.14" r="4.2" fill="#0d9488"/>
 <circle cx="688.00" cy="392.64" r="8" fill="#ffffff" stroke="#0d9488" stroke-width="3.4"/>
 <circle cx="688.00" cy="392.64" r="4.2" fill="#0d9488"/>
-<text x="470" y="590" class="small">Dashed connectors skip missing size slots; no point means no public comparable score.</text>
+<text x="470" y="590" class="small">Dashed = skipped slot; no point = no comparable score.</text>
 <rect x="852" y="248" width="382" height="356" rx="20" class="subpanel"/>
 <rect x="1146" y="264" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
 <text x="1179" y="278" text-anchor="middle" class="tiny">SCORED</text>
@@ -254,10 +264,19 @@
 <circle cx="988.00" cy="333.29" r="4.2" fill="#0d9488"/>
 <circle cx="1088.00" cy="339.96" r="8" fill="#ffffff" stroke="#0d9488" stroke-width="3.4"/>
 <circle cx="1088.00" cy="339.96" r="4.2" fill="#0d9488"/>
+<line x1="928.00" y1="351.08" x2="1028.00" y2="313.43" stroke="#ffffff" stroke-width="6.6" stroke-linecap="round" opacity="0.95"/>
+<line x1="928.00" y1="351.08" x2="1028.00" y2="313.43" stroke="#e11d48" stroke-width="4.6" stroke-linecap="round"/>
+<line x1="1028.00" y1="313.43" x2="1128.00" y2="314.44" stroke="#ffffff" stroke-width="6.6" stroke-linecap="round" opacity="0.95"/>
+<line x1="1028.00" y1="313.43" x2="1128.00" y2="314.44" stroke="#e11d48" stroke-width="4.6" stroke-linecap="round"/>
+<circle cx="928.00" cy="351.08" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
+<circle cx="928.00" cy="351.08" r="4.2" fill="#e11d48"/>
+<circle cx="1028.00" cy="313.43" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
+<circle cx="1028.00" cy="313.43" r="4.2" fill="#e11d48"/>
+<circle cx="1128.00" cy="314.44" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
+<circle cx="1128.00" cy="314.44" r="4.2" fill="#e11d48"/>
 <circle cx="1198.00" cy="325.25" r="8" fill="#ffffff" stroke="#111827" stroke-width="3.4"/>
 <circle cx="1198.00" cy="325.25" r="4.2" fill="#111827"/>
-<text x="1190.00" y="324.00" text-anchor="end" class="small">GPT-4o mini</text>
-<text x="870" y="590" class="small">Dashed connectors skip missing size slots; no point means no public comparable score.</text>
+<text x="870" y="590" class="small">Dashed = skipped slot; no point = no comparable score.</text>
 <rect x="48" y="644" width="1184" height="360" rx="18" class="legend-card"/>
 <text x="72" y="670" class="tiny">HOW TO READ THIS FIGURE</text>
 <line x1="618" y1="672" x2="618" y2="982" class="guide"/>
@@ -272,18 +291,20 @@
 <text x="656" y="696" class="tiny">FAMILY READ</text>
 <rect x="656" y="710" width="14" height="14" rx="4" fill="#d97706"/>
 <text x="680" y="721" class="small">MiniMax: S/M/L are scored on UniMoral and Value; S/L have SMID, while M has no SMID route.</text>
-<rect x="656" y="740" width="14" height="14" rx="4" fill="#0d9488"/>
-<text x="680" y="751" class="small">Qwen: text scored at S/M/L; SMID at S/L.</text>
-<rect x="656" y="770" width="14" height="14" rx="4" fill="#2563eb"/>
-<text x="680" y="781" class="small">DeepSeek: S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists.</text>
-<rect x="656" y="800" width="14" height="14" rx="4" fill="#ea580c"/>
-<text x="680" y="811" class="small">Llama: text scored at S/M/L; SMID at S/L.</text>
-<rect x="656" y="830" width="14" height="14" rx="4" fill="#8b5cf6"/>
-<text x="680" y="841" class="small">Gemma: full S/M/L scored sweep.</text>
-<rect x="656" y="860" width="14" height="14" rx="4" fill="#111827"/>
-<text x="680" y="871" class="small">GPT-4o mini: text-only reference point; no OpenAI S/M/L or SMID route is claimed.</text>
-<text x="656" y="910" class="tiny">EVIDENCE BOUNDARY</text>
-<text x="656" y="936" class="body">This figure stops at the three accuracy-comparable benchmarks.</text>
-<text x="656" y="964" class="body">That avoids mixing comparable accuracy with coverage or proxy evidence.</text>
+<rect x="656" y="738" width="14" height="14" rx="4" fill="#0d9488"/>
+<text x="680" y="749" class="small">Qwen: text scored at S/M/L; SMID at S/L.</text>
+<rect x="656" y="766" width="14" height="14" rx="4" fill="#2563eb"/>
+<text x="680" y="777" class="small">DeepSeek: S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists.</text>
+<rect x="656" y="794" width="14" height="14" rx="4" fill="#ea580c"/>
+<text x="680" y="805" class="small">Llama: text scored at S/M/L; SMID at S/L.</text>
+<rect x="656" y="822" width="14" height="14" rx="4" fill="#8b5cf6"/>
+<text x="680" y="833" class="small">Gemma: full S/M/L scored sweep.</text>
+<rect x="656" y="850" width="14" height="14" rx="4" fill="#e11d48"/>
+<text x="680" y="861" class="small">OpenAI GPT-5: text-only S/M/L: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5; no SMID/DeNEVIL.</text>
+<rect x="656" y="878" width="14" height="14" rx="4" fill="#111827"/>
+<text x="680" y="889" class="small">GPT-4o mini: separate GPT-4o mini text-only Ref marker; not part of GPT-5 S/M/L.</text>
+<text x="656" y="928" class="tiny">EVIDENCE BOUNDARY</text>
+<text x="656" y="954" class="body">This figure stops at the three accuracy-comparable benchmarks.</text>
+<text x="656" y="982" class="body">That avoids mixing comparable accuracy with coverage or proxy evidence.</text>
 <text x="72" y="1044" class="small">Takeaway: current evidence supports task-specific scaling statements across the three comparable accuracy benchmarks, not a single universal size law across all five benchmark surfaces.</text>
 </svg>

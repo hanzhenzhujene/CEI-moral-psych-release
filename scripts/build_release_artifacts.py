@@ -174,7 +174,7 @@ TEXT_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-text
 IMAGE_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-image-expansion"
 
 MODEL_ORDER = ["Qwen", "DeepSeek", "Gemma"]
-FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT-4o mini"]
+FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT-4o mini", "OpenAI GPT-5"]
 BENCHMARK_ORDER = ["UniMoral", "SMID", "Value Kaleidoscope", "CCD-Bench", "Denevil"]
 FAMILY_SIZE_STATUS_COLUMNS = ["unimoral", "smid", "value_kaleidoscope", "ccd_bench", "denevil"]
 FAMILY_SIZE_STATUS_LABELS = {
@@ -248,6 +248,7 @@ CCD_OPTION_COLORS = {
 }
 OPENAI_REFERENCE_LINE_LABEL = "GPT-4o mini"
 OPENAI_REFERENCE_FAMILY_LABEL = "GPT-4o mini"
+OPENAI_GPT5_FAMILY_LABEL = "OpenAI GPT-5"
 OPENAI_BATCH_REFERENCE_FAMILY_LABEL = "OpenAI Batch refs"
 LEGACY_OPENAI_REFERENCE_LINE_LABELS = {"OpenAI-Ref", "GPT4 only"}
 OPENAI_REFERENCE_ROUTE = "openai/gpt-4o-mini (Responses API + Batch API; text-only reference)"
@@ -296,11 +297,11 @@ OPENAI_TEXT_REFERENCE_SPECS = [
     },
     {
         "line_label": "GPT-5 nano",
-        "family": OPENAI_BATCH_REFERENCE_FAMILY_LABEL,
-        "size_slot": "Ref",
+        "family": OPENAI_GPT5_FAMILY_LABEL,
+        "size_slot": "S",
         "route": "openai/gpt-5-nano (Responses API + Batch API; text-only reference)",
-        "note": "OpenAI text-only Batch API reference line; SMID and DeNEVIL intentionally not run.",
-        "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
+        "note": "OpenAI GPT-5 text-only S slot; S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5; SMID and DeNEVIL intentionally not run.",
+        "comparison_note": "OpenAI GPT-5 text-only S slot; SMID and DeNEVIL intentionally not run.",
         "total_samples": 76_486,
         "parsed_samples": 76_401,
         "unimoral_action_accuracy": 5741 / 8784,
@@ -350,11 +351,11 @@ OPENAI_TEXT_REFERENCE_SPECS = [
     },
     {
         "line_label": "GPT-5 mini",
-        "family": OPENAI_BATCH_REFERENCE_FAMILY_LABEL,
-        "size_slot": "Ref",
+        "family": OPENAI_GPT5_FAMILY_LABEL,
+        "size_slot": "M",
         "route": "openai/gpt-5-mini (Responses API + Batch API; text-only reference)",
-        "note": "OpenAI text-only Batch API reference line; SMID and DeNEVIL intentionally not run.",
-        "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
+        "note": "OpenAI GPT-5 text-only M slot; S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5; SMID and DeNEVIL intentionally not run.",
+        "comparison_note": "OpenAI GPT-5 text-only M slot; SMID and DeNEVIL intentionally not run.",
         "total_samples": 76_486,
         "parsed_samples": 76_464,
         "unimoral_action_accuracy": 5955 / 8784,
@@ -404,11 +405,11 @@ OPENAI_TEXT_REFERENCE_SPECS = [
     },
     {
         "line_label": "GPT-5.5",
-        "family": OPENAI_BATCH_REFERENCE_FAMILY_LABEL,
-        "size_slot": "Ref",
+        "family": OPENAI_GPT5_FAMILY_LABEL,
+        "size_slot": "L",
         "route": "openai/gpt-5.5 (Responses API + Batch API; text-only reference)",
-        "note": "OpenAI GPT-5.5 text-only Batch API reference line; same eligible task set as the other OpenAI references, with SMID and DeNEVIL intentionally not run.",
-        "comparison_note": "OpenAI GPT-5.5 text-only reference; SMID and DeNEVIL intentionally not run.",
+        "note": "OpenAI GPT-5 text-only L slot; L is GPT-5.5. Same eligible task set as the other OpenAI text references, with SMID and DeNEVIL intentionally not run.",
+        "comparison_note": "OpenAI GPT-5 text-only L slot; L is GPT-5.5; SMID and DeNEVIL intentionally not run.",
         "total_samples": 76_486,
         "parsed_samples": 76_486,
         "unimoral_action_accuracy": 6005 / 8784,
@@ -1813,6 +1814,7 @@ FAMILY_COLOR_SCALES = {
     "Gemma": {"S": "#6d28d9", "M": "#8b5cf6", "L": "#c4b5fd"},
     "MiniMax": {"S": "#b45309", "M": "#d97706", "L": "#fbbf24"},
     OPENAI_REFERENCE_FAMILY_LABEL: {"Ref": "#111827"},
+    OPENAI_GPT5_FAMILY_LABEL: {"S": "#be123c", "M": "#e11d48", "L": "#fb7185"},
     OPENAI_BATCH_REFERENCE_FAMILY_LABEL: {"Ref": "#334155"},
 }
 
@@ -8099,6 +8101,11 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
             "Single text-only reference point, not a family-size scaling sweep.",
             "GPT-4o mini is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about OpenAI family scaling or vision-side SMID performance.",
         )
+    if family == OPENAI_GPT5_FAMILY_LABEL:
+        return (
+            "Text-only GPT-5 S/M/L reference series: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5.",
+            "Read this as text-only GPT-5 size context on UniMoral and Value Kaleidoscope, not an all-benchmark family sweep: all three slots intentionally omit SMID and DeNEVIL, and CCD-Bench remains choice-distribution behavior rather than accuracy.",
+        )
     available_metrics = sum(1 for points in metric_points.values() if points)
     return (
         f"{available_metrics} comparable metric series available.",
@@ -8731,16 +8738,32 @@ def render_family_scaling_profile_svg(
     chart_left_pad, chart_right_pad = 46, 36
     chart_top_pad, chart_bottom_pad = 62, 62
     y_min, y_max = 0.0, 0.75
-    family_draw_order = ["MiniMax", "DeepSeek", "Llama", "Gemma", "Qwen", OPENAI_REFERENCE_FAMILY_LABEL]
-    family_slot_offsets = {"MiniMax": -20, "Qwen": -10, "DeepSeek": 0, "Llama": 10, "Gemma": 20, OPENAI_REFERENCE_FAMILY_LABEL: 0}
-    family_line_widths = {"MiniMax": 4.2, "Qwen": 5.2, "DeepSeek": 4.0, "Llama": 4.0, "Gemma": 4.4, OPENAI_REFERENCE_FAMILY_LABEL: 3.8}
+    family_draw_order = ["MiniMax", "DeepSeek", "Llama", "Gemma", "Qwen", OPENAI_GPT5_FAMILY_LABEL, OPENAI_REFERENCE_FAMILY_LABEL]
+    family_slot_offsets = {
+        "MiniMax": -20,
+        "Qwen": -10,
+        "DeepSeek": 0,
+        "Llama": 10,
+        "Gemma": 20,
+        OPENAI_GPT5_FAMILY_LABEL: 30,
+        OPENAI_REFERENCE_FAMILY_LABEL: 0,
+    }
+    family_line_widths = {
+        "MiniMax": 4.2,
+        "Qwen": 5.2,
+        "DeepSeek": 4.0,
+        "Llama": 4.0,
+        "Gemma": 4.4,
+        OPENAI_GPT5_FAMILY_LABEL: 4.6,
+        OPENAI_REFERENCE_FAMILY_LABEL: 3.8,
+    }
     singleton_label_offsets = {
         "MiniMax": (-18, -8),
         "Qwen": (-10, -12),
         "DeepSeek": (-20, -16),
         "Llama": (10, -10),
         "Gemma": (10, -10),
-        OPENAI_REFERENCE_FAMILY_LABEL: (-8, -12),
+        OPENAI_REFERENCE_FAMILY_LABEL: (-12, -12),
     }
     rows_by_benchmark: dict[str, list[dict[str, Any]]] = {}
     for benchmark, field, _ in COMPARABLE_METRIC_SPECS:
@@ -8755,7 +8778,8 @@ def render_family_scaling_profile_svg(
     intro_lines = [
         "Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.",
         "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.",
-        "The GPT-4o mini marker is text-only; the newer OpenAI Batch rows are read in the bar and CCD figures, not as size curves.",
+        "OpenAI GPT-5 is plotted as a text-only S/M/L series: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5.",
+        "GPT-4o mini and GPT-4.1 rows remain separate text-only reference markers; no OpenAI row has SMID or Denevil.",
         "SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.",
         "Read CCD-Bench in the dedicated choice-distribution and concentration figures.",
         "Read Denevil in the dedicated behavioral-outcomes figure.",
@@ -8765,7 +8789,7 @@ def render_family_scaling_profile_svg(
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Family scaling profile by benchmark</title>",
-            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. The GPT-4o mini point is text-only, while the newer OpenAI Batch reference rows are read in the bar and CCD figures rather than as size curves. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M have text-side points where scored, while their SMID cells are unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
+            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. OpenAI GPT-5 is plotted as a text-only S/M/L series with S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5; the GPT-4o mini and GPT-4.1 rows remain separate text-only references. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, Llama-M, and every OpenAI row have SMID cells unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as choice behavior and proxy evidence rather than benchmark-faithful accuracy.</desc>",
             '<text x="48" y="64" class="title">Family Scaling Profile</text>',
         ]
     )
@@ -8826,6 +8850,8 @@ def render_family_scaling_profile_svg(
                 lines.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="4.2" fill="{color}"/>')
             if len(family_rows) == 1:
                 only_row = family_rows[0]
+                if family == OPENAI_REFERENCE_FAMILY_LABEL:
+                    continue
                 x = x_positions[only_row["size_slot"]] + family_slot_offsets[family]
                 y = y_for(panel_y, float(only_row[field]))
                 label_dx, label_dy = singleton_label_offsets[family]
@@ -8838,7 +8864,7 @@ def render_family_scaling_profile_svg(
                 )
 
         lines.append(
-            f'<text x="{panel_x + 18}" y="{panel_y + top_panel_height - 14}" class="small">Dashed connectors skip missing size slots; no point means no public comparable score.</text>'
+            f'<text x="{panel_x + 18}" y="{panel_y + top_panel_height - 14}" class="small">Dashed = skipped slot; no point = no comparable score.</text>'
         )
 
     lines.append('<rect x="48" y="644" width="1184" height="360" rx="18" class="legend-card"/>')
@@ -8864,18 +8890,19 @@ def render_family_scaling_profile_svg(
         ("DeepSeek", "S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists."),
         ("Llama", "text scored at S/M/L; SMID at S/L."),
         ("Gemma", "full S/M/L scored sweep."),
-        (OPENAI_REFERENCE_FAMILY_LABEL, "text-only reference point; no OpenAI S/M/L or SMID route is claimed."),
+        (OPENAI_GPT5_FAMILY_LABEL, "text-only S/M/L: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5; no SMID/DeNEVIL."),
+        (OPENAI_REFERENCE_FAMILY_LABEL, "separate GPT-4o mini text-only Ref marker; not part of GPT-5 S/M/L."),
     ]
     for index, (family, note) in enumerate(legend_items):
         x = 656
-        y = 722 + index * 30
+        y = 722 + index * 28
         color = family_base_color(family)
         lines.append(f'<rect x="{x}" y="{y - 12}" width="14" height="14" rx="4" fill="{color}"/>')
         lines.append(f'<text x="{x + 24}" y="{y - 1}" class="small">{escape_xml(family)}: {escape_xml(note)}</text>')
 
-    lines.append('<text x="656" y="910" class="tiny">EVIDENCE BOUNDARY</text>')
-    lines.append('<text x="656" y="936" class="body">This figure stops at the three accuracy-comparable benchmarks.</text>')
-    lines.append('<text x="656" y="964" class="body">That avoids mixing comparable accuracy with coverage or proxy evidence.</text>')
+    lines.append('<text x="656" y="928" class="tiny">EVIDENCE BOUNDARY</text>')
+    lines.append('<text x="656" y="954" class="body">This figure stops at the three accuracy-comparable benchmarks.</text>')
+    lines.append('<text x="656" y="982" class="body">That avoids mixing comparable accuracy with coverage or proxy evidence.</text>')
     lines.append('<text x="72" y="1044" class="small">Takeaway: current evidence supports task-specific scaling statements across the three comparable accuracy benchmarks, not a single universal size law across all five benchmark surfaces.</text>')
 
     lines.append("</svg>")
@@ -10328,7 +10355,7 @@ def append_tldr_section(
         best_openai_unimoral = _best_openai_reference(openai_reference_rows, "unimoral_action_accuracy")
         best_openai_value = _best_openai_reference(openai_reference_rows, "value_average_accuracy")
         lines.append(
-            f"- **OpenAI text-only Batch references:** {len(openai_reference_rows)} Responses/Batch API reference lines are now integrated, each with {parsed_total:,}/{parsed_total:,} response rows collected and parser coverage from {parsed_min:,} to {parsed_max:,} parsed rows. Best OpenAI UniMoral is `{best_openai_unimoral['line_label']}` at {fmt_float(as_float(best_openai_unimoral['unimoral_action_accuracy']))}; best OpenAI Value is `{best_openai_value['line_label']}` at {fmt_float(as_float(best_openai_value['value_average_accuracy']))}. SMID and DeNEVIL remain intentionally `n/a` for these text-only references."
+            f"- **OpenAI text-only references:** {len(openai_reference_rows)} Responses/Batch API reference lines are now integrated, each with {parsed_total:,}/{parsed_total:,} response rows collected and parser coverage from {parsed_min:,} to {parsed_max:,} parsed rows. The GPT-5 subset is now labeled as text-only S/M/L (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L). Best OpenAI UniMoral is `{best_openai_unimoral['line_label']}` at {fmt_float(as_float(best_openai_unimoral['unimoral_action_accuracy']))}; best OpenAI Value is `{best_openai_value['line_label']}` at {fmt_float(as_float(best_openai_value['value_average_accuracy']))}. SMID and DeNEVIL remain intentionally `n/a` for these text-only references."
         )
     lines.append(
         f"- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy ({fmt_float(as_float(smid_summary['mean_accuracy']))}) and widest spread ({fmt_float(as_float(smid_summary['spread']))}), while `UniMoral` is tightly clustered ({fmt_float(as_float(unimoral_summary['spread']))} spread). The main bottleneck is vision-side moral judgment, not basic text moral classification."
@@ -10369,7 +10396,7 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.",
             "",
-            "OpenAI Responses/Batch API text-only reference rows are shown in the comparable-accuracy and CCD figures. They are not treated as family-size scaling series, and they have no SMID or DeNEVIL rows.",
+            "OpenAI Responses/Batch API text-only reference rows are shown in the comparable-accuracy and CCD figures. The GPT-5 subset is plotted as a text-only S/M/L series (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L), while GPT-4o mini and GPT-4.1 rows remain separate text-only references; none have SMID or DeNEVIL rows.",
             "",
             "### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy",
             "",
@@ -10514,7 +10541,7 @@ def append_interpretation_sections(
         best_openai_unimoral = _best_openai_reference(openai_reference_rows, "unimoral_action_accuracy")
         best_openai_value = _best_openai_reference(openai_reference_rows, "value_average_accuracy")
         lines.append(
-            f"| OpenAI text-only reference markers | {len(openai_reference_rows)} Batch API rows have {parsed_total:,}/{parsed_total:,} collected responses each, with parser coverage from {parsed_min:,} to {parsed_max:,}. Best OpenAI UniMoral: `{best_openai_unimoral['line_label']}` at {fmt_float(best_openai_unimoral['unimoral_action_accuracy'])}; best OpenAI Value: `{best_openai_value['line_label']}` at {fmt_float(best_openai_value['value_average_accuracy'])}. | These are useful external text-only references, but they are not OpenAI family-size scaling claims and have no SMID / DeNEVIL evidence in this release. |"
+            f"| OpenAI text-only reference markers | {len(openai_reference_rows)} Batch API rows have {parsed_total:,}/{parsed_total:,} collected responses each, with parser coverage from {parsed_min:,} to {parsed_max:,}. The GPT-5 subset is labeled as text-only S/M/L (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L). Best OpenAI UniMoral: `{best_openai_unimoral['line_label']}` at {fmt_float(best_openai_unimoral['unimoral_action_accuracy'])}; best OpenAI Value: `{best_openai_value['line_label']}` at {fmt_float(best_openai_value['value_average_accuracy'])}. | These are useful external text-only references, but they have no SMID / DeNEVIL evidence in this release and should not be described as all-benchmark OpenAI coverage. |"
         )
     lines.append(
         f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |"
@@ -10523,7 +10550,7 @@ def append_interpretation_sections(
         f"| Closest thing to saturation | `UniMoral` has the tightest range, from {fmt_float(unimoral_summary['min_accuracy'])} to {fmt_float(unimoral_summary['max_accuracy'])} ({fmt_float(unimoral_summary['spread'])} spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |"
     )
     lines.append(
-        f"| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. OpenAI Batch rows are external text-only reference markers and are excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
+        f"| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. OpenAI GPT-5 adds a text-only S/M/L reference series (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L), but it is still excluded from all-benchmark size-law claims because it has no SMID or DeNEVIL. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
     )
     lines.extend(
         [
@@ -10619,7 +10646,7 @@ def append_interpretation_sections(
                 else "- If a line appears only in the appendix coverage/provenance panels, read it as a response-format / release-evidence signal rather than a benchmark-faithful accuracy result."
             ),
             f"- Do not call `{best_text_only_line['line_label']}` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line." if best_text_only_line is not None else "- Do not promote any text-only line into an all-around winner claim without a matching SMID route.",
-            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI Batch rows are text-only reference markers rather than family-size curves.",
+            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI GPT-5 S/M/L series is text-only (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L) with no SMID or DeNEVIL evidence.",
             f"- Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.",
             f"- Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.",
             "",
@@ -10798,7 +10825,7 @@ def append_latest_additional_model_sweep_section(lines: list[str]) -> None:
             "",
             "**Benchmark-wise:** UniMoral gives a clear performance separation between the very small 1B route and the stronger 7B-12B cluster. CCD-Bench gives a style/concentration readout rather than a correctness score: all models peak on Nordic Europe, but Llama 3.2 1B is most diffuse (15.9% dominant share; 9.12 effective clusters), while Mistral Nemo is most concentrated (25.3%; 7.22 effective clusters).",
             "",
-            "**OpenAI reference add-on:** `GPT-5.5` is the strongest OpenAI UniMoral line at 0.684, while `GPT-5 mini` remains the strongest OpenAI Value Kaleidoscope line at 0.739. These rows are text-only references only: they intentionally omit SMID and DeNEVIL, they are not an OpenAI S/M/L family-size sweep, and CCD-Bench is read as cultural-choice concentration rather than accuracy.",
+            "**OpenAI reference add-on:** `GPT-5.5` is the strongest OpenAI UniMoral line at 0.684, while `GPT-5 mini` remains the strongest OpenAI Value Kaleidoscope line at 0.739. The GPT-5 rows are now labeled as a text-only S/M/L series (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L); they intentionally omit SMID and DeNEVIL, so they are not an all-benchmark OpenAI family sweep. CCD-Bench is read as cultural-choice concentration rather than accuracy.",
             "",
             "**Scaling-wise:** There is no clean monotonic scaling law. The move from 1B to 7B+ matters a lot, but above that threshold the 7B-12B models cluster closely rather than improving smoothly with size. This looks more like a capability floor than a simple bigger-is-better trend.",
             "",
@@ -11912,7 +11939,7 @@ def build_release_manifest(
             "Denevil is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
             "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
             "DeepSeek-S text metrics come from the May 9 no-thinking saved rerun; it remains text-only because no SMID vision route exists.",
-            "OpenAI Batch rows are text-only reference markers, not claimed OpenAI family-size sweeps.",
+            "OpenAI GPT-5 rows are labeled as a text-only S/M/L reference series (S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5), but they still omit SMID and DeNEVIL and are not claimed as all-benchmark OpenAI coverage.",
             "Original-paper alignment is separated from current model benchmarking in paper-result-alignment.csv; blocked, proxy-only, saved/prior, and direct-comparison states are not collapsed together.",
             "The completed local Llama small line sits outside the frozen Option 1 totals.",
             "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration.",

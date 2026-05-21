@@ -73,9 +73,12 @@
 <rect x="48" y="892" width="118" height="40" rx="18" fill="#d9dadc" stroke="#111827" stroke-width="1.2"/>
 <text x="107.00" y="917.00" text-anchor="middle" class="label">GPT-4o mini</text>
 <line x1="48" y1="882.00" x2="1632" y2="882.00" class="baseline"/>
-<rect x="48" y="938" width="118" height="224" rx="18" fill="#dee1e4" stroke="#334155" stroke-width="1.2"/>
-<text x="107.00" y="1055.00" text-anchor="middle" class="label">OpenAI Batch refs</text>
+<rect x="48" y="938" width="118" height="132" rx="18" fill="#fadbe2" stroke="#e11d48" stroke-width="1.2"/>
+<text x="107.00" y="1009.00" text-anchor="middle" class="label">OpenAI GPT-5</text>
 <line x1="48" y1="928.00" x2="1632" y2="928.00" class="baseline"/>
+<rect x="48" y="1076" width="118" height="86" rx="18" fill="#dee1e4" stroke="#334155" stroke-width="1.2"/>
+<text x="107.00" y="1124.00" text-anchor="middle" class="label">OpenAI Batch refs</text>
+<line x1="48" y1="1066.00" x2="1632" y2="1066.00" class="baseline"/>
 <rect x="184" y="212" width="56" height="20" rx="12" fill="#0f766e"/>
 <text x="212.00" y="227.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="227.00" class="label">Qwen-S</text>
@@ -204,46 +207,46 @@
 <text x="533.08" y="917.00" text-anchor="end" class="celltext">17.1%</text>
 <text x="1162" y="913.00" class="label">option_6 (Nordic Europe)</text>
 <text x="1162" y="928.00" class="small">effective clusters 8.94</text>
-<rect x="184" y="948" width="56" height="20" rx="12" fill="#334155"/>
-<text x="212.00" y="963.00" text-anchor="middle" class="celltext">Ref</text>
-<text x="258" y="963.00" class="label">GPT-4.1 mini</text>
+<rect x="184" y="948" width="56" height="20" rx="12" fill="#be123c"/>
+<text x="212.00" y="963.00" text-anchor="middle" class="celltext">S</text>
+<text x="258" y="963.00" class="label">GPT-5 nano</text>
 <rect x="420" y="944" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="420" y="944" width="161.36" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
-<text x="571.36" y="963.00" text-anchor="end" class="celltext">22.4%</text>
+<rect x="420" y="944" width="200.06" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
+<text x="610.06" y="963.00" text-anchor="end" class="celltext">27.8%</text>
 <text x="1162" y="959.00" class="label">option_6 (Nordic Europe)</text>
-<text x="1162" y="974.00" class="small">effective clusters 8.07</text>
-<rect x="184" y="994" width="56" height="20" rx="12" fill="#334155"/>
-<text x="212.00" y="1009.00" text-anchor="middle" class="celltext">Ref</text>
-<text x="258" y="1009.00" class="label">GPT-4.1 nano</text>
+<text x="1162" y="974.00" class="small">effective clusters 6.79</text>
+<rect x="184" y="994" width="56" height="20" rx="12" fill="#e11d48"/>
+<text x="212.00" y="1009.00" text-anchor="middle" class="celltext">M</text>
+<text x="258" y="1009.00" class="label">GPT-5 mini</text>
 <rect x="420" y="990" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="420" y="990" width="154.76" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
-<text x="564.76" y="1009.00" text-anchor="end" class="celltext">21.5%</text>
+<rect x="420" y="990" width="182.14" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
+<text x="592.14" y="1009.00" text-anchor="end" class="celltext">25.3%</text>
 <text x="1162" y="1005.00" class="label">option_6 (Nordic Europe)</text>
-<text x="1162" y="1020.00" class="small">effective clusters 8.40</text>
-<rect x="184" y="1040" width="56" height="20" rx="12" fill="#334155"/>
-<text x="212.00" y="1055.00" text-anchor="middle" class="celltext">Ref</text>
-<text x="258" y="1055.00" class="label">GPT-5 mini</text>
+<text x="1162" y="1020.00" class="small">effective clusters 7.13</text>
+<rect x="184" y="1040" width="56" height="20" rx="12" fill="#fb7185"/>
+<text x="212.00" y="1055.00" text-anchor="middle" class="celltext-dark">L</text>
+<text x="258" y="1055.00" class="label">GPT-5.5</text>
 <rect x="420" y="1036" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="420" y="1036" width="182.14" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
-<text x="592.14" y="1055.00" text-anchor="end" class="celltext">25.3%</text>
+<rect x="420" y="1036" width="196.33" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
+<text x="606.33" y="1055.00" text-anchor="end" class="celltext">27.3%</text>
 <text x="1162" y="1051.00" class="label">option_6 (Nordic Europe)</text>
-<text x="1162" y="1066.00" class="small">effective clusters 7.13</text>
+<text x="1162" y="1066.00" class="small">effective clusters 7.06</text>
 <rect x="184" y="1086" width="56" height="20" rx="12" fill="#334155"/>
 <text x="212.00" y="1101.00" text-anchor="middle" class="celltext">Ref</text>
-<text x="258" y="1101.00" class="label">GPT-5 nano</text>
+<text x="258" y="1101.00" class="label">GPT-4.1 mini</text>
 <rect x="420" y="1082" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="420" y="1082" width="200.06" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
-<text x="610.06" y="1101.00" text-anchor="end" class="celltext">27.8%</text>
+<rect x="420" y="1082" width="161.36" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
+<text x="571.36" y="1101.00" text-anchor="end" class="celltext">22.4%</text>
 <text x="1162" y="1097.00" class="label">option_6 (Nordic Europe)</text>
-<text x="1162" y="1112.00" class="small">effective clusters 6.79</text>
+<text x="1162" y="1112.00" class="small">effective clusters 8.07</text>
 <rect x="184" y="1132" width="56" height="20" rx="12" fill="#334155"/>
 <text x="212.00" y="1147.00" text-anchor="middle" class="celltext">Ref</text>
-<text x="258" y="1147.00" class="label">GPT-5.5</text>
+<text x="258" y="1147.00" class="label">GPT-4.1 nano</text>
 <rect x="420" y="1128" width="720" height="28" rx="10" class="muted-bar"/>
-<rect x="420" y="1128" width="196.33" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
-<text x="606.33" y="1147.00" text-anchor="end" class="celltext">27.3%</text>
+<rect x="420" y="1128" width="154.76" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>
+<text x="564.76" y="1147.00" text-anchor="end" class="celltext">21.5%</text>
 <text x="1162" y="1143.00" class="label">option_6 (Nordic Europe)</text>
-<text x="1162" y="1158.00" class="small">effective clusters 7.06</text>
+<text x="1162" y="1158.00" class="small">effective clusters 8.40</text>
 <rect x="48" y="1208" width="1584" height="78" rx="18" class="legend-card"/>
 <text x="72" y="1234" class="tiny">HOW TO READ THIS FIGURE</text>
 <text x="72" y="1258" class="body">Dominant-cluster share = max(cluster share) among valid visible selections. Effective clusters = 1 / sum(p²). The first tells you how much one cluster dominates; the second tells you how broadly the line spreads its CCD choices.</text>

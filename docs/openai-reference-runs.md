@@ -13,7 +13,7 @@ The current release builder includes six completed text-only OpenAI reference ro
 - `GPT-4.1 mini`
 - `GPT-5.5`
 
-Each completed full text sweep covers 76,486 selected examples across UniMoral action prediction, ValuePrism relevance, ValuePrism valence, and CCD-Bench selection. These rows intentionally omit SMID and DeNEVIL, so they are reference markers rather than OpenAI family-size sweeps.
+Each completed full text sweep covers 76,486 selected examples across UniMoral action prediction, ValuePrism relevance, ValuePrism valence, and CCD-Bench selection. The release now labels the GPT-5 subset as a text-only S/M/L reference series: `GPT-5 nano` is S, `GPT-5 mini` is M, and `GPT-5.5` is L. These rows intentionally omit SMID and DeNEVIL, so the GPT-5 S/M/L read is text-only size context rather than all-benchmark OpenAI coverage.
 
 ## GPT-5.5 Promotion Status
 
@@ -37,6 +37,6 @@ The full GPT-5.5 text batch was prepared at workspace-level `outputs/openai-smok
 
 Local integrity checks on May 21, 2026 found 76,486 unique sample ids, zero JSON parse errors, and 76,486 successful `project_results.jsonl` rows. Task counts match the expected text-only sweep: 8,784 UniMoral action-prediction rows, 43,680 ValuePrism relevance rows, 21,840 ValuePrism valence rows, and 2,182 CCD-Bench selection rows. The manifest still records the original oversized chunk 01 as a failed submission attempt, but all retry chunks needed for the final artifact completed with zero failed requests.
 
-The promoted GPT-5.5 row is scoped exactly like the other OpenAI text references: it has UniMoral, ValuePrism, and CCD-Bench text-only evidence; it has no SMID row, no DeNEVIL row, and no OpenAI S/M/L family-size interpretation.
+The promoted GPT-5.5 row is scoped exactly like the other OpenAI text references: it has UniMoral, ValuePrism, and CCD-Bench text-only evidence; it has no SMID row and no DeNEVIL row. In the public family-scaling figure it is the OpenAI GPT-5 text-only L slot, paired with `GPT-5 nano` as S and `GPT-5 mini` as M; this should not be described as all-benchmark OpenAI family coverage.
 
 Reference: [OpenAI latest model guide](https://developers.openai.com/api/docs/guides/latest-model).

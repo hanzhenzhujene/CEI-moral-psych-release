@@ -136,30 +136,30 @@
 <rect x="280" y="840" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="840" width="538.16" height="28" rx="10" fill="#111827"/>
 <text x="828.16" y="859" text-anchor="start" class="label">67.3%</text>
-<rect x="122" y="887" width="10" height="10" rx="3" fill="#334155"/>
+<rect x="122" y="887" width="10" height="10" rx="3" fill="#be123c"/>
 <text x="138" y="901" text-anchor="end" class="label">GPT-5 nano</text>
 <rect x="280" y="882" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="882" width="522.86" height="28" rx="10" fill="#334155"/>
+<rect x="280" y="882" width="522.86" height="28" rx="10" fill="#be123c"/>
 <text x="812.86" y="901" text-anchor="start" class="label">65.4%</text>
 <rect x="122" y="929" width="10" height="10" rx="3" fill="#334155"/>
 <text x="138" y="943" text-anchor="end" class="label">GPT-4.1 nano</text>
 <rect x="280" y="924" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="924" width="517.03" height="28" rx="10" fill="#334155"/>
 <text x="807.03" y="943" text-anchor="start" class="label">64.6%</text>
-<rect x="122" y="971" width="10" height="10" rx="3" fill="#334155"/>
+<rect x="122" y="971" width="10" height="10" rx="3" fill="#e11d48"/>
 <text x="138" y="985" text-anchor="end" class="label">GPT-5 mini</text>
 <rect x="280" y="966" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="966" width="542.35" height="28" rx="10" fill="#334155"/>
+<rect x="280" y="966" width="542.35" height="28" rx="10" fill="#e11d48"/>
 <text x="832.35" y="985" text-anchor="start" class="label">67.8%</text>
 <rect x="122" y="1013" width="10" height="10" rx="3" fill="#334155"/>
 <text x="138" y="1027" text-anchor="end" class="label">GPT-4.1 mini</text>
 <rect x="280" y="1008" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1008" width="543.53" height="28" rx="10" fill="#334155"/>
 <text x="833.53" y="1027" text-anchor="start" class="label">67.9%</text>
-<rect x="122" y="1055" width="10" height="10" rx="3" fill="#334155"/>
+<rect x="122" y="1055" width="10" height="10" rx="3" fill="#fb7185"/>
 <text x="138" y="1069" text-anchor="end" class="label">GPT-5.5</text>
 <rect x="280" y="1050" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1050" width="546.90" height="28" rx="10" fill="#334155"/>
+<rect x="280" y="1050" width="546.90" height="28" rx="10" fill="#fb7185"/>
 <text x="836.90" y="1069" text-anchor="start" class="label">68.4%</text>
 <rect x="42" y="1130" width="1136" height="456" rx="18" class="subpanel"/>
 <text x="48" y="1158" class="axis">SMID</text>
@@ -314,29 +314,29 @@
 <rect x="280" y="2324" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="2324" width="560.56" height="28" rx="10" fill="#111827"/>
 <text x="850.56" y="2343" text-anchor="start" class="label">70.1%</text>
-<rect x="122" y="2371" width="10" height="10" rx="3" fill="#334155"/>
+<rect x="122" y="2371" width="10" height="10" rx="3" fill="#be123c"/>
 <text x="138" y="2385" text-anchor="end" class="label">GPT-5 nano</text>
 <rect x="280" y="2366" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="2366" width="493.75" height="28" rx="10" fill="#334155"/>
+<rect x="280" y="2366" width="493.75" height="28" rx="10" fill="#be123c"/>
 <text x="783.75" y="2385" text-anchor="start" class="label">61.7%</text>
 <rect x="122" y="2413" width="10" height="10" rx="3" fill="#334155"/>
 <text x="138" y="2427" text-anchor="end" class="label">GPT-4.1 nano</text>
 <rect x="280" y="2408" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="2408" width="538.43" height="28" rx="10" fill="#334155"/>
 <text x="828.43" y="2427" text-anchor="start" class="label">67.3%</text>
-<rect x="122" y="2455" width="10" height="10" rx="3" fill="#334155"/>
+<rect x="122" y="2455" width="10" height="10" rx="3" fill="#e11d48"/>
 <text x="138" y="2469" text-anchor="end" class="label">GPT-5 mini</text>
 <rect x="280" y="2450" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="2450" width="591.12" height="28" rx="10" fill="#334155"/>
+<rect x="280" y="2450" width="591.12" height="28" rx="10" fill="#e11d48"/>
 <text x="881.12" y="2469" text-anchor="start" class="label">73.9%</text>
 <rect x="122" y="2497" width="10" height="10" rx="3" fill="#334155"/>
 <text x="138" y="2511" text-anchor="end" class="label">GPT-4.1 mini</text>
 <rect x="280" y="2492" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="2492" width="587.91" height="28" rx="10" fill="#334155"/>
 <text x="877.91" y="2511" text-anchor="start" class="label">73.5%</text>
-<rect x="122" y="2539" width="10" height="10" rx="3" fill="#334155"/>
+<rect x="122" y="2539" width="10" height="10" rx="3" fill="#fb7185"/>
 <text x="138" y="2553" text-anchor="end" class="label">GPT-5.5</text>
 <rect x="280" y="2534" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="2534" width="588.52" height="28" rx="10" fill="#334155"/>
+<rect x="280" y="2534" width="588.52" height="28" rx="10" fill="#fb7185"/>
 <text x="878.52" y="2553" text-anchor="start" class="label">73.6%</text>
 </svg>

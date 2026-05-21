@@ -135,7 +135,7 @@
 <text x="1092" y="921.00" class="label">valid 2,182 / 2,182</text>
 <text x="292" y="967.00" text-anchor="end" class="label">GPT-5 nano</text>
 <rect x="310" y="948" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="948" width="759.65" height="28" rx="10" fill="#334155" stroke="#ffffff" stroke-width="1"/>
+<rect x="310" y="948" width="759.65" height="28" rx="10" fill="#be123c" stroke="#ffffff" stroke-width="1"/>
 <text x="1059.65" y="967.00" text-anchor="end" class="celltext">99.95%</text>
 <text x="1092" y="967.00" class="label">valid 2,181 / 2,182</text>
 <text x="292" y="1013.00" text-anchor="end" class="label">GPT-4.1 nano</text>
@@ -145,7 +145,7 @@
 <text x="1092" y="1013.00" class="label">valid 2,182 / 2,182</text>
 <text x="292" y="1059.00" text-anchor="end" class="label">GPT-5 mini</text>
 <rect x="310" y="1040" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="1040" width="760.00" height="28" rx="10" fill="#334155" stroke="#ffffff" stroke-width="1"/>
+<rect x="310" y="1040" width="760.00" height="28" rx="10" fill="#e11d48" stroke="#ffffff" stroke-width="1"/>
 <text x="1060.00" y="1059.00" text-anchor="end" class="celltext">100.0%</text>
 <text x="1092" y="1059.00" class="label">valid 2,182 / 2,182</text>
 <text x="292" y="1105.00" text-anchor="end" class="label">GPT-4.1 mini</text>
@@ -155,8 +155,8 @@
 <text x="1092" y="1105.00" class="label">valid 2,182 / 2,182</text>
 <text x="292" y="1151.00" text-anchor="end" class="label">GPT-5.5</text>
 <rect x="310" y="1132" width="760" height="28" rx="10" class="muted-bar"/>
-<rect x="310" y="1132" width="760.00" height="28" rx="10" fill="#334155" stroke="#ffffff" stroke-width="1"/>
-<text x="1060.00" y="1151.00" text-anchor="end" class="celltext">100.0%</text>
+<rect x="310" y="1132" width="760.00" height="28" rx="10" fill="#fb7185" stroke="#ffffff" stroke-width="1"/>
+<text x="1060.00" y="1151.00" text-anchor="end" class="celltext-dark">100.0%</text>
 <text x="1092" y="1151.00" class="label">valid 2,182 / 2,182</text>
 <rect x="48" y="1212" width="1344" height="72" rx="18" class="legend-card"/>
 <text x="72" y="1236" class="tiny">CCD COVERAGE INTERPRETATION</text>
