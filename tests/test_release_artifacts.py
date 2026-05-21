@@ -26,6 +26,12 @@ SCRIPT = ROOT / "scripts" / "build_release_artifacts.py"
 SOURCE = ROOT / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
 
 
+def markdown_h2_section(text: str, heading: str) -> str:
+    start = text.index(heading)
+    end = text.find("\n## ", start + len(heading))
+    return text[start:] if end == -1 else text[start:end]
+
+
 def test_axis_tick_helpers_stay_nonzero_for_minimal_clean_state():
     assert nice_tick_step(1, target_ticks=4) == 1
     ticks, upper = build_axis_ticks(1, target_ticks=4)
@@ -260,10 +266,11 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     for report_name in ("README.md", "jenny-group-report.md"):
         report_text = (release_dir / report_name).read_text(encoding="utf-8")
-        tldr_text = report_text.split("## Benchmark Result Visuals", 1)[0]
+        assert report_text.index("## Benchmark Result Visuals") < report_text.index("## TL;DR")
+        tldr_text = markdown_h2_section(report_text, "## TL;DR")
         assert "**Current GitHub-facing boundary:**" not in tldr_text
-        assert "**Main landscape:**" in tldr_text
-        assert "image moral judgment" in tldr_text
+        assert "**Bottom line:**" in tldr_text
+        assert "image moral judgment is the bottleneck" in tldr_text
         assert "**DeNEVIL is proxy behavioral evidence" not in tldr_text
         assert "`MiniMax-M`" in report_text
         assert (
@@ -273,7 +280,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     assert "## TL;DR" in topline_text
     assert "`GPT-5.5`" in topline_text
-    assert "**Main landscape:**" in topline_text
+    assert "**Bottom line:**" in topline_text
     assert "**DeNEVIL is proxy behavioral evidence" not in topline_text
     assert "**Current GitHub-facing boundary:**" not in topline_text.split("## Frozen Snapshot Scope", 1)[0]
 
@@ -1151,26 +1158,28 @@ def test_release_builder_emits_expected_files(tmp_path):
     for text in (report_text, release_readme):
         assert "## TL;DR" in text
         assert "Key takeaways:" in text
-        tldr_text = text.split("## Benchmark Result Visuals", 1)[0]
-        assert "Best all-around line" in tldr_text
-        assert "Main landscape" in tldr_text
-        assert "models can talk through moral choices and values better than they can see morally important cues in images" in tldr_text
-        assert "Scaling law" in tldr_text
-        assert "there is no reliable bigger-is-better rule" in tldr_text
-        assert "Family read" in tldr_text
-        assert "UniMoral is not one skill" in tldr_text
-        assert "Cultural-style bias" in tldr_text
-        assert "strong Europe/Nordic pull" in tldr_text
-        assert "**Current GitHub-facing boundary:**" not in text.split("## Benchmark Result Visuals", 1)[0]
-        assert "OpenAI references" in tldr_text
-        assert "GPT-4o-mini Ref" in tldr_text
-        assert "`GPT-5 nano` is S, `GPT-5 mini` is M, and `GPT-5.5` is L" in tldr_text
+        assert text.index("## Benchmark Result Visuals") < text.index("## TL;DR")
+        tldr_text = markdown_h2_section(text, "## TL;DR")
+        assert "Best comparable all-around line" in tldr_text
+        assert "Bottom line" in tldr_text
+        assert "text moral reasoning is usable; image moral judgment is the bottleneck" in tldr_text
+        assert "Best text-only line" in tldr_text
+        assert "Scaling read" in tldr_text
+        assert "bigger is not reliably better" in tldr_text
+        assert "UniMoral readout" in tldr_text
+        assert "CCD-Bench read" in tldr_text
+        assert "cultural-choice behavior, not accuracy" in tldr_text
+        assert "**Current GitHub-facing boundary:**" not in tldr_text
+        assert "OpenAI/GPT read" in tldr_text
+        assert "`GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L" in tldr_text
         assert "UniMoral tops out at `GPT-5.5`" in tldr_text
-        assert "`GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref`" in tldr_text
+        assert "GPT-4o/GPT-4.1 rows are separate text refs" in tldr_text
         assert "GPT-4o-mini reference line" not in text
         assert "76,486/76,486 parsed prompts" not in text
-        assert "Small-model follow-up" in tldr_text
-        assert "Mistral/Qwen/Llama older routes add one simple takeaway" in tldr_text
+        assert "DeNEVIL boundary" in tldr_text
+        assert "proxy behavior, not paper-faithful MoralPrompt scoring" in tldr_text
+        assert "Small-model floor" in tldr_text
+        assert "May 13 Mistral/Qwen/Llama follow-up shows a capability threshold" in tldr_text
         assert "Small-model capability floor | May 13 follow-up" in text
         assert "### Small-Model Follow-Up: Capability Floor" in text
         assert "`Mistral Nemo` | 12B | 0.648" in text
@@ -1182,6 +1191,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" not in tldr_text
         assert "## Results First" in text
         assert "## Benchmark Result Visuals" in text
+        assert "Start here. These figures are the main result surface" in text
+        assert "Visual readout in one sentence" in text
         assert "### 1. UniMoral RQ1-RQ4: family-size scaling and task readout" in text
         assert "### 2. SMID / Value Kaleidoscope: topline comparable accuracy" in text
         assert "### 3. SMID / Value Kaleidoscope: family-size scaling" in text
@@ -1191,6 +1202,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "### 7. CCD-Bench: dominant-option concentration" not in text
         assert "### 8. DeNEVIL: proxy behavioral outcomes" not in text
         assert "## Interpretation" in text
+        assert "### Direct Read" in text
+        assert "Overall comparable winner" in text
+        assert "Text-only winner" in text
         assert "### Interpretation At A Glance" in text
         assert "### Benchmark Reading Guide" in text
         assert "| Benchmark readout | In plain language: what it asks | Why it matters for moral psychology | How to read this release |" in text
@@ -1319,18 +1333,18 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     assert "## TL;DR" in topline_summary
     assert "Key takeaways:" in topline_summary
-    assert "Main landscape" in topline_summary
+    assert "Bottom line" in topline_summary
     assert "**Current GitHub-facing boundary:**" not in topline_summary.split("## Frozen Snapshot Scope", 1)[0]
-    assert "OpenAI references" in topline_summary
-    assert "`GPT-5 nano` is S, `GPT-5 mini` is M, and `GPT-5.5` is L" in topline_summary
-    assert "`GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref`" in topline_summary
-    assert "Small-model follow-up" in topline_summary
+    assert "OpenAI/GPT read" in topline_summary
+    assert "`GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L" in topline_summary
+    assert "GPT-4o/GPT-4.1 rows are separate text refs" in topline_summary
+    assert "Small-model floor" in topline_summary
     assert "Mistral Nemo" in topline_summary
     assert "GPT-4o-mini reference line" not in topline_summary
     assert "76,486/76,486 parsed prompts" not in topline_summary
     assert "## Frozen Snapshot Scope" in topline_summary
-    assert "Best all-around line" in topline_summary
-    assert "Cultural-style bias" in topline_summary
+    assert "Best comparable all-around line" in topline_summary
+    assert "CCD-Bench read" in topline_summary
     assert "GPT-5 nano" in topline_summary
     assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" not in topline_summary
     assert "For the full public package, move next to `README.md`" in topline_summary
@@ -1600,10 +1614,11 @@ def test_write_root_readme_keeps_benchmark_visuals_section(tmp_path):
     subprocess.run([sys.executable, str(script_copy), "--write-root-readme"], check=True, cwd=repo_copy)
 
     root_readme = (repo_copy / "README.md").read_text(encoding="utf-8")
-    assert root_readme.index("## Method Overview") < root_readme.index("## Benchmark Result Visuals")
+    assert root_readme.index("## Benchmark Result Visuals") < root_readme.index("## TL;DR")
+    assert root_readme.index("## TL;DR") < root_readme.index("## Research Goal")
     assert root_readme.index("## Benchmark Result Visuals") < root_readme.index("## Public Quickstart")
     assert "| Go straight to the benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |" in root_readme
-    assert "The GPT-5 subset is a text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`)" in root_readme
+    assert "The GPT-5 subset is a black text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`)" in root_readme
     assert "`openai/gpt-5.5`" in root_readme
     assert "None has SMID or DeNEVIL." in root_readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
