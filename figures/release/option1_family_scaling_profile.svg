@@ -39,12 +39,12 @@
 <rect x="0" y="0" width="1500" height="1240" class="canvas"/>
 <rect x="24" y="24" width="1452" height="1192" rx="22" class="panel"/>
 <title>Family scaling profile by benchmark</title>
-<desc>Two-panel family scaling view for the visual and text comparable-accuracy panels after the UniMoral benchmark block. OpenAI GPT-5 is plotted as a text-only S/M/L series on Value only: S is GPT-5 nano, M is GPT-5 mini, and L is GPT-5.5. GPT-4o and GPT-4.1 rows remain gray text reference lines. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
+<desc>Two-panel family scaling view for the visual and text comparable-accuracy panels after the UniMoral benchmark block. OpenAI GPT-5 is plotted as a black text-only S/M/L series on Value only: S is GPT-5 nano, M is GPT-5 mini, and L is GPT-5.5. GPT-4o and GPT-4.1 rows remain gray text reference lines. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
 <text x="48" y="64" class="title">Family Scaling Profile</text>
 <text x="48" y="92" class="subtitle">UniMoral is grouped in Figure 1 above; these comparable panels start at SMID.</text>
 <text x="48" y="114" class="subtitle">Two comparable benchmark panels here: SMID and Value Kaleidoscope.</text>
 <text x="48" y="136" class="subtitle">This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.</text>
-<text x="48" y="158" class="subtitle">OpenAI GPT-5 text-only points are S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5.</text>
+<text x="48" y="158" class="subtitle">OpenAI GPT-5 black text-only points are S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5.</text>
 <text x="48" y="180" class="subtitle">GPT-4o and GPT-4.1 text refs are gray dashed reference lines where a text metric exists.</text>
 <text x="48" y="202" class="subtitle">SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.</text>
 <text x="48" y="224" class="subtitle">Read CCD-Bench and Denevil in their dedicated figures.</text>
@@ -174,15 +174,15 @@
 <circle cx="1256.00" cy="370.15" r="8" fill="#ffffff" stroke="#65b8ac" stroke-width="3.4"/>
 <circle cx="1256.00" cy="370.15" r="4.2" fill="#65b8ac"/>
 <line x1="880.00" y1="383.58" x2="1091.00" y2="338.15" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
-<line x1="880.00" y1="383.58" x2="1091.00" y2="338.15" stroke="#e11d48" stroke-width="4.4" stroke-linecap="round"/>
+<line x1="880.00" y1="383.58" x2="1091.00" y2="338.15" stroke="#000000" stroke-width="4.4" stroke-linecap="round"/>
 <line x1="1091.00" y1="338.15" x2="1302.00" y2="339.36" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
-<line x1="1091.00" y1="338.15" x2="1302.00" y2="339.36" stroke="#e11d48" stroke-width="4.4" stroke-linecap="round"/>
-<circle cx="880.00" cy="383.58" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
-<circle cx="880.00" cy="383.58" r="4.2" fill="#e11d48"/>
-<circle cx="1091.00" cy="338.15" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
-<circle cx="1091.00" cy="338.15" r="4.2" fill="#e11d48"/>
-<circle cx="1302.00" cy="339.36" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
-<circle cx="1302.00" cy="339.36" r="4.2" fill="#e11d48"/>
+<line x1="1091.00" y1="338.15" x2="1302.00" y2="339.36" stroke="#000000" stroke-width="4.4" stroke-linecap="round"/>
+<circle cx="880.00" cy="383.58" r="8" fill="#ffffff" stroke="#000000" stroke-width="3.4"/>
+<circle cx="880.00" cy="383.58" r="4.2" fill="#000000"/>
+<circle cx="1091.00" cy="338.15" r="8" fill="#ffffff" stroke="#000000" stroke-width="3.4"/>
+<circle cx="1091.00" cy="338.15" r="4.2" fill="#000000"/>
+<circle cx="1302.00" cy="339.36" r="8" fill="#ffffff" stroke="#000000" stroke-width="3.4"/>
+<circle cx="1302.00" cy="339.36" r="4.2" fill="#000000"/>
 <line x1="848" y1="339.64" x2="1270" y2="339.64" stroke="#6b7280" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.62"/>
 <line x1="1270.00" y1="339.64" x2="1280.00" y2="364.00" stroke="#94a3b8" stroke-width="1.1" opacity="0.8"/>
 <text x="1286.00" y="368.00" class="ref-label">GPT-4.1-mini 73.5%</text>
@@ -202,7 +202,7 @@
 <text x="72" y="824" class="legend-note">has its combined RQ1-RQ4 block above.</text>
 <text x="72" y="852" class="legend-note">Use this figure for family-size comparisons</text>
 <text x="72" y="880" class="legend-note">on SMID and Value Kaleidoscope.</text>
-<text x="72" y="908" class="legend-note">OpenAI GPT-5 S/M/L appears on Value only;</text>
+<text x="72" y="908" class="legend-note">OpenAI GPT-5 black S/M/L appears on Value only;</text>
 <text x="72" y="936" class="legend-note">it has no SMID or DeNEVIL route.</text>
 <text x="72" y="964" class="legend-note">CCD-Bench is intentionally excluded here.</text>
 <text x="72" y="992" class="legend-note">Read CCD-Bench in the choice-distribution</text>
@@ -226,9 +226,9 @@
 <rect x="742" y="976" width="24" height="24" rx="6" fill="#a996e3"/>
 <text x="778" y="994" class="legend-big">Gemma</text>
 <text x="912" y="994" class="legend-note">full S/M/L sweep on SMID and Value.</text>
-<rect x="742" y="1018" width="24" height="24" rx="6" fill="#e11d48"/>
+<rect x="742" y="1018" width="24" height="24" rx="6" fill="#000000"/>
 <text x="778" y="1036" class="legend-big">OpenAI GPT-5</text>
-<text x="912" y="1036" class="legend-note">text-only S/M/L: S GPT-5 nano, M GPT-5 mini, L GPT-5.5.</text>
+<text x="912" y="1036" class="legend-note">black text-only S/M/L: S GPT-5 nano, M GPT-5 mini, L GPT-5.5.</text>
 <line x1="742" y1="1070" x2="786" y2="1070" stroke="#9ca3af" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 8"/>
 <text x="800" y="1078" class="legend-big">OpenAI Ref</text>
 <text x="912" y="1078" class="legend-note">GPT-4o and GPT-4.1 text refs; dashed where a text metric exists.</text>

@@ -11,9 +11,9 @@
 <rect x="246" y="100" width="760.0" height="18" fill="#84ad78" rx="3"/>
 <text x="1016.0" y="114">0.684</text>
 <text x="44" y="138">2. GPT-5.5</text>
-<rect x="178" y="125" width="38" height="18" fill="#e11d48" rx="9"/>
+<rect x="178" y="125" width="38" height="18" fill="#000000" rx="9"/>
 <text x="197" y="138" text-anchor="middle" fill="#17202a" font-weight="700">L</text>
-<rect x="246" y="124" width="760.0" height="18" fill="#e11d48" rx="3"/>
+<rect x="246" y="124" width="760.0" height="18" fill="#000000" rx="3"/>
 <text x="1016.0" y="138">0.684</text>
 <text x="44" y="162">3. GPT-4.1-mini Ref</text>
 <rect x="178" y="149" width="38" height="18" fill="#aab2bd" rx="9"/>
@@ -21,9 +21,9 @@
 <rect x="246" y="148" width="755.3" height="18" fill="#aab2bd" rx="3"/>
 <text x="1011.3" y="162">0.679</text>
 <text x="44" y="186">4. GPT-5 mini</text>
-<rect x="178" y="173" width="38" height="18" fill="#e11d48" rx="9"/>
+<rect x="178" y="173" width="38" height="18" fill="#000000" rx="9"/>
 <text x="197" y="186" text-anchor="middle" fill="#17202a" font-weight="700">M</text>
-<rect x="246" y="172" width="753.7" height="18" fill="#e11d48" rx="3"/>
+<rect x="246" y="172" width="753.7" height="18" fill="#000000" rx="3"/>
 <text x="1009.7" y="186">0.678</text>
 <text x="44" y="210">5. GPT-4o-mini Ref</text>
 <rect x="178" y="197" width="38" height="18" fill="#aab2bd" rx="9"/>
@@ -81,9 +81,9 @@
 <rect x="246" y="436" width="732.3" height="18" fill="#bf977a" rx="3"/>
 <text x="988.3" y="450">0.659</text>
 <text x="44" y="474">16. GPT-5 nano</text>
-<rect x="178" y="461" width="38" height="18" fill="#e11d48" rx="9"/>
+<rect x="178" y="461" width="38" height="18" fill="#000000" rx="9"/>
 <text x="197" y="474" text-anchor="middle" fill="#17202a" font-weight="700">S</text>
-<rect x="246" y="460" width="726.6" height="18" fill="#e11d48" rx="3"/>
+<rect x="246" y="460" width="726.6" height="18" fill="#000000" rx="3"/>
 <text x="982.6" y="474">0.654</text>
 <text x="44" y="498">17. Llama-S</text>
 <rect x="178" y="485" width="38" height="18" fill="#dc2626" rx="9"/>

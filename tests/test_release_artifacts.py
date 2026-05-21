@@ -1368,11 +1368,15 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "UniMoral is grouped in Figure 1 above" in family_scaling_svg
     assert "Two comparable benchmark panels here: SMID and Value Kaleidoscope." in family_scaling_svg
     assert "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence." in family_scaling_svg
-    assert "OpenAI GPT-5 text-only points are S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5." in family_scaling_svg
+    assert "OpenAI GPT-5 black text-only points are S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5." in family_scaling_svg
     assert "GPT-4o and GPT-4.1 text refs are gray dashed reference lines where a text metric exists." in family_scaling_svg
     assert "OpenAI refs 67.3%-73.5%" in family_scaling_svg
     assert "Best GPT-4.1-mini Ref 73.5%" in family_scaling_svg
     assert "OpenAI GPT-5" in family_scaling_svg
+    assert 'stroke="#000000"' in family_scaling_svg
+    assert 'fill="#000000"' in family_scaling_svg
+    for old_openai_color in ("#be123c", "#e11d48", "#fb7185"):
+        assert old_openai_color not in family_scaling_svg
     assert "GPT-4o-mini Ref: no SMID route" not in family_scaling_svg
     assert "#dc2626" in family_scaling_svg
     assert ">Ref<" not in family_scaling_svg
@@ -1553,8 +1557,13 @@ def test_openai_gpt_rows_are_visible_in_unimoral_and_ccd_figures():
     unimoral_scaling = (figure_dir / "option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
     for label in ("GPT-5 nano", "GPT-5 mini", "GPT-5.5"):
         assert label in unimoral_scaling
-    assert "OpenAI GPT-5 is shown as S/M/L in RQ1 only" in unimoral_scaling
+    assert "OpenAI GPT-5 is the black S/M/L line in RQ1 only" in unimoral_scaling
     assert "No OpenAI RQ2/RQ3/RQ4 scores are inferred." in unimoral_scaling
+    assert "OpenAI GPT-5 is black and appears for RQ1 action prediction only" in unimoral_scaling
+    assert 'stroke="#000000"' in unimoral_scaling
+    assert 'fill="#000000"' in unimoral_scaling
+    for old_openai_color in ("#be123c", "#e11d48", "#fb7185"):
+        assert old_openai_color not in unimoral_scaling
     assert "GPT-4o-mini as the only OpenAI reference" not in unimoral_scaling
     assert "other OpenAI rows stay in the broader text-comparison tables" not in unimoral_scaling
 

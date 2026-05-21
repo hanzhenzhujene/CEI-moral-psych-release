@@ -196,25 +196,25 @@
 <rect x="280" y="1330" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1330" width="560.56" height="28" rx="10" fill="#9ca3af"/>
 <text x="850.56" y="1349" text-anchor="start" class="label">70.1%</text>
-<rect x="56" y="1377" width="10" height="10" rx="3" fill="#be123c"/>
+<rect x="56" y="1377" width="10" height="10" rx="3" fill="#000000"/>
 <text x="78" y="1391" class="label">GPT-5 nano</text>
 <rect x="280" y="1372" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1372" width="493.75" height="28" rx="10" fill="#be123c"/>
+<rect x="280" y="1372" width="493.75" height="28" rx="10" fill="#000000"/>
 <text x="783.75" y="1391" text-anchor="start" class="label">61.7%</text>
 <rect x="56" y="1419" width="10" height="10" rx="3" fill="#9ca3af"/>
 <text x="78" y="1433" class="label">GPT-4.1-nano Ref</text>
 <rect x="280" y="1414" width="800" height="28" rx="10" fill="#e2e8f0"/>
 <rect x="280" y="1414" width="538.43" height="28" rx="10" fill="#9ca3af"/>
 <text x="828.43" y="1433" text-anchor="start" class="label">67.3%</text>
-<rect x="56" y="1461" width="10" height="10" rx="3" fill="#e11d48"/>
+<rect x="56" y="1461" width="10" height="10" rx="3" fill="#000000"/>
 <text x="78" y="1475" class="label">GPT-5 mini</text>
 <rect x="280" y="1456" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1456" width="591.12" height="28" rx="10" fill="#e11d48"/>
+<rect x="280" y="1456" width="591.12" height="28" rx="10" fill="#000000"/>
 <text x="881.12" y="1475" text-anchor="start" class="label">73.9%</text>
-<rect x="56" y="1503" width="10" height="10" rx="3" fill="#fb7185"/>
+<rect x="56" y="1503" width="10" height="10" rx="3" fill="#000000"/>
 <text x="78" y="1517" class="label">GPT-5.5</text>
 <rect x="280" y="1498" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="1498" width="588.52" height="28" rx="10" fill="#fb7185"/>
+<rect x="280" y="1498" width="588.52" height="28" rx="10" fill="#000000"/>
 <text x="878.52" y="1517" text-anchor="start" class="label">73.6%</text>
 <rect x="56" y="1545" width="10" height="10" rx="3" fill="#9ca3af"/>
 <text x="78" y="1559" class="label">GPT-4.1-mini Ref</text>
