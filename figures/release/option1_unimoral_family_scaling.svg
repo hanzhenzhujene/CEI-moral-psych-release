@@ -4,7 +4,7 @@
 <text x="42" y="48" class="title">UniMoral family-size scaling by RQ</text>
 <text x="42" y="78" class="subtitle">Line charts show how each family moves across S/M/L slots inside each UniMoral task. Higher is better in every panel.</text>
 <text x="42" y="102" class="subtitle">Classification panels use strict-complete accuracy cells. RQ4 uses rows with usable generation scores; remaining MiniMax caveats stay in the audit tables.</text>
-<text x="42" y="126" class="subtitle">OpenAI reference is GPT-4o-mini only in this UniMoral RQ figure; other OpenAI rows remain text refs in the broader comparison tables.</text>
+<text x="42" y="126" class="subtitle">OpenAI GPT-5 is shown as S/M/L in RQ1 only; GPT-4o/GPT-4.1 text refs are dashed. No OpenAI RQ2/RQ3/RQ4 scores are inferred.</text>
 <rect x="48" y="160" width="540" height="300" class="panel"/>
 <text x="70" y="194" class="panel-title">RQ1 Action Prediction</text>
 <text x="70" y="219" class="metric-label">Metric: Accuracy</text>
@@ -23,9 +23,15 @@
 <text x="285.0" y="430" text-anchor="middle" class="axis">M</text>
 <line x1="450.0" y1="252" x2="450.0" y2="402" stroke="#eef2f7"/>
 <text x="450.0" y="430" text-anchor="middle" class="axis">L</text>
+<line x1="120" y1="272.6" x2="450" y2="272.6" stroke="#6b7280" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.6"/>
+<line x1="450.0" y1="272.6" x2="457.0" y2="268.6" stroke="#94a3b8" stroke-width="1.1" opacity="0.75"/>
+<text x="462.0" y="272.6" class="tiny">GPT 4.1-mini 0.679</text>
 <line x1="120" y1="279.3" x2="450" y2="279.3" stroke="#6b7280" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.6"/>
-<line x1="450.0" y1="279.3" x2="457.0" y2="275.3" stroke="#94a3b8" stroke-width="1.1" opacity="0.75"/>
-<text x="462.0" y="279.3" class="tiny">GPT 4o-mini 0.673</text>
+<line x1="450.0" y1="279.3" x2="457.0" y2="285.6" stroke="#94a3b8" stroke-width="1.1" opacity="0.75"/>
+<text x="462.0" y="289.6" class="tiny">GPT 4o-mini 0.673</text>
+<line x1="120" y1="305.7" x2="450" y2="305.7" stroke="#6b7280" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.6"/>
+<line x1="450.0" y1="305.7" x2="457.0" y2="302.6" stroke="#94a3b8" stroke-width="1.1" opacity="0.75"/>
+<text x="462.0" y="306.6" class="tiny">GPT 4.1-nano 0.646</text>
 <line x1="120.0" y1="304.6" x2="285.0" y2="287.5" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
 <line x1="285.0" y1="287.5" x2="450.0" y2="286.7" stroke="#6fa8c7" stroke-width="3" stroke-linecap="round"/>
 <circle cx="120.0" cy="304.6" r="7" fill="white" stroke="#6fa8c7" stroke-width="3"/>
@@ -66,6 +72,17 @@
 <circle cx="285.0" cy="289.4" r="3" fill="#ad9ad0"/>
 <circle cx="450.0" cy="290.9" r="7" fill="white" stroke="#ad9ad0" stroke-width="3"/>
 <circle cx="450.0" cy="290.9" r="3" fill="#ad9ad0"/>
+<line x1="120.0" y1="298.4" x2="285.0" y2="274.1" stroke="#e11d48" stroke-width="3" stroke-linecap="round"/>
+<line x1="285.0" y1="274.1" x2="450.0" y2="268.4" stroke="#e11d48" stroke-width="3" stroke-linecap="round"/>
+<circle cx="120.0" cy="298.4" r="7" fill="white" stroke="#e11d48" stroke-width="3"/>
+<circle cx="120.0" cy="298.4" r="3" fill="#e11d48"/>
+<text x="120.0" y="286.4" text-anchor="middle" class="tiny">GPT-5 nano</text>
+<circle cx="285.0" cy="274.1" r="7" fill="white" stroke="#e11d48" stroke-width="3"/>
+<circle cx="285.0" cy="274.1" r="3" fill="#e11d48"/>
+<text x="285.0" y="262.1" text-anchor="middle" class="tiny">GPT-5 mini</text>
+<circle cx="450.0" cy="268.4" r="7" fill="white" stroke="#e11d48" stroke-width="3"/>
+<circle cx="450.0" cy="268.4" r="3" fill="#e11d48"/>
+<text x="450.0" y="256.4" text-anchor="middle" class="tiny">GPT-5.5</text>
 <rect x="630" y="160" width="540" height="300" class="panel"/>
 <text x="652" y="194" class="panel-title">RQ2 Moral Typology</text>
 <text x="652" y="219" class="metric-label">Metric: Accuracy</text>
@@ -299,16 +316,18 @@
 <text x="92" y="930" class="legend-title">Family legend</text>
 <circle cx="282" cy="922" r="11" fill="#6fa8c7"/>
 <text x="302" y="930" class="legend">Qwen</text>
-<circle cx="527" cy="922" r="11" fill="#bf977a"/>
-<text x="547" y="930" class="legend">MiniMax</text>
-<circle cx="772" cy="922" r="11" fill="#84ad78"/>
-<text x="792" y="930" class="legend">DeepSeek</text>
-<circle cx="1017" cy="922" r="11" fill="#dc2626"/>
-<text x="1037" y="930" class="legend">Llama</text>
-<circle cx="1262" cy="922" r="11" fill="#ad9ad0"/>
-<text x="1282" y="930" class="legend">Gemma</text>
-<line x1="1503" y1="922" x2="1553" y2="922" stroke="#aab2bd" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 8"/>
-<text x="1567" y="930" class="legend">OpenAI Ref</text>
+<circle cx="502" cy="922" r="11" fill="#bf977a"/>
+<text x="522" y="930" class="legend">MiniMax</text>
+<circle cx="722" cy="922" r="11" fill="#84ad78"/>
+<text x="742" y="930" class="legend">DeepSeek</text>
+<circle cx="942" cy="922" r="11" fill="#dc2626"/>
+<text x="962" y="930" class="legend">Llama</text>
+<circle cx="1162" cy="922" r="11" fill="#ad9ad0"/>
+<text x="1182" y="930" class="legend">Gemma</text>
+<circle cx="1382" cy="922" r="11" fill="#e11d48"/>
+<text x="1402" y="930" class="legend">OpenAI GPT-5</text>
+<line x1="1598" y1="922" x2="1648" y2="922" stroke="#aab2bd" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 8"/>
+<text x="1662" y="930" class="legend">OpenAI Ref</text>
 <text x="92" y="980" class="legend-note">Takeaway: UniMoral does not have one simple bigger-is-better curve. The winner changes by task, so report the RQ-specific pattern instead of one averaged moral-reasoning story.</text>
-<text x="92" y="1012" class="legend-note">This UniMoral RQ figure uses GPT-4o-mini as the only OpenAI reference line; the other OpenAI rows stay in the broader text-comparison tables.</text>
+<text x="92" y="1012" class="legend-note">OpenAI GPT-5 S/M/L points appear for RQ1 action prediction only; GPT-4o/GPT-4.1 refs are dashed where a UniMoral metric exists.</text>
 </svg>

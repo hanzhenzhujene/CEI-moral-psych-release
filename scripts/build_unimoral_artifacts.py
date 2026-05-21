@@ -41,7 +41,22 @@ MODEL_LINES = [
     ("Gemma-S", "Gemma", "S", "gemma_s"),
     ("Gemma-M", "Gemma", "M", "gemma_m"),
     ("Gemma-L", "Gemma", "L", "gemma_l"),
-    ("GPT4 only", "GPT4 only", "Ref", "gpt4_only"),
+    ("GPT4 only", "OpenAI Ref", "Ref", "gpt4_only"),
+]
+
+OPENAI_UNIMORAL_ACTION_ONLY_LINES = [
+    ("GPT-5 nano", "OpenAI GPT-5", "S", "openai_gpt5_nano"),
+    ("GPT-5 mini", "OpenAI GPT-5", "M", "openai_gpt5_mini"),
+    ("GPT-5.5", "OpenAI GPT-5", "L", "openai_gpt55"),
+    ("GPT-4.1-nano Ref", "OpenAI Ref", "Ref", "openai_gpt41_nano"),
+    ("GPT-4.1-mini Ref", "OpenAI Ref", "Ref", "openai_gpt41_mini"),
+]
+
+VISUAL_MODEL_LINES = [
+    *MODEL_LINES[:-1],
+    *OPENAI_UNIMORAL_ACTION_ONLY_LINES[:3],
+    MODEL_LINES[-1],
+    *OPENAI_UNIMORAL_ACTION_ONLY_LINES[3:],
 ]
 
 DISPLAY_LINE_LABELS = {
@@ -553,6 +568,48 @@ def action_lookup(release_dir: Path) -> dict[str, float]:
     return lookup
 
 
+def with_openai_unimoral_action_visual_rows(
+    rows: list[dict[str, object]],
+    release_dir: Path,
+) -> list[dict[str, object]]:
+    """Append OpenAI text-only RQ1 rows for figures without inventing RQ2/RQ3/RQ4 scores."""
+    lookup = action_lookup(release_dir)
+    existing = {
+        (str(row.get("line_label") or ""), str(row.get("task_name") or ""))
+        for row in rows
+    }
+    visual_rows = list(rows)
+    task = TASKS["unimoral_action_prediction"]
+    for line_label, family, size_slot, _slug in OPENAI_UNIMORAL_ACTION_ONLY_LINES:
+        key = (line_label, "unimoral_action_prediction")
+        if key in existing:
+            continue
+        value = lookup.get(line_label)
+        visual_rows.append(
+            {
+                "line_label": line_label,
+                "family": family,
+                "size_slot": size_slot,
+                "task_name": "unimoral_action_prediction",
+                "rq": task["rq"],
+                "task_label": task["label"],
+                "primary_metric": task["metric"],
+                "expected_samples": task["expected"],
+                "completed_samples": task["expected"] if value is not None else 0,
+                "status": "complete" if value is not None else "missing",
+                "log_path": "",
+                "accuracy": "" if value is None else round(value, 6),
+                "official_weighted_f1": "",
+                "bleu": "",
+                "meteor": "",
+                "bert_score_f1": "",
+                "rouge_l": "",
+                "parsed_count": task["expected"] if value is not None else "",
+            }
+        )
+    return visual_rows
+
+
 def build_rows(
     log_root: Path,
     release_dir: Path,
@@ -913,6 +970,8 @@ FAMILY_COLORS = {
     "Llama": "#dc2626",
     "Gemma": "#ad9ad0",
     "GPT4 only": "#aab2bd",
+    "OpenAI GPT-5": "#e11d48",
+    "OpenAI Ref": "#aab2bd",
 }
 
 
@@ -930,7 +989,7 @@ def internal_line_label(label: object) -> str:
 
 def family_for_line(line_label: str) -> str:
     internal_label = internal_line_label(line_label)
-    for label, family, _, _ in MODEL_LINES:
+    for label, family, _, _ in VISUAL_MODEL_LINES:
         if label == internal_label:
             return family
     return ""
@@ -1004,7 +1063,7 @@ def score_scale_note(rows: list[dict[str, object]]) -> str:
 
 def line_meta_for(label: str) -> tuple[str, str]:
     internal_label = internal_line_label(label)
-    for line_label, family, size_slot, _ in MODEL_LINES:
+    for line_label, family, size_slot, _ in VISUAL_MODEL_LINES:
         if line_label == internal_label:
             return family, size_slot
     return "", ""
@@ -1014,7 +1073,7 @@ def family_group_spans() -> list[tuple[str, int, int]]:
     spans: list[tuple[str, int, int]] = []
     current_family: str | None = None
     start_index = 0
-    for index, (_, family, _, _) in enumerate(MODEL_LINES):
+    for index, (_, family, _, _) in enumerate(VISUAL_MODEL_LINES):
         if current_family is None:
             current_family = family
             start_index = index
@@ -1024,7 +1083,7 @@ def family_group_spans() -> list[tuple[str, int, int]]:
             current_family = family
             start_index = index
     if current_family is not None:
-        spans.append((current_family, start_index, len(MODEL_LINES) - 1))
+        spans.append((current_family, start_index, len(VISUAL_MODEL_LINES) - 1))
     return spans
 
 
@@ -1095,7 +1154,7 @@ def svg_four_task_dashboard(
         "2. Main UniMoral figure: RQ1-RQ3 exact-match accuracy only.",
         "3. Generation figure: RQ4 BERTScore F1 and METEOR, separate from accuracy.",
         "4. Classification rankings/spread use the same RQ1-RQ3 accuracy metric.",
-        "All public/reference model lines remain listed: Qwen, MiniMax, DeepSeek, Llama, Gemma S/M/L plus GPT-4o-mini Ref.",
+        "OpenAI rows are now explicit: GPT-5 nano/mini/5.5 are S/M/L, while GPT-4o/GPT-4.1 rows remain text refs.",
     ]
     for index, line in enumerate(figure_lines):
         parts.append(f'<text x="952" y="{panel_y + 74 + index * 34}" class="subtitle">{html.escape(line)}</text>')
@@ -1107,15 +1166,18 @@ def svg_four_task_dashboard(
         f'<text x="60" y="{y0 + 62}" class="subtitle">Complete four-task lines outside MiniMax: Qwen-S/M/L, DeepSeek-S/M/L, Llama-S/M/L, Gemma-S/M/L, and GPT-4o-mini Ref (13/13 lines).</text>'
     )
     parts.append(
-        f'<text x="60" y="{y0 + 88}" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>'
+        f'<text x="60" y="{y0 + 88}" class="subtitle">Additional OpenAI GPT-5/GPT-4.1 rows are text-only RQ1 references in UniMoral; RQ2/RQ3/RQ4 are not filled in or inferred for them.</text>'
     )
-    chip_y = y0 + 124
+    parts.append(
+        f'<text x="60" y="{y0 + 114}" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>'
+    )
+    chip_y = y0 + 146
     chips = [
         ("Qwen", "S/M/L: 4 tasks complete"),
         ("DeepSeek", "S/M/L: 4 tasks complete"),
         ("Llama", "S/M/L: 4 tasks complete"),
         ("Gemma", "S/M/L: 4 tasks complete"),
-        ("GPT4 only", "GPT-4o-mini reference: 4 tasks complete"),
+        ("OpenAI Ref", "GPT-4o-mini reference: 4 tasks complete"),
         ("MiniMax", "caveats: see failure checklist"),
     ]
     chip_w = 260
@@ -1126,15 +1188,15 @@ def svg_four_task_dashboard(
         parts.append(f'<circle cx="{x + 22}" cy="{chip_y + 27}" r="7" fill="{fill}"/>')
         parts.append(f'<text x="{x + 40}" y="{chip_y + 22}" class="axis">{html.escape(display_family_label(family))}</text>')
         parts.append(f'<text x="{x + 40}" y="{chip_y + 42}" class="small">{html.escape(label)}</text>')
-    parts.append(f'<text x="60" y="{y0 + 214}" class="small">All run lines are shown in the full score heatmap and all-line ranking below: Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus GPT-4o-mini Ref.</text>')
-    parts.append(f'<text x="60" y="{y0 + 238}" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; the main figures avoid special cell markers.</text>')
+    parts.append(f'<text x="60" y="{y0 + 232}" class="small">The full score heatmap includes Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus OpenAI GPT-5 S/M/L and GPT-4o/GPT-4.1 text refs.</text>')
+    parts.append(f'<text x="60" y="{y0 + 256}" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; OpenAI action-only gaps are scope boundaries, not failed RQ2/RQ3/RQ4 runs.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
 
 def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
     task_names = CLASSIFICATION_TASK_NAMES
-    lines = [line for line, _, _, _ in MODEL_LINES]
+    lines = [line for line, _, _, _ in VISUAL_MODEL_LINES]
     row_lookup = {(internal_line_label(row["line_label"]), row["task_name"]): row for row in rows}
     ranges: dict[str, tuple[float, float]] = {}
     for task_name in task_names:
@@ -1160,7 +1222,7 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
     parts.append('<rect width="100%" height="100%" fill="white"/>')
     parts.append('<text x="28" y="42" class="title">UniMoral RQ1-RQ3 exact-match accuracy</text>')
     parts.append('<text x="28" y="74" class="subtitle">One shared metric for the three classification-style RQs, so values can be compared horizontally. Higher is better.</text>')
-    parts.append('<text x="28" y="100" class="subtitle">Rows list every public/reference line that has been run; RQ4 generation is shown in a separate BERTScore/METEOR figure.</text>')
+    parts.append('<text x="28" y="100" class="subtitle">Rows include OpenAI GPT-5 S/M/L and GPT-4o/GPT-4.1 text refs. RQ2/RQ3 cells stay n/a when that OpenAI task was not run.</text>')
     parts.append(f'<text x="{family_x + family_w / 2}" y="{top - 52}" text-anchor="middle" class="tiny">FAMILY</text>')
     parts.append(f'<text x="{size_x + size_w / 2}" y="{top - 52}" text-anchor="middle" class="tiny">SIZE</text>')
     parts.append(f'<text x="{line_x}" y="{top - 52}" class="tiny">MODEL LINE</text>')
@@ -1194,7 +1256,7 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
             label = "n/a" if value is None else f"{value:.3f}"
             parts.append(f'<rect x="{x}" y="{y}" width="{cell_w - 8}" height="{cell_h - 8}" fill="{color(value, low, high)}" stroke="#c9cdd1" stroke-width="1.2" rx="4"/>')
             parts.append(f'<text x="{x + 14}" y="{y + 26}" class="axis">{label}</text>')
-    parts.append(f'<text x="28" y="{height - 52}" class="small">Rows include all public model lines plus the GPT-4o-mini reference. S/M/L are planning slots for within-family scaling, not a universal vendor taxonomy.</text>')
+    parts.append(f'<text x="28" y="{height - 52}" class="small">Rows include all public model lines plus OpenAI GPT-5 S/M/L and GPT-4o/GPT-4.1 text refs. S/M/L are planning slots for within-family scaling.</text>')
     parts.append(f'<text x="28" y="{height - 28}" class="small">This main figure uses strict-complete exact-match accuracy cells only; parse gaps remain in the audit tables.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
@@ -1359,13 +1421,13 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
         (960, 520, 650, 330),
     ]
     size_positions = {"S": 0, "M": 1, "L": 2}
-    curve_families = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"]
-    legend_families = [*curve_families, "GPT4 only"]
+    curve_families = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "OpenAI GPT-5"]
+    legend_families = [*curve_families, "OpenAI Ref"]
     rows_by_task = {}
     for row in rows:
         rows_by_task.setdefault(str(row.get("task_name", "")), []).append(row)
 
-    def point_rows(task_name: str, metric: str) -> dict[str, list[tuple[int, str, float]]]:
+    def point_rows(task_name: str, metric: str) -> dict[str, list[tuple[int, str, str, float]]]:
         output = {family: [] for family in curve_families}
         for row in rows_by_task.get(task_name, []):
             value = field_value(row, metric)
@@ -1377,9 +1439,10 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
             if metric != "accuracy" and not status.startswith("complete"):
                 continue
             family, size_slot = line_meta_for(str(row.get("line_label", "")))
+            family = display_family_label(family)
             if family not in output or size_slot not in size_positions:
                 continue
-            output[family].append((size_positions[size_slot], size_slot, value))
+            output[family].append((size_positions[size_slot], size_slot, display_line_label(row.get("line_label", "")), value))
         for family in output:
             output[family].sort(key=lambda item: item[0])
         return output
@@ -1388,7 +1451,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
         values = []
         for row in rows_by_task.get(task_name, []):
             family, _size_slot = line_meta_for(str(row.get("line_label", "")))
-            if family != "GPT4 only":
+            if display_family_label(family) != "OpenAI Ref":
                 continue
             value = field_value(row, metric)
             if value is None:
@@ -1468,7 +1531,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
     parts.append('<text x="42" y="48" class="title">UniMoral family-size scaling by RQ</text>')
     parts.append('<text x="42" y="78" class="subtitle">Line charts show how each family moves across S/M/L slots inside each UniMoral task. Higher is better in every panel.</text>')
     parts.append('<text x="42" y="102" class="subtitle">Classification panels use strict-complete accuracy cells. RQ4 uses rows with usable generation scores; remaining MiniMax caveats stay in the audit tables.</text>')
-    parts.append('<text x="42" y="126" class="subtitle">OpenAI reference is GPT-4o-mini only in this UniMoral RQ figure; other OpenAI rows remain text refs in the broader comparison tables.</text>')
+    parts.append('<text x="42" y="126" class="subtitle">OpenAI GPT-5 is shown as S/M/L in RQ1 only; GPT-4o/GPT-4.1 text refs are dashed. No OpenAI RQ2/RQ3/RQ4 scores are inferred.</text>')
 
     for (task_name, metric, title, metric_label, low, high, ticks), (x, y, panel_w, panel_h) in zip(specs, panel_positions):
         plot_x = x + 72
@@ -1515,9 +1578,10 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
                     plot_x + plot_w * slot_index / (len(size_positions) - 1),
                     scaled_y(value, low, high, plot_y, plot_h),
                     slot_index,
+                    line_label,
                     value,
                 )
-                for slot_index, _, value in points
+                for slot_index, _, line_label, value in points
             ]
             for previous, current in zip(coords, coords[1:]):
                 dash = ' stroke-dasharray="6 5"' if current[2] - previous[2] > 1 else ""
@@ -1525,16 +1589,18 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
                     f'<line x1="{previous[0]:.1f}" y1="{previous[1]:.1f}" x2="{current[0]:.1f}" y2="{current[1]:.1f}" '
                     f'stroke="{fill}" stroke-width="3" stroke-linecap="round"{dash}/>'
                 )
-            for px, py, _, _value in coords:
+            for px, py, _, line_label, _value in coords:
                 parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="7" fill="white" stroke="{fill}" stroke-width="3"/>')
                 parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="3" fill="{fill}"/>')
+                if family == "OpenAI GPT-5" and task_name == "unimoral_action_prediction":
+                    parts.append(f'<text x="{px:.1f}" y="{py - 12:.1f}" text-anchor="middle" class="tiny">{html.escape(line_label)}</text>')
     legend_x, legend_y = 92, 930
     parts.append(f'<rect x="48" y="884" width="1704" height="176" rx="18" class="legend-card"/>')
     parts.append(f'<text x="{legend_x}" y="{legend_y}" class="legend-title">Family legend</text>')
     for index, family in enumerate(legend_families):
-        x = legend_x + 190 + index * 245
+        x = legend_x + 190 + index * 220
         fill = FAMILY_COLORS.get(family, "#6b7280")
-        if family == "GPT4 only":
+        if family == "OpenAI Ref":
             parts.append(f'<line x1="{x - 4}" y1="{legend_y - 8}" x2="{x + 46}" y2="{legend_y - 8}" stroke="{fill}" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 8"/>')
             text_x = x + 60
         else:
@@ -1542,7 +1608,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
             text_x = x + 20
         parts.append(f'<text x="{text_x}" y="{legend_y}" class="legend">{html.escape(display_family_label(family))}</text>')
     parts.append('<text x="92" y="980" class="legend-note">Takeaway: UniMoral does not have one simple bigger-is-better curve. The winner changes by task, so report the RQ-specific pattern instead of one averaged moral-reasoning story.</text>')
-    parts.append('<text x="92" y="1012" class="legend-note">This UniMoral RQ figure uses GPT-4o-mini as the only OpenAI reference line; the other OpenAI rows stay in the broader text-comparison tables.</text>')
+    parts.append('<text x="92" y="1012" class="legend-note">OpenAI GPT-5 S/M/L points appear for RQ1 action prediction only; GPT-4o/GPT-4.1 refs are dashed where a UniMoral metric exists.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
@@ -2212,13 +2278,16 @@ def main() -> None:
         spreads = read_csv(args.release_dir / "unimoral-task-spread.csv")
         rankings = read_csv(args.release_dir / "unimoral-model-rankings.csv")
         failures = read_csv(args.release_dir / "unimoral-failure-checklist.csv")
+        visual_rows = with_openai_unimoral_action_visual_rows(rows, args.release_dir)
+        visual_spreads = spread_rows(visual_rows)
+        visual_rankings = ranking_rows(visual_rows)
         args.figure_dir.mkdir(parents=True, exist_ok=True)
-        svg_four_task_dashboard(rows, coverage, spreads, rankings, args.figure_dir / "option1_unimoral_four_task_dashboard.svg")
-        svg_heatmap(rows, args.figure_dir / "option1_unimoral_task_heatmap.svg")
+        svg_four_task_dashboard(visual_rows, coverage, visual_spreads, visual_rankings, args.figure_dir / "option1_unimoral_four_task_dashboard.svg")
+        svg_heatmap(visual_rows, args.figure_dir / "option1_unimoral_task_heatmap.svg")
         svg_generation_quality(rows, args.figure_dir / "option1_unimoral_generation_quality.svg")
-        svg_family_scaling(rows, args.figure_dir / "option1_unimoral_family_scaling.svg")
-        svg_rankings(rows, args.figure_dir / "option1_unimoral_task_rankings.svg")
-        svg_spread(rows, args.figure_dir / "option1_unimoral_task_spread.svg")
+        svg_family_scaling(visual_rows, args.figure_dir / "option1_unimoral_family_scaling.svg")
+        svg_rankings(visual_rows, args.figure_dir / "option1_unimoral_task_rankings.svg")
+        svg_spread(visual_rows, args.figure_dir / "option1_unimoral_task_spread.svg")
         write_minimax_resume_plan(args.release_dir, failures)
         write_completion_audit(args.release_dir, coverage, failures)
         update_manifest(args.release_dir)
@@ -2235,6 +2304,9 @@ def main() -> None:
     spreads = spread_rows(rows)
     rankings = ranking_rows(rows)
     failures = failure_rows(rows)
+    visual_rows = with_openai_unimoral_action_visual_rows(rows, args.release_dir)
+    visual_spreads = spread_rows(visual_rows)
+    visual_rankings = ranking_rows(visual_rows)
 
     result_fields = [
         "line_label",
@@ -2301,12 +2373,12 @@ def main() -> None:
         publicize_bertscore_file(bertscore_file)
 
     args.figure_dir.mkdir(parents=True, exist_ok=True)
-    svg_four_task_dashboard(rows, coverage, spreads, rankings, args.figure_dir / "option1_unimoral_four_task_dashboard.svg")
-    svg_heatmap(rows, args.figure_dir / "option1_unimoral_task_heatmap.svg")
+    svg_four_task_dashboard(visual_rows, coverage, visual_spreads, visual_rankings, args.figure_dir / "option1_unimoral_four_task_dashboard.svg")
+    svg_heatmap(visual_rows, args.figure_dir / "option1_unimoral_task_heatmap.svg")
     svg_generation_quality(rows, args.figure_dir / "option1_unimoral_generation_quality.svg")
-    svg_family_scaling(rows, args.figure_dir / "option1_unimoral_family_scaling.svg")
-    svg_rankings(rows, args.figure_dir / "option1_unimoral_task_rankings.svg")
-    svg_spread(rows, args.figure_dir / "option1_unimoral_task_spread.svg")
+    svg_family_scaling(visual_rows, args.figure_dir / "option1_unimoral_family_scaling.svg")
+    svg_rankings(visual_rows, args.figure_dir / "option1_unimoral_task_rankings.svg")
+    svg_spread(visual_rows, args.figure_dir / "option1_unimoral_task_spread.svg")
     write_minimax_resume_plan(args.release_dir, failures)
     write_completion_audit(args.release_dir, coverage, failures)
     update_manifest(args.release_dir)

@@ -9123,8 +9123,9 @@ def render_ccd_choice_distribution_svg(rows: list[dict[str, Any]], output_path: 
             '<text x="48" y="64" class="title">CCD-Bench cultural-cluster choice behavior, not accuracy</text>',
             '<text x="48" y="88" class="subtitle">Cells show deviation from the 10% uniform baseline across the paper&apos;s ten canonical GLOBE cultural clusters, computed over valid visible selections only.</text>',
             '<text x="48" y="108" class="subtitle">Positive cells mean the line selected that cluster more often than uniform choice; negative cells mean under-indexing. This is CCD choice behavior, not benchmark accuracy.</text>',
-            '<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI refs are one-off text-only rows. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>',
-            '<text x="48" y="148" class="subtitle">Coverage stays in the appendix QA figure.</text>',
+            '<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI GPT-5 rows are S/M/L, while GPT-4o/GPT-4.1 rows remain text-only refs.</text>',
+            '<text x="48" y="148" class="subtitle">Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>',
+            '<text x="48" y="168" class="subtitle">Coverage stays in the appendix QA figure.</text>',
         ]
     )
 
@@ -9241,7 +9242,8 @@ def render_ccd_dominant_option_share_svg(rows: list[dict[str, Any]], output_path
             "<desc>Secondary CCD result. Compact CCD-Bench comparison showing how concentrated each line's valid visible selections are on its most frequent canonical cluster. Bars show dominant-cluster share; right-hand labels add effective-cluster count. This is a concentration summary, not accuracy.</desc>",
             '<text x="48" y="64" class="title">CCD-Bench choice-concentration summary, not accuracy</text>',
             '<text x="48" y="88" class="subtitle">Bars show the dominant-cluster share among valid visible CCD selections; the right-hand label adds the effective number of clusters implied by that same distribution.</text>',
-            '<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI refs are one-off text-only rows. Higher bars mean more concentration on one cluster.</text>',
+            '<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI GPT-5 rows are S/M/L, while GPT-4o/GPT-4.1 rows remain text-only refs.</text>',
+            '<text x="48" y="128" class="subtitle">Higher bars mean more concentration on one cluster.</text>',
         ]
     )
 

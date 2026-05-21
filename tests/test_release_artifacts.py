@@ -1532,6 +1532,41 @@ def test_default_release_builder_leaves_repo_readme_untouched(tmp_path):
     assert (repo_copy / "README.md").read_text(encoding="utf-8") == original_readme
 
 
+def test_openai_gpt_rows_are_visible_in_unimoral_and_ccd_figures():
+    figure_dir = ROOT / "figures" / "release"
+    openai_rows = [
+        "GPT-4o-mini Ref",
+        "GPT-5 nano",
+        "GPT-5 mini",
+        "GPT-5.5",
+        "GPT-4.1-nano Ref",
+        "GPT-4.1-mini Ref",
+    ]
+
+    unimoral_heatmap = (figure_dir / "option1_unimoral_task_heatmap.svg").read_text(encoding="utf-8")
+    for label in openai_rows:
+        assert label in unimoral_heatmap
+    assert "Rows include OpenAI GPT-5 S/M/L and GPT-4o/GPT-4.1 text refs." in unimoral_heatmap
+    assert "RQ2/RQ3 cells stay n/a when that OpenAI task was not run." in unimoral_heatmap
+    assert "OpenAI refs are one-off" not in unimoral_heatmap
+
+    unimoral_scaling = (figure_dir / "option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
+    for label in ("GPT-5 nano", "GPT-5 mini", "GPT-5.5"):
+        assert label in unimoral_scaling
+    assert "OpenAI GPT-5 is shown as S/M/L in RQ1 only" in unimoral_scaling
+    assert "No OpenAI RQ2/RQ3/RQ4 scores are inferred." in unimoral_scaling
+    assert "GPT-4o-mini as the only OpenAI reference" not in unimoral_scaling
+    assert "other OpenAI rows stay in the broader text-comparison tables" not in unimoral_scaling
+
+    for filename in ("option1_ccd_choice_distribution.svg", "option1_ccd_dominant_option_share.svg"):
+        text = (figure_dir / filename).read_text(encoding="utf-8")
+        for label in openai_rows:
+            assert label in text
+        assert "OpenAI GPT-5 rows are S/M/L" in text
+        assert "GPT-4o/GPT-4.1 rows remain text-only refs" in text
+        assert "OpenAI refs are one-off text-only rows" not in text
+
+
 def test_write_root_readme_keeps_benchmark_visuals_section(tmp_path):
     repo_copy = tmp_path / "repo"
     script_copy = repo_copy / "scripts" / "build_release_artifacts.py"

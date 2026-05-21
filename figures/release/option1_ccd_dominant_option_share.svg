@@ -41,7 +41,8 @@
 <desc>Secondary CCD result. Compact CCD-Bench comparison showing how concentrated each line's valid visible selections are on its most frequent canonical cluster. Bars show dominant-cluster share; right-hand labels add effective-cluster count. This is a concentration summary, not accuracy.</desc>
 <text x="48" y="64" class="title">CCD-Bench choice-concentration summary, not accuracy</text>
 <text x="48" y="88" class="subtitle">Bars show the dominant-cluster share among valid visible CCD selections; the right-hand label adds the effective number of clusters implied by that same distribution.</text>
-<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI refs are one-off text-only rows. Higher bars mean more concentration on one cluster.</text>
+<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI GPT-5 rows are S/M/L, while GPT-4o/GPT-4.1 rows remain text-only refs.</text>
+<text x="48" y="128" class="subtitle">Higher bars mean more concentration on one cluster.</text>
 <text x="107.00" y="190" text-anchor="middle" class="tiny">FAMILY</text>
 <text x="212.00" y="190" text-anchor="middle" class="tiny">SIZE</text>
 <text x="258" y="190" class="tiny">MODEL LINE</text>
