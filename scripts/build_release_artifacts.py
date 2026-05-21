@@ -525,6 +525,106 @@ BENCHMARK_METADATA = {
     },
 }
 
+PAPER_RESULT_ALIGNMENT_FIELDNAMES = [
+    "benchmark",
+    "paper_question_or_task",
+    "paper_metric_or_result_surface",
+    "paper_models_or_reference_routes_identified",
+    "paper_results_available_in_repo",
+    "current_repo_result_surface",
+    "same_or_near_model_overlap",
+    "paper_only_models_or_routes",
+    "ours_only_models_or_routes",
+    "comparison_status",
+    "can_compare_directly",
+    "classification_quality_readout",
+    "reviewer_takeaway",
+    "evidence_sources",
+]
+
+PAPER_RESULT_ALIGNMENT_ROWS = [
+    {
+        "benchmark": "UniMoral",
+        "paper_question_or_task": "RQ1 action prediction: choose the human-selected action from a moral dilemma and two candidate actions. The paper also has typology, factor-attribution, and consequence-generation RQs that this public release does not score.",
+        "paper_metric_or_result_surface": "Action-prediction accuracy for RQ1; other RQs use separate classification or generation metrics.",
+        "paper_models_or_reference_routes_identified": "Reference code names Phi-3.5-mini-instruct, Llama-3.1-8B-Instruct, and DeepSeek-R1-Distill-Llama-8B. The local May 13 calibration sweep also includes Mistral Nemo, Qwen2.5 7B, Llama 3 8B, and Llama 3.2 1B as saved/prior comparison rows.",
+        "paper_results_available_in_repo": "Exact original-paper table values are not tracked in this repo. Saved/prior May 13 UniMoral values are available: Mistral Nemo 0.648110; Qwen2.5 7B 0.640255; Llama 3.1 8B 0.638775; Llama 3 8B 0.631831; Llama 3.2 1B 0.405624.",
+        "current_repo_result_surface": "Current release reports UniMoral action accuracy in benchmark-comparison.csv. The strongest current UniMoral rows are DeepSeek-M 0.683629 and GPT-5.5 0.683629; GPT-5.5 is text-only and has no SMID or DeNEVIL row.",
+        "same_or_near_model_overlap": "Saved/prior exact overlap exists for Llama 3.1 8B, but this PR does not contain a fresh full original-paper-model rerun. DeepSeek current rows are not the same as the paper-named 8B distill route.",
+        "paper_only_models_or_routes": "Phi-3.5-mini-instruct; DeepSeek-R1-Distill-Llama-8B; Llama-3.1-8B-Instruct as paper/reference routes unless deliberately rerun.",
+        "ours_only_models_or_routes": "Qwen S/M/L, MiniMax S/M/L, DeepSeek S/M/L current routes, Llama S/M/L current routes, Gemma S/M/L, and OpenAI text-only reference rows including GPT-5.5.",
+        "comparison_status": "saved_prior_overlap",
+        "can_compare_directly": "Partly. RQ1 action accuracy is the same kind of metric, but the exact paper table values are not tracked here and the exact overlapping model evidence is saved/prior rather than a fresh rerun.",
+        "classification_quality_readout": "Yes for RQ1 only: higher action accuracy means better prediction of the selected human action. It should not be generalized to the other UniMoral RQs unless those tasks are run.",
+        "reviewer_takeaway": "Use UniMoral as the cleanest paper-faithful accuracy comparison layer, while labeling the Llama 3.1 8B overlap as saved/prior evidence and GPT-5.5 as a current text-only reference.",
+        "evidence_sources": "benchmark-comparison.csv; results/exploratory/2026-05-13-additional-model-sweep/unimoral-summary.csv; docs/calibration-replication.md; local reference checkout for UniMoral RQ1 code.",
+    },
+    {
+        "benchmark": "SMID",
+        "paper_question_or_task": "Socio-moral image stimulus norms: human wrongness and moral-foundation judgments over images.",
+        "paper_metric_or_result_surface": "Human normative ratings and labels, not an original LLM model leaderboard.",
+        "paper_models_or_reference_routes_identified": "No original LLM model roster was identified in the local reference material.",
+        "paper_results_available_in_repo": "The repo has local SMID data adapters and current model benchmark rows, but no paper-original LLM result table to reproduce.",
+        "current_repo_result_surface": "Current release reports a SMID average over moral-rating prediction and foundation classification in benchmark-comparison.csv. Best current SMID row is Qwen-L 0.482829; GPT-5.5 and other OpenAI text-only refs intentionally have no SMID route.",
+        "same_or_near_model_overlap": "None. This is a current benchmark comparison layer rather than paper-model replication.",
+        "paper_only_models_or_routes": "Not applicable because no paper LLM roster was identified.",
+        "ours_only_models_or_routes": "Vision-capable current rows for Qwen, MiniMax, Llama, and Gemma where routes exist.",
+        "comparison_status": "no_original_model_roster",
+        "can_compare_directly": "No paper-model comparison. The current SMID result is directly comparable across our own vision-capable model rows, not against an original paper model table.",
+        "classification_quality_readout": "Moderate and high-variance: SMID has the lowest mean and widest spread among the current comparable accuracy metrics, so low absolute scores should be read with image ambiguity and norm-consensus limits in mind.",
+        "reviewer_takeaway": "Do not ask 'did we beat the paper model' for SMID. Ask which current vision-capable rows best recover the human norm labels.",
+        "evidence_sources": "benchmark-comparison.csv; benchmark-difficulty-summary.csv; docs/paper-model-replication-map.md; docs/calibration-replication.md.",
+    },
+    {
+        "benchmark": "Value Kaleidoscope / ValuePrism",
+        "paper_question_or_task": "ValuePrism/Kaleido relevance and valence over values, rights, and duties in context.",
+        "paper_metric_or_result_surface": "Kaleido model relevance and valence scoring, plus generation of candidate values/rights/duties.",
+        "paper_models_or_reference_routes_identified": "Kaleido model family: tsor13/kaleido-small, tsor13/kaleido-base, tsor13/kaleido-large, tsor13/kaleido-xl, and tsor13/kaleido-xxl.",
+        "paper_results_available_in_repo": "Exact Kaleido paper scores are not extracted into the release. Local reference docs identify the gated model family and inference path, but the current release has not run the Kaleido models.",
+        "current_repo_result_surface": "Current release reports prompt-based LLM relevance and valence classification in benchmark-comparison.csv. Strong current rows include MiniMax-L 0.741197, MiniMax-S 0.739942, GPT-5 mini 0.738897, and GPT-5.5 0.735646.",
+        "same_or_near_model_overlap": "None. Prompt-based LLM rows are not Kaleido model replication.",
+        "paper_only_models_or_routes": "Kaleido small/base/large/xl/xxl.",
+        "ours_only_models_or_routes": "All current LLM families and OpenAI text-only references, including GPT-5.5.",
+        "comparison_status": "blocked_model_access_and_execution_path",
+        "can_compare_directly": "No. The label space is related, but the model route is different; a direct paper-model comparison needs approved Kaleido access and a separate local-model execution path.",
+        "classification_quality_readout": "Yes for the repo task only: high relevance/valence accuracy means good structured value tagging and polarity assignment. It is not proof of Kaleido model replication or value-conflict resolution.",
+        "reviewer_takeaway": "Keep ValuePrism rows in the current benchmark-comparison layer and mark Kaleido replication as blocked until the gated model route is run.",
+        "evidence_sources": "benchmark-comparison.csv; docs/paper-model-replication-map.md; docs/calibration-replication.md; local reference checkout for Kaleido README.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_question_or_task": "Cultural conflict decision-making: choose among ten culturally grounded response options tied to GLOBE cultural clusters.",
+        "paper_metric_or_result_surface": "Choice-distribution behavior, cultural-cluster concentration, entropy, multi-dimensional rate, Cramer's V, and model-bias style metrics. It is not a universal accuracy benchmark.",
+        "paper_models_or_reference_routes_identified": "Local reference artifacts include 17 full model routes: Mistral Nemo, Qwen2.5 72B, GPT-4o latest, GPT-4.1, Llama 3.3 70B, Llama 4 Maverick, DeepSeek Chat V3 0324, Gemini 2.0/2.5 Flash, Claude 3.7/4 Sonnet, Phi-4, WizardLM, Jamba, Command-R, Sonar, and Grok.",
+        "paper_results_available_in_repo": "Reference CCD summaries are available locally. Example reference values: Mistral Nemo model-bias score 0.137427, entropy 3.210635, multi-dimensional rate 81.989%. Saved/prior May 13 Mistral Nemo CCD artifact has 2,178/2,182 valid choices, dominant Nordic Europe share 25.344%, and 7.222 effective clusters.",
+        "current_repo_result_surface": "Current release reports line-level CCD choice distributions in ccd-choice-distribution.csv, not accuracy. GPT-5.5 has 2,182/2,182 valid choices, dominant option_6 Nordic Europe 27.268561%, and 7.058620 effective clusters.",
+        "same_or_near_model_overlap": "Exact saved/prior overlap exists for Mistral Nemo. The current release has same-family or near-route context for Llama 3.3 70B, Llama 4 Maverick, GPT-4.1 family, GPT-4o family, DeepSeek Chat, and Qwen, but route/version differences should be kept explicit.",
+        "paper_only_models_or_routes": "Claude, Gemini, Mistral Nemo, Phi-4, WizardLM, Jamba, Command-R, Sonar, Grok, and several exact route versions not in the current release table.",
+        "ours_only_models_or_routes": "Qwen3 S/M/L, MiniMax S/M/L, Gemma3 S/M/L, DeepSeek R1/R1-distill current rows, OpenAI GPT-5/GPT-4.1 nano/mini references, and GPT-5.5.",
+        "comparison_status": "distributional_comparison_available_not_accuracy",
+        "can_compare_directly": "Partly. You can compare distributions and concentration metrics, especially for saved/prior Mistral Nemo, but you cannot compare a CCD accuracy score because that is not the metric surface.",
+        "classification_quality_readout": "Do not call it classification quality or accuracy. The useful question is whether a model collapses narrowly onto one cultural cluster or spreads choices across the ten canonical options.",
+        "reviewer_takeaway": "CCD-Bench needs a visual/map rather than a winner table: compare dominant cluster, dominant share, and effective clusters, with all accuracy language removed.",
+        "evidence_sources": "ccd-choice-distribution.csv; results/exploratory/2026-05-13-additional-model-sweep/ccd-summary.csv; docs/calibration-replication.md; local reference checkout for CCD-Bench multi_model_analysis/model_summary_comparison.csv.",
+    },
+    {
+        "benchmark": "DeNEVIL / MoralPrompt",
+        "paper_question_or_task": "Dynamic generation over MoralPrompt-style ethical-value vulnerability prompts.",
+        "paper_metric_or_result_surface": "Paper-faithful DeNEVIL scoring requires MoralPrompt data and the original generation/evaluation setup. The current repo does not have that export.",
+        "paper_models_or_reference_routes_identified": "No paper-faithful MoralPrompt model-result roster is runnable from the local release state. The local ValueCompass/FULCRA materials are a proxy path, not the DeNEVIL paper setup.",
+        "paper_results_available_in_repo": "No paper-faithful MoralPrompt result table is available locally. Current DeNEVIL evidence comes from FULCRA-backed proxy traces only.",
+        "current_repo_result_surface": "Current release reports proxy visible-behavior categories and prompt-family breakdowns in denevil-behavior-summary.csv and denevil-prompt-family-breakdown.csv. GPT-5.5 and other OpenAI text-only references intentionally have no DeNEVIL row.",
+        "same_or_near_model_overlap": "None for paper-faithful DeNEVIL. Any current row is proxy-only behavior/provenance.",
+        "paper_only_models_or_routes": "Paper-faithful MoralPrompt route and any original DeNEVIL model rows until the missing data path is obtained.",
+        "ours_only_models_or_routes": "Current proxy rows for released model lines with FULCRA-backed traces.",
+        "comparison_status": "proxy_only_data_gap",
+        "can_compare_directly": "No. Proxy behavior categories are useful audit evidence but not paper-faithful DeNEVIL scores.",
+        "classification_quality_readout": "Only proxy behavior taxonomy is available: protective refusal, redirect, corrective/contextual response, direct answer, risky continuation, ambiguous answer, or no visible answer. This is not MoralPrompt accuracy.",
+        "reviewer_takeaway": "Keep DeNEVIL as proxy-only evidence outside macro-accuracy and paper-replication claims until a real MoralPrompt export exists.",
+        "evidence_sources": "denevil-behavior-summary.csv; denevil-prompt-family-breakdown.csv; denevil-proxy-summary.csv; docs/paper-model-replication-map.md; docs/calibration-replication.md.",
+    },
+]
+
 MODEL_ROUTE_METADATA = {
     "openrouter/qwen/qwen3-8b": {
         "size_hint": "8B",
@@ -4755,6 +4855,10 @@ def build_benchmark_catalog(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             }
         )
     return output
+
+
+def build_paper_result_alignment_rows() -> list[dict[str, Any]]:
+    return [dict(row) for row in PAPER_RESULT_ALIGNMENT_ROWS]
 
 
 def build_model_roster(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -9919,6 +10023,53 @@ def append_benchmark_reading_guide_table(lines: list[str], rows: list[dict[str, 
         )
 
 
+def append_paper_result_alignment_table(lines: list[str], rows: list[dict[str, Any]], csv_path: str, doc_path: str) -> None:
+    overview = {
+        "UniMoral": {
+            "paper_side": "RQ1 action-prediction accuracy; reference routes identified, but original paper table values are not tracked.",
+            "our_side": "Current action-accuracy rows plus saved/prior Llama 3.1 8B and May 13 calibration rows.",
+            "compare": "Partial: same RQ1 metric, saved/prior overlap only.",
+        },
+        "SMID": {
+            "paper_side": "Human-normed image stimulus set; no original LLM model roster found locally.",
+            "our_side": "Current vision-route moral-rating plus foundation-classification average.",
+            "compare": "No paper-model comparison; compare only across our current vision-capable rows.",
+        },
+        "Value Kaleidoscope / ValuePrism": {
+            "paper_side": "Kaleido gated model family and ValuePrism relevance/valence setup.",
+            "our_side": "Prompt-based LLM relevance and valence classification rows.",
+            "compare": "No direct comparison until Kaleido model access and execution are run.",
+        },
+        "CCD-Bench": {
+            "paper_side": "Ten-cluster cultural-choice behavior; reference artifacts include 17 model routes.",
+            "our_side": "Current CCD choice distributions, dominant-cluster share, and effective clusters.",
+            "compare": "Compare distributions only; never read CCD as accuracy.",
+        },
+        "DeNEVIL / MoralPrompt": {
+            "paper_side": "Paper-faithful MoralPrompt data path is missing locally.",
+            "our_side": "FULCRA-backed proxy visible-behavior summaries.",
+            "compare": "No direct comparison; proxy-only evidence.",
+        },
+    }
+    lines.extend(
+        [
+            "",
+            "### Original Paper Alignment Map",
+            "",
+            "This is the reviewer-facing lookup: what each benchmark paper contains, whether the original model/result evidence is locally available, and whether our current rows can be compared directly. The full machine-readable table is exported as "
+            f"`{csv_path}`; the narrative guide is `{doc_path}`.",
+            "",
+            "| Benchmark | Original paper/reference side | Our current side | Direct comparison status |",
+            "| --- | --- | --- | --- |",
+        ]
+    )
+    for row in rows:
+        item = overview[row["benchmark"]]
+        lines.append(
+            f"| `{row['benchmark']}` | {item['paper_side']} | {item['our_side']} | {item['compare']} |"
+        )
+
+
 def append_family_scaling_summary_table(lines: list[str], rows: list[dict[str, Any]]) -> None:
     lines.extend(
         [
@@ -10384,6 +10535,12 @@ def append_interpretation_sections(
         ]
     )
     append_benchmark_reading_guide_table(lines, benchmark_catalog)
+    append_paper_result_alignment_table(
+        lines,
+        build_paper_result_alignment_rows(),
+        "results/release/2026-04-19-option1/paper-result-alignment.csv",
+        "docs/paper-result-comparison.md",
+    )
     lines.extend(
         [
             "",
@@ -10673,8 +10830,10 @@ def append_repo_navigation(lines: list[str]) -> None:
             "| Understand how raw runs become public artifacts | [Data Flow](#data-flow) |",
             "| Go straight to the five benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |",
             "| Read the additional model and OpenAI follow-up | [Latest Additional Model Sweep](#latest-additional-model-sweep) |",
+            "| See paper original models/results vs our current rows | [Paper Result Comparison](docs/paper-result-comparison.md) |",
             "| Jump straight to the live summary | [Results First](#results-first) |",
             "| Download the exact full-matrix status | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
+            "| Download the paper-vs-ours alignment map | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv) |",
             "| Download the result-readiness summary dashboard | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |",
             "| Rebuild or verify the public package locally | [Reproducibility](#reproducibility) |",
             "",
@@ -11135,6 +11294,7 @@ def build_repo_readme(
             "- `results/release/2026-04-19-option1/jenny-group-report.md`",
             "- `results/release/2026-04-19-option1/family-size-progress.csv`",
             "- `results/release/2026-04-19-option1/benchmark-comparison.csv`",
+            "- `results/release/2026-04-19-option1/paper-result-alignment.csv`",
             "- `results/release/2026-04-19-option1/ccd-choice-distribution.csv`",
             "- `results/release/2026-04-19-option1/denevil-behavior-summary.csv`",
             "- `results/release/2026-04-19-option1/denevil-prompt-family-breakdown.csv`",
@@ -11313,6 +11473,7 @@ def build_release_readme(
             "- `jenny-group-report.md`: mentor-facing report with the benchmark list, model roster, and current results",
             "- `topline-summary.md`: shortest narrative summary of the frozen Option 1 snapshot",
             "- `release-manifest.json`: machine-readable release index",
+            f"- {markdown_link('paper result comparison', '../../../docs/paper-result-comparison.md')}: reviewer-facing map of original paper/reference models and metrics versus our current rows",
             f"- {markdown_link('how to read the results', '../../../docs/how-to-read-results.md')}: plain-language explanation of the report terms",
             "",
             "### Figures",
@@ -11367,6 +11528,7 @@ def build_release_readme(
             "- `release-manifest.json`: machine-readable index of counts, files, and caveats",
             "- `family-size-progress.csv`: current published family-size matrix",
             "- `benchmark-comparison.csv`: current comparable accuracy table used for the grouped bar figure",
+            "- `paper-result-alignment.csv`: paper-vs-ours alignment map, including original/reference model evidence, overlap status, blocked/proxy states, and safe comparison boundaries",
             "- `ccd-choice-distribution.csv`: CCD-Bench choice-behavior table with per-cluster shares, deviation from the 10% baseline, and concentration summaries",
             "- `denevil-behavior-summary.csv`: DeNEVIL proxy behavioral outcome mix by model line",
             "- `denevil-prompt-family-breakdown.csv`: DeNEVIL protective-response rates by heuristic prompt family",
@@ -11644,6 +11806,7 @@ def build_release_manifest(
             "benchmark_faithful_tasks": sum(row["benchmark_mode"] == "benchmark_faithful" for row in rows),
             "proxy_tasks": sum(row["benchmark_mode"] == "proxy" for row in rows),
             "total_samples": sum(row["total_samples"] for row in rows),
+            "paper_result_alignment_rows": len(PAPER_RESULT_ALIGNMENT_ROWS),
         },
         "model_families": public_families,
         "benchmarks": benchmark_summary,
@@ -11668,6 +11831,7 @@ def build_release_manifest(
             "topline_summary": "results/release/2026-04-19-option1/topline-summary.md",
             "manifest": "results/release/2026-04-19-option1/release-manifest.json",
             "benchmark_catalog": "results/release/2026-04-19-option1/benchmark-catalog.csv",
+            "paper_result_alignment": "results/release/2026-04-19-option1/paper-result-alignment.csv",
             "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
             "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
             "benchmark_comparison": "results/release/2026-04-19-option1/benchmark-comparison.csv",
@@ -11705,6 +11869,7 @@ def build_release_manifest(
             "topline-summary.json",
             "release-manifest.json",
             "benchmark-catalog.csv",
+            "paper-result-alignment.csv",
             "model-summary.csv",
             "model-roster.csv",
             "supplementary-model-progress.csv",
@@ -11748,6 +11913,7 @@ def build_release_manifest(
             "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
             "DeepSeek-S text metrics come from the May 9 no-thinking saved rerun; it remains text-only because no SMID vision route exists.",
             "OpenAI Batch rows are text-only reference markers, not claimed OpenAI family-size sweeps.",
+            "Original-paper alignment is separated from current model benchmarking in paper-result-alignment.csv; blocked, proxy-only, saved/prior, and direct-comparison states are not collapsed together.",
             "The completed local Llama small line sits outside the frozen Option 1 totals.",
             "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration.",
         ],
@@ -11786,6 +11952,7 @@ def main() -> None:
     model_summary = build_model_summary(rows)
     benchmark_summary = build_benchmark_summary(rows)
     benchmark_catalog = build_benchmark_catalog(rows)
+    paper_result_alignment = build_paper_result_alignment_rows()
     model_roster = build_model_roster(rows)
     future_model_plan = filter_public_family_rows(build_future_model_plan())
     supplementary_model_progress = filter_public_family_rows(build_supplementary_model_progress())
@@ -11852,6 +12019,11 @@ def main() -> None:
             "repo_readout",
             "release_interpretation",
         ],
+    )
+    write_csv(
+        args.release_dir / "paper-result-alignment.csv",
+        paper_result_alignment,
+        PAPER_RESULT_ALIGNMENT_FIELDNAMES,
     )
     write_csv(
         args.release_dir / "model-roster.csv",
@@ -12405,6 +12577,7 @@ def main() -> None:
         "figure_dir": str(args.figure_dir),
         "tables": [
             "benchmark-catalog.csv",
+            "paper-result-alignment.csv",
             "model-summary.csv",
             "model-roster.csv",
             "supplementary-model-progress.csv",

@@ -148,6 +148,18 @@ Before comparing charts, anchor each benchmark to its source paper. These benchm
 | `CCD-Bench` | A cross-cultural conflict benchmark where models adjudicate between ten culturally grounded response options tied to GLOBE cultural clusters. | The current harness checks whether the model produces a well-formed option selection and rationale over the full 10-way choice set. | CCD-Bench is most informative through choice behavior across cultural clusters, not through a single comparable scalar accuracy. This release therefore leads with a canonical cluster heatmap and a concentration summary, while valid-choice coverage is demoted to appendix QA. None of these CCD surfaces should be read as universal accuracy. |
 | `Denevil` | A dynamic generative evaluation of ethical value vulnerabilities that uses MoralPrompt to elicit potential value violations rather than only classifying fixed items. | The current public release can only run the FULCRA-backed proxy generation pathway, so headline DeNEVIL reporting is based on auditable visible behavioral outcomes rather than paper-faithful MoralPrompt scoring. | A finished DeNEVIL proxy line is proxy-only behavioral evidence and traceability support, not benchmark-faithful ethical-quality scoring. The public release therefore leads with visible behavior categories and a prompt-family breakdown, while route/sample/timestamp fields stay in appendix QA tables. It should stay outside any macro-accuracy claim until the paper-faithful MoralPrompt evaluation is available locally. |
 
+### Original Paper Alignment Map
+
+This is the reviewer-facing lookup: what each benchmark paper contains, whether the original model/result evidence is locally available, and whether our current rows can be compared directly. The full machine-readable table is exported as `results/release/2026-04-19-option1/paper-result-alignment.csv`; the narrative guide is `docs/paper-result-comparison.md`.
+
+| Benchmark | Original paper/reference side | Our current side | Direct comparison status |
+| --- | --- | --- | --- |
+| `UniMoral` | RQ1 action-prediction accuracy; reference routes identified, but original paper table values are not tracked. | Current action-accuracy rows plus saved/prior Llama 3.1 8B and May 13 calibration rows. | Partial: same RQ1 metric, saved/prior overlap only. |
+| `SMID` | Human-normed image stimulus set; no original LLM model roster found locally. | Current vision-route moral-rating plus foundation-classification average. | No paper-model comparison; compare only across our current vision-capable rows. |
+| `Value Kaleidoscope / ValuePrism` | Kaleido gated model family and ValuePrism relevance/valence setup. | Prompt-based LLM relevance and valence classification rows. | No direct comparison until Kaleido model access and execution are run. |
+| `CCD-Bench` | Ten-cluster cultural-choice behavior; reference artifacts include 17 model routes. | Current CCD choice distributions, dominant-cluster share, and effective clusters. | Compare distributions only; never read CCD as accuracy. |
+| `DeNEVIL / MoralPrompt` | Paper-faithful MoralPrompt data path is missing locally. | FULCRA-backed proxy visible-behavior summaries. | No direct comparison; proxy-only evidence. |
+
 ### Benchmark Difficulty Profile
 
 ![Benchmark difficulty profile](../../../figures/release/option1_benchmark_difficulty_profile.svg)

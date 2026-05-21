@@ -72,6 +72,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     expected_release_files = {
         "README.md",
         "benchmark-catalog.csv",
+        "paper-result-alignment.csv",
         "benchmark-comparison.csv",
         "ccd-choice-distribution.csv",
         "denevil-behavior-summary.csv",
@@ -130,6 +131,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     manifest = json.loads((release_dir / "release-manifest.json").read_text(encoding="utf-8"))
     assert manifest["counts"]["authoritative_tasks"] == 19
     assert manifest["counts"]["proxy_tasks"] == 3
+    assert manifest["counts"]["paper_result_alignment_rows"] == 5
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
     assert any("OpenAI Batch rows" in item and "text-only reference markers" in item for item in manifest["interpretation_guardrails"])
@@ -154,6 +156,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["target_matrix"]["model_families"] == 5
     assert manifest["model_families"] == ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"]
     assert manifest["entry_points"]["report"].endswith("jenny-group-report.md")
+    assert manifest["entry_points"]["paper_result_alignment"].endswith("paper-result-alignment.csv")
     assert manifest["entry_points"]["supplementary_progress"].endswith("supplementary-model-progress.csv")
     assert manifest["entry_points"]["family_size_progress"].endswith("family-size-progress.csv")
     assert manifest["entry_points"]["benchmark_difficulty_summary"].endswith("benchmark-difficulty-summary.csv")
@@ -181,6 +184,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["entry_points"]["denevil_proxy_valid_response_rate_figure"].endswith("option1_denevil_proxy_valid_response_rate.svg")
     assert manifest["entry_points"]["denevil_proxy_pipeline_figure"].endswith("option1_denevil_proxy_pipeline.svg")
     assert "benchmark-difficulty-summary.csv" in manifest["tables"]
+    assert "paper-result-alignment.csv" in manifest["tables"]
     assert "family-scaling-summary.csv" in manifest["tables"]
     assert "ccd-choice-distribution.csv" in manifest["tables"]
     assert "denevil-proxy-summary.csv" in manifest["tables"]
@@ -233,6 +237,22 @@ def test_release_builder_emits_expected_files(tmp_path):
     ccd_bench = next(row for row in benchmark_catalog_rows if row["benchmark"] == "CCD-Bench")
     assert ccd_bench["paper_title"] == "CCD-Bench: Probing Cultural Conflict in Large Language Model Decision-Making"
     assert "canonical cluster heatmap" in ccd_bench["release_interpretation"].lower()
+
+    with (release_dir / "paper-result-alignment.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames is not None
+        assert "comparison_status" in reader.fieldnames
+        assert "can_compare_directly" in reader.fieldnames
+        paper_alignment_rows = list(reader)
+    assert len(paper_alignment_rows) == 5
+    ccd_alignment = next(row for row in paper_alignment_rows if row["benchmark"] == "CCD-Bench")
+    assert ccd_alignment["comparison_status"] == "distributional_comparison_available_not_accuracy"
+    assert "not the metric surface" in ccd_alignment["can_compare_directly"]
+    denevil_alignment = next(row for row in paper_alignment_rows if row["benchmark"] == "DeNEVIL / MoralPrompt")
+    assert denevil_alignment["comparison_status"] == "proxy_only_data_gap"
+    assert "proxy-only" in denevil_alignment["reviewer_takeaway"]
+    value_alignment = next(row for row in paper_alignment_rows if row["benchmark"] == "Value Kaleidoscope / ValuePrism")
+    assert "Kaleido model replication" in value_alignment["classification_quality_readout"]
 
     with (release_dir / "supplementary-model-progress.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)

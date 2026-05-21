@@ -1,6 +1,6 @@
 # Paper-Model Replication Map
 
-This map separates paper-faithful replication candidates from route probes, saved/prior artifacts, and proxy-only evidence. It should be used for planning and audit, not as a new result table.
+This map separates paper-faithful replication candidates from route probes, saved/prior artifacts, and proxy-only evidence. It should be used for planning and audit, not as a new result table. For the reviewer-facing paper-vs-current-result comparison, use [`paper-result-comparison.md`](paper-result-comparison.md) and the generated [`paper-result-alignment.csv`](../results/release/2026-04-19-option1/paper-result-alignment.csv).
 
 ## Status Vocabulary
 

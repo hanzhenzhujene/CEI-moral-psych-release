@@ -34,7 +34,8 @@
     "authoritative_tasks": 19,
     "benchmark_faithful_tasks": 16,
     "proxy_tasks": 3,
-    "total_samples": 302776
+    "total_samples": 302776,
+    "paper_result_alignment_rows": 5
   },
   "model_families": [
     "Qwen",
@@ -149,6 +150,7 @@
     "topline_summary": "results/release/2026-04-19-option1/topline-summary.md",
     "manifest": "results/release/2026-04-19-option1/release-manifest.json",
     "benchmark_catalog": "results/release/2026-04-19-option1/benchmark-catalog.csv",
+    "paper_result_alignment": "results/release/2026-04-19-option1/paper-result-alignment.csv",
     "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
     "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
     "benchmark_comparison": "results/release/2026-04-19-option1/benchmark-comparison.csv",
@@ -186,6 +188,7 @@
     "topline-summary.json",
     "release-manifest.json",
     "benchmark-catalog.csv",
+    "paper-result-alignment.csv",
     "model-summary.csv",
     "model-roster.csv",
     "supplementary-model-progress.csv",
@@ -229,6 +232,7 @@
     "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
     "DeepSeek-S text metrics come from the May 9 no-thinking saved rerun; it remains text-only because no SMID vision route exists.",
     "OpenAI Batch rows are text-only reference markers, not claimed OpenAI family-size sweeps.",
+    "Original-paper alignment is separated from current model benchmarking in paper-result-alignment.csv; blocked, proxy-only, saved/prior, and direct-comparison states are not collapsed together.",
     "The completed local Llama small line sits outside the frozen Option 1 totals.",
     "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration."
   ]
