@@ -351,28 +351,29 @@ def svg_header(width: int, height: int) -> str:
         f'viewBox="0 0 {width} {height}">'
         '<style>'
         'text{font-family:Arial,Helvetica,sans-serif;fill:#18212f}'
-        '.title{font-size:22px;font-weight:700}.subtitle{font-size:12px;fill:#536171}'
-        '.axis{font-size:11px;fill:#536171}.label{font-size:12px}.small{font-size:10px;fill:#536171}'
+        '.title{font-size:26px;font-weight:700}.subtitle{font-size:15px;fill:#536171}'
+        '.axis{font-size:14px;fill:#536171}.label{font-size:15px}.small{font-size:12px;fill:#536171}'
+        '.metric{font-size:16px;font-weight:700;fill:#253044}'
         '</style>'
     )
 
 
 def write_unimoral_accuracy_svg(path: Path, rows: list[dict[str, Any]]) -> None:
-    width, height = 900, 430
-    left, top, chart_w, chart_h = 190, 82, 610, 245
+    width, height = 960, 470
+    left, top, chart_w, chart_h = 210, 92, 650, 255
     models = [row["model"] for row in rows]
     max_val = 0.70
     group_h = chart_h / len(models)
     parts = [
         svg_header(width, height),
         '<rect width="100%" height="100%" fill="#f8faf7"/>',
-        '<text x="34" y="38" class="title">Additional model sweep: UniMoral accuracy</text>',
-        '<text x="34" y="60" class="subtitle">Final scored result for the UniMoral action-prediction task.</text>',
+        '<text x="34" y="42" class="title">Small-model follow-up: UniMoral accuracy</text>',
+        '<text x="34" y="68" class="subtitle">Metric: action-prediction accuracy. Higher means closer to human-labeled choices.</text>',
     ]
     for tick in [0, 0.2, 0.4, 0.6]:
         x = left + tick / max_val * chart_w
         parts.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{top+chart_h}" stroke="#d6ddd9" stroke-width="1"/>')
-        parts.append(f'<text x="{x:.1f}" y="{top+chart_h+24}" text-anchor="middle" class="axis">{tick:.1f}</text>')
+        parts.append(f'<text x="{x:.1f}" y="{top+chart_h+28}" text-anchor="middle" class="axis">{tick:.1f}</text>')
     for idx, row in enumerate(rows):
         y = top + idx * group_h + 16
         value = float(row["accuracy"] or 0)
@@ -380,10 +381,11 @@ def write_unimoral_accuracy_svg(path: Path, rows: list[dict[str, Any]]) -> None:
         color = "#0f766e" if value >= 0.60 else "#94a3b8"
         parts.append(f'<text x="{left-14}" y="{y+14}" text-anchor="end" class="label">{row["model"]}</text>')
         parts.append(f'<rect x="{left}" y="{y}" width="{bar_w:.1f}" height="18" rx="5" fill="{color}"/>')
-        parts.append(f'<text x="{left+bar_w+8:.1f}" y="{y+14}" class="small">{value:.3f}</text>')
+        parts.append(f'<text x="{left+bar_w+10:.1f}" y="{y+14}" class="small">{value:.3f}</text>')
     parts.extend(
         [
-            '<text x="34" y="386" class="subtitle">Mistral Nemo, Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B cluster tightly; Llama 3.2 1B is the clear low line.</text>',
+            f'<text x="{left + chart_w / 2:.1f}" y="{height - 70}" text-anchor="middle" class="metric">Metric: UniMoral action accuracy</text>',
+            '<text x="34" y="430" class="subtitle">Takeaway: the 7B-12B routes cluster tightly; Llama 3.2 1B is the clear low line.</text>',
             "</svg>",
         ]
     )
@@ -391,19 +393,19 @@ def write_unimoral_accuracy_svg(path: Path, rows: list[dict[str, Any]]) -> None:
 
 
 def write_ccd_dominant_svg(path: Path, rows: list[dict[str, Any]]) -> None:
-    width, height = 900, 430
-    left, top, chart_w, chart_h = 190, 82, 610, 245
+    width, height = 960, 470
+    left, top, chart_w, chart_h = 210, 92, 650, 255
     max_val = 0.28
     parts = [
         svg_header(width, height),
         '<rect width="100%" height="100%" fill="#fffaf2"/>',
-        '<text x="34" y="38" class="title">CCD-Bench: dominant cultural-cluster concentration</text>',
-        '<text x="34" y="60" class="subtitle">CCD is not accuracy. Lower dominant share means less collapse into one cultural cluster.</text>',
+        '<text x="34" y="42" class="title">CCD-Bench: dominant cultural-cluster concentration</text>',
+        '<text x="34" y="68" class="subtitle">Metric: dominant-option share. Lower means less collapse into one cultural cluster.</text>',
     ]
     for tick in [0.10, 0.15, 0.20, 0.25]:
         x = left + tick / max_val * chart_w
         parts.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{top+chart_h}" stroke="#eadfce" stroke-width="1"/>')
-        parts.append(f'<text x="{x:.1f}" y="{top+chart_h+24}" text-anchor="middle" class="axis">{tick:.0%}</text>')
+        parts.append(f'<text x="{x:.1f}" y="{top+chart_h+28}" text-anchor="middle" class="axis">{tick:.0%}</text>')
     ordered = sorted(rows, key=lambda row: float(row["dominant_share"] or 0))
     group_h = chart_h / len(ordered)
     for idx, row in enumerate(ordered):
@@ -418,7 +420,8 @@ def write_ccd_dominant_svg(path: Path, rows: list[dict[str, Any]]) -> None:
         )
     parts.extend(
         [
-            '<text x="34" y="386" class="subtitle">All five additional model lines peak on Nordic Europe; Llama 3.2 1B is the most diffuse in this sweep.</text>',
+            f'<text x="{left + chart_w / 2:.1f}" y="{height - 70}" text-anchor="middle" class="metric">Metric: dominant cultural-cluster share</text>',
+            '<text x="34" y="430" class="subtitle">Takeaway: all five lines peak on Nordic Europe; the difference is how concentrated the choice pattern becomes.</text>',
             "</svg>",
         ]
     )
@@ -426,8 +429,8 @@ def write_ccd_dominant_svg(path: Path, rows: list[dict[str, Any]]) -> None:
 
 
 def write_scaling_svg(path: Path, unimoral_rows: list[dict[str, Any]], ccd_rows: list[dict[str, Any]]) -> None:
-    width, height = 930, 470
-    left, top, chart_w, chart_h = 86, 86, 730, 285
+    width, height = 1040, 540
+    left, top, chart_w, chart_h = 98, 100, 780, 320
     by_model = {row["model"]: row for row in unimoral_rows}
     ccd_by_model = {row["model"]: row for row in ccd_rows}
     models = ["Llama 3.2 1B", "Qwen2.5 7B", "Llama 3 8B", "Llama 3.1 8B", "Mistral Nemo"]
@@ -441,8 +444,8 @@ def write_scaling_svg(path: Path, unimoral_rows: list[dict[str, Any]], ccd_rows:
     parts = [
         svg_header(width, height),
         '<rect width="100%" height="100%" fill="#f6f7fb"/>',
-        '<text x="34" y="38" class="title">Additional model sweep: scaling readout</text>',
-        '<text x="34" y="60" class="subtitle">UniMoral accuracy by approximate model size; CCD concentration shown by point radius.</text>',
+        '<text x="34" y="42" class="title">Small-model follow-up: size and capability floor</text>',
+        '<text x="34" y="68" class="subtitle">Metric: UniMoral accuracy. Point size shows CCD dominant-cluster concentration.</text>',
     ]
     for tick in [0.4, 0.5, 0.6]:
         y = top + chart_h - (tick - y_min) / (y_max - y_min) * chart_h
@@ -451,7 +454,7 @@ def write_scaling_svg(path: Path, unimoral_rows: list[dict[str, Any]], ccd_rows:
     for tick in [1, 7, 8, 12]:
         x = left + (tick - x_min) / (x_max - x_min) * chart_w
         parts.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{top+chart_h}" stroke="#e5e9f2"/>')
-        parts.append(f'<text x="{x:.1f}" y="{top+chart_h+24}" text-anchor="middle" class="axis">{tick:g}B</text>')
+        parts.append(f'<text x="{x:.1f}" y="{top+chart_h+30}" text-anchor="middle" class="axis">{tick:g}B</text>')
     llama_points = []
     for model in ["Llama 3.2 1B", "Llama 3 8B", "Llama 3.1 8B"]:
         row = by_model[model]
@@ -463,6 +466,13 @@ def write_scaling_svg(path: Path, unimoral_rows: list[dict[str, Any]], ccd_rows:
             " ".join(f"{x:.1f},{y:.1f}" for x, y in llama_points)
         )
     )
+    label_offsets = {
+        "Llama 3.2 1B": (14, -20, "start"),
+        "Qwen2.5 7B": (-18, -18, "end"),
+        "Llama 3 8B": (18, 34, "start"),
+        "Llama 3.1 8B": (18, -30, "start"),
+        "Mistral Nemo": (18, -18, "start"),
+    }
     for model in models:
         row = by_model[model]
         ccd = ccd_by_model[model]
@@ -474,13 +484,21 @@ def write_scaling_svg(path: Path, unimoral_rows: list[dict[str, Any]], ccd_rows:
         radius = 7 + concentration * 42
         family = str(row["family"])
         parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{radius:.1f}" fill="{colors.get(family, "#334155")}" fill-opacity="0.78" stroke="white" stroke-width="2"/>')
-        parts.append(f'<text x="{x+12:.1f}" y="{y-9:.1f}" class="small">{model}</text>')
-        parts.append(f'<text x="{x+12:.1f}" y="{y+5:.1f}" class="small">{acc:.3f}</text>')
+        dx, dy, anchor = label_offsets[model]
+        label_x = x + dx
+        label_y = y + dy
+        parts.append(f'<text x="{label_x:.1f}" y="{label_y:.1f}" text-anchor="{anchor}" class="small">{model}</text>')
+        parts.append(f'<text x="{label_x:.1f}" y="{label_y + 15:.1f}" text-anchor="{anchor}" class="small">{acc:.3f}</text>')
+    legend_x, legend_y = 905, 110
+    for idx, (family, color) in enumerate(colors.items()):
+        y = legend_y + idx * 28
+        parts.append(f'<circle cx="{legend_x}" cy="{y}" r="7" fill="{color}" fill-opacity="0.78" stroke="white" stroke-width="2"/>')
+        parts.append(f'<text x="{legend_x + 16}" y="{y + 5}" class="label">{family}</text>')
     parts.extend(
         [
-            f'<text x="{left + chart_w / 2:.1f}" y="{height-54}" text-anchor="middle" class="axis">Approximate model size (B parameters)</text>',
-            f'<text x="24" y="{top + chart_h / 2:.1f}" transform="rotate(-90 24 {top + chart_h / 2:.1f})" text-anchor="middle" class="axis">UniMoral accuracy</text>',
-            '<text x="34" y="436" class="subtitle">Interpretation: the 1B Llama line is clearly weaker, but the 7B-12B models cluster tightly; this sweep does not show a clean monotonic scaling law.</text>',
+            f'<text x="{left + chart_w / 2:.1f}" y="{height-76}" text-anchor="middle" class="metric">Approximate model size (B parameters)</text>',
+            f'<text x="28" y="{top + chart_h / 2:.1f}" transform="rotate(-90 28 {top + chart_h / 2:.1f})" text-anchor="middle" class="metric">Metric: UniMoral accuracy</text>',
+            '<text x="34" y="504" class="subtitle">Takeaway: the 1B route is much weaker; the 7B-12B routes cluster instead of forming a clean bigger-is-better ladder.</text>',
             "</svg>",
         ]
     )
@@ -505,7 +523,7 @@ def write_readme(
         "",
         "Date: 2026-05-13",
         "",
-        "This exploratory sweep tested additional OpenRouter model routes on UniMoral action prediction and CCD-Bench cultural choice style. It is intentionally separate from the main Option 1 release package and asks whether older or smaller routes show a different pattern from the main model matrix.",
+        "This follow-up brings five older or smaller OpenRouter routes into the deliverable as a capability-floor check. It asks whether `Mistral`, `Qwen`, and smaller `Llama` routes change the main moral-psych story, or whether they mainly show where text moral-choice performance starts to fall off.",
         "",
         "## Key Findings",
         "",
@@ -513,7 +531,7 @@ def write_readme(
         f"- Weakest UniMoral result: **{weakest['model']}** at **{float(weakest['accuracy']):.3f}**; this is the only clear low-performing line.",
         "- The other four UniMoral lines are tightly clustered from **0.632** to **0.648**, so the main separation is the 1B route versus the 7B-12B routes.",
         f"- CCD-Bench is **not accuracy**. All five lines peak on **Nordic Europe**, but concentration differs: **{most_diffuse['model']}** is most diffuse at **{float(most_diffuse['dominant_share']):.1%}**, while **{most_concentrated['model']}** is most concentrated at **{float(most_concentrated['dominant_share']):.1%}**.",
-        "- Scaling readout: there is **no clean monotonic scaling law** in this sweep. Llama 3.2 1B is much weaker on UniMoral, but the 7B-12B models are tightly clustered.",
+        "- Scaling readout: this looks like a **capability floor**, not a clean monotonic scaling law. Llama 3.2 1B is much weaker on UniMoral, but the 7B-12B models are tightly clustered.",
         "",
         "## Interpretation",
         "",
@@ -521,9 +539,9 @@ def write_readme(
         "",
         "**Benchmark-wise:** UniMoral gives a clear performance separation between the very small 1B route and the stronger 7B-12B cluster. CCD-Bench gives a style/concentration readout rather than a correctness score: all models peak on Nordic Europe, but Llama 3.2 1B is most diffuse (15.9% dominant share; 9.12 effective clusters), while Mistral Nemo is most concentrated (25.3%; 7.22 effective clusters).",
         "",
-        "**Scaling-wise:** There is no clean monotonic scaling law. The move from 1B to 7B+ matters a lot, but above that threshold the 7B-12B models cluster closely rather than improving smoothly with size. This looks more like a capability floor than a simple bigger-is-better trend.",
+        "**Compared with the main release:** the follow-up supports the same high-level interpretation. Once a route is in the mid-sized instruction-model range, text moral-choice scores are close enough that the benchmark-specific story matters more than a simple model-size ranking. The 1B route is the warning case.",
         "",
-        "**Bottom line:** The additional sweep does not overturn the main release story. It adds one useful detail: very small models can fall off sharply, while several older or mid-sized instruction routes remain competitive on the selected text/style checks.",
+        "**Bottom line:** this is the practical takeaway to report: do not overclaim a universal bigger-is-better trend. Very small routes can fall off sharply, while several older or mid-sized instruction routes remain competitive on selected text moral-choice and cultural-style checks.",
         "",
         "## Result Tables",
         "",
@@ -566,7 +584,7 @@ def write_readme(
             "",
             "- UniMoral accuracy is computed from the completed run records with the same final A/B scoring rule across all five routes; no new API calls were used.",
             "- CCD-Bench reports cultural-choice distribution and concentration, not correctness.",
-            "- This is an exploratory sweep, not a replacement for the main release matrix.",
+            "- This follow-up is a capability-floor check, not a replacement for the main release matrix.",
             "",
         ]
     )

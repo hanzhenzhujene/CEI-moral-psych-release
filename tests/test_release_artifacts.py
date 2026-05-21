@@ -14,7 +14,13 @@ ROOT = Path(__file__).parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.build_release_artifacts import _sample_correctness_value, build_axis_ticks, nice_tick_step
+from scripts.build_release_artifacts import (
+    _sample_correctness_value,
+    build_axis_ticks,
+    nice_tick_step,
+    preserve_repo_readme_org_tail,
+)
+from scripts.build_unimoral_artifacts import update_markdown
 
 SCRIPT = ROOT / "scripts" / "build_release_artifacts.py"
 SOURCE = ROOT / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
@@ -48,6 +54,54 @@ def test_unimoral_blank_scorer_answer_reparsed_from_visible_completion():
     }
 
     assert _sample_correctness_value(sample, "unimoral_action_prediction") == 1.0
+
+
+def test_root_readme_regeneration_preserves_org_owned_tail_sections():
+    generated = "# CEI Moral-Psych Benchmark Suite\n\n<!-- UNIMORAL_FULL_BENCHMARK_END -->\n"
+    existing = (
+        "# CEI Moral-Psych Benchmark Suite\n\n"
+        "<!-- UNIMORAL_FULL_BENCHMARK_END -->\n\n"
+        "## Claude Code Slash Commands\n\n"
+        "| Command | What it does |\n"
+        "| --- | --- |\n"
+        "| `/validate-results` | Validate results. |\n\n"
+        "## Contributing\n\n"
+        "All changes go through pull requests.\n\n"
+        "## Team\n\n"
+        "| Person | Papers |\n"
+    )
+
+    result = preserve_repo_readme_org_tail(generated, existing)
+
+    assert result.startswith(generated.rstrip())
+    assert "## Claude Code Slash Commands" in result
+    assert "| `/validate-results` | Validate results. |" in result
+    assert "## Contributing" in result
+    assert "## Team" in result
+
+
+def test_unimoral_readme_block_stays_before_org_owned_tail_sections(tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        "# CEI Moral-Psych Benchmark Suite\n\n"
+        "Generated Jenny result surface.\n\n"
+        "## Claude Code Slash Commands\n\n"
+        "| `/validate-results` | Validate results. |\n\n"
+        "## Team\n\n"
+        "| Person | Papers |\n",
+        encoding="utf-8",
+    )
+
+    update_markdown(
+        readme,
+        "## UniMoral Full Benchmark Coverage\n\nUpdated benchmark section.\n",
+        insert_before_headings=("## Claude Code Slash Commands", "## Team"),
+    )
+
+    content = readme.read_text(encoding="utf-8")
+    assert content.index("<!-- UNIMORAL_FULL_BENCHMARK_START -->") < content.index("## Claude Code Slash Commands")
+    assert "| `/validate-results` | Validate results. |" in content
+    assert "## Team" in content
 
 
 def test_release_builder_emits_expected_files(tmp_path):
@@ -134,19 +188,13 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["paper_result_alignment_rows"] == 5
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
-    assert any(
-        "OpenAI GPT-5 rows" in item
-        and "S=GPT-5 nano" in item
-        and "L=GPT-5.5" in item
-        and "all-benchmark OpenAI coverage" in item
-        for item in manifest["interpretation_guardrails"]
-    )
+    assert any("OpenAI reference rows" in item and "text-only markers" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_total_cost"] == "$759.59 confirmed before May 16 OpenAI Batch additions"
+    assert manifest["report_metadata"]["current_total_cost"] == "$831.08"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
         "minimax_api": "$504.66",
-        "openrouter_other_model_family_runs": "$254.17",
-        "openai_api_reference_sweep": "$0.76 confirmed before May 16; new OpenAI Batch reference sweeps pending billing confirmation",
+        "openrouter_other_model_family_runs": "$325.66",
+        "openai_api_reference_sweep": "$0.76",
     }
     assert (
         manifest["report_metadata"]["current_cost_scope"]
@@ -212,21 +260,22 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     for report_name in ("README.md", "jenny-group-report.md"):
         report_text = (release_dir / report_name).read_text(encoding="utf-8")
-        assert "**Current GitHub-facing boundary:**" in report_text
+        tldr_text = report_text.split("## Benchmark Result Visuals", 1)[0]
+        assert "**Current GitHub-facing boundary:**" not in tldr_text
+        assert "**Main landscape:**" in tldr_text
+        assert "image moral judgment" in tldr_text
+        assert "**DeNEVIL is proxy behavioral evidence" not in tldr_text
         assert "`MiniMax-M`" in report_text
         assert (
-            "intentionally withheld until the clean M2.5 text pass is complete" in report_text
-            or "No MiniMax-M2.5 text benchmark remains live" in report_text
+            "Clean direct MiniMax-M2.5 text run is complete" in report_text
+            and "no medium SMID route fixed yet" in report_text
         )
     topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     assert "## TL;DR" in topline_text
     assert "`GPT-5.5`" in topline_text
-    assert "OpenAI text-only references" in topline_text
-    assert "GPT-5 subset is now labeled as text-only S/M/L" in topline_text
-    assert (
-        "intentionally withheld until the clean M2.5 text pass is complete" in topline_text
-        or "No MiniMax-M2.5 text benchmark remains live" in topline_text
-    )
+    assert "**Main landscape:**" in topline_text
+    assert "**DeNEVIL is proxy behavioral evidence" not in topline_text
+    assert "**Current GitHub-facing boundary:**" not in topline_text.split("## Frozen Snapshot Scope", 1)[0]
 
     with (release_dir / "benchmark-catalog.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -334,7 +383,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert_done_text_progress(
         minimax_small,
         smid_status="done",
-        summary_note="Direct MiniMax-M2.1 text rerun complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route.",
+        summary_note="Direct MiniMax-M2.1 text rerun complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route.",
     )
     minimax_medium = row_for("MiniMax-M")
     assert minimax_medium["unimoral"] in {"live", "done"}
@@ -345,7 +394,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert minimax_medium["summary_note"].startswith(
         (
             "Clean direct MiniMax-M2.5 text run is active; no medium SMID route fixed yet.",
-            "Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet.",
+            "Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet.",
         )
     )
     minimax_large = row_for("MiniMax-L")
@@ -452,7 +501,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert deepseek_small["denevil"] == "proxy"
     assert deepseek_small["summary_note"] in {
         "No SMID route; May 9 no-thinking text rerun is complete and visible-answer validated.",
-        "No SMID route; May 9 no-thinking text rerun is complete and passes visible-answer validation for UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy.",
+        "No SMID route; May 9 no-thinking text rerun is complete and passes visible-answer validation for UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy.",
     }
     deepseek_medium = row_for("DeepSeek-M")
     assert_done_text_progress(
@@ -464,7 +513,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert_done_text_progress(
         deepseek_large,
         smid_status="-",
-        summary_note="No SMID route; large R1 text rerun is complete from saved shards with UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed.",
+        summary_note="No SMID route; large R1 text rerun is complete from saved shards with UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed.",
     )
 
     with (release_dir / "benchmark-comparison.csv").open(newline="", encoding="utf-8") as handle:
@@ -492,65 +541,22 @@ def test_release_builder_emits_expected_files(tmp_path):
             for row in minimax_large_rows
         )
     rows_by_line = {row["line_label"]: row for row in rows}
-    expected_openai_references = {
-        "GPT-4o mini": {
-            "family": "GPT-4o mini",
-            "size_slot": "Ref",
-            "route": "openai/gpt-4o-mini (Responses API + Batch API; text-only reference)",
-            "unimoral_action_accuracy": "0.672700",
-            "value_average_accuracy": "0.700698",
-            "comparison_note": "GPT-4o mini text reference marker; SMID and DeNEVIL intentionally not run.",
-        },
-        "GPT-5 nano": {
-            "family": "OpenAI GPT-5",
-            "size_slot": "S",
-            "route": "openai/gpt-5-nano (Responses API + Batch API; text-only reference)",
-            "unimoral_action_accuracy": "0.653575",
-            "value_average_accuracy": "0.617193",
-            "comparison_note": "OpenAI GPT-5 text-only S slot; SMID and DeNEVIL intentionally not run.",
-        },
-        "GPT-4.1 nano": {
-            "family": "OpenAI Batch refs",
-            "size_slot": "Ref",
-            "route": "openai/gpt-4.1-nano (Responses API + Batch API; text-only reference)",
-            "unimoral_action_accuracy": "0.646289",
-            "value_average_accuracy": "0.673043",
-            "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
-        },
-        "GPT-5 mini": {
-            "family": "OpenAI GPT-5",
-            "size_slot": "M",
-            "route": "openai/gpt-5-mini (Responses API + Batch API; text-only reference)",
-            "unimoral_action_accuracy": "0.677937",
-            "value_average_accuracy": "0.738897",
-            "comparison_note": "OpenAI GPT-5 text-only M slot; SMID and DeNEVIL intentionally not run.",
-        },
-        "GPT-4.1 mini": {
-            "family": "OpenAI Batch refs",
-            "size_slot": "Ref",
-            "route": "openai/gpt-4.1-mini (Responses API + Batch API; text-only reference)",
-            "unimoral_action_accuracy": "0.679417",
-            "value_average_accuracy": "0.734890",
-            "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
-        },
-        "GPT-5.5": {
-            "family": "OpenAI GPT-5",
-            "size_slot": "L",
-            "route": "openai/gpt-5.5 (Responses API + Batch API; text-only reference)",
-            "unimoral_action_accuracy": "0.683629",
-            "value_average_accuracy": "0.735646",
-            "comparison_note": "OpenAI GPT-5 text-only L slot; L is GPT-5.5; SMID and DeNEVIL intentionally not run.",
-        },
+    expected_openai_refs = {
+        "GPT-4o-mini Ref": ("OpenAI Ref", "Ref", "0.672700", "0.700698", "GPT-4o-mini Ref text-only OpenAI reference; outside the GPT-5 S/M/L series."),
+        "GPT-5 nano": ("OpenAI GPT-5", "S", "0.653575", "0.617193", "GPT-5 nano text-only OpenAI GPT-5 S slot; no SMID or DeNEVIL route."),
+        "GPT-4.1-nano Ref": ("OpenAI Ref", "Ref", "0.646289", "0.673043", "GPT-4.1-nano Ref text-only OpenAI reference; outside the GPT-5 S/M/L series."),
+        "GPT-5 mini": ("OpenAI GPT-5", "M", "0.677937", "0.738897", "GPT-5 mini text-only OpenAI GPT-5 M slot; no SMID or DeNEVIL route."),
+        "GPT-5.5": ("OpenAI GPT-5", "L", "0.683629", "0.735646", "GPT-5.5 text-only OpenAI GPT-5 L slot; no SMID or DeNEVIL route."),
+        "GPT-4.1-mini Ref": ("OpenAI Ref", "Ref", "0.679417", "0.734890", "GPT-4.1-mini Ref text-only OpenAI reference; outside the GPT-5 S/M/L series."),
     }
-    for line_label, expected in expected_openai_references.items():
+    for line_label, (family, size_slot, unimoral_accuracy, value_accuracy, comparison_note) in expected_openai_refs.items():
         openai_reference = rows_by_line[line_label]
-        assert openai_reference["family"] == expected["family"]
-        assert openai_reference["size_slot"] == expected["size_slot"]
-        assert openai_reference["route"] == expected["route"]
-        assert openai_reference["unimoral_action_accuracy"] == expected["unimoral_action_accuracy"]
+        assert openai_reference["family"] == family
+        assert openai_reference["size_slot"] == size_slot
+        assert openai_reference["unimoral_action_accuracy"] == unimoral_accuracy
         assert openai_reference["smid_average_accuracy"] == ""
-        assert openai_reference["value_average_accuracy"] == expected["value_average_accuracy"]
-        assert openai_reference["comparison_note"] == expected["comparison_note"]
+        assert openai_reference["value_average_accuracy"] == value_accuracy
+        assert openai_reference["comparison_note"] == comparison_note
     assert rows_by_line["MiniMax-S"]["unimoral_action_accuracy"] == "0.660861"
     assert rows_by_line["MiniMax-S"]["smid_average_accuracy"] == "0.431996"
     assert rows_by_line["MiniMax-S"]["value_average_accuracy"] == "0.739942"
@@ -702,71 +708,23 @@ def test_release_builder_emits_expected_files(tmp_path):
             assert all(row[f"option_{cluster_id}_pct"] == "n/a" for cluster_id in range(1, 11))
             assert all(row[f"option_{cluster_id}_delta_pp"] == "n/a" for cluster_id in range(1, 11))
     ccd_rows_by_line = {row["line_label"]: row for row in ccd_distribution_rows}
-    openai_ccd = ccd_rows_by_line["GPT-4o mini"]
-    assert openai_ccd["family"] == "GPT-4o mini"
-    assert openai_ccd["size_slot"] == "Ref"
-    assert openai_ccd["valid_selection_count"] == "2182"
-    assert openai_ccd["valid_selection_rate"] == "100.000000"
-    assert openai_ccd["option_6_pct"] == "17.094409"
-    assert openai_ccd["dominant_option"] == "option_6 (Nordic Europe)"
-    assert openai_ccd["effective_cluster_count"] == "8.937721"
     expected_openai_ccd = {
-        "GPT-5 nano": {
-            "family": "OpenAI GPT-5",
-            "size_slot": "S",
-            "valid_selection_count": "2181",
-            "valid_selection_rate": "99.954170",
-            "option_6_pct": "27.785420",
-            "dominant_option_share": "27.785420",
-            "effective_cluster_count": "6.793151",
-        },
-        "GPT-4.1 nano": {
-            "family": "OpenAI Batch refs",
-            "size_slot": "Ref",
-            "valid_selection_count": "2182",
-            "valid_selection_rate": "100.000000",
-            "option_6_pct": "21.494042",
-            "dominant_option_share": "21.494042",
-            "effective_cluster_count": "8.397459",
-        },
-        "GPT-5 mini": {
-            "family": "OpenAI GPT-5",
-            "size_slot": "M",
-            "valid_selection_count": "2182",
-            "valid_selection_rate": "100.000000",
-            "option_6_pct": "25.297892",
-            "dominant_option_share": "25.297892",
-            "effective_cluster_count": "7.131573",
-        },
-        "GPT-4.1 mini": {
-            "family": "OpenAI Batch refs",
-            "size_slot": "Ref",
-            "valid_selection_count": "2182",
-            "valid_selection_rate": "100.000000",
-            "option_6_pct": "22.410632",
-            "dominant_option_share": "22.410632",
-            "effective_cluster_count": "8.069893",
-        },
-        "GPT-5.5": {
-            "family": "OpenAI GPT-5",
-            "size_slot": "L",
-            "valid_selection_count": "2182",
-            "valid_selection_rate": "100.000000",
-            "option_6_pct": "27.268561",
-            "dominant_option_share": "27.268561",
-            "effective_cluster_count": "7.058620",
-        },
+        "GPT-4o-mini Ref": ("OpenAI Ref", "Ref", "2182", "100.000000", "17.094409", "8.937721"),
+        "GPT-5 nano": ("OpenAI GPT-5", "S", "2181", "99.954170", "27.785420", "6.793151"),
+        "GPT-4.1-nano Ref": ("OpenAI Ref", "Ref", "2182", "100.000000", "21.494042", "8.397459"),
+        "GPT-5 mini": ("OpenAI GPT-5", "M", "2182", "100.000000", "25.297892", "7.131573"),
+        "GPT-5.5": ("OpenAI GPT-5", "L", "2182", "100.000000", "27.268561", "7.058620"),
+        "GPT-4.1-mini Ref": ("OpenAI Ref", "Ref", "2182", "100.000000", "22.410632", "8.069893"),
     }
-    for line_label, expected in expected_openai_ccd.items():
-        openai_batch_ccd = ccd_rows_by_line[line_label]
-        assert openai_batch_ccd["family"] == expected["family"]
-        assert openai_batch_ccd["size_slot"] == expected["size_slot"]
-        assert openai_batch_ccd["valid_selection_count"] == expected["valid_selection_count"]
-        assert openai_batch_ccd["valid_selection_rate"] == expected["valid_selection_rate"]
-        assert openai_batch_ccd["option_6_pct"] == expected["option_6_pct"]
-        assert openai_batch_ccd["dominant_option"] == "option_6 (Nordic Europe)"
-        assert openai_batch_ccd["dominant_option_share"] == expected["dominant_option_share"]
-        assert openai_batch_ccd["effective_cluster_count"] == expected["effective_cluster_count"]
+    for line_label, (family, size_slot, valid_count, valid_rate, option_6_pct, effective_clusters) in expected_openai_ccd.items():
+        openai_ccd = ccd_rows_by_line[line_label]
+        assert openai_ccd["family"] == family
+        assert openai_ccd["size_slot"] == size_slot
+        assert openai_ccd["valid_selection_count"] == valid_count
+        assert openai_ccd["valid_selection_rate"] == valid_rate
+        assert openai_ccd["option_6_pct"] == option_6_pct
+        assert openai_ccd["dominant_option"] == "option_6 (Nordic Europe)"
+        assert openai_ccd["effective_cluster_count"] == effective_clusters
     deepseek_small_ccd = ccd_rows_by_line["DeepSeek-S"]
     assert deepseek_small_ccd["distribution_status"] == "ok"
     assert deepseek_small_ccd["valid_selection_count"] == "2180"
@@ -1113,12 +1071,12 @@ def test_release_builder_emits_expected_files(tmp_path):
     with (release_dir / "family-scaling-summary.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         scaling_rows = list(reader)
-        assert tuple(row["family"] for row in scaling_rows) in {
-            ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT-4o mini", "OpenAI GPT-5"),
-            ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT-4o mini"),
-            ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"),
-            ("Qwen", "DeepSeek", "Llama", "Gemma"),
-        }
+    assert tuple(row["family"] for row in scaling_rows) in {
+        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "OpenAI GPT-5", "OpenAI Ref"),
+        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "OpenAI Ref"),
+        ("Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"),
+        ("Qwen", "DeepSeek", "Llama", "Gemma"),
+    }
     minimax_scaling_rows = [row for row in scaling_rows if row["family"] == "MiniMax"]
     if minimax_scaling_rows:
         assert any(
@@ -1146,14 +1104,14 @@ def test_release_builder_emits_expected_files(tmp_path):
         and "Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692" in row["numeric_pattern"]
         and "CCD-Bench" not in row["numeric_pattern"]
         and "Denevil" not in row["numeric_pattern"]
-        and "medium text line still beats the large line" in row["interpretation"]
+        and "M still beats L on some text metrics" in row["interpretation"]
         for row in scaling_rows
     )
     assert any(
         row["family"] == "Gemma"
         and "Full S/M/L comparable sweep" in row["evidence_scope"]
         and "SMID: S 0.417 -> M 0.364 -> L 0.412" in row["numeric_pattern"]
-        and "non-monotonic" in row["interpretation"]
+        and "does not give a simple bigger-is-better story" in row["interpretation"]
         for row in scaling_rows
     )
     assert any(
@@ -1163,27 +1121,27 @@ def test_release_builder_emits_expected_files(tmp_path):
         and "Value Kaleidoscope: S 0.695 -> M 0.635 -> L 0.681" in row["numeric_pattern"]
         and "CCD-Bench" not in row["numeric_pattern"]
         and "Denevil" not in row["numeric_pattern"]
-        and "text-only evidence" in row["interpretation"]
-        and "all three still omit SMID" in row["interpretation"]
-        for row in scaling_rows
-    )
-    assert any(
-        row["family"] == "GPT-4o mini"
-        and "Single text-only reference point" in row["evidence_scope"]
-        and "UniMoral: Ref 0.673" in row["numeric_pattern"]
-        and "Value Kaleidoscope: Ref 0.701" in row["numeric_pattern"]
-        and "not be read as evidence about OpenAI family scaling" in row["interpretation"]
+        and "text-only curve" in row["interpretation"]
+        and "image benchmark is absent" in row["interpretation"]
         for row in scaling_rows
     )
     assert any(
         row["family"] == "OpenAI GPT-5"
-        and "S=GPT-5 nano" in row["evidence_scope"]
-        and "M=GPT-5 mini" in row["evidence_scope"]
-        and "L=GPT-5.5" in row["evidence_scope"]
+        and "Text-only GPT-5 S/M/L series" in row["evidence_scope"]
         and "UniMoral: S 0.654 -> M 0.678 -> L 0.684" in row["numeric_pattern"]
         and "Value Kaleidoscope: S 0.617 -> M 0.739 -> L 0.736" in row["numeric_pattern"]
-        and "text-only GPT-5 size context" in row["interpretation"]
-        and "not an all-benchmark family sweep" in row["interpretation"]
+        and "GPT-5.5 is L" in row["interpretation"]
+        and "all-benchmark OpenAI coverage" in row["interpretation"]
+        for row in scaling_rows
+    )
+    assert any(
+        row["family"] == "OpenAI Ref"
+        and "Three GPT-4o/GPT-4.1 text-only reference rows" in row["evidence_scope"]
+        and "UniMoral: range 0.646-0.679" in row["numeric_pattern"]
+        and "best GPT-4.1-mini Ref 0.679" in row["numeric_pattern"]
+        and "Value Kaleidoscope: range 0.673-0.735" in row["numeric_pattern"]
+        and "best GPT-4.1-mini Ref 0.735" in row["numeric_pattern"]
+        and "should not be folded into the GPT-5 S/M/L curve" in row["interpretation"]
         for row in scaling_rows
     )
 
@@ -1192,31 +1150,64 @@ def test_release_builder_emits_expected_files(tmp_path):
     topline_summary = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     for text in (report_text, release_readme):
         assert "## TL;DR" in text
-        assert "Best like-for-like line" in text
-        assert "Best text-only line" in text
-        assert "The hardest benchmark is SMID" in text
-        assert "There is no universal scaling law" in text
-        if "CCD-Bench shows cultural choice style, not accuracy" in text:
-            assert "`DeepSeek-S` at 13.8% to `GPT-5 nano` at 27.8%" in text
-        if "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" in text:
-            assert "92.4% to 99.5% protective response rate" in text
-            assert "0.2% no-visible proxy traces" in text
+        assert "Key takeaways:" in text
+        tldr_text = text.split("## Benchmark Result Visuals", 1)[0]
+        assert "Best all-around line" in tldr_text
+        assert "Main landscape" in tldr_text
+        assert "models can talk through moral choices and values better than they can see morally important cues in images" in tldr_text
+        assert "Scaling law" in tldr_text
+        assert "there is no reliable bigger-is-better rule" in tldr_text
+        assert "Family read" in tldr_text
+        assert "UniMoral is not one skill" in tldr_text
+        assert "Cultural-style bias" in tldr_text
+        assert "strong Europe/Nordic pull" in tldr_text
+        assert "**Current GitHub-facing boundary:**" not in text.split("## Benchmark Result Visuals", 1)[0]
+        assert "OpenAI references" in tldr_text
+        assert "GPT-4o-mini Ref" in tldr_text
+        assert "`GPT-5 nano` is S, `GPT-5 mini` is M, and `GPT-5.5` is L" in tldr_text
+        assert "UniMoral tops out at `GPT-5.5`" in tldr_text
+        assert "`GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref`" in tldr_text
+        assert "GPT-4o-mini reference line" not in text
+        assert "76,486/76,486 parsed prompts" not in text
+        assert "Small-model follow-up" in tldr_text
+        assert "Mistral/Qwen/Llama older routes add one simple takeaway" in tldr_text
+        assert "Small-model capability floor | May 13 follow-up" in text
+        assert "### Small-Model Follow-Up: Capability Floor" in text
+        assert "`Mistral Nemo` | 12B | 0.648" in text
+        assert "additional_model_sweep_unimoral_accuracy.svg" in text
+        assert "additional_model_sweep_scaling.svg" in text
+        assert "additional_model_sweep_ccd_dominant_share.svg" in text
+        assert "The hardest benchmark is SMID" not in tldr_text
+        assert "Bigger is not automatically more moral" not in tldr_text
+        assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" not in tldr_text
         assert "## Results First" in text
         assert "## Benchmark Result Visuals" in text
-        assert "### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy" in text
-        assert "### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling" in text
-        assert "### 3. CCD-Bench: cultural-cluster choice behavior" in text
-        assert "### 4. CCD-Bench: dominant-option concentration" in text
-        assert "### 5. DeNEVIL: proxy behavioral outcomes" in text
+        assert "### 1. UniMoral RQ1-RQ4: family-size scaling and task readout" in text
+        assert "### 2. SMID / Value Kaleidoscope: topline comparable accuracy" in text
+        assert "### 3. SMID / Value Kaleidoscope: family-size scaling" in text
+        assert "### 4. CCD-Bench: cultural-cluster choice behavior" in text
+        assert "### 5. CCD-Bench: dominant-option concentration" in text
+        assert "### 6. DeNEVIL: proxy behavioral outcomes" in text
+        assert "### 7. CCD-Bench: dominant-option concentration" not in text
+        assert "### 8. DeNEVIL: proxy behavioral outcomes" not in text
         assert "## Interpretation" in text
         assert "### Interpretation At A Glance" in text
         assert "### Benchmark Reading Guide" in text
+        assert "| Benchmark readout | In plain language: what it asks | Why it matters for moral psychology | How to read this release |" in text
+        assert "`UniMoral RQ1: action prediction`" in text
+        assert "`UniMoral RQ2: moral typology`" in text
+        assert "`UniMoral RQ3: factor attribution`" in text
+        assert "`UniMoral RQ4: consequence generation`" in text
+        assert "`SMID` | Look at real images and infer moral wrongness or the dominant moral foundation." in text
+        assert "`CCD-Bench` | Choose among ten culturally grounded responses to a cross-cultural dilemma." in text
+        assert "`DeNEVIL` | Probe how the model behaves when prompts try to surface unethical or value-violating content." in text
         assert "### Benchmark Difficulty Profile" in text
         assert "### Family Scaling Profile" in text
         assert "### CCD-Bench Choice Behavior" in text
         assert "### DeNEVIL Proxy Behavioral Evidence" in text
         assert "### Reporting Guardrails" in text
         assert "These benchmarks do not all ask for the same kind of moral competence" in text
+        assert "Moral psychology cares about why people choose, not only what they choose." in text
         assert "### Latest Family-Size Progress Snapshot" not in text
         assert "Metric definition version: `2026-04-30`." in text
         assert "### DeepSeek S/M/L Log-Derived Readout" in text
@@ -1225,16 +1216,15 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "`DeepSeek-L` | UniMoral 0.563; Value 0.681" in text
         assert "Strongest fully observed comparable line | `MiniMax-S` averages 0.611" in text
         assert "Strongest text-only comparable line | `GPT-5.5` reaches UniMoral 0.684 and Value 0.736" in text
-        assert "OpenAI text-only reference markers | 6 Batch API rows have 76,486/76,486 collected responses each" in text
-        assert "GPT-5 subset is labeled as text-only S/M/L (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L)" in text
-        assert "GPT-4o mini text reference marker" in text
         assert "Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route" in text
         assert "CCD-Bench should not be flattened into a universal accuracy number." in text
         assert "The repo still lacks a stable local `MoralPrompt` export" in text
         assert "paper-aligned APV / EVR / MVP are `n/a`" in text
         assert "headline DeNEVIL behavioral-outcomes chart already appears above" in text
         assert "ccd-choice-distribution.csv" in text
-        assert "readiness-tier-matrix.csv" in text
+        assert "option1_unimoral_task_heatmap.svg" in text
+        assert "option1_unimoral_generation_quality.svg" in text
+        assert "option1_unimoral_family_scaling.svg" in text
         assert "option1_ccd_choice_distribution.svg" in text
         assert "option1_ccd_dominant_option_share.svg" in text
         assert "option1_denevil_behavior_outcomes.svg" in text
@@ -1259,6 +1249,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "Low-level DeNEVIL QA/provenance artifacts remain exported" in text
         assert "## Interpretation Notes" not in text
         assert text.count("![Comparable accuracy bars]") == 1
+        assert text.count("![UniMoral family-size scaling by RQ]") == 1
         assert text.count("![Family scaling profile]") == 1
         assert text.count("![CCD choice distribution]") == 1
         assert text.count("![CCD dominant-option share]") == 1
@@ -1327,12 +1318,21 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" not in release_readme
 
     assert "## TL;DR" in topline_summary
+    assert "Key takeaways:" in topline_summary
+    assert "Main landscape" in topline_summary
+    assert "**Current GitHub-facing boundary:**" not in topline_summary.split("## Frozen Snapshot Scope", 1)[0]
+    assert "OpenAI references" in topline_summary
+    assert "`GPT-5 nano` is S, `GPT-5 mini` is M, and `GPT-5.5` is L" in topline_summary
+    assert "`GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref`" in topline_summary
+    assert "Small-model follow-up" in topline_summary
+    assert "Mistral Nemo" in topline_summary
+    assert "GPT-4o-mini reference line" not in topline_summary
+    assert "76,486/76,486 parsed prompts" not in topline_summary
     assert "## Frozen Snapshot Scope" in topline_summary
-    assert "Best like-for-like line" in topline_summary
-    if "CCD-Bench shows cultural choice style, not accuracy" in topline_summary:
-        assert "GPT-5 nano" in topline_summary
-    if "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" in topline_summary:
-        assert "DeepSeek-S" in topline_summary
+    assert "Best all-around line" in topline_summary
+    assert "Cultural-style bias" in topline_summary
+    assert "GPT-5 nano" in topline_summary
+    assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" not in topline_summary
     assert "For the full public package, move next to `README.md`" in topline_summary
 
     progress_overview_svg = (figure_dir / "option1_family_size_progress_overview.svg").read_text(encoding="utf-8")
@@ -1350,10 +1350,11 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Qwen-S" in heatmap_svg
 
     benchmark_bar_svg = (figure_dir / "option1_benchmark_accuracy_bars.svg").read_text(encoding="utf-8")
-    assert "SMID panel omits rows with no public vision route" in benchmark_bar_svg
+    assert "Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells" in benchmark_bar_svg
     assert "no SMID vision route" not in benchmark_bar_svg
     assert "Gemma-L" in benchmark_bar_svg
-    assert "GPT-4o mini" in benchmark_bar_svg
+    assert "GPT-4o-mini Ref" in benchmark_bar_svg
+    assert "GPT-5.5" in benchmark_bar_svg
 
     benchmark_difficulty_svg = (figure_dir / "option1_benchmark_difficulty_profile.svg").read_text(encoding="utf-8")
     assert "Benchmark Difficulty And Spread" in benchmark_difficulty_svg
@@ -1364,12 +1365,17 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Family Scaling Profile" in family_scaling_svg
     assert 'preserveAspectRatio="xMidYMin meet"' in family_scaling_svg
     assert 'style="max-width:100%;height:auto"' in family_scaling_svg
-    assert "Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope." in family_scaling_svg
+    assert "UniMoral is grouped in Figure 1 above" in family_scaling_svg
+    assert "Two comparable benchmark panels here: SMID and Value Kaleidoscope." in family_scaling_svg
     assert "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence." in family_scaling_svg
-    assert "OpenAI GPT-5 is plotted as a text-only S/M/L series: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5." in family_scaling_svg
-    assert "S=GPT-5 nano" in family_scaling_svg
-    assert "M=GPT-5 mini" in family_scaling_svg
-    assert "L=GPT-5.5" in family_scaling_svg
+    assert "OpenAI GPT-5 text-only points are S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5." in family_scaling_svg
+    assert "GPT-4o and GPT-4.1 text refs are gray dashed reference lines where a text metric exists." in family_scaling_svg
+    assert "OpenAI refs 67.3%-73.5%" in family_scaling_svg
+    assert "Best GPT-4.1-mini Ref 73.5%" in family_scaling_svg
+    assert "OpenAI GPT-5" in family_scaling_svg
+    assert "GPT-4o-mini Ref: no SMID route" not in family_scaling_svg
+    assert "#dc2626" in family_scaling_svg
+    assert ">Ref<" not in family_scaling_svg
     assert "#4 CCD-Bench" not in family_scaling_svg
     assert "#5 Denevil" not in family_scaling_svg
     assert "100% coverage" not in family_scaling_svg
@@ -1380,17 +1386,15 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "and dominant-option concentration figures." in family_scaling_svg
     assert "Read Denevil in the behavioral-outcomes figure." in family_scaling_svg
     assert "Do not mix proxy evidence into accuracy scaling." in family_scaling_svg
-    assert "DeepSeek: S/M/L text metrics are now parsed from saved logs" in family_scaling_svg
+    assert "Value S/M/L are parsed from saved logs" in family_scaling_svg
     assert "Qwen" in family_scaling_svg
-    assert "Takeaway: current evidence supports task-specific scaling statements" in family_scaling_svg
+    assert "Takeaway: scaling is benchmark-specific" in family_scaling_svg
     if "MiniMax" in family_scaling_svg:
-        assert "MiniMax: S/M/L are scored on UniMoral and Value; S/L have SMID, while M has no SMID route." in family_scaling_svg
-    assert "Qwen: text scored at S/M/L; SMID at S/L." in family_scaling_svg
-    assert "Llama: text scored at S/M/L; SMID at S/L." in family_scaling_svg
-    assert "DeepSeek: S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists." in family_scaling_svg
-    assert "Gemma: full S/M/L scored sweep." in family_scaling_svg
-    assert "OpenAI GPT-5: text-only S/M/L: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5; no SMID/DeNEVIL." in family_scaling_svg
-    assert "GPT-4o mini: separate GPT-4o mini text-only Ref marker; not part of GPT-5 S/M/L." in family_scaling_svg
+        assert "Value S/M/L are scored; SMID S/L have routes" in family_scaling_svg
+        assert "route." in family_scaling_svg
+    assert "Value scored at S/M/L; SMID at S/L." in family_scaling_svg
+    assert "Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists." in family_scaling_svg
+    assert "full S/M/L sweep on SMID and Value." in family_scaling_svg
     assert "Only the small line is currently comparable." not in family_scaling_svg
 
     ccd_coverage_svg = (figure_dir / "option1_ccd_valid_choice_coverage.svg").read_text(encoding="utf-8")

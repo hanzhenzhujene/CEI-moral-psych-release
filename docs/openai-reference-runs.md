@@ -17,7 +17,7 @@ Each completed full text sweep covers 76,486 selected examples across UniMoral a
 
 ## GPT-5.5 Promotion Status
 
-As of May 21, 2026, official OpenAI documentation identifies GPT-5.5 as the current latest model for the latest-model endpoint guidance. The repo-local GPT-5.5 work used the same OpenAI text harness path as the completed reference rows:
+The repo-local GPT-5.5 work used the same OpenAI text harness path as the completed reference rows:
 
 - `openai_smoke_benchmark.py`
 - `/v1/responses`
@@ -38,5 +38,3 @@ The full GPT-5.5 text batch was prepared at workspace-level `outputs/openai-smok
 Local integrity checks on May 21, 2026 found 76,486 unique sample ids, zero JSON parse errors, and 76,486 successful `project_results.jsonl` rows. Task counts match the expected text-only sweep: 8,784 UniMoral action-prediction rows, 43,680 ValuePrism relevance rows, 21,840 ValuePrism valence rows, and 2,182 CCD-Bench selection rows. The manifest still records the original oversized chunk 01 as a failed submission attempt, but all retry chunks needed for the final artifact completed with zero failed requests.
 
 The promoted GPT-5.5 row is scoped exactly like the other OpenAI text references: it has UniMoral, ValuePrism, and CCD-Bench text-only evidence; it has no SMID row and no DeNEVIL row. In the public family-scaling figure it is the OpenAI GPT-5 text-only L slot, paired with `GPT-5 nano` as S and `GPT-5 mini` as M; this should not be described as all-benchmark OpenAI family coverage.
-
-Reference: [OpenAI latest model guide](https://developers.openai.com/api/docs/guides/latest-model).

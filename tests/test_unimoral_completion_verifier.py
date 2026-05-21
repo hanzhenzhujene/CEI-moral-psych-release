@@ -1,0 +1,1008 @@
+from __future__ import annotations
+
+import csv
+import json
+import zipfile
+from pathlib import Path
+
+import pytest
+
+from scripts import verify_unimoral_completion as verifier
+
+
+def _write_csv(path: Path, rows: list[dict[str, object]], fieldnames: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def _set_tiny_verifier_constants(monkeypatch) -> None:
+    tasks = {
+        "unimoral_action_prediction": {"rq": "RQ1", "expected": 3, "metric": "accuracy"},
+        "unimoral_moral_typology": {"rq": "RQ2", "expected": 2, "metric": "accuracy"},
+    }
+    monkeypatch.setattr(verifier, "MODEL_LINES", ["Line-A"])
+    monkeypatch.setattr(verifier, "TASKS", tasks)
+    monkeypatch.setattr(verifier, "PREDICTION_TASKS", {"unimoral_moral_typology": tasks["unimoral_moral_typology"]})
+    monkeypatch.setattr(verifier, "EXPECTED_SAMPLE_PREDICTION_ROWS", 2)
+
+
+def _set_tiny_rq4_verifier_constants(monkeypatch) -> None:
+    tasks = {
+        "unimoral_action_prediction": {"rq": "RQ1", "expected": 3, "metric": "accuracy"},
+        "unimoral_consequence_generation": {"rq": "RQ4", "expected": 2, "metric": "bert_score_f1"},
+    }
+    monkeypatch.setattr(verifier, "MODEL_LINES", ["Line-A"])
+    monkeypatch.setattr(verifier, "TASKS", tasks)
+    monkeypatch.setattr(
+        verifier,
+        "PREDICTION_TASKS",
+        {"unimoral_consequence_generation": tasks["unimoral_consequence_generation"]},
+    )
+    monkeypatch.setattr(verifier, "EXPECTED_SAMPLE_PREDICTION_ROWS", 2)
+
+
+def _write_success_eval(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr("header.json", json.dumps({"status": "success"}) + "\n")
+
+
+def _write_overview_metadata(release: Path, *, documented_incomplete: bool = False) -> None:
+    total_samples = len(verifier.MODEL_LINES) * sum(task["expected"] for task in verifier.TASKS.values())
+    families = list(dict.fromkeys(verifier.family_display_for_line(line) for line in verifier.MODEL_LINES))
+    mode = "benchmark_faithful; documented_incomplete" if documented_incomplete else "benchmark_faithful"
+    _write_csv(
+        release / "benchmark-summary.csv",
+        [
+            {
+                "benchmark": "UniMoral",
+                "task_types": len(verifier.TASKS),
+                "evaluated_lines": len(verifier.MODEL_LINES) * len(verifier.TASKS),
+                "models_covered": len(families),
+                "samples": total_samples,
+                "modes": mode,
+            }
+        ],
+        ["benchmark", "task_types", "evaluated_lines", "models_covered", "samples", "modes"],
+    )
+    interpretation = (
+        "Action prediction remains the original comparable UniMoral scalar; incomplete or parse-limited model-line cells are tracked in unimoral-failure-checklist.csv."
+        if documented_incomplete
+        else "Action prediction remains the original comparable UniMoral scalar; RQ2/RQ3/RQ4 expose the full model-line matrix."
+    )
+    _write_csv(
+        release / "benchmark-catalog.csv",
+        [
+            {
+                "benchmark": "UniMoral",
+                "models_in_release": "; ".join(families),
+                "samples_in_release": total_samples,
+                "current_release_mode": mode,
+                "repo_readout": "The release implements all four UniMoral task definitions.",
+                "release_interpretation": interpretation,
+            }
+        ],
+        ["benchmark", "models_in_release", "samples_in_release", "current_release_mode", "repo_readout", "release_interpretation"],
+    )
+    manifest_path = release / "release-manifest.json"
+    if manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["benchmarks"] = [
+            {
+                "benchmark": "UniMoral",
+                "task_types": len(verifier.TASKS),
+                "evaluated_lines": len(verifier.MODEL_LINES) * len(verifier.TASKS),
+                "models_covered": len(families),
+                "samples": total_samples,
+                "modes": mode,
+            }
+        ]
+        manifest["counts"] = {
+            "authoritative_tasks": len(verifier.MODEL_LINES) * len(verifier.TASKS),
+            "benchmark_faithful_tasks": len(verifier.MODEL_LINES) * len(verifier.TASKS),
+            "proxy_tasks": 0,
+            "total_samples": total_samples,
+        }
+        manifest_path.write_text(json.dumps(manifest) + "\n", encoding="utf-8")
+
+
+def _write_tiny_summary_artifacts(release: Path, full_rows: list[dict[str, object]]) -> None:
+    spread_rows = []
+    ranking_rows = []
+    for task_name, task in verifier.TASKS.items():
+        task_rows = [row for row in full_rows if row["task_name"] == task_name]
+        complete_rows = [row for row in task_rows if row["status"] == "complete"]
+        valued_rows = [
+            (row, float(row[task["metric"]]))
+            for row in complete_rows
+            if row.get(task["metric"]) not in {None, ""}
+        ]
+        values = [value for _, value in valued_rows]
+        if values:
+            spread = max(values) - min(values)
+            spread_rows.append(
+                {
+                    "task_name": task_name,
+                    "task_label": task_rows[0]["task_label"],
+                    "model_lines": len(values),
+                    "mean": sum(values) / len(values),
+                    "min": min(values),
+                    "max": max(values),
+                    "range": spread,
+                    "diagnostic_read": "saturated",
+                }
+            )
+        else:
+            spread_rows.append(
+                {
+                    "task_name": task_name,
+                    "task_label": task_rows[0]["task_label"],
+                    "model_lines": 0,
+                    "mean": "",
+                    "min": "",
+                    "max": "",
+                    "range": "",
+                    "diagnostic_read": "missing",
+                }
+            )
+        valued_rows.sort(key=lambda item: item[1], reverse=True)
+        for rank, (row, value) in enumerate(valued_rows, start=1):
+            ranking_rows.append(
+                {
+                    "task_name": task_name,
+                    "task_label": row["task_label"],
+                    "rank": rank,
+                    "line_label": row["line_label"],
+                    "metric": task["metric"],
+                    "value": value,
+                }
+            )
+    _write_csv(release / "unimoral-task-spread.csv", spread_rows, list(spread_rows[0]))
+    _write_csv(release / "unimoral-model-rankings.csv", ranking_rows, list(ranking_rows[0]))
+
+
+def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
+    release = root / "release"
+    figures = root / "figures"
+    release.mkdir(parents=True)
+    figures.mkdir(parents=True)
+    _write_overview_metadata(release)
+    root.joinpath("README.md").write_text("The release now scores all four UniMoral tasks.\n", encoding="utf-8")
+    release.joinpath("README.md").write_text("The release now scores all four UniMoral tasks.\n", encoding="utf-8")
+    release.joinpath("jenny-group-report.md").write_text("The release now scores all four UniMoral tasks.\n", encoding="utf-8")
+    release.joinpath("unimoral-minimax-resume-plan.md").write_text(
+        "No MiniMax blockers are listed in the fixture failure checklist.\n",
+        encoding="utf-8",
+    )
+    release.joinpath("unimoral-completion-audit.md").write_text(
+        "# UniMoral Completion Audit\n\n"
+        "Status: **achieved**.\n\n"
+        "## Prompt-to-Artifact Checklist\n\n"
+        "Strict completion is achieved in this fixture.\n\n"
+        "2 rows present; strict expected count is 2.\n\n"
+        "| MiniMax is not run without explicit authorization | "
+        "`make unimoral-missing-plan` | `make unimoral-missing-plan` is "
+        "dry-run only; non-dry-run MiniMax lines require "
+        "`UNIMORAL_ALLOW_MINIMAX=1`. | guarded |\n\n"
+        "| Clean committed branch | `git status --short --branch`, "
+        "`git rev-list --left-right --count HEAD...@{upstream}` | "
+        "Post-generation check required: the final operator report must cite "
+        "clean status and 0/0 ahead-behind after the last push. | external final check |\n\n"
+        "## CSV-Level Strict Blockers\n\n"
+        "Total strict sample prediction gap: **0** rows.\n\n"
+        "No CSV-level strict blockers remain; `scripts/verify_unimoral_completion.py` remains the source of truth.\n\n"
+        "No MiniMax provider calls are made by generating this audit.\n",
+        encoding="utf-8",
+    )
+
+    for name, title in verifier.REQUIRED_FIGURE_MARKERS.items():
+        figures.joinpath(name).write_text(
+            f"<svg><text>{title}</text></svg>\n",
+            encoding="utf-8",
+        )
+
+    _write_success_eval(root / "results" / "inspect" / "logs" / "example.eval")
+    full_rows = []
+    for line in verifier.MODEL_LINES:
+        for task_name, task in verifier.TASKS.items():
+            row = {
+                "line_label": line,
+                "family": line.split("-")[0],
+                "size_slot": "",
+                "task_name": task_name,
+                "rq": task["rq"],
+                "task_label": task_name,
+                "primary_metric": task["metric"],
+                "expected_samples": task["expected"],
+                "completed_samples": task["expected"],
+                "status": "complete",
+                "accuracy": "0.5" if task_name != "unimoral_consequence_generation" else "",
+                "official_weighted_f1": "0.5" if task["metric"] == "official_weighted_f1" else "",
+                "bleu": "",
+                "meteor": "0.1" if task["metric"] == "meteor" else "",
+                "bert_score_f1": "0.9" if task_name == "unimoral_consequence_generation" else "",
+                "rouge_l": "",
+                "parsed_count": task["expected"],
+                "log_path": "" if task_name == "unimoral_action_prediction" else "results/inspect/logs/example.eval",
+            }
+            full_rows.append(row)
+    _write_csv(release / "unimoral-full-benchmark.csv", full_rows, list(full_rows[0]))
+
+    coverage_rows = [
+        {
+            "rq": task["rq"],
+            "task_name": task_name,
+            "task_label": task_name,
+            "status": "complete",
+            "complete_model_lines": len(verifier.MODEL_LINES),
+            "reported_model_lines": len(verifier.MODEL_LINES),
+            "expected_model_lines": len(verifier.MODEL_LINES),
+            "expected_samples_per_model": task["expected"],
+        }
+        for task_name, task in verifier.TASKS.items()
+    ]
+    _write_csv(release / "unimoral-coverage.csv", coverage_rows, list(coverage_rows[0]))
+    _write_tiny_summary_artifacts(release, full_rows)
+    prediction_rows = []
+    for task_name, task in verifier.PREDICTION_TASKS.items():
+        prediction_rows.extend(
+            {
+                "line_label": "Line-A",
+                "family": "Line",
+                "size_slot": "",
+                "task_name": task_name,
+                "rq": task["rq"],
+                "sample_id": f"{task_name}-sample-{idx}",
+                "language": "English",
+                "scenario_id": str(idx),
+                "target_json": '["answer"]',
+                "prediction": "answer",
+                "score_value": "1",
+                "bert_score_f1": "0.9" if task_name == "unimoral_consequence_generation" else "",
+                "answer_source": "visible",
+                "source_log_dir": "results/inspect/logs",
+                "source_log_count": "1",
+            }
+            for idx in range(task["expected"])
+        )
+    _write_csv(
+        release / "unimoral-sample-predictions.csv",
+        prediction_rows,
+        [
+            "line_label",
+            "family",
+            "size_slot",
+            "task_name",
+            "rq",
+            "sample_id",
+            "language",
+            "scenario_id",
+            "target_json",
+            "prediction",
+            "score_value",
+            "bert_score_f1",
+            "answer_source",
+            "source_log_dir",
+            "source_log_count",
+        ],
+    )
+    if "unimoral_consequence_generation" in verifier.PREDICTION_TASKS:
+        rq4_rows = [
+            row
+            for row in prediction_rows
+            if row["task_name"] == "unimoral_consequence_generation"
+        ]
+        _write_csv(
+            release / "unimoral-rq4-bertscore.csv",
+            [
+                {
+                    "line_label": row["line_label"],
+                    "task_name": row["task_name"],
+                    "sample_id": row["sample_id"],
+                    "language": row["language"],
+                    "bert_score_f1": row["bert_score_f1"],
+                }
+                for row in rq4_rows
+            ],
+            ["line_label", "task_name", "sample_id", "language", "bert_score_f1"],
+        )
+    _write_csv(
+        release / "unimoral-failure-checklist.csv",
+        [],
+        [
+            "line_label",
+            "task_name",
+            "status",
+            "completed_samples",
+            "expected_samples",
+            "parsed_count",
+            "category",
+            "reason",
+            "next_action",
+            "log_path",
+        ],
+    )
+    entry_points = {
+        "unimoral_full_benchmark": "results/release/unimoral-full-benchmark.csv",
+        "unimoral_coverage": "results/release/unimoral-coverage.csv",
+        "unimoral_task_spread": "results/release/unimoral-task-spread.csv",
+        "unimoral_model_rankings": "results/release/unimoral-model-rankings.csv",
+        "unimoral_sample_predictions": "results/release/unimoral-sample-predictions.csv",
+        "unimoral_failure_checklist": "results/release/unimoral-failure-checklist.csv",
+        "unimoral_completion_audit": "results/release/unimoral-completion-audit.md",
+        "unimoral_minimax_resume_plan": "results/release/unimoral-minimax-resume-plan.md",
+        "unimoral_four_task_dashboard_figure": "figures/release/option1_unimoral_four_task_dashboard.svg",
+        "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
+        "unimoral_generation_quality_figure": "figures/release/option1_unimoral_generation_quality.svg",
+        "unimoral_family_scaling_figure": "figures/release/option1_unimoral_family_scaling.svg",
+        "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
+        "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
+    }
+    if "unimoral_consequence_generation" in verifier.TASKS:
+        entry_points["unimoral_rq4_bertscore"] = "results/release/unimoral-rq4-bertscore.csv"
+
+    release.joinpath("release-manifest.json").write_text(
+        json.dumps(
+            {
+                "benchmarks": [
+                    {
+                        "benchmark": "UniMoral",
+                        "task_types": len(verifier.TASKS),
+                        "evaluated_lines": len(verifier.MODEL_LINES) * len(verifier.TASKS),
+                        "models_covered": 1,
+                        "samples": len(verifier.MODEL_LINES) * sum(task["expected"] for task in verifier.TASKS.values()),
+                        "modes": "benchmark_faithful",
+                    }
+                ],
+                "counts": {
+                    "authoritative_tasks": len(verifier.MODEL_LINES) * len(verifier.TASKS),
+                    "benchmark_faithful_tasks": len(verifier.MODEL_LINES) * len(verifier.TASKS),
+                    "proxy_tasks": 0,
+                    "total_samples": len(verifier.MODEL_LINES) * sum(task["expected"] for task in verifier.TASKS.values())
+                },
+                "entry_points": entry_points,
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return release, figures
+
+
+def test_unimoral_completion_verifier_passes_complete_artifacts(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    assert verifier.verify_release(release, figures, allow_incomplete=False) == []
+
+
+def test_unimoral_completion_verifier_checks_branch_audit_contract(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    audit_path = release / "unimoral-completion-audit.md"
+    audit_path.write_text(
+        "# UniMoral Completion Audit\n\n"
+        "Status: **achieved**.\n\n"
+        "## Prompt-to-Artifact Checklist\n\n"
+        "Strict completion is achieved in this fixture.\n\n"
+        "No MiniMax provider calls are made by generating this audit.\n",
+        encoding="utf-8",
+    )
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=False)
+
+    assert any("Clean committed branch" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_rejects_transient_operator_context(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    audit_path = release / "unimoral-completion-audit.md"
+    audit_path.write_text(
+        audit_path.read_text(encoding="utf-8") + "\nThe current user instruction forbids MiniMax runs.\n",
+        encoding="utf-8",
+    )
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=False)
+
+    assert any("stale operator-context phrase" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_fails_incomplete_status(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    rows[0]["status"] = "partial"
+    rows[0]["completed_samples"] = "1"
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=False)
+
+    assert any("status=partial expected complete" in error for error in errors)
+    assert any("completed_samples=1" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_requires_model_task_blocker_audit(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    rows.append(dict(rows[0]))
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("contains duplicate model-task rows" in error for error in errors)
+    assert any("missing CSV blocker phrase" in error for error in errors)
+
+
+@pytest.mark.parametrize(
+    ("case", "expected_error"),
+    [
+        ("missing", "missing model-task rows"),
+        ("unexpected", "unexpected model-task rows"),
+    ],
+)
+def test_unimoral_completion_verifier_requires_missing_or_unexpected_model_task_blocker_audit(
+    tmp_path,
+    monkeypatch,
+    case,
+    expected_error,
+):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    if case == "missing":
+        rows.pop()
+    else:
+        extra = dict(rows[0])
+        extra["line_label"] = "Line-B"
+        rows.append(extra)
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any(expected_error in error for error in errors)
+    assert any("missing CSV blocker phrase" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_allow_incomplete_skips_absent_raw_logs(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    for path in tmp_path.glob("results/inspect/logs/*.eval"):
+        path.unlink()
+
+    assert verifier.verify_release(release, figures, allow_incomplete=True) == []
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=False)
+
+    assert any("status=unreadable expected success" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_allow_incomplete_keeps_structural_checks(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+    _write_overview_metadata(release, documented_incomplete=True)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    for row in rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "partial"
+            row["completed_samples"] = "1"
+            row["parsed_count"] = "1"
+            row["accuracy"] = ""
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+    _write_tiny_summary_artifacts(release, rows)
+    coverage_rows = list(csv.DictReader((release / "unimoral-coverage.csv").open(newline="", encoding="utf-8")))
+    for row in coverage_rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "incomplete"
+            row["complete_model_lines"] = "0"
+            row["reported_model_lines"] = "0"
+    _write_csv(release / "unimoral-coverage.csv", coverage_rows, list(coverage_rows[0]))
+    prediction_rows = list(csv.DictReader((release / "unimoral-sample-predictions.csv").open(newline="", encoding="utf-8")))
+    _write_csv(release / "unimoral-sample-predictions.csv", prediction_rows[:1], list(prediction_rows[0]))
+    _write_csv(
+        release / "unimoral-failure-checklist.csv",
+        [
+            {
+                "line_label": "Line-A",
+                "task_name": "unimoral_moral_typology",
+                "status": "partial",
+                "completed_samples": "1",
+                "expected_samples": "2",
+                "parsed_count": "1",
+                "category": "runtime",
+                "reason": "fixture incomplete",
+                "next_action": "rerun fixture",
+                "log_path": "results/inspect/logs/example.eval",
+            }
+        ],
+        [
+            "line_label",
+            "task_name",
+            "status",
+            "completed_samples",
+            "expected_samples",
+            "parsed_count",
+            "category",
+            "reason",
+            "next_action",
+            "log_path",
+        ],
+    )
+    tmp_path.joinpath("README.md").write_text("current model-line matrix is not yet fully complete\n", encoding="utf-8")
+    release.joinpath("unimoral-completion-audit.md").write_text(
+        "# UniMoral Completion Audit\n\n"
+        "Status: **not achieved**.\n\n"
+        "## Prompt-to-Artifact Checklist\n\n"
+        "Strict completion is blocked in this fixture.\n\n"
+        "1 rows present; strict expected count is 2.\n\n"
+        "| MiniMax is not run without explicit authorization | "
+        "`make unimoral-missing-plan` | `make unimoral-missing-plan` is "
+        "dry-run only; non-dry-run MiniMax lines require "
+        "`UNIMORAL_ALLOW_MINIMAX=1`. | guarded |\n\n"
+        "| Clean committed branch | `git status --short --branch`, "
+        "`git rev-list --left-right --count HEAD...@{upstream}` | "
+        "Post-generation check required: the final operator report must cite "
+        "clean status and 0/0 ahead-behind after the last push. | external final check |\n\n"
+        "## CSV-Level Strict Blockers\n\n"
+        "Total strict sample prediction gap: **1** rows.\n\n"
+        "- `Line-A` `unimoral_moral_typology`: 1 sample predictions missing (1/2); status `partial`.\n\n"
+        "No MiniMax provider calls are made by generating this audit.\n",
+        encoding="utf-8",
+    )
+
+    assert verifier.verify_release(release, figures, allow_incomplete=True) == []
+
+    stale_coverage_rows = [dict(row) for row in coverage_rows]
+    for row in stale_coverage_rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "complete"
+            row["complete_model_lines"] = "1"
+            row["reported_model_lines"] = "1"
+    _write_csv(release / "unimoral-coverage.csv", stale_coverage_rows, list(stale_coverage_rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any(
+        "unimoral-coverage.csv unimoral_moral_typology status='complete' expected current 'incomplete'" in error
+        for error in errors
+    )
+
+    _write_csv(release / "unimoral-coverage.csv", coverage_rows, list(coverage_rows[0]))
+
+    rows[0]["rq"] = "WRONG"
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("has rq=WRONG" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_fails_stale_csv_blocker_audit(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+    _write_overview_metadata(release, documented_incomplete=True)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    for row in rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "partial"
+            row["completed_samples"] = "1"
+            row["parsed_count"] = "1"
+            row["accuracy"] = ""
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+
+    coverage_rows = list(csv.DictReader((release / "unimoral-coverage.csv").open(newline="", encoding="utf-8")))
+    for row in coverage_rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "incomplete"
+            row["complete_model_lines"] = "0"
+            row["reported_model_lines"] = "0"
+    _write_csv(release / "unimoral-coverage.csv", coverage_rows, list(coverage_rows[0]))
+
+    prediction_rows = list(csv.DictReader((release / "unimoral-sample-predictions.csv").open(newline="", encoding="utf-8")))
+    _write_csv(release / "unimoral-sample-predictions.csv", prediction_rows[:1], list(prediction_rows[0]))
+    _write_csv(
+        release / "unimoral-failure-checklist.csv",
+        [
+            {
+                "line_label": "Line-A",
+                "task_name": "unimoral_moral_typology",
+                "status": "partial",
+                "completed_samples": "1",
+                "expected_samples": "2",
+                "parsed_count": "1",
+                "category": "runtime",
+                "reason": "fixture incomplete",
+                "next_action": "rerun fixture",
+                "log_path": "results/inspect/logs/example.eval",
+            }
+        ],
+        [
+            "line_label",
+            "task_name",
+            "status",
+            "completed_samples",
+            "expected_samples",
+            "parsed_count",
+            "category",
+            "reason",
+            "next_action",
+            "log_path",
+        ],
+    )
+    tmp_path.joinpath("README.md").write_text("current model-line matrix is not yet fully complete\n", encoding="utf-8")
+    release.joinpath("unimoral-completion-audit.md").write_text(
+        "# UniMoral Completion Audit\n\n"
+        "Status: **not achieved**.\n\n"
+        "## Prompt-to-Artifact Checklist\n\n"
+        "Strict completion is blocked in this fixture.\n\n"
+        "| MiniMax is not run without explicit authorization | "
+        "`make unimoral-missing-plan` | `make unimoral-missing-plan` is "
+        "dry-run only; non-dry-run MiniMax lines require "
+        "`UNIMORAL_ALLOW_MINIMAX=1`. | guarded |\n\n"
+        "| Clean committed branch | `git status --short --branch`, "
+        "`git rev-list --left-right --count HEAD...@{upstream}` | "
+        "Post-generation check required: the final operator report must cite "
+        "clean status and 0/0 ahead-behind after the last push. | external final check |\n\n"
+        "## CSV-Level Strict Blockers\n\n"
+        "Total strict sample prediction gap: **0** rows.\n\n"
+        "No CSV-level strict blockers remain; `scripts/verify_unimoral_completion.py` remains the source of truth.\n\n"
+        "No MiniMax provider calls are made by generating this audit.\n",
+        encoding="utf-8",
+    )
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("missing current sample prediction count" in error for error in errors)
+    assert any("missing current strict prediction gap" in error for error in errors)
+    assert any("missing CSV blocker phrase" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_allow_incomplete_fails_duplicate_predictions(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    rows = list(csv.DictReader((release / "unimoral-sample-predictions.csv").open(newline="", encoding="utf-8")))
+    rows.append(dict(rows[0]))
+    _write_csv(release / "unimoral-sample-predictions.csv", rows, list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("contains duplicate line/task/sample rows" in error for error in errors)
+    assert any("missing CSV blocker phrase" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_checks_rq4_bertscore_alignment(tmp_path, monkeypatch):
+    _set_tiny_rq4_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    assert verifier.verify_release(release, figures, allow_incomplete=False) == []
+
+    rows = list(csv.DictReader((release / "unimoral-rq4-bertscore.csv").open(newline="", encoding="utf-8")))
+    rows[0]["bert_score_f1"] = "0.1"
+    _write_csv(release / "unimoral-rq4-bertscore.csv", rows, list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=False)
+
+    assert any("does not match sample predictions" in error for error in errors)
+
+    _write_csv(release / "unimoral-rq4-bertscore.csv", rows[1:], list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=False)
+
+    assert any("unimoral-rq4-bertscore.csv missing RQ4 prediction rows" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_allow_incomplete_requires_failure_checklist_row(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+    _write_overview_metadata(release, documented_incomplete=True)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    for row in rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "partial"
+            row["completed_samples"] = "1"
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("incomplete model-task rows missing from failure checklist" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_validates_failure_checklist_detail(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+    _write_overview_metadata(release, documented_incomplete=True)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    for row in rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "partial"
+            row["completed_samples"] = "1"
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+    failure_rows = [
+        {
+            "line_label": "Line-A",
+            "task_name": "unimoral_moral_typology",
+            "status": "partial",
+            "completed_samples": "2",
+            "expected_samples": "2",
+            "parsed_count": "2",
+            "category": "unknown",
+            "reason": "",
+            "next_action": "rerun fixture",
+            "log_path": "results/inspect/logs/stale.eval",
+        }
+    ]
+    _write_csv(release / "unimoral-failure-checklist.csv", failure_rows, list(failure_rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("failure checklist completed_samples='2' does not match benchmark row '1'" in error for error in errors)
+    assert any("failure checklist log_path='results/inspect/logs/stale.eval' does not match benchmark row" in error for error in errors)
+    assert any("failure checklist category='unknown' is not recognized" in error for error in errors)
+    assert any("failure checklist missing reason" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_requires_minimax_safety_wording(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    monkeypatch.setattr(verifier, "MODEL_LINES", ["MiniMax-S"])
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+    _write_overview_metadata(release, documented_incomplete=True)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    for row in rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "partial"
+            row["completed_samples"] = "1"
+            row["parsed_count"] = "1"
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+    failure_rows = [
+        {
+            "line_label": "MiniMax-S",
+            "task_name": "unimoral_moral_typology",
+            "status": "partial",
+            "completed_samples": "1",
+            "expected_samples": "2",
+            "parsed_count": "1",
+            "category": "runtime",
+            "reason": "fixture incomplete",
+            "next_action": "rerun fixture",
+            "log_path": "results/inspect/logs/example.eval",
+        }
+    ]
+    _write_csv(release / "unimoral-failure-checklist.csv", failure_rows, list(failure_rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("next_action missing MiniMax safety phrase: 'make unimoral-missing-plan'" in error for error in errors)
+    assert any("next_action missing MiniMax safety phrase: 'MiniMax explicitly allowed'" in error for error in errors)
+    assert any("next_action missing MiniMax safety phrase: 'UNIMORAL_ALLOW_MINIMAX=1'" in error for error in errors)
+    assert any("next_action missing MiniMax safety phrase: 'OPENROUTER_API_KEY'" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_requires_current_minimax_resume_plan_row(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    monkeypatch.setattr(verifier, "MODEL_LINES", ["MiniMax-S"])
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+    _write_overview_metadata(release, documented_incomplete=True)
+
+    rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    for row in rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "partial"
+            row["completed_samples"] = "1"
+            row["parsed_count"] = "1"
+    _write_csv(release / "unimoral-full-benchmark.csv", rows, list(rows[0]))
+    coverage_rows = list(csv.DictReader((release / "unimoral-coverage.csv").open(newline="", encoding="utf-8")))
+    for row in coverage_rows:
+        if row["task_name"] == "unimoral_moral_typology":
+            row["status"] = "incomplete"
+            row["complete_model_lines"] = "0"
+            row["reported_model_lines"] = "0"
+    _write_csv(release / "unimoral-coverage.csv", coverage_rows, list(coverage_rows[0]))
+    prediction_rows = list(csv.DictReader((release / "unimoral-sample-predictions.csv").open(newline="", encoding="utf-8")))
+    _write_csv(release / "unimoral-sample-predictions.csv", prediction_rows[:1], list(prediction_rows[0]))
+    failure_rows = [
+        {
+            "line_label": "MiniMax-S",
+            "task_name": "unimoral_moral_typology",
+            "status": "partial",
+            "completed_samples": "1",
+            "expected_samples": "2",
+            "parsed_count": "1",
+            "category": "runtime",
+            "reason": "fixture incomplete",
+            "next_action": (
+                "Refresh planned ranges first with `make unimoral-missing-plan`, then rerun with "
+                "MiniMax explicitly allowed and OPENROUTER_API_KEY available using UNIMORAL_ALLOW_MINIMAX=1."
+            ),
+            "log_path": "results/inspect/logs/example.eval",
+        }
+    ]
+    _write_csv(release / "unimoral-failure-checklist.csv", failure_rows, list(failure_rows[0]))
+    tmp_path.joinpath("README.md").write_text("current model-line matrix is not yet fully complete\n", encoding="utf-8")
+    release.joinpath("unimoral-completion-audit.md").write_text(
+        "# UniMoral Completion Audit\n\n"
+        "Status: **not achieved**.\n\n"
+        "## Prompt-to-Artifact Checklist\n\n"
+        "Strict completion is blocked in this fixture.\n\n"
+        "1 rows present; strict expected count is 2.\n\n"
+        "| MiniMax is not run without explicit authorization | "
+        "`make unimoral-missing-plan` | `make unimoral-missing-plan` is "
+        "dry-run only; non-dry-run MiniMax lines require "
+        "`UNIMORAL_ALLOW_MINIMAX=1`. | guarded |\n\n"
+        "| Clean committed branch | `git status --short --branch`, "
+        "`git rev-list --left-right --count HEAD...@{upstream}` | "
+        "Post-generation check required: the final operator report must cite "
+        "clean status and 0/0 ahead-behind after the last push. | external final check |\n\n"
+        "## CSV-Level Strict Blockers\n\n"
+        "Total strict sample prediction gap: **1** rows.\n\n"
+        "- `MiniMax-S` `unimoral_moral_typology`: 1 sample predictions missing (1/2); status `partial`.\n\n"
+        "No MiniMax provider calls are made by generating this audit.\n",
+        encoding="utf-8",
+    )
+    release.joinpath("unimoral-minimax-resume-plan.md").write_text(
+        "# UniMoral MiniMax Resume Plan\n\n"
+        "This file documents current blockers without granting permission to run MiniMax.\n\n"
+        "Run these only after `UNIMORAL_ALLOW_MINIMAX=1` is set.\n\n"
+        "## Current State\n\n"
+        "| Line | Task | Failure status | Saved coverage | Dry-run range plan |\n"
+        "| --- | --- | --- | --- | --- |\n"
+        "| `MiniMax-S` | `unimoral_moral_typology` | `partial` | 2/2 logged; 2/2 parseable | stale fixture row |\n\n"
+        "Use `make unimoral-missing-plan` with `UNIMORAL_DRY_RUN=1` before provider work.\n\n"
+        "A provider-free scan found no safe recovery path. Do not infer labels from hidden reasoning.\n\n"
+        "## Local Samplebuffer Audit\n\n"
+        "Google Drive was searched. `UNIMORAL_RERUN_UNPARSED_MAX_GAP=3` on May 17, 2026. "
+        "`key_state=missing`. `MiniMax-L` | `unimoral_consequence_generation`.\n",
+        encoding="utf-8",
+    )
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("unimoral-minimax-resume-plan.md missing current blocker row" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_checks_manifest_paths(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    manifest = json.loads((release / "release-manifest.json").read_text(encoding="utf-8"))
+    manifest["entry_points"]["unimoral_task_heatmap_figure"] = "figures/release/missing.svg"
+    (release / "release-manifest.json").write_text(json.dumps(manifest) + "\n", encoding="utf-8")
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("unimoral_task_heatmap_figure points to missing artifact" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_rejects_placeholder_figures(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    figures.joinpath("option1_unimoral_task_heatmap.svg").write_text("<svg></svg>\n", encoding="utf-8")
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("option1_unimoral_task_heatmap.svg missing expected figure title" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_requires_minimax_resume_plan_manifest_entry(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    manifest = json.loads((release / "release-manifest.json").read_text(encoding="utf-8"))
+    del manifest["entry_points"]["unimoral_minimax_resume_plan"]
+    (release / "release-manifest.json").write_text(json.dumps(manifest) + "\n", encoding="utf-8")
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("release-manifest.json missing entry_points.unimoral_minimax_resume_plan" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_checks_minimax_resume_plan_content(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+    (release / "unimoral-minimax-resume-plan.md").write_text(
+        "# UniMoral MiniMax Resume Plan\n\nMiniMax reruns are pending.\n",
+        encoding="utf-8",
+    )
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("unimoral-minimax-resume-plan.md missing required phrase" in error for error in errors)
+    assert any("without granting permission to run MiniMax" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_checks_required_csv_columns(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    rows = list(csv.DictReader((release / "unimoral-failure-checklist.csv").open(newline="", encoding="utf-8")))
+    _write_csv(release / "unimoral-failure-checklist.csv", rows, ["line_label", "task_name"])
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("unimoral-failure-checklist.csv missing required columns" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_checks_spread_and_ranking_summaries(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    spread_rows = list(csv.DictReader((release / "unimoral-task-spread.csv").open(newline="", encoding="utf-8")))
+    spread_rows[0]["model_lines"] = "0"
+    _write_csv(release / "unimoral-task-spread.csv", spread_rows, list(spread_rows[0]))
+
+    ranking_rows = list(csv.DictReader((release / "unimoral-model-rankings.csv").open(newline="", encoding="utf-8")))
+    ranking_rows[0]["line_label"] = "Stale"
+    _write_csv(release / "unimoral-model-rankings.csv", ranking_rows, list(ranking_rows[0]))
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("unimoral-task-spread.csv unimoral_action_prediction model_lines='0' expected 1" in error for error in errors)
+    assert any("unimoral-model-rankings.csv row 1 line_label='Stale' expected 'Line-A'" in error for error in errors)
+
+
+def test_unimoral_completion_verifier_checks_overview_metadata(tmp_path, monkeypatch):
+    _set_tiny_verifier_constants(monkeypatch)
+    release, figures = _write_minimal_complete_artifacts(tmp_path)
+    monkeypatch.setattr(verifier, "ROOT", tmp_path)
+
+    summary_rows = list(csv.DictReader((release / "benchmark-summary.csv").open(newline="", encoding="utf-8")))
+    summary_rows[0]["samples"] = "10"
+    _write_csv(release / "benchmark-summary.csv", summary_rows, list(summary_rows[0]))
+    catalog_rows = list(csv.DictReader((release / "benchmark-catalog.csv").open(newline="", encoding="utf-8")))
+    catalog_rows[0]["models_in_release"] = "Stale"
+    catalog_rows[0]["current_release_mode"] = "stale"
+    catalog_rows[0]["repo_readout"] = "old"
+    _write_csv(release / "benchmark-catalog.csv", catalog_rows, list(catalog_rows[0]))
+    manifest = json.loads((release / "release-manifest.json").read_text(encoding="utf-8"))
+    manifest["benchmarks"][0]["task_types"] = 1
+    manifest["benchmarks"][0]["samples"] = 10
+    manifest["counts"]["authoritative_tasks"] = 1
+    manifest["counts"]["total_samples"] = 10
+    (release / "release-manifest.json").write_text(json.dumps(manifest) + "\n", encoding="utf-8")
+
+    errors = verifier.verify_release(release, figures, allow_incomplete=True)
+
+    assert any("benchmark-summary.csv UniMoral samples='10'" in error for error in errors)
+    assert any("benchmark-catalog.csv UniMoral models_in_release='Stale'" in error for error in errors)
+    assert any("benchmark-catalog.csv UniMoral current_release_mode='stale'" in error for error in errors)
+    assert any("repo_readout does not mention all four task definitions" in error for error in errors)
+    assert any("release-manifest.json UniMoral task_types=1" in error for error in errors)
+    assert any("release-manifest.json UniMoral samples=10" in error for error in errors)
+    assert any("release-manifest.json counts.authoritative_tasks=1" in error for error in errors)

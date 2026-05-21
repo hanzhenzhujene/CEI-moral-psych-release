@@ -11,6 +11,7 @@ import ast
 import asyncio
 import base64
 import json
+import math
 import mimetypes
 import os
 import random
@@ -437,10 +438,25 @@ def extract_explicit_label(text: str, patterns: Mapping[str, Sequence[str]]) -> 
         return None
     alias_union = "|".join(escaped_aliases)
 
+    wrapped_alias = rf"[<\[\('\"“”‘’]*({alias_union})[>\]\)'\"“”‘’]*"
     labeled_patterns = [
-        rf"\b(?:final\s+answer|answer|label|response|classification|category)\s*(?:is|=|:)?\s*({alias_union})\b",
-        rf"\b(?:dominant\s+(?:moral\s+)?foundation)\s*(?:is|=|:|appears\s+to\s+be)\s*({alias_union})\b",
-        rf"\b({alias_union})\b\s*(?:is\s+the\s+(?:final\s+)?answer|is\s+the\s+dominant\s+(?:moral\s+)?foundation)\b",
+        rf"\b(?:final\s+answer|answer|label|response|classification|category)\s*(?:is|=|:|should\s+be|would\s+be|must\s+be)?\s*{wrapped_alias}\b",
+        rf"\b(?:selected\s+action)\s*(?:is|=|:)?\s*{wrapped_alias}\b",
+        rf"\b(?:dominant\s+(?:moral\s+)?foundation)\s*(?:is|=|:|appears\s+to\s+be)\s*{wrapped_alias}\b",
+        rf"\b{wrapped_alias}\s*(?:is\s+the\s+(?:final\s+)?answer|is\s+the\s+dominant\s+(?:moral\s+)?foundation)\b",
+        rf"\b(?:thus|therefore|so|overall|in\s+conclusion|conclusion|final(?:ly)?|hence|accordingly)\b[^.\n]{{0,180}}\b(?:action|decision|choice|framework|ethical\s+framework|moral\s+framework|type|classification|category|factor|contributing\s+factor|influential\s+factor|important\s+factor)\b[^.\n]{{0,120}}(?:is|=|:|would\s+be|appears\s+to\s+be|seems\s+to\s+be|points\s+to)\s*{wrapped_alias}\b",
+        rf"\b(?:thus|therefore|so|overall|in\s+conclusion|conclusion|final(?:ly)?|hence|accordingly)\s*[,:\-]?\s*{wrapped_alias}\b",
+        rf"\b(?:i(?:'d|\s+would)?\s+(?:argue|choose|select|classify|say)|my\s+(?:choice|selection|classification))\b[^.\n]{{0,160}}(?:is|=|:|as)?\s*{wrapped_alias}\b",
+        rf"(?:我\s*(?:认为|觉得|选择)|最终|最后|因此|所以|最佳匹配(?:是|为)?)[^。\n]{{0,160}}{wrapped_alias}",
+        rf"(?:答案|最终答案|回答|选择|因此|所以)\s*(?:是|为|:|：)?\s*{wrapped_alias}",
+        rf"(?:ответ|итоговый\s+ответ|финальный\s+ответ|следовательно|поэтому)\s*(?:это|:|=|\-|—)?\s*{wrapped_alias}",
+        rf"(?:الإجابة|الجواب|الإختيار|الاختيار|لذلك|لذا|إذن|بالتالي|في\s+النهاية)\s*(?:هي|هو|:|=)?\s*{wrapped_alias}",
+        rf"(?:العامل\s+(?:الحاسم|الرئيسي|الأكثر\s+تأثيرًا)|الخيار\s+(?:الأفضل|المناسب))[^.\n؛،]{{0,120}}(?:هو|هي|:)?\s*{wrapped_alias}",
+        rf"{wrapped_alias}\s*(?:هو|هي)?\s*(?:العامل\s+(?:الحاسم|الرئيسي|الأكثر\s+تأثيرًا)|كعامل\s+(?:أساسي|رئيسي|حاسم))",
+        rf"(?:اختيار|اختر|يستدعي\s+اختيار)\s*{wrapped_alias}\s*كعامل",
+        rf"\b(?:the\s+)?(?:most\s+)?(?:important|influential|primary|main)\s+(?:contributing\s+)?factor\s*(?:is|=|:|would\s+be|appears\s+to\s+be|seems\s+to\s+be)\s*{wrapped_alias}\b",
+        rf"\b(?:the\s+)?(?:action|decision|choice)\s*(?:is|=|:|would\s+be|appears\s+to\s+be|seems\s+to\s+be)\s*{wrapped_alias}\b",
+        rf"\b{wrapped_alias}\s*(?:is|would\s+be|appears\s+to\s+be|seems\s+to\s+be)\s+the\s+(?:most\s+)?(?:important|influential|primary|main)\s+(?:contributing\s+)?factor\b",
     ]
     for pattern in labeled_patterns:
         matches = list(re.finditer(pattern, normalized, flags=re.IGNORECASE))
@@ -498,6 +514,207 @@ def canonicalize_label(text: str, patterns: Mapping[str, Sequence[str]]) -> str 
         return None
     matches.sort(key=lambda item: item[0])
     return matches[-1][1]
+
+
+def _content_item_text(item: Any, *keys: str) -> str:
+    for key in keys:
+        if isinstance(item, Mapping):
+            value = item.get(key)
+        else:
+            value = getattr(item, key, None)
+        if isinstance(value, str) and value:
+            return value
+    return ""
+
+
+def model_output_text_parts(output: Any) -> tuple[str, str]:
+    visible = []
+    reasoning = []
+    completion = output.get("completion", "") if isinstance(output, Mapping) else getattr(output, "completion", "")
+    if isinstance(completion, str) and completion:
+        visible.append(completion)
+
+    choices = output.get("choices") if isinstance(output, Mapping) else getattr(output, "choices", None)
+    choices = choices or []
+    for choice in choices:
+        message = getattr(choice, "message", None)
+        if message is None and isinstance(choice, Mapping):
+            message = choice.get("message")
+        content = getattr(message, "content", None)
+        if content is None and isinstance(message, Mapping):
+            content = message.get("content")
+        message_reasoning = getattr(message, "reasoning", None)
+        if message_reasoning is None and isinstance(message, Mapping):
+            message_reasoning = message.get("reasoning") or message.get("reasoning_content")
+        if isinstance(message_reasoning, str):
+            reasoning.append(message_reasoning)
+        if isinstance(content, str):
+            visible.append(content)
+        elif isinstance(content, Sequence) and not isinstance(content, (str, bytes)):
+            for item in content:
+                item_type = _content_item_text(item, "type")
+                text = _content_item_text(item, "text")
+                reason = _content_item_text(item, "reasoning")
+                if item_type == "reasoning" or reason:
+                    reasoning.append(reason or text)
+                elif text:
+                    visible.append(text)
+    return normalize_whitespace("\n".join(visible)), normalize_whitespace("\n".join(reasoning))
+
+
+def canonicalize_label_from_output(output: Any, patterns: Mapping[str, Sequence[str]]) -> tuple[str | None, str, str]:
+    visible, reasoning = model_output_text_parts(output)
+    answer = canonicalize_label(visible, patterns)
+    if answer is not None:
+        return answer, visible, "visible"
+    tail = reasoning[-2400:]
+    answer = extract_explicit_label(tail, patterns) or _leading_label(tail, patterns)
+    if answer is not None:
+        return answer, tail, "reasoning_tail"
+    answer = extract_explicit_label(reasoning, patterns) or _leading_label(reasoning, patterns)
+    if answer is not None:
+        return answer, reasoning, "reasoning"
+    return None, visible or tail or reasoning, "unparsed"
+
+
+def extract_consequence_generation(text: str) -> str:
+    normalized = normalize_whitespace(text)
+    if not normalized:
+        return ""
+    match = re.search(r"\bconsequence\s+of\s+the\s+action\s+is\b\s*:?\s*(.*)", normalized, flags=re.IGNORECASE)
+    if match is not None:
+        return normalize_whitespace(match.group(1)).strip()
+    return normalized
+
+
+def consequence_text_from_output(output: Any) -> tuple[str, str, str]:
+    visible, reasoning = model_output_text_parts(output)
+    prediction = extract_consequence_generation(visible)
+    if prediction:
+        return prediction, visible, "visible"
+    tail = reasoning[-2400:]
+    match = re.search(r"\bconsequence\s+of\s+the\s+action\s+is\b\s*:?\s*(.*)", tail, flags=re.IGNORECASE)
+    if match is not None:
+        return normalize_whitespace(match.group(1)).strip(), tail, "reasoning_tail"
+    return "", visible or tail, "unparsed"
+
+
+def text_from_sample_output(output: Mapping[str, Any], *, include_reasoning: bool = True) -> str:
+    visible = []
+    reasoning = []
+    completion = output.get("completion")
+    if isinstance(completion, str) and completion.strip():
+        visible.append(completion)
+    choices = output.get("choices")
+    if isinstance(choices, list):
+        for choice in choices:
+            message = choice.get("message") if isinstance(choice, Mapping) else {}
+            content = message.get("content") if isinstance(message, Mapping) else ""
+            message_reasoning = ""
+            if isinstance(message, Mapping):
+                message_reasoning = message.get("reasoning") or message.get("reasoning_content") or ""
+            if isinstance(message_reasoning, str) and message_reasoning.strip():
+                reasoning.append(message_reasoning)
+            if isinstance(content, str):
+                visible.append(content)
+            elif isinstance(content, list):
+                for item in content:
+                    if not isinstance(item, Mapping):
+                        continue
+                    if item.get("type") == "reasoning":
+                        reasoning.append(str(item.get("reasoning") or item.get("text") or ""))
+                    else:
+                        visible.append(str(item.get("text") or ""))
+    visible_text = normalize_whitespace("\n".join(visible))
+    if visible_text:
+        return visible_text
+    return normalize_whitespace("\n".join(reasoning)) if include_reasoning else ""
+
+
+def _ngram_counts(tokens: Sequence[str], n: int) -> dict[tuple[str, ...], int]:
+    counts: dict[tuple[str, ...], int] = {}
+    if len(tokens) < n:
+        return counts
+    for index in range(len(tokens) - n + 1):
+        ngram = tuple(tokens[index : index + n])
+        counts[ngram] = counts.get(ngram, 0) + 1
+    return counts
+
+
+def _fallback_bleu(reference_tokens: Sequence[str], prediction_tokens: Sequence[str]) -> float:
+    if not reference_tokens or not prediction_tokens:
+        return 0.0
+    precisions = []
+    for n in range(1, 5):
+        pred_counts = _ngram_counts(prediction_tokens, n)
+        ref_counts = _ngram_counts(reference_tokens, n)
+        if not pred_counts:
+            precisions.append(0.1)
+            continue
+        overlap = 0
+        total = 0
+        for ngram, count in pred_counts.items():
+            overlap += min(count, ref_counts.get(ngram, 0))
+            total += count
+        precisions.append((overlap + 0.1) / (total + 0.1))
+    geo_mean = math.exp(sum(math.log(value) for value in precisions) / 4)
+    brevity = 1.0
+    if len(prediction_tokens) < len(reference_tokens):
+        brevity = math.exp(1 - len(reference_tokens) / max(1, len(prediction_tokens)))
+    return float(brevity * geo_mean)
+
+
+def sentence_bleu_score(reference: str, prediction: str) -> float:
+    reference_tokens = reference.split()
+    prediction_tokens = prediction.split()
+    if not reference_tokens or not prediction_tokens:
+        return 0.0
+    try:
+        from nltk.translate.bleu_score import SmoothingFunction, sentence_bleu
+
+        return float(
+            sentence_bleu(
+                [reference_tokens],
+                prediction_tokens,
+                smoothing_function=SmoothingFunction().method1,
+            )
+        )
+    except Exception:
+        return _fallback_bleu(reference_tokens, prediction_tokens)
+
+
+def _fallback_meteor(reference_tokens: Sequence[str], prediction_tokens: Sequence[str]) -> float:
+    if not reference_tokens or not prediction_tokens:
+        return 0.0
+    reference_counts: dict[str, int] = {}
+    for token in reference_tokens:
+        reference_counts[token] = reference_counts.get(token, 0) + 1
+    overlap = 0
+    for token in prediction_tokens:
+        count = reference_counts.get(token, 0)
+        if count:
+            overlap += 1
+            reference_counts[token] = count - 1
+    if overlap == 0:
+        return 0.0
+    precision = overlap / len(prediction_tokens)
+    recall = overlap / len(reference_tokens)
+    if precision == 0.0 or recall == 0.0:
+        return 0.0
+    return float((10 * precision * recall) / (recall + 9 * precision))
+
+
+def meteor_score(reference: str, prediction: str) -> float:
+    reference_tokens = reference.split()
+    prediction_tokens = prediction.split()
+    if not reference_tokens or not prediction_tokens:
+        return 0.0
+    try:
+        from nltk.translate.meteor_score import single_meteor_score
+
+        return float(single_meteor_score(reference_tokens, prediction_tokens))
+    except Exception:
+        return _fallback_meteor(reference_tokens, prediction_tokens)
 
 
 def first_matching_key(row: Mapping[str, Any], *candidates: str) -> str | None:
@@ -577,12 +794,13 @@ def ensure_extracted_zip(zip_path: Path) -> Path:
 @scorer(metrics=[accuracy(), stderr()])
 def label_membership_scorer(patterns: Mapping[str, Sequence[str]]):
     async def score(state: TaskState, target: Target) -> Score:
-        answer = canonicalize_label(state.output.completion, patterns)
+        answer, explanation, source = canonicalize_label_from_output(state.output, patterns)
         is_correct = answer is not None and answer in target.target
         return Score(
             value=1 if is_correct else 0,
             answer=answer or "",
-            explanation=state.output.completion,
+            explanation=explanation,
+            metadata={"answer_source": source},
         )
 
     return score
@@ -668,6 +886,51 @@ def rouge_l_max_scorer():
             answer=prediction,
             explanation=best_reference,
             metadata={"best_reference": best_reference},
+        )
+
+    return score
+
+
+@scorer(metrics=[mean(), stderr()])
+def unimoral_consequence_scorer():
+    rouge = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
+
+    async def score(state: TaskState, target: Target) -> Score:
+        prediction_text, explanation, source = consequence_text_from_output(state.output)
+        prediction = normalize_whitespace(prediction_text.lower())
+        references = [normalize_whitespace(reference).lower() for reference in target.target if reference]
+        if not prediction or not references:
+            return Score(
+                value=0.0,
+                answer=prediction,
+                explanation=explanation,
+                metadata={"bleu": 0.0, "meteor": 0.0, "rouge_l": 0.0, "best_reference": "", "answer_source": source},
+            )
+
+        per_reference = []
+        for reference in references:
+            per_reference.append(
+                {
+                    "reference": reference,
+                    "bleu": sentence_bleu_score(reference, prediction),
+                    "meteor": meteor_score(reference, prediction),
+                    "rouge_l": rouge.score(reference, prediction)["rougeL"].fmeasure,
+                }
+            )
+        best_by_meteor = max(per_reference, key=lambda item: item["meteor"])
+        return Score(
+            value=best_by_meteor["meteor"],
+            answer=prediction,
+            explanation=best_by_meteor["reference"],
+            metadata={
+                "bleu": max(item["bleu"] for item in per_reference),
+                "meteor": best_by_meteor["meteor"],
+                "rouge_l": max(item["rouge_l"] for item in per_reference),
+                "best_reference": best_by_meteor["reference"],
+                "answer_source": source,
+                "bert_score_f1": None,
+                "bert_score_status": "not_computed_in_live_scorer_use_offline_release_metric_script",
+            },
         )
 
     return score

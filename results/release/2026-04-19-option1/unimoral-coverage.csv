@@ -1,0 +1,5 @@
+rq,task_name,task_label,status,complete_model_lines,reported_model_lines,expected_model_lines,expected_samples_per_model
+RQ1,unimoral_action_prediction,Action prediction,complete,16,16,16,8784
+RQ2,unimoral_moral_typology,Moral typology,incomplete,15,16,16,3492
+RQ3,unimoral_factor_attribution,Factor attribution,incomplete,14,15,16,3492
+RQ4,unimoral_consequence_generation,Consequence generation,incomplete,14,15,16,1782

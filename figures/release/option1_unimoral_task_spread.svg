@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="330" viewBox="0 0 980 330">
+<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:20px;font-weight:700}.subtitle{font-size:12px;fill:#4b5563}.axis{font-weight:700}</style>
+<rect width="100%" height="100%" fill="white"/>
+<text x="24" y="34" class="title">UniMoral task spread and saturation: exact-match accuracy</text>
+<text x="24" y="58" class="subtitle">Same metric for RQ1-RQ3. Longer bars mean more cross-line separation; short bars indicate near-saturation.</text>
+<text x="36" y="107" class="axis">Action prediction</text>
+<rect x="250" y="92" width="460.0" height="22" fill="#3c78d8" rx="3"/>
+<text x="732" y="108">accuracy range 0.121</text>
+<text x="36" y="157" class="axis">Moral typology</text>
+<rect x="250" y="142" width="170.8" height="22" fill="#3c78d8" rx="3"/>
+<text x="732" y="158">accuracy range 0.045</text>
+<text x="36" y="207" class="axis">Factor attribution</text>
+<rect x="250" y="192" width="264.4" height="22" fill="#3c78d8" rx="3"/>
+<text x="732" y="208">accuracy range 0.070</text>
+</svg>

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1100" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1240" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,276 +35,204 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1280" height="1100" class="canvas"/>
-<rect x="24" y="24" width="1232" height="1052" rx="22" class="panel"/>
+<style>.ref-title { font: 700 15px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #374151; }.ref-label { font: 700 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #4b5563; }.legend-big { font: 700 18px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }.legend-note { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #34495e; }</style>
+<rect x="0" y="0" width="1500" height="1240" class="canvas"/>
+<rect x="24" y="24" width="1452" height="1192" rx="22" class="panel"/>
 <title>Family scaling profile by benchmark</title>
-<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. OpenAI GPT-5 is plotted as a text-only S/M/L series with S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5; the GPT-4o mini and GPT-4.1 rows remain separate text-only references. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, Llama-M, and every OpenAI row have SMID cells unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as choice behavior and proxy evidence rather than benchmark-faithful accuracy.</desc>
+<desc>Two-panel family scaling view for the visual and text comparable-accuracy panels after the UniMoral benchmark block. OpenAI GPT-5 is plotted as a text-only S/M/L series on Value only: S is GPT-5 nano, M is GPT-5 mini, and L is GPT-5.5. GPT-4o and GPT-4.1 rows remain gray text reference lines. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
 <text x="48" y="64" class="title">Family Scaling Profile</text>
-<text x="48" y="92" class="subtitle">Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.</text>
-<text x="48" y="114" class="subtitle">This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.</text>
-<text x="48" y="136" class="subtitle">OpenAI GPT-5 is plotted as a text-only S/M/L series: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5.</text>
-<text x="48" y="158" class="subtitle">GPT-4o mini and GPT-4.1 rows remain separate text-only reference markers; no OpenAI row has SMID or Denevil.</text>
-<text x="48" y="180" class="subtitle">SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.</text>
-<text x="48" y="202" class="subtitle">Read CCD-Bench in the dedicated choice-distribution and concentration figures.</text>
-<text x="48" y="224" class="subtitle">Read Denevil in the dedicated behavioral-outcomes figure.</text>
-<rect x="52" y="248" width="382" height="356" rx="20" class="subpanel"/>
-<rect x="346" y="264" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
-<text x="379" y="278" text-anchor="middle" class="tiny">SCORED</text>
-<text x="74" y="278" class="axis">#1 UniMoral</text>
-<text x="74" y="298" class="small">Action prediction accuracy</text>
-<line x1="98" y1="542.00" x2="398" y2="542.00" class="guide"/>
-<text x="86" y="546.00" text-anchor="end" class="small">0%</text>
-<line x1="98" y1="480.13" x2="398" y2="480.13" class="guide"/>
-<text x="86" y="484.13" text-anchor="end" class="small">20%</text>
-<line x1="98" y1="433.73" x2="398" y2="433.73" class="guide"/>
-<text x="86" y="437.73" text-anchor="end" class="small">35%</text>
-<line x1="98" y1="387.33" x2="398" y2="387.33" class="guide"/>
-<text x="86" y="391.33" text-anchor="end" class="small">50%</text>
-<line x1="98" y1="340.93" x2="398" y2="340.93" class="guide"/>
-<text x="86" y="344.93" text-anchor="end" class="small">65%</text>
-<line x1="98" y1="310.00" x2="398" y2="310.00" class="guide"/>
-<text x="86" y="314.00" text-anchor="end" class="small">75%</text>
-<line x1="98.00" y1="310" x2="98.00" y2="542" class="guide"/>
-<text x="98.00" y="566" text-anchor="middle" class="axis">S</text>
-<line x1="198.00" y1="310" x2="198.00" y2="542" class="guide"/>
-<text x="198.00" y="566" text-anchor="middle" class="axis">M</text>
-<line x1="298.00" y1="310" x2="298.00" y2="542" class="guide"/>
-<text x="298.00" y="566" text-anchor="middle" class="axis">L</text>
-<line x1="398.00" y1="310" x2="398.00" y2="542" class="guide"/>
-<text x="398.00" y="566" text-anchor="middle" class="axis">Ref</text>
-<line x1="78.00" y1="337.57" x2="178.00" y2="338.24" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95"/>
-<line x1="78.00" y1="337.57" x2="178.00" y2="338.24" stroke="#d97706" stroke-width="4.2" stroke-linecap="round"/>
-<line x1="178.00" y1="338.24" x2="278.00" y2="337.68" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95"/>
-<line x1="178.00" y1="338.24" x2="278.00" y2="337.68" stroke="#d97706" stroke-width="4.2" stroke-linecap="round"/>
-<circle cx="78.00" cy="337.57" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
-<circle cx="78.00" cy="337.57" r="4.2" fill="#d97706"/>
-<circle cx="178.00" cy="338.24" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
-<circle cx="178.00" cy="338.24" r="4.2" fill="#d97706"/>
-<circle cx="278.00" cy="337.68" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
-<circle cx="278.00" cy="337.68" r="4.2" fill="#d97706"/>
-<line x1="98.00" y1="337.66" x2="198.00" y2="330.53" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
-<line x1="98.00" y1="337.66" x2="198.00" y2="330.53" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
-<line x1="198.00" y1="330.53" x2="298.00" y2="367.98" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
-<line x1="198.00" y1="330.53" x2="298.00" y2="367.98" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
-<circle cx="98.00" cy="337.66" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
-<circle cx="98.00" cy="337.66" r="4.2" fill="#2563eb"/>
-<circle cx="198.00" cy="330.53" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
-<circle cx="198.00" cy="330.53" r="4.2" fill="#2563eb"/>
-<circle cx="298.00" cy="367.98" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
-<circle cx="298.00" cy="367.98" r="4.2" fill="#2563eb"/>
-<line x1="108.00" y1="341.55" x2="208.00" y2="334.79" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
-<line x1="108.00" y1="341.55" x2="208.00" y2="334.79" stroke="#ea580c" stroke-width="4.0" stroke-linecap="round"/>
-<line x1="208.00" y1="334.79" x2="308.00" y2="337.89" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
-<line x1="208.00" y1="334.79" x2="308.00" y2="337.89" stroke="#ea580c" stroke-width="4.0" stroke-linecap="round"/>
-<circle cx="108.00" cy="341.55" r="8" fill="#ffffff" stroke="#ea580c" stroke-width="3.4"/>
-<circle cx="108.00" cy="341.55" r="4.2" fill="#ea580c"/>
-<circle cx="208.00" cy="334.79" r="8" fill="#ffffff" stroke="#ea580c" stroke-width="3.4"/>
-<circle cx="208.00" cy="334.79" r="4.2" fill="#ea580c"/>
-<circle cx="308.00" cy="337.89" r="8" fill="#ffffff" stroke="#ea580c" stroke-width="3.4"/>
-<circle cx="308.00" cy="337.89" r="4.2" fill="#ea580c"/>
-<line x1="118.00" y1="345.50" x2="218.00" y2="337.05" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
-<line x1="118.00" y1="345.50" x2="218.00" y2="337.05" stroke="#8b5cf6" stroke-width="4.4" stroke-linecap="round"/>
-<line x1="218.00" y1="337.05" x2="318.00" y2="337.50" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
-<line x1="218.00" y1="337.05" x2="318.00" y2="337.50" stroke="#8b5cf6" stroke-width="4.4" stroke-linecap="round"/>
-<circle cx="118.00" cy="345.50" r="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="3.4"/>
-<circle cx="118.00" cy="345.50" r="4.2" fill="#8b5cf6"/>
-<circle cx="218.00" cy="337.05" r="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="3.4"/>
-<circle cx="218.00" cy="337.05" r="4.2" fill="#8b5cf6"/>
-<circle cx="318.00" cy="337.50" r="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="3.4"/>
-<circle cx="318.00" cy="337.50" r="4.2" fill="#8b5cf6"/>
-<line x1="88.00" y1="341.73" x2="188.00" y2="336.45" stroke="#ffffff" stroke-width="7.2" stroke-linecap="round" opacity="0.95"/>
-<line x1="88.00" y1="341.73" x2="188.00" y2="336.45" stroke="#0d9488" stroke-width="5.2" stroke-linecap="round"/>
-<line x1="188.00" y1="336.45" x2="288.00" y2="336.20" stroke="#ffffff" stroke-width="7.2" stroke-linecap="round" opacity="0.95"/>
-<line x1="188.00" y1="336.45" x2="288.00" y2="336.20" stroke="#0d9488" stroke-width="5.2" stroke-linecap="round"/>
-<circle cx="88.00" cy="341.73" r="8" fill="#ffffff" stroke="#0d9488" stroke-width="3.4"/>
-<circle cx="88.00" cy="341.73" r="4.2" fill="#0d9488"/>
-<circle cx="188.00" cy="336.45" r="8" fill="#ffffff" stroke="#0d9488" stroke-width="3.4"/>
-<circle cx="188.00" cy="336.45" r="4.2" fill="#0d9488"/>
-<circle cx="288.00" cy="336.20" r="8" fill="#ffffff" stroke="#0d9488" stroke-width="3.4"/>
-<circle cx="288.00" cy="336.20" r="4.2" fill="#0d9488"/>
-<line x1="128.00" y1="339.83" x2="228.00" y2="332.29" stroke="#ffffff" stroke-width="6.6" stroke-linecap="round" opacity="0.95"/>
-<line x1="128.00" y1="339.83" x2="228.00" y2="332.29" stroke="#e11d48" stroke-width="4.6" stroke-linecap="round"/>
-<line x1="228.00" y1="332.29" x2="328.00" y2="330.53" stroke="#ffffff" stroke-width="6.6" stroke-linecap="round" opacity="0.95"/>
-<line x1="228.00" y1="332.29" x2="328.00" y2="330.53" stroke="#e11d48" stroke-width="4.6" stroke-linecap="round"/>
-<circle cx="128.00" cy="339.83" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
-<circle cx="128.00" cy="339.83" r="4.2" fill="#e11d48"/>
-<circle cx="228.00" cy="332.29" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
-<circle cx="228.00" cy="332.29" r="4.2" fill="#e11d48"/>
-<circle cx="328.00" cy="330.53" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
-<circle cx="328.00" cy="330.53" r="4.2" fill="#e11d48"/>
-<circle cx="398.00" cy="333.91" r="8" fill="#ffffff" stroke="#111827" stroke-width="3.4"/>
-<circle cx="398.00" cy="333.91" r="4.2" fill="#111827"/>
-<text x="70" y="590" class="small">Dashed = skipped slot; no point = no comparable score.</text>
-<rect x="452" y="248" width="382" height="356" rx="20" class="subpanel"/>
-<rect x="746" y="264" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
-<text x="779" y="278" text-anchor="middle" class="tiny">SCORED</text>
-<text x="474" y="278" class="axis">#2 SMID</text>
-<text x="474" y="298" class="small">Average of moral rating and foundation classification</text>
-<line x1="498" y1="542.00" x2="798" y2="542.00" class="guide"/>
-<text x="486" y="546.00" text-anchor="end" class="small">0%</text>
-<line x1="498" y1="480.13" x2="798" y2="480.13" class="guide"/>
-<text x="486" y="484.13" text-anchor="end" class="small">20%</text>
-<line x1="498" y1="433.73" x2="798" y2="433.73" class="guide"/>
-<text x="486" y="437.73" text-anchor="end" class="small">35%</text>
-<line x1="498" y1="387.33" x2="798" y2="387.33" class="guide"/>
-<text x="486" y="391.33" text-anchor="end" class="small">50%</text>
-<line x1="498" y1="340.93" x2="798" y2="340.93" class="guide"/>
-<text x="486" y="344.93" text-anchor="end" class="small">65%</text>
-<line x1="498" y1="310.00" x2="798" y2="310.00" class="guide"/>
-<text x="486" y="314.00" text-anchor="end" class="small">75%</text>
-<line x1="498.00" y1="310" x2="498.00" y2="542" class="guide"/>
-<text x="498.00" y="566" text-anchor="middle" class="axis">S</text>
-<line x1="598.00" y1="310" x2="598.00" y2="542" class="guide"/>
-<text x="598.00" y="566" text-anchor="middle" class="axis">M</text>
-<line x1="698.00" y1="310" x2="698.00" y2="542" class="guide"/>
-<text x="698.00" y="566" text-anchor="middle" class="axis">L</text>
-<line x1="798.00" y1="310" x2="798.00" y2="542" class="guide"/>
-<text x="798.00" y="566" text-anchor="middle" class="axis">Ref</text>
-<line x1="478.00" y1="408.37" x2="678.00" y2="480.68" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
-<line x1="478.00" y1="408.37" x2="678.00" y2="480.68" stroke="#d97706" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="7 6"/>
-<circle cx="478.00" cy="408.37" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
-<circle cx="478.00" cy="408.37" r="4.2" fill="#d97706"/>
-<circle cx="678.00" cy="480.68" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
-<circle cx="678.00" cy="480.68" r="4.2" fill="#d97706"/>
-<line x1="508.00" y1="475.05" x2="708.00" y2="422.57" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
-<line x1="508.00" y1="475.05" x2="708.00" y2="422.57" stroke="#ea580c" stroke-width="4.0" stroke-linecap="round" stroke-dasharray="7 6"/>
-<circle cx="508.00" cy="475.05" r="8" fill="#ffffff" stroke="#ea580c" stroke-width="3.4"/>
-<circle cx="508.00" cy="475.05" r="4.2" fill="#ea580c"/>
-<circle cx="708.00" cy="422.57" r="8" fill="#ffffff" stroke="#ea580c" stroke-width="3.4"/>
-<circle cx="708.00" cy="422.57" r="4.2" fill="#ea580c"/>
-<line x1="518.00" y1="413.05" x2="618.00" y2="429.51" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
-<line x1="518.00" y1="413.05" x2="618.00" y2="429.51" stroke="#8b5cf6" stroke-width="4.4" stroke-linecap="round"/>
-<line x1="618.00" y1="429.51" x2="718.00" y2="414.47" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
-<line x1="618.00" y1="429.51" x2="718.00" y2="414.47" stroke="#8b5cf6" stroke-width="4.4" stroke-linecap="round"/>
-<circle cx="518.00" cy="413.05" r="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="3.4"/>
-<circle cx="518.00" cy="413.05" r="4.2" fill="#8b5cf6"/>
-<circle cx="618.00" cy="429.51" r="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="3.4"/>
-<circle cx="618.00" cy="429.51" r="4.2" fill="#8b5cf6"/>
-<circle cx="718.00" cy="414.47" r="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="3.4"/>
-<circle cx="718.00" cy="414.47" r="4.2" fill="#8b5cf6"/>
-<line x1="488.00" y1="428.14" x2="688.00" y2="392.64" stroke="#ffffff" stroke-width="7.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
-<line x1="488.00" y1="428.14" x2="688.00" y2="392.64" stroke="#0d9488" stroke-width="5.2" stroke-linecap="round" stroke-dasharray="7 6"/>
-<circle cx="488.00" cy="428.14" r="8" fill="#ffffff" stroke="#0d9488" stroke-width="3.4"/>
-<circle cx="488.00" cy="428.14" r="4.2" fill="#0d9488"/>
-<circle cx="688.00" cy="392.64" r="8" fill="#ffffff" stroke="#0d9488" stroke-width="3.4"/>
-<circle cx="688.00" cy="392.64" r="4.2" fill="#0d9488"/>
-<text x="470" y="590" class="small">Dashed = skipped slot; no point = no comparable score.</text>
-<rect x="852" y="248" width="382" height="356" rx="20" class="subpanel"/>
-<rect x="1146" y="264" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
-<text x="1179" y="278" text-anchor="middle" class="tiny">SCORED</text>
-<text x="874" y="278" class="axis">#3 Value Kaleidoscope</text>
-<text x="874" y="298" class="small">Average of relevance and valence accuracy</text>
-<line x1="898" y1="542.00" x2="1198" y2="542.00" class="guide"/>
-<text x="886" y="546.00" text-anchor="end" class="small">0%</text>
-<line x1="898" y1="480.13" x2="1198" y2="480.13" class="guide"/>
-<text x="886" y="484.13" text-anchor="end" class="small">20%</text>
-<line x1="898" y1="433.73" x2="1198" y2="433.73" class="guide"/>
-<text x="886" y="437.73" text-anchor="end" class="small">35%</text>
-<line x1="898" y1="387.33" x2="1198" y2="387.33" class="guide"/>
-<text x="886" y="391.33" text-anchor="end" class="small">50%</text>
-<line x1="898" y1="340.93" x2="1198" y2="340.93" class="guide"/>
-<text x="886" y="344.93" text-anchor="end" class="small">65%</text>
-<line x1="898" y1="310.00" x2="1198" y2="310.00" class="guide"/>
-<text x="886" y="314.00" text-anchor="end" class="small">75%</text>
-<line x1="898.00" y1="310" x2="898.00" y2="542" class="guide"/>
-<text x="898.00" y="566" text-anchor="middle" class="axis">S</text>
-<line x1="998.00" y1="310" x2="998.00" y2="542" class="guide"/>
-<text x="998.00" y="566" text-anchor="middle" class="axis">M</text>
-<line x1="1098.00" y1="310" x2="1098.00" y2="542" class="guide"/>
-<text x="1098.00" y="566" text-anchor="middle" class="axis">L</text>
-<line x1="1198.00" y1="310" x2="1198.00" y2="542" class="guide"/>
-<text x="1198.00" y="566" text-anchor="middle" class="axis">Ref</text>
-<line x1="878.00" y1="313.11" x2="978.00" y2="313.16" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95"/>
-<line x1="878.00" y1="313.11" x2="978.00" y2="313.16" stroke="#d97706" stroke-width="4.2" stroke-linecap="round"/>
-<line x1="978.00" y1="313.16" x2="1078.00" y2="312.72" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95"/>
-<line x1="978.00" y1="313.16" x2="1078.00" y2="312.72" stroke="#d97706" stroke-width="4.2" stroke-linecap="round"/>
-<circle cx="878.00" cy="313.11" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
-<circle cx="878.00" cy="313.11" r="4.2" fill="#d97706"/>
-<circle cx="978.00" cy="313.16" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
-<circle cx="978.00" cy="313.16" r="4.2" fill="#d97706"/>
-<circle cx="1078.00" cy="312.72" r="8" fill="#ffffff" stroke="#d97706" stroke-width="3.4"/>
-<circle cx="1078.00" cy="312.72" r="4.2" fill="#d97706"/>
-<line x1="898.00" y1="326.95" x2="998.00" y2="345.67" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
-<line x1="898.00" y1="326.95" x2="998.00" y2="345.67" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
-<line x1="998.00" y1="345.67" x2="1098.00" y2="331.45" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
-<line x1="998.00" y1="345.67" x2="1098.00" y2="331.45" stroke="#2563eb" stroke-width="4.0" stroke-linecap="round"/>
-<circle cx="898.00" cy="326.95" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
-<circle cx="898.00" cy="326.95" r="4.2" fill="#2563eb"/>
-<circle cx="998.00" cy="345.67" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
-<circle cx="998.00" cy="345.67" r="4.2" fill="#2563eb"/>
-<circle cx="1098.00" cy="331.45" r="8" fill="#ffffff" stroke="#2563eb" stroke-width="3.4"/>
-<circle cx="1098.00" cy="331.45" r="4.2" fill="#2563eb"/>
-<line x1="908.00" y1="378.49" x2="1008.00" y2="318.15" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
-<line x1="908.00" y1="378.49" x2="1008.00" y2="318.15" stroke="#ea580c" stroke-width="4.0" stroke-linecap="round"/>
-<line x1="1008.00" y1="318.15" x2="1108.00" y2="327.84" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
-<line x1="1008.00" y1="318.15" x2="1108.00" y2="327.84" stroke="#ea580c" stroke-width="4.0" stroke-linecap="round"/>
-<circle cx="908.00" cy="378.49" r="8" fill="#ffffff" stroke="#ea580c" stroke-width="3.4"/>
-<circle cx="908.00" cy="378.49" r="4.2" fill="#ea580c"/>
-<circle cx="1008.00" cy="318.15" r="8" fill="#ffffff" stroke="#ea580c" stroke-width="3.4"/>
-<circle cx="1008.00" cy="318.15" r="4.2" fill="#ea580c"/>
-<circle cx="1108.00" cy="327.84" r="8" fill="#ffffff" stroke="#ea580c" stroke-width="3.4"/>
-<circle cx="1108.00" cy="327.84" r="4.2" fill="#ea580c"/>
-<line x1="918.00" y1="358.67" x2="1018.00" y2="336.71" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
-<line x1="918.00" y1="358.67" x2="1018.00" y2="336.71" stroke="#8b5cf6" stroke-width="4.4" stroke-linecap="round"/>
-<line x1="1018.00" y1="336.71" x2="1118.00" y2="339.08" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
-<line x1="1018.00" y1="336.71" x2="1118.00" y2="339.08" stroke="#8b5cf6" stroke-width="4.4" stroke-linecap="round"/>
-<circle cx="918.00" cy="358.67" r="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="3.4"/>
-<circle cx="918.00" cy="358.67" r="4.2" fill="#8b5cf6"/>
-<circle cx="1018.00" cy="336.71" r="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="3.4"/>
-<circle cx="1018.00" cy="336.71" r="4.2" fill="#8b5cf6"/>
-<circle cx="1118.00" cy="339.08" r="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="3.4"/>
-<circle cx="1118.00" cy="339.08" r="4.2" fill="#8b5cf6"/>
-<line x1="888.00" y1="330.91" x2="988.00" y2="333.29" stroke="#ffffff" stroke-width="7.2" stroke-linecap="round" opacity="0.95"/>
-<line x1="888.00" y1="330.91" x2="988.00" y2="333.29" stroke="#0d9488" stroke-width="5.2" stroke-linecap="round"/>
-<line x1="988.00" y1="333.29" x2="1088.00" y2="339.96" stroke="#ffffff" stroke-width="7.2" stroke-linecap="round" opacity="0.95"/>
-<line x1="988.00" y1="333.29" x2="1088.00" y2="339.96" stroke="#0d9488" stroke-width="5.2" stroke-linecap="round"/>
-<circle cx="888.00" cy="330.91" r="8" fill="#ffffff" stroke="#0d9488" stroke-width="3.4"/>
-<circle cx="888.00" cy="330.91" r="4.2" fill="#0d9488"/>
-<circle cx="988.00" cy="333.29" r="8" fill="#ffffff" stroke="#0d9488" stroke-width="3.4"/>
-<circle cx="988.00" cy="333.29" r="4.2" fill="#0d9488"/>
-<circle cx="1088.00" cy="339.96" r="8" fill="#ffffff" stroke="#0d9488" stroke-width="3.4"/>
-<circle cx="1088.00" cy="339.96" r="4.2" fill="#0d9488"/>
-<line x1="928.00" y1="351.08" x2="1028.00" y2="313.43" stroke="#ffffff" stroke-width="6.6" stroke-linecap="round" opacity="0.95"/>
-<line x1="928.00" y1="351.08" x2="1028.00" y2="313.43" stroke="#e11d48" stroke-width="4.6" stroke-linecap="round"/>
-<line x1="1028.00" y1="313.43" x2="1128.00" y2="314.44" stroke="#ffffff" stroke-width="6.6" stroke-linecap="round" opacity="0.95"/>
-<line x1="1028.00" y1="313.43" x2="1128.00" y2="314.44" stroke="#e11d48" stroke-width="4.6" stroke-linecap="round"/>
-<circle cx="928.00" cy="351.08" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
-<circle cx="928.00" cy="351.08" r="4.2" fill="#e11d48"/>
-<circle cx="1028.00" cy="313.43" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
-<circle cx="1028.00" cy="313.43" r="4.2" fill="#e11d48"/>
-<circle cx="1128.00" cy="314.44" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
-<circle cx="1128.00" cy="314.44" r="4.2" fill="#e11d48"/>
-<circle cx="1198.00" cy="325.25" r="8" fill="#ffffff" stroke="#111827" stroke-width="3.4"/>
-<circle cx="1198.00" cy="325.25" r="4.2" fill="#111827"/>
-<text x="870" y="590" class="small">Dashed = skipped slot; no point = no comparable score.</text>
-<rect x="48" y="644" width="1184" height="360" rx="18" class="legend-card"/>
-<text x="72" y="670" class="tiny">HOW TO READ THIS FIGURE</text>
-<line x1="618" y1="672" x2="618" y2="982" class="guide"/>
-<text x="72" y="696" class="body">Panels 1-3 show only benchmark-faithful comparable accuracy.</text>
-<text x="72" y="722" class="body">Use this figure for family-size comparisons on UniMoral,</text>
-<text x="72" y="748" class="body">SMID, and Value Kaleidoscope.</text>
-<text x="72" y="774" class="body">CCD-Bench is intentionally excluded here.</text>
-<text x="72" y="800" class="body">Read CCD-Bench in the choice-distribution</text>
-<text x="72" y="826" class="body">and dominant-option concentration figures.</text>
-<text x="72" y="852" class="body">Read Denevil in the behavioral-outcomes figure.</text>
-<text x="72" y="878" class="body">Do not mix proxy evidence into accuracy scaling.</text>
-<text x="656" y="696" class="tiny">FAMILY READ</text>
-<rect x="656" y="710" width="14" height="14" rx="4" fill="#d97706"/>
-<text x="680" y="721" class="small">MiniMax: S/M/L are scored on UniMoral and Value; S/L have SMID, while M has no SMID route.</text>
-<rect x="656" y="738" width="14" height="14" rx="4" fill="#0d9488"/>
-<text x="680" y="749" class="small">Qwen: text scored at S/M/L; SMID at S/L.</text>
-<rect x="656" y="766" width="14" height="14" rx="4" fill="#2563eb"/>
-<text x="680" y="777" class="small">DeepSeek: S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists.</text>
-<rect x="656" y="794" width="14" height="14" rx="4" fill="#ea580c"/>
-<text x="680" y="805" class="small">Llama: text scored at S/M/L; SMID at S/L.</text>
-<rect x="656" y="822" width="14" height="14" rx="4" fill="#8b5cf6"/>
-<text x="680" y="833" class="small">Gemma: full S/M/L scored sweep.</text>
-<rect x="656" y="850" width="14" height="14" rx="4" fill="#e11d48"/>
-<text x="680" y="861" class="small">OpenAI GPT-5: text-only S/M/L: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5; no SMID/DeNEVIL.</text>
-<rect x="656" y="878" width="14" height="14" rx="4" fill="#111827"/>
-<text x="680" y="889" class="small">GPT-4o mini: separate GPT-4o mini text-only Ref marker; not part of GPT-5 S/M/L.</text>
-<text x="656" y="928" class="tiny">EVIDENCE BOUNDARY</text>
-<text x="656" y="954" class="body">This figure stops at the three accuracy-comparable benchmarks.</text>
-<text x="656" y="982" class="body">That avoids mixing comparable accuracy with coverage or proxy evidence.</text>
-<text x="72" y="1044" class="small">Takeaway: current evidence supports task-specific scaling statements across the three comparable accuracy benchmarks, not a single universal size law across all five benchmark surfaces.</text>
+<text x="48" y="92" class="subtitle">UniMoral is grouped in Figure 1 above; these comparable panels start at SMID.</text>
+<text x="48" y="114" class="subtitle">Two comparable benchmark panels here: SMID and Value Kaleidoscope.</text>
+<text x="48" y="136" class="subtitle">This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.</text>
+<text x="48" y="158" class="subtitle">OpenAI GPT-5 text-only points are S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5.</text>
+<text x="48" y="180" class="subtitle">GPT-4o and GPT-4.1 text refs are gray dashed reference lines where a text metric exists.</text>
+<text x="48" y="202" class="subtitle">SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.</text>
+<text x="48" y="224" class="subtitle">Read CCD-Bench and Denevil in their dedicated figures.</text>
+<rect x="72" y="260" width="650" height="430" rx="20" class="subpanel"/>
+<rect x="634" y="276" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
+<text x="667" y="290" text-anchor="middle" class="tiny">SCORED</text>
+<text x="94" y="290" class="axis">#1 SMID</text>
+<text x="94" y="310" class="small">Average of moral rating and foundation classification</text>
+<line x1="142" y1="614.00" x2="564" y2="614.00" class="guide"/>
+<text x="130" y="618.00" text-anchor="end" class="small">0%</text>
+<line x1="142" y1="539.33" x2="564" y2="539.33" class="guide"/>
+<text x="130" y="543.33" text-anchor="end" class="small">20%</text>
+<line x1="142" y1="483.33" x2="564" y2="483.33" class="guide"/>
+<text x="130" y="487.33" text-anchor="end" class="small">35%</text>
+<line x1="142" y1="427.33" x2="564" y2="427.33" class="guide"/>
+<text x="130" y="431.33" text-anchor="end" class="small">50%</text>
+<line x1="142" y1="371.33" x2="564" y2="371.33" class="guide"/>
+<text x="130" y="375.33" text-anchor="end" class="small">65%</text>
+<line x1="142" y1="334.00" x2="564" y2="334.00" class="guide"/>
+<text x="130" y="338.00" text-anchor="end" class="small">75%</text>
+<line x1="142.00" y1="334" x2="142.00" y2="614" class="guide"/>
+<text x="142.00" y="638" text-anchor="middle" class="axis">S</text>
+<line x1="353.00" y1="334" x2="353.00" y2="614" class="guide"/>
+<text x="353.00" y="638" text-anchor="middle" class="axis">M</text>
+<line x1="564.00" y1="334" x2="564.00" y2="614" class="guide"/>
+<text x="564.00" y="638" text-anchor="middle" class="axis">L</text>
+<line x1="118.00" y1="452.72" x2="540.00" y2="539.99" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
+<line x1="118.00" y1="452.72" x2="540.00" y2="539.99" stroke="#e0ad68" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="7 6"/>
+<circle cx="118.00" cy="452.72" r="8" fill="#ffffff" stroke="#e0ad68" stroke-width="3.4"/>
+<circle cx="118.00" cy="452.72" r="4.2" fill="#e0ad68"/>
+<circle cx="540.00" cy="539.99" r="8" fill="#ffffff" stroke="#e0ad68" stroke-width="3.4"/>
+<circle cx="540.00" cy="539.99" r="4.2" fill="#e0ad68"/>
+<line x1="150.00" y1="533.20" x2="572.00" y2="469.86" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
+<line x1="150.00" y1="533.20" x2="572.00" y2="469.86" stroke="#dc2626" stroke-width="4.0" stroke-linecap="round" stroke-dasharray="7 6"/>
+<circle cx="150.00" cy="533.20" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3.4"/>
+<circle cx="150.00" cy="533.20" r="4.2" fill="#dc2626"/>
+<circle cx="572.00" cy="469.86" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3.4"/>
+<circle cx="572.00" cy="469.86" r="4.2" fill="#dc2626"/>
+<line x1="162.00" y1="458.37" x2="373.00" y2="478.24" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
+<line x1="162.00" y1="458.37" x2="373.00" y2="478.24" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
+<line x1="373.00" y1="478.24" x2="584.00" y2="460.08" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
+<line x1="373.00" y1="478.24" x2="584.00" y2="460.08" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
+<circle cx="162.00" cy="458.37" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
+<circle cx="162.00" cy="458.37" r="4.2" fill="#a996e3"/>
+<circle cx="373.00" cy="478.24" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
+<circle cx="373.00" cy="478.24" r="4.2" fill="#a996e3"/>
+<circle cx="584.00" cy="460.08" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
+<circle cx="584.00" cy="460.08" r="4.2" fill="#a996e3"/>
+<line x1="128.00" y1="476.59" x2="550.00" y2="433.74" stroke="#ffffff" stroke-width="7.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
+<line x1="128.00" y1="476.59" x2="550.00" y2="433.74" stroke="#65b8ac" stroke-width="5.2" stroke-linecap="round" stroke-dasharray="7 6"/>
+<circle cx="128.00" cy="476.59" r="8" fill="#ffffff" stroke="#65b8ac" stroke-width="3.4"/>
+<circle cx="128.00" cy="476.59" r="4.2" fill="#65b8ac"/>
+<circle cx="550.00" cy="433.74" r="8" fill="#ffffff" stroke="#65b8ac" stroke-width="3.4"/>
+<circle cx="550.00" cy="433.74" r="4.2" fill="#65b8ac"/>
+<text x="90" y="676" class="small">Dashed colored segments skip missing size slots.</text>
+<rect x="778" y="260" width="650" height="430" rx="20" class="subpanel"/>
+<rect x="1340" y="276" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
+<text x="1373" y="290" text-anchor="middle" class="tiny">SCORED</text>
+<text x="800" y="290" class="axis">#2 Value Kaleidoscope</text>
+<text x="800" y="310" class="small">Average of relevance and valence accuracy</text>
+<line x1="848" y1="614.00" x2="1270" y2="614.00" class="guide"/>
+<text x="836" y="618.00" text-anchor="end" class="small">0%</text>
+<line x1="848" y1="539.33" x2="1270" y2="539.33" class="guide"/>
+<text x="836" y="543.33" text-anchor="end" class="small">20%</text>
+<line x1="848" y1="483.33" x2="1270" y2="483.33" class="guide"/>
+<text x="836" y="487.33" text-anchor="end" class="small">35%</text>
+<line x1="848" y1="427.33" x2="1270" y2="427.33" class="guide"/>
+<text x="836" y="431.33" text-anchor="end" class="small">50%</text>
+<line x1="848" y1="371.33" x2="1270" y2="371.33" class="guide"/>
+<text x="836" y="375.33" text-anchor="end" class="small">65%</text>
+<line x1="848" y1="334.00" x2="1270" y2="334.00" class="guide"/>
+<text x="836" y="338.00" text-anchor="end" class="small">75%</text>
+<line x1="848.00" y1="334" x2="848.00" y2="614" class="guide"/>
+<text x="848.00" y="638" text-anchor="middle" class="axis">S</text>
+<line x1="1059.00" y1="334" x2="1059.00" y2="614" class="guide"/>
+<text x="1059.00" y="638" text-anchor="middle" class="axis">M</text>
+<line x1="1270.00" y1="334" x2="1270.00" y2="614" class="guide"/>
+<text x="1270.00" y="638" text-anchor="middle" class="axis">L</text>
+<line x1="824.00" y1="337.75" x2="1035.00" y2="337.82" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95"/>
+<line x1="824.00" y1="337.75" x2="1035.00" y2="337.82" stroke="#e0ad68" stroke-width="4.2" stroke-linecap="round"/>
+<line x1="1035.00" y1="337.82" x2="1246.00" y2="337.29" stroke="#ffffff" stroke-width="6.2" stroke-linecap="round" opacity="0.95"/>
+<line x1="1035.00" y1="337.82" x2="1246.00" y2="337.29" stroke="#e0ad68" stroke-width="4.2" stroke-linecap="round"/>
+<circle cx="824.00" cy="337.75" r="8" fill="#ffffff" stroke="#e0ad68" stroke-width="3.4"/>
+<circle cx="824.00" cy="337.75" r="4.2" fill="#e0ad68"/>
+<circle cx="1035.00" cy="337.82" r="8" fill="#ffffff" stroke="#e0ad68" stroke-width="3.4"/>
+<circle cx="1035.00" cy="337.82" r="4.2" fill="#e0ad68"/>
+<circle cx="1246.00" cy="337.29" r="8" fill="#ffffff" stroke="#e0ad68" stroke-width="3.4"/>
+<circle cx="1246.00" cy="337.29" r="4.2" fill="#e0ad68"/>
+<line x1="844.00" y1="354.46" x2="1055.00" y2="377.06" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
+<line x1="844.00" y1="354.46" x2="1055.00" y2="377.06" stroke="#78a8e6" stroke-width="4.0" stroke-linecap="round"/>
+<line x1="1055.00" y1="377.06" x2="1266.00" y2="359.89" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
+<line x1="1055.00" y1="377.06" x2="1266.00" y2="359.89" stroke="#78a8e6" stroke-width="4.0" stroke-linecap="round"/>
+<circle cx="844.00" cy="354.46" r="8" fill="#ffffff" stroke="#78a8e6" stroke-width="3.4"/>
+<circle cx="844.00" cy="354.46" r="4.2" fill="#78a8e6"/>
+<circle cx="1055.00" cy="377.06" r="8" fill="#ffffff" stroke="#78a8e6" stroke-width="3.4"/>
+<circle cx="1055.00" cy="377.06" r="4.2" fill="#78a8e6"/>
+<circle cx="1266.00" cy="359.89" r="8" fill="#ffffff" stroke="#78a8e6" stroke-width="3.4"/>
+<circle cx="1266.00" cy="359.89" r="4.2" fill="#78a8e6"/>
+<line x1="856.00" y1="416.66" x2="1067.00" y2="343.84" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
+<line x1="856.00" y1="416.66" x2="1067.00" y2="343.84" stroke="#dc2626" stroke-width="4.0" stroke-linecap="round"/>
+<line x1="1067.00" y1="343.84" x2="1278.00" y2="355.53" stroke="#ffffff" stroke-width="6.0" stroke-linecap="round" opacity="0.95"/>
+<line x1="1067.00" y1="343.84" x2="1278.00" y2="355.53" stroke="#dc2626" stroke-width="4.0" stroke-linecap="round"/>
+<circle cx="856.00" cy="416.66" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3.4"/>
+<circle cx="856.00" cy="416.66" r="4.2" fill="#dc2626"/>
+<circle cx="1067.00" cy="343.84" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3.4"/>
+<circle cx="1067.00" cy="343.84" r="4.2" fill="#dc2626"/>
+<circle cx="1278.00" cy="355.53" r="8" fill="#ffffff" stroke="#dc2626" stroke-width="3.4"/>
+<circle cx="1278.00" cy="355.53" r="4.2" fill="#dc2626"/>
+<line x1="868.00" y1="392.74" x2="1079.00" y2="366.24" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
+<line x1="868.00" y1="392.74" x2="1079.00" y2="366.24" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
+<line x1="1079.00" y1="366.24" x2="1290.00" y2="369.10" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
+<line x1="1079.00" y1="366.24" x2="1290.00" y2="369.10" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
+<circle cx="868.00" cy="392.74" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
+<circle cx="868.00" cy="392.74" r="4.2" fill="#a996e3"/>
+<circle cx="1079.00" cy="366.24" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
+<circle cx="1079.00" cy="366.24" r="4.2" fill="#a996e3"/>
+<circle cx="1290.00" cy="369.10" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
+<circle cx="1290.00" cy="369.10" r="4.2" fill="#a996e3"/>
+<line x1="834.00" y1="359.24" x2="1045.00" y2="362.11" stroke="#ffffff" stroke-width="7.2" stroke-linecap="round" opacity="0.95"/>
+<line x1="834.00" y1="359.24" x2="1045.00" y2="362.11" stroke="#65b8ac" stroke-width="5.2" stroke-linecap="round"/>
+<line x1="1045.00" y1="362.11" x2="1256.00" y2="370.15" stroke="#ffffff" stroke-width="7.2" stroke-linecap="round" opacity="0.95"/>
+<line x1="1045.00" y1="362.11" x2="1256.00" y2="370.15" stroke="#65b8ac" stroke-width="5.2" stroke-linecap="round"/>
+<circle cx="834.00" cy="359.24" r="8" fill="#ffffff" stroke="#65b8ac" stroke-width="3.4"/>
+<circle cx="834.00" cy="359.24" r="4.2" fill="#65b8ac"/>
+<circle cx="1045.00" cy="362.11" r="8" fill="#ffffff" stroke="#65b8ac" stroke-width="3.4"/>
+<circle cx="1045.00" cy="362.11" r="4.2" fill="#65b8ac"/>
+<circle cx="1256.00" cy="370.15" r="8" fill="#ffffff" stroke="#65b8ac" stroke-width="3.4"/>
+<circle cx="1256.00" cy="370.15" r="4.2" fill="#65b8ac"/>
+<line x1="880.00" y1="383.58" x2="1091.00" y2="338.15" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
+<line x1="880.00" y1="383.58" x2="1091.00" y2="338.15" stroke="#e11d48" stroke-width="4.4" stroke-linecap="round"/>
+<line x1="1091.00" y1="338.15" x2="1302.00" y2="339.36" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
+<line x1="1091.00" y1="338.15" x2="1302.00" y2="339.36" stroke="#e11d48" stroke-width="4.4" stroke-linecap="round"/>
+<circle cx="880.00" cy="383.58" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
+<circle cx="880.00" cy="383.58" r="4.2" fill="#e11d48"/>
+<circle cx="1091.00" cy="338.15" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
+<circle cx="1091.00" cy="338.15" r="4.2" fill="#e11d48"/>
+<circle cx="1302.00" cy="339.36" r="8" fill="#ffffff" stroke="#e11d48" stroke-width="3.4"/>
+<circle cx="1302.00" cy="339.36" r="4.2" fill="#e11d48"/>
+<line x1="848" y1="339.64" x2="1270" y2="339.64" stroke="#6b7280" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.62"/>
+<line x1="1270.00" y1="339.64" x2="1280.00" y2="364.00" stroke="#94a3b8" stroke-width="1.1" opacity="0.8"/>
+<text x="1286.00" y="368.00" class="ref-label">GPT-4.1-mini 73.5%</text>
+<line x1="848" y1="352.41" x2="1270" y2="352.41" stroke="#6b7280" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.62"/>
+<line x1="1270.00" y1="352.41" x2="1280.00" y2="383.00" stroke="#94a3b8" stroke-width="1.1" opacity="0.8"/>
+<text x="1286.00" y="387.00" class="ref-label">GPT-4o-mini 70.1%</text>
+<line x1="848" y1="362.73" x2="1270" y2="362.73" stroke="#6b7280" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.62"/>
+<line x1="1270.00" y1="362.73" x2="1280.00" y2="402.00" stroke="#94a3b8" stroke-width="1.1" opacity="0.8"/>
+<text x="1286.00" y="406.00" class="ref-label">GPT-4.1-nano 67.3%</text>
+<text x="1286" y="310.00" class="ref-title">OpenAI refs 67.3%-73.5%</text>
+<text x="1286" y="328.00" class="small">Best GPT-4.1-mini Ref 73.5%</text>
+<text x="796" y="676" class="small">Dashed colored segments skip missing size slots; gray dashed lines are GPT-4o/GPT-4.1 text refs.</text>
+<rect x="48" y="732" width="1404" height="430" rx="18" class="legend-card"/>
+<text x="72" y="762" class="tiny">HOW TO READ THIS FIGURE</text>
+<line x1="704" y1="764" x2="704" y2="1118" class="guide"/>
+<text x="72" y="796" class="legend-note">Panels 1-2 start at SMID because UniMoral</text>
+<text x="72" y="824" class="legend-note">has its combined RQ1-RQ4 block above.</text>
+<text x="72" y="852" class="legend-note">Use this figure for family-size comparisons</text>
+<text x="72" y="880" class="legend-note">on SMID and Value Kaleidoscope.</text>
+<text x="72" y="908" class="legend-note">OpenAI GPT-5 S/M/L appears on Value only;</text>
+<text x="72" y="936" class="legend-note">it has no SMID or DeNEVIL route.</text>
+<text x="72" y="964" class="legend-note">CCD-Bench is intentionally excluded here.</text>
+<text x="72" y="992" class="legend-note">Read CCD-Bench in the choice-distribution</text>
+<text x="72" y="1020" class="legend-note">and dominant-option concentration figures.</text>
+<text x="72" y="1048" class="legend-note">Read Denevil in the behavioral-outcomes figure.</text>
+<text x="72" y="1076" class="legend-note">Do not mix proxy evidence into accuracy scaling.</text>
+<text x="742" y="796" class="tiny">FAMILY READ</text>
+<rect x="742" y="808" width="24" height="24" rx="6" fill="#e0ad68"/>
+<text x="778" y="826" class="legend-big">MiniMax</text>
+<text x="912" y="826" class="legend-note">Value S/M/L are scored; SMID S/L have routes, while M has no SMID</text>
+<text x="912" y="842" class="legend-note">route.</text>
+<rect x="742" y="850" width="24" height="24" rx="6" fill="#65b8ac"/>
+<text x="778" y="868" class="legend-big">Qwen</text>
+<text x="912" y="868" class="legend-note">Value scored at S/M/L; SMID at S/L.</text>
+<rect x="742" y="892" width="24" height="24" rx="6" fill="#78a8e6"/>
+<text x="778" y="910" class="legend-big">DeepSeek</text>
+<text x="912" y="910" class="legend-note">Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists.</text>
+<rect x="742" y="934" width="24" height="24" rx="6" fill="#dc2626"/>
+<text x="778" y="952" class="legend-big">Llama</text>
+<text x="912" y="952" class="legend-note">Value scored at S/M/L; SMID at S/L.</text>
+<rect x="742" y="976" width="24" height="24" rx="6" fill="#a996e3"/>
+<text x="778" y="994" class="legend-big">Gemma</text>
+<text x="912" y="994" class="legend-note">full S/M/L sweep on SMID and Value.</text>
+<rect x="742" y="1018" width="24" height="24" rx="6" fill="#e11d48"/>
+<text x="778" y="1036" class="legend-big">OpenAI GPT-5</text>
+<text x="912" y="1036" class="legend-note">text-only S/M/L: S GPT-5 nano, M GPT-5 mini, L GPT-5.5.</text>
+<line x1="742" y1="1070" x2="786" y2="1070" stroke="#9ca3af" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 8"/>
+<text x="800" y="1078" class="legend-big">OpenAI Ref</text>
+<text x="912" y="1078" class="legend-note">GPT-4o and GPT-4.1 text refs; dashed where a text metric exists.</text>
+<text x="742" y="1124" class="tiny">EVIDENCE BOUNDARY</text>
+<text x="900" y="1124" class="legend-note">This figure stops at SMID + Value so accuracy, coverage, and proxy behavior do not get mixed.</text>
+<text x="72" y="1206" class="small">Takeaway: scaling is benchmark-specific. OpenAI GPT-5 is text-only S/M/L context, while GPT-4o/GPT-4.1 remain reference markers.</text>
 </svg>

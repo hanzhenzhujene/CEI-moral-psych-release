@@ -513,6 +513,9 @@ run_job() {
   echo "running:$job:$(now_iso)" > "$MASTER_STATUS_FILE"
 
   run_or_skip_task "$job" "unimoral_action_prediction" "src/inspect/evals/unimoral.py::unimoral_action_prediction" "$model" "$max_connections" || job_failed=1
+  run_or_skip_task "$job" "unimoral_moral_typology" "src/inspect/evals/unimoral.py::unimoral_moral_typology" "$model" "$max_connections" || job_failed=1
+  run_or_skip_task "$job" "unimoral_factor_attribution" "src/inspect/evals/unimoral.py::unimoral_factor_attribution" "$model" "$max_connections" || job_failed=1
+  run_or_skip_task "$job" "unimoral_consequence_generation" "src/inspect/evals/unimoral.py::unimoral_consequence_generation" "$model" "$max_connections" || job_failed=1
   run_or_skip_task "$job" "value_prism_relevance" "src/inspect/evals/value_kaleidoscope.py::value_prism_relevance" "$model" "$max_connections" || job_failed=1
   run_or_skip_task "$job" "value_prism_valence" "src/inspect/evals/value_kaleidoscope.py::value_prism_valence" "$model" "$max_connections" || job_failed=1
   run_or_skip_task "$job" "ccd_bench_selection" "src/inspect/evals/ccd_bench.py::ccd_bench_selection" "$model" "$max_connections" || job_failed=1

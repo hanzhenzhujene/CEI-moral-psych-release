@@ -53,9 +53,9 @@ REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 202
 REPORT_PROVIDER = "OpenRouter + direct MiniMax + OpenAI"
 REPORT_TEMPERATURE = "0"
 REPORT_MINIMAX_API_COST = "$504.66"
-REPORT_OPENROUTER_COST = "$254.17"
-REPORT_OPENAI_API_COST = "$0.76 confirmed before May 16; new OpenAI Batch reference sweeps pending billing confirmation"
-REPORT_CURRENT_TOTAL_COST = "$759.59 confirmed before May 16 OpenAI Batch additions"
+REPORT_OPENROUTER_COST = "$325.66"
+REPORT_OPENAI_API_COST = "$0.76"
+REPORT_CURRENT_TOTAL_COST = "$831.08"
 REPORT_CURRENT_COST_BREAKDOWN = (
     f"MiniMax API: `{REPORT_MINIMAX_API_COST}`; OpenRouter for other model-family runs: `{REPORT_OPENROUTER_COST}`; "
     f"OpenAI API reference sweep: `{REPORT_OPENAI_API_COST}`."
@@ -134,12 +134,12 @@ DENEVIL_BEHAVIOR_ORDER = [
     "No visible answer",
 ]
 DENEVIL_BEHAVIOR_COLORS = {
-    "Protective refusal": "#2563eb",
-    "Protective redirect": "#0f766e",
-    "Corrective / contextual response": "#2f855a",
-    "Direct task answer": "#6b7280",
-    "Potentially risky continuation": "#dc2626",
-    "Ambiguous visible answer": "#d97706",
+    "Protective refusal": "#7fa8e8",
+    "Protective redirect": "#77b8ad",
+    "Corrective / contextual response": "#82b889",
+    "Direct task answer": "#9ca3af",
+    "Potentially risky continuation": "#e68585",
+    "Ambiguous visible answer": "#e2b56f",
     "No visible answer": "#cbd5e1",
 }
 DENEVIL_PROMPT_FAMILY_ORDER = [
@@ -174,7 +174,7 @@ TEXT_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-text
 IMAGE_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-image-expansion"
 
 MODEL_ORDER = ["Qwen", "DeepSeek", "Gemma"]
-FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "GPT-4o mini", "OpenAI GPT-5"]
+FULL_MODEL_FAMILY_ORDER = ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma", "OpenAI GPT-5", "OpenAI Ref"]
 BENCHMARK_ORDER = ["UniMoral", "SMID", "Value Kaleidoscope", "CCD-Bench", "Denevil"]
 FAMILY_SIZE_STATUS_COLUMNS = ["unimoral", "smid", "value_kaleidoscope", "ccd_bench", "denevil"]
 FAMILY_SIZE_STATUS_LABELS = {
@@ -185,7 +185,7 @@ FAMILY_SIZE_STATUS_LABELS = {
     "denevil": "Denevil",
 }
 BENCHMARK_TASK_COUNTS = {
-    "UniMoral": 1,
+    "UniMoral": 4,
     "SMID": 2,
     "Value Kaleidoscope": 2,
     "CCD-Bench": 1,
@@ -193,6 +193,9 @@ BENCHMARK_TASK_COUNTS = {
 }
 TASK_EXPECTED_SAMPLE_TOTALS = {
     "unimoral_action_prediction": 8784,
+    "unimoral_moral_typology": 3492,
+    "unimoral_factor_attribution": 3492,
+    "unimoral_consequence_generation": 1782,
     "smid_moral_rating": 2941,
     "smid_foundation_classification": 2941,
     "value_prism_relevance": 43680,
@@ -211,6 +214,11 @@ COMPARABLE_METRIC_SPECS = [
     ("UniMoral", "unimoral_action_accuracy", "Action prediction accuracy"),
     ("SMID", "smid_average_accuracy", "Average of moral rating and foundation classification"),
     ("Value Kaleidoscope", "value_average_accuracy", "Average of relevance and valence accuracy"),
+]
+VISUAL_COMPARABLE_METRIC_SPECS = [
+    (benchmark, field, scope)
+    for benchmark, field, scope in COMPARABLE_METRIC_SPECS
+    if benchmark != "UniMoral"
 ]
 COVERAGE_METRIC_SPECS = [
     (
@@ -246,15 +254,15 @@ CCD_OPTION_COLORS = {
     9: "#bcbd22",
     10: "#17becf",
 }
-OPENAI_REFERENCE_LINE_LABEL = "GPT-4o mini"
-OPENAI_REFERENCE_FAMILY_LABEL = "GPT-4o mini"
+OPENAI_REFERENCE_LINE_LABEL = "GPT-4o-mini Ref"
+OPENAI_REFERENCE_FAMILY_LABEL = "OpenAI Ref"
 OPENAI_GPT5_FAMILY_LABEL = "OpenAI GPT-5"
-OPENAI_BATCH_REFERENCE_FAMILY_LABEL = "OpenAI Batch refs"
-LEGACY_OPENAI_REFERENCE_LINE_LABELS = {"OpenAI-Ref", "GPT4 only"}
 OPENAI_REFERENCE_ROUTE = "openai/gpt-4o-mini (Responses API + Batch API; text-only reference)"
 OPENAI_REFERENCE_NOTE = (
-    "One-model GPT-4o mini text reference line; SMID and DeNEVIL are intentionally not run, "
-    "so this is a reference marker rather than S/M/L scaling evidence."
+    "OpenAI text-only reference marker outside the GPT-5 S/M/L series."
+)
+OPENAI_GPT5_NOTE = (
+    "OpenAI GPT-5 text-only S/M/L reference slot; no SMID or DeNEVIL route."
 )
 OPENAI_REFERENCE_TOTAL_SAMPLES = 76486
 OPENAI_REFERENCE_PARSED_SAMPLES = 76486
@@ -278,32 +286,26 @@ OPENAI_REFERENCE_CCD_CLUSTER_COUNTS = {
     9: 160,
     10: 182,
 }
-OPENAI_TEXT_REFERENCE_SPECS = [
+OPENAI_TEXT_REFERENCE_SPECS: list[dict[str, Any]] = [
     {
         "line_label": OPENAI_REFERENCE_LINE_LABEL,
         "family": OPENAI_REFERENCE_FAMILY_LABEL,
         "size_slot": "Ref",
         "route": OPENAI_REFERENCE_ROUTE,
-        "note": OPENAI_REFERENCE_NOTE,
-        "comparison_note": "GPT-4o mini text reference marker; SMID and DeNEVIL intentionally not run.",
-        "total_samples": OPENAI_REFERENCE_TOTAL_SAMPLES,
-        "parsed_samples": OPENAI_REFERENCE_PARSED_SAMPLES,
         "unimoral_action_accuracy": OPENAI_REFERENCE_UNIMORAL_ACCURACY,
         "value_relevance_accuracy": OPENAI_REFERENCE_VALUE_RELEVANCE_ACCURACY,
         "value_valence_accuracy": OPENAI_REFERENCE_VALUE_VALENCE_ACCURACY,
         "ccd_total": OPENAI_REFERENCE_CCD_TOTAL,
         "ccd_valid": OPENAI_REFERENCE_CCD_VALID,
         "ccd_cluster_counts": OPENAI_REFERENCE_CCD_CLUSTER_COUNTS,
+        "note": OPENAI_REFERENCE_NOTE,
+        "comparison_note": "GPT-4o-mini Ref text-only OpenAI reference; outside the GPT-5 S/M/L series.",
     },
     {
         "line_label": "GPT-5 nano",
         "family": OPENAI_GPT5_FAMILY_LABEL,
         "size_slot": "S",
         "route": "openai/gpt-5-nano (Responses API + Batch API; text-only reference)",
-        "note": "OpenAI GPT-5 text-only S slot; S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5; SMID and DeNEVIL intentionally not run.",
-        "comparison_note": "OpenAI GPT-5 text-only S slot; SMID and DeNEVIL intentionally not run.",
-        "total_samples": 76_486,
-        "parsed_samples": 76_401,
         "unimoral_action_accuracy": 5741 / 8784,
         "value_relevance_accuracy": 26284 / 43680,
         "value_valence_accuracy": 13817 / 21840,
@@ -321,16 +323,14 @@ OPENAI_TEXT_REFERENCE_SPECS = [
             9: 259,
             10: 83,
         },
+        "note": OPENAI_GPT5_NOTE,
+        "comparison_note": "GPT-5 nano text-only OpenAI GPT-5 S slot; no SMID or DeNEVIL route.",
     },
     {
-        "line_label": "GPT-4.1 nano",
-        "family": OPENAI_BATCH_REFERENCE_FAMILY_LABEL,
+        "line_label": "GPT-4.1-nano Ref",
+        "family": OPENAI_REFERENCE_FAMILY_LABEL,
         "size_slot": "Ref",
         "route": "openai/gpt-4.1-nano (Responses API + Batch API; text-only reference)",
-        "note": "OpenAI text-only Batch API reference line; SMID and DeNEVIL intentionally not run.",
-        "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
-        "total_samples": 76_486,
-        "parsed_samples": 76_466,
         "unimoral_action_accuracy": 5677 / 8784,
         "value_relevance_accuracy": 29337 / 43680,
         "value_valence_accuracy": 14730 / 21840,
@@ -348,16 +348,14 @@ OPENAI_TEXT_REFERENCE_SPECS = [
             9: 185,
             10: 156,
         },
+        "note": OPENAI_REFERENCE_NOTE,
+        "comparison_note": "GPT-4.1-nano Ref text-only OpenAI reference; outside the GPT-5 S/M/L series.",
     },
     {
         "line_label": "GPT-5 mini",
         "family": OPENAI_GPT5_FAMILY_LABEL,
         "size_slot": "M",
         "route": "openai/gpt-5-mini (Responses API + Batch API; text-only reference)",
-        "note": "OpenAI GPT-5 text-only M slot; S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5; SMID and DeNEVIL intentionally not run.",
-        "comparison_note": "OpenAI GPT-5 text-only M slot; SMID and DeNEVIL intentionally not run.",
-        "total_samples": 76_486,
-        "parsed_samples": 76_464,
         "unimoral_action_accuracy": 5955 / 8784,
         "value_relevance_accuracy": 32186 / 43680,
         "value_valence_accuracy": 16182 / 21840,
@@ -375,43 +373,14 @@ OPENAI_TEXT_REFERENCE_SPECS = [
             9: 280,
             10: 90,
         },
-    },
-    {
-        "line_label": "GPT-4.1 mini",
-        "family": OPENAI_BATCH_REFERENCE_FAMILY_LABEL,
-        "size_slot": "Ref",
-        "route": "openai/gpt-4.1-mini (Responses API + Batch API; text-only reference)",
-        "note": "OpenAI text-only Batch API reference line; SMID and DeNEVIL intentionally not run.",
-        "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
-        "total_samples": 76_486,
-        "parsed_samples": 76_486,
-        "unimoral_action_accuracy": 5968 / 8784,
-        "value_relevance_accuracy": 31726 / 43680,
-        "value_valence_accuracy": 16237 / 21840,
-        "ccd_total": 2182,
-        "ccd_valid": 2182,
-        "ccd_cluster_counts": {
-            1: 312,
-            2: 148,
-            3: 169,
-            4: 132,
-            5: 130,
-            6: 489,
-            7: 243,
-            8: 205,
-            9: 227,
-            10: 127,
-        },
+        "note": OPENAI_GPT5_NOTE,
+        "comparison_note": "GPT-5 mini text-only OpenAI GPT-5 M slot; no SMID or DeNEVIL route.",
     },
     {
         "line_label": "GPT-5.5",
         "family": OPENAI_GPT5_FAMILY_LABEL,
         "size_slot": "L",
         "route": "openai/gpt-5.5 (Responses API + Batch API; text-only reference)",
-        "note": "OpenAI GPT-5 text-only L slot; L is GPT-5.5. Same eligible task set as the other OpenAI text references, with SMID and DeNEVIL intentionally not run.",
-        "comparison_note": "OpenAI GPT-5 text-only L slot; L is GPT-5.5; SMID and DeNEVIL intentionally not run.",
-        "total_samples": 76_486,
-        "parsed_samples": 76_486,
         "unimoral_action_accuracy": 6005 / 8784,
         "value_relevance_accuracy": 31706 / 43680,
         "value_valence_accuracy": 16280 / 21840,
@@ -429,12 +398,68 @@ OPENAI_TEXT_REFERENCE_SPECS = [
             9: 233,
             10: 102,
         },
+        "note": OPENAI_GPT5_NOTE,
+        "comparison_note": "GPT-5.5 text-only OpenAI GPT-5 L slot; no SMID or DeNEVIL route.",
+    },
+    {
+        "line_label": "GPT-4.1-mini Ref",
+        "family": OPENAI_REFERENCE_FAMILY_LABEL,
+        "size_slot": "Ref",
+        "route": "openai/gpt-4.1-mini (Responses API + Batch API; text-only reference)",
+        "unimoral_action_accuracy": 5968 / 8784,
+        "value_relevance_accuracy": 31726 / 43680,
+        "value_valence_accuracy": 16237 / 21840,
+        "ccd_total": 2182,
+        "ccd_valid": 2182,
+        "ccd_cluster_counts": {
+            1: 312,
+            2: 148,
+            3: 169,
+            4: 132,
+            5: 130,
+            6: 489,
+            7: 243,
+            8: 205,
+            9: 227,
+            10: 127,
+        },
+        "note": OPENAI_REFERENCE_NOTE,
+        "comparison_note": "GPT-4.1-mini Ref text-only OpenAI reference; outside the GPT-5 S/M/L series.",
     },
 ]
-OPENAI_REFERENCE_LINE_LABELS = {str(spec["line_label"]) for spec in OPENAI_TEXT_REFERENCE_SPECS}
-OPENAI_REFERENCE_SPEC_BY_LINE = {
-    str(spec["line_label"]): spec for spec in OPENAI_TEXT_REFERENCE_SPECS
+OPENAI_TEXT_LINE_LABELS = {spec["line_label"] for spec in OPENAI_TEXT_REFERENCE_SPECS}
+OPENAI_REFERENCE_LINE_LABELS = OPENAI_TEXT_LINE_LABELS
+OPENAI_REF_ONLY_LINE_LABELS = {
+    spec["line_label"]
+    for spec in OPENAI_TEXT_REFERENCE_SPECS
+    if spec["family"] == OPENAI_REFERENCE_FAMILY_LABEL
 }
+OPENAI_GPT5_LINE_LABELS = {
+    spec["line_label"]
+    for spec in OPENAI_TEXT_REFERENCE_SPECS
+    if spec["family"] == OPENAI_GPT5_FAMILY_LABEL
+}
+OPENAI_TEXT_REFERENCE_COMPARISON_NOTES = {
+    spec["line_label"]: spec["comparison_note"]
+    for spec in OPENAI_TEXT_REFERENCE_SPECS
+}
+OPENAI_REFERENCE_LINE_ORDER = {
+    spec["line_label"]: index
+    for index, spec in enumerate(OPENAI_TEXT_REFERENCE_SPECS)
+}
+LEGACY_OPENAI_REFERENCE_LINE_LABELS = {
+    "OpenAI-Ref",
+    "GPT4 only",
+    "GPT-4o mini",
+    "GPT-5 nano",
+    "GPT-5-nano Ref",
+    "GPT-4.1 nano",
+    "GPT-5 mini",
+    "GPT-5-mini Ref",
+    "GPT-5.5",
+    "GPT-4.1 mini",
+}
+ALL_OPENAI_REFERENCE_LINE_LABELS = OPENAI_TEXT_LINE_LABELS | LEGACY_OPENAI_REFERENCE_LINE_LABELS
 
 BENCHMARK_METADATA = {
     "UniMoral": {
@@ -450,11 +475,11 @@ BENCHMARK_METADATA = {
             "unimoral_factor_attribution",
             "unimoral_consequence_generation",
         ],
-        "current_release_scope": "Action prediction only",
+        "current_release_scope": "Action prediction, moral typology, factor attribution, and consequence generation",
         "dataset_note": "This repo still expects a local export path via UNIMORAL_DATA_DIR.",
         "paper_focus": "A unified multilingual moral-reasoning resource spanning action choice, typology, factor attribution, and consequence generation under culturally varied dilemmas.",
-        "repo_readout": "The public release currently scores action prediction only: given a dilemma and two candidate actions, select the crowd-endorsed action.",
-        "release_interpretation": "A high UniMoral score means the model tracks consensus action choices across multilingual moral dilemmas. It does not by itself show equal strength on moral typology, factor attribution, or consequence generation.",
+        "repo_readout": "The code now implements all four UniMoral task definitions: action prediction, moral typology classification, factor attribution, and consequence generation. The UniMoral coverage artifacts record which model-line cells completed cleanly.",
+        "release_interpretation": "Action prediction remains the original comparable UniMoral scalar in the legacy topline table and is near-saturated; the added UniMoral artifacts expose typology, attribution, and generation separately, with incomplete or parse-limited provider cells tracked in the failure checklist.",
     },
     "SMID": {
         "paper_title": "The Socio-Moral Image Database (SMID): A Novel Stimulus Set for the Study of Social, Moral, and Affective Processes",
@@ -630,7 +655,7 @@ MODEL_ROUTE_METADATA = {
     "openrouter/qwen/qwen3-8b": {
         "size_hint": "8B",
         "modality": "Text",
-        "note": "Closed-slice text route for UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy.",
+        "note": "Closed-slice text route for UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy.",
     },
     "openrouter/qwen/qwen3-vl-8b-instruct": {
         "size_hint": "8B VL",
@@ -655,7 +680,7 @@ FUTURE_MODEL_PLAN = [
         "closed_release_status": "Included in Option 1",
         "current_route": "qwen3-8b + qwen3-vl-8b-instruct",
         "small_candidate": "Current 8B text + 8B vision routes complete in the release",
-        "medium_candidate": "openrouter/qwen/qwen3-14b completed locally across UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy",
+        "medium_candidate": "openrouter/qwen/qwen3-14b completed locally across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy",
         "large_candidate": "text: openrouter/qwen/qwen3-32b complete locally; vision: openrouter/qwen/qwen2.5-vl-72b-instruct (SMID recovery complete)",
         "next_step": "Decide whether to promote the completed Qwen medium and large evidence into the next authoritative snapshot.",
     },
@@ -663,8 +688,8 @@ FUTURE_MODEL_PLAN = [
         "family": "MiniMax",
         "closed_release_status": "Public matrix now includes the completed direct-provider rerun",
         "current_route": "text: minimax-m2.1 and minimax-m2.5; shared SMID recovery: minimax-01",
-        "small_candidate": "MiniMax-M2.1 direct-provider text rerun is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the prior MiniMax-01 recovery route",
-        "medium_candidate": "MiniMax-M2.5 clean text/proxy rerun is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no distinct medium SMID route is fixed yet",
+        "small_candidate": "MiniMax-M2.1 direct-provider text rerun is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the prior MiniMax-01 recovery route",
+        "medium_candidate": "MiniMax-M2.5 clean text/proxy rerun is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no distinct medium SMID route is fixed yet",
         "large_candidate": "The MiniMax-M2.5 text rerun now carries the public MiniMax-M line for text/proxy benchmarks, while SMID remains unavailable for that medium slot rather than borrowed from another route",
         "next_step": "Decide whether a separate MiniMax-M1 pass or a distinct medium SMID route is still worth paying for; no published MiniMax-M2.5 text/proxy line remains active.",
     },
@@ -672,9 +697,9 @@ FUTURE_MODEL_PLAN = [
         "family": "DeepSeek",
         "closed_release_status": "Included in Option 1",
         "current_route": "deepseek-chat-v3.1",
-        "small_candidate": "openrouter/deepseek/deepseek-r1-distill-llama-70b completed locally in the May 9 no-thinking text rerun, with UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy results parsed from saved logs",
+        "small_candidate": "openrouter/deepseek/deepseek-r1-distill-llama-70b completed locally in the May 9 no-thinking text rerun, with UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy results parsed from saved logs",
         "medium_candidate": "openrouter/deepseek/deepseek-chat-v3.1 already complete in the closed release",
-        "large_candidate": "openrouter/deepseek/deepseek-r1 completed locally across UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy from saved shard logs",
+        "large_candidate": "openrouter/deepseek/deepseek-r1 completed locally across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy from saved shard logs",
         "next_step": "Decide whether the completed DeepSeek-S and DeepSeek-L text-only reruns should be promoted into the next authoritative snapshot despite the missing SMID route.",
     },
     {
@@ -1101,7 +1126,7 @@ SUPPLEMENTARY_MODEL_PROGRESS = [
         "benchmark_faithful_macro_accuracy": 0.376442,
         "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
         "missing_benchmark_lines": "Benchmark-faithful Denevil via MoralPrompt",
-        "note": "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy from saved local shards.",
+        "note": "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy from saved local shards.",
     },
 ]
 
@@ -1144,7 +1169,7 @@ LOCAL_EXPANSION_CHECKPOINT = [
     {
         "line": "DeepSeek-L R1 text batch",
         "status": "done",
-        "note": "Saved R1 shards now cover UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy; no SMID route exists.",
+        "note": "Saved R1 shards now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy; no SMID route exists.",
     },
     {
         "line": "Llama-L SMID",
@@ -1274,7 +1299,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "done",
         "ccd_bench": "done",
         "denevil": "proxy",
-        "summary_note": "No SMID route; large R1 text rerun is complete from saved shards with UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed.",
+        "summary_note": "No SMID route; large R1 text rerun is complete from saved shards with UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed.",
     },
     {
         "family": "Llama",
@@ -1403,14 +1428,14 @@ CURRENT_RESULT_LINES = [
         "line_label": "Qwen-M",
         "scope": "Complete local line",
         "status": "done",
-        "coverage": "Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint",
+        "coverage": "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint",
         "note": "Clean text rerun finished locally after the withdrawn short-answer artifacts.",
     },
     {
         "line_label": "Qwen-L",
         "scope": "Complete local line",
         "status": "done",
-        "coverage": "SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint",
+        "coverage": "SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint",
         "note": "SMID recovery complete; clean text rerun finished locally.",
     },
     {
@@ -1424,21 +1449,21 @@ CURRENT_RESULT_LINES = [
         "line_label": "DeepSeek-L",
         "scope": "Complete local line",
         "status": "done",
-        "coverage": "No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed from saved R1 shards",
+        "coverage": "No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed from saved R1 shards",
         "note": "Large R1 text rerun complete from saved logs; keep it text-only because no SMID route exists.",
     },
     {
         "line_label": "Llama-L",
         "scope": "Complete local line",
         "status": "done",
-        "coverage": "SMID complete; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%.",
+        "coverage": "SMID complete; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%.",
         "note": "SMID complete; local text rerun finished successfully through the Denevil proxy task.",
     },
     {
         "line_label": "DeepSeek-S",
         "scope": "Complete local line",
         "status": "done",
-        "coverage": "No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs",
+        "coverage": "No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs",
         "note": "May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot.",
     },
     {
@@ -1571,7 +1596,7 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         "size_slot": "S",
         "route": "text: minimax-m2.1 via direct MiniMax API; vision: minimax-01 recovery route",
         "merge_shards": True,
-        "coverage_note": "MiniMax-S direct-provider text rerun is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID reuses the completed MiniMax-01 recovery route.",
+        "coverage_note": "MiniMax-S direct-provider text rerun is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID reuses the completed MiniMax-01 recovery route.",
         "task_sources": MINIMAX_SMALL_DIRECT_TASK_SOURCES,
     },
     {
@@ -1580,7 +1605,7 @@ LOCAL_COMPARISON_LINE_SOURCES = [
         "size_slot": "M",
         "route": "text: minimax-m2.5 via direct MiniMax API clean run; medium SMID route TBD",
         "merge_shards": True,
-        "coverage_note": "Clean MiniMax-M2.5 text run is active; publish completed/partial provenance but do not treat it as a completed comparable line until UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy are all complete.",
+        "coverage_note": "Clean MiniMax-M2.5 text run is active; publish completed/partial provenance but do not treat it as a completed comparable line until UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy are all complete.",
         "task_sources": MINIMAX_MEDIUM_CLEAN_TASK_SOURCES,
     },
     {
@@ -1808,14 +1833,13 @@ reroot_task_source_rows(AUTHORITATIVE_COMPARISON_LINES.values())
 reroot_task_source_rows(LOCAL_COMPARISON_LINE_SOURCES)
 
 FAMILY_COLOR_SCALES = {
-    "Qwen": {"S": "#0f766e", "M": "#0d9488", "L": "#2dd4bf"},
-    "DeepSeek": {"S": "#1d4ed8", "M": "#2563eb", "L": "#60a5fa"},
-    "Llama": {"S": "#c2410c", "M": "#ea580c", "L": "#fb923c"},
-    "Gemma": {"S": "#6d28d9", "M": "#8b5cf6", "L": "#c4b5fd"},
-    "MiniMax": {"S": "#b45309", "M": "#d97706", "L": "#fbbf24"},
-    OPENAI_REFERENCE_FAMILY_LABEL: {"Ref": "#111827"},
+    "Qwen": {"S": "#8fc7bd", "M": "#65b8ac", "L": "#3fc7b8"},
+    "DeepSeek": {"S": "#94b8e8", "M": "#78a8e6", "L": "#a8c7f0"},
+    "Llama": {"S": "#f87171", "M": "#dc2626", "L": "#991b1b"},
+    "Gemma": {"S": "#b8a5df", "M": "#a996e3", "L": "#cfc3f0"},
+    "MiniMax": {"S": "#d4a46e", "M": "#e0ad68", "L": "#f3cf82"},
     OPENAI_GPT5_FAMILY_LABEL: {"S": "#be123c", "M": "#e11d48", "L": "#fb7185"},
-    OPENAI_BATCH_REFERENCE_FAMILY_LABEL: {"Ref": "#334155"},
+    OPENAI_REFERENCE_FAMILY_LABEL: {"Ref": "#9ca3af"},
 }
 
 STATUS_DISPLAY = {
@@ -2575,7 +2599,7 @@ def _apply_live_monitor_snapshot() -> None:
     deepseek_stage_note = ""
     minimax_stage_note = ""
     qwen_medium_current_coverage = (
-        f"Earlier text checkpoints withdrawn; UniMoral done; live rerun holds a "
+        f"Earlier text checkpoints withdrawn; UniMoral action prediction done; live rerun holds a "
         f"{qwen_medium['progress_pct']:.1f}% persisted Value Prism Relevance checkpoint"
     )
     qwen_medium_line_suffix = (
@@ -2633,7 +2657,7 @@ def _apply_live_monitor_snapshot() -> None:
         qwen_large_local_checkpoint_status = "done"
         qwen_large_local_checkpoint_note = qwen_large_current_note
     qwen_large_current_coverage = (
-        "SMID recovery stands; UniMoral done; live rerun holds a "
+        "SMID recovery stands; UniMoral action prediction done; live rerun holds a "
         f"{qwen_large['progress_pct']:.1f}% persisted Value Prism Relevance checkpoint"
     )
     qwen_large_line_suffix = (
@@ -2652,7 +2676,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"{_checkpoint_task_phrase(qwen_medium_valence)}."
         )
         qwen_medium_current_coverage = (
-            "Earlier text checkpoints withdrawn; UniMoral done; Value Prism Relevance is fully persisted; "
+            "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Prism Relevance is fully persisted; "
             f"Value Prism Valence holds a {qwen_medium_valence['progress_pct']:.1f}% persisted checkpoint"
         )
         qwen_medium_line_suffix = (
@@ -2677,7 +2701,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"the current saved archive there has reached {_checkpoint_task_phrase(qwen_medium_ccd)}."
         )
         qwen_medium_current_coverage = (
-            "Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope is fully persisted; "
+            "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope is fully persisted; "
             f"CCD-Bench holds a {qwen_medium_ccd['progress_pct']:.1f}% persisted checkpoint"
         )
         if qwen_medium_valence is not None and qwen_medium_valence["completed"] > 0:
@@ -2711,7 +2735,7 @@ def _apply_live_monitor_snapshot() -> None:
             " Qwen-M has now fully persisted CCD-Bench, and it has already moved into the Denevil proxy task"
         )
         qwen_medium_current_coverage = (
-            "Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; "
+            "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; "
             "Denevil proxy has started"
         )
         if qwen_medium_denevil is not None and qwen_medium_denevil["completed"] > 0:
@@ -2720,7 +2744,7 @@ def _apply_live_monitor_snapshot() -> None:
                 f"{_checkpoint_task_phrase(qwen_medium_denevil)}."
             )
             qwen_medium_current_coverage = (
-                "Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully "
+                "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully "
                 f"persisted; Denevil proxy holds a {qwen_medium_denevil['progress_pct']:.1f}% persisted checkpoint"
             )
             if qwen_medium_valence is not None and qwen_medium_ccd is not None:
@@ -2745,7 +2769,7 @@ def _apply_live_monitor_snapshot() -> None:
         ).strip()
     if qwen_medium_stopped_partial:
         qwen_medium_current_coverage = (
-            "Earlier text checkpoints withdrawn; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; "
+            "Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; "
             "Denevil proxy remains partial after the latest non-success exit"
         )
         qwen_medium_line_suffix = (
@@ -2764,12 +2788,12 @@ def _apply_live_monitor_snapshot() -> None:
         )
         if qwen_large["completed"] == qwen_large["total"]:
             qwen_large_current_coverage = (
-                "SMID recovery stands; UniMoral done; Value Prism Relevance is fully persisted; "
+                "SMID recovery stands; UniMoral action prediction done; Value Prism Relevance is fully persisted; "
                 f"Value Prism Valence holds a {qwen_large_valence['progress_pct']:.1f}% persisted checkpoint"
             )
         else:
             qwen_large_current_coverage = (
-                "SMID recovery stands; UniMoral done; the best Value Prism Relevance rerun checkpoint still tops out at "
+                "SMID recovery stands; UniMoral action prediction done; the best Value Prism Relevance rerun checkpoint still tops out at "
                 f"{qwen_large['progress_pct']:.1f}%; Value Prism Valence holds a "
                 f"{qwen_large_valence['progress_pct']:.1f}% persisted checkpoint"
             )
@@ -2796,7 +2820,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"the current saved archive there has reached {_checkpoint_task_phrase(qwen_large_ccd)}."
         )
         qwen_large_current_coverage = (
-            "SMID recovery stands; UniMoral done; Value Kaleidoscope is fully persisted; "
+            "SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope is fully persisted; "
             f"CCD-Bench holds a {qwen_large_ccd['progress_pct']:.1f}% persisted checkpoint"
         )
         if qwen_large_valence is not None and qwen_large_valence["completed"] > 0:
@@ -2819,7 +2843,7 @@ def _apply_live_monitor_snapshot() -> None:
             " Qwen-L has now fully persisted CCD-Bench, and it has already moved into the Denevil proxy task"
         )
         qwen_large_current_coverage = (
-            "SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; "
+            "SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; "
             "Denevil proxy has started"
         )
         if qwen_large_denevil is not None and qwen_large_denevil["completed"] > 0:
@@ -2828,7 +2852,7 @@ def _apply_live_monitor_snapshot() -> None:
                 f"{_checkpoint_task_phrase(qwen_large_denevil)}."
             )
             qwen_large_current_coverage = (
-                "SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; "
+                "SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; "
                 f"Denevil proxy holds a {qwen_large_denevil['progress_pct']:.1f}% persisted checkpoint"
             )
             if qwen_large_valence is not None and qwen_large_ccd is not None:
@@ -2854,7 +2878,7 @@ def _apply_live_monitor_snapshot() -> None:
         ).strip()
     if qwen_large_stopped_partial:
         qwen_large_current_coverage = (
-            "SMID recovery stands; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy "
+            "SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy "
             "remains partial after the latest non-success exit"
         )
         qwen_large_line_suffix = (
@@ -2868,7 +2892,7 @@ def _apply_live_monitor_snapshot() -> None:
             "output on disk, but the latest attempt is currently stopped after a non-success exit."
         )
     llama_current_coverage = (
-        f"UniMoral done; live rerun holds a {llama_medium['progress_pct']:.1f}% persisted Value Prism Relevance checkpoint"
+        f"UniMoral action prediction done; live rerun holds a {llama_medium['progress_pct']:.1f}% persisted Value Prism Relevance checkpoint"
     )
     llama_line_suffix = (
         f"{_checkpoint_task_phrase(llama_medium).replace(' Value Prism Relevance', '')}, and the rerun is active again "
@@ -2880,7 +2904,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"{_checkpoint_task_phrase(llama_valence)}."
         )
         llama_current_coverage = (
-            "UniMoral done; Value Prism Relevance is fully persisted; "
+            "UniMoral action prediction done; Value Prism Relevance is fully persisted; "
             f"Value Prism Valence holds a {llama_valence['progress_pct']:.1f}% persisted checkpoint"
         )
         llama_line_suffix = (
@@ -2899,7 +2923,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"the current saved archive there has reached {_checkpoint_task_phrase(llama_ccd)}."
         )
         llama_current_coverage = (
-            "UniMoral done; Value Prism is fully persisted; "
+            "UniMoral action prediction done; Value Prism is fully persisted; "
             f"CCD-Bench holds a {llama_ccd['progress_pct']:.1f}% persisted checkpoint"
         )
         if llama_valence is not None and llama_valence["completed"] > 0:
@@ -2917,14 +2941,14 @@ def _apply_live_monitor_snapshot() -> None:
             )
     if llama_latest is not None and llama_latest["task"] == "denevil_fulcra_proxy_generation":
         llama_stage_note = " Llama-M has now fully persisted CCD-Bench, and it has already moved into the Denevil proxy task"
-        llama_current_coverage = "UniMoral done; Value Prism and CCD-Bench are fully persisted; Denevil proxy has started"
+        llama_current_coverage = "UniMoral action prediction done; Value Prism and CCD-Bench are fully persisted; Denevil proxy has started"
         if llama_denevil is not None and llama_denevil["completed"] > 0:
             llama_stage_note = (
                 f"{llama_stage_note}; the current saved archive there has reached "
                 f"{_checkpoint_task_phrase(llama_denevil)}."
             )
             llama_current_coverage = (
-                "UniMoral done; Value Prism and CCD-Bench are fully persisted; "
+                "UniMoral action prediction done; Value Prism and CCD-Bench are fully persisted; "
                 f"Denevil proxy holds a {llama_denevil['progress_pct']:.1f}% persisted checkpoint"
             )
             if llama_valence is not None and llama_valence["completed"] > 0 and llama_ccd is not None:
@@ -3027,7 +3051,7 @@ def _apply_live_monitor_snapshot() -> None:
                     f"and Denevil proxy has already reached {deepseek_denevil['progress_pct']:.1f}% persisted coverage."
                 )
                 deepseek_current_coverage = (
-                    "No vision route; UniMoral, Value Kaleidoscope, and CCD-Bench are fully persisted; "
+                    "No vision route; UniMoral action prediction, Value Kaleidoscope, and CCD-Bench are fully persisted; "
                     f"Denevil proxy holds a {deepseek_denevil['progress_pct']:.1f}% persisted checkpoint"
                 )
             else:
@@ -3110,7 +3134,7 @@ def _apply_live_monitor_snapshot() -> None:
             deepseek_local_checkpoint_status = "done"
             if deepseek_denevil is not None and deepseek_denevil["completed"] > 0:
                 deepseek_current_coverage = (
-                    "No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy archives are persisted, "
+                    "No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy archives are persisted, "
                     "with the public readout refreshed from the May 9 no-thinking saved logs."
                 )
                 deepseek_current_note = (
@@ -3688,13 +3712,13 @@ def _apply_live_monitor_snapshot() -> None:
     llama_large_note = "SMID complete; current text rerun active."
     llama_large_coverage = "SMID complete; text rerun active."
     if llama_large_unimoral is not None and llama_large_unimoral["status"] == "success":
-        llama_large_coverage = "SMID complete; UniMoral done; text rerun active."
+        llama_large_coverage = "SMID complete; UniMoral action prediction done; text rerun active."
     if llama_large_completed and llama_large_denevil is not None:
         llama_large_note = (
             "SMID complete; local text rerun finished successfully through the Denevil proxy task."
         )
         llama_large_coverage = (
-            "SMID complete; UniMoral done; Value Kaleidoscope and CCD-Bench are fully persisted; "
+            "SMID complete; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; "
             f"Denevil proxy finished at {llama_large_denevil['progress_pct']:.1f}%."
         )
     elif llama_large_active_rerun and llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
@@ -3703,7 +3727,7 @@ def _apply_live_monitor_snapshot() -> None:
             f"{llama_large_value_relevance['progress_pct']:.1f}%, and the current text rerun is active again."
         )
         llama_large_coverage = (
-            "SMID complete; UniMoral done; the best saved Value Prism Relevance checkpoint still holds at a "
+            "SMID complete; UniMoral action prediction done; the best saved Value Prism Relevance checkpoint still holds at a "
             f"{llama_large_value_relevance['progress_pct']:.1f}% persisted checkpoint while the rerun is active again."
         )
     elif llama_large_value_relevance is not None and llama_large_value_relevance["completed"] > 0:
@@ -3718,7 +3742,7 @@ def _apply_live_monitor_snapshot() -> None:
                 f"{llama_large_value_relevance['progress_pct']:.1f}% Value Prism Relevance checkpoint."
             )
         llama_large_coverage = (
-            "SMID complete; UniMoral done; Value Prism Relevance preserved a "
+            "SMID complete; UniMoral action prediction done; Value Prism Relevance preserved a "
             f"{llama_large_value_relevance['progress_pct']:.1f}% checkpoint before the run stalled."
         )
     elif llama_large_denevil is not None and llama_large_denevil["completed"] > 0:
@@ -3729,7 +3753,7 @@ def _apply_live_monitor_snapshot() -> None:
         )
     elif llama_large_unimoral is not None and llama_large_unimoral["completed"] > 0:
         llama_large_note = "SMID complete; UniMoral is already persisted, but later text tasks are still incomplete."
-        llama_large_coverage = "SMID complete; UniMoral done; later text tasks remain incomplete."
+        llama_large_coverage = "SMID complete; UniMoral action prediction done; later text tasks remain incomplete."
     if llama_large_completed or llama_large_active_rerun or llama_large_unimoral is not None or llama_large_denevil is not None:
         _upsert_current_result_line(
             {
@@ -3743,7 +3767,7 @@ def _apply_live_monitor_snapshot() -> None:
         )
 
     if minimax_medium_active_rerun or minimax_medium_unimoral is not None:
-        minimax_medium_coverage = "No medium SMID route fixed yet; text rerun active on UniMoral."
+        minimax_medium_coverage = "No medium SMID route fixed yet; text rerun active on UniMoral action prediction."
         minimax_medium_note = "Text rerun active; the first UniMoral chunk has not flushed yet."
         if minimax_medium_unimoral is not None and minimax_medium_unimoral["completed"] > 0:
             minimax_medium_coverage = (
@@ -3798,7 +3822,7 @@ def _apply_live_monitor_snapshot() -> None:
             deepseek_current_scope = "Complete local line"
             deepseek_current_status = "done"
             deepseek_current_coverage = (
-                "No SMID route; UniMoral, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs"
+                "No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs"
             )
             deepseek_current_note = (
                 "May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot."
@@ -4262,7 +4286,7 @@ def _apply_minimax_pr6_public_release_patch() -> None:
         )
     elif value_complete and ccd_complete and denevil_complete:
         minimax_large_progress["summary_note"] = (
-            "Shared MiniMax-01 SMID recovery complete; UniMoral, Value Kaleidoscope test-only reruns, CCD-Bench, "
+            "Shared MiniMax-01 SMID recovery complete; UniMoral action prediction, Value Kaleidoscope test-only reruns, CCD-Bench, "
             "and the Denevil proxy archive are all persisted in saved local artifacts."
         )
     elif denevil_live and ccd_complete:
@@ -4421,7 +4445,7 @@ def _apply_minimax_pr6_public_release_patch() -> None:
                 "completed_benchmark_lines": "; ".join(completed_lines) if completed_lines else "None yet",
                 "missing_benchmark_lines": "; ".join(missing_lines),
                 "note": (
-                    "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy from saved local shards."
+                    "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy from saved local shards."
                     if completed
                     else "Shared MiniMax-01 SMID recovery is complete, UniMoral and CCD-Bench are complete, and the MiniMax-M2.5 text reruns are now active on Denevil proxy while Value Kaleidoscope remains queued on this pass."
                     if denevil_live and ccd_complete
@@ -4497,7 +4521,7 @@ def _apply_minimax_s_direct_public_release_patch() -> None:
     progress["ccd_bench"] = "done"
     progress["denevil"] = "proxy"
     progress["summary_note"] = (
-        "Direct MiniMax-M2.1 text rerun complete across UniMoral, Value Kaleidoscope, CCD-Bench, "
+        "Direct MiniMax-M2.1 text rerun complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, "
         "and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route."
     )
 
@@ -4515,7 +4539,7 @@ def _apply_minimax_s_direct_public_release_patch() -> None:
     )
     if comparison is not None:
         comparison["coverage_note"] = (
-            "Complete local MiniMax-S line: direct MiniMax-M2.1 text rerun for UniMoral, Value Kaleidoscope, "
+            "Complete local MiniMax-S line: direct MiniMax-M2.1 text rerun for UniMoral action prediction, Value Kaleidoscope, "
             "CCD-Bench, and the Denevil proxy; SMID comes from the completed MiniMax-01 recovery route."
         )
 
@@ -4604,7 +4628,7 @@ def _apply_minimax_m_clean_public_release_patch() -> None:
     progress["ccd_bench"] = status("ccd_bench_selection")
     progress["denevil"] = status("denevil_fulcra_proxy_generation", proxy=True)
     summary_prefix = (
-        "Clean direct MiniMax-M2.5 text run is complete across UniMoral, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet."
+        "Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet."
         if text_complete
         else "Clean direct MiniMax-M2.5 text run is active; no medium SMID route fixed yet."
         if active
@@ -4612,7 +4636,7 @@ def _apply_minimax_m_clean_public_release_patch() -> None:
     )
     progress["summary_note"] = (
         f"{summary_prefix} "
-        f"Build-time persisted text counts: UniMoral {completed('unimoral_action_prediction'):,}/{expected('unimoral_action_prediction'):,}; "
+        f"Build-time persisted text counts: UniMoral action prediction {completed('unimoral_action_prediction'):,}/{expected('unimoral_action_prediction'):,}; "
         f"Value {relevance_done + valence_done:,}/{expected('value_prism_relevance') + expected('value_prism_valence'):,}; "
         f"CCD {completed('ccd_bench_selection'):,}/{expected('ccd_bench_selection'):,}; "
         f"Denevil proxy {completed('denevil_fulcra_proxy_generation'):,}/{expected('denevil_fulcra_proxy_generation'):,}."
@@ -4911,7 +4935,7 @@ def filter_public_line_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         row
         for row in rows
         if row.get("line_label") not in PUBLIC_WITHHELD_LINES
-        and row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
+        and row.get("line_label") not in ALL_OPENAI_REFERENCE_LINE_LABELS
     ]
 
 
@@ -5694,7 +5718,7 @@ def published_ccd_choice_distribution_fallbacks() -> dict[str, dict[str, Any]]:
     fallbacks: dict[str, dict[str, Any]] = {}
     with path.open(newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle):
-            if row.get("line_label") in LEGACY_OPENAI_REFERENCE_LINE_LABELS:
+            if row.get("line_label") in ALL_OPENAI_REFERENCE_LINE_LABELS:
                 continue
             if row.get("distribution_status") != "ok":
                 continue
@@ -5816,7 +5840,7 @@ def published_benchmark_comparison_fallbacks() -> dict[str, dict[str, Any]]:
     with path.open(newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle):
             line_label = row["line_label"]
-            if line_label in LEGACY_OPENAI_REFERENCE_LINE_LABELS:
+            if line_label in ALL_OPENAI_REFERENCE_LINE_LABELS:
                 continue
             ccd = ccd_fallbacks.get(line_label, {})
             denevil = denevil_fallbacks.get(line_label, {})
@@ -6561,6 +6585,7 @@ def ordered_family_size_rows(
         key=lambda row: (
             family_order_index.get(str(row.get(family_key, "")), 99),
             SIZE_SLOT_INDEX.get(str(row.get(size_key, "")), 99),
+            OPENAI_REFERENCE_LINE_ORDER.get(str(row.get(label_key, "")), 99),
             str(row.get(label_key, "")),
         ),
     )
@@ -6590,31 +6615,31 @@ def family_group_spans(
 
 
 def openai_reference_value_average(spec: dict[str, Any]) -> float:
-    return mean([float(spec["value_relevance_accuracy"]), float(spec["value_valence_accuracy"])])
+    return mean([spec["value_relevance_accuracy"], spec["value_valence_accuracy"]])
 
 
 def openai_reference_benchmark_row(spec: dict[str, Any]) -> dict[str, Any]:
     return {
         "line_label": spec["line_label"],
-        "family": spec["family"],
-        "size_slot": spec["size_slot"],
+        "family": spec.get("family", OPENAI_REFERENCE_FAMILY_LABEL),
+        "size_slot": spec.get("size_slot", "Ref"),
         "route": spec["route"],
         "unimoral_action_accuracy": spec["unimoral_action_accuracy"],
         "smid_average_accuracy": None,
         "value_average_accuracy": openai_reference_value_average(spec),
-        "ccd_completion_coverage": int(spec["ccd_valid"]) / int(spec["ccd_total"]),
+        "ccd_completion_coverage": spec["ccd_valid"] / spec["ccd_total"],
         "ccd_completion_count": spec["ccd_valid"],
         "ccd_completion_total": spec["ccd_total"],
         "denevil_proxy_coverage": None,
         "denevil_proxy_count": None,
         "denevil_proxy_total": None,
-        "coverage_note": spec["note"],
+        "coverage_note": spec.get("note", OPENAI_REFERENCE_NOTE),
     }
 
 
 def openai_reference_ccd_distribution_row(spec: dict[str, Any]) -> dict[str, Any]:
     cluster_counts = spec["ccd_cluster_counts"]
-    ccd_valid = int(spec["ccd_valid"])
+    ccd_valid = spec["ccd_valid"]
     option_shares = {
         cluster_id: count / ccd_valid
         for cluster_id, count in cluster_counts.items()
@@ -6625,12 +6650,12 @@ def openai_reference_ccd_distribution_row(spec: dict[str, Any]) -> dict[str, Any
     )
     row = {
         "line_label": spec["line_label"],
-        "family": spec["family"],
-        "size_slot": spec["size_slot"],
+        "family": spec.get("family", OPENAI_REFERENCE_FAMILY_LABEL),
+        "size_slot": spec.get("size_slot", "Ref"),
         "route": spec["route"],
         "total_ccd_samples": spec["ccd_total"],
         "valid_selection_count": ccd_valid,
-        "valid_selection_rate": ccd_valid / int(spec["ccd_total"]),
+        "valid_selection_rate": ccd_valid / spec["ccd_total"],
         "dominant_option": _ccd_distribution_option_label(dominant_option),
         "dominant_option_share": option_shares[dominant_option],
         "effective_cluster_count": _effective_cluster_count(option_shares),
@@ -6644,17 +6669,15 @@ def openai_reference_ccd_distribution_row(spec: dict[str, Any]) -> dict[str, Any
 
 
 def openai_reference_ccd_coverage_row(spec: dict[str, Any]) -> dict[str, Any]:
-    ccd_valid = int(spec["ccd_valid"])
-    ccd_total = int(spec["ccd_total"])
     return {
         "line_label": spec["line_label"],
-        "family": spec["family"],
-        "size_slot": spec["size_slot"],
-        "total_ccd_samples": ccd_total,
-        "valid_selection_count": ccd_valid,
-        "valid_selection_rate": ccd_valid / ccd_total,
+        "family": spec.get("family", OPENAI_REFERENCE_FAMILY_LABEL),
+        "size_slot": spec.get("size_slot", "Ref"),
+        "total_ccd_samples": spec["ccd_total"],
+        "valid_selection_count": spec["ccd_valid"],
+        "valid_selection_rate": spec["ccd_valid"] / spec["ccd_total"],
         "coverage_status": "ok",
-        "coverage_note": f"valid {fmt_ratio(ccd_valid, ccd_total)}",
+        "coverage_note": f"valid {fmt_ratio(spec['ccd_valid'], spec['ccd_total'])}",
     }
 
 
@@ -6663,24 +6686,15 @@ def add_openai_reference_outputs(
     ccd_choice_distribution: list[dict[str, Any]],
     ccd_valid_choice_coverage: list[dict[str, Any]],
 ) -> None:
-    """Add completed OpenAI text-only Batch sweeps as reference markers."""
+    """Add completed OpenAI text-only sweeps as reference markers."""
     benchmark_comparison[:] = [
-        row
-        for row in benchmark_comparison
-        if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
-        and row.get("line_label") not in OPENAI_REFERENCE_LINE_LABELS
+        row for row in benchmark_comparison if row.get("line_label") not in ALL_OPENAI_REFERENCE_LINE_LABELS
     ]
     ccd_choice_distribution[:] = [
-        row
-        for row in ccd_choice_distribution
-        if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
-        and row.get("line_label") not in OPENAI_REFERENCE_LINE_LABELS
+        row for row in ccd_choice_distribution if row.get("line_label") not in ALL_OPENAI_REFERENCE_LINE_LABELS
     ]
     ccd_valid_choice_coverage[:] = [
-        row
-        for row in ccd_valid_choice_coverage
-        if row.get("line_label") not in LEGACY_OPENAI_REFERENCE_LINE_LABELS
-        and row.get("line_label") not in OPENAI_REFERENCE_LINE_LABELS
+        row for row in ccd_valid_choice_coverage if row.get("line_label") not in ALL_OPENAI_REFERENCE_LINE_LABELS
     ]
     for spec in OPENAI_TEXT_REFERENCE_SPECS:
         benchmark_comparison.append(openai_reference_benchmark_row(spec))
@@ -6868,9 +6882,8 @@ def build_readiness_tier_matrix(
 
 
 def comparable_snapshot_note(row: dict[str, Any]) -> str:
-    if row.get("line_label") in OPENAI_REFERENCE_LINE_LABELS:
-        spec = OPENAI_REFERENCE_SPEC_BY_LINE[str(row["line_label"])]
-        return str(spec["comparison_note"])
+    if row.get("line_label") in OPENAI_TEXT_LINE_LABELS:
+        return OPENAI_TEXT_REFERENCE_COMPARISON_NOTES[str(row["line_label"])]
     if (
         row.get("line_label") == "DeepSeek-S"
         and row["unimoral_action_accuracy"] is not None
@@ -8079,37 +8092,37 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
     if family == "Gemma":
         return (
             "Full S/M/L comparable sweep on all three comparable benchmarks.",
-            "Best evidence against a single universal scaling law in this repo: text benchmarks improve with size overall, while SMID is non-monotonic.",
+            "Gemma is the cleanest size test in this repo, and it still does not give a simple bigger-is-better story: text tasks improve overall, but SMID dips at M and rebounds at L.",
         )
     if family == "Llama":
         return (
             "Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence.",
-            "Llama improves sharply from the small line to the larger text routes and also gains on SMID from S to L, but the medium text line still beats the large line on some text metrics, so the pattern is broader than before without becoming fully monotonic.",
+            "Llama gets much better after the small line, especially on text, and S-to-L also helps SMID. But M still beats L on some text metrics, so the useful story is improvement after S, not a clean monotonic ladder.",
         )
     if family == "Qwen":
         return (
             "Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence after the recovered large line.",
-            "Qwen improves from S to M on text tasks and then largely plateaus at L, while the recovered large SMID line is much stronger than the small line. That supports task-specific scaling, not a single monotonic curve.",
+            "Qwen improves from S to M on text and then mostly plateaus. On SMID, the recovered L vision line is clearly stronger than S. That makes Qwen a case where scale helps some surfaces but not all of them.",
         )
     if family == "DeepSeek":
         return (
             "The S/M/L text lines are now accuracy-comparable where text-only metrics exist, but no DeepSeek slot has a public SMID route.",
-            "Read the DeepSeek size curve as text-only evidence: S and L now come from saved shard reruns, M remains the frozen closed-slice line, and all three still omit SMID.",
-        )
-    if family == OPENAI_REFERENCE_FAMILY_LABEL:
-        return (
-            "Single text-only reference point, not a family-size scaling sweep.",
-            "GPT-4o mini is plotted as a reference marker on UniMoral, Value Kaleidoscope, and CCD-Bench only; it should not be read as evidence about OpenAI family scaling or vision-side SMID performance.",
+            "DeepSeek should be discussed as a text-only curve. It is useful for UniMoral and Value comparisons, but it cannot support an all-around moral-psych claim because the image benchmark is absent.",
         )
     if family == OPENAI_GPT5_FAMILY_LABEL:
         return (
-            "Text-only GPT-5 S/M/L reference series: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5.",
-            "Read this as text-only GPT-5 size context on UniMoral and Value Kaleidoscope, not an all-benchmark family sweep: all three slots intentionally omit SMID and DeNEVIL, and CCD-Bench remains choice-distribution behavior rather than accuracy.",
+            "Text-only GPT-5 S/M/L series on the eligible OpenAI reference task set; no SMID or DeNEVIL route.",
+            "OpenAI GPT-5 is a useful text-only size read: GPT-5 nano is S, GPT-5 mini is M, and GPT-5.5 is L. It should not be described as all-benchmark OpenAI coverage because the vision and DeNEVIL proxy surfaces are absent.",
+        )
+    if family == OPENAI_REFERENCE_FAMILY_LABEL:
+        return (
+            "Three GPT-4o/GPT-4.1 text-only reference rows outside the GPT-5 S/M/L series.",
+            "These OpenAI rows are text-side reference markers for GPT-4o and GPT-4.1 routes. They are useful calibration points, but they do not answer the vision question and should not be folded into the GPT-5 S/M/L curve.",
         )
     available_metrics = sum(1 for points in metric_points.values() if points)
     return (
         f"{available_metrics} comparable metric series available.",
-        "Current public evidence is too sparse for a stronger within-family scaling claim.",
+        "Current public evidence is too sparse for a stronger within-family scaling claim; report the observed points and avoid turning route gaps into model failures.",
     )
 
 
@@ -8132,11 +8145,27 @@ def build_family_scaling_summary(rows: list[dict[str, Any]]) -> list[dict[str, A
             metric_points[benchmark] = points
         evidence_scope, interpretation = _scaling_interpretation_for_family(family, metric_points)
         numeric_parts: list[str] = []
-        for benchmark, _, _ in COMPARABLE_METRIC_SPECS:
-            points = metric_points[benchmark]
-            if not points:
-                continue
-            numeric_parts.append(f"{benchmark}: {_format_scaling_sequence(points)}")
+        if family == OPENAI_REFERENCE_FAMILY_LABEL:
+            for benchmark, field, _ in COMPARABLE_METRIC_SPECS:
+                scored_refs = [
+                    (row["line_label"], float(row[field]))
+                    for row in comparable_rows
+                    if row[field] is not None
+                ]
+                if not scored_refs:
+                    continue
+                best_label, best_value = max(scored_refs, key=lambda item: item[1])
+                low_value = min(value for _, value in scored_refs)
+                high_value = max(value for _, value in scored_refs)
+                numeric_parts.append(
+                    f"{benchmark}: range {fmt_float(low_value, 3)}-{fmt_float(high_value, 3)}; best {best_label} {fmt_float(best_value, 3)}"
+                )
+        else:
+            for benchmark, _, _ in COMPARABLE_METRIC_SPECS:
+                points = metric_points[benchmark]
+                if not points:
+                    continue
+                numeric_parts.append(f"{benchmark}: {_format_scaling_sequence(points)}")
 
         family_rows.append(
             {
@@ -8435,11 +8464,12 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
                 lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 55}" text-anchor="middle" class="small">{escape_xml(missing_note)}</text>')
                 continue
             weight = 0.0 if math.isclose(max_acc, min_acc) else (value - min_acc) / (max_acc - min_acc)
-            color = interpolate_color("#f2e8cf", "#1f6f78", weight)
+            color = interpolate_color("#f4f0df", "#78aeb4", weight)
             main_class, sub_class = text_classes_for_fill(color)
+            sub_label = row["family"] if row["size_slot"] == "Ref" else f'{row["family"]} {row["size_slot"]}'
             lines.append(f'<rect x="{x}" y="{y0}" width="{cell_w - 14}" height="{cell_h - 14}" rx="16" fill="{color}" stroke="#ffffff" stroke-width="1"/>')
             lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 34}" text-anchor="middle" class="{main_class}">{value * 100:.1f}%</text>')
-            lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 55}" text-anchor="middle" class="{sub_class}">{escape_xml(row["family"])} {escape_xml(row["size_slot"])}</text>')
+            lines.append(f'<text x="{x + (cell_w - 14) / 2}" y="{y0 + 55}" text-anchor="middle" class="{sub_class}">{escape_xml(sub_label)}</text>')
 
     legend_x = 560
     legend_y = height - 94
@@ -8450,7 +8480,7 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
     lines.append(f'<text x="{legend_x}" y="{legend_y - 2}" class="small">Lighter cells mean lower accuracy; darker cells mean higher accuracy.</text>')
     for step in range(legend_steps):
         weight = step / (legend_steps - 1)
-        color = interpolate_color("#f2e8cf", "#1f6f78", weight)
+        color = interpolate_color("#f4f0df", "#78aeb4", weight)
         x = legend_x + step * (legend_w / legend_steps)
         lines.append(f'<rect x="{x:.2f}" y="{legend_y + 10}" width="{legend_w / legend_steps + 1:.2f}" height="16" fill="{color}" stroke="#ffffff" stroke-width="0.6"/>')
     lines.append(f'<text x="{legend_x}" y="{legend_y + 44}" class="small">{min_acc * 100:.1f}%</text>')
@@ -8553,11 +8583,6 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
     line_colors = {row["line_label"]: line_color(row) for row in rows}
     metric_specs = [
         (
-            "unimoral_action_accuracy",
-            "UniMoral",
-            "Action prediction accuracy",
-        ),
-        (
             "smid_average_accuracy",
             "SMID",
             "Average of moral rating and foundation classification",
@@ -8583,13 +8608,13 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
-            "<title>Comparable accuracy by benchmark</title>",
-            "<desc>Horizontal bar panels comparing the latest available family-size lines on benchmarks with directly comparable accuracy metrics. UniMoral and Value keep the text-only reference rows, while the SMID panel omits rows with no public vision route instead of showing empty placeholders.</desc>",
-            '<text x="48" y="64" class="title">Comparable Accuracy by Benchmark</text>',
+            "<title>SMID and Value accuracy by benchmark</title>",
+            "<desc>Horizontal bar panels comparing the latest available family-size lines on SMID and Value Kaleidoscope after the combined UniMoral benchmark block. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>",
+            '<text x="48" y="64" class="title">SMID And Value Accuracy By Benchmark</text>',
             *svg_text_block(
                 48,
                 88,
-                "UniMoral and Value show the text-only comparison/reference rows. SMID shows only lines with a public vision route, so no-vision routes are removed from that panel rather than left as blank bars.",
+                "UniMoral is shown in separate accuracy and generation figures, so this comparison starts at SMID. Each panel keeps the same current lines. Hatched rows mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format validation.",
                 "subtitle",
                 135,
             ),
@@ -8617,8 +8642,8 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
             y = panel_y + 46 + row_index * (bar_height + bar_gap)
             row = row_lookup.get(line_label)
             value = None if row is None else row[field]
-            lines.append(f'<rect x="{panel_left - 158}" y="{y + 5}" width="10" height="10" rx="3" fill="{line_colors.get(line_label, "#475569")}"/>')
-            lines.append(f'<text x="{panel_left - 142}" y="{y + 19}" text-anchor="end" class="label">{escape_xml(line_label)}</text>')
+            lines.append(f'<rect x="{panel_left - 224}" y="{y + 5}" width="10" height="10" rx="3" fill="{line_colors.get(line_label, "#475569")}"/>')
+            lines.append(f'<text x="{panel_left - 202}" y="{y + 19}" class="label">{escape_xml(line_label)}</text>')
             lines.append(f'<rect x="{panel_left}" y="{y}" width="{panel_width}" height="{bar_height}" rx="10" fill="#e2e8f0"/>')
             if value is None:
                 missing_note = comparable_missing_note(row, field) if row is not None else "no current result"
@@ -8645,7 +8670,7 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
 
 
 def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
-    width, height = 1220, 620
+    width, height = 1220, 650
     axis_left, axis_width = 280, 540
     top, row_gap, row_height = 188, 112, 40
     summary_x = 860
@@ -8666,7 +8691,7 @@ def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_p
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Benchmark difficulty and spread</title>",
-            "<desc>Mean, minimum, and maximum comparable accuracy for UniMoral, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>",
+            "<desc>Mean, minimum, and maximum comparable accuracy for UniMoral action prediction, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>",
             '<text x="48" y="64" class="title">Benchmark Difficulty And Spread</text>',
             *svg_text_block(
                 48,
@@ -8706,7 +8731,7 @@ def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_p
         lines.append(f'<text x="{summary_x + 18}" y="{y + 20}" class="body">Lowest: {escape_xml(row["weakest_line"])} ({fmt_pct(row["min_accuracy"])})</text>')
         lines.append(f'<text x="{summary_x + 18}" y="{y + 40}" class="small">Spread: {fmt_pct(row["spread"])} absolute accuracy points</text>')
 
-    lines.append('<rect x="48" y="472" width="1096" height="94" rx="18" class="legend-card"/>')
+    lines.append('<rect x="48" y="472" width="1096" height="116" rx="18" class="legend-card"/>')
     lines.append('<text x="72" y="500" class="tiny">READ THIS FIGURE</text>')
     lines.append(
         f'<text x="72" y="524" class="body">Hardest current comparable benchmark: {escape_xml(lowest_mean["benchmark"])} '
@@ -8717,7 +8742,7 @@ def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_p
         f'at {fmt_pct(widest_spread["spread"])} from low to high.</text>'
     )
     lines.append(
-        f'<text x="72" y="564" class="body">Tightest spread: {escape_xml(tightest_spread["benchmark"])} '
+        f'<text x="72" y="568" class="body">Tightest spread: {escape_xml(tightest_spread["benchmark"])} '
         f'at {fmt_pct(tightest_spread["spread"])}; current lines cluster closely there.</text>'
     )
 
@@ -8731,42 +8756,30 @@ def render_family_scaling_profile_svg(
     output_path: Path,
 ) -> None:
     _ = progress_rows
-    width, height = 1280, 1100
-    top_panel_left, top_panel_width = 52, 382
-    top_panel_gap = 18
-    top_panel_top, top_panel_height = 248, 356
-    chart_left_pad, chart_right_pad = 46, 36
-    chart_top_pad, chart_bottom_pad = 62, 62
+    visual_specs = VISUAL_COMPARABLE_METRIC_SPECS
+    width, height = 1500, 1240
+    top_panel_left, top_panel_width = 72, 650
+    top_panel_gap = 56
+    top_panel_top, top_panel_height = 260, 430
+    chart_left_pad, chart_right_pad = 70, 158
+    chart_top_pad, chart_bottom_pad = 74, 76
     y_min, y_max = 0.0, 0.75
-    family_draw_order = ["MiniMax", "DeepSeek", "Llama", "Gemma", "Qwen", OPENAI_GPT5_FAMILY_LABEL, OPENAI_REFERENCE_FAMILY_LABEL]
-    family_slot_offsets = {
-        "MiniMax": -20,
-        "Qwen": -10,
-        "DeepSeek": 0,
-        "Llama": 10,
-        "Gemma": 20,
-        OPENAI_GPT5_FAMILY_LABEL: 30,
-        OPENAI_REFERENCE_FAMILY_LABEL: 0,
-    }
-    family_line_widths = {
-        "MiniMax": 4.2,
-        "Qwen": 5.2,
-        "DeepSeek": 4.0,
-        "Llama": 4.0,
-        "Gemma": 4.4,
-        OPENAI_GPT5_FAMILY_LABEL: 4.6,
-        OPENAI_REFERENCE_FAMILY_LABEL: 3.8,
-    }
+    chart_size_slots = ["S", "M", "L"]
+    chart_slot_index = {slot: index for index, slot in enumerate(chart_size_slots)}
+    family_draw_order = ["MiniMax", "DeepSeek", "Llama", "Gemma", "Qwen", OPENAI_GPT5_FAMILY_LABEL]
+    family_slot_offsets = {"MiniMax": -24, "Qwen": -14, "DeepSeek": -4, "Llama": 8, "Gemma": 20, OPENAI_GPT5_FAMILY_LABEL: 32}
+    family_line_widths = {"MiniMax": 4.2, "Qwen": 5.2, "DeepSeek": 4.0, "Llama": 4.0, "Gemma": 4.4, OPENAI_GPT5_FAMILY_LABEL: 4.4}
     singleton_label_offsets = {
         "MiniMax": (-18, -8),
         "Qwen": (-10, -12),
         "DeepSeek": (-20, -16),
         "Llama": (10, -10),
         "Gemma": (10, -10),
+        OPENAI_GPT5_FAMILY_LABEL: (10, -10),
         OPENAI_REFERENCE_FAMILY_LABEL: (-12, -12),
     }
     rows_by_benchmark: dict[str, list[dict[str, Any]]] = {}
-    for benchmark, field, _ in COMPARABLE_METRIC_SPECS:
+    for benchmark, field, _ in visual_specs:
         rows_by_benchmark[benchmark] = [row for row in rows if row[field] is not None]
 
     def y_for(panel_y: int, value: float) -> float:
@@ -8774,29 +8787,58 @@ def render_family_scaling_profile_svg(
         weight = (value - y_min) / (y_max - y_min)
         return panel_y + top_panel_height - chart_bottom_pad - usable_h * weight
 
+    def spread_reference_labels(items: list[tuple[str, float, float]], top: float, bottom: float) -> list[tuple[str, float, float, float]]:
+        if not items:
+            return []
+        min_gap = 19.0
+        ordered = sorted(items, key=lambda item: item[2])
+        positions = [max(top, min(bottom, item[2])) for item in ordered]
+        for index in range(1, len(positions)):
+            positions[index] = max(positions[index], positions[index - 1] + min_gap)
+        overflow = positions[-1] - bottom
+        if overflow > 0:
+            positions = [position - overflow for position in positions]
+            positions[0] = max(top, positions[0])
+            for index in range(1, len(positions)):
+                positions[index] = max(positions[index], positions[index - 1] + min_gap)
+        for index in range(len(positions) - 2, -1, -1):
+            positions[index] = min(positions[index], positions[index + 1] - min_gap)
+        return [
+            (label, value, natural_y, max(top, min(bottom, label_y)))
+            for (label, value, natural_y), label_y in zip(ordered, positions)
+        ]
+
     lines = svg_header(width, height)
+    lines.append(
+        "<style>"
+        ".ref-title { font: 700 15px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #374151; }"
+        ".ref-label { font: 700 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #4b5563; }"
+        ".legend-big { font: 700 18px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }"
+        ".legend-note { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #34495e; }"
+        "</style>"
+    )
     intro_lines = [
-        "Three comparable benchmark panels only: UniMoral, SMID, and Value Kaleidoscope.",
+        "UniMoral is grouped in Figure 1 above; these comparable panels start at SMID.",
+        "Two comparable benchmark panels here: SMID and Value Kaleidoscope.",
         "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.",
-        "OpenAI GPT-5 is plotted as a text-only S/M/L series: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5.",
-        "GPT-4o mini and GPT-4.1 rows remain separate text-only reference markers; no OpenAI row has SMID or Denevil.",
+        "OpenAI GPT-5 text-only points are S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5.",
+        "GPT-4o and GPT-4.1 text refs are gray dashed reference lines where a text metric exists.",
         "SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.",
-        "Read CCD-Bench in the dedicated choice-distribution and concentration figures.",
-        "Read Denevil in the dedicated behavioral-outcomes figure.",
+        "Read CCD-Bench and Denevil in their dedicated figures.",
     ]
     lines.extend(
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Family scaling profile by benchmark</title>",
-            "<desc>Three-panel family scaling view across the directly comparable accuracy benchmarks only: UniMoral, SMID, and Value Kaleidoscope. OpenAI GPT-5 is plotted as a text-only S/M/L series with S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5; the GPT-4o mini and GPT-4.1 rows remain separate text-only references. DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, Llama-M, and every OpenAI row have SMID cells unavailable because no public vision route exists. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as choice behavior and proxy evidence rather than benchmark-faithful accuracy.</desc>",
+            "<desc>Two-panel family scaling view for the visual and text comparable-accuracy panels after the UniMoral benchmark block. OpenAI GPT-5 is plotted as a text-only S/M/L series on Value only: S is GPT-5 nano, M is GPT-5 mini, and L is GPT-5.5. GPT-4o and GPT-4.1 rows remain gray text reference lines. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
             '<text x="48" y="64" class="title">Family Scaling Profile</text>',
         ]
     )
     for intro_index, intro_line in enumerate(intro_lines):
         lines.append(f'<text x="48" y="{92 + intro_index * 22}" class="subtitle">{escape_xml(intro_line)}</text>')
 
-    for panel_index, (benchmark, field, scope_label) in enumerate(COMPARABLE_METRIC_SPECS):
+    for panel_index, (benchmark, field, scope_label) in enumerate(visual_specs):
         panel_x = top_panel_left + panel_index * (top_panel_width + top_panel_gap)
         panel_y = top_panel_top
         chart_left = panel_x + chart_left_pad
@@ -8818,15 +8860,15 @@ def render_family_scaling_profile_svg(
             lines.append(f'<line x1="{chart_left}" y1="{y:.2f}" x2="{chart_right}" y2="{y:.2f}" class="guide"/>')
             lines.append(f'<text x="{chart_left - 12}" y="{y + 4:.2f}" text-anchor="end" class="small">{tick_value * 100:.0f}%</text>')
 
-        for slot in SIZE_SLOT_ORDER:
-            x = chart_left + (chart_right - chart_left) * SIZE_SLOT_INDEX[slot] / (len(SIZE_SLOT_ORDER) - 1)
+        for slot in chart_size_slots:
+            x = chart_left + (chart_right - chart_left) * chart_slot_index[slot] / (len(chart_size_slots) - 1)
             x_positions[slot] = x
             lines.append(f'<line x1="{x:.2f}" y1="{chart_top}" x2="{x:.2f}" y2="{chart_bottom}" class="guide"/>')
             lines.append(f'<text x="{x:.2f}" y="{chart_bottom + 24}" text-anchor="middle" class="axis">{slot}</text>')
 
         for family in family_draw_order:
             family_rows = [row for row in rows_by_benchmark[benchmark] if row["family"] == family]
-            family_rows.sort(key=lambda row: SIZE_SLOT_INDEX.get(row["size_slot"], 99))
+            family_rows.sort(key=lambda row: chart_slot_index.get(row["size_slot"], 99))
             color = family_base_color(family)
             line_width = family_line_widths[family]
             if len(family_rows) >= 2:
@@ -8835,7 +8877,7 @@ def render_family_scaling_profile_svg(
                     x2 = x_positions[right_row["size_slot"]] + family_slot_offsets[family]
                     y1 = y_for(panel_y, float(left_row[field]))
                     y2 = y_for(panel_y, float(right_row[field]))
-                    consecutive = SIZE_SLOT_INDEX[right_row["size_slot"]] - SIZE_SLOT_INDEX[left_row["size_slot"]] == 1
+                    consecutive = chart_slot_index[right_row["size_slot"]] - chart_slot_index[left_row["size_slot"]] == 1
                     dash = "" if consecutive else ' stroke-dasharray="7 6"'
                     lines.append(
                         f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" stroke="#ffffff" stroke-width="{line_width + 2.0:.1f}" stroke-linecap="round" opacity="0.95"{dash}/>'
@@ -8858,22 +8900,72 @@ def render_family_scaling_profile_svg(
                 label_x = x + label_dx
                 label_y = max(chart_top + 14, min(chart_bottom - 8, y + label_dy))
                 label_anchor = "start" if label_dx >= 0 else "end"
-                point_label = only_row["line_label"] if family == OPENAI_REFERENCE_FAMILY_LABEL else family + "-" + only_row["size_slot"]
+                singleton_label = (
+                    only_row["line_label"]
+                    if family == OPENAI_REFERENCE_FAMILY_LABEL
+                    else family + "-" + only_row["size_slot"]
+                )
                 lines.append(
-                    f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{label_anchor}" class="small">{escape_xml(point_label)}</text>'
+                    f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{label_anchor}" class="small">{escape_xml(singleton_label)}</text>'
                 )
 
-        lines.append(
-            f'<text x="{panel_x + 18}" y="{panel_y + top_panel_height - 14}" class="small">Dashed = skipped slot; no point = no comparable score.</text>'
-        )
+        reference_rows = [
+            row
+            for row in rows_by_benchmark[benchmark]
+            if row["line_label"] in OPENAI_REF_ONLY_LINE_LABELS and row[field] is not None
+        ]
+        if reference_rows:
+            reference_rows.sort(key=lambda row: OPENAI_REFERENCE_LINE_ORDER.get(row["line_label"], 99))
+            reference_values = [float(row[field]) for row in reference_rows]
+            reference_items = [
+                (reference_row["line_label"], float(reference_row[field]), y_for(panel_y, float(reference_row[field])))
+                for reference_row in reference_rows
+            ]
+            for reference_label, reference_value, reference_y, label_y in spread_reference_labels(
+                reference_items,
+                chart_top + 34,
+                chart_bottom - 4,
+            ):
+                lines.append(
+                    f'<line x1="{chart_left}" y1="{reference_y:.2f}" x2="{chart_right}" y2="{reference_y:.2f}" '
+                    'stroke="#6b7280" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="9 7" opacity="0.62"/>'
+                )
+                label_x = chart_right + 16
+                short_reference_label = reference_label.replace(" Ref", "")
+                lines.append(
+                    f'<line x1="{chart_right:.2f}" y1="{reference_y:.2f}" x2="{label_x - 6:.2f}" y2="{label_y - 4:.2f}" '
+                    'stroke="#94a3b8" stroke-width="1.1" opacity="0.8"/>'
+                )
+                lines.append(
+                    f'<text x="{label_x:.2f}" y="{label_y:.2f}" class="ref-label">{escape_xml(short_reference_label)} {fmt_pct(reference_value)}</text>'
+                )
+            best_reference = max(reference_rows, key=lambda row: float(row[field]))
+            best_reference_value = float(best_reference[field])
+            lines.append(
+                f'<text x="{chart_right + 16}" y="{chart_top - 24:.2f}" class="ref-title">OpenAI refs {fmt_pct(min(reference_values))}-{fmt_pct(max(reference_values))}</text>'
+            )
+            lines.append(
+                f'<text x="{chart_right + 16}" y="{chart_top - 6:.2f}" class="small">Best {escape_xml(best_reference["line_label"])} {fmt_pct(best_reference_value)}</text>'
+            )
 
-    lines.append('<rect x="48" y="644" width="1184" height="360" rx="18" class="legend-card"/>')
-    lines.append('<text x="72" y="670" class="tiny">HOW TO READ THIS FIGURE</text>')
-    lines.append('<line x1="618" y1="672" x2="618" y2="982" class="guide"/>')
+        footer_text = (
+            "Dashed colored segments skip missing size slots; gray dashed lines are GPT-4o/GPT-4.1 text refs."
+            if reference_rows
+            else "Dashed colored segments skip missing size slots."
+        )
+        lines.append(f'<text x="{panel_x + 18}" y="{panel_y + top_panel_height - 14}" class="small">{footer_text}</text>')
+
+    legend_card_top = 732
+    lines.append(f'<rect x="48" y="{legend_card_top}" width="{width - 96}" height="430" rx="18" class="legend-card"/>')
+    lines.append(f'<text x="72" y="{legend_card_top + 30}" class="tiny">HOW TO READ THIS FIGURE</text>')
+    lines.append(f'<line x1="704" y1="{legend_card_top + 32}" x2="704" y2="{legend_card_top + 386}" class="guide"/>')
     left_lines = [
-        "Panels 1-3 show only benchmark-faithful comparable accuracy.",
-        "Use this figure for family-size comparisons on UniMoral,",
-        "SMID, and Value Kaleidoscope.",
+        "Panels 1-2 start at SMID because UniMoral",
+        "has its combined RQ1-RQ4 block above.",
+        "Use this figure for family-size comparisons",
+        "on SMID and Value Kaleidoscope.",
+        "OpenAI GPT-5 S/M/L appears on Value only;",
+        "it has no SMID or DeNEVIL route.",
         "CCD-Bench is intentionally excluded here.",
         "Read CCD-Bench in the choice-distribution",
         "and dominant-option concentration figures.",
@@ -8881,29 +8973,35 @@ def render_family_scaling_profile_svg(
         "Do not mix proxy evidence into accuracy scaling.",
     ]
     for index, line in enumerate(left_lines):
-        lines.append(f'<text x="72" y="{696 + index * 26}" class="body">{escape_xml(line)}</text>')
+        lines.append(f'<text x="72" y="{legend_card_top + 64 + index * 28}" class="legend-note">{escape_xml(line)}</text>')
 
-    lines.append('<text x="656" y="696" class="tiny">FAMILY READ</text>')
+    lines.append(f'<text x="742" y="{legend_card_top + 64}" class="tiny">FAMILY READ</text>')
     legend_items = [
-        ("MiniMax", "S/M/L are scored on UniMoral and Value; S/L have SMID, while M has no SMID route."),
-        ("Qwen", "text scored at S/M/L; SMID at S/L."),
-        ("DeepSeek", "S/M/L text metrics are now parsed from saved logs; no DeepSeek SMID route exists."),
-        ("Llama", "text scored at S/M/L; SMID at S/L."),
-        ("Gemma", "full S/M/L scored sweep."),
-        (OPENAI_GPT5_FAMILY_LABEL, "text-only S/M/L: S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5; no SMID/DeNEVIL."),
-        (OPENAI_REFERENCE_FAMILY_LABEL, "separate GPT-4o mini text-only Ref marker; not part of GPT-5 S/M/L."),
+        ("MiniMax", "Value S/M/L are scored; SMID S/L have routes, while M has no SMID route."),
+        ("Qwen", "Value scored at S/M/L; SMID at S/L."),
+        ("DeepSeek", "Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists."),
+        ("Llama", "Value scored at S/M/L; SMID at S/L."),
+        ("Gemma", "full S/M/L sweep on SMID and Value."),
+        (OPENAI_GPT5_FAMILY_LABEL, "text-only S/M/L: S GPT-5 nano, M GPT-5 mini, L GPT-5.5."),
+        (OPENAI_REFERENCE_FAMILY_LABEL, "GPT-4o and GPT-4.1 text refs; dashed where a text metric exists."),
     ]
     for index, (family, note) in enumerate(legend_items):
-        x = 656
-        y = 722 + index * 28
+        x = 742
+        y = legend_card_top + 96 + index * 42
         color = family_base_color(family)
-        lines.append(f'<rect x="{x}" y="{y - 12}" width="14" height="14" rx="4" fill="{color}"/>')
-        lines.append(f'<text x="{x + 24}" y="{y - 1}" class="small">{escape_xml(family)}: {escape_xml(note)}</text>')
+        if family == OPENAI_REFERENCE_FAMILY_LABEL:
+            lines.append(f'<line x1="{x}" y1="{y - 10}" x2="{x + 44}" y2="{y - 10}" stroke="{color}" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 8"/>')
+            label_x = x + 58
+        else:
+            lines.append(f'<rect x="{x}" y="{y - 20}" width="24" height="24" rx="6" fill="{color}"/>')
+            label_x = x + 36
+        lines.append(f'<text x="{label_x}" y="{y - 2}" class="legend-big">{escape_xml(family)}</text>')
+        for note_index, note_line in enumerate(_wrap_svg_text(note, 70)[:2]):
+            lines.append(f'<text x="{x + 170}" y="{y - 2 + note_index * 16}" class="legend-note">{escape_xml(note_line)}</text>')
 
-    lines.append('<text x="656" y="928" class="tiny">EVIDENCE BOUNDARY</text>')
-    lines.append('<text x="656" y="954" class="body">This figure stops at the three accuracy-comparable benchmarks.</text>')
-    lines.append('<text x="656" y="982" class="body">That avoids mixing comparable accuracy with coverage or proxy evidence.</text>')
-    lines.append('<text x="72" y="1044" class="small">Takeaway: current evidence supports task-specific scaling statements across the three comparable accuracy benchmarks, not a single universal size law across all five benchmark surfaces.</text>')
+    lines.append(f'<text x="742" y="{legend_card_top + 392}" class="tiny">EVIDENCE BOUNDARY</text>')
+    lines.append(f'<text x="900" y="{legend_card_top + 392}" class="legend-note">This figure stops at SMID + Value so accuracy, coverage, and proxy behavior do not get mixed.</text>')
+    lines.append('<text x="72" y="1206" class="small">Takeaway: scaling is benchmark-specific. OpenAI GPT-5 is text-only S/M/L context, while GPT-4o/GPT-4.1 remain reference markers.</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -9012,8 +9110,8 @@ def render_ccd_choice_distribution_svg(rows: list[dict[str, Any]], output_path: 
             return "#ffffff"
         clipped = max(-max_abs_delta, min(max_abs_delta, float(delta_pp)))
         if clipped >= 0:
-            return interpolate_color("#f3faf6", "#2f855a", clipped / max_abs_delta)
-        return interpolate_color("#fff7ed", "#c05621", abs(clipped) / max_abs_delta)
+            return interpolate_color("#f3faf6", "#78b99b", clipped / max_abs_delta)
+        return interpolate_color("#fff7ed", "#e2a17d", abs(clipped) / max_abs_delta)
 
     lines = svg_header(width, height)
     lines.extend(
@@ -9025,7 +9123,7 @@ def render_ccd_choice_distribution_svg(rows: list[dict[str, Any]], output_path: 
             '<text x="48" y="64" class="title">CCD-Bench cultural-cluster choice behavior, not accuracy</text>',
             '<text x="48" y="88" class="subtitle">Cells show deviation from the 10% uniform baseline across the paper&apos;s ten canonical GLOBE cultural clusters, computed over valid visible selections only.</text>',
             '<text x="48" y="108" class="subtitle">Positive cells mean the line selected that cluster more often than uniform choice; negative cells mean under-indexing. This is CCD choice behavior, not benchmark accuracy.</text>',
-            '<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI Batch references are one-off text-only rows. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>',
+            '<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI refs are one-off text-only rows. Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>',
             '<text x="48" y="148" class="subtitle">Coverage stays in the appendix QA figure.</text>',
         ]
     )
@@ -9143,7 +9241,7 @@ def render_ccd_dominant_option_share_svg(rows: list[dict[str, Any]], output_path
             "<desc>Secondary CCD result. Compact CCD-Bench comparison showing how concentrated each line's valid visible selections are on its most frequent canonical cluster. Bars show dominant-cluster share; right-hand labels add effective-cluster count. This is a concentration summary, not accuracy.</desc>",
             '<text x="48" y="64" class="title">CCD-Bench choice-concentration summary, not accuracy</text>',
             '<text x="48" y="88" class="subtitle">Bars show the dominant-cluster share among valid visible CCD selections; the right-hand label adds the effective number of clusters implied by that same distribution.</text>',
-            '<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI Batch references are one-off text-only rows. Higher bars mean more concentration on one cluster.</text>',
+            '<text x="48" y="108" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI refs are one-off text-only rows. Higher bars mean more concentration on one cluster.</text>',
         ]
     )
 
@@ -9250,7 +9348,7 @@ def render_denevil_behavior_outcomes_svg(rows: list[dict[str, Any]], output_path
     chart_right = chart_left + chart_width
     top = 218
     legend_top = top + len(rows) * (row_height + row_gap) + 36
-    height = legend_top + 180
+    height = legend_top + 220
 
     lines = svg_header(width, height)
     lines.extend(
@@ -9342,16 +9440,16 @@ def render_denevil_behavior_outcomes_svg(rows: list[dict[str, Any]], output_path
             f'<text x="{chart_right + 24}" y="{y_center + 16:.2f}" class="small">protective {fmt_pct(row["protective_response_rate"], 1) or "n/a"}</text>'
         )
 
-    lines.append(f'<rect x="48" y="{legend_top}" width="{width - 96}" height="138" rx="18" class="legend-card"/>')
+    lines.append(f'<rect x="48" y="{legend_top}" width="{width - 96}" height="168" rx="18" class="legend-card"/>')
     lines.append(f'<text x="72" y="{legend_top + 24}" class="tiny">BEHAVIOR LEGEND</text>')
     for index, behavior_label in enumerate(DENEVIL_BEHAVIOR_ORDER):
-        x = 72 + (index % 3) * 470
-        y = legend_top + 50 + (index // 3) * 30
+        x = 72 + (index % 4) * 410
+        y = legend_top + 52 + (index // 4) * 32
         fill = DENEVIL_BEHAVIOR_COLORS[behavior_label]
         lines.append(f'<rect x="{x}" y="{y - 11}" width="16" height="16" rx="4" fill="{fill}"/>')
         lines.append(f'<text x="{x + 24}" y="{y + 1}" class="small">{escape_xml(behavior_label)}</text>')
     lines.append(
-        f'<text x="72" y="{legend_top + 114}" class="body">This is the headline proxy-result view for DeNEVIL in the public release. Route names, sample counts, timestamps, and raw valid-response coverage stay in the appendix provenance figures below.</text>'
+        f'<text x="72" y="{legend_top + 128}" class="body">This is the headline proxy-result view for DeNEVIL in the public release. Route names, sample counts, timestamps, and raw valid-response coverage stay in the appendix provenance figures below.</text>'
     )
 
     lines.append("</svg>")
@@ -9378,7 +9476,7 @@ def render_denevil_prompt_family_heatmap_svg(rows: list[dict[str, Any]], output_
     def heat_fill(rate: float | None) -> str:
         if rate is None:
             return "#ffffff"
-        return interpolate_color("#fff7ed", "#2f855a", float(rate))
+        return interpolate_color("#fff7ed", "#82b889", float(rate))
 
     grouped: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
     for row in rows:
@@ -9417,7 +9515,18 @@ def render_denevil_prompt_family_heatmap_svg(rows: list[dict[str, Any]], output_
                 f'<text x="{x + cell_width / 2:.2f}" y="{chart_top - 38 + header_index * 16}" text-anchor="middle" class="tiny">{escape_xml(header_line)}</text>'
             )
 
-    group_spans = family_group_spans(rows, family_key="model_family")
+    line_meta = []
+    for line_label in line_order:
+        cells = grouped.get(line_label, {})
+        family_name = next((cell["model_family"] for cell in cells.values()), "")
+        size_slot = next((cell["size_slot"] for cell in cells.values()), "")
+        if not family_name:
+            family_name = next((row["model_family"] for row in rows if row["model_line"] == line_label), "")
+        if not size_slot:
+            size_slot = next((row["size_slot"] for row in rows if row["model_line"] == line_label), "")
+        line_meta.append({"model_line": line_label, "model_family": family_name, "size_slot": size_slot})
+
+    group_spans = family_group_spans(line_meta, family_key="model_family")
     for family, start_index, end_index in group_spans:
         group_y = chart_top + start_index * (row_height + row_gap) - 6
         group_height = (end_index - start_index + 1) * row_height + (end_index - start_index) * row_gap + 12
@@ -9922,6 +10031,7 @@ def build_topline_summary(
     benchmark_difficulty_summary: list[dict[str, Any]],
     ccd_choice_distribution: list[dict[str, Any]],
     denevil_behavior_summary: list[dict[str, Any]],
+    release_dir: Path | None = None,
 ) -> str:
     total_samples = sum(row["total_samples"] for row in rows)
     faithful_tasks = sum(row["benchmark_mode"] == "benchmark_faithful" for row in rows)
@@ -9939,6 +10049,7 @@ def build_topline_summary(
         benchmark_difficulty_summary,
         ccd_choice_distribution,
         denevil_behavior_summary,
+        release_dir,
     )
     lines.extend(
         [
@@ -10037,16 +10148,66 @@ def append_benchmark_difficulty_table(lines: list[str], rows: list[dict[str, Any
         )
 
 
-def append_benchmark_reading_guide_table(lines: list[str], rows: list[dict[str, Any]]) -> None:
+def append_benchmark_reading_guide_table(lines: list[str], _rows: list[dict[str, Any]]) -> None:
+    guide_rows = [
+        (
+            "UniMoral RQ1: action prediction",
+            "Given a dilemma and two possible actions, predict which action the human annotator chose.",
+            "This is descriptive moral choice: it asks whether the model can track situated human decisions, not whether it can declare the one correct answer.",
+            "Higher accuracy means the model better matched human choices. Scores are close together, so RQ1 is a useful sanity check but not the whole story.",
+        ),
+        (
+            "UniMoral RQ2: moral typology",
+            "Given the chosen action, label the reasoning style: deontological, utilitarian, rights-based, or virtuous.",
+            "The same action can come from different moral theories. This task checks whether the model can name the reasoning frame behind a choice.",
+            "Read this separately from RQ1: a model can guess the action while still misunderstanding the moral theory behind it.",
+        ),
+        (
+            "UniMoral RQ3: factor attribution",
+            "Identify what shaped the decision, such as emotion, moral values, culture, responsibility, relationships, legality, politeness, or sacred values.",
+            "Moral psychology cares about why people choose, not only what they choose. RQ3 tests whether the model can recover those human explanation factors.",
+            "Higher accuracy means the model better identifies the reason behind the choice. Low or uneven scores mean the model may know the answer but not the human motive.",
+        ),
+        (
+            "UniMoral RQ4: consequence generation",
+            "Generate likely consequences of the selected action.",
+            "Consequences connect moral choice to expected harm, benefit, social reaction, and future responsibility, which are central to moral reasoning.",
+            "Read RQ4 as generation quality. BERTScore F1 captures meaning overlap; METEOR captures wording overlap. Neither is the same as classification accuracy.",
+        ),
+        (
+            "SMID",
+            "Look at real images and infer moral wrongness or the dominant moral foundation.",
+            "Moral judgment is often visual, social, and affective. SMID asks whether models can see morally relevant cues in concrete scenes, not only reason over text.",
+            "Higher accuracy means closer alignment with human image judgments. This is the current bottleneck because image-based moral cues are harder and more ambiguous than text labels.",
+        ),
+        (
+            "Value Kaleidoscope",
+            "For a situation and a candidate value, right, or duty, decide whether it is relevant and whether it supports, opposes, or fits either way.",
+            "Pluralistic moral judgment often involves several values in tension. This benchmark checks whether the model can recognize that value structure before making any final decision.",
+            "Higher accuracy means better value tagging and polarity assignment. It shows whether the model sees the value structure, not whether it solved the whole ethical dilemma.",
+        ),
+        (
+            "CCD-Bench",
+            "Choose among ten culturally grounded responses to a cross-cultural dilemma.",
+            "Cultural conflict is a moral-psych question because different communities may weigh duties, relationships, hierarchy, autonomy, and social harmony differently.",
+            "Do not read CCD-Bench as universal accuracy. Read it as style: which cultural cluster the model leans toward, and whether it collapses too strongly onto one option.",
+        ),
+        (
+            "DeNEVIL",
+            "Probe how the model behaves when prompts try to surface unethical or value-violating content.",
+            "This matters for alignment: a model can classify moral labels well but still respond poorly when asked to generate risky behavior.",
+            "This release uses proxy traces, so read protective, contextual, risky, and empty-response categories as behavior evidence, not as paper-faithful DeNEVIL scoring.",
+        ),
+    ]
     lines.extend(
         [
-            "| Benchmark | What the paper is really testing | What this repo currently scores | How to read the current result |",
+            "| Benchmark readout | In plain language: what it asks | Why it matters for moral psychology | How to read this release |",
             "| --- | --- | --- | --- |",
         ]
     )
-    for row in rows:
+    for benchmark, plain_language, why_matters, release_read in guide_rows:
         lines.append(
-            f"| `{row['benchmark']}` | {row['paper_focus']} | {row['repo_readout']} | {row['release_interpretation']} |"
+            f"| `{benchmark}` | {plain_language} | {why_matters} | {release_read} |"
         )
 
 
@@ -10171,38 +10332,65 @@ def append_denevil_proxy_examples_table(lines: list[str], rows: list[dict[str, A
         )
 
 
-def current_research_group_status_takeaway() -> str | None:
-    """Summarize the one status boundary a reviewer should not miss."""
-    try:
-        minimax_medium = _find_row(FAMILY_SIZE_PROGRESS, "line_label", "MiniMax-M")
-    except KeyError:
-        return None
+def unimoral_rq_tldr_takeaway(release_dir: Path | None) -> str | None:
+    if release_dir is None:
+        return (
+            "- **UniMoral is not one skill:** a model can match the human action but still miss the moral frame, "
+            "the reason, or the consequence. So the useful story is which part of moral reasoning each family handles, "
+            "not one single moral score."
+        )
+    path = release_dir / "unimoral-full-benchmark.csv"
+    if not path.exists():
+        return (
+            "- **UniMoral is not one skill:** a model can match the human action but still miss the moral frame, "
+            "the reason, or the consequence. So the useful story is which part of moral reasoning each family handles, "
+            "not one single moral score."
+        )
 
-    status_values = [
-        minimax_medium["unimoral"],
-        minimax_medium["value_kaleidoscope"],
-        minimax_medium["ccd_bench"],
-        minimax_medium["denevil"],
+    def value_for(row: dict[str, str], field: str) -> float | None:
+        value = row.get(field)
+        if value in {None, "", "n/a"}:
+            return None
+        return float(value)
+
+    with path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    task_specs = [
+        ("RQ1", "unimoral_action_prediction", "accuracy"),
+        ("RQ2", "unimoral_moral_typology", "accuracy"),
+        ("RQ3", "unimoral_factor_attribution", "accuracy"),
+        ("RQ4 semantic", "unimoral_consequence_generation", "bert_score_f1"),
+        ("RQ4 lexical", "unimoral_consequence_generation", "meteor"),
     ]
-    smid_clause = "SMID remains `TBD`, so the medium MiniMax line is not a fully comparable all-around line yet."
-    summary_note = str(minimax_medium.get("summary_note") or "").strip()
-    if any(status == "live" for status in status_values):
+    winners: list[str] = []
+    for label, task_name, field in task_specs:
+        candidates = []
+        for row in rows:
+            if row.get("task_name") != task_name:
+                continue
+            value = value_for(row, field)
+            if value is None:
+                continue
+            status = str(row.get("status", ""))
+            if field == "accuracy" and status != "complete":
+                continue
+            if field != "accuracy" and not status.startswith("complete"):
+                continue
+            candidates.append((row.get("line_label", ""), value))
+        if candidates:
+            line_label, value = max(candidates, key=lambda item: item[1])
+            winners.append(f"{label} `{line_label}` {fmt_float(value)}")
+    if len(winners) < 4:
         return (
-            "- **Current GitHub-facing boundary:** All rows marked `Done` or `Proxy` are already parsed into the public tables and SVGs; "
-            f"`MiniMax-M` is the only line still live. {summary_note} Its comparable accuracy is intentionally withheld until the clean M2.5 text pass is complete. "
-            f"{smid_clause}"
+            "- **UniMoral is not one skill:** a model can match the human action but still miss the moral frame, "
+            "the reason, or the consequence. So the useful story is which part of moral reasoning each family handles, "
+            "not one single moral score."
         )
-    if all(status in {"done", "proxy"} for status in status_values):
-        return (
-            "- **Current GitHub-facing boundary:** No MiniMax-M2.5 text benchmark remains live; the saved MiniMax-M2.5 text/proxy pass is already parsed into the public tables and SVGs. "
-            f"{smid_clause}"
-        )
-    if any(status == "partial" for status in status_values):
-        return (
-            "- **Current GitHub-facing boundary:** `MiniMax-M` has partial saved text checkpoints and is not yet a final result line. "
-            f"{summary_note} Its comparable accuracy is intentionally withheld until the clean M2.5 text pass is complete. {smid_clause}"
-        )
-    return None
+    return (
+        "- **UniMoral is not one skill:** a model can match the human action but still miss the moral frame, the reason, or the consequence. "
+        f"Task winners rotate across {', '.join(winners)}. "
+        "So the useful story is which part of moral reasoning each family handles, not one single moral score."
+    )
 
 
 def _openai_reference_rows(benchmark_comparison: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -10233,6 +10421,7 @@ def append_tldr_section(
     benchmark_difficulty_summary: list[dict[str, Any]],
     ccd_choice_distribution: list[dict[str, Any]],
     denevil_behavior_summary: list[dict[str, Any]],
+    release_dir: Path | None = None,
 ) -> None:
     def as_float(value: Any) -> float | None:
         if value in {None, "", "n/a"}:
@@ -10285,14 +10474,47 @@ def append_tldr_section(
         if text_only_lines
         else None
     )
-    openai_reference_rows = _openai_reference_rows(benchmark_comparison)
+    openai_reference_rows = [
+        row for row in benchmark_comparison if row["line_label"] in OPENAI_REFERENCE_LINE_LABELS
+    ]
+    best_openai_unimoral = (
+        max(openai_reference_rows, key=lambda row: as_float(row["unimoral_action_accuracy"]) or float("-inf"))
+        if openai_reference_rows
+        else None
+    )
+    best_openai_value = (
+        max(openai_reference_rows, key=lambda row: as_float(row["value_average_accuracy"]) or float("-inf"))
+        if openai_reference_rows
+        else None
+    )
 
     smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
     unimoral_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "UniMoral")
+    value_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "Value Kaleidoscope")
+    best_smid_line = (
+        max(
+            (row for row in benchmark_comparison if as_float(row["smid_average_accuracy"]) is not None),
+            key=lambda row: as_float(row["smid_average_accuracy"]) or float("-inf"),
+        )
+        if benchmark_comparison
+        else None
+    )
+    qwen_s = next((row for row in benchmark_comparison if row["line_label"] == "Qwen-S"), None)
+    qwen_l = next((row for row in benchmark_comparison if row["line_label"] == "Qwen-L"), None)
+    llama_s = next((row for row in benchmark_comparison if row["line_label"] == "Llama-S"), None)
+    llama_m = next((row for row in benchmark_comparison if row["line_label"] == "Llama-M"), None)
+    minimax_l = next((row for row in benchmark_comparison if row["line_label"] == "MiniMax-L"), None)
+    deepseek_m = next((row for row in benchmark_comparison if row["line_label"] == "DeepSeek-M"), None)
+    deepseek_l = next((row for row in benchmark_comparison if row["line_label"] == "DeepSeek-L"), None)
+    gpt_4o_mini = next((row for row in benchmark_comparison if row["line_label"] == "GPT-4o-mini Ref"), None)
+    gpt_5_nano = next((row for row in benchmark_comparison if row["line_label"] == "GPT-5 nano"), None)
+    gpt_5_mini = next((row for row in benchmark_comparison if row["line_label"] == "GPT-5 mini"), None)
+    gpt_55 = next((row for row in benchmark_comparison if row["line_label"] == "GPT-5.5"), None)
+    gpt_41_nano = next((row for row in benchmark_comparison if row["line_label"] == "GPT-4.1-nano Ref"), None)
+    gpt_41_mini = next((row for row in benchmark_comparison if row["line_label"] == "GPT-4.1-mini Ref"), None)
     gemma_s = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-S"), None)
     gemma_m = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-M"), None)
     gemma_l = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-L"), None)
-    llama_m = next((row for row in benchmark_comparison if row["line_label"] == "Llama-M"), None)
     llama_l = next((row for row in benchmark_comparison if row["line_label"] == "Llama-L"), None)
 
     valid_ccd_rows = [
@@ -10313,6 +10535,9 @@ def append_tldr_section(
         else None
     )
     dominant_cluster = next(iter(sorted({row["dominant_option"] for row in valid_ccd_rows})), None)
+    ccd_nordic_count = sum(1 for row in valid_ccd_rows if "Nordic Europe" in row["dominant_option"])
+    deepseek_s_ccd = next((row for row in valid_ccd_rows if row["line_label"] == "DeepSeek-S"), None)
+    gpt_5_nano_ccd = next((row for row in valid_ccd_rows if row["line_label"] == "GPT-5 nano"), None)
 
     usable_denevil_rows = [
         row
@@ -10338,54 +10563,64 @@ def append_tldr_section(
         [
             "## TL;DR",
             "",
-            "If you only read one section, read these key takeaways:",
+            "Key takeaways:",
             "",
         ]
     )
+    lines.append(
+        f"- **Main landscape:** text moral reasoning is much stronger than image moral judgment. UniMoral and Value sit around {fmt_float(as_float(unimoral_summary['mean_accuracy']))}-{fmt_float(as_float(value_summary['mean_accuracy']))} mean accuracy, but SMID image accuracy averages only {fmt_float(as_float(smid_summary['mean_accuracy']))}; even the best image line, `{best_smid_line['line_label']}` at {fmt_float(as_float(best_smid_line['smid_average_accuracy']))}, is below 0.50. In plain terms: models can talk through moral choices and values better than they can see morally important cues in images."
+    )
     if best_full_line is not None and best_full_line_mean is not None:
         lines.append(
-            f"- **Best like-for-like line:** `{best_full_line['line_label']}` is the strongest fully comparable line, averaging {fmt_float(best_full_line_mean)} across UniMoral {fmt_float(as_float(best_full_line['unimoral_action_accuracy']))}, SMID {fmt_float(as_float(best_full_line['smid_average_accuracy']))}, and Value {fmt_float(as_float(best_full_line['value_average_accuracy']))}. This is the cleanest overall topline because all three comparable metrics are observed on the same line."
+            f"- **Best all-around line:** `{best_full_line['line_label']}` is the cleanest overall winner because it is not missing the image benchmark: UniMoral {fmt_float(as_float(best_full_line['unimoral_action_accuracy']))}, SMID {fmt_float(as_float(best_full_line['smid_average_accuracy']))}, Value {fmt_float(as_float(best_full_line['value_average_accuracy']))}, mean {fmt_float(best_full_line_mean)}. The main warning is that the best text-only rows can look stronger, but they do not answer the image problem."
         )
-    if best_text_only_line is not None:
+    if (
+        best_text_only_line is not None
+        and qwen_s is not None
+        and qwen_l is not None
+        and llama_s is not None
+        and llama_m is not None
+        and gemma_s is not None
+        and gemma_m is not None
+        and gemma_l is not None
+        and deepseek_m is not None
+        and deepseek_l is not None
+        and minimax_l is not None
+    ):
         lines.append(
-            f"- **Best text-only line:** `{best_text_only_line['line_label']}` is the strongest pure text line, reaching UniMoral {fmt_float(as_float(best_text_only_line['unimoral_action_accuracy']))} and Value {fmt_float(as_float(best_text_only_line['value_average_accuracy']))}. It should not be called the best all-around line because there is no public SMID route on that line."
-        )
-    if openai_reference_rows:
-        parsed_min, parsed_max, parsed_total = _openai_reference_parsed_range()
-        best_openai_unimoral = _best_openai_reference(openai_reference_rows, "unimoral_action_accuracy")
-        best_openai_value = _best_openai_reference(openai_reference_rows, "value_average_accuracy")
-        lines.append(
-            f"- **OpenAI text-only references:** {len(openai_reference_rows)} Responses/Batch API reference lines are now integrated, each with {parsed_total:,}/{parsed_total:,} response rows collected and parser coverage from {parsed_min:,} to {parsed_max:,} parsed rows. The GPT-5 subset is now labeled as text-only S/M/L (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L). Best OpenAI UniMoral is `{best_openai_unimoral['line_label']}` at {fmt_float(as_float(best_openai_unimoral['unimoral_action_accuracy']))}; best OpenAI Value is `{best_openai_value['line_label']}` at {fmt_float(as_float(best_openai_value['value_average_accuracy']))}. SMID and DeNEVIL remain intentionally `n/a` for these text-only references."
+            f"- **Scaling law:** there is no reliable bigger-is-better rule. Scale helps in a few places, especially Qwen on images ({fmt_float(as_float(qwen_s['smid_average_accuracy']))} -> {fmt_float(as_float(qwen_l['smid_average_accuracy']))}) and Llama on Value from S to M ({fmt_float(as_float(llama_s['value_average_accuracy']))} -> {fmt_float(as_float(llama_m['value_average_accuracy']))}). But there are clear reversals: Gemma image dips then rebounds ({fmt_float(as_float(gemma_s['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_m['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_l['smid_average_accuracy']))}), DeepSeek UniMoral falls from M to L ({fmt_float(as_float(deepseek_m['unimoral_action_accuracy']))} -> {fmt_float(as_float(deepseek_l['unimoral_action_accuracy']))}), and `MiniMax-L` is an image outlier at {fmt_float(as_float(minimax_l['smid_average_accuracy']))}."
         )
     lines.append(
-        f"- **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy ({fmt_float(as_float(smid_summary['mean_accuracy']))}) and widest spread ({fmt_float(as_float(smid_summary['spread']))}), while `UniMoral` is tightly clustered ({fmt_float(as_float(unimoral_summary['spread']))} spread). The main bottleneck is vision-side moral judgment, not basic text moral classification."
+        "- **Family read:** Qwen is the clearest case where size helps vision; Gemma is the cleanest full S/M/L family but still non-monotonic; DeepSeek is useful for text but has no image route and its large line is not automatically better; Llama improves after the small line but M can beat L on text; MiniMax-S is the safest all-around line, while MiniMax-L is the clearest bad image outlier."
     )
-    if gemma_s is not None and gemma_m is not None and gemma_l is not None and llama_m is not None and llama_l is not None:
+    unimoral_takeaway = unimoral_rq_tldr_takeaway(release_dir)
+    if unimoral_takeaway is not None:
+        lines.append(unimoral_takeaway)
+    if (
+        ccd_min_row is not None
+        and ccd_max_row is not None
+        and deepseek_s_ccd is not None
+        and gpt_5_nano_ccd is not None
+    ):
         lines.append(
-            f"- **There is no universal scaling law:** `Gemma` is non-monotonic on SMID ({fmt_float(as_float(gemma_s['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_m['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_l['smid_average_accuracy']))}), and `Llama-M` still beats `Llama-L` on Value ({fmt_float(as_float(llama_m['value_average_accuracy']))} vs {fmt_float(as_float(llama_l['value_average_accuracy']))}). Size helps on some tasks, but not in one clean monotonic pattern."
+            f"- **Cultural-style bias:** CCD-Bench shows a strong Europe/Nordic pull, not a normal accuracy score. {ccd_nordic_count} of {len(valid_ccd_rows)} valid lines choose `Nordic Europe` as their dominant style. `GPT-5 nano` is the most collapsed onto one cluster ({fmt_pct(as_float(gpt_5_nano_ccd['dominant_option_share']), 1)}), while `DeepSeek-S` is the least collapsed and the only non-Nordic dominant line ({fmt_pct(as_float(deepseek_s_ccd['dominant_option_share']), 1)}, `Sub Saharan Africa`)."
         )
-    if ccd_min_row is not None and ccd_max_row is not None and dominant_cluster is not None:
+    if (
+        best_openai_unimoral is not None
+        and best_openai_value is not None
+        and gpt_4o_mini is not None
+        and gpt_5_nano is not None
+        and gpt_5_mini is not None
+        and gpt_55 is not None
+        and gpt_41_nano is not None
+        and gpt_41_mini is not None
+    ):
         lines.append(
-            f"- **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `{dominant_cluster}`, but concentration still varies meaningfully, from `{ccd_min_row['line_label']}` at {fmt_pct(as_float(ccd_min_row['dominant_option_share']), 1)} to `{ccd_max_row['line_label']}` at {fmt_pct(as_float(ccd_max_row['dominant_option_share']), 1)}. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest \"accuracy.\""
+            f"- **OpenAI references:** the GPT rows split cleanly into a text-only GPT-5 S/M/L series and separate GPT-4o/GPT-4.1 reference markers. `GPT-5 nano` is S, `GPT-5 mini` is M, and `GPT-5.5` is L; Value rises from {fmt_float(as_float(gpt_5_nano['value_average_accuracy']))} to {fmt_float(as_float(gpt_5_mini['value_average_accuracy']))} and then sits at {fmt_float(as_float(gpt_55['value_average_accuracy']))}, while UniMoral tops out at `GPT-5.5` ({fmt_float(as_float(gpt_55['unimoral_action_accuracy']))}). `GPT-4o-mini Ref` remains a GPT-4o text reference, and `GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref` ({fmt_float(as_float(gpt_41_mini['unimoral_action_accuracy']))} vs {fmt_float(as_float(gpt_41_nano['unimoral_action_accuracy']))} on UniMoral). None of these rows has SMID or DeNEVIL, so they do not solve the image or proxy-behavior gaps."
         )
-    if denevil_min_row is not None and denevil_max_row is not None and deepseek_m_denevil is not None:
-        deepseek_empty_rate = as_float(deepseek_m_denevil["no_visible_answer_rate"]) or 0.0
-        if deepseek_empty_rate >= 0.05:
-            caveat = (
-                f"`DeepSeek-S` is the main visibility caveat because {fmt_pct(deepseek_empty_rate, 1)} "
-                "of prompts surfaced no visible answer, so that line should be read as a trace-surfacing caveat rather than a harmful-behavior result."
-            )
-        else:
-            caveat = (
-                f"`DeepSeek-S` no longer has the old visibility-collapse problem in the May 9 saved rerun "
-                f"({fmt_pct(deepseek_empty_rate, 1)} no-visible proxy traces)."
-            )
-        lines.append(
-            f"- **DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring.** Among completed lines with usable visible traces, protective/contextual behavior dominates ({fmt_pct(as_float(denevil_min_row['protective_response_rate']), 1)} to {fmt_pct(as_float(denevil_max_row['protective_response_rate']), 1)} protective response rate). {caveat}"
-        )
-    research_group_status = current_research_group_status_takeaway()
-    if research_group_status is not None:
-        lines.append(research_group_status)
+    lines.append(
+        "- **Small-model follow-up:** Mistral/Qwen/Llama older routes add one simple takeaway: there is a capability floor. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral from 0.632 to 0.648, but `Llama 3.2 1B` drops to 0.406. So these models are useful baselines, not a new top tier, and the 1B route is too small for this moral-choice setup."
+    )
     lines.extend(["", ""])
 
 
@@ -10394,39 +10629,64 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
         [
             "## Benchmark Result Visuals",
             "",
-            "If you want the five benchmark results before the tables, start here. These five visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.",
+            "If you want the benchmark results before the tables, start here. These visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.",
             "",
-            "OpenAI Responses/Batch API text-only reference rows are shown in the comparable-accuracy and CCD figures. The GPT-5 subset is plotted as a text-only S/M/L series (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L), while GPT-4o mini and GPT-4.1 rows remain separate text-only references; none have SMID or DeNEVIL rows.",
+            "OpenAI text-only rows are shown in the comparable-accuracy and CCD figures. The GPT-5 subset is a text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`); GPT-4o and GPT-4.1 stay as separate reference markers. None has SMID or DeNEVIL.",
+            "OpenAI/GPT scope: the scored reference routes are `openai/gpt-4o-mini`, `openai/gpt-5-nano`, `openai/gpt-4.1-nano`, `openai/gpt-5-mini`, `openai/gpt-5.5`, and `openai/gpt-4.1-mini`.",
             "",
-            "### 1. UniMoral / SMID / Value Kaleidoscope: topline comparable accuracy",
+            "### 1. UniMoral RQ1-RQ4: family-size scaling and task readout",
+            "",
+            f"![UniMoral family-size scaling by RQ]({figure_prefix}/option1_unimoral_family_scaling.svg)",
+            "",
+            "_What it tests: UniMoral breaks moral reasoning into four human-facing steps: what action someone chooses, what moral frame the choice reflects, what factor shaped the choice, and what consequences the action may cause._",
+            "",
+            "_Why it matters: moral psychology is about choices plus explanations, not just a right/wrong label. The figure shows that the winner changes across RQs, so the honest takeaway is not `larger model = better moral reasoner`; it is `different model families handle different parts of moral reasoning differently`._",
+            "",
+            f"![UniMoral RQ1-RQ3 exact-match accuracy]({figure_prefix}/option1_unimoral_task_heatmap.svg)",
+            "",
+            "_How to read it: RQ1, RQ2, and RQ3 all use exact-match accuracy, so the three classification surfaces stay comparable inside the same benchmark block. Higher means the model matched the human-labeled action, moral frame, or decision factor more often._",
+            "",
+            f"![UniMoral RQ4 generation quality]({figure_prefix}/option1_unimoral_generation_quality.svg)",
+            "",
+            "_How to read RQ4: consequence generation is open-ended. BERTScore F1 asks whether the model said something semantically close to the reference consequence; METEOR asks whether the wording overlaps. It is not a right/wrong accuracy score._",
+            "",
+            "### 2. SMID / Value Kaleidoscope: topline comparable accuracy",
             "",
             f"![Comparable accuracy bars]({figure_prefix}/option1_benchmark_accuracy_bars.svg)",
             "",
-            "_Use this first for the like-for-like result on the three benchmark-faithful accuracy tasks. The SMID panel only includes lines with a public vision route; no-vision text-only rows are removed rather than shown as blanks._",
+            "_What it tests: SMID asks whether a vision model can see morally important cues in images. Value Kaleidoscope asks whether a text model can spot which values, rights, or duties matter in a situation and whether they support or oppose the action._",
             "",
-            "### 2. UniMoral / SMID / Value Kaleidoscope: family-size scaling",
+            "_How to read it: UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._",
+            "",
+            "### 3. SMID / Value Kaleidoscope: family-size scaling",
             "",
             f"![Family scaling profile]({figure_prefix}/option1_family_scaling_profile.svg)",
             "",
-            "_Use this second to compare size effects across the comparable-accuracy layer without mixing in CCD-Bench or DeNEVIL proxy evidence; absent SMID points are route gaps._",
+            "_Why it matters: if scale helped moral perception and value recognition in a simple way, every line would climb from S to M to L. They do not. The useful read is where size helps, where it plateaus, and where it can even hurt._",
             "",
-            "### 3. CCD-Bench: cultural-cluster choice behavior",
+            "_Use this next to compare size effects on SMID and Value after the combined UniMoral block, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._",
+            "",
+            "### 4. CCD-Bench: cultural-cluster choice behavior",
             "",
             f"![CCD choice distribution]({figure_prefix}/option1_ccd_choice_distribution.svg)",
             "",
-            "_This is the main CCD-Bench result: deviation from the 10% uniform baseline across the ten canonical cultural clusters._",
+            "_What it tests: CCD-Bench puts models in value conflicts where ten answer options map to cultural clusters. The figure shows which cultural response styles each model over-selects or avoids relative to a 10% uniform baseline._",
             "",
-            "### 4. CCD-Bench: dominant-option concentration",
+            "_Why it matters: this is not a single right-answer benchmark. It tells a moral-psych reader which culturally grounded response style a model tends to privilege when values conflict._",
+            "",
+            "### 5. CCD-Bench: dominant-option concentration",
             "",
             f"![CCD dominant-option share]({figure_prefix}/option1_ccd_dominant_option_share.svg)",
             "",
-            "_This is the compact CCD-Bench summary: how much each line collapses onto one dominant cluster, and how broadly it still spreads across the option set._",
+            "_How to read it: this is the compact CCD-Bench summary, showing how much each line collapses onto one dominant cultural cluster and how broadly it still spreads across the option set._",
             "",
-            "### 5. DeNEVIL: proxy behavioral outcomes",
+            "### 6. DeNEVIL: proxy behavioral outcomes",
             "",
             f"![DeNEVIL proxy behavioral outcomes]({figure_prefix}/option1_denevil_behavior_outcomes.svg)",
             "",
-            "_This is the main DeNEVIL result surface: auditable behavioral categories from proxy traces, not benchmark-faithful accuracy._",
+            "_What it tests: DeNEVIL-style evaluation looks for value vulnerabilities under risky or ethically loaded prompts. In this release the paper-faithful MoralPrompt export is not local, so this figure reports auditable proxy behavior categories from saved traces._",
+            "",
+            "_How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._",
             "",
             "Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.",
             "",
@@ -10480,7 +10740,19 @@ def append_interpretation_sections(
                 if value is not None
             ),
         )
-    openai_reference_rows = _openai_reference_rows(benchmark_comparison)
+    openai_reference_rows = [
+        row for row in benchmark_comparison if row["line_label"] in OPENAI_REFERENCE_LINE_LABELS
+    ]
+    best_openai_unimoral = (
+        max(openai_reference_rows, key=lambda row: float(row["unimoral_action_accuracy"]))
+        if openai_reference_rows
+        else None
+    )
+    best_openai_value = (
+        max(openai_reference_rows, key=lambda row: float(row["value_average_accuracy"]))
+        if openai_reference_rows
+        else None
+    )
     unimoral_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "UniMoral")
     smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
     gemma_s = next((row for row in benchmark_comparison if row["line_label"] == "Gemma-S"), None)
@@ -10522,7 +10794,7 @@ def append_interpretation_sections(
     )
     if best_full_line is not None and best_full_line_mean is not None:
         lines.append(
-            f"| Strongest fully observed comparable line | `{best_full_line['line_label']}` averages {fmt_float(best_full_line_mean)} across UniMoral {fmt_float(best_full_line['unimoral_action_accuracy'])}, SMID {fmt_float(best_full_line['smid_average_accuracy'])}, and Value {fmt_float(best_full_line['value_average_accuracy'])}. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |"
+            f"| Strongest fully observed comparable line | `{best_full_line['line_label']}` averages {fmt_float(best_full_line_mean)} across UniMoral action {fmt_float(best_full_line['unimoral_action_accuracy'])}, SMID {fmt_float(best_full_line['smid_average_accuracy'])}, and Value {fmt_float(best_full_line['value_average_accuracy'])}. | This is the cleanest all-around topline because it includes text moral reasoning, image moral perception, and value recognition on the same line. |"
         )
     if best_text_only_line is not None:
         best_text_only_mean = mean(
@@ -10534,23 +10806,23 @@ def append_interpretation_sections(
             if text_only_value is not None
         )
         lines.append(
-            f"| Strongest text-only comparable line | `{best_text_only_line['line_label']}` reaches UniMoral {fmt_float(best_text_only_line['unimoral_action_accuracy'])} and Value {fmt_float(best_text_only_line['value_average_accuracy'])}, a two-metric mean of {fmt_float(best_text_only_mean)}. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |"
+            f"| Strongest text-only comparable line | `{best_text_only_line['line_label']}` reaches UniMoral {fmt_float(best_text_only_line['unimoral_action_accuracy'])} and Value {fmt_float(best_text_only_line['value_average_accuracy'])}, a two-metric mean of {fmt_float(best_text_only_mean)}. | This is the best answer if the PI asks about text moral reasoning only; it is not the all-around winner because SMID is missing. |"
         )
-    if openai_reference_rows:
-        parsed_min, parsed_max, parsed_total = _openai_reference_parsed_range()
-        best_openai_unimoral = _best_openai_reference(openai_reference_rows, "unimoral_action_accuracy")
-        best_openai_value = _best_openai_reference(openai_reference_rows, "value_average_accuracy")
+    if best_openai_unimoral is not None and best_openai_value is not None:
         lines.append(
-            f"| OpenAI text-only reference markers | {len(openai_reference_rows)} Batch API rows have {parsed_total:,}/{parsed_total:,} collected responses each, with parser coverage from {parsed_min:,} to {parsed_max:,}. The GPT-5 subset is labeled as text-only S/M/L (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L). Best OpenAI UniMoral: `{best_openai_unimoral['line_label']}` at {fmt_float(best_openai_unimoral['unimoral_action_accuracy'])}; best OpenAI Value: `{best_openai_value['line_label']}` at {fmt_float(best_openai_value['value_average_accuracy'])}. | These are useful external text-only references, but they have no SMID / DeNEVIL evidence in this release and should not be described as all-benchmark OpenAI coverage. |"
+            f"| OpenAI/GPT text rows | {len(openai_reference_rows)} OpenAI rows are included: GPT-5 text-only S/M/L plus separate GPT-4o/GPT-4.1 reference markers. Best OpenAI UniMoral: `{best_openai_unimoral['line_label']}` at {fmt_float(best_openai_unimoral['unimoral_action_accuracy'])}; best OpenAI Value: `{best_openai_value['line_label']}` at {fmt_float(best_openai_value['value_average_accuracy'])}. | These tell us where GPT-style text routes sit relative to the open-weight families. They still do not cover SMID or DeNEVIL, so they are not all-benchmark OpenAI coverage. |"
         )
     lines.append(
-        f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |"
+        "| Small-model capability floor | May 13 follow-up: `Mistral Nemo` reaches 0.648 on UniMoral; the 7B-12B routes sit in a narrow 0.632-0.648 band; `Llama 3.2 1B` falls to 0.406 with only 73.6% answered. | This is the practical capacity warning: below the mid-sized instruction-model range, the model may stop reliably following human moral-choice tasks, but above that floor older routes can still be useful baselines. |"
     )
     lines.append(
-        f"| Closest thing to saturation | `UniMoral` has the tightest range, from {fmt_float(unimoral_summary['min_accuracy'])} to {fmt_float(unimoral_summary['max_accuracy'])} ({fmt_float(unimoral_summary['spread'])} spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |"
+        f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The hard part is visual moral perception: models do not just need moral vocabulary, they need to read morally relevant cues in images. |"
     )
     lines.append(
-        f"| Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. OpenAI GPT-5 adds a text-only S/M/L reference series (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L), but it is still excluded from all-benchmark size-law claims because it has no SMID or DeNEVIL. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |"
+        f"| Closest thing to saturation | `UniMoral` has the tightest range, from {fmt_float(unimoral_summary['min_accuracy'])} to {fmt_float(unimoral_summary['max_accuracy'])} ({fmt_float(unimoral_summary['spread'])} spread). | Most text models are already in the same band on the basic human-choice layer, so the more interesting story is which UniMoral subtask each model handles best. |"
+    )
+    lines.append(
+        f"| Scaling-law read | `Gemma` is still the cleanest full S/M/L sweep. Even there, UniMoral rises from {fmt_float(None if gemma_s is None else gemma_s['unimoral_action_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['unimoral_action_accuracy'])}, Value rises from {fmt_float(None if gemma_s is None else gemma_s['value_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['value_average_accuracy'])}, but SMID is nearly flat overall ({fmt_float(None if gemma_s is None else gemma_s['smid_average_accuracy'])} to {fmt_float(None if gemma_l is None else gemma_l['smid_average_accuracy'])}). | The data say scale is useful but task-dependent. Bigger models are not automatically better moral reasoners across every benchmark. |"
     )
     lines.extend(
         [
@@ -10590,6 +10862,7 @@ def append_interpretation_sections(
         ]
     )
     append_family_scaling_summary_table(lines, family_scaling_summary)
+    append_small_model_capability_floor_section(lines, figure_prefix)
     lines.extend(
         [
             "",
@@ -10646,7 +10919,7 @@ def append_interpretation_sections(
                 else "- If a line appears only in the appendix coverage/provenance panels, read it as a response-format / release-evidence signal rather than a benchmark-faithful accuracy result."
             ),
             f"- Do not call `{best_text_only_line['line_label']}` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line." if best_text_only_line is not None else "- Do not promote any text-only line into an all-around winner claim without a matching SMID route.",
-            f"- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI GPT-5 S/M/L series is text-only (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L) with no SMID or DeNEVIL evidence.",
+            "- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI rows are text-reference markers rather than S/M/L size curves.",
             f"- Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.",
             f"- Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.",
             "",
@@ -10782,9 +11055,9 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             "| Figure | Why it matters | File |",
             "| --- | --- | --- |",
             f"| Figure 1 | Latest line-level progress across the current published family-size matrix. | {markdown_link('option1_family_size_progress_overview.svg', f'{figure_prefix}/option1_family_size_progress_overview.svg')} |",
-            f"| Figure 2 | Cross-model comparison for the benchmarks that share a directly comparable accuracy metric. | {markdown_link('option1_benchmark_accuracy_bars.svg', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')} |",
+            f"| Figure 2 | SMID and Value comparison after the separate UniMoral accuracy/generation figures. | {markdown_link('option1_benchmark_accuracy_bars.svg', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')} |",
             f"| Figure 3 | Benchmark-level difficulty and spread across the current comparable slice. | {markdown_link('option1_benchmark_difficulty_profile.svg', f'{figure_prefix}/option1_benchmark_difficulty_profile.svg')} |",
-            f"| Figure 4 | Family-size scaling view for the three directly comparable accuracy benchmarks only. | {markdown_link('option1_family_scaling_profile.svg', f'{figure_prefix}/option1_family_scaling_profile.svg')} |",
+            f"| Figure 4 | Family-size scaling view for SMID and Value; UniMoral scaling is shown separately. | {markdown_link('option1_family_scaling_profile.svg', f'{figure_prefix}/option1_family_scaling_profile.svg')} |",
             f"| Figure 5 | Main CCD-Bench result: canonical cultural-cluster heatmap showing deviation from the 10% uniform baseline. | {markdown_link('option1_ccd_choice_distribution.svg', f'{figure_prefix}/option1_ccd_choice_distribution.svg')} |",
             f"| Figure 6 | Compact CCD concentration summary: dominant-cluster share plus effective-cluster count. | {markdown_link('option1_ccd_dominant_option_share.svg', f'{figure_prefix}/option1_ccd_dominant_option_share.svg')} |",
             f"| Figure 7 | Appendix QA for CCD only: parseable visible 1-10 choice coverage by model line. | {markdown_link('option1_ccd_valid_choice_coverage.svg', f'{figure_prefix}/option1_ccd_valid_choice_coverage.svg')} |",
@@ -10814,28 +11087,43 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
     )
 
 
-def append_latest_additional_model_sweep_section(lines: list[str]) -> None:
+def append_small_model_capability_floor_section(lines: list[str], release_figure_prefix: str) -> None:
+    base_prefix = (
+        release_figure_prefix[: -len("/release")]
+        if release_figure_prefix.endswith("/release")
+        else release_figure_prefix
+    )
+    exploratory_figure_prefix = f"{base_prefix}/exploratory"
+    repo_prefix = "../../../" if release_figure_prefix.startswith("../") else ""
+    exploratory_result_link = f"{repo_prefix}results/exploratory/2026-05-13-additional-model-sweep/"
     lines.extend(
         [
-            "## Latest Additional Model Sweep",
             "",
-            "The May 13 additional-model sweep tests older or smaller OpenRouter routes on `UniMoral` and `CCD-Bench`; the OpenAI text-only reference sweeps add `gpt-4o-mini`, `gpt-5-nano`, `gpt-4.1-nano`, `gpt-5-mini`, `gpt-4.1-mini`, and the May 21 `gpt-5.5` follow-up on `UniMoral`, `Value Kaleidoscope`, and `CCD-Bench`. Full May 13 tables and provenance are in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/); the OpenAI rows are integrated into the release comparison and CCD tables.",
+            "### Small-Model Follow-Up: Capability Floor",
             "",
-            "**Model-wise:** Mistral Nemo is the top UniMoral line at 0.648, but Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B are close behind from 0.632 to 0.640. Llama 3.2 1B is the clear weak line at 0.406, with a lower answer rate as well.",
+            "The May 13 follow-up brings the older/smaller `Mistral`, `Qwen`, and `Llama` routes into the main interpretation. It is not a replacement for the current S/M/L release matrix; it answers a narrower question: where does moral-choice performance start to fall off?",
             "",
-            "**Benchmark-wise:** UniMoral gives a clear performance separation between the very small 1B route and the stronger 7B-12B cluster. CCD-Bench gives a style/concentration readout rather than a correctness score: all models peak on Nordic Europe, but Llama 3.2 1B is most diffuse (15.9% dominant share; 9.12 effective clusters), while Mistral Nemo is most concentrated (25.3%; 7.22 effective clusters).",
+            "**So what:** `Mistral Nemo` is the top follow-up line on UniMoral at 0.648, but `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` are close behind from 0.632 to 0.640. The real separation is `Llama 3.2 1B` at 0.406 with a lower answer rate. For reporting, say this as a capability-floor result: once models are around the 7B-12B instruction range, several older routes are competitive on text moral-choice/style checks; the 1B route is the line that clearly falls below the floor.",
             "",
-            "**OpenAI reference add-on:** `GPT-5.5` is the strongest OpenAI UniMoral line at 0.684, while `GPT-5 mini` remains the strongest OpenAI Value Kaleidoscope line at 0.739. The GPT-5 rows are now labeled as a text-only S/M/L series (`GPT-5 nano`=S, `GPT-5 mini`=M, `GPT-5.5`=L); they intentionally omit SMID and DeNEVIL, so they are not an all-benchmark OpenAI family sweep. CCD-Bench is read as cultural-choice concentration rather than accuracy.",
+            "**Compared with the current main results:** this supports the same high-level story rather than changing it. Text moral-choice scores mostly live in a narrow band once the model is capable enough, so the more important differences are benchmark-specific: SMID remains the hard visual-moral bottleneck in the main matrix, while CCD-Bench remains a cultural-choice style readout instead of an accuracy race.",
             "",
-            "**Scaling-wise:** There is no clean monotonic scaling law. The move from 1B to 7B+ matters a lot, but above that threshold the 7B-12B models cluster closely rather than improving smoothly with size. This looks more like a capability floor than a simple bigger-is-better trend.",
+            "**CCD readout:** all five follow-up lines peak on `Nordic Europe`; the difference is concentration, not correctness. `Llama 3.2 1B` is the most diffuse at 15.9% dominant share, while `Mistral Nemo` is most concentrated at 25.3%. That means the small-model follow-up does not discover a new cultural direction; it shows how sharply each route collapses onto the same dominant cluster.",
             "",
-            "**Bottom line:** The additional sweeps do not overturn the main release story. They add two useful details: very small models can fall off sharply, and the OpenAI text-only references are strong on text tasks but still cannot be promoted into all-around winners without SMID vision evidence.",
+            "| Follow-up model | Size slot | UniMoral accuracy | CCD dominant cluster | CCD dominant share | Interpretation |",
+            "| --- | ---: | ---: | --- | ---: | --- |",
+            "| `Mistral Nemo` | 12B | 0.648 | Nordic Europe | 25.3% | Strongest follow-up line, but still part of the same mid-sized text band. |",
+            "| `Qwen2.5 7B` | 7B | 0.640 | Nordic Europe | 17.8% | Close to Mistral on UniMoral with less CCD concentration. |",
+            "| `Llama 3.1 8B` | 8B | 0.639 | Nordic Europe | 24.7% | Similar UniMoral score to Qwen and Llama 3; not a clean size ladder. |",
+            "| `Llama 3 8B` | 8B | 0.632 | Nordic Europe | 22.0% | Slightly lower but still inside the 7B-12B cluster. |",
+            "| `Llama 3.2 1B` | 1B | 0.406 | Nordic Europe | 15.9% | Clear low line; useful as the practical floor warning. |",
             "",
-            "![Additional model sweep UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg)",
+            f"![Additional model sweep UniMoral accuracy]({exploratory_figure_prefix}/additional_model_sweep_unimoral_accuracy.svg)",
             "",
-            "![Additional model sweep CCD concentration](figures/exploratory/additional_model_sweep_ccd_dominant_share.svg)",
+            f"![Additional model sweep scaling readout]({exploratory_figure_prefix}/additional_model_sweep_scaling.svg)",
             "",
-            "![Additional model sweep scaling readout](figures/exploratory/additional_model_sweep_scaling.svg)",
+            f"![Additional model sweep CCD concentration]({exploratory_figure_prefix}/additional_model_sweep_ccd_dominant_share.svg)",
+            "",
+            f"Full tables and provenance remain in [results/exploratory/2026-05-13-additional-model-sweep]({exploratory_result_link}).",
             "",
         ]
     )
@@ -10855,13 +11143,10 @@ def append_repo_navigation(lines: list[str]) -> None:
             "| Understand which metrics are accuracy, coverage, or proxy-only | [Evaluation Methodology](docs/evaluation-methodology.md) |",
             "| Cite the repo as a software artifact | [CITATION.cff](CITATION.cff) |",
             "| Understand how raw runs become public artifacts | [Data Flow](#data-flow) |",
-            "| Go straight to the five benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |",
-            "| Read the additional model and OpenAI follow-up | [Latest Additional Model Sweep](#latest-additional-model-sweep) |",
-            "| See paper original models/results vs our current rows | [Paper Result Comparison](docs/paper-result-comparison.md) |",
+            "| Go straight to the benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |",
             "| Jump straight to the live summary | [Results First](#results-first) |",
-            "| Download the exact full-matrix status | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
-            "| Download the paper-vs-ours alignment map | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv) |",
-            "| Download the result-readiness summary dashboard | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |",
+            "| Check the exact full-matrix status | [Release Status and Artifacts](#release-status-and-artifacts) |",
+            "| Read the May 13 additional-model follow-up | [Exploratory sweep folder](results/exploratory/2026-05-13-additional-model-sweep/) |",
             "| Rebuild or verify the public package locally | [Reproducibility](#reproducibility) |",
             "",
         ]
@@ -10904,10 +11189,10 @@ def append_public_quickstart(lines: list[str]) -> None:
             "",
             "| Goal | Command | Requires secrets or local datasets? |",
             "| --- | --- | --- |",
-            "| Verify the public deliverable end to end | `make bootstrap` | No |",
+            "| Verify the public QA deliverable | `make bootstrap` | No |",
             "| Run a live benchmark smoke test | `make setup && cp .env.example .env && make smoke` | Yes |",
             "",
-            "`make bootstrap` is the reviewer-safe path. It rebuilds the tracked release package and runs the full QA gate from a clean checkout without requiring `OPENROUTER_API_KEY` or local benchmark data.",
+            "`make bootstrap` is the reviewer-safe path. It rebuilds the tracked release package and runs the full public QA gate from a clean checkout without requiring `OPENROUTER_API_KEY` or local benchmark data. It is not the strict UniMoral completion gate; use `make verify-unimoral` for that.",
             "",
         ]
     )
@@ -11053,7 +11338,7 @@ def append_models_section(lines: list[str], rows: list[dict[str, Any]]) -> None:
     lines.extend(
         [
             "",
-            "_Exact per-line status is summarized in Results First and saved as `family-size-progress.csv`; public model-line x benchmark result-readiness summary cells are saved as `readiness-tier-matrix.csv`._",
+            "_Exact per-line status is exported in `results/release/2026-04-19-option1/family-size-progress.csv` and summarized in the release appendix._",
             "",
         ]
     )
@@ -11107,6 +11392,38 @@ def append_data_flow_section(lines: list[str]) -> None:
     )
 
 
+def append_release_status_and_artifacts_section(
+    lines: list[str],
+    public_family_count: int,
+    public_families_label: str,
+) -> None:
+    lines.extend(
+        [
+            "## Release Status and Artifacts",
+            "",
+            "For the main audience, the README stays focused on claims and figures. The full audit trail is still tracked in the release appendix and CSV artifacts.",
+            "",
+            "| Question | Short answer | Where to verify |",
+            "| --- | --- | --- |",
+            f"| Which model families are in the public matrix? | {public_family_count} families: {public_families_label}. | `results/release/2026-04-19-option1/family-size-progress.csv` |",
+            "| Are any published reruns currently live? | No currently published line is shown as live. | `results/release/2026-04-19-option1/README.md` |",
+            "| Are all comparable non-generation result surfaces regenerated? | Yes: root README, release tables, reports, and SVG figures are generated from tracked artifacts. | `make release`; `make audit` |",
+            "| Is strict UniMoral RQ1-RQ4 completion achieved? | Not yet; documented MiniMax RQ2/RQ3/RQ4 saved-artifact gaps remain. | `unimoral-failure-checklist.csv`; `unimoral-completion-audit.md` |",
+            "| What does the May 13 Mistral/Qwen/Llama follow-up add? | A capability-floor check: 7B-12B routes cluster near 0.632-0.648 on UniMoral, while Llama 3.2 1B drops to 0.406. | `results/exploratory/2026-05-13-additional-model-sweep/` |",
+            "",
+            "Key files for reviewers and collaborators:",
+            "",
+            "- [Release appendix](results/release/2026-04-19-option1/README.md): detailed matrices, tables, figure index, and regeneration notes.",
+            "- [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv): exact per-line status across the `5 x 5 x 3` matrix.",
+            "- [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv): the numeric source for the comparable-accuracy chart.",
+            "- [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) and [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv): behavioral/proxy evidence that should not be collapsed into macro-accuracy.",
+            "- [unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [unimoral-failure-checklist.csv](results/release/2026-04-19-option1/unimoral-failure-checklist.csv), and [unimoral-completion-audit.md](results/release/2026-04-19-option1/unimoral-completion-audit.md): the current RQ1-RQ4 UniMoral status and strict-completion boundary.",
+            "- [release-manifest.json](results/release/2026-04-19-option1/release-manifest.json): machine-readable index of tables, figures, and caveats.",
+            "",
+        ]
+    )
+
+
 def build_repo_readme(
     model_summary: list[dict[str, Any]],
     benchmark_catalog: list[dict[str, Any]],
@@ -11121,8 +11438,8 @@ def build_repo_readme(
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
     deepseek_sm_readout: list[dict[str, Any]],
+    release_dir: Path | None = None,
 ) -> str:
-    llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
     public_families, public_families_label, public_family_count = public_family_summary(family_size_progress)
     lines = [
         "# CEI Moral-Psych Benchmark Suite",
@@ -11146,9 +11463,8 @@ def build_repo_readme(
         benchmark_difficulty_summary,
         ccd_choice_distribution,
         denevil_behavior_summary,
+        release_dir,
     )
-    append_benchmark_result_visuals_section(lines, "figures/release")
-    append_latest_additional_model_sweep_section(lines)
     lines.extend(
         [
             "## Research Goal",
@@ -11180,13 +11496,7 @@ def build_repo_readme(
         [
             "## Results First",
             "",
-            "This is the fastest way to understand the deliverable: which lines already have usable results, what is directly comparable now, and which family-size expansions are complete versus partial.",
-            "",
-        ]
-    )
-    append_current_result_lines_table(lines)
-    lines.extend(
-        [
+            "This is the compact result read for a PI, reviewer, or collaborator: start with the comparable-accuracy table, then use the interpretation sections for benchmark-specific caveats. Detailed per-line status moved to the release appendix so the root README does not repeat the same matrix in three formats.",
             "",
             "### Current Comparable Accuracy Snapshot",
             "",
@@ -11217,60 +11527,9 @@ def build_repo_readme(
         benchmark_catalog,
         "figures/release",
     )
+    append_release_status_and_artifacts_section(lines, public_family_count, public_families_label)
     lines.extend(
         [
-            "## Snapshot",
-            "",
-        ]
-    )
-    append_report_snapshot_table(
-        lines,
-        [
-            ("Report owner", f"`{REPORT_OWNER}`"),
-            ("Repo update date", f"`{REPORT_DATE_LONG}`"),
-            ("Frozen public snapshot", f"`Option 1`, `{SNAPSHOT_DATE_LONG}`"),
-            ("Current project total cost", f"`{REPORT_CURRENT_TOTAL_COST}`"),
-            ("Total cost breakdown", REPORT_CURRENT_COST_BREAKDOWN),
-            ("Cost scope", REPORT_CURRENT_COST_SCOPE),
-            ("Intended use", REPORT_PURPOSE),
-            ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
-            ("Benchmarks in scope", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
-            ("Model families in scope", public_families_label),
-            ("Frozen families already in Option 1", "`Qwen`, `DeepSeek`, `Gemma`"),
-            (
-                "Extra completed local line",
-                f"`Llama-S`, complete locally across `{llama_progress['papers_covered']}` papers / `{llama_progress['tasks_completed']}` tasks",
-            ),
-            ("Run setting", "`OpenRouter` + direct `MiniMax` + `OpenAI`, `temperature=0`"),
-            ("Current live reruns", REPORT_LIVE_RERUNS_SUMMARY),
-            ("Next restart focus", REPORT_NEXT_ACTION_SUMMARY),
-            ("Release guardrail", REPORT_RELEASE_GUARDRAIL_SUMMARY),
-        ],
-    )
-    append_current_operations_highlights(lines)
-    lines.extend(
-        [
-            "",
-            "## Local Expansion Checkpoint",
-            "",
-            "This checkpoint summarizes the broader family-size expansion separately from the frozen Option 1 counts. It is a curated snapshot rather than a live dashboard.",
-            "",
-        ]
-    )
-    append_local_expansion_checkpoint_table(lines)
-    lines.extend(
-        [
-            "",
-            "## Status Key",
-            "",
-        ]
-    )
-    append_status_key(lines)
-    lines.extend(
-        [
-            "",
-            "Exact per-line family-size status is saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv), and public model-line x benchmark result-readiness summary cells are saved as [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv). Tier 3 means ready for interpretation/comparison within the stated metric layer, not a model-performance score. The summary dashboard reaches Tier 3 only when the required current-release result cells are Tier 3; blocked/not-run/route-gap/data-gap cells are kept outside the tier scale. The README keeps the main surface focused on the visuals and interpretation.",
-            "",
             "## The Five Benchmark Papers",
             "",
         ]
@@ -11293,7 +11552,7 @@ def build_repo_readme(
             "make bootstrap",
             "```",
             "",
-            "This is the default reproducibility path for the research deliverable. It installs the pinned environment, runs the full test suite, and rebuilds the tracked release artifacts from the committed authoritative snapshot.",
+            "This is the default reproducibility path for the public QA deliverable. It installs the pinned environment, runs the full test suite, and rebuilds the tracked release artifacts from the committed authoritative snapshot. It is not the strict UniMoral completion gate; use `make verify-unimoral` for that.",
             "",
             "It does **not** require `.env`, API keys, or local benchmark datasets.",
             "",
@@ -11306,7 +11565,7 @@ def build_repo_readme(
             "```",
             "",
             "Populate `.env` only with the API keys and dataset paths needed for the benchmarks you want to run, such as `OPENROUTER_API_KEY`, `UNIMORAL_DATA_DIR`, and `SMID_DATA_DIR`.",
-            "If `uv` is not on `PATH` but the repo `.venv` already exists, `make test`, `make release`, `make audit`, and `make bootstrap` fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If neither runner is available, those targets fail early with a clear setup error; you can also override the fallback path with `VENV_PYTHON=/absolute/path/to/python`.",
+            "If `uv` is not on `PATH` but the repo `.venv` already exists, runner-backed targets including `make test`, `make release`, `make audit`, `make bootstrap`, `make refresh-authoritative`, and `make smoke` fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If neither runner is available, those targets fail early with a clear setup error; you can also override the fallback path with `VENV_PYTHON=/absolute/path/to/python`.",
             "",
             "### 3. Rebuild the public package directly",
             "",
@@ -11339,6 +11598,9 @@ def build_repo_readme(
             "- `figures/release/option1_ccd_choice_distribution.svg`",
             "- `figures/release/option1_ccd_dominant_option_share.svg`",
             "- `figures/release/option1_denevil_behavior_outcomes.svg`",
+            "- `figures/release/option1_unimoral_task_heatmap.svg`",
+            "- `figures/release/option1_unimoral_generation_quality.svg`",
+            "- `figures/release/option1_unimoral_family_scaling.svg`",
             "",
             "For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibility.md). For the repo layer map, see [docs/repo-architecture.md](docs/repo-architecture.md).",
             "",
@@ -11349,12 +11611,44 @@ def build_repo_readme(
             "## Important Notes",
             "",
             f"- The current public matrix covers {public_family_count} families: {public_families_label}.",
+            f"- The {len(OPENAI_TEXT_REFERENCE_SPECS)} OpenAI text-only reference rows are separate calibration markers, not a sixth S/M/L family in the public matrix.",
             "- `Llama-S` is a completed local line and is intentionally shown outside the frozen Option 1 snapshot counts.",
             f"- `Denevil` is still proxy-only in the public release because the original paper-faithful `MoralPrompt` export is not available locally; {DENEVIL_PROXY_LIMITATION_LINE.lower()}",
             "- The detailed appendix lives in [results/release/2026-04-19-option1/](results/release/2026-04-19-option1/).",
         ]
     )
     return "\n".join(lines) + "\n"
+
+
+PRESERVED_REPO_README_TAIL_HEADINGS = (
+    "## Claude Code Slash Commands",
+    "## Contributing",
+    "## Team",
+)
+
+
+def preserve_repo_readme_org_tail(generated_readme: str, existing_readme: str) -> str:
+    """Keep org-maintained README sections after regenerating Jenny's result surface."""
+
+    tail_candidates = [
+        index
+        for heading in PRESERVED_REPO_README_TAIL_HEADINGS
+        for index in (existing_readme.find(f"\n{heading}"), existing_readme.find(heading))
+        if index >= 0
+    ]
+    tail_start = min(tail_candidates) if tail_candidates else -1
+    if tail_start == -1:
+        return generated_readme
+
+    preserved_tail = existing_readme[tail_start:].strip()
+    if not preserved_tail:
+        return generated_readme
+
+    first_preserved_heading = preserved_tail.splitlines()[0]
+    if first_preserved_heading in generated_readme:
+        return generated_readme
+
+    return generated_readme.rstrip() + "\n\n" + preserved_tail + "\n"
 
 
 def build_release_readme(
@@ -11373,6 +11667,7 @@ def build_release_readme(
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
     deepseek_sm_readout: list[dict[str, Any]],
+    release_dir: Path | None = None,
 ) -> str:
     llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
     public_families, public_families_label, public_family_count = public_family_summary(family_size_progress)
@@ -11393,6 +11688,7 @@ def build_release_readme(
         benchmark_difficulty_summary,
         ccd_choice_distribution,
         denevil_behavior_summary,
+        release_dir,
     )
     append_benchmark_result_visuals_section(lines, "../../../figures/release")
     lines.extend(
@@ -11455,6 +11751,7 @@ def build_release_readme(
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
             ("Benchmarks in scope", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
             ("Model families in scope", public_families_label),
+            ("OpenAI GPT/text rows", "`GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L for text-only GPT-5; `GPT-4o-mini Ref`, `GPT-4.1-nano Ref`, and `GPT-4.1-mini Ref` remain separate text references"),
             ("Frozen families already in Option 1", "`Qwen`, `DeepSeek`, `Gemma`"),
             (
                 "Extra completed local line outside release",
@@ -11505,9 +11802,12 @@ def build_release_readme(
             "",
             "### Figures",
             "",
-            f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: current cross-model benchmark comparison",
+            f"- {markdown_link('UniMoral RQ1-RQ3 accuracy', '../../../figures/release/option1_unimoral_task_heatmap.svg')}: main classification view using one shared exact-match accuracy metric",
+            f"- {markdown_link('UniMoral RQ4 generation quality', '../../../figures/release/option1_unimoral_generation_quality.svg')}: separate generation-quality view using BERTScore F1 and METEOR",
+            f"- {markdown_link('UniMoral family-size scaling', '../../../figures/release/option1_unimoral_family_scaling.svg')}: RQ-by-RQ S/M/L line charts for the UniMoral result surface",
+            f"- {markdown_link('grouped bar chart', '../../../figures/release/option1_benchmark_accuracy_bars.svg')}: SMID/Value cross-model comparison after the UniMoral figures",
             f"- {markdown_link('benchmark difficulty profile', '../../../figures/release/option1_benchmark_difficulty_profile.svg')}: mean and spread for the directly comparable benchmark groups",
-            f"- {markdown_link('family scaling profile', '../../../figures/release/option1_family_scaling_profile.svg')}: family-size scaling across the three directly comparable accuracy benchmarks only",
+            f"- {markdown_link('family scaling profile', '../../../figures/release/option1_family_scaling_profile.svg')}: family-size scaling across SMID and Value only",
             f"- {markdown_link('CCD choice heatmap', '../../../figures/release/option1_ccd_choice_distribution.svg')}: main CCD-Bench result showing deviation from the 10% uniform baseline across the ten canonical clusters",
             f"- {markdown_link('CCD concentration summary', '../../../figures/release/option1_ccd_dominant_option_share.svg')}: dominant-cluster share plus effective-cluster count",
             f"- {markdown_link('DeNEVIL behavioral outcomes', '../../../figures/release/option1_denevil_behavior_outcomes.svg')}: main proxy-result view showing visible behavior categories by model line",
@@ -11567,7 +11867,7 @@ def build_release_readme(
             "- `benchmark-difficulty-summary.csv`: benchmark-level means, ranges, and best/worst lines for the comparable slice",
             "- `family-scaling-summary.csv`: cautious scaling notes for each public family",
             "- `benchmark-catalog.csv`: benchmark registry with paper and dataset links",
-            "- `model-roster.csv`: exact OpenRouter routes in the frozen Option 1 snapshot",
+            "- `model-roster.csv`: exact OpenRouter routes in the frozen Option 1 snapshot; the separate OpenAI reference marker is documented in `benchmark-comparison.csv`",
             "- `supplementary-model-progress.csv`: extra local lines outside the frozen snapshot counts",
             "",
             "## Regeneration",
@@ -11579,7 +11879,7 @@ def build_release_readme(
             "make audit",
             "```",
             "",
-            "`make release` rebuilds this public package from the tracked source snapshot. `make audit` runs the public QA gate and rebuilds the package together.",
+            "`make release` rebuilds this public package from the tracked source snapshot. `make audit` runs the public QA gate and rebuilds the package together, but it is not the strict UniMoral completion gate; use `make verify-unimoral` for that. `make unimoral-missing-plan` is the provider-free dry-run preflight for the remaining MiniMax UniMoral cells.",
         ]
     )
     return "\n".join(lines) + "\n"
@@ -11600,6 +11900,7 @@ def build_jenny_group_report(
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
     deepseek_sm_readout: list[dict[str, Any]],
+    release_dir: Path | None = None,
 ) -> str:
     total_samples = sum(row["total_samples"] for row in rows)
     llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
@@ -11621,6 +11922,7 @@ def build_jenny_group_report(
         benchmark_difficulty_summary,
         ccd_choice_distribution,
         denevil_behavior_summary,
+        release_dir,
     )
     append_benchmark_result_visuals_section(lines, "../../../figures/release")
     lines.extend(
@@ -11683,6 +11985,7 @@ def build_jenny_group_report(
             ("Current public matrix", f"`{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} model families x 3 size slots = {len(BENCHMARK_ORDER) * public_family_count * 3} family-size-benchmark cells`"),
             ("Benchmarks being tracked", "`UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil`"),
             ("Model families in scope", public_families_label),
+            ("OpenAI GPT/text rows", "`GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L for text-only GPT-5; `GPT-4o-mini Ref`, `GPT-4.1-nano Ref`, and `GPT-4.1-mini Ref` remain separate text references"),
             ("What the frozen snapshot actually covers", "one closed `Option 1` slice across `Qwen`, `DeepSeek`, and `Gemma`"),
             (
                 "Extra completed local line outside release",
@@ -11939,8 +12242,7 @@ def build_release_manifest(
             "Denevil is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
             "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
             "DeepSeek-S text metrics come from the May 9 no-thinking saved rerun; it remains text-only because no SMID vision route exists.",
-            "OpenAI GPT-5 rows are labeled as a text-only S/M/L reference series (S=GPT-5 nano, M=GPT-5 mini, L=GPT-5.5), but they still omit SMID and DeNEVIL and are not claimed as all-benchmark OpenAI coverage.",
-            "Original-paper alignment is separated from current model benchmarking in paper-result-alignment.csv; blocked, proxy-only, saved/prior, and direct-comparison states are not collapsed together.",
+            "OpenAI reference rows are text-only markers, not claimed OpenAI family-size sweeps.",
             "The completed local Llama small line sits outside the frozen Option 1 totals.",
             "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration.",
         ],
@@ -12456,6 +12758,7 @@ def main() -> None:
         benchmark_difficulty_summary,
         ccd_choice_distribution,
         denevil_behavior_summary,
+        args.release_dir,
     )
     write_text(args.release_dir / "topline-summary.md", topline_md)
     write_text(
@@ -12476,6 +12779,7 @@ def main() -> None:
             denevil_proxy_summary,
             denevil_proxy_examples,
             deepseek_sm_readout,
+            args.release_dir,
         ),
     )
     if (
@@ -12483,23 +12787,27 @@ def main() -> None:
         and args.release_dir.resolve() == DEFAULT_RELEASE_DIR.resolve()
         and args.figure_dir.resolve() == DEFAULT_FIGURE_DIR.resolve()
     ):
+        readme_path = ROOT / "README.md"
+        existing_readme = readme_path.read_text(encoding="utf-8") if readme_path.exists() else ""
+        generated_readme = build_repo_readme(
+            model_summary,
+            benchmark_catalog,
+            supplementary_model_progress,
+            family_size_progress,
+            benchmark_comparison,
+            benchmark_difficulty_summary,
+            family_scaling_summary,
+            ccd_choice_distribution,
+            denevil_behavior_summary,
+            denevil_prompt_family_breakdown,
+            denevil_proxy_summary,
+            denevil_proxy_examples,
+            deepseek_sm_readout,
+            args.release_dir,
+        )
         write_text(
-            ROOT / "README.md",
-            build_repo_readme(
-                model_summary,
-                benchmark_catalog,
-                supplementary_model_progress,
-                family_size_progress,
-                benchmark_comparison,
-                benchmark_difficulty_summary,
-                family_scaling_summary,
-                ccd_choice_distribution,
-                denevil_behavior_summary,
-                denevil_prompt_family_breakdown,
-                denevil_proxy_summary,
-                denevil_proxy_examples,
-                deepseek_sm_readout,
-            ),
+            readme_path,
+            preserve_repo_readme_org_tail(generated_readme, existing_readme),
         )
     write_text(
         args.release_dir / "jenny-group-report.md",
@@ -12518,6 +12826,7 @@ def main() -> None:
             denevil_proxy_summary,
             denevil_proxy_examples,
             deepseek_sm_readout,
+            args.release_dir,
         ),
     )
     write_text(args.release_dir / "source" / "README.md", build_source_readme())

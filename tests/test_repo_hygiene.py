@@ -82,6 +82,9 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "results/release/2026-04-19-option1/README.md" in readme
     assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
     assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme
+    assert "figures/release/option1_unimoral_task_heatmap.svg" in readme
+    assert "figures/release/option1_unimoral_generation_quality.svg" in readme
+    assert "figures/release/option1_unimoral_family_scaling.svg" in readme
     assert "figures/release/option1_family_scaling_profile.svg" in readme
     assert "figures/release/option1_ccd_choice_distribution.svg" in readme
     assert "figures/release/option1_ccd_dominant_option_share.svg" in readme
@@ -89,6 +92,19 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "`CCD-Bench` is reported as cultural-cluster choice behavior" in readme
     assert "`DeNEVIL` is reported as proxy behavioral evidence" in readme
     assert "`make bootstrap`" in readme or "make audit" in readme
+
+    unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
+    assert "UniMoral family-size scaling by RQ" in unimoral_family_scaling_svg
+    assert "OpenAI reference is GPT-4o-mini only in this UniMoral RQ figure" in unimoral_family_scaling_svg
+    assert "Metric: Accuracy" in unimoral_family_scaling_svg
+    assert "Metric: BERTScore F1" in unimoral_family_scaling_svg
+    assert "Metric: METEOR" in unimoral_family_scaling_svg
+    assert "GPT 4o-mini 0.711" in unimoral_family_scaling_svg
+    assert "GPT 5-mini" not in unimoral_family_scaling_svg
+    assert "GPT 4.1-mini" not in unimoral_family_scaling_svg
+    assert ">Ref<" not in unimoral_family_scaling_svg
+    assert "OpenAI Ref" in unimoral_family_scaling_svg
+    assert "#dc2626" in unimoral_family_scaling_svg
 
 
 def test_repository_root_keeps_legacy_files_archived():

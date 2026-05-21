@@ -8,7 +8,7 @@ environment variables.
 
 | Benchmark | Paper | Dataset / access link | Tasks in repo | Required env vars | Expected local format | Public release status |
 | --- | --- | --- | --- | --- | --- | --- |
-| `UniMoral` | [Kumar et al. 2025](https://aclanthology.org/2025.acl-long.294/) | [HF dataset](https://huggingface.co/datasets/shivaniku/UniMoral) | `unimoral_action_prediction` plus additional task builders in module | `UNIMORAL_DATA_DIR` | directory containing files such as `English_long.csv` and `English_short.csv` | benchmark-faithful |
+| `UniMoral` | [Kumar et al. 2025](https://aclanthology.org/2025.acl-long.294/) | [HF dataset](https://huggingface.co/datasets/shivaniku/UniMoral) | `unimoral_action_prediction`, `unimoral_moral_typology`, `unimoral_factor_attribution`, `unimoral_consequence_generation` | `UNIMORAL_DATA_DIR` | directory containing files such as `English_long.csv` and `English_short.csv`; RQ2/RQ3/RQ4 require the long files with `Action_criteria`, `Contributing_factors`, and `Consequence` | benchmark-faithful task definitions; current full-benchmark coverage is tracked in `unimoral-coverage.csv` and `unimoral-failure-checklist.csv` |
 | `SMID` | [Crone et al. 2018](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0190954) | [OSF project](https://osf.io/ngzwx/) | `smid_moral_rating`, `smid_foundation_classification` | `SMID_DATA_DIR` | directory containing a norms CSV plus image assets or image zip archives | benchmark-faithful |
 | `Value Kaleidoscope` | [Sorensen et al. 2024 / arXiv](https://arxiv.org/abs/2309.00779) | [HF dataset](https://huggingface.co/datasets/allenai/ValuePrism) | `value_prism_relevance`, `value_prism_valence` | `VALUEPRISM_RELEVANCE_FILE`, `VALUEPRISM_VALENCE_FILE` or Hugging Face auth | local CSV / JSON / JSONL export, or gated HF dataset access | benchmark-faithful |
 | `CCD-Bench` | [Rahman et al. 2025](https://arxiv.org/abs/2510.03553) | [repo](https://github.com/smartlab-nyu/CCD-Bench), [JSON](https://raw.githubusercontent.com/smartlab-nyu/CCD-Bench/main/datasets/CCD-Bench.json) | `ccd_bench_selection` | `CCD_BENCH_DATA_FILE` optional | local JSON file or default remote JSON URL | benchmark-faithful |
@@ -40,5 +40,9 @@ repository.
 ## Release Interpretation
 
 The closed `2026-04-19 Option 1` package includes benchmark-faithful lines for
-`UniMoral`, `SMID`, `Value Kaleidoscope`, and `CCD-Bench`, but only a proxy line
-for `Denevil`. Treat that distinction as methodological, not cosmetic.
+`UniMoral` RQ1/action prediction, `SMID`, `Value Kaleidoscope`, and
+`CCD-Bench`, but only a proxy line for `Denevil`. The expanded UniMoral
+artifact package now also exposes RQ2/RQ3/RQ4 tables and sample predictions;
+read their completion state from the UniMoral coverage and failure-checklist
+artifacts rather than from the legacy RQ1-only topline column. Treat these
+distinctions as methodological, not cosmetic.

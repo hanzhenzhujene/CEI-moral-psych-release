@@ -37,9 +37,9 @@ These tiers are paired with metric layers. Tier 3 CCD-Bench is still choice-dist
 
 - `Qwen`, `DeepSeek`, and `Gemma` are inside the frozen `Option 1` snapshot.
 - `Llama-S` is complete locally, but it is still outside the frozen snapshot counts.
-- `MiniMax-S` is complete in the current generated release tables via the direct MiniMax-M2.1 text rerun plus the MiniMax-01 SMID recovery route.
-- `MiniMax-M` has text results but no medium SMID route yet, so it should not be described as a full five-benchmark comparison line.
+- A formal attempt on disk is not enough to call a line complete; use the current release status tables and task-specific failure checklists.
 - `Denevil` should be reported as `proxy` unless a real local `MoralPrompt` export becomes available and `denevil_generation` is rerun.
+- In legacy release tables, `UniMoral` means the RQ1/action-prediction scalar unless the table explicitly says `UniMoral Full Benchmark`. The full RQ1-RQ4 package has its own coverage table and failure checklist.
 
 ## Short Version
 

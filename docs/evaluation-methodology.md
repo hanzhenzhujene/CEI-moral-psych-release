@@ -28,7 +28,7 @@ Tier is about result readiness. It is not model performance, not a family-level 
 
 This repo currently exposes three different kinds of result:
 
-1. `Benchmark-faithful accuracy`
+1. `Benchmark-faithful accuracy / classification / generation metrics`
    - Used for: `UniMoral`, `SMID`, `Value Kaleidoscope`
    - Interpretation: the model produced a benchmark answer that can be scored against a benchmark target.
    - Safe comparisons: across models within the same benchmark, and cautiously across families when the same route type exists.
@@ -54,6 +54,8 @@ This repo currently exposes three different kinds of result:
 The current code deliberately uses stricter answer extraction than earlier iterations of this repo.
 
 - `UniMoral` action prediction now looks for an explicit `a` / `b` choice instead of matching any stray article-like token.
+- `UniMoral` moral typology and factor attribution use label-membership parsing against the official RQ2/RQ3 label sets and report official-style weighted F1 as the primary release metric.
+- `UniMoral` consequence generation extracts the explicit generated consequence and reports official-style BLEU, METEOR, and offline BERTScore, with ROUGE-L retained as an additional repo-local diagnostic.
 - `Value Kaleidoscope` now resolves `not relevant` before `relevant`, and `Either` before `Supports` / `Opposes`, so overlapping phrases do not get misclassified by regex order.
 - `CCD-Bench` coverage now expects a structured visible `1-10` choice rather than blindly trusting the first integer mentioned anywhere in the completion.
 - `SMID` moral rating now expects a bounded visible integer rather than any incidental digit captured by a loose regex.
@@ -64,7 +66,8 @@ These controls matter because many modern provider routes emit hidden reasoning 
 
 Use these rules when writing claims from the current release:
 
-- Compare `UniMoral`, `SMID`, and `Value Kaleidoscope` as accuracy-style benchmark results.
+- Compare legacy `UniMoral` action prediction, `SMID`, and `Value Kaleidoscope` as accuracy-style benchmark results.
+- Read the expanded `UniMoral` RQ2/RQ3/RQ4 artifacts separately: RQ2/RQ3 are classification tasks scored mainly by weighted F1, and RQ4 is a generation task scored mainly by METEOR plus BLEU/BERTScore.
 - Treat `CCD-Bench` as two separate public surfaces: valid-choice coverage, then choice-distribution / dominant-option concentration among valid visible selections. Do not collapse those into a scalar accuracy claim.
 - Treat `Denevil` as proxy-only coverage and traceability evidence unless and until the repo exposes a paper-aligned comparable scalar for it.
 - Do not fold `Denevil` into any macro-accuracy average.
@@ -77,6 +80,7 @@ Use these rules when writing claims from the current release:
 - `Reasoning-only traces`: hidden reasoning is not treated as a valid public answer.
 - `Route mismatch`: some provider routes are text-only, some are vision-capable, and some have no stable public route for a benchmark-size slot.
 - `Proxy drift`: `Denevil` is still a proxy path in this repo, so completion there cannot be interpreted as benchmark-faithful ethical robustness.
+- `Mixed UniMoral task types`: the legacy `UniMoral` scalar in older tables is RQ1/action prediction only. The full UniMoral package has separate RQ1/RQ2/RQ3/RQ4 artifacts and a failure checklist for any provider cells that are incomplete or parse-limited.
 
 ## How To Read DeepSeek-M
 

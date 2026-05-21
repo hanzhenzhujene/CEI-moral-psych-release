@@ -132,6 +132,28 @@ uv run --package cei-inspect \
   --no_sandbox
 ```
 
+Run the added UniMoral RQ2/RQ3/RQ4 tasks explicitly:
+
+```bash
+cd /path/to/CEI
+UNIMORAL_DATA_DIR="/absolute/path/to/Final_data" \
+UNIMORAL_LANGUAGE=all \
+UNIMORAL_MODE=np \
+uv run --package cei-inspect python src/inspect/run.py \
+  --tasks src/inspect/evals/moral_psych.py::unimoral_moral_typology \
+          src/inspect/evals/moral_psych.py::unimoral_factor_attribution \
+          src/inspect/evals/moral_psych.py::unimoral_consequence_generation \
+  --model openrouter/qwen/qwen-2.5-72b-instruct \
+  --temperature 0 \
+  --no_sandbox
+```
+
+For the current release package, use `make verify-unimoral` as the strict
+completion gate and `make verify-unimoral-artifacts` for a structural check
+that still permits documented provider blockers. Any incomplete UniMoral
+RQ2/RQ3/RQ4 cell should appear in
+`results/release/2026-04-19-option1/unimoral-failure-checklist.csv`.
+
 Run SMID with a vision model:
 
 ```bash
@@ -214,8 +236,9 @@ A practical way to run them is one family at a time, always keeping `--temperatu
 ## Notes On Scoring
 
 - `UniMoral`
-  - Action prediction, moral typology, and factor attribution are scored directly.
-  - Consequence generation uses max ROUGE-L against available reference consequences.
+  - Action prediction is scored as an `a` / `b` classification task.
+  - Moral typology and factor attribution use official-style weighted F1 over the top label(s) from `Action_criteria` and `Contributing_factors`.
+  - Consequence generation uses `Consequence` references and reports BLEU, METEOR, BERTScore, and an additional ROUGE-L diagnostic.
 - `SMID`
   - Moral rating is scored as integer match against rounded normative ratings.
   - Foundation classification is scored against the dominant normative foundation.

@@ -73,7 +73,7 @@ DEEPSEEK_OPENROUTER_MODEL_ARGS="${DEEPSEEK_OPENROUTER_MODEL_ARGS-}"
 DEEPSEEK_OPENROUTER_EXTRA_BODY_JSON="${DEEPSEEK_OPENROUTER_EXTRA_BODY_JSON:-{\"reasoning\":{\"effort\":\"minimal\",\"exclude\":true}}}"
 DEEPSEEK_OPENROUTER_PROMPT_PREFIX="${DEEPSEEK_OPENROUTER_PROMPT_PREFIX:-/no_think}"
 DEEPSEEK_CEI_MIN_MAX_TOKENS="${DEEPSEEK_CEI_MIN_MAX_TOKENS-}"
-TASK_FILTER="${TASK_FILTER:-ccd_bench_selection,unimoral_action_prediction,denevil_fulcra_proxy_generation,value_prism_valence,value_prism_relevance}"
+TASK_FILTER="${TASK_FILTER:-ccd_bench_selection,unimoral_action_prediction,unimoral_moral_typology,unimoral_factor_attribution,unimoral_consequence_generation,denevil_fulcra_proxy_generation,value_prism_valence,value_prism_relevance}"
 
 UNIMORAL_DATA_DIR="${UNIMORAL_DATA_DIR:-$DATA_ROOT/unimoral}"
 DENEVIL_DATA_FILE="${DENEVIL_DATA_FILE:-$DATA_ROOT/denevil/data_hybrid.jsonl}"
@@ -377,6 +377,9 @@ run_task() {
     ccd_bench_selection) task_resume_env="CCD_BENCH_RESUME_COUNT" ;;
     denevil_fulcra_proxy_generation) task_resume_env="DENEVIL_FULCRA_RESUME_COUNT" ;;
     unimoral_action_prediction) task_resume_env="UNIMORAL_ACTION_RESUME_COUNT" ;;
+    unimoral_moral_typology) task_resume_env="UNIMORAL_TYPOLOGY_RESUME_COUNT" ;;
+    unimoral_factor_attribution) task_resume_env="UNIMORAL_FACTOR_RESUME_COUNT" ;;
+    unimoral_consequence_generation) task_resume_env="UNIMORAL_CONSEQUENCE_RESUME_COUNT" ;;
     value_prism_valence) task_resume_env="VALUEPRISM_VALENCE_RESUME_COUNT" ;;
     value_prism_relevance) task_resume_env="VALUEPRISM_RELEVANCE_RESUME_COUNT" ;;
     *) task_resume_env="" ;;
@@ -476,6 +479,9 @@ run_family() {
 
   run_task "$family" "ccd_bench_selection" "src/inspect/evals/ccd_bench.py::ccd_bench_selection" "$DEEPSEEK_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
   run_task "$family" "unimoral_action_prediction" "src/inspect/evals/unimoral.py::unimoral_action_prediction" "$DEEPSEEK_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
+  run_task "$family" "unimoral_moral_typology" "src/inspect/evals/unimoral.py::unimoral_moral_typology" "$DEEPSEEK_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
+  run_task "$family" "unimoral_factor_attribution" "src/inspect/evals/unimoral.py::unimoral_factor_attribution" "$DEEPSEEK_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
+  run_task "$family" "unimoral_consequence_generation" "src/inspect/evals/unimoral.py::unimoral_consequence_generation" "$DEEPSEEK_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
   run_task "$family" "denevil_fulcra_proxy_generation" "src/inspect/evals/denevil.py::denevil_fulcra_proxy_generation" "$DEEPSEEK_TEXT_MODEL" 4 || overall_rc=$?
   run_task "$family" "value_prism_valence" "src/inspect/evals/value_kaleidoscope.py::value_prism_valence" "$DEEPSEEK_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
   run_task "$family" "value_prism_relevance" "src/inspect/evals/value_kaleidoscope.py::value_prism_relevance" "$DEEPSEEK_TEXT_MODEL" "$TEXT_MAX_CONNECTIONS" || overall_rc=$?
