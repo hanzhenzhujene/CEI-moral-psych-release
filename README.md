@@ -44,6 +44,69 @@ The release follows one consistent evaluation logic:
 3. `DeNEVIL` is reported as proxy behavioral evidence from released traces because local `MoralPrompt` scoring is unavailable; it is therefore excluded from macro-accuracy claims by design.
 4. Every public table, report, and SVG is regenerated from a tracked authoritative snapshot through one builder, so the repo publishes a coherent frozen release rather than a hand-edited dashboard.
 
+## Benchmark Result Visuals
+
+If you want the benchmark results before the tables, start here. These visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
+
+OpenAI text-only rows are shown in the comparable-accuracy and CCD figures. The GPT-5 subset is a text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`); GPT-4o and GPT-4.1 stay as separate reference markers. None has SMID or DeNEVIL.
+OpenAI/GPT scope: the scored reference routes are `openai/gpt-4o-mini`, `openai/gpt-5-nano`, `openai/gpt-4.1-nano`, `openai/gpt-5-mini`, `openai/gpt-5.5`, and `openai/gpt-4.1-mini`.
+
+### 1. UniMoral RQ1-RQ4: family-size scaling and task readout
+
+![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
+
+_What it tests: UniMoral breaks moral reasoning into four human-facing steps: what action someone chooses, what moral frame the choice reflects, what factor shaped the choice, and what consequences the action may cause._
+
+_Why it matters: moral psychology is about choices plus explanations, not just a right/wrong label. The figure shows that the winner changes across RQs, so the honest takeaway is not `larger model = better moral reasoner`; it is `different model families handle different parts of moral reasoning differently`._
+
+![UniMoral RQ1-RQ3 exact-match accuracy](figures/release/option1_unimoral_task_heatmap.svg)
+
+_How to read it: RQ1, RQ2, and RQ3 all use exact-match accuracy, so the three classification surfaces stay comparable inside the same benchmark block. Higher means the model matched the human-labeled action, moral frame, or decision factor more often._
+
+![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)
+
+_How to read RQ4: consequence generation is open-ended. BERTScore F1 asks whether the model said something semantically close to the reference consequence; METEOR asks whether the wording overlaps. It is not a right/wrong accuracy score._
+
+### 2. SMID / Value Kaleidoscope: topline comparable accuracy
+
+![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
+
+_What it tests: SMID asks whether a vision model can see morally important cues in images. Value Kaleidoscope asks whether a text model can spot which values, rights, or duties matter in a situation and whether they support or oppose the action._
+
+_How to read it: UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
+
+### 3. SMID / Value Kaleidoscope: family-size scaling
+
+![Family scaling profile](figures/release/option1_family_scaling_profile.svg)
+
+_Why it matters: if scale helped moral perception and value recognition in a simple way, every line would climb from S to M to L. They do not. The useful read is where size helps, where it plateaus, and where it can even hurt._
+
+_Use this next to compare size effects on SMID and Value after the combined UniMoral block, without mixing in CCD-Bench or DeNEVIL proxy evidence; missing SMID points are explicit route gaps._
+
+### 4. CCD-Bench: cultural-cluster choice behavior
+
+![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)
+
+_What it tests: CCD-Bench puts models in value conflicts where ten answer options map to cultural clusters. The figure shows which cultural response styles each model over-selects or avoids relative to a 10% uniform baseline._
+
+_Why it matters: this is not a single right-answer benchmark. It tells a moral-psych reader which culturally grounded response style a model tends to privilege when values conflict._
+
+### 5. CCD-Bench: dominant-option concentration
+
+![CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)
+
+_How to read it: this is the compact CCD-Bench summary, showing how much each line collapses onto one dominant cultural cluster and how broadly it still spreads across the option set._
+
+### 6. DeNEVIL: proxy behavioral outcomes
+
+![DeNEVIL proxy behavioral outcomes](figures/release/option1_denevil_behavior_outcomes.svg)
+
+_What it tests: DeNEVIL-style evaluation looks for value vulnerabilities under risky or ethically loaded prompts. In this release the paper-faithful MoralPrompt export is not local, so this figure reports auditable proxy behavior categories from saved traces._
+
+_How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._
+
+Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
+
 ## Public Quickstart
 
 This repo has two distinct entrypoints:
