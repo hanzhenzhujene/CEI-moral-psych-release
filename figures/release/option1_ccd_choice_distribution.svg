@@ -84,7 +84,7 @@
 <rect x="48" y="884" width="118" height="168" rx="18" fill="#f1eefb" stroke="#a996e3" stroke-width="1.2"/>
 <text x="107.00" y="973.00" text-anchor="middle" class="label">Gemma</text>
 <line x1="48" y1="874.00" x2="1772" y2="874.00" class="baseline"/>
-<rect x="48" y="1052" width="118" height="168" rx="18" fill="#fadbe2" stroke="#e11d48" stroke-width="1.2"/>
+<rect x="48" y="1052" width="118" height="168" rx="18" fill="#d6d6d6" stroke="#000000" stroke-width="1.2"/>
 <text x="107.00" y="1141.00" text-anchor="middle" class="label">OpenAI GPT-5</text>
 <line x1="48" y1="1042.00" x2="1772" y2="1042.00" class="baseline"/>
 <rect x="48" y="1220" width="118" height="168" rx="18" fill="#eff0f2" stroke="#9ca3af" stroke-width="1.2"/>
@@ -465,7 +465,7 @@
 <text x="1256.00" y="1030.00" text-anchor="middle" class="celltext-dark">+0.3</text>
 <text x="1378" y="1030.00" class="label">17.6%</text>
 <text x="1548" y="1030.00" class="label">9.05</text>
-<rect x="184" y="1064" width="56" height="32" rx="12" fill="#be123c"/>
+<rect x="184" y="1064" width="56" height="32" rx="12" fill="#000000"/>
 <text x="212.00" y="1085.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="1086.00" class="label">GPT-5 nano</text>
 <rect x="420" y="1058" width="88" height="44" fill="#bedecf" stroke="#ffffff" stroke-width="1.2"/>
@@ -490,7 +490,7 @@
 <text x="1256.00" y="1086.00" text-anchor="middle" class="celltext-dark">-6.2</text>
 <text x="1378" y="1086.00" class="label">27.8%</text>
 <text x="1548" y="1086.00" class="label">6.79</text>
-<rect x="184" y="1120" width="56" height="32" rx="12" fill="#e11d48"/>
+<rect x="184" y="1120" width="56" height="32" rx="12" fill="#000000"/>
 <text x="212.00" y="1141.00" text-anchor="middle" class="celltext">M</text>
 <text x="258" y="1142.00" class="label">GPT-5 mini</text>
 <rect x="420" y="1114" width="88" height="44" fill="#b8dbcb" stroke="#ffffff" stroke-width="1.2"/>
@@ -515,8 +515,8 @@
 <text x="1256.00" y="1142.00" text-anchor="middle" class="celltext-dark">-5.9</text>
 <text x="1378" y="1142.00" class="label">25.3%</text>
 <text x="1548" y="1142.00" class="label">7.13</text>
-<rect x="184" y="1176" width="56" height="32" rx="12" fill="#fb7185"/>
-<text x="212.00" y="1197.00" text-anchor="middle" class="celltext-dark">L</text>
+<rect x="184" y="1176" width="56" height="32" rx="12" fill="#000000"/>
+<text x="212.00" y="1197.00" text-anchor="middle" class="celltext">L</text>
 <text x="258" y="1198.00" class="label">GPT-5.5</text>
 <rect x="420" y="1170" width="88" height="44" fill="#cfe7db" stroke="#ffffff" stroke-width="1.2"/>
 <text x="464.00" y="1198.00" text-anchor="middle" class="celltext-dark">+4.4</text>

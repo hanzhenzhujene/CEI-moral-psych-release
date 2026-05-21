@@ -71,7 +71,7 @@
 <rect x="48" y="754" width="118" height="132" rx="18" fill="#f1eefb" stroke="#a996e3" stroke-width="1.2"/>
 <text x="107.00" y="825.00" text-anchor="middle" class="label">Gemma</text>
 <line x1="48" y1="744.00" x2="1632" y2="744.00" class="baseline"/>
-<rect x="48" y="892" width="118" height="132" rx="18" fill="#fadbe2" stroke="#e11d48" stroke-width="1.2"/>
+<rect x="48" y="892" width="118" height="132" rx="18" fill="#d6d6d6" stroke="#000000" stroke-width="1.2"/>
 <text x="107.00" y="963.00" text-anchor="middle" class="label">OpenAI GPT-5</text>
 <line x1="48" y1="882.00" x2="1632" y2="882.00" class="baseline"/>
 <rect x="48" y="1030" width="118" height="132" rx="18" fill="#eff0f2" stroke="#9ca3af" stroke-width="1.2"/>
@@ -197,7 +197,7 @@
 <text x="536.38" y="871.00" text-anchor="end" class="celltext">17.6%</text>
 <text x="1162" y="867.00" class="label">option_6 (Nordic Europe)</text>
 <text x="1162" y="882.00" class="small">effective clusters 9.05</text>
-<rect x="184" y="902" width="56" height="20" rx="12" fill="#be123c"/>
+<rect x="184" y="902" width="56" height="20" rx="12" fill="#000000"/>
 <text x="212.00" y="917.00" text-anchor="middle" class="celltext">S</text>
 <text x="258" y="917.00" class="label">GPT-5 nano</text>
 <rect x="420" y="898" width="720" height="28" rx="10" class="muted-bar"/>
@@ -205,7 +205,7 @@
 <text x="610.06" y="917.00" text-anchor="end" class="celltext">27.8%</text>
 <text x="1162" y="913.00" class="label">option_6 (Nordic Europe)</text>
 <text x="1162" y="928.00" class="small">effective clusters 6.79</text>
-<rect x="184" y="948" width="56" height="20" rx="12" fill="#e11d48"/>
+<rect x="184" y="948" width="56" height="20" rx="12" fill="#000000"/>
 <text x="212.00" y="963.00" text-anchor="middle" class="celltext">M</text>
 <text x="258" y="963.00" class="label">GPT-5 mini</text>
 <rect x="420" y="944" width="720" height="28" rx="10" class="muted-bar"/>
@@ -213,8 +213,8 @@
 <text x="592.14" y="963.00" text-anchor="end" class="celltext">25.3%</text>
 <text x="1162" y="959.00" class="label">option_6 (Nordic Europe)</text>
 <text x="1162" y="974.00" class="small">effective clusters 7.13</text>
-<rect x="184" y="994" width="56" height="20" rx="12" fill="#fb7185"/>
-<text x="212.00" y="1009.00" text-anchor="middle" class="celltext-dark">L</text>
+<rect x="184" y="994" width="56" height="20" rx="12" fill="#000000"/>
+<text x="212.00" y="1009.00" text-anchor="middle" class="celltext">L</text>
 <text x="258" y="1009.00" class="label">GPT-5.5</text>
 <rect x="420" y="990" width="720" height="28" rx="10" class="muted-bar"/>
 <rect x="420" y="990" width="196.33" height="28" rx="10" fill="#8c564b" stroke="#ffffff" stroke-width="1"/>

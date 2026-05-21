@@ -970,7 +970,7 @@ FAMILY_COLORS = {
     "Llama": "#dc2626",
     "Gemma": "#ad9ad0",
     "GPT4 only": "#aab2bd",
-    "OpenAI GPT-5": "#e11d48",
+    "OpenAI GPT-5": "#000000",
     "OpenAI Ref": "#aab2bd",
 }
 
@@ -1520,6 +1520,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
         ".metric-label{font-size:18px;font-weight:800;fill:#17202a}"
         ".small{font-size:13px;fill:#475569}"
         ".tiny{font-size:11px;fill:#64748b;font-weight:700}"
+        ".openai-label{font-size:12px;fill:#000000;font-weight:800}"
         ".legend{font-size:21px;font-weight:700;fill:#243447}"
         ".legend-note{font-size:14px;font-weight:500;fill:#475569}"
         ".legend-title{font-size:19px;font-weight:700;fill:#17202a}"
@@ -1531,7 +1532,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
     parts.append('<text x="42" y="48" class="title">UniMoral family-size scaling by RQ</text>')
     parts.append('<text x="42" y="78" class="subtitle">Line charts show how each family moves across S/M/L slots inside each UniMoral task. Higher is better in every panel.</text>')
     parts.append('<text x="42" y="102" class="subtitle">Classification panels use strict-complete accuracy cells. RQ4 uses rows with usable generation scores; remaining MiniMax caveats stay in the audit tables.</text>')
-    parts.append('<text x="42" y="126" class="subtitle">OpenAI GPT-5 is shown as S/M/L in RQ1 only; GPT-4o/GPT-4.1 text refs are dashed. No OpenAI RQ2/RQ3/RQ4 scores are inferred.</text>')
+    parts.append('<text x="42" y="126" class="subtitle">OpenAI GPT-5 is the black S/M/L line in RQ1 only; GPT-4o/GPT-4.1 text refs are dashed. No OpenAI RQ2/RQ3/RQ4 scores are inferred.</text>')
 
     for (task_name, metric, title, metric_label, low, high, ticks), (x, y, panel_w, panel_h) in zip(specs, panel_positions):
         plot_x = x + 72
@@ -1573,6 +1574,9 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
             if not points:
                 continue
             fill = FAMILY_COLORS.get(family, "#6b7280")
+            line_width = 4.2 if family == "OpenAI GPT-5" else 3.0
+            outer_radius = 8.5 if family == "OpenAI GPT-5" else 7.0
+            inner_radius = 4.0 if family == "OpenAI GPT-5" else 3.0
             coords = [
                 (
                     plot_x + plot_w * slot_index / (len(size_positions) - 1),
@@ -1587,13 +1591,13 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
                 dash = ' stroke-dasharray="6 5"' if current[2] - previous[2] > 1 else ""
                 parts.append(
                     f'<line x1="{previous[0]:.1f}" y1="{previous[1]:.1f}" x2="{current[0]:.1f}" y2="{current[1]:.1f}" '
-                    f'stroke="{fill}" stroke-width="3" stroke-linecap="round"{dash}/>'
+                    f'stroke="{fill}" stroke-width="{line_width:.1f}" stroke-linecap="round"{dash}/>'
                 )
             for px, py, _, line_label, _value in coords:
-                parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="7" fill="white" stroke="{fill}" stroke-width="3"/>')
-                parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="3" fill="{fill}"/>')
+                parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{outer_radius:.1f}" fill="white" stroke="{fill}" stroke-width="{line_width:.1f}"/>')
+                parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{inner_radius:.1f}" fill="{fill}"/>')
                 if family == "OpenAI GPT-5" and task_name == "unimoral_action_prediction":
-                    parts.append(f'<text x="{px:.1f}" y="{py - 12:.1f}" text-anchor="middle" class="tiny">{html.escape(line_label)}</text>')
+                    parts.append(f'<text x="{px:.1f}" y="{py - 14:.1f}" text-anchor="middle" class="openai-label">{html.escape(line_label)}</text>')
     legend_x, legend_y = 92, 930
     parts.append(f'<rect x="48" y="884" width="1704" height="176" rx="18" class="legend-card"/>')
     parts.append(f'<text x="{legend_x}" y="{legend_y}" class="legend-title">Family legend</text>')
@@ -1608,7 +1612,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
             text_x = x + 20
         parts.append(f'<text x="{text_x}" y="{legend_y}" class="legend">{html.escape(display_family_label(family))}</text>')
     parts.append('<text x="92" y="980" class="legend-note">Takeaway: UniMoral does not have one simple bigger-is-better curve. The winner changes by task, so report the RQ-specific pattern instead of one averaged moral-reasoning story.</text>')
-    parts.append('<text x="92" y="1012" class="legend-note">OpenAI GPT-5 S/M/L points appear for RQ1 action prediction only; GPT-4o/GPT-4.1 refs are dashed where a UniMoral metric exists.</text>')
+    parts.append('<text x="92" y="1012" class="legend-note">OpenAI GPT-5 is black and appears for RQ1 action prediction only; GPT-4o/GPT-4.1 refs are dashed where a UniMoral metric exists.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 

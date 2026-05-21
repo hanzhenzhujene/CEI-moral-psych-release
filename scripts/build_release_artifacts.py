@@ -1838,7 +1838,7 @@ FAMILY_COLOR_SCALES = {
     "Llama": {"S": "#f87171", "M": "#dc2626", "L": "#991b1b"},
     "Gemma": {"S": "#b8a5df", "M": "#a996e3", "L": "#cfc3f0"},
     "MiniMax": {"S": "#d4a46e", "M": "#e0ad68", "L": "#f3cf82"},
-    OPENAI_GPT5_FAMILY_LABEL: {"S": "#be123c", "M": "#e11d48", "L": "#fb7185"},
+    OPENAI_GPT5_FAMILY_LABEL: {"S": "#000000", "M": "#000000", "L": "#000000"},
     OPENAI_REFERENCE_FAMILY_LABEL: {"Ref": "#9ca3af"},
 }
 
@@ -8821,7 +8821,7 @@ def render_family_scaling_profile_svg(
         "UniMoral is grouped in Figure 1 above; these comparable panels start at SMID.",
         "Two comparable benchmark panels here: SMID and Value Kaleidoscope.",
         "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.",
-        "OpenAI GPT-5 text-only points are S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5.",
+        "OpenAI GPT-5 black text-only points are S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5.",
         "GPT-4o and GPT-4.1 text refs are gray dashed reference lines where a text metric exists.",
         "SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.",
         "Read CCD-Bench and Denevil in their dedicated figures.",
@@ -8831,7 +8831,7 @@ def render_family_scaling_profile_svg(
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Family scaling profile by benchmark</title>",
-            "<desc>Two-panel family scaling view for the visual and text comparable-accuracy panels after the UniMoral benchmark block. OpenAI GPT-5 is plotted as a text-only S/M/L series on Value only: S is GPT-5 nano, M is GPT-5 mini, and L is GPT-5.5. GPT-4o and GPT-4.1 rows remain gray text reference lines. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
+            "<desc>Two-panel family scaling view for the visual and text comparable-accuracy panels after the UniMoral benchmark block. OpenAI GPT-5 is plotted as a black text-only S/M/L series on Value only: S is GPT-5 nano, M is GPT-5 mini, and L is GPT-5.5. GPT-4o and GPT-4.1 rows remain gray text reference lines. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>",
             '<text x="48" y="64" class="title">Family Scaling Profile</text>',
         ]
     )
@@ -8964,7 +8964,7 @@ def render_family_scaling_profile_svg(
         "has its combined RQ1-RQ4 block above.",
         "Use this figure for family-size comparisons",
         "on SMID and Value Kaleidoscope.",
-        "OpenAI GPT-5 S/M/L appears on Value only;",
+        "OpenAI GPT-5 black S/M/L appears on Value only;",
         "it has no SMID or DeNEVIL route.",
         "CCD-Bench is intentionally excluded here.",
         "Read CCD-Bench in the choice-distribution",
@@ -8982,7 +8982,7 @@ def render_family_scaling_profile_svg(
         ("DeepSeek", "Value S/M/L are parsed from saved logs; no DeepSeek SMID route exists."),
         ("Llama", "Value scored at S/M/L; SMID at S/L."),
         ("Gemma", "full S/M/L sweep on SMID and Value."),
-        (OPENAI_GPT5_FAMILY_LABEL, "text-only S/M/L: S GPT-5 nano, M GPT-5 mini, L GPT-5.5."),
+        (OPENAI_GPT5_FAMILY_LABEL, "black text-only S/M/L: S GPT-5 nano, M GPT-5 mini, L GPT-5.5."),
         (OPENAI_REFERENCE_FAMILY_LABEL, "GPT-4o and GPT-4.1 text refs; dashed where a text metric exists."),
     ]
     for index, (family, note) in enumerate(legend_items):
