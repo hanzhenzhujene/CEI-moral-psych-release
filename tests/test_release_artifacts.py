@@ -1530,3 +1530,44 @@ def test_default_release_builder_leaves_repo_readme_untouched(tmp_path):
     subprocess.run([sys.executable, str(script_copy)], check=True, cwd=repo_copy)
 
     assert (repo_copy / "README.md").read_text(encoding="utf-8") == original_readme
+
+
+def test_write_root_readme_keeps_benchmark_visuals_section(tmp_path):
+    repo_copy = tmp_path / "repo"
+    script_copy = repo_copy / "scripts" / "build_release_artifacts.py"
+    source_copy = repo_copy / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
+    benchmark_utils_copy = repo_copy / "src" / "inspect" / "evals" / "_benchmark_utils.py"
+
+    script_copy.parent.mkdir(parents=True, exist_ok=True)
+    source_copy.parent.mkdir(parents=True, exist_ok=True)
+    benchmark_utils_copy.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(SCRIPT, script_copy)
+    shutil.copy2(SOURCE, source_copy)
+    shutil.copy2(ROOT / "src" / "inspect" / "evals" / "_benchmark_utils.py", benchmark_utils_copy)
+    (benchmark_utils_copy.parent / "__init__.py").write_text("", encoding="utf-8")
+    (repo_copy / "README.md").write_text(
+        "# CEI Moral-Psych Benchmark Suite\n\n"
+        "Old generated surface.\n\n"
+        "## Claude Code Slash Commands\n\n"
+        "Keep org-owned tail.\n",
+        encoding="utf-8",
+    )
+
+    subprocess.run([sys.executable, str(script_copy), "--write-root-readme"], check=True, cwd=repo_copy)
+
+    root_readme = (repo_copy / "README.md").read_text(encoding="utf-8")
+    assert root_readme.index("## Method Overview") < root_readme.index("## Benchmark Result Visuals")
+    assert root_readme.index("## Benchmark Result Visuals") < root_readme.index("## Public Quickstart")
+    assert "| Go straight to the benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |" in root_readme
+    assert "The GPT-5 subset is a text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`)" in root_readme
+    assert "`openai/gpt-5.5`" in root_readme
+    assert "None has SMID or DeNEVIL." in root_readme
+    assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
+    assert "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
+    assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in root_readme
+    assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
+    assert "![CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in root_readme
+    assert "![DeNEVIL proxy behavioral outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
+    assert "../../../figures/release" not in root_readme
+    assert root_readme.count("## Benchmark Result Visuals") == 1
+    assert "## Claude Code Slash Commands" in root_readme

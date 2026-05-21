@@ -11487,6 +11487,7 @@ def build_repo_readme(
             "",
         ]
     )
+    append_benchmark_result_visuals_section(lines, "figures/release")
     append_public_quickstart(lines)
     append_repo_navigation(lines)
     append_repo_layout(lines)
