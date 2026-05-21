@@ -44,6 +44,7 @@
   "counts": {
     "authoritative_tasks": 80,
     "benchmark_faithful_tasks": 77,
+    "paper_result_alignment_rows": 5,
     "proxy_tasks": 3,
     "total_samples": 557224
   },
@@ -75,6 +76,8 @@
     "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
     "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
     "manifest": "results/release/2026-04-19-option1/release-manifest.json",
+    "paper_result_alignment": "results/release/2026-04-19-option1/paper-result-alignment.csv",
+    "readiness_tier_matrix": "results/release/2026-04-19-option1/readiness-tier-matrix.csv",
     "report": "results/release/2026-04-19-option1/jenny-group-report.md",
     "sample_volume_figure": "figures/release/option1_sample_volume.svg",
     "saved_results_audit": "results/release/2026-04-19-option1/saved-results-audit.csv",
@@ -172,13 +175,13 @@
       "openai_api_reference_sweep": "$0.76",
       "openrouter_other_model_family_runs": "$325.66"
     },
-    "current_cost_scope": "User-confirmed total spend through the latest saved reruns parsed in this repo.",
+    "current_cost_scope": "User-confirmed total spend before the May 16 OpenAI Batch additions; check the OpenAI billing dashboard before publishing an exact updated dollar total.",
     "current_total_cost": "$831.08",
-    "date": "2026-05-19",
+    "date": "2026-05-21",
     "frozen_snapshot_date": "2026-04-19",
     "metric_definition_summary": "Stricter visible-answer parsing is now versioned explicitly: UniMoral, SMID, and Value Kaleidoscope use structured visible-answer extraction; CCD-Bench coverage requires a parseable visible 1-10 choice; CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; Denevil appendix coverage counts non-empty visible proxy answers while the headline proxy figures classify visible behavior categories.",
     "metric_definition_version": "2026-04-30",
-    "operations_note": "Updated May 19, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `DeepSeek-L`, `Llama-L`, `DeepSeek-S`, `MiniMax-L`, and `MiniMax-S`, and no published follow-up line is still live.",
+    "operations_note": "Updated May 21, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `DeepSeek-L`, `Llama-L`, `DeepSeek-S`, `MiniMax-L`, and `MiniMax-S`, and no published follow-up line is still live.",
     "owner": "Jenny Zhu",
     "provider": "OpenRouter + direct MiniMax + OpenAI",
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
@@ -222,6 +225,7 @@
     "topline-summary.json",
     "release-manifest.json",
     "benchmark-catalog.csv",
+    "paper-result-alignment.csv",
     "model-summary.csv",
     "model-roster.csv",
     "supplementary-model-progress.csv",
@@ -233,6 +237,7 @@
     "denevil-prompt-family-breakdown.csv",
     "denevil-proxy-examples.csv",
     "deepseek-sm-readout.csv",
+    "readiness-tier-matrix.csv",
     "saved-results-audit.csv",
     "benchmark-difficulty-summary.csv",
     "family-scaling-summary.csv",
@@ -252,9 +257,12 @@
   ],
   "target_matrix": {
     "benchmarks": 5,
+    "blocked_summary_cells": 18,
     "family_size_benchmark_cells": 75,
     "model_families": 5,
-    "size_slots": 3
+    "readiness_summary_cells": 105,
+    "size_slots": 3,
+    "tier3_summary_cells": 87
   },
   "title": "CEI Moral-Psych Benchmark Suite: Jenny Zhu Option 1 Report"
 }

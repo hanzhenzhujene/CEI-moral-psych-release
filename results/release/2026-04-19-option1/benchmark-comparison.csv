@@ -13,9 +13,10 @@ Llama-M,Llama,M,text: openrouter/meta-llama/llama-3.3-70b-instruct,0.669854,,0.7
 Llama-L,Llama,L,text: openrouter/meta-llama/llama-4-maverick; vision: openrouter/meta-llama/llama-4-maverick,0.659836,0.386093,0.692319,Comparable on all three benchmark-faithful accuracy panels.
 Gemma-S,Gemma,S,openrouter/google/gemma-3-4b-it,0.635246,0.416865,0.592663,Comparable on all three benchmark-faithful accuracy panels.
 Gemma-M,Gemma,M,text: openrouter/google/gemma-3-12b-it; vision: openrouter/google/gemma-3-12b-it,0.662568,0.363652,0.663656,Comparable on all three benchmark-faithful accuracy panels.
-Gemma-L,Gemma,L,text: openrouter/google/gemma-3-27b-it; vision: openrouter/google/gemma-3-27b-it,0.661088,0.412105,0.655987,Comparable on all three benchmark-faithful accuracy panels.
-GPT-4o-mini Ref,OpenAI Ref,Ref,openai/gpt-4o-mini (Responses API + Batch API; text-only reference),0.672700,,0.700698,GPT-4o-mini Ref text-only OpenAI reference; outside the S/M/L family curves.
-GPT-5-nano Ref,OpenAI Ref,Ref,openai/gpt-5-nano (Responses API + Batch API; text-only reference),0.653575,,0.617193,GPT-5-nano Ref text-only OpenAI reference; outside the S/M/L family curves.
-GPT-4.1-nano Ref,OpenAI Ref,Ref,openai/gpt-4.1-nano (Responses API + Batch API; text-only reference),0.646289,,0.673043,GPT-4.1-nano Ref text-only OpenAI reference; outside the S/M/L family curves.
-GPT-5-mini Ref,OpenAI Ref,Ref,openai/gpt-5-mini (Responses API + Batch API; text-only reference),0.677937,,0.738897,GPT-5-mini Ref text-only OpenAI reference; outside the S/M/L family curves.
-GPT-4.1-mini Ref,OpenAI Ref,Ref,openai/gpt-4.1-mini (Responses API + Batch API; text-only reference),0.679417,,0.734890,GPT-4.1-mini Ref text-only OpenAI reference; outside the S/M/L family curves.
+Gemma-L,Gemma,L,text: openrouter/google/gemma-3-27b-it; vision: openrouter/google/gemma-3-27b-it,0.661088,0.412275,0.655987,Comparable on all three benchmark-faithful accuracy panels.
+GPT-4o-mini Ref,OpenAI Ref,Ref,openai/gpt-4o-mini (Responses API + Batch API; text-only reference),0.672700,,0.700698,GPT-4o-mini Ref text-only OpenAI reference; outside the GPT-5 S/M/L series.
+GPT-5 nano,OpenAI GPT-5,S,openai/gpt-5-nano (Responses API + Batch API; text-only reference),0.653575,,0.617193,GPT-5 nano text-only OpenAI GPT-5 S slot; no SMID or DeNEVIL route.
+GPT-4.1-nano Ref,OpenAI Ref,Ref,openai/gpt-4.1-nano (Responses API + Batch API; text-only reference),0.646289,,0.673043,GPT-4.1-nano Ref text-only OpenAI reference; outside the GPT-5 S/M/L series.
+GPT-5 mini,OpenAI GPT-5,M,openai/gpt-5-mini (Responses API + Batch API; text-only reference),0.677937,,0.738897,GPT-5 mini text-only OpenAI GPT-5 M slot; no SMID or DeNEVIL route.
+GPT-5.5,OpenAI GPT-5,L,openai/gpt-5.5 (Responses API + Batch API; text-only reference),0.683629,,0.735646,GPT-5.5 text-only OpenAI GPT-5 L slot; no SMID or DeNEVIL route.
+GPT-4.1-mini Ref,OpenAI Ref,Ref,openai/gpt-4.1-mini (Responses API + Batch API; text-only reference),0.679417,,0.734890,GPT-4.1-mini Ref text-only OpenAI reference; outside the GPT-5 S/M/L series.

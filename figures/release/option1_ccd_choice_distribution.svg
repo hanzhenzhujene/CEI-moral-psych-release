@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1820 1552" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1820 1608" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,8 +35,8 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1820" height="1552" class="canvas"/>
-<rect x="24" y="24" width="1772" height="1504" rx="22" class="panel"/>
+<rect x="0" y="0" width="1820" height="1608" class="canvas"/>
+<rect x="24" y="24" width="1772" height="1560" rx="22" class="panel"/>
 <title>CCD-Bench cultural-cluster choice behavior, not accuracy</title>
 <desc>Main CCD result. Model-line by cultural-cluster heatmap for CCD-Bench. Each cell shows percentage-point deviation from a 10% uniform baseline among valid visible selections only. Positive cells indicate the line selected that canonical cluster more often than uniform choice; negative cells indicate under-indexing. This is a choice-distribution result, not scalar accuracy.</desc>
 <text x="48" y="64" class="title">CCD-Bench cultural-cluster choice behavior, not accuracy</text>
@@ -83,9 +83,12 @@
 <rect x="48" y="884" width="118" height="168" rx="18" fill="#f1eefb" stroke="#a996e3" stroke-width="1.2"/>
 <text x="107.00" y="973.00" text-anchor="middle" class="label">Gemma</text>
 <line x1="48" y1="874.00" x2="1772" y2="874.00" class="baseline"/>
-<rect x="48" y="1052" width="118" height="280" rx="18" fill="#eff0f2" stroke="#9ca3af" stroke-width="1.2"/>
-<text x="107.00" y="1197.00" text-anchor="middle" class="label">OpenAI Ref</text>
+<rect x="48" y="1052" width="118" height="168" rx="18" fill="#fadbe2" stroke="#e11d48" stroke-width="1.2"/>
+<text x="107.00" y="1141.00" text-anchor="middle" class="label">OpenAI GPT-5</text>
 <line x1="48" y1="1042.00" x2="1772" y2="1042.00" class="baseline"/>
+<rect x="48" y="1220" width="118" height="168" rx="18" fill="#eff0f2" stroke="#9ca3af" stroke-width="1.2"/>
+<text x="107.00" y="1309.00" text-anchor="middle" class="label">OpenAI Ref</text>
+<line x1="48" y1="1210.00" x2="1772" y2="1210.00" class="baseline"/>
 <rect x="184" y="224" width="56" height="32" rx="12" fill="#8fc7bd"/>
 <text x="212.00" y="245.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="246.00" class="label">Qwen-S</text>
@@ -461,134 +464,159 @@
 <text x="1256.00" y="1030.00" text-anchor="middle" class="celltext-dark">+0.3</text>
 <text x="1378" y="1030.00" class="label">17.6%</text>
 <text x="1548" y="1030.00" class="label">9.05</text>
-<rect x="184" y="1064" width="56" height="32" rx="12" fill="#9ca3af"/>
-<text x="212.00" y="1085.00" text-anchor="middle" class="celltext-dark">Ref</text>
-<text x="258" y="1086.00" class="label">GPT-4o-mini Ref</text>
-<rect x="420" y="1058" width="88" height="44" fill="#d2e8dd" stroke="#ffffff" stroke-width="1.2"/>
-<text x="464.00" y="1086.00" text-anchor="middle" class="celltext-dark">+4.1</text>
-<rect x="508" y="1058" width="88" height="44" fill="#fbecdf" stroke="#ffffff" stroke-width="1.2"/>
-<text x="552.00" y="1086.00" text-anchor="middle" class="celltext-dark">-1.9</text>
-<rect x="596" y="1058" width="88" height="44" fill="#fef3e8" stroke="#ffffff" stroke-width="1.2"/>
-<text x="640.00" y="1086.00" text-anchor="middle" class="celltext-dark">-0.7</text>
-<rect x="684" y="1058" width="88" height="44" fill="#f6dcca" stroke="#ffffff" stroke-width="1.2"/>
-<text x="728.00" y="1086.00" text-anchor="middle" class="celltext-dark">-4.7</text>
-<rect x="772" y="1058" width="88" height="44" fill="#f9e5d6" stroke="#ffffff" stroke-width="1.2"/>
-<text x="816.00" y="1086.00" text-anchor="middle" class="celltext-dark">-3.1</text>
-<rect x="860" y="1058" width="88" height="44" fill="#b9dbcb" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="1086.00" text-anchor="middle" class="celltext-dark">+7.1</text>
-<rect x="948" y="1058" width="88" height="44" fill="#e2f1e9" stroke="#ffffff" stroke-width="1.2"/>
-<text x="992.00" y="1086.00" text-anchor="middle" class="celltext-dark">+2.1</text>
-<rect x="1036" y="1058" width="88" height="44" fill="#e7f4ed" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1080.00" y="1086.00" text-anchor="middle" class="celltext-dark">+1.4</text>
-<rect x="1124" y="1058" width="88" height="44" fill="#fae8d9" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1168.00" y="1086.00" text-anchor="middle" class="celltext-dark">-2.7</text>
-<rect x="1212" y="1058" width="88" height="44" fill="#fcede1" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1256.00" y="1086.00" text-anchor="middle" class="celltext-dark">-1.7</text>
-<text x="1378" y="1086.00" class="label">17.1%</text>
-<text x="1548" y="1086.00" class="label">8.94</text>
-<rect x="184" y="1120" width="56" height="32" rx="12" fill="#9ca3af"/>
-<text x="212.00" y="1141.00" text-anchor="middle" class="celltext-dark">Ref</text>
-<text x="258" y="1142.00" class="label">GPT-5-nano Ref</text>
-<rect x="420" y="1114" width="88" height="44" fill="#bedecf" stroke="#ffffff" stroke-width="1.2"/>
-<text x="464.00" y="1142.00" text-anchor="middle" class="celltext-dark">+6.5</text>
-<rect x="508" y="1114" width="88" height="44" fill="#f6dcca" stroke="#ffffff" stroke-width="1.2"/>
-<text x="552.00" y="1142.00" text-anchor="middle" class="celltext-dark">-4.7</text>
-<rect x="596" y="1114" width="88" height="44" fill="#f7e1d0" stroke="#ffffff" stroke-width="1.2"/>
-<text x="640.00" y="1142.00" text-anchor="middle" class="celltext-dark">-3.9</text>
-<rect x="684" y="1114" width="88" height="44" fill="#f9e5d5" stroke="#ffffff" stroke-width="1.2"/>
-<text x="728.00" y="1142.00" text-anchor="middle" class="celltext-dark">-3.2</text>
-<rect x="772" y="1114" width="88" height="44" fill="#f8e1d0" stroke="#ffffff" stroke-width="1.2"/>
-<text x="816.00" y="1142.00" text-anchor="middle" class="celltext-dark">-3.9</text>
+<rect x="184" y="1064" width="56" height="32" rx="12" fill="#be123c"/>
+<text x="212.00" y="1085.00" text-anchor="middle" class="celltext">S</text>
+<text x="258" y="1086.00" class="label">GPT-5 nano</text>
+<rect x="420" y="1058" width="88" height="44" fill="#bedecf" stroke="#ffffff" stroke-width="1.2"/>
+<text x="464.00" y="1086.00" text-anchor="middle" class="celltext-dark">+6.5</text>
+<rect x="508" y="1058" width="88" height="44" fill="#f6dcca" stroke="#ffffff" stroke-width="1.2"/>
+<text x="552.00" y="1086.00" text-anchor="middle" class="celltext-dark">-4.7</text>
+<rect x="596" y="1058" width="88" height="44" fill="#f7e1d0" stroke="#ffffff" stroke-width="1.2"/>
+<text x="640.00" y="1086.00" text-anchor="middle" class="celltext-dark">-3.9</text>
+<rect x="684" y="1058" width="88" height="44" fill="#f9e5d5" stroke="#ffffff" stroke-width="1.2"/>
+<text x="728.00" y="1086.00" text-anchor="middle" class="celltext-dark">-3.2</text>
+<rect x="772" y="1058" width="88" height="44" fill="#f8e1d0" stroke="#ffffff" stroke-width="1.2"/>
+<text x="816.00" y="1086.00" text-anchor="middle" class="celltext-dark">-3.9</text>
+<rect x="860" y="1058" width="88" height="44" fill="#78b99b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="1086.00" text-anchor="middle" class="celltext-dark">+17.8</text>
+<rect x="948" y="1058" width="88" height="44" fill="#fceee1" stroke="#ffffff" stroke-width="1.2"/>
+<text x="992.00" y="1086.00" text-anchor="middle" class="celltext-dark">-1.6</text>
+<rect x="1036" y="1058" width="88" height="44" fill="#fae7d9" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1080.00" y="1086.00" text-anchor="middle" class="celltext-dark">-2.7</text>
+<rect x="1124" y="1058" width="88" height="44" fill="#e4f2eb" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1168.00" y="1086.00" text-anchor="middle" class="celltext-dark">+1.9</text>
+<rect x="1212" y="1058" width="88" height="44" fill="#f3d3bf" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1256.00" y="1086.00" text-anchor="middle" class="celltext-dark">-6.2</text>
+<text x="1378" y="1086.00" class="label">27.8%</text>
+<text x="1548" y="1086.00" class="label">6.79</text>
+<rect x="184" y="1120" width="56" height="32" rx="12" fill="#e11d48"/>
+<text x="212.00" y="1141.00" text-anchor="middle" class="celltext">M</text>
+<text x="258" y="1142.00" class="label">GPT-5 mini</text>
+<rect x="420" y="1114" width="88" height="44" fill="#b8dbcb" stroke="#ffffff" stroke-width="1.2"/>
+<text x="464.00" y="1142.00" text-anchor="middle" class="celltext-dark">+7.1</text>
+<rect x="508" y="1114" width="88" height="44" fill="#f6dcc9" stroke="#ffffff" stroke-width="1.2"/>
+<text x="552.00" y="1142.00" text-anchor="middle" class="celltext-dark">-4.8</text>
+<rect x="596" y="1114" width="88" height="44" fill="#f8e4d4" stroke="#ffffff" stroke-width="1.2"/>
+<text x="640.00" y="1142.00" text-anchor="middle" class="celltext-dark">-3.4</text>
+<rect x="684" y="1114" width="88" height="44" fill="#f9e4d4" stroke="#ffffff" stroke-width="1.2"/>
+<text x="728.00" y="1142.00" text-anchor="middle" class="celltext-dark">-3.3</text>
+<rect x="772" y="1114" width="88" height="44" fill="#f6decc" stroke="#ffffff" stroke-width="1.2"/>
+<text x="816.00" y="1142.00" text-anchor="middle" class="celltext-dark">-4.4</text>
 <rect x="860" y="1114" width="88" height="44" fill="#78b99b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="1142.00" text-anchor="middle" class="celltext-dark">+17.8</text>
-<rect x="948" y="1114" width="88" height="44" fill="#fceee1" stroke="#ffffff" stroke-width="1.2"/>
-<text x="992.00" y="1142.00" text-anchor="middle" class="celltext-dark">-1.6</text>
-<rect x="1036" y="1114" width="88" height="44" fill="#fae7d9" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1080.00" y="1142.00" text-anchor="middle" class="celltext-dark">-2.7</text>
-<rect x="1124" y="1114" width="88" height="44" fill="#e4f2eb" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1168.00" y="1142.00" text-anchor="middle" class="celltext-dark">+1.9</text>
-<rect x="1212" y="1114" width="88" height="44" fill="#f3d3bf" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1256.00" y="1142.00" text-anchor="middle" class="celltext-dark">-6.2</text>
-<text x="1378" y="1142.00" class="label">27.8%</text>
-<text x="1548" y="1142.00" class="label">6.79</text>
-<rect x="184" y="1176" width="56" height="32" rx="12" fill="#9ca3af"/>
-<text x="212.00" y="1197.00" text-anchor="middle" class="celltext-dark">Ref</text>
-<text x="258" y="1198.00" class="label">GPT-4.1-nano Ref</text>
-<rect x="420" y="1170" width="88" height="44" fill="#deefe7" stroke="#ffffff" stroke-width="1.2"/>
-<text x="464.00" y="1198.00" text-anchor="middle" class="celltext-dark">+2.5</text>
-<rect x="508" y="1170" width="88" height="44" fill="#f9e7d8" stroke="#ffffff" stroke-width="1.2"/>
-<text x="552.00" y="1198.00" text-anchor="middle" class="celltext-dark">-2.9</text>
-<rect x="596" y="1170" width="88" height="44" fill="#fcede0" stroke="#ffffff" stroke-width="1.2"/>
-<text x="640.00" y="1198.00" text-anchor="middle" class="celltext-dark">-1.8</text>
-<rect x="684" y="1170" width="88" height="44" fill="#f8e3d3" stroke="#ffffff" stroke-width="1.2"/>
-<text x="728.00" y="1198.00" text-anchor="middle" class="celltext-dark">-3.5</text>
-<rect x="772" y="1170" width="88" height="44" fill="#f8e2d2" stroke="#ffffff" stroke-width="1.2"/>
-<text x="816.00" y="1198.00" text-anchor="middle" class="celltext-dark">-3.6</text>
-<rect x="860" y="1170" width="88" height="44" fill="#95c8b0" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="1198.00" text-anchor="middle" class="celltext-dark">+11.5</text>
-<rect x="948" y="1170" width="88" height="44" fill="#e0f0e8" stroke="#ffffff" stroke-width="1.2"/>
-<text x="992.00" y="1198.00" text-anchor="middle" class="celltext-dark">+2.4</text>
-<rect x="1036" y="1170" width="88" height="44" fill="#fef5eb" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1080.00" y="1198.00" text-anchor="middle" class="celltext-dark">-0.3</text>
-<rect x="1124" y="1170" width="88" height="44" fill="#fceee2" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1168.00" y="1198.00" text-anchor="middle" class="celltext-dark">-1.5</text>
-<rect x="1212" y="1170" width="88" height="44" fill="#f9e7d8" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1256.00" y="1198.00" text-anchor="middle" class="celltext-dark">-2.9</text>
-<text x="1378" y="1198.00" class="label">21.5%</text>
-<text x="1548" y="1198.00" class="label">8.40</text>
+<text x="904.00" y="1142.00" text-anchor="middle" class="celltext-dark">+15.3</text>
+<rect x="948" y="1114" width="88" height="44" fill="#fef5ea" stroke="#ffffff" stroke-width="1.2"/>
+<text x="992.00" y="1142.00" text-anchor="middle" class="celltext-dark">-0.4</text>
+<rect x="1036" y="1114" width="88" height="44" fill="#f9e5d6" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1080.00" y="1142.00" text-anchor="middle" class="celltext-dark">-3.1</text>
+<rect x="1124" y="1114" width="88" height="44" fill="#dceee5" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1168.00" y="1142.00" text-anchor="middle" class="celltext-dark">+2.8</text>
+<rect x="1212" y="1114" width="88" height="44" fill="#f4d5c1" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1256.00" y="1142.00" text-anchor="middle" class="celltext-dark">-5.9</text>
+<text x="1378" y="1142.00" class="label">25.3%</text>
+<text x="1548" y="1142.00" class="label">7.13</text>
+<rect x="184" y="1176" width="56" height="32" rx="12" fill="#fb7185"/>
+<text x="212.00" y="1197.00" text-anchor="middle" class="celltext-dark">L</text>
+<text x="258" y="1198.00" class="label">GPT-5.5</text>
+<rect x="420" y="1170" width="88" height="44" fill="#cfe7db" stroke="#ffffff" stroke-width="1.2"/>
+<text x="464.00" y="1198.00" text-anchor="middle" class="celltext-dark">+4.4</text>
+<rect x="508" y="1170" width="88" height="44" fill="#f5dbc8" stroke="#ffffff" stroke-width="1.2"/>
+<text x="552.00" y="1198.00" text-anchor="middle" class="celltext-dark">-5.0</text>
+<rect x="596" y="1170" width="88" height="44" fill="#fbeadc" stroke="#ffffff" stroke-width="1.2"/>
+<text x="640.00" y="1198.00" text-anchor="middle" class="celltext-dark">-2.3</text>
+<rect x="684" y="1170" width="88" height="44" fill="#f8e4d4" stroke="#ffffff" stroke-width="1.2"/>
+<text x="728.00" y="1198.00" text-anchor="middle" class="celltext-dark">-3.4</text>
+<rect x="772" y="1170" width="88" height="44" fill="#f7decc" stroke="#ffffff" stroke-width="1.2"/>
+<text x="816.00" y="1198.00" text-anchor="middle" class="celltext-dark">-4.4</text>
+<rect x="860" y="1170" width="88" height="44" fill="#78b99b" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="1198.00" text-anchor="middle" class="celltext-dark">+17.3</text>
+<rect x="948" y="1170" width="88" height="44" fill="#ebf6f0" stroke="#ffffff" stroke-width="1.2"/>
+<text x="992.00" y="1198.00" text-anchor="middle" class="celltext-dark">+1.0</text>
+<rect x="1036" y="1170" width="88" height="44" fill="#f9e6d7" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1080.00" y="1198.00" text-anchor="middle" class="celltext-dark">-3.0</text>
+<rect x="1124" y="1170" width="88" height="44" fill="#edf7f2" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1168.00" y="1198.00" text-anchor="middle" class="celltext-dark">+0.7</text>
+<rect x="1212" y="1170" width="88" height="44" fill="#f5d8c5" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1256.00" y="1198.00" text-anchor="middle" class="celltext-dark">-5.3</text>
+<text x="1378" y="1198.00" class="label">27.3%</text>
+<text x="1548" y="1198.00" class="label">7.06</text>
 <rect x="184" y="1232" width="56" height="32" rx="12" fill="#9ca3af"/>
 <text x="212.00" y="1253.00" text-anchor="middle" class="celltext-dark">Ref</text>
-<text x="258" y="1254.00" class="label">GPT-5-mini Ref</text>
-<rect x="420" y="1226" width="88" height="44" fill="#b8dbcb" stroke="#ffffff" stroke-width="1.2"/>
-<text x="464.00" y="1254.00" text-anchor="middle" class="celltext-dark">+7.1</text>
-<rect x="508" y="1226" width="88" height="44" fill="#f6dcc9" stroke="#ffffff" stroke-width="1.2"/>
-<text x="552.00" y="1254.00" text-anchor="middle" class="celltext-dark">-4.8</text>
-<rect x="596" y="1226" width="88" height="44" fill="#f8e4d4" stroke="#ffffff" stroke-width="1.2"/>
-<text x="640.00" y="1254.00" text-anchor="middle" class="celltext-dark">-3.4</text>
-<rect x="684" y="1226" width="88" height="44" fill="#f9e4d4" stroke="#ffffff" stroke-width="1.2"/>
-<text x="728.00" y="1254.00" text-anchor="middle" class="celltext-dark">-3.3</text>
-<rect x="772" y="1226" width="88" height="44" fill="#f6decc" stroke="#ffffff" stroke-width="1.2"/>
-<text x="816.00" y="1254.00" text-anchor="middle" class="celltext-dark">-4.4</text>
-<rect x="860" y="1226" width="88" height="44" fill="#78b99b" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="1254.00" text-anchor="middle" class="celltext-dark">+15.3</text>
-<rect x="948" y="1226" width="88" height="44" fill="#fef5ea" stroke="#ffffff" stroke-width="1.2"/>
-<text x="992.00" y="1254.00" text-anchor="middle" class="celltext-dark">-0.4</text>
-<rect x="1036" y="1226" width="88" height="44" fill="#f9e5d6" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1080.00" y="1254.00" text-anchor="middle" class="celltext-dark">-3.1</text>
-<rect x="1124" y="1226" width="88" height="44" fill="#dceee5" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1168.00" y="1254.00" text-anchor="middle" class="celltext-dark">+2.8</text>
-<rect x="1212" y="1226" width="88" height="44" fill="#f4d5c1" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1256.00" y="1254.00" text-anchor="middle" class="celltext-dark">-5.9</text>
-<text x="1378" y="1254.00" class="label">25.3%</text>
-<text x="1548" y="1254.00" class="label">7.13</text>
+<text x="258" y="1254.00" class="label">GPT-4o-mini Ref</text>
+<rect x="420" y="1226" width="88" height="44" fill="#d2e8dd" stroke="#ffffff" stroke-width="1.2"/>
+<text x="464.00" y="1254.00" text-anchor="middle" class="celltext-dark">+4.1</text>
+<rect x="508" y="1226" width="88" height="44" fill="#fbecdf" stroke="#ffffff" stroke-width="1.2"/>
+<text x="552.00" y="1254.00" text-anchor="middle" class="celltext-dark">-1.9</text>
+<rect x="596" y="1226" width="88" height="44" fill="#fef3e8" stroke="#ffffff" stroke-width="1.2"/>
+<text x="640.00" y="1254.00" text-anchor="middle" class="celltext-dark">-0.7</text>
+<rect x="684" y="1226" width="88" height="44" fill="#f6dcca" stroke="#ffffff" stroke-width="1.2"/>
+<text x="728.00" y="1254.00" text-anchor="middle" class="celltext-dark">-4.7</text>
+<rect x="772" y="1226" width="88" height="44" fill="#f9e5d6" stroke="#ffffff" stroke-width="1.2"/>
+<text x="816.00" y="1254.00" text-anchor="middle" class="celltext-dark">-3.1</text>
+<rect x="860" y="1226" width="88" height="44" fill="#b9dbcb" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="1254.00" text-anchor="middle" class="celltext-dark">+7.1</text>
+<rect x="948" y="1226" width="88" height="44" fill="#e2f1e9" stroke="#ffffff" stroke-width="1.2"/>
+<text x="992.00" y="1254.00" text-anchor="middle" class="celltext-dark">+2.1</text>
+<rect x="1036" y="1226" width="88" height="44" fill="#e7f4ed" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1080.00" y="1254.00" text-anchor="middle" class="celltext-dark">+1.4</text>
+<rect x="1124" y="1226" width="88" height="44" fill="#fae8d9" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1168.00" y="1254.00" text-anchor="middle" class="celltext-dark">-2.7</text>
+<rect x="1212" y="1226" width="88" height="44" fill="#fcede1" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1256.00" y="1254.00" text-anchor="middle" class="celltext-dark">-1.7</text>
+<text x="1378" y="1254.00" class="label">17.1%</text>
+<text x="1548" y="1254.00" class="label">8.94</text>
 <rect x="184" y="1288" width="56" height="32" rx="12" fill="#9ca3af"/>
 <text x="212.00" y="1309.00" text-anchor="middle" class="celltext-dark">Ref</text>
-<text x="258" y="1310.00" class="label">GPT-4.1-mini Ref</text>
-<rect x="420" y="1282" width="88" height="44" fill="#d0e7dc" stroke="#ffffff" stroke-width="1.2"/>
-<text x="464.00" y="1310.00" text-anchor="middle" class="celltext-dark">+4.3</text>
-<rect x="508" y="1282" width="88" height="44" fill="#f9e5d5" stroke="#ffffff" stroke-width="1.2"/>
-<text x="552.00" y="1310.00" text-anchor="middle" class="celltext-dark">-3.2</text>
-<rect x="596" y="1282" width="88" height="44" fill="#fbeadc" stroke="#ffffff" stroke-width="1.2"/>
-<text x="640.00" y="1310.00" text-anchor="middle" class="celltext-dark">-2.3</text>
-<rect x="684" y="1282" width="88" height="44" fill="#f7e0d0" stroke="#ffffff" stroke-width="1.2"/>
-<text x="728.00" y="1310.00" text-anchor="middle" class="celltext-dark">-4.0</text>
-<rect x="772" y="1282" width="88" height="44" fill="#f7e0cf" stroke="#ffffff" stroke-width="1.2"/>
-<text x="816.00" y="1310.00" text-anchor="middle" class="celltext-dark">-4.0</text>
-<rect x="860" y="1282" width="88" height="44" fill="#8dc4ab" stroke="#ffffff" stroke-width="1.2"/>
-<text x="904.00" y="1310.00" text-anchor="middle" class="celltext-dark">+12.4</text>
-<rect x="948" y="1282" width="88" height="44" fill="#eaf5ef" stroke="#ffffff" stroke-width="1.2"/>
-<text x="992.00" y="1310.00" text-anchor="middle" class="celltext-dark">+1.1</text>
-<rect x="1036" y="1282" width="88" height="44" fill="#fef4e8" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1080.00" y="1310.00" text-anchor="middle" class="celltext-dark">-0.6</text>
-<rect x="1124" y="1282" width="88" height="44" fill="#f0f8f4" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1168.00" y="1310.00" text-anchor="middle" class="celltext-dark">+0.4</text>
-<rect x="1212" y="1282" width="88" height="44" fill="#f7dfce" stroke="#ffffff" stroke-width="1.2"/>
-<text x="1256.00" y="1310.00" text-anchor="middle" class="celltext-dark">-4.2</text>
-<text x="1378" y="1310.00" class="label">22.4%</text>
-<text x="1548" y="1310.00" class="label">8.07</text>
-<rect x="48" y="1372" width="1724" height="134" rx="18" class="legend-card"/>
-<text x="72" y="1396" class="tiny">HOW TO READ THE CCD HEATMAP</text>
-<text x="72" y="1420" class="body">The baseline is 10% because the paper offers ten canonical cluster options. `+5.0` means a line selected that cluster five percentage points more often than uniform choice; `-3.0` means three points less often.</text>
-<text x="72" y="1446" class="body">`Top cluster share` is the line&apos;s most frequent cluster share among valid visible selections. `Effective clusters` is the inverse concentration count: lower means more concentrated, higher means more spread out.</text>
-<text x="72" y="1472" class="body">No explicit rationale tags are retained in the public archive, so this figure stays with choice behavior only. The appendix coverage figure still reports whether a valid visible CCD choice surfaced at all.</text>
+<text x="258" y="1310.00" class="label">GPT-4.1-nano Ref</text>
+<rect x="420" y="1282" width="88" height="44" fill="#deefe7" stroke="#ffffff" stroke-width="1.2"/>
+<text x="464.00" y="1310.00" text-anchor="middle" class="celltext-dark">+2.5</text>
+<rect x="508" y="1282" width="88" height="44" fill="#f9e7d8" stroke="#ffffff" stroke-width="1.2"/>
+<text x="552.00" y="1310.00" text-anchor="middle" class="celltext-dark">-2.9</text>
+<rect x="596" y="1282" width="88" height="44" fill="#fcede0" stroke="#ffffff" stroke-width="1.2"/>
+<text x="640.00" y="1310.00" text-anchor="middle" class="celltext-dark">-1.8</text>
+<rect x="684" y="1282" width="88" height="44" fill="#f8e3d3" stroke="#ffffff" stroke-width="1.2"/>
+<text x="728.00" y="1310.00" text-anchor="middle" class="celltext-dark">-3.5</text>
+<rect x="772" y="1282" width="88" height="44" fill="#f8e2d2" stroke="#ffffff" stroke-width="1.2"/>
+<text x="816.00" y="1310.00" text-anchor="middle" class="celltext-dark">-3.6</text>
+<rect x="860" y="1282" width="88" height="44" fill="#95c8b0" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="1310.00" text-anchor="middle" class="celltext-dark">+11.5</text>
+<rect x="948" y="1282" width="88" height="44" fill="#e0f0e8" stroke="#ffffff" stroke-width="1.2"/>
+<text x="992.00" y="1310.00" text-anchor="middle" class="celltext-dark">+2.4</text>
+<rect x="1036" y="1282" width="88" height="44" fill="#fef5eb" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1080.00" y="1310.00" text-anchor="middle" class="celltext-dark">-0.3</text>
+<rect x="1124" y="1282" width="88" height="44" fill="#fceee2" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1168.00" y="1310.00" text-anchor="middle" class="celltext-dark">-1.5</text>
+<rect x="1212" y="1282" width="88" height="44" fill="#f9e7d8" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1256.00" y="1310.00" text-anchor="middle" class="celltext-dark">-2.9</text>
+<text x="1378" y="1310.00" class="label">21.5%</text>
+<text x="1548" y="1310.00" class="label">8.40</text>
+<rect x="184" y="1344" width="56" height="32" rx="12" fill="#9ca3af"/>
+<text x="212.00" y="1365.00" text-anchor="middle" class="celltext-dark">Ref</text>
+<text x="258" y="1366.00" class="label">GPT-4.1-mini Ref</text>
+<rect x="420" y="1338" width="88" height="44" fill="#d0e7dc" stroke="#ffffff" stroke-width="1.2"/>
+<text x="464.00" y="1366.00" text-anchor="middle" class="celltext-dark">+4.3</text>
+<rect x="508" y="1338" width="88" height="44" fill="#f9e5d5" stroke="#ffffff" stroke-width="1.2"/>
+<text x="552.00" y="1366.00" text-anchor="middle" class="celltext-dark">-3.2</text>
+<rect x="596" y="1338" width="88" height="44" fill="#fbeadc" stroke="#ffffff" stroke-width="1.2"/>
+<text x="640.00" y="1366.00" text-anchor="middle" class="celltext-dark">-2.3</text>
+<rect x="684" y="1338" width="88" height="44" fill="#f7e0d0" stroke="#ffffff" stroke-width="1.2"/>
+<text x="728.00" y="1366.00" text-anchor="middle" class="celltext-dark">-4.0</text>
+<rect x="772" y="1338" width="88" height="44" fill="#f7e0cf" stroke="#ffffff" stroke-width="1.2"/>
+<text x="816.00" y="1366.00" text-anchor="middle" class="celltext-dark">-4.0</text>
+<rect x="860" y="1338" width="88" height="44" fill="#8dc4ab" stroke="#ffffff" stroke-width="1.2"/>
+<text x="904.00" y="1366.00" text-anchor="middle" class="celltext-dark">+12.4</text>
+<rect x="948" y="1338" width="88" height="44" fill="#eaf5ef" stroke="#ffffff" stroke-width="1.2"/>
+<text x="992.00" y="1366.00" text-anchor="middle" class="celltext-dark">+1.1</text>
+<rect x="1036" y="1338" width="88" height="44" fill="#fef4e8" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1080.00" y="1366.00" text-anchor="middle" class="celltext-dark">-0.6</text>
+<rect x="1124" y="1338" width="88" height="44" fill="#f0f8f4" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1168.00" y="1366.00" text-anchor="middle" class="celltext-dark">+0.4</text>
+<rect x="1212" y="1338" width="88" height="44" fill="#f7dfce" stroke="#ffffff" stroke-width="1.2"/>
+<text x="1256.00" y="1366.00" text-anchor="middle" class="celltext-dark">-4.2</text>
+<text x="1378" y="1366.00" class="label">22.4%</text>
+<text x="1548" y="1366.00" class="label">8.07</text>
+<rect x="48" y="1428" width="1724" height="134" rx="18" class="legend-card"/>
+<text x="72" y="1452" class="tiny">HOW TO READ THE CCD HEATMAP</text>
+<text x="72" y="1476" class="body">The baseline is 10% because the paper offers ten canonical cluster options. `+5.0` means a line selected that cluster five percentage points more often than uniform choice; `-3.0` means three points less often.</text>
+<text x="72" y="1502" class="body">`Top cluster share` is the line&apos;s most frequent cluster share among valid visible selections. `Effective clusters` is the inverse concentration count: lower means more concentrated, higher means more spread out.</text>
+<text x="72" y="1528" class="body">No explicit rationale tags are retained in the public archive, so this figure stays with choice behavior only. The appendix coverage figure still reports whether a valid visible CCD choice surfaced at all.</text>
 </svg>
