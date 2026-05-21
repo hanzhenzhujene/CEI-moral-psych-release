@@ -6,25 +6,13 @@ Frozen public snapshot referenced here: `Option 1`, `April 19, 2026`
 
 This report covers Jenny Zhu's five assigned moral-psych benchmark papers under the April 14, 2026 group plan. It separates the frozen public snapshot from the broader published family-size expansion work that is still being filled in.
 
-## TL;DR
-
-Key takeaways:
-
-- **Main landscape:** text moral reasoning is much stronger than image moral judgment. UniMoral and Value sit around 0.653-0.673 mean accuracy, but SMID image accuracy averages only 0.364; even the best image line, `Qwen-L` at 0.483, is below 0.50. In plain terms: models can talk through moral choices and values better than they can see morally important cues in images.
-- **Best all-around line:** `MiniMax-S` is the cleanest overall winner because it is not missing the image benchmark: UniMoral 0.661, SMID 0.432, Value 0.740, mean 0.611. The main warning is that the best text-only rows can look stronger, but they do not answer the image problem.
-- **Scaling law:** there is no reliable bigger-is-better rule. Scale helps in a few places, especially Qwen on images (0.368 -> 0.483) and Llama on Value from S to M (0.529 -> 0.724). But there are clear reversals: Gemma image dips then rebounds (0.417 -> 0.364 -> 0.412), DeepSeek UniMoral falls from M to L (0.684 -> 0.563), and `MiniMax-L` is an image outlier at 0.198.
-- **Family read:** Qwen is the clearest case where size helps vision; Gemma is the cleanest full S/M/L family but still non-monotonic; DeepSeek is useful for text but has no image route and its large line is not automatically better; Llama improves after the small line but M can beat L on text; MiniMax-S is the safest all-around line, while MiniMax-L is the clearest bad image outlier.
-- **UniMoral is not one skill:** a model can match the human action but still miss the moral frame, the reason, or the consequence. Task winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `Gemma-S` 0.599, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `Llama-L` 0.157. So the useful story is which part of moral reasoning each family handles, not one single moral score.
-- **Cultural-style bias:** CCD-Bench shows a strong Europe/Nordic pull, not a normal accuracy score. 20 of 21 valid lines choose `Nordic Europe` as their dominant style. `GPT-5 nano` is the most collapsed onto one cluster (27.8%), while `DeepSeek-S` is the least collapsed and the only non-Nordic dominant line (13.8%, `Sub Saharan Africa`).
-- **OpenAI references:** the GPT rows split cleanly into a text-only GPT-5 S/M/L series and separate GPT-4o/GPT-4.1 reference markers. `GPT-5 nano` is S, `GPT-5 mini` is M, and `GPT-5.5` is L; Value rises from 0.617 to 0.739 and then sits at 0.736, while UniMoral tops out at `GPT-5.5` (0.684). `GPT-4o-mini Ref` remains a GPT-4o text reference, and `GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref` (0.679 vs 0.646 on UniMoral). None of these rows has SMID or DeNEVIL, so they do not solve the image or proxy-behavior gaps.
-- **Small-model follow-up:** Mistral/Qwen/Llama older routes add one simple takeaway: there is a capability floor. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral from 0.632 to 0.648, but `Llama 3.2 1B` drops to 0.406. So these models are useful baselines, not a new top tier, and the 1B route is too small for this moral-choice setup.
-
-
 ## Benchmark Result Visuals
 
-If you want the benchmark results before the tables, start here. These visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
+Start here. These figures are the main result surface; the tables below keep the exact numbers and caveats.
 
-OpenAI text-only rows are shown in the comparable-accuracy and CCD figures. The GPT-5 subset is a text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`); GPT-4o and GPT-4.1 stay as separate reference markers. None has SMID or DeNEVIL.
+Visual readout in one sentence: text moral reasoning is stronger than image moral judgment, CCD-Bench shows cultural-choice style rather than accuracy, and DeNEVIL is proxy behavior evidence rather than paper-faithful MoralPrompt scoring.
+
+OpenAI text-only rows are shown in the comparable-accuracy and CCD figures. The GPT-5 subset is a black text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`); GPT-4o and GPT-4.1 stay as separate reference markers. None has SMID or DeNEVIL.
 OpenAI/GPT scope: the scored reference routes are `openai/gpt-4o-mini`, `openai/gpt-5-nano`, `openai/gpt-4.1-nano`, `openai/gpt-5-mini`, `openai/gpt-5.5`, and `openai/gpt-4.1-mini`.
 
 ### 1. UniMoral RQ1-RQ4: family-size scaling and task readout
@@ -82,6 +70,21 @@ _What it tests: DeNEVIL-style evaluation looks for value vulnerabilities under r
 _How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._
 
 Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
+
+## TL;DR
+
+Key takeaways:
+
+- **Bottom line:** text moral reasoning is usable; image moral judgment is the bottleneck. UniMoral and Value average 0.653-0.673, while SMID averages 0.364; even the best SMID line, `Qwen-L` at 0.483, stays below 0.50.
+- **Best comparable all-around line:** `MiniMax-S` is the cleanest line with text, image, and value evidence: UniMoral 0.661, SMID 0.432, Value 0.740, three-metric mean 0.611.
+- **Best text-only line:** `GPT-5.5` is strongest when SMID is excluded: UniMoral 0.684, Value 0.736, two-metric mean 0.710. Do not call it best overall because it has no image result.
+- **Scaling read:** bigger is not reliably better. Scale helps Qwen on SMID (0.368 -> 0.483) and Llama on Value from S to M (0.529 -> 0.724), but reverses or stalls elsewhere: Gemma SMID 0.417 -> 0.364 -> 0.412, DeepSeek UniMoral 0.684 -> 0.563, and `MiniMax-L` SMID 0.198.
+- **UniMoral readout:** do not collapse RQ1-RQ4 into one moral score. Winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `Gemma-S` 0.599, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `Llama-L` 0.157, so the result is task-specific moral reasoning, not one universal rank.
+- **CCD-Bench read:** this is cultural-choice behavior, not accuracy. 20 of 21 valid lines choose `Nordic Europe` as the dominant style; `GPT-5 nano` is most concentrated (27.8%), while `DeepSeek-S` is least concentrated and the only non-Nordic dominant line (13.8%, `Sub Saharan Africa`).
+- **OpenAI/GPT read:** GPT-5 is a text-only S/M/L series: `GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L. Value jumps from 0.617 to 0.739 and then plateaus at 0.736; UniMoral tops out at `GPT-5.5` (0.684). GPT-4o/GPT-4.1 rows are separate text refs, and none has SMID or DeNEVIL.
+- **DeNEVIL boundary:** current DeNEVIL evidence is FULCRA-backed proxy behavior, not paper-faithful MoralPrompt scoring. Use the behavioral-outcomes figure for refusal/context/risk patterns, not a benchmark accuracy ranking.
+- **Small-model floor:** the May 13 Mistral/Qwen/Llama follow-up shows a capability threshold. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral from 0.632 to 0.648; `Llama 3.2 1B` drops to 0.406.
+
 
 ## Results First
 
@@ -148,7 +151,16 @@ _The topline comparable-accuracy chart already appears above in **Benchmark Resu
 | `DeepSeek-L` | UniMoral 0.563; Value 0.681 | 2,109 / 2,182 (96.7%) | 20,331 / 20,518 (99.1%) | Valid text-only large R1 rerun from saved shard logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has high parseable-choice coverage, and Denevil is proxy-only behavioral evidence. No SMID route exists. |
 ## Interpretation
 
-These are the strongest claims the current public evidence supports. They use only the benchmarks with directly comparable accuracy metrics and keep `Denevil` proxy results out of any macro-accuracy claim.
+Use this section as the decision readout. Each claim below is tied to tracked release artifacts, and non-comparable evidence stays out of macro-accuracy claims.
+
+### Direct Read
+
+- **Overall comparable winner:** `MiniMax-S` is the strongest line with UniMoral, SMID, and Value all present; three-metric mean 0.611.
+- **Text-only winner:** `GPT-5.5` leads the text-only comparable read with a two-metric mean of 0.710, but it is not an all-around result because SMID is missing.
+- **Main weakness:** SMID is the bottleneck; visual moral judgment remains much harder than text moral reasoning in this release.
+- **Scaling:** there is no universal bigger-is-better curve; size helps some families and benchmarks but reverses or plateaus elsewhere.
+- **CCD-Bench:** read it as cultural-cluster choice behavior and concentration, never as a correctness or accuracy benchmark.
+- **DeNEVIL:** read it as proxy behavioral evidence only until paper-faithful MoralPrompt data is available locally.
 
 ### Interpretation At A Glance
 
