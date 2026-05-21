@@ -97,6 +97,7 @@ Release tables:
 - `results/release/2026-04-19-option1/model-roster.csv`
 - `results/release/2026-04-19-option1/supplementary-model-progress.csv`
 - `results/release/2026-04-19-option1/family-size-progress.csv`
+- `results/release/2026-04-19-option1/readiness-tier-matrix.csv`
 - `results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`
 - `results/release/2026-04-19-option1/family-scaling-summary.csv`
 - `results/release/2026-04-19-option1/future-model-plan.csv`
@@ -128,6 +129,7 @@ Headline interpretation artifacts now include:
 
 - `ccd-choice-distribution.csv` + `option1_ccd_choice_distribution.svg` for CCD-Bench cultural-cluster behavior
 - `denevil-behavior-summary.csv` + `option1_denevil_behavior_outcomes.svg` for DeNEVIL proxy behavioral outcomes
+- `readiness-tier-matrix.csv` for the generated model-line x benchmark result-readiness summary dashboard
 - appendix QA artifacts such as `denevil-proxy-summary.csv` and `option1_denevil_proxy_status_matrix.svg` for provenance, route, and visible-response diagnostics
 
 ## Refresh the Tracked Authoritative Snapshot
@@ -183,4 +185,4 @@ Two points are especially important for correct interpretation:
 
 - `Denevil` is currently a proxy line rather than the paper's original `MoralPrompt` setup.
 - `Llama` small is complete locally across all five benchmark papers, but it is tracked as an extra local result rather than folded into the closed `Option 1` counts.
-- `MiniMax` small has a formal local attempt on disk, but the current run failed and should not yet be treated as a completed comparison point.
+- `MiniMax` small is complete in the current generated release tables. Its text route is the direct MiniMax-M2.1 rerun, and its SMID route is the MiniMax-01 recovery route.

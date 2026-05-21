@@ -17,8 +17,8 @@ It combines three things in one clean public surface:
 If you only read one section, read these key takeaways:
 
 - **Best like-for-like line:** `MiniMax-S` is the strongest fully comparable line, averaging 0.611 across UniMoral 0.661, SMID 0.432, and Value 0.740. This is the cleanest overall topline because all three comparable metrics are observed on the same line.
-- **Best text-only line:** `GPT-5 mini` is the strongest pure text line, reaching UniMoral 0.678 and Value 0.739. It should not be called the best all-around line because there is no public SMID route on that line.
-- **OpenAI text-only Batch references:** 5 Responses/Batch API reference lines are now integrated, each with 76,486/76,486 response rows collected and parser coverage from 76,401 to 76,486 parsed rows. Best OpenAI UniMoral is `GPT-4.1 mini` at 0.679; best OpenAI Value is `GPT-5 mini` at 0.739. SMID and DeNEVIL remain intentionally `n/a` for these text-only references.
+- **Best text-only line:** `GPT-5.5` is the strongest pure text line, reaching UniMoral 0.684 and Value 0.736. It should not be called the best all-around line because there is no public SMID route on that line.
+- **OpenAI text-only Batch references:** 6 Responses/Batch API reference lines are now integrated, each with 76,486/76,486 response rows collected and parser coverage from 76,401 to 76,486 parsed rows. Best OpenAI UniMoral is `GPT-5.5` at 0.684; best OpenAI Value is `GPT-5 mini` at 0.739. SMID and DeNEVIL remain intentionally `n/a` for these text-only references.
 - **The hardest benchmark is SMID:** `SMID` has the lowest mean accuracy (0.364) and widest spread (0.285), while `UniMoral` is tightly clustered (0.121 spread). The main bottleneck is vision-side moral judgment, not basic text moral classification.
 - **There is no universal scaling law:** `Gemma` is non-monotonic on SMID (0.417 -> 0.364 -> 0.412), and `Llama-M` still beats `Llama-L` on Value (0.724 vs 0.692). Size helps on some tasks, but not in one clean monotonic pattern.
 - **CCD-Bench shows cultural choice style, not accuracy.** Every released line with valid CCD choices currently peaks on `option_6 (Nordic Europe)`, but concentration still varies meaningfully, from `DeepSeek-S` at 13.8% to `GPT-5 nano` at 27.8%. The key question is how narrowly each line collapses onto one cultural cluster, not who has the highest "accuracy."
@@ -66,13 +66,13 @@ Lower-level QA/provenance figures are still generated in `figures/release/`, but
 
 ## Latest Additional Model Sweep
 
-The May 13 additional-model sweep tests older or smaller OpenRouter routes on `UniMoral` and `CCD-Bench`; the May 16 OpenAI text-only reference sweep adds `gpt-4o-mini`, `gpt-5-nano`, `gpt-4.1-nano`, `gpt-5-mini`, and `gpt-4.1-mini` on `UniMoral`, `Value Kaleidoscope`, and `CCD-Bench`. Full May 13 tables and provenance are in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/); the OpenAI rows are integrated into the release comparison and CCD tables.
+The May 13 additional-model sweep tests older or smaller OpenRouter routes on `UniMoral` and `CCD-Bench`; the OpenAI text-only reference sweeps add `gpt-4o-mini`, `gpt-5-nano`, `gpt-4.1-nano`, `gpt-5-mini`, `gpt-4.1-mini`, and the May 21 `gpt-5.5` follow-up on `UniMoral`, `Value Kaleidoscope`, and `CCD-Bench`. Full May 13 tables and provenance are in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/); the OpenAI rows are integrated into the release comparison and CCD tables.
 
 **Model-wise:** Mistral Nemo is the top UniMoral line at 0.648, but Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B are close behind from 0.632 to 0.640. Llama 3.2 1B is the clear weak line at 0.406, with a lower answer rate as well.
 
 **Benchmark-wise:** UniMoral gives a clear performance separation between the very small 1B route and the stronger 7B-12B cluster. CCD-Bench gives a style/concentration readout rather than a correctness score: all models peak on Nordic Europe, but Llama 3.2 1B is most diffuse (15.9% dominant share; 9.12 effective clusters), while Mistral Nemo is most concentrated (25.3%; 7.22 effective clusters).
 
-**OpenAI reference add-on:** `GPT-4.1 mini` is the strongest OpenAI UniMoral line at 0.679, while `GPT-5 mini` is the strongest OpenAI Value Kaleidoscope line at 0.739. These rows are text-only references only: they intentionally omit SMID and DeNEVIL, and CCD-Bench is read as cultural-choice concentration rather than accuracy.
+**OpenAI reference add-on:** `GPT-5.5` is the strongest OpenAI UniMoral line at 0.684, while `GPT-5 mini` remains the strongest OpenAI Value Kaleidoscope line at 0.739. These rows are text-only references only: they intentionally omit SMID and DeNEVIL, they are not an OpenAI S/M/L family-size sweep, and CCD-Bench is read as cultural-choice concentration rather than accuracy.
 
 **Scaling-wise:** There is no clean monotonic scaling law. The move from 1B to 7B+ matters a lot, but above that threshold the 7B-12B models cluster closely rather than improving smoothly with size. This looks more like a capability floor than a simple bigger-is-better trend.
 
@@ -128,6 +128,7 @@ This repo has two distinct entrypoints:
 | Read the additional model and OpenAI follow-up | [Latest Additional Model Sweep](#latest-additional-model-sweep) |
 | Jump straight to the live summary | [Results First](#results-first) |
 | Download the exact full-matrix status | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
+| Download the result-readiness summary dashboard | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |
 | Rebuild or verify the public package locally | [Reproducibility](#reproducibility) |
 
 ## Repository Layout
@@ -164,7 +165,7 @@ Every evaluation line in this repo is mapped onto a family-size slot and served 
 | `Llama` | **Text / Vision:** `llama-3.2-11b-vision-instruct` | **Text:** `llama-3.3-70b-instruct` | **Text / Vision:** `llama-4-maverick` | Text benchmarks on `S/M/L`; SMID on `S/L`. |
 | `Gemma` | **Text / Vision:** `gemma-3-4b-it` | **Text / Vision:** `gemma-3-12b-it` | **Text / Vision:** `gemma-3-27b-it` | Text benchmarks and SMID on `S/M/L`. |
 
-_Exact per-line status is summarized in Results First and saved as `family-size-progress.csv`._
+_Exact per-line status is summarized in Results First and saved as `family-size-progress.csv`; public model-line x benchmark result-readiness summary cells are saved as `readiness-tier-matrix.csv`._
 
 ## Data Flow
 
@@ -257,6 +258,7 @@ Metric definition version: `2026-04-30`. The visible-answer parsing rules behind
 | `GPT-4.1 nano` | 0.646 | n/a | 0.673 | OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run. |
 | `GPT-5 mini` | 0.678 | n/a | 0.739 | OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run. |
 | `GPT-4.1 mini` | 0.679 | n/a | 0.735 | OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run. |
+| `GPT-5.5` | 0.684 | n/a | 0.736 | OpenAI GPT-5.5 text-only reference; SMID and DeNEVIL intentionally not run. |
 
 _The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._
 
@@ -278,8 +280,8 @@ These are the strongest claims the current public evidence supports. They use on
 | Claim | Evidence | Why it matters |
 | --- | --- | --- |
 | Strongest fully observed comparable line | `MiniMax-S` averages 0.611 across UniMoral 0.661, SMID 0.432, and Value 0.740. | This is the cleanest like-for-like topline because all three comparable metrics are present on the same line. |
-| Strongest text-only comparable line | `GPT-5 mini` reaches UniMoral 0.678 and Value 0.739, a two-metric mean of 0.708. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |
-| OpenAI text-only reference markers | 5 Batch API rows have 76,486/76,486 collected responses each, with parser coverage from 76,401 to 76,486. Best OpenAI UniMoral: `GPT-4.1 mini` at 0.679; best OpenAI Value: `GPT-5 mini` at 0.739. | These are useful external text-only references, but they are not OpenAI family-size scaling claims and have no SMID / DeNEVIL evidence in this release. |
+| Strongest text-only comparable line | `GPT-5.5` reaches UniMoral 0.684 and Value 0.736, a two-metric mean of 0.710. | It is the strongest text-only comparison point, but it should not be described as the best all-around line because there is no SMID route on that line. |
+| OpenAI text-only reference markers | 6 Batch API rows have 76,486/76,486 collected responses each, with parser coverage from 76,401 to 76,486. Best OpenAI UniMoral: `GPT-5.5` at 0.684; best OpenAI Value: `GPT-5 mini` at 0.739. | These are useful external text-only references, but they are not OpenAI family-size scaling claims and have no SMID / DeNEVIL evidence in this release. |
 | Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.364 and the widest spread at 0.285. | The public readout should treat SMID as the highest-variance benchmark rather than expecting simple size-based improvements. |
 | Closest thing to saturation | `UniMoral` has the tightest range, from 0.563 to 0.684 (0.121 spread). | Current text lines cluster closely on UniMoral, so additional size mainly fine-tunes rather than reshapes the ranking there. |
 | Scaling-law read | `Gemma` is still the only family with a full three-metric S/M/L comparable sweep, while `Qwen`, `DeepSeek`, and `Llama` now add broader text-side size curves. OpenAI Batch rows are external text-only reference markers and are excluded from size-law claims. Even in the cleanest full sweep, the directions diverge: Gemma UniMoral rises from 0.635 to 0.661, Value from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data support task-specific scaling, not a single monotonic law across all families and benchmarks. |
@@ -351,6 +353,7 @@ _The two headline CCD figures already appear above in **Benchmark Result Visuals
 | `GPT-4.1 nano` | option_6 (Nordic Europe) | 21.5% | 8.40 | Compare against the heatmap above, not as scalar accuracy. |
 | `GPT-5 mini` | option_6 (Nordic Europe) | 25.3% | 7.13 | Compare against the heatmap above, not as scalar accuracy. |
 | `GPT-4.1 mini` | option_6 (Nordic Europe) | 22.4% | 8.07 | Compare against the heatmap above, not as scalar accuracy. |
+| `GPT-5.5` | option_6 (Nordic Europe) | 27.3% | 7.06 | Compare against the heatmap above, not as scalar accuracy. |
 
 ### DeNEVIL Proxy Behavioral Evidence
 
@@ -399,7 +402,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 - Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
 - Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.
 - Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%`, and `Denevil visible proxy coverage = 99.8%`. These are parser/proxy coverage checks, not CCD or Denevil accuracy.
-- Do not call `GPT-5 mini` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
+- Do not call `GPT-5.5` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
 - Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI Batch rows are text-only reference markers rather than family-size curves.
 - Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.
 - Treat missing comparable cells as evidence limits rather than model failures. Several large lines are complete operationally but still lack directly comparable public metrics for some benchmarks.
@@ -409,7 +412,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `May 16, 2026` |
+| Repo update date | `May 21, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
 | Current project total cost | `$759.59 confirmed before May 16 OpenAI Batch additions` |
 | Total cost breakdown | MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$254.17`; OpenAI API reference sweep: `$0.76 confirmed before May 16; new OpenAI Batch reference sweeps pending billing confirmation`. |
@@ -464,7 +467,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `TBD` | The family-size route is not frozen yet. |
 | `-` | No run is planned on that line right now. |
 
-Exact per-line family-size status is saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv); the README keeps the main surface focused on the visuals and interpretation.
+Exact per-line family-size status is saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv), and public model-line x benchmark result-readiness summary cells are saved as [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv). Tier 3 means ready for interpretation/comparison within the stated metric layer, not a model-performance score. The summary dashboard reaches Tier 3 only when the required current-release result cells are Tier 3; blocked/not-run/route-gap/data-gap cells are kept outside the tier scale. The README keeps the main surface focused on the visuals and interpretation.
 
 ## The Five Benchmark Papers
 
@@ -520,6 +523,7 @@ Expected high-level outputs:
 - `results/release/2026-04-19-option1/denevil-proxy-summary.csv`
 - `results/release/2026-04-19-option1/denevil-proxy-examples.csv`
 - `results/release/2026-04-19-option1/deepseek-sm-readout.csv`
+- `results/release/2026-04-19-option1/readiness-tier-matrix.csv`
 - `results/release/2026-04-19-option1/saved-results-audit.csv`
 - `results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`
 - `results/release/2026-04-19-option1/family-scaling-summary.csv`

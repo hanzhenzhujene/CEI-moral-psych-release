@@ -4,7 +4,7 @@
   "source_snapshot": "results/release/2026-04-19-option1/source/authoritative-summary.csv",
   "report_metadata": {
     "owner": "Jenny Zhu",
-    "date": "2026-05-16",
+    "date": "2026-05-21",
     "frozen_snapshot_date": "2026-04-19",
     "current_total_cost": "$759.59 confirmed before May 16 OpenAI Batch additions",
     "current_cost_breakdown": {
@@ -18,14 +18,17 @@
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
     "provider": "OpenRouter + direct MiniMax + OpenAI",
     "temperature": "0",
-    "operations_note": "Updated May 16, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `DeepSeek-L`, `Llama-L`, `DeepSeek-S`, `MiniMax-L`, and `MiniMax-S`, and no published follow-up line is still live.",
+    "operations_note": "Updated May 21, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `DeepSeek-L`, `Llama-L`, `DeepSeek-S`, `MiniMax-L`, and `MiniMax-S`, and no published follow-up line is still live.",
     "ci_workflow_url": "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml"
   },
   "target_matrix": {
     "benchmarks": 5,
     "model_families": 5,
     "size_slots": 3,
-    "family_size_benchmark_cells": 75
+    "family_size_benchmark_cells": 75,
+    "readiness_summary_cells": 105,
+    "tier3_summary_cells": 87,
+    "blocked_summary_cells": 18
   },
   "counts": {
     "authoritative_tasks": 19,
@@ -155,6 +158,7 @@
     "denevil_prompt_family_breakdown": "results/release/2026-04-19-option1/denevil-prompt-family-breakdown.csv",
     "denevil_proxy_examples": "results/release/2026-04-19-option1/denevil-proxy-examples.csv",
     "deepseek_sm_readout": "results/release/2026-04-19-option1/deepseek-sm-readout.csv",
+    "readiness_tier_matrix": "results/release/2026-04-19-option1/readiness-tier-matrix.csv",
     "saved_results_audit": "results/release/2026-04-19-option1/saved-results-audit.csv",
     "benchmark_difficulty_summary": "results/release/2026-04-19-option1/benchmark-difficulty-summary.csv",
     "family_scaling_summary": "results/release/2026-04-19-option1/family-scaling-summary.csv",
@@ -193,6 +197,7 @@
     "denevil-prompt-family-breakdown.csv",
     "denevil-proxy-examples.csv",
     "deepseek-sm-readout.csv",
+    "readiness-tier-matrix.csv",
     "saved-results-audit.csv",
     "benchmark-difficulty-summary.csv",
     "family-scaling-summary.csv",

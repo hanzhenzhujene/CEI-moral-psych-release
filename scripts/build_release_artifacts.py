@@ -156,13 +156,13 @@ DENEVIL_PROTECTIVE_BEHAVIORS = {
     "Corrective / contextual response",
 }
 MINIMAX_SMALL_STATUS_SUMMARY = (
-    "formal attempt exists, but the current line failed and is not counted as complete"
+    "MiniMax-S direct-provider text rerun is complete; SMID remains covered by the completed MiniMax-01 recovery route"
 )
 MINIMAX_SMALL_INTERPRETATION_NOTE = (
-    "`MiniMax-S` should currently be reported as a failed formal attempt, not as a completed five-benchmark line."
+    "`MiniMax-S` is now a complete local line for the published dashboard: text is from direct MiniMax-M2.1, and SMID is from the prior MiniMax-01 recovery route."
 )
 MINIMAX_SMALL_GUARDRAIL = (
-    "The MiniMax small line has a formal attempt on disk, but the current run failed and is not yet a usable comparison point."
+    "Use the May 11 direct MiniMax-M2.1 text logs for MiniMax-S; do not fall back to the older OpenRouter key-limit attempt."
 )
 PUBLIC_WITHHELD_FAMILIES: set[str] = set()
 PUBLIC_WITHHELD_LINES: set[str] = set()
@@ -400,6 +400,33 @@ OPENAI_TEXT_REFERENCE_SPECS = [
             8: 205,
             9: 227,
             10: 127,
+        },
+    },
+    {
+        "line_label": "GPT-5.5",
+        "family": OPENAI_BATCH_REFERENCE_FAMILY_LABEL,
+        "size_slot": "Ref",
+        "route": "openai/gpt-5.5 (Responses API + Batch API; text-only reference)",
+        "note": "OpenAI GPT-5.5 text-only Batch API reference line; same eligible task set as the other OpenAI references, with SMID and DeNEVIL intentionally not run.",
+        "comparison_note": "OpenAI GPT-5.5 text-only reference; SMID and DeNEVIL intentionally not run.",
+        "total_samples": 76_486,
+        "parsed_samples": 76_486,
+        "unimoral_action_accuracy": 6005 / 8784,
+        "value_relevance_accuracy": 31706 / 43680,
+        "value_valence_accuracy": 16280 / 21840,
+        "ccd_total": 2182,
+        "ccd_valid": 2182,
+        "ccd_cluster_counts": {
+            1: 314,
+            2: 110,
+            3: 168,
+            4: 144,
+            5: 123,
+            6: 595,
+            7: 240,
+            8: 153,
+            9: 233,
+            10: 102,
         },
     },
 ]
@@ -6555,6 +6582,185 @@ def add_openai_reference_outputs(
         ccd_valid_choice_coverage.append(openai_reference_ccd_coverage_row(spec))
 
 
+def build_readiness_tier_matrix(
+    benchmark_comparison: list[dict[str, Any]],
+    ccd_choice_distribution: list[dict[str, Any]],
+    denevil_proxy_summary: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    ccd_by_line = {row["line_label"]: row for row in ccd_choice_distribution}
+    denevil_by_line = {row["model_line"]: row for row in denevil_proxy_summary}
+    rows: list[dict[str, Any]] = []
+
+    def append_row(
+        line: dict[str, Any],
+        *,
+        benchmark: str,
+        subtask_or_rq: str,
+        metric_layer: str,
+        sample_set: str,
+        readiness_tier: str,
+        result_status: str,
+        blocker_status: str,
+        evidence_status: str,
+        primary_metric: str,
+        primary_metric_value: str,
+        source_file: str,
+        run_id_or_source_artifact: str,
+        interpretation: str,
+    ) -> None:
+        rows.append(
+            {
+                "dashboard_unit": "public_summary_model_line_x_benchmark",
+                "cell_granularity": "summary",
+                "line_label": line["line_label"],
+                "model_id": line["line_label"],
+                "provider_route": line.get("route") or "",
+                "family": line["family"],
+                "size_slot": line["size_slot"],
+                "benchmark": benchmark,
+                "subtask_or_rq": subtask_or_rq,
+                "sample_set": sample_set,
+                "aggregation_rule": "summary tier is the minimum readiness of the current-release required result cells; blocked/not_run/data_gap cells receive no tier",
+                "readiness_tier": readiness_tier,
+                "metric_layer": metric_layer,
+                "result_status": result_status,
+                "blocker_status": blocker_status,
+                "evidence_status": evidence_status,
+                "primary_metric": primary_metric,
+                "primary_metric_value": primary_metric_value,
+                "source_file": source_file,
+                "run_id_or_source_artifact": run_id_or_source_artifact,
+                "lower_level_limitations": "Public summary row; model_id is the public model line when a benchmark summary aggregates text/vision routes or source artifacts.",
+                "interpretation": interpretation,
+            }
+        )
+
+    def append_accuracy_row(line: dict[str, Any], *, benchmark: str, field: str) -> None:
+        value = line.get(field)
+        subtask_or_rq = {
+            "UniMoral": "RQ1 action_prediction",
+            "SMID": "moral_rating + foundation_classification",
+            "Value Kaleidoscope": "value_relevance + value_valence",
+        }[benchmark]
+        if value is None:
+            blocker_status = "route_gap" if benchmark == "SMID" else "not_run"
+            append_row(
+                line,
+                benchmark=benchmark,
+                subtask_or_rq=subtask_or_rq,
+                metric_layer="M1 benchmark-faithful accuracy",
+                sample_set="current release selected sample set",
+                readiness_tier="",
+                result_status="blocked",
+                blocker_status=blocker_status,
+                evidence_status=blocker_status,
+                primary_metric="accuracy",
+                primary_metric_value="",
+                source_file="benchmark-comparison.csv",
+                run_id_or_source_artifact="results/release/2026-04-19-option1/benchmark-comparison.csv",
+                interpretation="No result-readiness tier is assigned because the required accuracy result cell is blocked or not run.",
+            )
+            return
+        append_row(
+            line,
+            benchmark=benchmark,
+            subtask_or_rq=subtask_or_rq,
+            metric_layer="M1 benchmark-faithful accuracy",
+            sample_set="current release selected sample set",
+            readiness_tier="Tier 3",
+            result_status="interpretable_comparable",
+            blocker_status="",
+            evidence_status="completed_valid_interpretable",
+            primary_metric="accuracy",
+            primary_metric_value=fmt_float(float(value), 6),
+            source_file="benchmark-comparison.csv",
+            run_id_or_source_artifact="results/release/2026-04-19-option1/benchmark-comparison.csv",
+            interpretation="Tier 3 result-readiness: completed, valid, and interpretable for comparison within this benchmark and metric layer.",
+        )
+
+    for line in benchmark_comparison:
+        append_accuracy_row(line, benchmark="UniMoral", field="unimoral_action_accuracy")
+        append_accuracy_row(line, benchmark="SMID", field="smid_average_accuracy")
+        append_accuracy_row(line, benchmark="Value Kaleidoscope", field="value_average_accuracy")
+
+        ccd = ccd_by_line.get(line["line_label"])
+        ccd_status = "missing_route" if ccd is None else str(ccd.get("distribution_status") or "missing_eval_samples")
+        if ccd is not None and ccd_status == "ok":
+            append_row(
+                line,
+                benchmark="CCD-Bench",
+                subtask_or_rq="cultural_choice",
+                metric_layer="M2 choice-distribution behavior",
+                sample_set="full CCD-Bench selection set",
+                readiness_tier="Tier 3",
+                result_status="interpretable_comparable",
+                blocker_status="",
+                evidence_status=ccd_status,
+                primary_metric="valid_choice_rate_pct",
+                primary_metric_value=fmt_pct_number_or_na(ccd.get("valid_selection_rate"), 6),
+                source_file="ccd-choice-distribution.csv",
+                run_id_or_source_artifact="results/release/2026-04-19-option1/ccd-choice-distribution.csv",
+                interpretation="Tier 3 result-readiness for CCD choice-distribution behavior; this is distributional evidence, not cultural-choice accuracy.",
+            )
+        else:
+            append_row(
+                line,
+                benchmark="CCD-Bench",
+                subtask_or_rq="cultural_choice",
+                metric_layer="M2 choice-distribution behavior",
+                sample_set="full CCD-Bench selection set",
+                readiness_tier="",
+                result_status="blocked",
+                blocker_status="route_gap",
+                evidence_status=ccd_status,
+                primary_metric="valid_choice_rate_pct",
+                primary_metric_value="",
+                source_file="ccd-choice-distribution.csv",
+                run_id_or_source_artifact="results/release/2026-04-19-option1/ccd-choice-distribution.csv",
+                interpretation="No result-readiness tier is assigned because CCD choice-distribution evidence is unavailable.",
+            )
+
+        denevil = denevil_by_line.get(line["line_label"])
+        if denevil is not None and denevil.get("limitation_flag") != "missing_route":
+            route_line = dict(line)
+            route_line["route"] = denevil.get("route_model_name") or line.get("route") or ""
+            append_row(
+                route_line,
+                benchmark="Denevil",
+                subtask_or_rq="FULCRA proxy generation",
+                metric_layer="M3 proxy behavior/provenance",
+                sample_set="current release FULCRA proxy sample set",
+                readiness_tier="Tier 3",
+                result_status="interpretable_comparable_proxy",
+                blocker_status="",
+                evidence_status=str(denevil.get("proxy_status") or "proxy_available"),
+                primary_metric="visible_response_rate",
+                primary_metric_value=fmt_float_or_na(denevil.get("valid_response_rate"), 6),
+                source_file="denevil-proxy-summary.csv",
+                run_id_or_source_artifact="results/release/2026-04-19-option1/denevil-proxy-summary.csv",
+                interpretation="Tier 3 result-readiness for the proxy metric layer only; do not treat as paper-faithful MoralPrompt scoring.",
+            )
+        else:
+            append_row(
+                line,
+                benchmark="Denevil",
+                subtask_or_rq="MoralPrompt paper-faithful generation",
+                metric_layer="M3 proxy behavior/provenance",
+                sample_set="not available in current release",
+                readiness_tier="",
+                result_status="blocked",
+                blocker_status="not_run",
+                evidence_status="not_run",
+                primary_metric="visible_response_rate",
+                primary_metric_value="",
+                source_file="denevil-proxy-summary.csv",
+                run_id_or_source_artifact="results/release/2026-04-19-option1/denevil-proxy-summary.csv",
+                interpretation="No result-readiness tier is assigned because this DeNEVIL cell was not run in the current release.",
+            )
+
+    return rows
+
+
 def comparable_snapshot_note(row: dict[str, Any]) -> str:
     if row.get("line_label") in OPENAI_REFERENCE_LINE_LABELS:
         spec = OPENAI_REFERENCE_SPEC_BY_LINE[str(row["line_label"])]
@@ -10429,13 +10635,13 @@ def append_latest_additional_model_sweep_section(lines: list[str]) -> None:
         [
             "## Latest Additional Model Sweep",
             "",
-            "The May 13 additional-model sweep tests older or smaller OpenRouter routes on `UniMoral` and `CCD-Bench`; the May 16 OpenAI text-only reference sweep adds `gpt-4o-mini`, `gpt-5-nano`, `gpt-4.1-nano`, `gpt-5-mini`, and `gpt-4.1-mini` on `UniMoral`, `Value Kaleidoscope`, and `CCD-Bench`. Full May 13 tables and provenance are in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/); the OpenAI rows are integrated into the release comparison and CCD tables.",
+            "The May 13 additional-model sweep tests older or smaller OpenRouter routes on `UniMoral` and `CCD-Bench`; the OpenAI text-only reference sweeps add `gpt-4o-mini`, `gpt-5-nano`, `gpt-4.1-nano`, `gpt-5-mini`, `gpt-4.1-mini`, and the May 21 `gpt-5.5` follow-up on `UniMoral`, `Value Kaleidoscope`, and `CCD-Bench`. Full May 13 tables and provenance are in [results/exploratory/2026-05-13-additional-model-sweep](results/exploratory/2026-05-13-additional-model-sweep/); the OpenAI rows are integrated into the release comparison and CCD tables.",
             "",
             "**Model-wise:** Mistral Nemo is the top UniMoral line at 0.648, but Qwen2.5 7B, Llama 3.1 8B, and Llama 3 8B are close behind from 0.632 to 0.640. Llama 3.2 1B is the clear weak line at 0.406, with a lower answer rate as well.",
             "",
             "**Benchmark-wise:** UniMoral gives a clear performance separation between the very small 1B route and the stronger 7B-12B cluster. CCD-Bench gives a style/concentration readout rather than a correctness score: all models peak on Nordic Europe, but Llama 3.2 1B is most diffuse (15.9% dominant share; 9.12 effective clusters), while Mistral Nemo is most concentrated (25.3%; 7.22 effective clusters).",
             "",
-            "**OpenAI reference add-on:** `GPT-4.1 mini` is the strongest OpenAI UniMoral line at 0.679, while `GPT-5 mini` is the strongest OpenAI Value Kaleidoscope line at 0.739. These rows are text-only references only: they intentionally omit SMID and DeNEVIL, and CCD-Bench is read as cultural-choice concentration rather than accuracy.",
+            "**OpenAI reference add-on:** `GPT-5.5` is the strongest OpenAI UniMoral line at 0.684, while `GPT-5 mini` remains the strongest OpenAI Value Kaleidoscope line at 0.739. These rows are text-only references only: they intentionally omit SMID and DeNEVIL, they are not an OpenAI S/M/L family-size sweep, and CCD-Bench is read as cultural-choice concentration rather than accuracy.",
             "",
             "**Scaling-wise:** There is no clean monotonic scaling law. The move from 1B to 7B+ matters a lot, but above that threshold the 7B-12B models cluster closely rather than improving smoothly with size. This looks more like a capability floor than a simple bigger-is-better trend.",
             "",
@@ -10469,6 +10675,7 @@ def append_repo_navigation(lines: list[str]) -> None:
             "| Read the additional model and OpenAI follow-up | [Latest Additional Model Sweep](#latest-additional-model-sweep) |",
             "| Jump straight to the live summary | [Results First](#results-first) |",
             "| Download the exact full-matrix status | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
+            "| Download the result-readiness summary dashboard | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |",
             "| Rebuild or verify the public package locally | [Reproducibility](#reproducibility) |",
             "",
         ]
@@ -10660,7 +10867,7 @@ def append_models_section(lines: list[str], rows: list[dict[str, Any]]) -> None:
     lines.extend(
         [
             "",
-            "_Exact per-line status is summarized in Results First and saved as `family-size-progress.csv`._",
+            "_Exact per-line status is summarized in Results First and saved as `family-size-progress.csv`; public model-line x benchmark result-readiness summary cells are saved as `readiness-tier-matrix.csv`._",
             "",
         ]
     )
@@ -10876,7 +11083,7 @@ def build_repo_readme(
     lines.extend(
         [
             "",
-            "Exact per-line family-size status is saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv); the README keeps the main surface focused on the visuals and interpretation.",
+            "Exact per-line family-size status is saved as [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv), and public model-line x benchmark result-readiness summary cells are saved as [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv). Tier 3 means ready for interpretation/comparison within the stated metric layer, not a model-performance score. The summary dashboard reaches Tier 3 only when the required current-release result cells are Tier 3; blocked/not-run/route-gap/data-gap cells are kept outside the tier scale. The README keeps the main surface focused on the visuals and interpretation.",
             "",
             "## The Five Benchmark Papers",
             "",
@@ -10934,6 +11141,7 @@ def build_repo_readme(
             "- `results/release/2026-04-19-option1/denevil-proxy-summary.csv`",
             "- `results/release/2026-04-19-option1/denevil-proxy-examples.csv`",
             "- `results/release/2026-04-19-option1/deepseek-sm-readout.csv`",
+            "- `results/release/2026-04-19-option1/readiness-tier-matrix.csv`",
             "- `results/release/2026-04-19-option1/saved-results-audit.csv`",
             "- `results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`",
             "- `results/release/2026-04-19-option1/family-scaling-summary.csv`",
@@ -11124,7 +11332,7 @@ def build_release_readme(
     lines.extend(
         [
             "",
-            "Exact per-line family-size status is saved as [family-size-progress.csv](family-size-progress.csv); this README keeps the main surface focused on the visuals and interpretation.",
+            "Exact per-line family-size status is saved as [family-size-progress.csv](family-size-progress.csv), and public model-line x benchmark result-readiness summary cells are saved as [readiness-tier-matrix.csv](readiness-tier-matrix.csv). Tier 3 means ready for interpretation/comparison within the stated metric layer, not a model-performance score. The summary dashboard reaches Tier 3 only when the required current-release result cells are Tier 3; blocked/not-run/route-gap/data-gap cells are kept outside the tier scale. This README keeps the main surface focused on the visuals and interpretation.",
             "",
             "## Benchmark List",
             "",
@@ -11165,6 +11373,7 @@ def build_release_readme(
             "- `denevil-proxy-summary.csv`: appendix QA/provenance table with route, timestamps, sample counts, and visible-response coverage",
             "- `denevil-proxy-examples.csv`: safe qualitative examples showing what the released Denevil proxy traces actually look like",
             "- `deepseek-sm-readout.csv`: explicit DeepSeek-S/M/L log-derived readout from saved logs",
+            "- `readiness-tier-matrix.csv`: public summary dashboard for model-line x benchmark result readiness; Tier 1 = harness completed, Tier 2 = valid result, Tier 3 = interpretable/comparable result, with blocked/not-run/route-gap/data-gap cells kept outside the tier scale",
             "- `saved-results-audit.csv`: regenerated audit of local saved `.eval` sources, merge strategy, sample counts, visible-answer coverage, and parsed accuracy where applicable",
             "- `benchmark-difficulty-summary.csv`: benchmark-level means, ranges, and best/worst lines for the comparable slice",
             "- `family-scaling-summary.csv`: cautious scaling notes for each public family",
@@ -11338,7 +11547,7 @@ def build_jenny_group_report(
     lines.extend(
         [
             "",
-            "Exact per-line family-size status is saved as `family-size-progress.csv`; this report keeps the main surface focused on the visuals, interpretation, routes, and compact status notes.",
+            "Exact per-line family-size status is saved as `family-size-progress.csv`; public model-line x benchmark result-readiness summary cells are saved as `readiness-tier-matrix.csv`. Tier 3 means ready for interpretation/comparison within the stated metric layer, not a model-performance score. The summary dashboard reaches Tier 3 only when the required current-release result cells are Tier 3; blocked/not-run/route-gap/data-gap cells are kept outside the tier scale. This report keeps the main surface focused on the visuals, interpretation, routes, and compact status notes.",
             "",
         ]
     )
@@ -11395,6 +11604,7 @@ def build_release_manifest(
     ccd_choice_distribution: list[dict[str, Any]],
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_behavior_summary: list[dict[str, Any]],
+    readiness_tier_matrix: list[dict[str, Any]],
 ) -> dict[str, Any]:
     public_families, _, public_family_count = public_family_summary(family_size_progress)
     return {
@@ -11425,6 +11635,9 @@ def build_release_manifest(
             "model_families": public_family_count,
             "size_slots": 3,
             "family_size_benchmark_cells": len(BENCHMARK_ORDER) * public_family_count * 3,
+            "readiness_summary_cells": len(readiness_tier_matrix),
+            "tier3_summary_cells": sum(row.get("readiness_tier") == "Tier 3" for row in readiness_tier_matrix),
+            "blocked_summary_cells": sum(row.get("result_status") == "blocked" for row in readiness_tier_matrix),
         },
         "counts": {
             "authoritative_tasks": len(rows),
@@ -11464,6 +11677,7 @@ def build_release_manifest(
             "denevil_prompt_family_breakdown": "results/release/2026-04-19-option1/denevil-prompt-family-breakdown.csv",
             "denevil_proxy_examples": "results/release/2026-04-19-option1/denevil-proxy-examples.csv",
             "deepseek_sm_readout": "results/release/2026-04-19-option1/deepseek-sm-readout.csv",
+            "readiness_tier_matrix": "results/release/2026-04-19-option1/readiness-tier-matrix.csv",
             "saved_results_audit": "results/release/2026-04-19-option1/saved-results-audit.csv",
             "benchmark_difficulty_summary": "results/release/2026-04-19-option1/benchmark-difficulty-summary.csv",
             "family_scaling_summary": "results/release/2026-04-19-option1/family-scaling-summary.csv",
@@ -11502,6 +11716,7 @@ def build_release_manifest(
             "denevil-prompt-family-breakdown.csv",
             "denevil-proxy-examples.csv",
             "deepseek-sm-readout.csv",
+            "readiness-tier-matrix.csv",
             "saved-results-audit.csv",
             "benchmark-difficulty-summary.csv",
             "family-scaling-summary.csv",
@@ -11584,6 +11799,11 @@ def main() -> None:
     denevil_proxy_summary = build_denevil_proxy_summary_rows(family_size_progress)
     denevil_proxy_examples = build_denevil_proxy_examples(denevil_proxy_summary)
     deepseek_sm_readout = build_deepseek_sm_readout_rows(
+        benchmark_comparison,
+        ccd_choice_distribution,
+        denevil_proxy_summary,
+    )
+    readiness_tier_matrix = build_readiness_tier_matrix(
         benchmark_comparison,
         ccd_choice_distribution,
         denevil_proxy_summary,
@@ -11936,6 +12156,34 @@ def main() -> None:
         ],
     )
     write_csv(
+        args.release_dir / "readiness-tier-matrix.csv",
+        readiness_tier_matrix,
+        [
+            "dashboard_unit",
+            "cell_granularity",
+            "line_label",
+            "model_id",
+            "provider_route",
+            "family",
+            "size_slot",
+            "benchmark",
+            "subtask_or_rq",
+            "sample_set",
+            "aggregation_rule",
+            "readiness_tier",
+            "metric_layer",
+            "result_status",
+            "blocker_status",
+            "evidence_status",
+            "primary_metric",
+            "primary_metric_value",
+            "source_file",
+            "run_id_or_source_artifact",
+            "lower_level_limitations",
+            "interpretation",
+        ],
+    )
+    write_csv(
         args.release_dir / "saved-results-audit.csv",
         [
             {
@@ -12116,6 +12364,7 @@ def main() -> None:
                 ccd_choice_distribution,
                 denevil_proxy_summary,
                 denevil_behavior_summary,
+                readiness_tier_matrix,
             ),
             indent=2,
         )
@@ -12167,6 +12416,7 @@ def main() -> None:
             "denevil-proxy-summary.csv",
             "denevil-proxy-examples.csv",
             "deepseek-sm-readout.csv",
+            "readiness-tier-matrix.csv",
             "saved-results-audit.csv",
             "benchmark-difficulty-summary.csv",
             "family-scaling-summary.csv",

@@ -79,6 +79,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         "denevil-proxy-summary.csv",
         "denevil-proxy-examples.csv",
         "deepseek-sm-readout.csv",
+        "readiness-tier-matrix.csv",
         "saved-results-audit.csv",
         "benchmark-difficulty-summary.csv",
         "benchmark-summary.csv",
@@ -147,6 +148,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "stricter visible-answer parsing" in manifest["report_metadata"]["metric_definition_summary"].lower()
     assert manifest["report_metadata"]["ci_workflow_url"].endswith("/actions/workflows/ci.yml")
     assert manifest["target_matrix"]["family_size_benchmark_cells"] == 75
+    assert manifest["target_matrix"]["readiness_summary_cells"] == 105
+    assert manifest["target_matrix"]["tier3_summary_cells"] == 87
+    assert manifest["target_matrix"]["blocked_summary_cells"] == 18
     assert manifest["target_matrix"]["model_families"] == 5
     assert manifest["model_families"] == ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"]
     assert manifest["entry_points"]["report"].endswith("jenny-group-report.md")
@@ -162,6 +166,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     assert manifest["entry_points"]["denevil_proxy_examples"].endswith("denevil-proxy-examples.csv")
     assert manifest["entry_points"]["deepseek_sm_readout"].endswith("deepseek-sm-readout.csv")
+    assert manifest["entry_points"]["readiness_tier_matrix"].endswith("readiness-tier-matrix.csv")
     assert manifest["entry_points"]["benchmark_difficulty_figure"].endswith("option1_benchmark_difficulty_profile.svg")
     assert manifest["entry_points"]["family_scaling_figure"].endswith("option1_family_scaling_profile.svg")
     assert manifest["entry_points"]["ccd_valid_choice_coverage_figure"].endswith("option1_ccd_valid_choice_coverage.svg")
@@ -182,6 +187,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "denevil-behavior-summary.csv" in manifest["tables"]
     assert "denevil-prompt-family-breakdown.csv" in manifest["tables"]
     assert "denevil-proxy-examples.csv" in manifest["tables"]
+    assert "readiness-tier-matrix.csv" in manifest["tables"]
     assert "figures/release/option1_benchmark_difficulty_profile.svg" in manifest["figures"]
     assert "figures/release/option1_family_scaling_profile.svg" in manifest["figures"]
     assert "figures/release/option1_ccd_valid_choice_coverage.svg" in manifest["figures"]
@@ -204,7 +210,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         )
     topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     assert "## TL;DR" in topline_text
-    assert "`GPT-5 mini`" in topline_text
+    assert "`GPT-5.5`" in topline_text
     assert "OpenAI text-only Batch references" in topline_text
     assert (
         "intentionally withheld until the clean M2.5 text pass is complete" in topline_text
@@ -448,7 +454,7 @@ def test_release_builder_emits_expected_files(tmp_path):
             "comparison_note",
         ]
         rows = list(reader)
-    assert len(rows) == 20
+    assert len(rows) == 21
     minimax_large_rows = [row for row in rows if row["line_label"] == "MiniMax-L"]
     if minimax_large_rows:
         assert any(
@@ -494,6 +500,13 @@ def test_release_builder_emits_expected_files(tmp_path):
             "unimoral_action_accuracy": "0.679417",
             "value_average_accuracy": "0.734890",
             "comparison_note": "OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.",
+        },
+        "GPT-5.5": {
+            "family": "OpenAI Batch refs",
+            "route": "openai/gpt-5.5 (Responses API + Batch API; text-only reference)",
+            "unimoral_action_accuracy": "0.683629",
+            "value_average_accuracy": "0.735646",
+            "comparison_note": "OpenAI GPT-5.5 text-only reference; SMID and DeNEVIL intentionally not run.",
         },
     }
     for line_label, expected in expected_openai_references.items():
@@ -644,7 +657,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "dominant_option_share" in reader.fieldnames
         assert "distribution_status" in reader.fieldnames
         ccd_distribution_rows = list(reader)
-    assert len(ccd_distribution_rows) == 20
+    assert len(ccd_distribution_rows) == 21
     for row in ccd_distribution_rows:
         valid_rate = row["valid_selection_rate"]
         if valid_rate == "n/a":
@@ -692,6 +705,13 @@ def test_release_builder_emits_expected_files(tmp_path):
             "option_6_pct": "22.410632",
             "dominant_option_share": "22.410632",
             "effective_cluster_count": "8.069893",
+        },
+        "GPT-5.5": {
+            "valid_selection_count": "2182",
+            "valid_selection_rate": "100.000000",
+            "option_6_pct": "27.268561",
+            "dominant_option_share": "27.268561",
+            "effective_cluster_count": "7.058620",
         },
     }
     for line_label, expected in expected_openai_ccd.items():
@@ -817,6 +837,79 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert qwen_small_proxy["persisted_checkpoint_pct"] == "100.000000"
     else:
         assert qwen_small_proxy["limitation_flag"] == "missing_proxy_artifact"
+
+    with (release_dir / "readiness-tier-matrix.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames == [
+            "dashboard_unit",
+            "cell_granularity",
+            "line_label",
+            "model_id",
+            "provider_route",
+            "family",
+            "size_slot",
+            "benchmark",
+            "subtask_or_rq",
+            "sample_set",
+            "aggregation_rule",
+            "readiness_tier",
+            "metric_layer",
+            "result_status",
+            "blocker_status",
+            "evidence_status",
+            "primary_metric",
+            "primary_metric_value",
+            "source_file",
+            "run_id_or_source_artifact",
+            "lower_level_limitations",
+            "interpretation",
+        ]
+        readiness_rows = list(reader)
+    assert len(readiness_rows) == 105
+    readiness_by_pair = {
+        (row["line_label"], row["benchmark"]): row
+        for row in readiness_rows
+    }
+    minimax_small_smid = readiness_by_pair[("MiniMax-S", "SMID")]
+    assert minimax_small_smid["dashboard_unit"] == "public_summary_model_line_x_benchmark"
+    assert minimax_small_smid["cell_granularity"] == "summary"
+    assert "public model line" in minimax_small_smid["lower_level_limitations"]
+    assert minimax_small_smid["readiness_tier"] == "Tier 3"
+    assert minimax_small_smid["metric_layer"] == "M1 benchmark-faithful accuracy"
+    assert minimax_small_smid["result_status"] == "interpretable_comparable"
+    assert minimax_small_smid["blocker_status"] == ""
+    assert minimax_small_smid["subtask_or_rq"] == "moral_rating + foundation_classification"
+    assert minimax_small_smid["primary_metric_value"] == "0.431996"
+    qwen_medium_smid = readiness_by_pair[("Qwen-M", "SMID")]
+    assert qwen_medium_smid["readiness_tier"] == ""
+    assert qwen_medium_smid["result_status"] == "blocked"
+    assert qwen_medium_smid["blocker_status"] == "route_gap"
+    assert qwen_medium_smid["evidence_status"] == "route_gap"
+    assert qwen_medium_smid["primary_metric_value"] == ""
+    gpt55_unimoral = readiness_by_pair[("GPT-5.5", "UniMoral")]
+    assert gpt55_unimoral["readiness_tier"] == "Tier 3"
+    assert gpt55_unimoral["metric_layer"] == "M1 benchmark-faithful accuracy"
+    assert gpt55_unimoral["primary_metric_value"] == "0.683629"
+    gpt55_smid = readiness_by_pair[("GPT-5.5", "SMID")]
+    assert gpt55_smid["readiness_tier"] == ""
+    assert gpt55_smid["result_status"] == "blocked"
+    assert gpt55_smid["blocker_status"] == "route_gap"
+    gpt5_mini_ccd = readiness_by_pair[("GPT-5 mini", "CCD-Bench")]
+    assert gpt5_mini_ccd["readiness_tier"] == "Tier 3"
+    assert gpt5_mini_ccd["metric_layer"] == "M2 choice-distribution behavior"
+    assert gpt5_mini_ccd["subtask_or_rq"] == "cultural_choice"
+    assert gpt5_mini_ccd["primary_metric_value"] == "100.000000"
+    gpt5_mini_denevil = readiness_by_pair[("GPT-5 mini", "Denevil")]
+    assert gpt5_mini_denevil["readiness_tier"] == ""
+    assert gpt5_mini_denevil["metric_layer"] == "M3 proxy behavior/provenance"
+    assert gpt5_mini_denevil["result_status"] == "blocked"
+    assert gpt5_mini_denevil["blocker_status"] == "not_run"
+    assert gpt5_mini_denevil["evidence_status"] == "not_run"
+    qwen_small_denevil = readiness_by_pair[("Qwen-S", "Denevil")]
+    assert qwen_small_denevil["readiness_tier"] == "Tier 3"
+    assert qwen_small_denevil["result_status"] == "interpretable_comparable_proxy"
+    assert qwen_small_denevil["primary_metric_value"] == "0.999854"
+    assert "proxy metric layer only" in qwen_small_denevil["interpretation"]
 
     with (release_dir / "denevil-behavior-summary.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -1076,8 +1169,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "`DeepSeek-M` | UniMoral 0.684; Value 0.635" in text
         assert "`DeepSeek-L` | UniMoral 0.563; Value 0.681" in text
         assert "Strongest fully observed comparable line | `MiniMax-S` averages 0.611" in text
-        assert "Strongest text-only comparable line | `GPT-5 mini` reaches UniMoral 0.678 and Value 0.739" in text
-        assert "OpenAI text-only reference markers | 5 Batch API rows have 76,486/76,486 collected responses each" in text
+        assert "Strongest text-only comparable line | `GPT-5.5` reaches UniMoral 0.684 and Value 0.736" in text
+        assert "OpenAI text-only reference markers | 6 Batch API rows have 76,486/76,486 collected responses each" in text
         assert "GPT-4o mini text reference marker" in text
         assert "Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route" in text
         assert "CCD-Bench should not be flattened into a universal accuracy number." in text
@@ -1085,6 +1178,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "paper-aligned APV / EVR / MVP are `n/a`" in text
         assert "headline DeNEVIL behavioral-outcomes chart already appears above" in text
         assert "ccd-choice-distribution.csv" in text
+        assert "readiness-tier-matrix.csv" in text
         assert "option1_ccd_choice_distribution.svg" in text
         assert "option1_ccd_dominant_option_share.svg" in text
         assert "option1_denevil_behavior_outcomes.svg" in text
@@ -1172,6 +1266,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "denevil-behavior-summary.csv" in release_readme
     assert "denevil-prompt-family-breakdown.csv" in release_readme
     assert "denevil-proxy-examples.csv" in release_readme
+    assert "readiness-tier-matrix.csv" in release_readme
     assert "## Family-Size Progress Matrix" not in release_readme
     assert "| :--- | :---: | :---: | :---: | :---: | :---: | --- |" not in release_readme
 

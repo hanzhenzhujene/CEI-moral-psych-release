@@ -19,3 +19,4 @@ GPT-5 nano,OpenAI Batch refs,Ref,openai/gpt-5-nano (Responses API + Batch API; t
 GPT-4.1 nano,OpenAI Batch refs,Ref,openai/gpt-4.1-nano (Responses API + Batch API; text-only reference),0.646289,,0.673043,OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.
 GPT-5 mini,OpenAI Batch refs,Ref,openai/gpt-5-mini (Responses API + Batch API; text-only reference),0.677937,,0.738897,OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.
 GPT-4.1 mini,OpenAI Batch refs,Ref,openai/gpt-4.1-mini (Responses API + Batch API; text-only reference),0.679417,,0.734890,OpenAI Batch API text-only reference; SMID and DeNEVIL intentionally not run.
+GPT-5.5,OpenAI Batch refs,Ref,openai/gpt-5.5 (Responses API + Batch API; text-only reference),0.683629,,0.735646,OpenAI GPT-5.5 text-only reference; SMID and DeNEVIL intentionally not run.
