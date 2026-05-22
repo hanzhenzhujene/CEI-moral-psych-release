@@ -571,7 +571,7 @@ PAPER_RESULT_ALIGNMENT_FIELDNAMES = [
 PAPER_RESULT_ALIGNMENT_ROWS = [
     {
         "benchmark": "UniMoral",
-        "paper_question_or_task": "RQ1 action prediction: choose the human-selected action from a moral dilemma and two candidate actions. The paper also has typology, factor-attribution, and consequence-generation RQs that this public release does not score.",
+        "paper_question_or_task": "RQ1 action prediction is the clean paper-faithful overlap: choose the human-selected action from a moral dilemma and two candidate actions. The release also reports repo-local UniMoral RQ2 typology, RQ3 factor attribution, and RQ4 consequence generation, but those should be read as additional benchmark tasks rather than exact paper-table replication.",
         "paper_metric_or_result_surface": "Action-prediction accuracy for RQ1; other RQs use separate classification or generation metrics.",
         "paper_models_or_reference_routes_identified": "Reference code names Phi-3.5-mini-instruct, Llama-3.1-8B-Instruct, and DeepSeek-R1-Distill-Llama-8B. The local May 13 calibration sweep also includes Mistral Nemo, Qwen2.5 7B, Llama 3 8B, and Llama 3.2 1B as saved/prior comparison rows.",
         "paper_results_available_in_repo": "Exact original-paper table values are not tracked in this repo. Saved/prior May 13 UniMoral values are available: Mistral Nemo 0.648110; Qwen2.5 7B 0.640255; Llama 3.1 8B 0.638775; Llama 3 8B 0.631831; Llama 3.2 1B 0.405624.",
@@ -581,7 +581,7 @@ PAPER_RESULT_ALIGNMENT_ROWS = [
         "ours_only_models_or_routes": "Qwen S/M/L, MiniMax S/M/L, DeepSeek S/M/L current routes, Llama S/M/L current routes, Gemma S/M/L, and OpenAI text-only reference rows including GPT-5.5.",
         "comparison_status": "saved_prior_overlap",
         "can_compare_directly": "Partly. RQ1 action accuracy is the same kind of metric, but the exact paper table values are not tracked here and the exact overlapping model evidence is saved/prior rather than a fresh rerun.",
-        "classification_quality_readout": "Yes for RQ1 only: higher action accuracy means better prediction of the selected human action. It should not be generalized to the other UniMoral RQs unless those tasks are run.",
+        "classification_quality_readout": "Yes for the scored task metric: RQ1/RQ2/RQ3 use higher-better accuracy, while RQ4 uses higher-better BERTScore F1 and METEOR. Only RQ1 should be described as the clean paper-faithful action-prediction overlap.",
         "reviewer_takeaway": "Use UniMoral as the cleanest paper-faithful accuracy comparison layer, while labeling the Llama 3.1 8B overlap as saved/prior evidence and GPT-5.5 as a current text-only reference.",
         "evidence_sources": "benchmark-comparison.csv; results/exploratory/2026-05-13-additional-model-sweep/unimoral-summary.csv; docs/calibration-replication.md; local reference checkout for UniMoral RQ1 code.",
     },
@@ -10643,7 +10643,7 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "Visual readout in one sentence: text moral reasoning is stronger than image moral judgment, CCD-Bench shows cultural-choice style rather than accuracy, and DeNEVIL is proxy behavior evidence rather than paper-faithful MoralPrompt scoring.",
             "",
-            "OpenAI text-only rows are shown in the comparable-accuracy and CCD figures. The GPT-5 subset is a black text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`); GPT-4o and GPT-4.1 stay as separate reference markers. None has SMID or DeNEVIL.",
+            "OpenAI text-only rows are shown in the UniMoral, comparable-accuracy, and CCD figures. The GPT-5 subset is a black text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`); GPT-4o and GPT-4.1 stay as separate reference markers. None has SMID or DeNEVIL.",
             "OpenAI/GPT scope: the scored reference routes are `openai/gpt-4o-mini`, `openai/gpt-5-nano`, `openai/gpt-4.1-nano`, `openai/gpt-5-mini`, `openai/gpt-5.5`, and `openai/gpt-4.1-mini`.",
             "",
             "### 1. UniMoral RQ1-RQ4: family-size scaling and task readout",

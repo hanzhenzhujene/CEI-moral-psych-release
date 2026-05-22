@@ -59,6 +59,18 @@ Gemma-L,Gemma,L,unimoral_action_prediction,RQ1,Action prediction,accuracy,8784,8
 Gemma-L,Gemma,L,unimoral_moral_typology,RQ2,Moral typology,accuracy,3492,3492,complete,0.571592,0.300461,,,,,3492,results/inspect/logs/2026-05-16-unimoral-full/gemma_l/2026-05-16T21-07-51-00-00_unimoral-moral-typology_aCsNwoJ4DFGA4RZKkjTgfp.eval
 Gemma-L,Gemma,L,unimoral_factor_attribution,RQ3,Factor attribution,accuracy,3492,3492,complete,0.614548,0.253402,,,,,3492,results/inspect/logs/2026-05-16-unimoral-full/gemma_l/2026-05-16T21-29-15-00-00_unimoral-factor-attribution_fmFMuA9SKxE27edFCDF9uh.eval
 Gemma-L,Gemma,L,unimoral_consequence_generation,RQ4,Consequence generation,bert_score_f1,1782,1782,complete,,,0.008782,0.08787,0.706031,0.03567,1782,results/inspect/logs/2026-05-16-unimoral-full/gemma_l/2026-05-16T21-49-22-00-00_unimoral-consequence-generation_dPrfS4f3wCjJaZhCTE9c8Q.eval
+GPT-5 nano,OpenAI GPT-5,S,unimoral_action_prediction,RQ1,Action prediction,accuracy,8784,8784,complete,0.653575,,,,,,8784,
+GPT-5 nano,OpenAI GPT-5,S,unimoral_moral_typology,RQ2,Moral typology,accuracy,3492,3492,complete,0.595074,0.361396,,,,,3488,outputs/openai-smoke/gpt5-unimoral-rq2-rq4-20260521/gpt5_nano
+GPT-5 nano,OpenAI GPT-5,S,unimoral_factor_attribution,RQ3,Factor attribution,accuracy,3492,3492,complete,0.532073,0.237853,,,,,3464,outputs/openai-smoke/gpt5-unimoral-rq2-rq4-20260521/gpt5_nano
+GPT-5 nano,OpenAI GPT-5,S,unimoral_consequence_generation,RQ4,Consequence generation,bert_score_f1,1782,1782,complete,,,,0.135579,0.706543,,1782,outputs/openai-smoke/gpt5-unimoral-rq2-rq4-20260521/gpt5_nano
+GPT-5 mini,OpenAI GPT-5,M,unimoral_action_prediction,RQ1,Action prediction,accuracy,8784,8784,complete,0.677937,,,,,,8784,
+GPT-5 mini,OpenAI GPT-5,M,unimoral_moral_typology,RQ2,Moral typology,accuracy,3492,3492,complete,0.634021,0.372045,,,,,3492,outputs/openai-smoke/gpt5-unimoral-rq2-rq4-20260521/gpt5_mini
+GPT-5 mini,OpenAI GPT-5,M,unimoral_factor_attribution,RQ3,Factor attribution,accuracy,3492,3492,complete,0.54181,0.223461,,,,,3491,outputs/openai-smoke/gpt5-unimoral-rq2-rq4-20260521/gpt5_mini
+GPT-5 mini,OpenAI GPT-5,M,unimoral_consequence_generation,RQ4,Consequence generation,bert_score_f1,1782,1782,complete,,,,0.148426,0.698736,,1782,outputs/openai-smoke/gpt5-unimoral-rq2-rq4-20260521/gpt5_mini
+GPT-5.5,OpenAI GPT-5,L,unimoral_action_prediction,RQ1,Action prediction,accuracy,8784,8784,complete,0.683629,,,,,,8784,
+GPT-5.5,OpenAI GPT-5,L,unimoral_moral_typology,RQ2,Moral typology,accuracy,3492,3492,complete,0.637171,0.387478,,,,,3492,outputs/openai-smoke/gpt5-unimoral-rq2-rq4-20260521/gpt55
+GPT-5.5,OpenAI GPT-5,L,unimoral_factor_attribution,RQ3,Factor attribution,accuracy,3492,3492,complete,0.600515,0.268976,,,,,3492,outputs/openai-smoke/gpt5-unimoral-rq2-rq4-20260521/gpt55
+GPT-5.5,OpenAI GPT-5,L,unimoral_consequence_generation,RQ4,Consequence generation,bert_score_f1,1782,1782,complete,,,,0.164713,0.724731,,1782,outputs/openai-smoke/gpt5-unimoral-rq2-rq4-20260521/gpt55
 GPT-4o-mini Ref,OpenAI Ref,Ref,unimoral_action_prediction,RQ1,Action prediction,accuracy,8784,8784,complete,0.6727,,,,,,8784,
 GPT-4o-mini Ref,OpenAI Ref,Ref,unimoral_moral_typology,RQ2,Moral typology,accuracy,3492,3492,complete,0.553551,0.27438,,,,,3492,results/inspect/logs/2026-05-16-unimoral-full/gpt4_only/2026-05-16T21-07-04-00-00_unimoral-moral-typology_2KKRAEqRfevJaQoys6uVYA.eval
 GPT-4o-mini Ref,OpenAI Ref,Ref,unimoral_factor_attribution,RQ3,Factor attribution,accuracy,3492,3492,complete,0.592497,0.254061,,,,,3492,results/inspect/logs/2026-05-16-unimoral-full/gpt4_only/2026-05-16T21-14-46-00-00_unimoral-factor-attribution_6CUvBnqgjNbYmteN2URhLd.eval
