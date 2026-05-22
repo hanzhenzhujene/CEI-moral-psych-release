@@ -7,26 +7,26 @@
 <rect x="36" y="122" width="410" height="132" class="card"/>
 <text x="54" y="152" class="axis">RQ1: Action prediction</text>
 <text x="54" y="178" class="small">Metric: accuracy</text>
-<text x="54" y="200" class="small">Strict complete: 16/16; reported: 16/16</text>
+<text x="54" y="200" class="small">Strict complete: 19/19; reported: 19/19</text>
 <text x="54" y="222" class="small">Mean/range: 0.658 / 0.121</text>
 <text x="54" y="244" class="small">Top line: DeepSeek-M (0.684)</text>
 <rect x="466" y="122" width="410" height="132" class="card"/>
 <text x="484" y="152" class="axis">RQ2: Moral typology</text>
 <text x="484" y="178" class="small">Metric: exact-match accuracy</text>
-<text x="484" y="200" class="small">Strict complete: 15/16; reported: 16/16</text>
-<text x="484" y="222" class="small">Mean/range: 0.581 / 0.045</text>
-<text x="484" y="244" class="small">Top line: Gemma-S (0.599)</text>
+<text x="484" y="200" class="small">Strict complete: 18/19; reported: 19/19</text>
+<text x="484" y="222" class="small">Mean/range: 0.588 / 0.084</text>
+<text x="484" y="244" class="small">Top line: GPT-5.5 (0.637)</text>
 <rect x="896" y="122" width="410" height="132" class="card"/>
 <text x="914" y="152" class="axis">RQ3: Factor attribution</text>
 <text x="914" y="178" class="small">Metric: exact-match accuracy</text>
-<text x="914" y="200" class="small">Strict complete: 14/16; reported: 15/16</text>
-<text x="914" y="222" class="small">Mean/range: 0.592 / 0.070</text>
+<text x="914" y="200" class="small">Strict complete: 17/19; reported: 18/19</text>
+<text x="914" y="222" class="small">Mean/range: 0.586 / 0.099</text>
 <text x="914" y="244" class="small">Top line: Llama-M (0.631)</text>
 <rect x="1326" y="122" width="410" height="132" class="card"/>
 <text x="1344" y="152" class="axis">RQ4: Consequence generation</text>
-<text x="1344" y="178" class="small">Metric: BERTScore; METEOR 0.077-0.157</text>
-<text x="1344" y="200" class="small">Strict complete: 14/16; reported: 15/16</text>
-<text x="1344" y="222" class="small">Mean/range: 0.691 / 0.101</text>
+<text x="1344" y="178" class="small">Metric: BERTScore; METEOR 0.077-0.165</text>
+<text x="1344" y="200" class="small">Strict complete: 17/19; reported: 18/19</text>
+<text x="1344" y="222" class="small">Mean/range: 0.695 / 0.101</text>
 <text x="1344" y="244" class="small">Top line: Llama-M (0.730)</text>
 <rect x="36" y="286" width="840" height="382" class="panel"/>
 <text x="60" y="320" class="axis">Metric guide</text>
@@ -43,33 +43,38 @@
 <text x="952" y="496" class="subtitle">OpenAI rows are now explicit: GPT-5 nano/mini/5.5 are S/M/L, while GPT-4o/GPT-4.1 rows remain text refs.</text>
 <rect x="36" y="720" width="1728" height="292" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>
 <text x="60" y="754" class="axis">Coverage readout</text>
-<text x="60" y="782" class="subtitle">Complete four-task lines outside MiniMax: Qwen-S/M/L, DeepSeek-S/M/L, Llama-S/M/L, Gemma-S/M/L, and GPT-4o-mini Ref (13/13 lines).</text>
-<text x="60" y="808" class="subtitle">Additional OpenAI GPT-5/GPT-4.1 rows are text-only RQ1 references in UniMoral; RQ2/RQ3/RQ4 are not filled in or inferred for them.</text>
-<text x="60" y="834" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>
-<rect x="60" y="866" width="260" height="54" fill="white" stroke="#6fa8c7" stroke-width="2" rx="8"/>
-<circle cx="82" cy="893" r="7" fill="#6fa8c7"/>
-<text x="100" y="888" class="axis">Qwen</text>
-<text x="100" y="908" class="small">S/M/L: 4 tasks complete</text>
-<rect x="340" y="866" width="260" height="54" fill="white" stroke="#84ad78" stroke-width="2" rx="8"/>
-<circle cx="362" cy="893" r="7" fill="#84ad78"/>
-<text x="380" y="888" class="axis">DeepSeek</text>
-<text x="380" y="908" class="small">S/M/L: 4 tasks complete</text>
-<rect x="620" y="866" width="260" height="54" fill="white" stroke="#dc2626" stroke-width="2" rx="8"/>
-<circle cx="642" cy="893" r="7" fill="#dc2626"/>
-<text x="660" y="888" class="axis">Llama</text>
-<text x="660" y="908" class="small">S/M/L: 4 tasks complete</text>
-<rect x="900" y="866" width="260" height="54" fill="white" stroke="#ad9ad0" stroke-width="2" rx="8"/>
-<circle cx="922" cy="893" r="7" fill="#ad9ad0"/>
-<text x="940" y="888" class="axis">Gemma</text>
-<text x="940" y="908" class="small">S/M/L: 4 tasks complete</text>
-<rect x="1180" y="866" width="260" height="54" fill="white" stroke="#aab2bd" stroke-width="2" rx="8"/>
-<circle cx="1202" cy="893" r="7" fill="#aab2bd"/>
-<text x="1220" y="888" class="axis">OpenAI Ref</text>
-<text x="1220" y="908" class="small">GPT-4o-mini reference: 4 tasks complete</text>
-<rect x="1460" y="866" width="260" height="54" fill="white" stroke="#bf977a" stroke-width="2" rx="8"/>
-<circle cx="1482" cy="893" r="7" fill="#bf977a"/>
-<text x="1500" y="888" class="axis">MiniMax</text>
-<text x="1500" y="908" class="small">caveats: see failure checklist</text>
-<text x="60" y="952" class="small">The full score heatmap includes Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus OpenAI GPT-5 S/M/L and GPT-4o/GPT-4.1 text refs.</text>
-<text x="60" y="976" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; OpenAI action-only gaps are scope boundaries, not failed RQ2/RQ3/RQ4 runs.</text>
+<text x="60" y="782" class="subtitle">Complete four-task lines outside MiniMax: Qwen, DeepSeek, Llama, Gemma, OpenAI GPT-5 S/M/L, and GPT-4o-mini Ref (16/16 lines).</text>
+<text x="60" y="808" class="subtitle">OpenAI GPT-5 now has real RQ1-RQ4 UniMoral scores; GPT-4.1 rows remain text-only RQ1 references.</text>
+<text x="60" y="834" class="subtitle">GPT-5 read: GPT-5.5 is strongest inside GPT-5 on RQ2, RQ3, and both RQ4 metrics; Llama-M still leads semantic RQ4 overall.</text>
+<text x="60" y="860" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>
+<rect x="60" y="888" width="220" height="54" fill="white" stroke="#6fa8c7" stroke-width="2" rx="8"/>
+<circle cx="82" cy="915" r="7" fill="#6fa8c7"/>
+<text x="100" y="910" class="axis">Qwen</text>
+<text x="100" y="930" class="small">S/M/L: 4 tasks complete</text>
+<rect x="300" y="888" width="220" height="54" fill="white" stroke="#84ad78" stroke-width="2" rx="8"/>
+<circle cx="322" cy="915" r="7" fill="#84ad78"/>
+<text x="340" y="910" class="axis">DeepSeek</text>
+<text x="340" y="930" class="small">S/M/L: 4 tasks complete</text>
+<rect x="540" y="888" width="220" height="54" fill="white" stroke="#dc2626" stroke-width="2" rx="8"/>
+<circle cx="562" cy="915" r="7" fill="#dc2626"/>
+<text x="580" y="910" class="axis">Llama</text>
+<text x="580" y="930" class="small">S/M/L: 4 tasks complete</text>
+<rect x="780" y="888" width="220" height="54" fill="white" stroke="#ad9ad0" stroke-width="2" rx="8"/>
+<circle cx="802" cy="915" r="7" fill="#ad9ad0"/>
+<text x="820" y="910" class="axis">Gemma</text>
+<text x="820" y="930" class="small">S/M/L: 4 tasks complete</text>
+<rect x="1020" y="888" width="220" height="54" fill="white" stroke="#000000" stroke-width="2" rx="8"/>
+<circle cx="1042" cy="915" r="7" fill="#000000"/>
+<text x="1060" y="910" class="axis">OpenAI GPT-5</text>
+<text x="1060" y="930" class="small">S/M/L: 4 tasks complete</text>
+<rect x="1260" y="888" width="220" height="54" fill="white" stroke="#aab2bd" stroke-width="2" rx="8"/>
+<circle cx="1282" cy="915" r="7" fill="#aab2bd"/>
+<text x="1300" y="910" class="axis">OpenAI Ref</text>
+<text x="1300" y="930" class="small">GPT-4o-mini reference: 4 tasks complete</text>
+<rect x="1500" y="888" width="220" height="54" fill="white" stroke="#bf977a" stroke-width="2" rx="8"/>
+<circle cx="1522" cy="915" r="7" fill="#bf977a"/>
+<text x="1540" y="910" class="axis">MiniMax</text>
+<text x="1540" y="930" class="small">caveats: see failure checklist</text>
+<text x="60" y="972" class="small">The full score heatmap includes Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus OpenAI GPT-5 S/M/L and GPT-4o/GPT-4.1 text refs.</text>
+<text x="60" y="996" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; GPT-4.1 action-only refs are scope boundaries, not failed RQ2/RQ3/RQ4 runs.</text>
 </svg>

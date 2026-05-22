@@ -13,6 +13,12 @@ from zipfile import BadZipFile, ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src" / "inspect"))
+DEFAULT_OPENAI_GPT5_RQ234_RUN_ROOT = (
+    ROOT.parent
+    / "outputs"
+    / "openai-smoke"
+    / "gpt5-unimoral-rq2-rq4-20260521"
+)
 
 from evals._benchmark_utils import (  # noqa: E402
     canonicalize_label_from_output,
@@ -41,23 +47,28 @@ MODEL_LINES = [
     ("Gemma-S", "Gemma", "S", "gemma_s"),
     ("Gemma-M", "Gemma", "M", "gemma_m"),
     ("Gemma-L", "Gemma", "L", "gemma_l"),
+    ("GPT-5 nano", "OpenAI GPT-5", "S", "openai_gpt5_nano"),
+    ("GPT-5 mini", "OpenAI GPT-5", "M", "openai_gpt5_mini"),
+    ("GPT-5.5", "OpenAI GPT-5", "L", "openai_gpt55"),
     ("GPT4 only", "OpenAI Ref", "Ref", "gpt4_only"),
 ]
 
 OPENAI_UNIMORAL_ACTION_ONLY_LINES = [
-    ("GPT-5 nano", "OpenAI GPT-5", "S", "openai_gpt5_nano"),
-    ("GPT-5 mini", "OpenAI GPT-5", "M", "openai_gpt5_mini"),
-    ("GPT-5.5", "OpenAI GPT-5", "L", "openai_gpt55"),
     ("GPT-4.1-nano Ref", "OpenAI Ref", "Ref", "openai_gpt41_nano"),
     ("GPT-4.1-mini Ref", "OpenAI Ref", "Ref", "openai_gpt41_mini"),
 ]
 
+OPENAI_GPT5_RQ234_RUN_SLUGS = {
+    "GPT-5 nano": "gpt5_nano",
+    "GPT-5 mini": "gpt5_mini",
+    "GPT-5.5": "gpt55",
+}
+
 VISUAL_MODEL_LINES = [
-    *MODEL_LINES[:-1],
-    *OPENAI_UNIMORAL_ACTION_ONLY_LINES[:3],
-    MODEL_LINES[-1],
-    *OPENAI_UNIMORAL_ACTION_ONLY_LINES[3:],
+    *MODEL_LINES,
+    *OPENAI_UNIMORAL_ACTION_ONLY_LINES,
 ]
+MODEL_LINE_ORDER = {line_label: index for index, (line_label, *_rest) in enumerate(MODEL_LINES)}
 
 DISPLAY_LINE_LABELS = {
     "GPT4 only": "GPT-4o-mini Ref",
@@ -97,6 +108,7 @@ TASKS = {
         "expected": 1782,
     },
 }
+TASK_ORDER = {task_name: index for index, task_name in enumerate(TASKS)}
 
 CLASSIFICATION_TASK_NAMES = [
     "unimoral_action_prediction",
@@ -223,12 +235,28 @@ def read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def read_jsonl(path: Path) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    if not path.exists():
+        return rows
+    with path.open(encoding="utf-8") as handle:
+        for line in handle:
+            if line.strip():
+                rows.append(json.loads(line))
+    return rows
+
+
 def write_csv(path: Path, rows: list[dict[str, object]], fieldnames: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def csv_fieldnames(path: Path) -> list[str]:
+    with path.open(newline="", encoding="utf-8") as handle:
+        return list(csv.DictReader(handle).fieldnames or [])
 
 
 def eval_header(path: Path) -> dict | None:
@@ -262,6 +290,16 @@ def display_path(path: Path) -> str:
         return str(resolved.relative_to(ROOT))
     except ValueError:
         return str(path)
+
+
+def display_workspace_path(path: Path) -> str:
+    resolved = path.resolve()
+    for base in (ROOT, ROOT.parent):
+        try:
+            return str(resolved.relative_to(base))
+        except ValueError:
+            continue
+    return str(path)
 
 
 def eval_task_name(path: Path) -> str | None:
@@ -310,6 +348,8 @@ def resolve_display_path(path_text: str) -> Path:
 
 
 def eval_error_message(path: Path) -> str:
+    if not path.exists():
+        return ""
     try:
         with ZipFile(path) as zf:
             if "header.json" not in zf.namelist():
@@ -513,6 +553,254 @@ def classification_summary(samples: list[dict], patterns: dict[str, list[str]]) 
     }
 
 
+def classification_weighted_f1_from_prediction_rows(rows: list[dict[str, object]], labels: list[str]) -> float | None:
+    if not rows:
+        return None
+    per_class = {label: {"tp": 0, "fp": 0, "fn": 0, "support": 0} for label in labels}
+    for row in rows:
+        raw_targets = row.get("target")
+        if isinstance(raw_targets, list):
+            targets = {str(item) for item in raw_targets if str(item).strip()}
+        else:
+            targets = {str(raw_targets)} if raw_targets not in {None, ""} else set()
+        prediction = str(row.get("prediction") or "").strip()
+        for label in labels:
+            if label in targets:
+                per_class[label]["support"] += 1
+            if prediction == label and label in targets:
+                per_class[label]["tp"] += 1
+            elif prediction == label and label not in targets:
+                per_class[label]["fp"] += 1
+            elif prediction != label and label in targets:
+                per_class[label]["fn"] += 1
+    total_support = sum(values["support"] for values in per_class.values())
+    if not total_support:
+        return None
+    weighted_f1 = 0.0
+    for values in per_class.values():
+        tp = values["tp"]
+        precision = tp / (tp + values["fp"]) if tp + values["fp"] else 0.0
+        recall = tp / (tp + values["fn"]) if tp + values["fn"] else 0.0
+        f1 = (2 * precision * recall / (precision + recall)) if precision + recall else 0.0
+        weighted_f1 += f1 * values["support"]
+    return weighted_f1 / total_support
+
+
+def openai_gpt5_rq234_run_available(run_root: Path | None) -> bool:
+    if run_root is None:
+        return False
+    return (
+        (run_root / "metrics_summary.csv").exists()
+        and (run_root / "unimoral-sample-predictions.csv").exists()
+        and (run_root / "unimoral-rq4-bertscore.csv").exists()
+    )
+
+
+def openai_gpt5_rq234_result_rows(run_root: Path | None) -> list[dict[str, object]]:
+    if not openai_gpt5_rq234_run_available(run_root):
+        return []
+    assert run_root is not None
+    metrics = {
+        (row["line_label"], row["task_name"]): row
+        for row in read_csv(run_root / "metrics_summary.csv")
+    }
+    output: list[dict[str, object]] = []
+    for line_label, family, size_slot, _slug in MODEL_LINES:
+        if line_label not in OPENAI_GPT5_RQ234_RUN_SLUGS:
+            continue
+        run_slug = OPENAI_GPT5_RQ234_RUN_SLUGS[line_label]
+        prediction_rows = read_jsonl(run_root / run_slug / "predictions.jsonl")
+        predictions_by_task: dict[str, list[dict[str, object]]] = {}
+        for row in prediction_rows:
+            predictions_by_task.setdefault(str(row.get("task_name") or ""), []).append(row)
+        for task_name in (
+            "unimoral_moral_typology",
+            "unimoral_factor_attribution",
+            "unimoral_consequence_generation",
+        ):
+            task = TASKS[task_name]
+            metric = metrics.get((line_label, task_name), {})
+            rows = predictions_by_task.get(task_name, [])
+            official_weighted_f1 = ""
+            if task_name == "unimoral_moral_typology":
+                value = classification_weighted_f1_from_prediction_rows(rows, list(TYPOLOGY_PATTERNS))
+                official_weighted_f1 = "" if value is None else round(value, 6)
+            elif task_name == "unimoral_factor_attribution":
+                value = classification_weighted_f1_from_prediction_rows(rows, list(FACTOR_PATTERNS))
+                official_weighted_f1 = "" if value is None else round(value, 6)
+            output.append(
+                {
+                    "line_label": line_label,
+                    "family": family,
+                    "size_slot": size_slot,
+                    "task_name": task_name,
+                    "rq": task["rq"],
+                    "task_label": task["label"],
+                    "primary_metric": task["metric"],
+                    "expected_samples": task["expected"],
+                    "completed_samples": metric.get("completed_samples", len(rows)),
+                    "status": metric.get("status", "missing"),
+                    "accuracy": metric.get("accuracy", ""),
+                    "official_weighted_f1": official_weighted_f1,
+                    "bleu": "",
+                    "meteor": metric.get("meteor", ""),
+                    "bert_score_f1": metric.get("bert_score_f1", ""),
+                    "rouge_l": "",
+                    "parsed_count": metric.get("parsed_count", ""),
+                    "log_path": display_workspace_path(run_root / run_slug),
+                }
+            )
+    return output
+
+
+def openai_gpt5_action_result_rows(release_dir: Path) -> list[dict[str, object]]:
+    lookup = action_lookup(release_dir)
+    task = TASKS["unimoral_action_prediction"]
+    output: list[dict[str, object]] = []
+    for line_label, family, size_slot, _slug in MODEL_LINES:
+        if line_label not in OPENAI_GPT5_RQ234_RUN_SLUGS:
+            continue
+        value = lookup.get(line_label)
+        output.append(
+            {
+                "line_label": line_label,
+                "family": family,
+                "size_slot": size_slot,
+                "task_name": "unimoral_action_prediction",
+                "rq": task["rq"],
+                "task_label": task["label"],
+                "primary_metric": task["metric"],
+                "expected_samples": task["expected"],
+                "completed_samples": task["expected"] if value is not None else 0,
+                "status": "complete" if value is not None else "missing",
+                "accuracy": "" if value is None else round(value, 6),
+                "official_weighted_f1": "",
+                "bleu": "",
+                "meteor": "",
+                "bert_score_f1": "",
+                "rouge_l": "",
+                "parsed_count": task["expected"] if value is not None else "",
+                "log_path": "",
+            }
+        )
+    return output
+
+
+def merge_rows_by_model_task(
+    rows: list[dict[str, object]],
+    replacements: list[dict[str, object]],
+) -> list[dict[str, object]]:
+    replacement_by_key = {
+        (row["line_label"], row["task_name"]): row
+        for row in replacements
+    }
+    if not replacement_by_key:
+        return rows
+    output: list[dict[str, object]] = []
+    for row in rows:
+        key = (str(row.get("line_label") or ""), str(row.get("task_name") or ""))
+        if key in replacement_by_key:
+            output.append(replacement_by_key.pop(key))
+        else:
+            output.append(row)
+    output.extend(replacement_by_key.values())
+    return output
+
+
+def merge_openai_gpt5_action_rows(
+    rows: list[dict[str, object]],
+    release_dir: Path,
+) -> list[dict[str, object]]:
+    return merge_rows_by_model_task(rows, openai_gpt5_action_result_rows(release_dir))
+
+
+def merge_openai_gpt5_rq234_rows(
+    rows: list[dict[str, object]],
+    run_root: Path | None,
+) -> list[dict[str, object]]:
+    return merge_rows_by_model_task(rows, openai_gpt5_rq234_result_rows(run_root))
+
+
+def sort_result_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    return sorted(
+        rows,
+        key=lambda row: (
+            MODEL_LINE_ORDER.get(str(row.get("line_label") or ""), len(MODEL_LINE_ORDER)),
+            TASK_ORDER.get(str(row.get("task_name") or ""), len(TASK_ORDER)),
+        ),
+    )
+
+
+def sort_prediction_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    return sorted(
+        rows,
+        key=lambda row: (
+            MODEL_LINE_ORDER.get(str(row.get("line_label") or ""), len(MODEL_LINE_ORDER)),
+            TASK_ORDER.get(str(row.get("task_name") or ""), len(TASK_ORDER)),
+            str(row.get("sample_id") or ""),
+        ),
+    )
+
+
+def openai_gpt5_sample_prediction_rows(run_root: Path | None) -> list[dict[str, object]]:
+    if not openai_gpt5_rq234_run_available(run_root):
+        return []
+    assert run_root is not None
+    output: list[dict[str, object]] = []
+    for row in read_csv(run_root / "unimoral-sample-predictions.csv"):
+        line_label = row.get("line_label") or ""
+        if line_label not in OPENAI_GPT5_RQ234_RUN_SLUGS:
+            continue
+        task_name = row.get("task_name") or ""
+        if task_name not in {
+            "unimoral_moral_typology",
+            "unimoral_factor_attribution",
+            "unimoral_consequence_generation",
+        }:
+            continue
+        run_slug = OPENAI_GPT5_RQ234_RUN_SLUGS[line_label]
+        output.append(
+            {
+                "line_label": line_label,
+                "family": row.get("family", "OpenAI GPT-5"),
+                "size_slot": row.get("size_slot", ""),
+                "task_name": task_name,
+                "rq": row.get("rq", TASKS[task_name]["rq"]),
+                "sample_id": row.get("sample_id", ""),
+                "language": row.get("language", ""),
+                "scenario_id": row.get("scenario_id", ""),
+                "target_json": row.get("target_json", "[]"),
+                "prediction": row.get("prediction", ""),
+                "score_value": row.get("score_value", ""),
+                "bert_score_f1": row.get("bert_score_f1", ""),
+                "answer_source": row.get("answer_source", ""),
+                "source_log_dir": display_workspace_path(run_root / run_slug),
+                "source_log_count": 19,
+            }
+        )
+    return output
+
+
+def rq4_bertscore_rows_from_predictions(predictions: list[dict[str, object]]) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for row in predictions:
+        if row.get("task_name") != "unimoral_consequence_generation":
+            continue
+        value = row.get("bert_score_f1")
+        if value in {None, ""}:
+            continue
+        rows.append(
+            {
+                "line_label": row.get("line_label", ""),
+                "task_name": row.get("task_name", ""),
+                "sample_id": row.get("sample_id", ""),
+                "language": row.get("language", ""),
+                "bert_score_f1": value,
+            }
+        )
+    return rows
+
+
 def consequence_summary(samples: list[dict]) -> dict[str, object]:
     rouge = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
     bleu_values = []
@@ -615,6 +903,7 @@ def build_rows(
     release_dir: Path,
     *,
     bertscore_lookup: dict[tuple[str, str, str], float] | None = None,
+    openai_gpt5_rq234_run_root: Path | None = None,
 ) -> list[dict[str, object]]:
     action = action_lookup(release_dir)
     bertscore_lookup = bertscore_lookup or {}
@@ -714,13 +1003,16 @@ def build_rows(
                 if bert_average is not None:
                     base["bert_score_f1"] = round(bert_average, 6)
             rows.append(base)
-    return rows
+    rows = merge_openai_gpt5_action_rows(rows, release_dir)
+    rows = merge_openai_gpt5_rq234_rows(rows, openai_gpt5_rq234_run_root)
+    return sort_result_rows(rows)
 
 
 def sample_prediction_rows(
     log_root: Path,
     *,
     bertscore_lookup: dict[tuple[str, str, str], float] | None = None,
+    openai_gpt5_rq234_run_root: Path | None = None,
 ) -> list[dict[str, object]]:
     bertscore_lookup = bertscore_lookup or {}
     rows: list[dict[str, object]] = []
@@ -782,7 +1074,8 @@ def sample_prediction_rows(
                         "source_log_count": len(source_paths),
                     }
                 )
-    return rows
+    rows.extend(openai_gpt5_sample_prediction_rows(openai_gpt5_rq234_run_root))
+    return sort_prediction_rows(rows)
 
 
 def metric_value(row: dict[str, object]) -> float | None:
@@ -987,6 +1280,79 @@ def internal_line_label(label: object) -> str:
     return PUBLIC_TO_INTERNAL_LINE_LABELS.get(str(label), str(label))
 
 
+def gpt5_unimoral_readout(rows: list[dict[str, object]], *, values: bool = False) -> str:
+    gpt5_lines = {"GPT-5 nano", "GPT-5 mini", "GPT-5.5"}
+    specs = [
+        ("RQ2", "unimoral_moral_typology", "accuracy"),
+        ("RQ3", "unimoral_factor_attribution", "accuracy"),
+        ("RQ4 BERTScore", "unimoral_consequence_generation", "bert_score_f1"),
+        ("RQ4 METEOR", "unimoral_consequence_generation", "meteor"),
+    ]
+    winners: list[tuple[str, str, float]] = []
+    for label, task_name, field in specs:
+        candidates = []
+        for row in rows:
+            line_label = display_line_label(row.get("line_label", ""))
+            if line_label not in gpt5_lines or row.get("task_name") != task_name:
+                continue
+            value = field_value(row, field)
+            if value is None:
+                continue
+            status = str(row.get("status", ""))
+            if field == "accuracy" and status != "complete":
+                continue
+            if field != "accuracy" and not status.startswith("complete"):
+                continue
+            candidates.append((line_label, value))
+        if candidates:
+            line_label, value = max(candidates, key=lambda item: item[1])
+            winners.append((label, line_label, value))
+    semantic_candidates = [
+        (display_line_label(row.get("line_label", "")), value)
+        for row in rows
+        if row.get("task_name") == "unimoral_consequence_generation"
+        and (value := field_value(row, "bert_score_f1")) is not None
+        and str(row.get("status", "")).startswith("complete")
+    ]
+    if len(winners) != len(specs) or not semantic_candidates:
+        return "GPT-5 read: completed RQ2-RQ4 rows are shown as the black S/M/L line; compare RQ4 as generation quality, not accuracy."
+    semantic_label, semantic_value = max(semantic_candidates, key=lambda item: item[1])
+    if values:
+        winner_lookup = {label: (line_label, value) for label, line_label, value in winners}
+        rq2_line, rq2_value = winner_lookup["RQ2"]
+        _rq3_line, rq3_value = winner_lookup["RQ3"]
+        _meteor_line, meteor_value = winner_lookup["RQ4 METEOR"]
+        return f"GPT-5 read: {rq2_line} leads GPT-5 on RQ2 {rq2_value:.3f}, RQ3 {rq3_value:.3f}, and RQ4 METEOR {meteor_value:.3f}."
+    winner_labels = {line_label for _, line_label, _ in winners}
+    if winner_labels == {"GPT-5.5"}:
+        return "GPT-5 read: GPT-5.5 is strongest inside GPT-5 on RQ2, RQ3, and both RQ4 metrics; Llama-M still leads semantic RQ4 overall."
+    winner_text = ", ".join(f"{label} {line_label}" for label, line_label, _ in winners)
+    return f"GPT-5 read: best GPT-5 rows are {winner_text}; semantic RQ4 overall still peaks at {semantic_label}."
+
+
+def gpt5_unimoral_semantic_readout(rows: list[dict[str, object]]) -> str:
+    gpt5_candidates = [
+        (display_line_label(row.get("line_label", "")), value)
+        for row in rows
+        if display_line_label(row.get("line_label", "")) in {"GPT-5 nano", "GPT-5 mini", "GPT-5.5"}
+        and row.get("task_name") == "unimoral_consequence_generation"
+        and (value := field_value(row, "bert_score_f1")) is not None
+        and str(row.get("status", "")).startswith("complete")
+    ]
+    semantic_candidates = [
+        (display_line_label(row.get("line_label", "")), value)
+        for row in rows
+        if row.get("task_name") == "unimoral_consequence_generation"
+        and (value := field_value(row, "bert_score_f1")) is not None
+        and str(row.get("status", "")).startswith("complete")
+    ]
+    if not gpt5_candidates or not semantic_candidates:
+        return "Semantic RQ4 is shown with BERTScore F1; read it separately from classification accuracy."
+    gpt5_label, gpt5_value = max(gpt5_candidates, key=lambda item: item[1])
+    semantic_label, semantic_value = max(semantic_candidates, key=lambda item: item[1])
+    return f"Semantic RQ4: {gpt5_label} reaches BERTScore {gpt5_value:.3f}; {semantic_label} remains overall top at {semantic_value:.3f}."
+
+
 def family_for_line(line_label: str) -> str:
     internal_label = internal_line_label(line_label)
     for label, family, _, _ in VISUAL_MODEL_LINES:
@@ -1163,33 +1529,37 @@ def svg_four_task_dashboard(
     parts.append(f'<rect x="36" y="{y0}" width="1728" height="292" fill="#fbfcfd" stroke="#d8dee4" rx="8"/>')
     parts.append(f'<text x="60" y="{y0 + 34}" class="axis">Coverage readout</text>')
     parts.append(
-        f'<text x="60" y="{y0 + 62}" class="subtitle">Complete four-task lines outside MiniMax: Qwen-S/M/L, DeepSeek-S/M/L, Llama-S/M/L, Gemma-S/M/L, and GPT-4o-mini Ref (13/13 lines).</text>'
+        f'<text x="60" y="{y0 + 62}" class="subtitle">Complete four-task lines outside MiniMax: Qwen, DeepSeek, Llama, Gemma, OpenAI GPT-5 S/M/L, and GPT-4o-mini Ref (16/16 lines).</text>'
     )
     parts.append(
-        f'<text x="60" y="{y0 + 88}" class="subtitle">Additional OpenAI GPT-5/GPT-4.1 rows are text-only RQ1 references in UniMoral; RQ2/RQ3/RQ4 are not filled in or inferred for them.</text>'
+        f'<text x="60" y="{y0 + 88}" class="subtitle">OpenAI GPT-5 now has real RQ1-RQ4 UniMoral scores; GPT-4.1 rows remain text-only RQ1 references.</text>'
     )
     parts.append(
-        f'<text x="60" y="{y0 + 114}" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>'
+        f'<text x="60" y="{y0 + 114}" class="subtitle">{html.escape(gpt5_unimoral_readout(rows))}</text>'
     )
-    chip_y = y0 + 146
+    parts.append(
+        f'<text x="60" y="{y0 + 140}" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>'
+    )
+    chip_y = y0 + 168
     chips = [
         ("Qwen", "S/M/L: 4 tasks complete"),
         ("DeepSeek", "S/M/L: 4 tasks complete"),
         ("Llama", "S/M/L: 4 tasks complete"),
         ("Gemma", "S/M/L: 4 tasks complete"),
+        ("OpenAI GPT-5", "S/M/L: 4 tasks complete"),
         ("OpenAI Ref", "GPT-4o-mini reference: 4 tasks complete"),
         ("MiniMax", "caveats: see failure checklist"),
     ]
-    chip_w = 260
+    chip_w = 220
     for idx, (family, label) in enumerate(chips):
-        x = 60 + idx * 280
+        x = 60 + idx * 240
         fill = FAMILY_COLORS.get(family, "#6b7280")
         parts.append(f'<rect x="{x}" y="{chip_y}" width="{chip_w}" height="54" fill="white" stroke="{fill}" stroke-width="2" rx="8"/>')
         parts.append(f'<circle cx="{x + 22}" cy="{chip_y + 27}" r="7" fill="{fill}"/>')
         parts.append(f'<text x="{x + 40}" y="{chip_y + 22}" class="axis">{html.escape(display_family_label(family))}</text>')
         parts.append(f'<text x="{x + 40}" y="{chip_y + 42}" class="small">{html.escape(label)}</text>')
-    parts.append(f'<text x="60" y="{y0 + 232}" class="small">The full score heatmap includes Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus OpenAI GPT-5 S/M/L and GPT-4o/GPT-4.1 text refs.</text>')
-    parts.append(f'<text x="60" y="{y0 + 256}" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; OpenAI action-only gaps are scope boundaries, not failed RQ2/RQ3/RQ4 runs.</text>')
+    parts.append(f'<text x="60" y="{y0 + 252}" class="small">The full score heatmap includes Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus OpenAI GPT-5 S/M/L and GPT-4o/GPT-4.1 text refs.</text>')
+    parts.append(f'<text x="60" y="{y0 + 276}" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; GPT-4.1 action-only refs are scope boundaries, not failed RQ2/RQ3/RQ4 runs.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
@@ -1222,7 +1592,7 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
     parts.append('<rect width="100%" height="100%" fill="white"/>')
     parts.append('<text x="28" y="42" class="title">UniMoral RQ1-RQ3 exact-match accuracy</text>')
     parts.append('<text x="28" y="74" class="subtitle">One shared metric for the three classification-style RQs, so values can be compared horizontally. Higher is better.</text>')
-    parts.append('<text x="28" y="100" class="subtitle">Rows include OpenAI GPT-5 S/M/L and GPT-4o/GPT-4.1 text refs. RQ2/RQ3 cells stay n/a when that OpenAI task was not run.</text>')
+    parts.append('<text x="28" y="100" class="subtitle">Rows include OpenAI GPT-5 S/M/L across RQ1-RQ3 plus GPT-4o/GPT-4.1 text refs where those tasks exist.</text>')
     parts.append(f'<text x="{family_x + family_w / 2}" y="{top - 52}" text-anchor="middle" class="tiny">FAMILY</text>')
     parts.append(f'<text x="{size_x + size_w / 2}" y="{top - 52}" text-anchor="middle" class="tiny">SIZE</text>')
     parts.append(f'<text x="{line_x}" y="{top - 52}" class="tiny">MODEL LINE</text>')
@@ -1273,7 +1643,7 @@ def svg_generation_quality(rows: list[dict[str, object]], path: Path) -> None:
     ]
     task_rows.sort(key=lambda row: field_value(row, "bert_score_f1") or -1.0, reverse=True)
     width = 1220
-    top = 190
+    top = 244
     row_h = 44
     row_gap = 10
     height = top + len(task_rows) * (row_h + row_gap) + 126
@@ -1284,7 +1654,7 @@ def svg_generation_quality(rows: list[dict[str, object]], path: Path) -> None:
     meteor_x = 804
     meteor_w = 270
     bert_min, bert_max = 0.60, 0.75
-    meteor_min, meteor_max = 0.07, 0.16
+    meteor_min, meteor_max = 0.07, 0.18
 
     def scaled_width(value: float | None, low: float, high: float, width_value: int) -> float:
         if value is None or high <= low:
@@ -1298,14 +1668,16 @@ def svg_generation_quality(rows: list[dict[str, object]], path: Path) -> None:
     parts.append('<text x="36" y="42" class="title">UniMoral RQ4 generation quality</text>')
     parts.append('<text x="36" y="74" class="subtitle">RQ4 asks models to generate consequences, so it is not mixed with the RQ1-RQ3 accuracy chart.</text>')
     parts.append('<text x="36" y="100" class="subtitle">Both metrics are higher-better. BERTScore F1 reads semantic similarity; METEOR reads lexical overlap.</text>')
-    parts.append('<text x="36" y="124" class="subtitle">Each metric panel uses its own axis so within-metric differences are visible.</text>')
+    parts.append(f'<text x="36" y="124" class="subtitle">{html.escape(gpt5_unimoral_readout(rows, values=True))}</text>')
+    parts.append(f'<text x="36" y="148" class="subtitle">{html.escape(gpt5_unimoral_semantic_readout(rows))}</text>')
+    parts.append('<text x="36" y="172" class="subtitle">Each metric panel uses its own axis so within-metric differences are visible.</text>')
     parts.append(f'<text x="{bert_x}" y="{top - 44}" class="metric">Metric: BERTScore F1</text>')
     parts.append(f'<text x="{meteor_x}" y="{top - 44}" class="metric">Metric: METEOR</text>')
     for tick in (0.60, 0.65, 0.70, 0.75):
         x = bert_x + bert_w * ((tick - bert_min) / (bert_max - bert_min))
         parts.append(f'<line x1="{x:.2f}" y1="{top - 12}" x2="{x:.2f}" y2="{height - 76}" stroke="#e5e7eb"/>')
         parts.append(f'<text x="{x:.2f}" y="{top - 20}" text-anchor="middle" class="small">{tick:.2f}</text>')
-    for tick in (0.07, 0.10, 0.13, 0.16):
+    for tick in (0.08, 0.12, 0.16, 0.18):
         x = meteor_x + meteor_w * ((tick - meteor_min) / (meteor_max - meteor_min))
         parts.append(f'<line x1="{x:.2f}" y1="{top - 12}" x2="{x:.2f}" y2="{height - 76}" stroke="#e5e7eb"/>')
         parts.append(f'<text x="{x:.2f}" y="{top - 20}" text-anchor="middle" class="small">{tick:.2f}</text>')
@@ -1411,7 +1783,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
         ("unimoral_moral_typology", "accuracy", "RQ2 Moral Typology", "Accuracy", 0.54, 0.61, [0.54, 0.56, 0.58, 0.60]),
         ("unimoral_factor_attribution", "accuracy", "RQ3 Factor Attribution", "Accuracy", 0.54, 0.64, [0.54, 0.58, 0.62, 0.64]),
         ("unimoral_consequence_generation", "bert_score_f1", "RQ4 Consequence Generation", "BERTScore F1", 0.60, 0.75, [0.60, 0.65, 0.70, 0.75]),
-        ("unimoral_consequence_generation", "meteor", "RQ4 Consequence Generation", "METEOR", 0.07, 0.16, [0.07, 0.10, 0.13, 0.16]),
+        ("unimoral_consequence_generation", "meteor", "RQ4 Consequence Generation", "METEOR", 0.07, 0.18, [0.08, 0.12, 0.16, 0.18]),
     ]
     panel_positions = [
         (48, 160, 540, 300),
@@ -1532,7 +1904,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
     parts.append('<text x="42" y="48" class="title">UniMoral family-size scaling by RQ</text>')
     parts.append('<text x="42" y="78" class="subtitle">Line charts show how each family moves across S/M/L slots inside each UniMoral task. Higher is better in every panel.</text>')
     parts.append('<text x="42" y="102" class="subtitle">Classification panels use strict-complete accuracy cells. RQ4 uses rows with usable generation scores; remaining MiniMax caveats stay in the audit tables.</text>')
-    parts.append('<text x="42" y="126" class="subtitle">OpenAI GPT-5 is the black S/M/L line in RQ1 only; GPT-4o/GPT-4.1 text refs are dashed. No OpenAI RQ2/RQ3/RQ4 scores are inferred.</text>')
+    parts.append('<text x="42" y="126" class="subtitle">OpenAI GPT-5 is the black S/M/L line across RQ1-RQ4; GPT-4o/GPT-4.1 text refs remain dashed where a UniMoral metric exists.</text>')
 
     for (task_name, metric, title, metric_label, low, high, ticks), (x, y, panel_w, panel_h) in zip(specs, panel_positions):
         plot_x = x + 72
@@ -1596,7 +1968,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
             for px, py, _, line_label, _value in coords:
                 parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{outer_radius:.1f}" fill="white" stroke="{fill}" stroke-width="{line_width:.1f}"/>')
                 parts.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{inner_radius:.1f}" fill="{fill}"/>')
-                if family == "OpenAI GPT-5" and task_name == "unimoral_action_prediction":
+                if family == "OpenAI GPT-5":
                     parts.append(f'<text x="{px:.1f}" y="{py - 14:.1f}" text-anchor="middle" class="openai-label">{html.escape(line_label)}</text>')
     legend_x, legend_y = 92, 930
     parts.append(f'<rect x="48" y="884" width="1704" height="176" rx="18" class="legend-card"/>')
@@ -1612,7 +1984,8 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
             text_x = x + 20
         parts.append(f'<text x="{text_x}" y="{legend_y}" class="legend">{html.escape(display_family_label(family))}</text>')
     parts.append('<text x="92" y="980" class="legend-note">Takeaway: UniMoral does not have one simple bigger-is-better curve. The winner changes by task, so report the RQ-specific pattern instead of one averaged moral-reasoning story.</text>')
-    parts.append('<text x="92" y="1012" class="legend-note">OpenAI GPT-5 is black and appears for RQ1 action prediction only; GPT-4o/GPT-4.1 refs are dashed where a UniMoral metric exists.</text>')
+    parts.append('<text x="92" y="1012" class="legend-note">OpenAI GPT-5 is black and appears across RQ1-RQ4 after the completed local RQ2-RQ4 follow-up; GPT-4o/GPT-4.1 refs are dashed where a UniMoral metric exists.</text>')
+    parts.append(f'<text x="92" y="1044" class="legend-note">{html.escape(gpt5_unimoral_readout(rows))}</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
@@ -2274,14 +2647,74 @@ def main() -> None:
         type=Path,
         help="Optional per-sample RQ4 BERTScore CSV to merge into UniMoral artifacts.",
     )
+    parser.add_argument(
+        "--openai-gpt5-rq234-run-root",
+        default=DEFAULT_OPENAI_GPT5_RQ234_RUN_ROOT,
+        type=Path,
+        help="Optional local GPT-5 UniMoral RQ2-RQ4 run root to promote into UniMoral tables.",
+    )
     args = parser.parse_args()
 
     if not log_root_has_evals(args.log_root) and existing_release_tables_available(args.release_dir):
         rows = read_csv(args.release_dir / "unimoral-full-benchmark.csv")
-        coverage = read_csv(args.release_dir / "unimoral-coverage.csv")
-        spreads = read_csv(args.release_dir / "unimoral-task-spread.csv")
-        rankings = read_csv(args.release_dir / "unimoral-model-rankings.csv")
-        failures = read_csv(args.release_dir / "unimoral-failure-checklist.csv")
+        predictions = read_csv(args.release_dir / "unimoral-sample-predictions.csv")
+        promoted_openai = openai_gpt5_rq234_run_available(args.openai_gpt5_rq234_run_root)
+        if promoted_openai:
+            rows = merge_openai_gpt5_action_rows(rows, args.release_dir)
+            rows = merge_openai_gpt5_rq234_rows(rows, args.openai_gpt5_rq234_run_root)
+            rows = sort_result_rows(rows)
+            gpt5_keys = set(OPENAI_GPT5_RQ234_RUN_SLUGS)
+            predictions = [
+                row
+                for row in predictions
+                if not (
+                    row.get("line_label") in gpt5_keys
+                    and row.get("task_name")
+                    in {
+                        "unimoral_moral_typology",
+                        "unimoral_factor_attribution",
+                        "unimoral_consequence_generation",
+                    }
+                )
+            ]
+            predictions.extend(openai_gpt5_sample_prediction_rows(args.openai_gpt5_rq234_run_root))
+            predictions = sort_prediction_rows(predictions)
+            coverage = coverage_rows(rows)
+            spreads = spread_rows(rows)
+            rankings = ranking_rows(rows)
+            failures = failure_rows(rows)
+            write_csv(
+                args.release_dir / "unimoral-full-benchmark.csv",
+                rows,
+                csv_fieldnames(args.release_dir / "unimoral-full-benchmark.csv"),
+            )
+            write_csv(args.release_dir / "unimoral-coverage.csv", coverage, list(coverage[0]))
+            write_csv(args.release_dir / "unimoral-task-spread.csv", spreads, list(spreads[0]))
+            write_csv(
+                args.release_dir / "unimoral-model-rankings.csv",
+                rankings,
+                list(rankings[0]) if rankings else ["task_name", "task_label", "rank", "line_label", "metric", "value"],
+            )
+            write_csv(
+                args.release_dir / "unimoral-sample-predictions.csv",
+                predictions,
+                csv_fieldnames(args.release_dir / "unimoral-sample-predictions.csv"),
+            )
+            write_csv(
+                args.release_dir / "unimoral-rq4-bertscore.csv",
+                rq4_bertscore_rows_from_predictions(predictions),
+                ["line_label", "task_name", "sample_id", "language", "bert_score_f1"],
+            )
+            write_csv(
+                args.release_dir / "unimoral-failure-checklist.csv",
+                failures,
+                csv_fieldnames(args.release_dir / "unimoral-failure-checklist.csv"),
+            )
+        else:
+            coverage = read_csv(args.release_dir / "unimoral-coverage.csv")
+            spreads = read_csv(args.release_dir / "unimoral-task-spread.csv")
+            rankings = read_csv(args.release_dir / "unimoral-model-rankings.csv")
+            failures = read_csv(args.release_dir / "unimoral-failure-checklist.csv")
         visual_rows = with_openai_unimoral_action_visual_rows(rows, args.release_dir)
         visual_spreads = spread_rows(visual_rows)
         visual_rankings = ranking_rows(visual_rows)
@@ -2297,13 +2730,28 @@ def main() -> None:
         update_manifest(args.release_dir)
         update_release_overview_tables(args.release_dir, coverage)
         update_markdown_reports(args.release_dir, rows, coverage, spreads, rankings)
-        print(f"No Inspect .eval logs found under {args.log_root}; reused existing tracked UniMoral CSV artifacts.")
+        if promoted_openai:
+            print(
+                f"No Inspect .eval logs found under {args.log_root}; reused tracked UniMoral CSV artifacts "
+                "and promoted local GPT-5 RQ2-RQ4 rows."
+            )
+        else:
+            print(f"No Inspect .eval logs found under {args.log_root}; reused existing tracked UniMoral CSV artifacts.")
         return
 
     bertscore_file = args.bertscore_file or args.release_dir / "unimoral-rq4-bertscore.csv"
     bertscore_lookup = load_bertscore_lookup(bertscore_file)
-    rows = build_rows(args.log_root, args.release_dir, bertscore_lookup=bertscore_lookup)
-    predictions = sample_prediction_rows(args.log_root, bertscore_lookup=bertscore_lookup)
+    rows = build_rows(
+        args.log_root,
+        args.release_dir,
+        bertscore_lookup=bertscore_lookup,
+        openai_gpt5_rq234_run_root=args.openai_gpt5_rq234_run_root,
+    )
+    predictions = sample_prediction_rows(
+        args.log_root,
+        bertscore_lookup=bertscore_lookup,
+        openai_gpt5_rq234_run_root=args.openai_gpt5_rq234_run_root,
+    )
     coverage = coverage_rows(rows)
     spreads = spread_rows(rows)
     rankings = ranking_rows(rows)
@@ -2356,6 +2804,11 @@ def main() -> None:
             "source_log_dir",
             "source_log_count",
         ],
+    )
+    write_csv(
+        args.release_dir / "unimoral-rq4-bertscore.csv",
+        rq4_bertscore_rows_from_predictions(predictions),
+        ["line_label", "task_name", "sample_id", "language", "bert_score_f1"],
     )
     write_csv(
         args.release_dir / "unimoral-failure-checklist.csv",

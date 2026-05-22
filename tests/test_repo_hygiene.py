@@ -95,8 +95,9 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
 
     unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
     assert "UniMoral family-size scaling by RQ" in unimoral_family_scaling_svg
-    assert "OpenAI GPT-5 is the black S/M/L line in RQ1 only" in unimoral_family_scaling_svg
-    assert "No OpenAI RQ2/RQ3/RQ4 scores are inferred." in unimoral_family_scaling_svg
+    assert "OpenAI GPT-5 is the black S/M/L line across RQ1-RQ4" in unimoral_family_scaling_svg
+    assert "OpenAI GPT-5 is black and appears across RQ1-RQ4" in unimoral_family_scaling_svg
+    assert "GPT-5.5 is strongest inside GPT-5 on RQ2, RQ3, and both RQ4 metrics" in unimoral_family_scaling_svg
     assert "Metric: Accuracy" in unimoral_family_scaling_svg
     assert "Metric: BERTScore F1" in unimoral_family_scaling_svg
     assert "Metric: METEOR" in unimoral_family_scaling_svg
@@ -108,7 +109,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert ">Ref<" not in unimoral_family_scaling_svg
     assert "OpenAI GPT-5" in unimoral_family_scaling_svg
     assert "OpenAI Ref" in unimoral_family_scaling_svg
-    assert "OpenAI GPT-5 is black and appears for RQ1 action prediction only" in unimoral_family_scaling_svg
+    assert "OpenAI GPT-5 is black and appears across RQ1-RQ4" in unimoral_family_scaling_svg
     assert 'stroke="#000000"' in unimoral_family_scaling_svg
     assert 'fill="#000000"' in unimoral_family_scaling_svg
     assert "#dc2626" in unimoral_family_scaling_svg

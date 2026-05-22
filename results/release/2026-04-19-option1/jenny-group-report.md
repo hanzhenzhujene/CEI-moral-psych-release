@@ -12,7 +12,7 @@ Start here. These figures are the main result surface; the tables below keep the
 
 Visual readout in one sentence: text moral reasoning is stronger than image moral judgment, CCD-Bench shows cultural-choice style rather than accuracy, and DeNEVIL is proxy behavior evidence rather than paper-faithful MoralPrompt scoring.
 
-OpenAI text-only rows are shown in the comparable-accuracy and CCD figures. The GPT-5 subset is a black text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`); GPT-4o and GPT-4.1 stay as separate reference markers. None has SMID or DeNEVIL.
+OpenAI text-only rows are shown in the UniMoral, comparable-accuracy, and CCD figures. The GPT-5 subset is a black text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`); GPT-4o and GPT-4.1 stay as separate reference markers. None has SMID or DeNEVIL.
 OpenAI/GPT scope: the scored reference routes are `openai/gpt-4o-mini`, `openai/gpt-5-nano`, `openai/gpt-4.1-nano`, `openai/gpt-5-mini`, `openai/gpt-5.5`, and `openai/gpt-4.1-mini`.
 
 ### 1. UniMoral RQ1-RQ4: family-size scaling and task readout
@@ -79,9 +79,9 @@ Key takeaways:
 - **Best comparable all-around line:** `MiniMax-S` is the cleanest line with text, image, and value evidence: UniMoral 0.661, SMID 0.432, Value 0.740, three-metric mean 0.611.
 - **Best text-only line:** `GPT-5.5` is strongest when SMID is excluded: UniMoral 0.684, Value 0.736, two-metric mean 0.710. Do not call it best overall because it has no image result.
 - **Scaling read:** bigger is not reliably better. Scale helps Qwen on SMID (0.368 -> 0.483) and Llama on Value from S to M (0.529 -> 0.724), but reverses or stalls elsewhere: Gemma SMID 0.417 -> 0.364 -> 0.412, DeepSeek UniMoral 0.684 -> 0.563, and `MiniMax-L` SMID 0.198.
-- **UniMoral readout:** do not collapse RQ1-RQ4 into one moral score. Winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `Gemma-S` 0.599, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `Llama-L` 0.157, so the result is task-specific moral reasoning, not one universal rank.
+- **UniMoral readout:** do not collapse RQ1-RQ4 into one moral score. Winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `GPT-5.5` 0.637, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `GPT-5.5` 0.165, so the result is task-specific moral reasoning, not one universal rank.
 - **CCD-Bench read:** this is cultural-choice behavior, not accuracy. 20 of 21 valid lines choose `Nordic Europe` as the dominant style; `GPT-5 nano` is most concentrated (27.8%), while `DeepSeek-S` is least concentrated and the only non-Nordic dominant line (13.8%, `Sub Saharan Africa`).
-- **OpenAI/GPT read:** GPT-5 is a text-only S/M/L series: `GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L. Value jumps from 0.617 to 0.739 and then plateaus at 0.736; UniMoral tops out at `GPT-5.5` (0.684). GPT-4o/GPT-4.1 rows are separate text refs, and none has SMID or DeNEVIL.
+- **OpenAI/GPT read:** GPT-5 is a text-only S/M/L series: `GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L. Value jumps from 0.617 to 0.739 and then plateaus at 0.736; UniMoral tops out at `GPT-5.5` (0.684). GPT-4o/GPT-4.1 rows are separate text refs, and none has SMID or DeNEVIL. Completed GPT-5 RQ2-RQ4 follow-up: `GPT-5.5` leads the GPT-5 line on RQ2 accuracy 0.637, RQ3 accuracy 0.601, RQ4 BERTScore F1 0.725, and RQ4 METEOR 0.165. Overall semantic RQ4 still peaks at `Llama-M` 0.730, so this is strong GPT text evidence, not one universal UniMoral winner.
 - **DeNEVIL boundary:** current DeNEVIL evidence is FULCRA-backed proxy behavior, not paper-faithful MoralPrompt scoring. Use the behavioral-outcomes figure for refusal/context/risk patterns, not a benchmark accuracy ranking.
 - **Small-model floor:** the May 13 Mistral/Qwen/Llama follow-up shows a capability threshold. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral from 0.632 to 0.648; `Llama 3.2 1B` drops to 0.406.
 
@@ -168,7 +168,7 @@ Use this section as the decision readout. Each claim below is tied to tracked re
 | --- | --- | --- |
 | Strongest fully observed comparable line | `MiniMax-S` averages 0.611 across UniMoral action 0.661, SMID 0.432, and Value 0.740. | This is the cleanest all-around topline because it includes text moral reasoning, image moral perception, and value recognition on the same line. |
 | Strongest text-only comparable line | `GPT-5.5` reaches UniMoral 0.684 and Value 0.736, a two-metric mean of 0.710. | This is the best answer if the PI asks about text moral reasoning only; it is not the all-around winner because SMID is missing. |
-| OpenAI/GPT text rows | 6 OpenAI rows are included: GPT-5 text-only S/M/L plus separate GPT-4o/GPT-4.1 reference markers. Best OpenAI UniMoral: `GPT-5.5` at 0.684; best OpenAI Value: `GPT-5 mini` at 0.739. | These tell us where GPT-style text routes sit relative to the open-weight families. They still do not cover SMID or DeNEVIL, so they are not all-benchmark OpenAI coverage. |
+| OpenAI/GPT text rows | 6 OpenAI rows are included: GPT-5 text-only S/M/L plus separate GPT-4o/GPT-4.1 reference markers. Best OpenAI UniMoral RQ1: `GPT-5.5` at 0.684; best OpenAI Value: `GPT-5 mini` at 0.739. Completed GPT-5 RQ2-RQ4 follow-up: `GPT-5.5` leads the GPT-5 line on RQ2 accuracy 0.637, RQ3 accuracy 0.601, RQ4 BERTScore F1 0.725, and RQ4 METEOR 0.165. Overall semantic RQ4 still peaks at `Llama-M` 0.730, so this is strong GPT text evidence, not one universal UniMoral winner. | These tell us where GPT-style text routes sit relative to the open-weight families. They still do not cover SMID or DeNEVIL, so they are not all-benchmark OpenAI coverage. |
 | Small-model capability floor | May 13 follow-up: `Mistral Nemo` reaches 0.648 on UniMoral; the 7B-12B routes sit in a narrow 0.632-0.648 band; `Llama 3.2 1B` falls to 0.406 with only 73.6% answered. | This is the practical capacity warning: below the mid-sized instruction-model range, the model may stop reliably following human moral-choice tasks, but above that floor older routes can still be useful baselines. |
 | Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at 0.364 and the widest spread at 0.285. | The hard part is visual moral perception: models do not just need moral vocabulary, they need to read morally relevant cues in images. |
 | Closest thing to saturation | `UniMoral` has the tightest range, from 0.563 to 0.684 (0.121 spread). | Most text models are already in the same band on the basic human-choice layer, so the more interesting story is which UniMoral subtask each model handles best. |
@@ -442,14 +442,14 @@ Exact per-line family-size status is saved as `family-size-progress.csv`; public
 
 The release now implements all four UniMoral task definitions and exports scored artifacts where model runs completed, but the current model-line matrix is not yet fully complete. Incomplete or parse-limited cells are listed in `unimoral-failure-checklist.csv`; action prediction remains the legacy comparable scalar and is retained as RQ1.
 
-Metric sanity check: UniMoral has four RQs. Because the frozen RQ1 source exposes only aggregate action accuracy, the main RQ1-RQ3 comparison uses one shared exact-match accuracy metric. In the current strict-complete cells, exact-match accuracy spans RQ2 0.554-0.599 and RQ3 0.561-0.631. RQ4 is a generation task, so it is separated and read with semantic similarity instead of accuracy: BERTScore F1 spans 0.629-0.730, with METEOR 0.077-0.157 as a lexical side metric.
+Metric sanity check: UniMoral has four RQs. Because the frozen RQ1 source exposes only aggregate action accuracy, the main RQ1-RQ3 comparison uses one shared exact-match accuracy metric. In the current strict-complete cells, exact-match accuracy spans RQ2 0.554-0.637 and RQ3 0.532-0.631. RQ4 is a generation task, so it is separated and read with semantic similarity instead of accuracy: BERTScore F1 spans 0.629-0.730, with METEOR 0.077-0.165 as a lexical side metric.
 
 | RQ | Task | Status | Strict complete | Reported cells | Primary metric | Mean | Range | Top line | Diagnostic read |
 | --- | --- | --- | ---: | ---: | --- | ---: | ---: | --- | --- |
-| RQ1 | Action prediction | complete | 16/16 | 16/16 | accuracy | 0.655 | 0.121 | DeepSeek-M (0.684) | diagnostic |
-| RQ2 | Moral typology | incomplete | 15/16 | 16/16 | accuracy | 0.581 | 0.045 | Gemma-S (0.599) | saturated |
-| RQ3 | Factor attribution | incomplete | 14/16 | 15/16 | accuracy | 0.592 | 0.070 | Llama-M (0.631) | moderately diagnostic |
-| RQ4 | Consequence generation | incomplete | 14/16 | 15/16 | bert_score_f1 | 0.691 | 0.101 | Llama-M (0.730) | diagnostic |
+| RQ1 | Action prediction | complete | 19/19 | 19/19 | accuracy | 0.657 | 0.121 | DeepSeek-M (0.684) | diagnostic |
+| RQ2 | Moral typology | incomplete | 18/19 | 19/19 | accuracy | 0.588 | 0.084 | GPT-5.5 (0.637) | moderately diagnostic |
+| RQ3 | Factor attribution | incomplete | 17/19 | 18/19 | accuracy | 0.586 | 0.099 | Llama-M (0.631) | moderately diagnostic |
+| RQ4 | Consequence generation | incomplete | 17/19 | 18/19 | bert_score_f1 | 0.695 | 0.101 | Llama-M (0.730) | diagnostic |
 
 Sample-level predictions for RQ2/RQ3/RQ4 are exported in `unimoral-sample-predictions.csv`; full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.
 The provider-free MiniMax handoff is tracked in [`unimoral-minimax-resume-plan.md`](unimoral-minimax-resume-plan.md).

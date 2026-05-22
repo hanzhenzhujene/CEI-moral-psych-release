@@ -31,6 +31,9 @@ MODEL_LINES = [
     "Gemma-S",
     "Gemma-M",
     "Gemma-L",
+    "GPT-5 nano",
+    "GPT-5 mini",
+    "GPT-5.5",
     "GPT-4o-mini Ref",
 ]
 
@@ -55,7 +58,7 @@ PREDICTION_TASKS = {
     for name, task in TASKS.items()
     if name != "unimoral_action_prediction"
 }
-FAILURE_CATEGORIES = {"api", "data", "format/parsing", "parsing", "runtime"}
+FAILURE_CATEGORIES = {"api", "api/runtime", "data", "format/parsing", "parsing", "runtime"}
 
 REQUIRED_CSV_COLUMNS = {
     "unimoral-full-benchmark.csv": {
@@ -200,6 +203,8 @@ def spread_diagnostic(spread: float) -> str:
 
 
 def family_display_for_line(line: str) -> str:
+    if line.startswith("GPT-5"):
+        return "OpenAI GPT-5"
     family = "GPT-4o-mini Ref" if line == "GPT-4o-mini Ref" else line.split("-", 1)[0]
     return DISPLAY_FAMILY_LABELS.get(family, family)
 

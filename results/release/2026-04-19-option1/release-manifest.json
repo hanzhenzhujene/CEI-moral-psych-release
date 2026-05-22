@@ -2,10 +2,10 @@
   "benchmarks": [
     {
       "benchmark": "UniMoral",
-      "evaluated_lines": 64,
-      "models_covered": 6,
+      "evaluated_lines": 76,
+      "models_covered": 7,
       "modes": "benchmark_faithful; documented_incomplete",
-      "samples": 280800,
+      "samples": 333450,
       "task_types": 4
     },
     {
@@ -42,11 +42,11 @@
     }
   ],
   "counts": {
-    "authoritative_tasks": 80,
-    "benchmark_faithful_tasks": 77,
+    "authoritative_tasks": 92,
+    "benchmark_faithful_tasks": 89,
     "paper_result_alignment_rows": 5,
     "proxy_tasks": 3,
-    "total_samples": 557224
+    "total_samples": 609874
   },
   "entry_points": {
     "accuracy_figure": "figures/release/option1_accuracy_heatmap.svg",
