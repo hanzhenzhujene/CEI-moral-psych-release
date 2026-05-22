@@ -1173,6 +1173,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "OpenAI/GPT read" in tldr_text
         assert "`GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L" in tldr_text
         assert "UniMoral tops out at `GPT-5.5`" in tldr_text
+        assert "Completed GPT-5 RQ2-RQ4 follow-up" in tldr_text
+        assert "RQ4 BERTScore F1 0.725" in tldr_text
+        assert "semantic RQ4 still peaks at `Llama-M` 0.730" in tldr_text
         assert "GPT-4o/GPT-4.1 rows are separate text refs" in tldr_text
         assert "GPT-4o-mini reference line" not in text
         assert "76,486/76,486 parsed prompts" not in text
@@ -1573,12 +1576,22 @@ def test_openai_gpt_rows_are_visible_in_unimoral_and_ccd_figures():
         assert label in unimoral_scaling
     assert "OpenAI GPT-5 is the black S/M/L line across RQ1-RQ4" in unimoral_scaling
     assert "OpenAI GPT-5 is black and appears across RQ1-RQ4" in unimoral_scaling
+    assert "GPT-5.5 is strongest inside GPT-5 on RQ2, RQ3, and both RQ4 metrics" in unimoral_scaling
     assert 'stroke="#000000"' in unimoral_scaling
     assert 'fill="#000000"' in unimoral_scaling
     for old_openai_color in ("#be123c", "#e11d48", "#fb7185"):
         assert old_openai_color not in unimoral_scaling
     assert "GPT-4o-mini as the only OpenAI reference" not in unimoral_scaling
     assert "other OpenAI rows stay in the broader text-comparison tables" not in unimoral_scaling
+
+    unimoral_dashboard = (figure_dir / "option1_unimoral_four_task_dashboard.svg").read_text(encoding="utf-8")
+    assert "OpenAI GPT-5 now has real RQ1-RQ4 UniMoral scores" in unimoral_dashboard
+    assert "Llama-M still leads semantic RQ4 overall" in unimoral_dashboard
+
+    unimoral_generation = (figure_dir / "option1_unimoral_generation_quality.svg").read_text(encoding="utf-8")
+    assert "GPT-5.5 leads GPT-5 on RQ2 0.637, RQ3 0.601, and RQ4 METEOR 0.165" in unimoral_generation
+    assert "GPT-5.5 reaches BERTScore 0.725" in unimoral_generation
+    assert ">0.18<" in unimoral_generation
 
     for filename in ("option1_ccd_choice_distribution.svg", "option1_ccd_dominant_option_share.svg"):
         text = (figure_dir / filename).read_text(encoding="utf-8")

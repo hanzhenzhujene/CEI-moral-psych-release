@@ -97,6 +97,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "UniMoral family-size scaling by RQ" in unimoral_family_scaling_svg
     assert "OpenAI GPT-5 is the black S/M/L line across RQ1-RQ4" in unimoral_family_scaling_svg
     assert "OpenAI GPT-5 is black and appears across RQ1-RQ4" in unimoral_family_scaling_svg
+    assert "GPT-5.5 is strongest inside GPT-5 on RQ2, RQ3, and both RQ4 metrics" in unimoral_family_scaling_svg
     assert "Metric: Accuracy" in unimoral_family_scaling_svg
     assert "Metric: BERTScore F1" in unimoral_family_scaling_svg
     assert "Metric: METEOR" in unimoral_family_scaling_svg

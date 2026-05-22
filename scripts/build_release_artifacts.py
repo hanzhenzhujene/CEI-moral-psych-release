@@ -10391,6 +10391,75 @@ def unimoral_rq_tldr_takeaway(release_dir: Path | None) -> str | None:
     )
 
 
+def gpt5_unimoral_followup_takeaway(release_dir: Path | None) -> str | None:
+    candidate_paths = []
+    if release_dir is not None:
+        candidate_paths.append(release_dir / "unimoral-full-benchmark.csv")
+    candidate_paths.append(DEFAULT_RELEASE_DIR / "unimoral-full-benchmark.csv")
+    path = next((candidate for candidate in candidate_paths if candidate.exists()), None)
+    if path is None:
+        return None
+
+    def value_for(row: dict[str, str], field: str) -> float | None:
+        value = row.get(field)
+        if value in {None, "", "n/a"}:
+            return None
+        return float(value)
+
+    with path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    specs = [
+        ("RQ2 accuracy", "unimoral_moral_typology", "accuracy"),
+        ("RQ3 accuracy", "unimoral_factor_attribution", "accuracy"),
+        ("RQ4 BERTScore F1", "unimoral_consequence_generation", "bert_score_f1"),
+        ("RQ4 METEOR", "unimoral_consequence_generation", "meteor"),
+    ]
+    gpt5_winners: list[tuple[str, str, float]] = []
+    for label, task_name, field in specs:
+        candidates = []
+        for row in rows:
+            if row.get("line_label") not in OPENAI_GPT5_LINE_LABELS or row.get("task_name") != task_name:
+                continue
+            value = value_for(row, field)
+            if value is None:
+                continue
+            status = str(row.get("status", ""))
+            if field == "accuracy" and status != "complete":
+                continue
+            if field != "accuracy" and not status.startswith("complete"):
+                continue
+            candidates.append((row["line_label"], value))
+        if candidates:
+            gpt5_winners.append((label, *max(candidates, key=lambda item: item[1])))
+    semantic_candidates = []
+    for row in rows:
+        if row.get("task_name") != "unimoral_consequence_generation":
+            continue
+        value = value_for(row, "bert_score_f1")
+        if value is None or not str(row.get("status", "")).startswith("complete"):
+            continue
+        semantic_candidates.append((row["line_label"], value))
+    if len(gpt5_winners) != len(specs) or not semantic_candidates:
+        return None
+    semantic_label, semantic_value = max(semantic_candidates, key=lambda item: item[1])
+    if {line_label for _, line_label, _ in gpt5_winners} == {"GPT-5.5"}:
+        values = {label: value for label, _line_label, value in gpt5_winners}
+        return (
+            "Completed GPT-5 RQ2-RQ4 follow-up: `GPT-5.5` leads the GPT-5 line on "
+            f"RQ2 accuracy {fmt_float(values['RQ2 accuracy'])}, RQ3 accuracy {fmt_float(values['RQ3 accuracy'])}, "
+            f"RQ4 BERTScore F1 {fmt_float(values['RQ4 BERTScore F1'])}, and RQ4 METEOR {fmt_float(values['RQ4 METEOR'])}. "
+            f"Overall semantic RQ4 still peaks at `{semantic_label}` {fmt_float(semantic_value)}, so this is strong GPT text evidence, not one universal UniMoral winner."
+        )
+    winner_text = "; ".join(
+        f"{label} `{line_label}` {fmt_float(value)}"
+        for label, line_label, value in gpt5_winners
+    )
+    return (
+        f"Completed GPT-5 RQ2-RQ4 follow-up: {winner_text}. "
+        f"Overall semantic RQ4 still peaks at `{semantic_label}` {fmt_float(semantic_value)}, so this is strong GPT text evidence, not one universal UniMoral winner."
+    )
+
+
 def _openai_reference_rows(benchmark_comparison: list[dict[str, Any]]) -> list[dict[str, Any]]:
     rows_by_label = {row["line_label"]: row for row in benchmark_comparison}
     return [
@@ -10603,6 +10672,7 @@ def append_tldr_section(
     unimoral_takeaway = unimoral_rq_tldr_takeaway(release_dir)
     if unimoral_takeaway is not None:
         lines.append(unimoral_takeaway)
+    gpt5_followup_takeaway = gpt5_unimoral_followup_takeaway(release_dir)
     if (
         ccd_min_row is not None
         and ccd_max_row is not None
@@ -10622,8 +10692,9 @@ def append_tldr_section(
         and gpt_41_nano is not None
         and gpt_41_mini is not None
     ):
+        followup_sentence = f" {gpt5_followup_takeaway}" if gpt5_followup_takeaway is not None else ""
         lines.append(
-            f"- **OpenAI/GPT read:** GPT-5 is a text-only S/M/L series: `GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L. Value jumps from {fmt_float(as_float(gpt_5_nano['value_average_accuracy']))} to {fmt_float(as_float(gpt_5_mini['value_average_accuracy']))} and then plateaus at {fmt_float(as_float(gpt_55['value_average_accuracy']))}; UniMoral tops out at `GPT-5.5` ({fmt_float(as_float(gpt_55['unimoral_action_accuracy']))}). GPT-4o/GPT-4.1 rows are separate text refs, and none has SMID or DeNEVIL."
+            f"- **OpenAI/GPT read:** GPT-5 is a text-only S/M/L series: `GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L. Value jumps from {fmt_float(as_float(gpt_5_nano['value_average_accuracy']))} to {fmt_float(as_float(gpt_5_mini['value_average_accuracy']))} and then plateaus at {fmt_float(as_float(gpt_55['value_average_accuracy']))}; UniMoral tops out at `GPT-5.5` ({fmt_float(as_float(gpt_55['unimoral_action_accuracy']))}). GPT-4o/GPT-4.1 rows are separate text refs, and none has SMID or DeNEVIL.{followup_sentence}"
         )
     lines.append(
         f"- **DeNEVIL boundary:** current DeNEVIL evidence is FULCRA-backed proxy behavior, not paper-faithful MoralPrompt scoring. Use the behavioral-outcomes figure for refusal/context/risk patterns, not a benchmark accuracy ranking."
@@ -10718,6 +10789,7 @@ def append_interpretation_sections(
     denevil_proxy_examples: list[dict[str, Any]],
     benchmark_catalog: list[dict[str, Any]],
     figure_prefix: str,
+    release_dir: Path | None = None,
 ) -> None:
     full_metric_lines = [
         row
@@ -10848,8 +10920,10 @@ def append_interpretation_sections(
             f"| Strongest text-only comparable line | `{best_text_only_line['line_label']}` reaches UniMoral {fmt_float(best_text_only_line['unimoral_action_accuracy'])} and Value {fmt_float(best_text_only_line['value_average_accuracy'])}, a two-metric mean of {fmt_float(best_text_only_mean)}. | This is the best answer if the PI asks about text moral reasoning only; it is not the all-around winner because SMID is missing. |"
         )
     if best_openai_unimoral is not None and best_openai_value is not None:
+        gpt5_followup_takeaway = gpt5_unimoral_followup_takeaway(release_dir)
+        gpt5_followup_clause = f" {gpt5_followup_takeaway}" if gpt5_followup_takeaway is not None else ""
         lines.append(
-            f"| OpenAI/GPT text rows | {len(openai_reference_rows)} OpenAI rows are included: GPT-5 text-only S/M/L plus separate GPT-4o/GPT-4.1 reference markers. Best OpenAI UniMoral: `{best_openai_unimoral['line_label']}` at {fmt_float(best_openai_unimoral['unimoral_action_accuracy'])}; best OpenAI Value: `{best_openai_value['line_label']}` at {fmt_float(best_openai_value['value_average_accuracy'])}. | These tell us where GPT-style text routes sit relative to the open-weight families. They still do not cover SMID or DeNEVIL, so they are not all-benchmark OpenAI coverage. |"
+            f"| OpenAI/GPT text rows | {len(openai_reference_rows)} OpenAI rows are included: GPT-5 text-only S/M/L plus separate GPT-4o/GPT-4.1 reference markers. Best OpenAI UniMoral RQ1: `{best_openai_unimoral['line_label']}` at {fmt_float(best_openai_unimoral['unimoral_action_accuracy'])}; best OpenAI Value: `{best_openai_value['line_label']}` at {fmt_float(best_openai_value['value_average_accuracy'])}.{gpt5_followup_clause} | These tell us where GPT-style text routes sit relative to the open-weight families. They still do not cover SMID or DeNEVIL, so they are not all-benchmark OpenAI coverage. |"
         )
     lines.append(
         "| Small-model capability floor | May 13 follow-up: `Mistral Nemo` reaches 0.648 on UniMoral; the 7B-12B routes sit in a narrow 0.632-0.648 band; `Llama 3.2 1B` falls to 0.406 with only 73.6% answered. | This is the practical capacity warning: below the mid-sized instruction-model range, the model may stop reliably following human moral-choice tasks, but above that floor older routes can still be useful baselines. |"
@@ -11566,6 +11640,7 @@ def build_repo_readme(
         denevil_proxy_examples,
         benchmark_catalog,
         "figures/release",
+        release_dir,
     )
     append_release_status_and_artifacts_section(lines, public_family_count, public_families_label)
     lines.extend(
@@ -11771,6 +11846,7 @@ def build_release_readme(
         denevil_proxy_examples,
         benchmark_catalog,
         "../../../figures/release",
+        release_dir,
     )
     lines.extend(
         [
@@ -12005,6 +12081,7 @@ def build_jenny_group_report(
         denevil_proxy_examples,
         benchmark_catalog,
         "../../../figures/release",
+        release_dir,
     )
     lines.extend(
         [

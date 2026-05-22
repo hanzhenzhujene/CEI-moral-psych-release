@@ -1280,6 +1280,79 @@ def internal_line_label(label: object) -> str:
     return PUBLIC_TO_INTERNAL_LINE_LABELS.get(str(label), str(label))
 
 
+def gpt5_unimoral_readout(rows: list[dict[str, object]], *, values: bool = False) -> str:
+    gpt5_lines = {"GPT-5 nano", "GPT-5 mini", "GPT-5.5"}
+    specs = [
+        ("RQ2", "unimoral_moral_typology", "accuracy"),
+        ("RQ3", "unimoral_factor_attribution", "accuracy"),
+        ("RQ4 BERTScore", "unimoral_consequence_generation", "bert_score_f1"),
+        ("RQ4 METEOR", "unimoral_consequence_generation", "meteor"),
+    ]
+    winners: list[tuple[str, str, float]] = []
+    for label, task_name, field in specs:
+        candidates = []
+        for row in rows:
+            line_label = display_line_label(row.get("line_label", ""))
+            if line_label not in gpt5_lines or row.get("task_name") != task_name:
+                continue
+            value = field_value(row, field)
+            if value is None:
+                continue
+            status = str(row.get("status", ""))
+            if field == "accuracy" and status != "complete":
+                continue
+            if field != "accuracy" and not status.startswith("complete"):
+                continue
+            candidates.append((line_label, value))
+        if candidates:
+            line_label, value = max(candidates, key=lambda item: item[1])
+            winners.append((label, line_label, value))
+    semantic_candidates = [
+        (display_line_label(row.get("line_label", "")), value)
+        for row in rows
+        if row.get("task_name") == "unimoral_consequence_generation"
+        and (value := field_value(row, "bert_score_f1")) is not None
+        and str(row.get("status", "")).startswith("complete")
+    ]
+    if len(winners) != len(specs) or not semantic_candidates:
+        return "GPT-5 read: completed RQ2-RQ4 rows are shown as the black S/M/L line; compare RQ4 as generation quality, not accuracy."
+    semantic_label, semantic_value = max(semantic_candidates, key=lambda item: item[1])
+    if values:
+        winner_lookup = {label: (line_label, value) for label, line_label, value in winners}
+        rq2_line, rq2_value = winner_lookup["RQ2"]
+        _rq3_line, rq3_value = winner_lookup["RQ3"]
+        _meteor_line, meteor_value = winner_lookup["RQ4 METEOR"]
+        return f"GPT-5 read: {rq2_line} leads GPT-5 on RQ2 {rq2_value:.3f}, RQ3 {rq3_value:.3f}, and RQ4 METEOR {meteor_value:.3f}."
+    winner_labels = {line_label for _, line_label, _ in winners}
+    if winner_labels == {"GPT-5.5"}:
+        return "GPT-5 read: GPT-5.5 is strongest inside GPT-5 on RQ2, RQ3, and both RQ4 metrics; Llama-M still leads semantic RQ4 overall."
+    winner_text = ", ".join(f"{label} {line_label}" for label, line_label, _ in winners)
+    return f"GPT-5 read: best GPT-5 rows are {winner_text}; semantic RQ4 overall still peaks at {semantic_label}."
+
+
+def gpt5_unimoral_semantic_readout(rows: list[dict[str, object]]) -> str:
+    gpt5_candidates = [
+        (display_line_label(row.get("line_label", "")), value)
+        for row in rows
+        if display_line_label(row.get("line_label", "")) in {"GPT-5 nano", "GPT-5 mini", "GPT-5.5"}
+        and row.get("task_name") == "unimoral_consequence_generation"
+        and (value := field_value(row, "bert_score_f1")) is not None
+        and str(row.get("status", "")).startswith("complete")
+    ]
+    semantic_candidates = [
+        (display_line_label(row.get("line_label", "")), value)
+        for row in rows
+        if row.get("task_name") == "unimoral_consequence_generation"
+        and (value := field_value(row, "bert_score_f1")) is not None
+        and str(row.get("status", "")).startswith("complete")
+    ]
+    if not gpt5_candidates or not semantic_candidates:
+        return "Semantic RQ4 is shown with BERTScore F1; read it separately from classification accuracy."
+    gpt5_label, gpt5_value = max(gpt5_candidates, key=lambda item: item[1])
+    semantic_label, semantic_value = max(semantic_candidates, key=lambda item: item[1])
+    return f"Semantic RQ4: {gpt5_label} reaches BERTScore {gpt5_value:.3f}; {semantic_label} remains overall top at {semantic_value:.3f}."
+
+
 def family_for_line(line_label: str) -> str:
     internal_label = internal_line_label(line_label)
     for label, family, _, _ in VISUAL_MODEL_LINES:
@@ -1462,9 +1535,12 @@ def svg_four_task_dashboard(
         f'<text x="60" y="{y0 + 88}" class="subtitle">OpenAI GPT-5 now has real RQ1-RQ4 UniMoral scores; GPT-4.1 rows remain text-only RQ1 references.</text>'
     )
     parts.append(
-        f'<text x="60" y="{y0 + 114}" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>'
+        f'<text x="60" y="{y0 + 114}" class="subtitle">{html.escape(gpt5_unimoral_readout(rows))}</text>'
     )
-    chip_y = y0 + 146
+    parts.append(
+        f'<text x="60" y="{y0 + 140}" class="subtitle">MiniMax is included where scored, but strict completion is still blocked by documented parse/recovery gaps in RQ2/RQ3/RQ4.</text>'
+    )
+    chip_y = y0 + 168
     chips = [
         ("Qwen", "S/M/L: 4 tasks complete"),
         ("DeepSeek", "S/M/L: 4 tasks complete"),
@@ -1482,8 +1558,8 @@ def svg_four_task_dashboard(
         parts.append(f'<circle cx="{x + 22}" cy="{chip_y + 27}" r="7" fill="{fill}"/>')
         parts.append(f'<text x="{x + 40}" y="{chip_y + 22}" class="axis">{html.escape(display_family_label(family))}</text>')
         parts.append(f'<text x="{x + 40}" y="{chip_y + 42}" class="small">{html.escape(label)}</text>')
-    parts.append(f'<text x="60" y="{y0 + 232}" class="small">The full score heatmap includes Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus OpenAI GPT-5 S/M/L and GPT-4o/GPT-4.1 text refs.</text>')
-    parts.append(f'<text x="60" y="{y0 + 256}" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; GPT-4.1 action-only refs are scope boundaries, not failed RQ2/RQ3/RQ4 runs.</text>')
+    parts.append(f'<text x="60" y="{y0 + 252}" class="small">The full score heatmap includes Qwen/MiniMax/DeepSeek/Llama/Gemma S-M-L plus OpenAI GPT-5 S/M/L and GPT-4o/GPT-4.1 text refs.</text>')
+    parts.append(f'<text x="60" y="{y0 + 276}" class="small">MiniMax remaining gaps are documented in unimoral-failure-checklist.csv; GPT-4.1 action-only refs are scope boundaries, not failed RQ2/RQ3/RQ4 runs.</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
@@ -1567,7 +1643,7 @@ def svg_generation_quality(rows: list[dict[str, object]], path: Path) -> None:
     ]
     task_rows.sort(key=lambda row: field_value(row, "bert_score_f1") or -1.0, reverse=True)
     width = 1220
-    top = 190
+    top = 244
     row_h = 44
     row_gap = 10
     height = top + len(task_rows) * (row_h + row_gap) + 126
@@ -1578,7 +1654,7 @@ def svg_generation_quality(rows: list[dict[str, object]], path: Path) -> None:
     meteor_x = 804
     meteor_w = 270
     bert_min, bert_max = 0.60, 0.75
-    meteor_min, meteor_max = 0.07, 0.16
+    meteor_min, meteor_max = 0.07, 0.18
 
     def scaled_width(value: float | None, low: float, high: float, width_value: int) -> float:
         if value is None or high <= low:
@@ -1592,14 +1668,16 @@ def svg_generation_quality(rows: list[dict[str, object]], path: Path) -> None:
     parts.append('<text x="36" y="42" class="title">UniMoral RQ4 generation quality</text>')
     parts.append('<text x="36" y="74" class="subtitle">RQ4 asks models to generate consequences, so it is not mixed with the RQ1-RQ3 accuracy chart.</text>')
     parts.append('<text x="36" y="100" class="subtitle">Both metrics are higher-better. BERTScore F1 reads semantic similarity; METEOR reads lexical overlap.</text>')
-    parts.append('<text x="36" y="124" class="subtitle">Each metric panel uses its own axis so within-metric differences are visible.</text>')
+    parts.append(f'<text x="36" y="124" class="subtitle">{html.escape(gpt5_unimoral_readout(rows, values=True))}</text>')
+    parts.append(f'<text x="36" y="148" class="subtitle">{html.escape(gpt5_unimoral_semantic_readout(rows))}</text>')
+    parts.append('<text x="36" y="172" class="subtitle">Each metric panel uses its own axis so within-metric differences are visible.</text>')
     parts.append(f'<text x="{bert_x}" y="{top - 44}" class="metric">Metric: BERTScore F1</text>')
     parts.append(f'<text x="{meteor_x}" y="{top - 44}" class="metric">Metric: METEOR</text>')
     for tick in (0.60, 0.65, 0.70, 0.75):
         x = bert_x + bert_w * ((tick - bert_min) / (bert_max - bert_min))
         parts.append(f'<line x1="{x:.2f}" y1="{top - 12}" x2="{x:.2f}" y2="{height - 76}" stroke="#e5e7eb"/>')
         parts.append(f'<text x="{x:.2f}" y="{top - 20}" text-anchor="middle" class="small">{tick:.2f}</text>')
-    for tick in (0.07, 0.10, 0.13, 0.16):
+    for tick in (0.08, 0.12, 0.16, 0.18):
         x = meteor_x + meteor_w * ((tick - meteor_min) / (meteor_max - meteor_min))
         parts.append(f'<line x1="{x:.2f}" y1="{top - 12}" x2="{x:.2f}" y2="{height - 76}" stroke="#e5e7eb"/>')
         parts.append(f'<text x="{x:.2f}" y="{top - 20}" text-anchor="middle" class="small">{tick:.2f}</text>')
@@ -1705,7 +1783,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
         ("unimoral_moral_typology", "accuracy", "RQ2 Moral Typology", "Accuracy", 0.54, 0.61, [0.54, 0.56, 0.58, 0.60]),
         ("unimoral_factor_attribution", "accuracy", "RQ3 Factor Attribution", "Accuracy", 0.54, 0.64, [0.54, 0.58, 0.62, 0.64]),
         ("unimoral_consequence_generation", "bert_score_f1", "RQ4 Consequence Generation", "BERTScore F1", 0.60, 0.75, [0.60, 0.65, 0.70, 0.75]),
-        ("unimoral_consequence_generation", "meteor", "RQ4 Consequence Generation", "METEOR", 0.07, 0.16, [0.07, 0.10, 0.13, 0.16]),
+        ("unimoral_consequence_generation", "meteor", "RQ4 Consequence Generation", "METEOR", 0.07, 0.18, [0.08, 0.12, 0.16, 0.18]),
     ]
     panel_positions = [
         (48, 160, 540, 300),
@@ -1907,6 +1985,7 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
         parts.append(f'<text x="{text_x}" y="{legend_y}" class="legend">{html.escape(display_family_label(family))}</text>')
     parts.append('<text x="92" y="980" class="legend-note">Takeaway: UniMoral does not have one simple bigger-is-better curve. The winner changes by task, so report the RQ-specific pattern instead of one averaged moral-reasoning story.</text>')
     parts.append('<text x="92" y="1012" class="legend-note">OpenAI GPT-5 is black and appears across RQ1-RQ4 after the completed local RQ2-RQ4 follow-up; GPT-4o/GPT-4.1 refs are dashed where a UniMoral metric exists.</text>')
+    parts.append(f'<text x="92" y="1044" class="legend-note">{html.escape(gpt5_unimoral_readout(rows))}</text>')
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
