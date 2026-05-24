@@ -54,8 +54,8 @@ REPORT_PROVIDER = "OpenRouter + direct MiniMax + OpenAI"
 REPORT_TEMPERATURE = "0"
 REPORT_MINIMAX_API_COST = "$504.66"
 REPORT_OPENROUTER_COST = "$325.66"
-REPORT_OPENAI_API_COST = "$0.76"
-REPORT_CURRENT_TOTAL_COST = "$831.08"
+REPORT_OPENAI_API_COST = "$39.98"
+REPORT_CURRENT_TOTAL_COST = "$870.30"
 REPORT_CURRENT_COST_BREAKDOWN = (
     f"MiniMax API: `{REPORT_MINIMAX_API_COST}`; OpenRouter for other model-family runs: `{REPORT_OPENROUTER_COST}`; "
     f"OpenAI API reference sweep: `{REPORT_OPENAI_API_COST}`."
@@ -10222,7 +10222,7 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             f"![UniMoral RQ4 generation quality]({figure_prefix}/option1_unimoral_generation_quality.svg)",
             "",
-            "_How to read RQ4: consequence generation is open-ended. BERTScore F1 asks whether the model said something semantically close to the reference consequence; METEOR asks whether the wording overlaps. It is not a right/wrong accuracy score._",
+            "_How to read RQ4: UniMoral RQ4 shows consequence-generation quality, not accuracy. Higher is better for both metrics: BERTScore F1 measures whether the generated consequence is semantically close to the reference answer, while METEOR measures how much the wording overlaps with the reference. Llama is strongest overall._",
             "",
             "### 2. SMID / Value Kaleidoscope: topline comparable accuracy",
             "",

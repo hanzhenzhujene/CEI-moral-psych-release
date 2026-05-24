@@ -203,11 +203,11 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
     assert any("OpenAI reference rows" in item and "text-only markers" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_total_cost"] == "$831.08"
+    assert manifest["report_metadata"]["current_total_cost"] == "$870.30"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
         "minimax_api": "$504.66",
         "openrouter_other_model_family_runs": "$325.66",
-        "openai_api_reference_sweep": "$0.76",
+        "openai_api_reference_sweep": "$39.98",
     }
     assert "latest saved reruns parsed in this repo" in manifest["report_metadata"]["current_cost_scope"]
     assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"

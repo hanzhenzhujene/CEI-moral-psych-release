@@ -532,7 +532,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
 <!-- BEGIN JENNY_MORAL_PSYCH_RELEASE -->
 ## Jenny Moral-Psych Release TL;DR
 
-> Current project total cost: `$831.08` (MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$325.66`; OpenAI API reference sweep: `$0.76`.)
+> Current project total cost: `$870.30` (MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$325.66`; OpenAI API reference sweep: `$39.98`.)
 
 This appended section is Jenny's current release readout. The shared CEI repo overview, TrolleyBench notes, ETHICS docs, Claude Code commands, and team table above remain the canonical repo-level structure.
 
@@ -584,7 +584,7 @@ _How to read it: RQ1, RQ2, and RQ3 all use exact-match accuracy, so the three cl
 
 ![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)
 
-_How to read RQ4: consequence generation is open-ended. BERTScore F1 asks whether the model said something semantically close to the reference consequence; METEOR asks whether the wording overlaps. It is not a right/wrong accuracy score._
+_How to read RQ4: UniMoral RQ4 shows consequence-generation quality, not accuracy. Higher is better for both metrics: BERTScore F1 measures whether the generated consequence is semantically close to the reference answer, while METEOR measures how much the wording overlaps with the reference. Llama is strongest overall._
 
 #### 2. SMID / Value Kaleidoscope: topline comparable accuracy
 
