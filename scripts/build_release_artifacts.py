@@ -494,6 +494,42 @@ BENCHMARK_METADATA = {
     },
 }
 
+PAPER_RESULT_COMPARISON_FIELDNAMES = [
+    "benchmark",
+    "paper",
+    "paper_metric",
+    "paper_exact_result",
+    "paper_models_or_subjects",
+    "our_release_metric",
+    "our_exact_result",
+    "our_closest_line",
+    "comparison_status",
+    "same_model_overlap",
+    "reviewer_takeaway",
+    "source_url",
+]
+
+PAPER_MODEL_OVERLAP_FIELDNAMES = [
+    "benchmark",
+    "paper_model_or_evidence",
+    "paper_result_anchor",
+    "our_matching_or_closest_line",
+    "our_result_anchor",
+    "overlap_status",
+    "what_to_compare",
+]
+
+UNIMORAL_FULL_BENCHMARK_METRIC_FALLBACKS = {
+    ("unimoral_action_prediction", "accuracy"): ("DeepSeek-M", 0.683629),
+    ("unimoral_moral_typology", "accuracy"): ("Gemma-S", 0.598511),
+    ("unimoral_moral_typology", "official_weighted_f1"): ("Llama-S", 0.354226),
+    ("unimoral_factor_attribution", "accuracy"): ("Llama-M", 0.630584),
+    ("unimoral_factor_attribution", "official_weighted_f1"): ("DeepSeek-S", 0.264409),
+    ("unimoral_consequence_generation", "bert_score_f1"): ("Llama-M", 0.730047),
+    ("unimoral_consequence_generation", "meteor"): ("Llama-L", 0.157234),
+    ("unimoral_consequence_generation", "bleu"): ("Llama-M", 0.016592),
+}
+
 MODEL_ROUTE_METADATA = {
     "openrouter/qwen/qwen3-8b": {
         "size_hint": "8B",
@@ -7839,6 +7875,379 @@ def build_family_scaling_summary(rows: list[dict[str, Any]]) -> list[dict[str, A
     return family_rows
 
 
+@lru_cache(maxsize=1)
+def _published_unimoral_full_rows() -> tuple[dict[str, str], ...]:
+    path = DEFAULT_RELEASE_DIR / "unimoral-full-benchmark.csv"
+    if not path.exists():
+        return ()
+    with path.open(newline="", encoding="utf-8") as handle:
+        return tuple(csv.DictReader(handle))
+
+
+def _best_unimoral_full_metric(task_name: str, metric: str) -> dict[str, Any] | None:
+    fallback = UNIMORAL_FULL_BENCHMARK_METRIC_FALLBACKS.get((task_name, metric))
+    best_row = None
+    best_value = None
+    if fallback is not None:
+        best_row = {"line_label": fallback[0], "value": fallback[1]}
+        best_value = fallback[1]
+
+    for row in _published_unimoral_full_rows():
+        if row.get("task_name") != task_name or row.get("status") != "complete":
+            continue
+        value = _numeric_or_none(row.get(metric))
+        if value is None:
+            continue
+        if best_value is None or value > best_value:
+            best_row = {"line_label": row["line_label"], "value": value}
+            best_value = value
+    return best_row
+
+
+def _best_line_metric(rows: list[dict[str, Any]], field: str) -> dict[str, Any] | None:
+    best_row = None
+    best_value = None
+    for row in rows:
+        value = _numeric_or_none(row.get(field))
+        if value is None:
+            continue
+        if best_value is None or value > best_value:
+            best_row = {"line_label": row["line_label"], "value": value, "row": row}
+            best_value = value
+    return best_row
+
+
+def _named_line(rows: list[dict[str, Any]], line_label: str) -> dict[str, Any] | None:
+    return next((row for row in rows if row.get("line_label") == line_label or row.get("model_line") == line_label), None)
+
+
+def _format_best_line(best: dict[str, Any] | None, *, digits: int = 3) -> str:
+    if best is None:
+        return "n/a"
+    return f"{best['line_label']} {fmt_float(best['value'], digits)}"
+
+
+def _format_ccd_row(row: dict[str, Any] | None) -> str:
+    if row is None:
+        return "n/a"
+    dominant = row.get("dominant_option") or "n/a"
+    dominant_share = fmt_pct(_numeric_or_none(row.get("dominant_option_share")), 1) or "n/a"
+    effective_clusters = fmt_float(_numeric_or_none(row.get("effective_cluster_count")), 2) or "n/a"
+    return f"{row['line_label']}: {dominant} at {dominant_share}; effective clusters {effective_clusters}"
+
+
+def _markdown_cell(value: Any) -> str:
+    return str(value).replace("|", "\\|").replace("\n", " ")
+
+
+def _release_link(prefix: str, filename: str) -> str:
+    return f"{prefix.rstrip('/')}/{filename}" if prefix else filename
+
+
+def build_paper_result_comparison(
+    benchmark_comparison: list[dict[str, Any]],
+    ccd_choice_distribution: list[dict[str, Any]],
+    denevil_behavior_summary: list[dict[str, Any]],
+) -> list[dict[str, str]]:
+    rq1_best = _best_unimoral_full_metric("unimoral_action_prediction", "accuracy")
+    rq2_accuracy_best = _best_unimoral_full_metric("unimoral_moral_typology", "accuracy")
+    rq2_f1_best = _best_unimoral_full_metric("unimoral_moral_typology", "official_weighted_f1")
+    rq3_accuracy_best = _best_unimoral_full_metric("unimoral_factor_attribution", "accuracy")
+    rq3_f1_best = _best_unimoral_full_metric("unimoral_factor_attribution", "official_weighted_f1")
+    rq4_bertscore_best = _best_unimoral_full_metric("unimoral_consequence_generation", "bert_score_f1")
+    rq4_meteor_best = _best_unimoral_full_metric("unimoral_consequence_generation", "meteor")
+    rq4_bleu_best = _best_unimoral_full_metric("unimoral_consequence_generation", "bleu")
+    best_smid = _best_line_metric(benchmark_comparison, "smid_average_accuracy")
+    best_value = _best_line_metric(benchmark_comparison, "value_average_accuracy")
+    openai_value_rows = [row for row in benchmark_comparison if row["family"] == OPENAI_REFERENCE_FAMILY_LABEL]
+    best_openai_value = _best_line_metric(openai_value_rows, "value_average_accuracy")
+    smid_values = [
+        value
+        for value in (_numeric_or_none(row.get("smid_average_accuracy")) for row in benchmark_comparison)
+        if value is not None
+    ]
+    smid_mean = mean(smid_values) if smid_values else None
+
+    valid_ccd_rows = [
+        row for row in ccd_choice_distribution if _numeric_or_none(row.get("dominant_option_share")) is not None
+    ]
+    nordic_dominant_rows = [
+        row for row in valid_ccd_rows if str(row.get("dominant_option", "")).startswith("option_6")
+    ]
+    gpt_5_nano_ccd = _named_line(ccd_choice_distribution, "GPT-5-nano Ref")
+    deepseek_s_ccd = _named_line(ccd_choice_distribution, "DeepSeek-S")
+    ccd_readout_parts = [
+        f"{len(nordic_dominant_rows)}/{len(valid_ccd_rows)} current release rows are Nordic Europe dominant"
+    ]
+    if gpt_5_nano_ccd is not None:
+        ccd_readout_parts.append(_format_ccd_row(gpt_5_nano_ccd))
+    if deepseek_s_ccd is not None:
+        ccd_readout_parts.append(_format_ccd_row(deepseek_s_ccd))
+
+    usable_denevil_rows = [
+        row
+        for row in denevil_behavior_summary
+        if row.get("behavior_status") == "ok"
+        and _numeric_or_none(row.get("protective_response_rate")) is not None
+    ]
+    best_proxy = (
+        max(usable_denevil_rows, key=lambda row: _numeric_or_none(row.get("protective_response_rate")) or -1.0)
+        if usable_denevil_rows
+        else None
+    )
+    denevil_proxy_readout = "APV/EVR/MVP n/a; proxy-only visible behavior rows; all DeNEVIL proxy rows remain not T3."
+    if best_proxy is not None:
+        denevil_proxy_readout = (
+            f"APV/EVR/MVP n/a; strongest proxy protective-response rate is "
+            f"{best_proxy['model_line']} {fmt_pct(_numeric_or_none(best_proxy.get('protective_response_rate')), 1)}; "
+            "all DeNEVIL proxy rows remain not T3."
+        )
+
+    return [
+        {
+            "benchmark": "UniMoral RQ1 action prediction",
+            "paper": "Kumar et al. (ACL Findings 2025)",
+            "paper_metric": "Weighted F1, best visible Table 4 cell",
+            "paper_exact_result": "66.38 (Phi-3.5-mini Instruct, English)",
+            "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
+            "our_release_metric": "Exact-match action accuracy",
+            "our_exact_result": f"Best current release row: {_format_best_line(rq1_best)}",
+            "our_closest_line": "" if rq1_best is None else rq1_best["line_label"],
+            "comparison_status": "Same benchmark; different metric/model roster",
+            "same_model_overlap": "Saved/prior Llama 3.1 8B action result exists separately; current main release best is not one of the paper's exact three rows.",
+            "reviewer_takeaway": "Use as a directional benchmark bridge, not as a strict paper leaderboard replication.",
+            "source_url": "https://aclanthology.org/2025.acl-long.294/",
+        },
+        {
+            "benchmark": "UniMoral RQ2 moral typology",
+            "paper": "Kumar et al. (ACL Findings 2025)",
+            "paper_metric": "Weighted F1, best visible Table 5 cell",
+            "paper_exact_result": "57.01 (Llama-3.1-8B Instruct, Spanish)",
+            "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
+            "our_release_metric": "Accuracy for main RQ2 readout; official weighted F1 retained as bridge metric",
+            "our_exact_result": f"Best accuracy: {_format_best_line(rq2_accuracy_best)}; best weighted-F1 bridge: {_format_best_line(rq2_f1_best)}",
+            "our_closest_line": "Gemma-S / Llama-S",
+            "comparison_status": "Same benchmark; paper uses weighted F1 while the release headline uses accuracy",
+            "same_model_overlap": "No current public full RQ2 row for the paper's exact three-model roster.",
+            "reviewer_takeaway": "Do not compare the paper's 57.01 weighted F1 directly to the release accuracy number.",
+            "source_url": "https://aclanthology.org/2025.acl-long.294/",
+        },
+        {
+            "benchmark": "UniMoral RQ3 factor attribution",
+            "paper": "Kumar et al. (ACL Findings 2025)",
+            "paper_metric": "Weighted F1, best visible Table 6 cell",
+            "paper_exact_result": "38.59 (Llama-3.1-8B Instruct, Russian)",
+            "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
+            "our_release_metric": "Accuracy for main RQ3 readout; official weighted F1 retained as bridge metric",
+            "our_exact_result": f"Best accuracy: {_format_best_line(rq3_accuracy_best)}; best weighted-F1 bridge: {_format_best_line(rq3_f1_best)}",
+            "our_closest_line": "Llama-M / DeepSeek-S",
+            "comparison_status": "Same benchmark; paper uses weighted F1 while the release headline uses accuracy",
+            "same_model_overlap": "No current public full RQ3 row for the paper's exact three-model roster.",
+            "reviewer_takeaway": "RQ3 is comparable as a task family, but not as an exact replicated table cell.",
+            "source_url": "https://aclanthology.org/2025.acl-long.294/",
+        },
+        {
+            "benchmark": "UniMoral RQ4 consequence generation",
+            "paper": "Kumar et al. (ACL Findings 2025)",
+            "paper_metric": "BLEU / METEOR / BERTScore, best visible Table 7 cells",
+            "paper_exact_result": "BLEU 3.29; METEOR 19.08; BERTScore 87.44",
+            "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
+            "our_release_metric": "BERTScore F1 and METEOR for headline RQ4; BLEU retained as a secondary overlap metric",
+            "our_exact_result": (
+                f"BERTScore F1: {_format_best_line(rq4_bertscore_best)}; "
+                f"METEOR: {_format_best_line(rq4_meteor_best)}; "
+                f"BLEU: {_format_best_line(rq4_bleu_best, digits=4)}"
+            ),
+            "our_closest_line": "Llama-M / Llama-L",
+            "comparison_status": "Metric family overlaps; scorer scale and model roster differ",
+            "same_model_overlap": "No current public full RQ4 row for the paper's exact three-model roster.",
+            "reviewer_takeaway": "Read this as generation-quality calibration, not accuracy and not an exact reproduced Table 7.",
+            "source_url": "https://aclanthology.org/2025.acl-long.294/",
+        },
+        {
+            "benchmark": "SMID",
+            "paper": "Crone et al. (PLOS ONE 2018)",
+            "paper_metric": "Human norming reliability and stimulus coverage, not model accuracy",
+            "paper_exact_result": "2,941 images; 2,716 participants; 820,565 ratings; mean 34.88 ratings/image; averaged norms ICC >= .75",
+            "paper_models_or_subjects": "Human participants; no original LLM model roster",
+            "our_release_metric": "Model accuracy against moral-rating and foundation-label norms",
+            "our_exact_result": f"Best current SMID average accuracy: {_format_best_line(best_smid)}; current mean {fmt_float(smid_mean)}",
+            "our_closest_line": "" if best_smid is None else best_smid["line_label"],
+            "comparison_status": "No paper model leaderboard",
+            "same_model_overlap": "Not applicable: the paper validates a stimulus set with human ratings.",
+            "reviewer_takeaway": "Our SMID table is a new model-vs-human-norm benchmark layer, not a replication of paper model accuracy.",
+            "source_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0190954",
+        },
+        {
+            "benchmark": "Value Kaleidoscope / ValuePrism",
+            "paper": "Sorensen et al. (AAAI 2024)",
+            "paper_metric": "Kaleido model and human-preference evaluations",
+            "paper_exact_result": "ValuePrism has 218k value/rights/duties for 31k situations; 91% high-quality; KAL SYS 11B overall win rate 58.3 vs GPT-4, accuracy win 62.5; GPT-4 valence correctness 93.1",
+            "paper_models_or_subjects": "Kaleido 60M/220M/770M/3B/11B; GPT-4; GPT-3.5-turbo; humans",
+            "our_release_metric": "Prompt-based ValuePrism relevance/valence accuracy",
+            "our_exact_result": f"Best current prompt-based Value average: {_format_best_line(best_value)}; best OpenAI text ref: {_format_best_line(best_openai_value)}",
+            "our_closest_line": "" if best_value is None else best_value["line_label"],
+            "comparison_status": "Same source family, not Kaleido model replication",
+            "same_model_overlap": "No Kaleido model execution path is in the current release; OpenAI refs are mini/nano text markers, not the paper's GPT-4/GPT-3.5 rows.",
+            "reviewer_takeaway": "Do not describe prompt-based ValuePrism rows as Kaleido replication.",
+            "source_url": "https://arxiv.org/abs/2309.00779",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper": "Rahman and Salam (2025)",
+            "paper_metric": "Cultural-cluster choice distribution and rationale plurality, not accuracy",
+            "paper_exact_result": "2,182 dilemmas; 17 LLMs; Nordic Europe 20.2%, Germanic Europe 12.4%; Eastern Europe and MENA about 5-6%; plural rationales 87.9%; position-bias Cramer's V 0.0586",
+            "paper_models_or_subjects": "17 LLMs including GPT-4o/latest, GPT-4.1, Llama, DeepSeek, Mistral, Qwen, Claude, Gemini, and others",
+            "our_release_metric": "Full-choice distribution over the same ten GLOBE clusters",
+            "our_exact_result": "; ".join(ccd_readout_parts),
+            "our_closest_line": "Current full release rows plus May 13 exploratory Mistral/Llama/Qwen follow-up",
+            "comparison_status": "Direct behavioral comparison, but CCD-Bench is not accuracy",
+            "same_model_overlap": "Partial overlap: several current routes are close to paper routes, but not always exact model/date variants.",
+            "reviewer_takeaway": "This is the cleanest paper-vs-ours behavior bridge: compare cluster shares and concentration, not correctness.",
+            "source_url": "https://github.com/smartlab-nyu/CCD-Bench",
+        },
+        {
+            "benchmark": "DeNEVIL / MoralPrompt",
+            "paper": "Duan et al. (ICLR 2024)",
+            "paper_metric": "MoralPrompt value-violation metrics: EVR, APV, MVP",
+            "paper_exact_result": "MoralPrompt has 2,397 prompts / 522 principles; ChatGPT-prompt Table 16 reports ChatGPT APV 65.20 +/- 26.45, GPT-4 APV 79.08 +/- 21.46, LLaMA-2-70B-chat APV 76.94 +/- 18.86",
+            "paper_models_or_subjects": "27 LLMs, including ChatGPT, GPT-4, Text-davinci-003, LLaMA/LLaMA2, Vicuna, Alpaca, and others",
+            "our_release_metric": "Proxy visible-behavior categories only",
+            "our_exact_result": denevil_proxy_readout,
+            "our_closest_line": "" if best_proxy is None else best_proxy["model_line"],
+            "comparison_status": "Blocked/proxy only; not paper-faithful MoralPrompt and not T3",
+            "same_model_overlap": "No paper-faithful MoralPrompt export or APV/EVR/MVP scorer is available locally.",
+            "reviewer_takeaway": "DeNEVIL should stay out of benchmark-faithful comparison tables until MoralPrompt data and scoring are present.",
+            "source_url": "https://arxiv.org/abs/2310.11053",
+        },
+    ]
+
+
+def build_paper_model_overlap_map(
+    benchmark_comparison: list[dict[str, Any]],
+    ccd_choice_distribution: list[dict[str, Any]],
+) -> list[dict[str, str]]:
+    llama_m_ccd = _named_line(ccd_choice_distribution, "Llama-M")
+    llama_l_ccd = _named_line(ccd_choice_distribution, "Llama-L")
+    deepseek_m_ccd = _named_line(ccd_choice_distribution, "DeepSeek-M")
+    gpt_4o_mini_ccd = _named_line(ccd_choice_distribution, "GPT-4o-mini Ref")
+    gpt_41_mini_ccd = _named_line(ccd_choice_distribution, "GPT-4.1-mini Ref")
+    deepseek_s = _named_line(benchmark_comparison, "DeepSeek-S")
+
+    return [
+        {
+            "benchmark": "UniMoral",
+            "paper_model_or_evidence": "Phi-3.5-mini Instruct",
+            "paper_result_anchor": "Best RQ1 table cell: 66.38 weighted F1",
+            "our_matching_or_closest_line": "No exact current public row",
+            "our_result_anchor": "n/a",
+            "overlap_status": "Not run in this release",
+            "what_to_compare": "Run full paper-style UniMoral tasks if exact replication is needed.",
+        },
+        {
+            "benchmark": "UniMoral",
+            "paper_model_or_evidence": "Llama-3.1-8B Instruct",
+            "paper_result_anchor": "RQ2/RQ3/RQ4 paper tables include this model",
+            "our_matching_or_closest_line": "Saved/prior Llama 3.1 8B action-only follow-up",
+            "our_result_anchor": "UniMoral action accuracy 0.639 in the May 13 exploratory sweep",
+            "overlap_status": "Saved/prior evidence, not a fresh full RQ1-RQ4 replication",
+            "what_to_compare": "Use only for action-prediction capability-floor context.",
+        },
+        {
+            "benchmark": "UniMoral",
+            "paper_model_or_evidence": "DeepSeek-R1-Distill-Llama-8B",
+            "paper_result_anchor": "Paper table model",
+            "our_matching_or_closest_line": "DeepSeek-S",
+            "our_result_anchor": (
+                f"DeepSeek-S action accuracy {fmt_float(_numeric_or_none(deepseek_s.get('unimoral_action_accuracy')) if deepseek_s else None)}"
+            ),
+            "overlap_status": "Close family label only; current row is the 70B distill recovery route, not the paper's exact 8B model",
+            "what_to_compare": "Do not call it exact replication.",
+        },
+        {
+            "benchmark": "SMID",
+            "paper_model_or_evidence": "Human norming sample",
+            "paper_result_anchor": "2,716 participants and 820,565 ratings",
+            "our_matching_or_closest_line": "Qwen-L, MiniMax-S/L, Gemma S/M/L, Llama S/L vision rows",
+            "our_result_anchor": "Best SMID average accuracy is Qwen-L 0.483",
+            "overlap_status": "No paper model overlap",
+            "what_to_compare": "Compare model rows to human-norm labels, not to a paper model leaderboard.",
+        },
+        {
+            "benchmark": "Value Kaleidoscope / ValuePrism",
+            "paper_model_or_evidence": "Kaleido 60M/220M/770M/3B/11B",
+            "paper_result_anchor": "KAL SYS 11B overall win rate 58.3 vs GPT-4",
+            "our_matching_or_closest_line": "No Kaleido model row",
+            "our_result_anchor": "Best current prompt-based Value average is MiniMax-L 0.741",
+            "overlap_status": "Model-access gap",
+            "what_to_compare": "Current rows are prompt-based relevance/valence classification, not Kaleido generation/evaluation.",
+        },
+        {
+            "benchmark": "Value Kaleidoscope / ValuePrism",
+            "paper_model_or_evidence": "GPT-4 / GPT-3.5-turbo paper baselines",
+            "paper_result_anchor": "GPT-4 valence correctness 93.1; GPT-3.5 overall win rate 39.5 vs GPT-4",
+            "our_matching_or_closest_line": "OpenAI text refs",
+            "our_result_anchor": "GPT-5-mini Ref Value average 0.739; GPT-4.1-mini Ref 0.735; GPT-4o-mini Ref 0.701",
+            "overlap_status": "Reference family only, not exact paper models",
+            "what_to_compare": "Use as current OpenAI calibration markers, not paper-baseline replication.",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper_model_or_evidence": "Llama-3.3-70B-Instruct",
+            "paper_result_anchor": "Paper/source repo: Nordic Europe 19.7%, Germanic Europe 15.3%",
+            "our_matching_or_closest_line": "Llama-M",
+            "our_result_anchor": _format_ccd_row(llama_m_ccd),
+            "overlap_status": "Closest direct current row",
+            "what_to_compare": "Compare cluster shares and effective-cluster concentration.",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper_model_or_evidence": "Llama-4-Maverick",
+            "paper_result_anchor": "Paper/source repo: Nordic Europe 21.1%, Germanic Europe 14.6%",
+            "our_matching_or_closest_line": "Llama-L",
+            "our_result_anchor": _format_ccd_row(llama_l_ccd),
+            "overlap_status": "Closest direct current row with lower valid-choice coverage",
+            "what_to_compare": "Compare behavior; do not treat lower coverage as accuracy.",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper_model_or_evidence": "Mistral Nemo",
+            "paper_result_anchor": "Paper/source repo: Nordic Europe 19.0%, Germanic Europe 13.1%",
+            "our_matching_or_closest_line": "May 13 exploratory Mistral Nemo",
+            "our_result_anchor": "CCD Nordic Europe 25.3%; effective clusters 7.22",
+            "overlap_status": "Saved/prior exploratory evidence outside the current family-size release table",
+            "what_to_compare": "Use as a clearly labeled follow-up row, not as a fresh rerun.",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper_model_or_evidence": "DeepSeek-chat-v3-0324",
+            "paper_result_anchor": "Paper/source repo: Nordic Europe 22.9%, Germanic Europe 11.9%",
+            "our_matching_or_closest_line": "DeepSeek-M",
+            "our_result_anchor": _format_ccd_row(deepseek_m_ccd),
+            "overlap_status": "Close model family, different version",
+            "what_to_compare": "Compare cautiously as cluster-behavior alignment.",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper_model_or_evidence": "OpenAI ChatGPT-4o-latest / GPT-4.1",
+            "paper_result_anchor": "Paper/source repo: GPT-4o Nordic 18.4%; GPT-4.1 Nordic 21.5%",
+            "our_matching_or_closest_line": "GPT-4o-mini Ref / GPT-4.1-mini Ref",
+            "our_result_anchor": f"{_format_ccd_row(gpt_4o_mini_ccd)}; {_format_ccd_row(gpt_41_mini_ccd)}",
+            "overlap_status": "OpenAI reference family only, not exact model variants",
+            "what_to_compare": "Useful for calibration markers; not an OpenAI S/M/L family-size sweep.",
+        },
+        {
+            "benchmark": "DeNEVIL / MoralPrompt",
+            "paper_model_or_evidence": "ChatGPT, GPT-4, LLaMA2-70B-chat, and 24 other LLMs",
+            "paper_result_anchor": "Paper reports EVR/APV/MVP over MoralPrompt; e.g. ChatGPT APV 65.20 +/- 26.45",
+            "our_matching_or_closest_line": "No MoralPrompt row",
+            "our_result_anchor": "FULCRA-backed proxy behavior only; APV/EVR/MVP n/a",
+            "overlap_status": "Blocked data/scorer gap; proxy is not T3",
+            "what_to_compare": "Do not compare DeNEVIL proxy categories to MoralPrompt APV/EVR/MVP.",
+        },
+    ]
+
+
 def build_coverage_matrix(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     output: list[dict[str, Any]] = []
     for model in MODEL_ORDER:
@@ -8396,6 +8805,83 @@ def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_p
         f'<text x="72" y="568" class="body">Tightest spread: {escape_xml(tightest_spread["benchmark"])} '
         f'at {fmt_pct(tightest_spread["spread"])}; current lines cluster closely there.</text>'
     )
+
+    lines.append("</svg>")
+    write_text(output_path, "\n".join(lines) + "\n")
+
+
+def _paper_comparison_status_color(status: str) -> str:
+    lowered = status.lower()
+    if "direct" in lowered:
+        return "#0f766e"
+    if "blocked" in lowered or "proxy" in lowered or "not t3" in lowered:
+        return "#b91c1c"
+    if "no paper" in lowered:
+        return "#475569"
+    if "not kaleido" in lowered or "different" in lowered or "overlaps" in lowered:
+        return "#b45309"
+    return "#2563eb"
+
+
+def render_paper_result_comparison_svg(rows: list[dict[str, str]], output_path: Path) -> None:
+    width = 1500
+    row_height = 124
+    top = 174
+    height = top + len(rows) * row_height + 108
+    col_specs = [
+        ("benchmark", 58, 28, 4),
+        ("paper_exact_result", 306, 58, 5),
+        ("our_exact_result", 752, 58, 5),
+        ("comparison_status", 1210, 28, 5),
+    ]
+
+    lines = svg_header(width, height)
+    lines.extend(
+        [
+            f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
+            f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
+            "<title>Paper results compared with the current release</title>",
+            "<desc>Exact original-paper metrics shown next to the closest current release metric, with status labels separating direct comparisons from proxy-only or non-overlapping evidence.</desc>",
+            '<text x="48" y="64" class="title">Paper Results Compared With Our Release</text>',
+            *svg_text_block(
+                48,
+                90,
+                "Exact paper-side metrics stay separate from our release metrics. CCD-Bench is choice behavior, not accuracy; DeNEVIL is proxy-only until MoralPrompt data and EVR/APV/MVP scoring exist.",
+                "subtitle",
+                158,
+            ),
+            '<text x="58" y="146" class="tiny">BENCHMARK</text>',
+            '<text x="306" y="146" class="tiny">ORIGINAL PAPER EXACT RESULT</text>',
+            '<text x="752" y="146" class="tiny">OUR CLOSEST CURRENT RESULT</text>',
+            '<text x="1210" y="146" class="tiny">COMPARISON STATUS</text>',
+        ]
+    )
+
+    for index, row in enumerate(rows):
+        y = top + index * row_height
+        status_color = _paper_comparison_status_color(row["comparison_status"])
+        lines.append(f'<rect x="42" y="{y - 24}" width="{width - 84}" height="{row_height - 14}" rx="14" class="subpanel"/>')
+        lines.append(f'<rect x="42" y="{y - 24}" width="8" height="{row_height - 14}" rx="4" fill="{status_color}"/>')
+        for field, x, max_chars, max_lines in col_specs:
+            class_name = "label" if field == "benchmark" else "body"
+            text_lines = _wrap_svg_text(row[field], max_chars)[:max_lines]
+            for line_index, text_line in enumerate(text_lines):
+                lines.append(
+                    f'<text x="{x}" y="{y + line_index * 18}" class="{class_name}">{escape_xml(text_line)}</text>'
+                )
+        lines.append(f'<circle cx="1192" cy="{y - 2}" r="7" fill="{status_color}"/>')
+
+    legend_y = height - 66
+    legend_items = [
+        ("#0f766e", "Direct behavior comparison"),
+        ("#b45309", "Same family, metric/model caveat"),
+        ("#475569", "No paper model leaderboard"),
+        ("#b91c1c", "Proxy/blocked, not T3"),
+    ]
+    for index, (color, label) in enumerate(legend_items):
+        x = 58 + index * 340
+        lines.append(f'<rect x="{x}" y="{legend_y - 15}" width="20" height="20" rx="5" fill="{color}"/>')
+        lines.append(f'<text x="{x + 30}" y="{legend_y}" class="label">{escape_xml(label)}</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -10268,6 +10754,79 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
     )
 
 
+def append_paper_result_comparison_section(
+    lines: list[str],
+    paper_result_comparison: list[dict[str, str]],
+    paper_model_overlap: list[dict[str, str]],
+    figure_prefix: str,
+    release_prefix: str,
+) -> None:
+    paper_result_link = _release_link(release_prefix, "paper-result-comparison.csv")
+    paper_overlap_link = _release_link(release_prefix, "paper-model-overlap-map.csv")
+    lines.extend(
+        [
+            "## Paper Result Comparison",
+            "",
+            f"![Paper result comparison]({figure_prefix}/option1_paper_result_comparison.svg)",
+            "",
+            "This is the replication/calibration bridge: it shows what each original paper actually reported, whether that paper had model-level results, and what the closest current release row can and cannot be compared against.",
+            "",
+            "Read it strictly:",
+            "",
+            "- `UniMoral` is the same benchmark family, but the paper tables use weighted F1 while the release leads with accuracy for RQ1-RQ3 and BERTScore F1/METEOR for RQ4.",
+            "- `SMID` is a human-normed image stimulus paper, so the original paper has no LLM accuracy table.",
+            "- `Value Kaleidoscope` uses Kaleido model evaluation in the paper; this release uses prompt-based ValuePrism relevance/valence rows, so it is not Kaleido model replication.",
+            "- `CCD-Bench` is the closest direct paper-vs-ours behavior comparison, but CCD-Bench is not accuracy.",
+            "- `DeNEVIL` is not paper-faithful MoralPrompt in this release; the local rows are proxy-only and not T3.",
+            "",
+            f"Full exact bridge: [paper-result-comparison.csv]({paper_result_link}).",
+            f"Model-overlap map: [paper-model-overlap-map.csv]({paper_overlap_link}).",
+            "",
+            "### Exact Paper Metric Bridge",
+            "",
+            "| Benchmark | Original paper exact result | Our closest current result | Status |",
+            "| :--- | :--- | :--- | :--- |",
+        ]
+    )
+    for row in paper_result_comparison:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    _markdown_cell(row["benchmark"]),
+                    _markdown_cell(row["paper_exact_result"]),
+                    _markdown_cell(row["our_exact_result"]),
+                    _markdown_cell(row["comparison_status"]),
+                ]
+            )
+            + " |"
+        )
+    lines.extend(
+        [
+            "",
+            "### Model Overlap Map",
+            "",
+            "| Benchmark | Paper model/evidence | Our matching or closest row | Overlap status | What to compare |",
+            "| :--- | :--- | :--- | :--- | :--- |",
+        ]
+    )
+    for row in paper_model_overlap:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    _markdown_cell(row["benchmark"]),
+                    _markdown_cell(row["paper_model_or_evidence"]),
+                    _markdown_cell(row["our_matching_or_closest_line"]),
+                    _markdown_cell(row["overlap_status"]),
+                    _markdown_cell(row["what_to_compare"]),
+                ]
+            )
+            + " |"
+        )
+    lines.extend(["", ""])
+
+
 def append_interpretation_sections(
     lines: list[str],
     benchmark_comparison: list[dict[str, Any]],
@@ -11233,6 +11792,8 @@ def build_repo_readme_managed_section(
     benchmark_difficulty_summary: list[dict[str, Any]],
     ccd_choice_distribution: list[dict[str, Any]],
     denevil_behavior_summary: list[dict[str, Any]],
+    paper_result_comparison: list[dict[str, str]],
+    paper_model_overlap: list[dict[str, str]],
     release_dir: Path | None = None,
 ) -> str:
     lines = [
@@ -11248,6 +11809,8 @@ def build_repo_readme_managed_section(
         "- [Full release appendix](results/release/2026-04-19-option1/README.md)",
         "- [PI-facing report](results/release/2026-04-19-option1/jenny-group-report.md)",
         "- [Topline summary](results/release/2026-04-19-option1/topline-summary.md)",
+        "- [Paper result comparison](results/release/2026-04-19-option1/paper-result-comparison.csv)",
+        "- [Paper/model overlap map](results/release/2026-04-19-option1/paper-model-overlap-map.csv)",
         "- [Exact family-size progress table](results/release/2026-04-19-option1/family-size-progress.csv)",
         "",
         "Metric boundaries:",
@@ -11272,6 +11835,16 @@ def build_repo_readme_managed_section(
     visual_lines: list[str] = []
     append_benchmark_result_visuals_section(visual_lines, "figures/release")
     _append_demoted_markdown(lines, visual_lines)
+
+    paper_lines: list[str] = []
+    append_paper_result_comparison_section(
+        paper_lines,
+        paper_result_comparison,
+        paper_model_overlap,
+        "figures/release",
+        "results/release/2026-04-19-option1",
+    )
+    _append_demoted_markdown(lines, paper_lines)
 
     lines.extend(
         [
@@ -11310,6 +11883,8 @@ def build_release_readme(
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
     deepseek_sm_readout: list[dict[str, Any]],
+    paper_result_comparison: list[dict[str, str]],
+    paper_model_overlap: list[dict[str, str]],
     release_dir: Path | None = None,
 ) -> str:
     llama_progress = next(row for row in supplementary_model_progress if row["family"] == "Llama")
@@ -11334,6 +11909,13 @@ def build_release_readme(
         release_dir,
     )
     append_benchmark_result_visuals_section(lines, "../../../figures/release")
+    append_paper_result_comparison_section(
+        lines,
+        paper_result_comparison,
+        paper_model_overlap,
+        "../../../figures/release",
+        "",
+    )
     lines.extend(
         [
         "## Results First",
@@ -11511,6 +12093,8 @@ def build_release_readme(
             "- `denevil-proxy-summary.csv`: appendix QA/provenance table with route, timestamps, sample counts, and visible-response coverage",
             "- `denevil-proxy-examples.csv`: safe qualitative examples showing what the released Denevil proxy traces actually look like",
             "- `deepseek-sm-readout.csv`: explicit DeepSeek-S/M/L log-derived readout from saved logs",
+            "- `paper-result-comparison.csv`: exact bridge between original-paper metrics and the closest current release readout",
+            "- `paper-model-overlap-map.csv`: explicit map of which paper models match, partially overlap, or remain unrun",
             "- `saved-results-audit.csv`: regenerated audit of local saved `.eval` sources, merge strategy, sample counts, visible-answer coverage, and parsed accuracy where applicable",
             "- `benchmark-difficulty-summary.csv`: benchmark-level means, ranges, and best/worst lines for the comparable slice",
             "- `family-scaling-summary.csv`: cautious scaling notes for each public family",
@@ -11548,6 +12132,8 @@ def build_jenny_group_report(
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
     deepseek_sm_readout: list[dict[str, Any]],
+    paper_result_comparison: list[dict[str, str]],
+    paper_model_overlap: list[dict[str, str]],
     release_dir: Path | None = None,
 ) -> str:
     total_samples = sum(row["total_samples"] for row in rows)
@@ -11573,6 +12159,13 @@ def build_jenny_group_report(
         release_dir,
     )
     append_benchmark_result_visuals_section(lines, "../../../figures/release")
+    append_paper_result_comparison_section(
+        lines,
+        paper_result_comparison,
+        paper_model_overlap,
+        "../../../figures/release",
+        "",
+    )
     lines.extend(
         [
             "## Results First",
@@ -11819,6 +12412,8 @@ def build_release_manifest(
             "denevil_prompt_family_breakdown": "results/release/2026-04-19-option1/denevil-prompt-family-breakdown.csv",
             "denevil_proxy_examples": "results/release/2026-04-19-option1/denevil-proxy-examples.csv",
             "deepseek_sm_readout": "results/release/2026-04-19-option1/deepseek-sm-readout.csv",
+            "paper_result_comparison": "results/release/2026-04-19-option1/paper-result-comparison.csv",
+            "paper_model_overlap_map": "results/release/2026-04-19-option1/paper-model-overlap-map.csv",
             "saved_results_audit": "results/release/2026-04-19-option1/saved-results-audit.csv",
             "benchmark_difficulty_summary": "results/release/2026-04-19-option1/benchmark-difficulty-summary.csv",
             "family_scaling_summary": "results/release/2026-04-19-option1/family-scaling-summary.csv",
@@ -11827,6 +12422,7 @@ def build_release_manifest(
             "accuracy_figure": "figures/release/option1_accuracy_heatmap.svg",
             "benchmark_bar_figure": "figures/release/option1_benchmark_accuracy_bars.svg",
             "benchmark_difficulty_figure": "figures/release/option1_benchmark_difficulty_profile.svg",
+            "paper_result_comparison_figure": "figures/release/option1_paper_result_comparison.svg",
             "family_scaling_figure": "figures/release/option1_family_scaling_profile.svg",
             "ccd_valid_choice_coverage_figure": "figures/release/option1_ccd_valid_choice_coverage.svg",
             "ccd_choice_distribution_figure": "figures/release/option1_ccd_choice_distribution.svg",
@@ -11857,6 +12453,8 @@ def build_release_manifest(
             "denevil-prompt-family-breakdown.csv",
             "denevil-proxy-examples.csv",
             "deepseek-sm-readout.csv",
+            "paper-result-comparison.csv",
+            "paper-model-overlap-map.csv",
             "saved-results-audit.csv",
             "benchmark-difficulty-summary.csv",
             "family-scaling-summary.csv",
@@ -11871,6 +12469,7 @@ def build_release_manifest(
             "figures/release/option1_accuracy_heatmap.svg",
             "figures/release/option1_benchmark_accuracy_bars.svg",
             "figures/release/option1_benchmark_difficulty_profile.svg",
+            "figures/release/option1_paper_result_comparison.svg",
             "figures/release/option1_family_scaling_profile.svg",
             "figures/release/option1_ccd_valid_choice_coverage.svg",
             "figures/release/option1_ccd_choice_distribution.svg",
@@ -11885,6 +12484,7 @@ def build_release_manifest(
         ],
         "interpretation_guardrails": [
             "Denevil is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
+            "The paper-result comparison keeps original paper metrics separate from current release metrics; ValuePrism prompt rows are not Kaleido model replication, CCD-Bench is not accuracy, and DeNEVIL proxy rows are not paper-faithful MoralPrompt results.",
             "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
             "DeepSeek-S text metrics come from the May 9 no-thinking saved rerun; it remains text-only because no SMID vision route exists.",
             "OpenAI reference rows are text-only markers, not claimed OpenAI family-size sweeps.",
@@ -11943,6 +12543,12 @@ def main() -> None:
         ccd_choice_distribution,
         denevil_proxy_summary,
     )
+    paper_result_comparison = build_paper_result_comparison(
+        benchmark_comparison,
+        ccd_choice_distribution,
+        denevil_behavior_summary,
+    )
+    paper_model_overlap = build_paper_model_overlap_map(benchmark_comparison, ccd_choice_distribution)
     saved_results_audit = build_saved_results_audit_rows(family_size_progress)
     benchmark_difficulty_summary = build_benchmark_difficulty_summary(benchmark_comparison)
     family_scaling_summary = build_family_scaling_summary(benchmark_comparison)
@@ -12287,6 +12893,16 @@ def main() -> None:
         ],
     )
     write_csv(
+        args.release_dir / "paper-result-comparison.csv",
+        paper_result_comparison,
+        PAPER_RESULT_COMPARISON_FIELDNAMES,
+    )
+    write_csv(
+        args.release_dir / "paper-model-overlap-map.csv",
+        paper_model_overlap,
+        PAPER_MODEL_OVERLAP_FIELDNAMES,
+    )
+    write_csv(
         args.release_dir / "saved-results-audit.csv",
         [
             {
@@ -12381,6 +12997,8 @@ def main() -> None:
             denevil_proxy_summary,
             denevil_proxy_examples,
             deepseek_sm_readout,
+            paper_result_comparison,
+            paper_model_overlap,
             args.release_dir,
         ),
     )
@@ -12396,6 +13014,8 @@ def main() -> None:
             benchmark_difficulty_summary,
             ccd_choice_distribution,
             denevil_behavior_summary,
+            paper_result_comparison,
+            paper_model_overlap,
             args.release_dir,
         )
         write_text(
@@ -12419,6 +13039,8 @@ def main() -> None:
             denevil_proxy_summary,
             denevil_proxy_examples,
             deepseek_sm_readout,
+            paper_result_comparison,
+            paper_model_overlap,
             args.release_dir,
         ),
     )
@@ -12476,6 +13098,7 @@ def main() -> None:
     render_accuracy_svg(benchmark_comparison, args.figure_dir / "option1_accuracy_heatmap.svg")
     render_benchmark_accuracy_bars_svg(benchmark_comparison, args.figure_dir / "option1_benchmark_accuracy_bars.svg")
     render_benchmark_difficulty_profile_svg(benchmark_difficulty_summary, args.figure_dir / "option1_benchmark_difficulty_profile.svg")
+    render_paper_result_comparison_svg(paper_result_comparison, args.figure_dir / "option1_paper_result_comparison.svg")
     render_family_scaling_profile_svg(
         benchmark_comparison,
         family_size_progress,
@@ -12516,6 +13139,8 @@ def main() -> None:
             "denevil-proxy-summary.csv",
             "denevil-proxy-examples.csv",
             "deepseek-sm-readout.csv",
+            "paper-result-comparison.csv",
+            "paper-model-overlap-map.csv",
             "saved-results-audit.csv",
             "benchmark-difficulty-summary.csv",
             "family-scaling-summary.csv",
@@ -12535,6 +13160,7 @@ def main() -> None:
             "option1_accuracy_heatmap.svg",
             "option1_benchmark_accuracy_bars.svg",
             "option1_benchmark_difficulty_profile.svg",
+            "option1_paper_result_comparison.svg",
             "option1_family_scaling_profile.svg",
             "option1_ccd_valid_choice_coverage.svg",
             "option1_ccd_choice_distribution.svg",

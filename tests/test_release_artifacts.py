@@ -160,6 +160,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         "jenny-group-report.md",
         "model-summary.csv",
         "model-roster.csv",
+        "paper-model-overlap-map.csv",
+        "paper-result-comparison.csv",
         "release-manifest.json",
         "supplementary-model-progress.csv",
         "topline-summary.json",
@@ -178,6 +180,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         "option1_accuracy_heatmap.svg",
         "option1_benchmark_accuracy_bars.svg",
         "option1_benchmark_difficulty_profile.svg",
+        "option1_paper_result_comparison.svg",
         "option1_coverage_matrix.svg",
         "option1_family_scaling_profile.svg",
         "option1_ccd_valid_choice_coverage.svg",
@@ -229,7 +232,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     assert manifest["entry_points"]["denevil_proxy_examples"].endswith("denevil-proxy-examples.csv")
     assert manifest["entry_points"]["deepseek_sm_readout"].endswith("deepseek-sm-readout.csv")
+    assert manifest["entry_points"]["paper_result_comparison"].endswith("paper-result-comparison.csv")
+    assert manifest["entry_points"]["paper_model_overlap_map"].endswith("paper-model-overlap-map.csv")
     assert manifest["entry_points"]["benchmark_difficulty_figure"].endswith("option1_benchmark_difficulty_profile.svg")
+    assert manifest["entry_points"]["paper_result_comparison_figure"].endswith("option1_paper_result_comparison.svg")
     assert manifest["entry_points"]["family_scaling_figure"].endswith("option1_family_scaling_profile.svg")
     assert manifest["entry_points"]["ccd_valid_choice_coverage_figure"].endswith("option1_ccd_valid_choice_coverage.svg")
     assert manifest["entry_points"]["ccd_choice_distribution_figure"].endswith("option1_ccd_choice_distribution.svg")
@@ -249,7 +255,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "denevil-behavior-summary.csv" in manifest["tables"]
     assert "denevil-prompt-family-breakdown.csv" in manifest["tables"]
     assert "denevil-proxy-examples.csv" in manifest["tables"]
+    assert "paper-result-comparison.csv" in manifest["tables"]
+    assert "paper-model-overlap-map.csv" in manifest["tables"]
     assert "figures/release/option1_benchmark_difficulty_profile.svg" in manifest["figures"]
+    assert "figures/release/option1_paper_result_comparison.svg" in manifest["figures"]
     assert "figures/release/option1_family_scaling_profile.svg" in manifest["figures"]
     assert "figures/release/option1_ccd_valid_choice_coverage.svg" in manifest["figures"]
     assert "figures/release/option1_ccd_choice_distribution.svg" in manifest["figures"]
@@ -1048,6 +1057,64 @@ def test_release_builder_emits_expected_files(tmp_path):
         for row in scaling_rows
     )
 
+    with (release_dir / "paper-result-comparison.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames == [
+            "benchmark",
+            "paper",
+            "paper_metric",
+            "paper_exact_result",
+            "paper_models_or_subjects",
+            "our_release_metric",
+            "our_exact_result",
+            "our_closest_line",
+            "comparison_status",
+            "same_model_overlap",
+            "reviewer_takeaway",
+            "source_url",
+        ]
+        paper_rows = list(reader)
+    assert len(paper_rows) == 8
+    paper_text = "\n".join(
+        " | ".join(row[field] for field in reader.fieldnames or [])
+        for row in paper_rows
+    )
+    assert "66.38" in paper_text
+    assert "57.01" in paper_text
+    assert "38.59" in paper_text
+    assert "BERTScore 87.44" in paper_text
+    assert "820,565 ratings" in paper_text
+    assert "KAL SYS 11B" in paper_text
+    assert "Nordic Europe 20.2%" in paper_text
+    assert "MoralPrompt has 2,397 prompts" in paper_text
+    assert "CCD-Bench is not accuracy" in paper_text
+    assert "not Kaleido model replication" in paper_text
+    assert "not paper-faithful MoralPrompt" in paper_text
+    assert "not T3" in paper_text
+
+    with (release_dir / "paper-model-overlap-map.csv").open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        assert reader.fieldnames == [
+            "benchmark",
+            "paper_model_or_evidence",
+            "paper_result_anchor",
+            "our_matching_or_closest_line",
+            "our_result_anchor",
+            "overlap_status",
+            "what_to_compare",
+        ]
+        overlap_rows = list(reader)
+    assert len(overlap_rows) >= 10
+    overlap_text = "\n".join(
+        " | ".join(row[field] for field in reader.fieldnames or [])
+        for row in overlap_rows
+    )
+    assert "Llama-3.1-8B Instruct" in overlap_text
+    assert "Kaleido 60M/220M/770M/3B/11B" in overlap_text
+    assert "Llama-3.3-70B-Instruct" in overlap_text
+    assert "Mistral Nemo" in overlap_text
+    assert "proxy is not T3" in overlap_text
+
     report_text = (release_dir / "jenny-group-report.md").read_text(encoding="utf-8")
     release_readme = (release_dir / "README.md").read_text(encoding="utf-8")
     topline_summary = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
@@ -1084,6 +1151,14 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" not in tldr_text
         assert "## Results First" in text
         assert "## Benchmark Result Visuals" in text
+        assert "## Paper Result Comparison" in text
+        assert "option1_paper_result_comparison.svg" in text
+        assert "paper-result-comparison.csv" in text
+        assert "paper-model-overlap-map.csv" in text
+        assert "This is the replication/calibration bridge" in text
+        assert "CCD-Bench is not accuracy" in text
+        assert "not Kaleido model replication" in text
+        assert "not paper-faithful MoralPrompt" in text
         assert "### 1. UniMoral RQ1-RQ4: family-size scaling and task readout" in text
         assert "### 2. SMID / Value Kaleidoscope: topline comparable accuracy" in text
         assert "### 3. SMID / Value Kaleidoscope: family-size scaling" in text
@@ -1156,6 +1231,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert text.count("![CCD choice distribution]") == 1
         assert text.count("![CCD dominant-option share]") == 1
         assert text.count("![DeNEVIL proxy behavioral outcomes]") == 1
+        assert text.count("![Paper result comparison]") == 1
         assert "without re-embedding the same chart" in text
         assert "without re-embedding low-level QA charts" in text
 
@@ -1262,6 +1338,16 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Benchmark Difficulty And Spread" in benchmark_difficulty_svg
     assert "Hardest current comparable benchmark" in benchmark_difficulty_svg
     assert "Widest cross-line spread" in benchmark_difficulty_svg
+
+    paper_comparison_svg = (figure_dir / "option1_paper_result_comparison.svg").read_text(encoding="utf-8")
+    assert "Paper Results Compared With Our Release" in paper_comparison_svg
+    assert "Exact paper-side metrics stay separate" in paper_comparison_svg
+    assert "CCD-Bench is choice behavior, not accuracy" in paper_comparison_svg
+    assert "DeNEVIL is proxy-only" in paper_comparison_svg
+    assert "UniMoral RQ1 action" in paper_comparison_svg
+    assert "66.38" in paper_comparison_svg
+    assert "KAL SYS 11B" in paper_comparison_svg
+    assert "Proxy/blocked, not T3" in paper_comparison_svg
 
     family_scaling_svg = (figure_dir / "option1_family_scaling_profile.svg").read_text(encoding="utf-8")
     assert "Family Scaling Profile" in family_scaling_svg

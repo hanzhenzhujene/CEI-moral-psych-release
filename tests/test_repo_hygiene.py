@@ -90,7 +90,10 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "### TL;DR" in readme
     assert "results/release/2026-04-19-option1/README.md" in readme
     assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
+    assert "results/release/2026-04-19-option1/paper-result-comparison.csv" in readme
+    assert "results/release/2026-04-19-option1/paper-model-overlap-map.csv" in readme
     assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme
+    assert "figures/release/option1_paper_result_comparison.svg" in readme
     assert "figures/release/option1_unimoral_task_heatmap.svg" in readme
     assert "figures/release/option1_unimoral_generation_quality.svg" in readme
     assert "figures/release/option1_unimoral_family_scaling.svg" in readme
@@ -100,6 +103,9 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
     assert "`CCD-Bench` is reported as cultural-cluster choice behavior" in readme
     assert "`DeNEVIL` is reported as proxy behavioral evidence" in readme
+    assert "## Paper Result Comparison" in readme
+    assert "CCD-Bench is not accuracy" in readme
+    assert "not paper-faithful MoralPrompt" in readme
     assert "FULCRA-backed `DeNEVIL` proxy rows are **not T3**" in readme
     assert "`make bootstrap`" in readme or "make audit" in readme
 
