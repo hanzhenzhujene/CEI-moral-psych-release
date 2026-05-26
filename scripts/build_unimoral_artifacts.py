@@ -83,6 +83,11 @@ TASKS = {
     },
 }
 
+LOCAL_SAMPLE_ARTIFACTS = {
+    "unimoral_sample_predictions": "results/release/2026-04-19-option1/unimoral-sample-predictions.csv",
+    "unimoral_rq4_bertscore": "results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv",
+}
+
 CLASSIFICATION_TASK_NAMES = [
     "unimoral_action_prediction",
     "unimoral_moral_typology",
@@ -1593,13 +1598,14 @@ def update_manifest(release_dir: Path) -> None:
         counts["total_samples"] = total_samples
 
     entry_points = manifest.setdefault("entry_points", {})
+    for key in LOCAL_SAMPLE_ARTIFACTS:
+        entry_points.pop(key, None)
     entry_points.update(
         {
             "unimoral_full_benchmark": "results/release/2026-04-19-option1/unimoral-full-benchmark.csv",
             "unimoral_coverage": "results/release/2026-04-19-option1/unimoral-coverage.csv",
             "unimoral_task_spread": "results/release/2026-04-19-option1/unimoral-task-spread.csv",
             "unimoral_model_rankings": "results/release/2026-04-19-option1/unimoral-model-rankings.csv",
-            "unimoral_sample_predictions": "results/release/2026-04-19-option1/unimoral-sample-predictions.csv",
             "unimoral_failure_checklist": "results/release/2026-04-19-option1/unimoral-failure-checklist.csv",
             "unimoral_completion_audit": "results/release/2026-04-19-option1/unimoral-completion-audit.md",
             "unimoral_four_task_dashboard_figure": "figures/release/option1_unimoral_four_task_dashboard.svg",
@@ -1610,21 +1616,19 @@ def update_manifest(release_dir: Path) -> None:
             "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
         }
     )
-    bertscore_path = release_dir / "unimoral-rq4-bertscore.csv"
-    if bertscore_path.exists() and bertscore_path.stat().st_size > 0:
-        entry_points["unimoral_rq4_bertscore"] = "results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv"
     entry_points["unimoral_minimax_resume_plan"] = "results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md"
+    local_artifacts = manifest.setdefault("local_artifacts", {})
+    local_artifacts.update(LOCAL_SAMPLE_ARTIFACTS)
+    public_table_exclusions = {Path(path).name for path in LOCAL_SAMPLE_ARTIFACTS.values()}
     for key, values in {
         "tables": [
             "unimoral-full-benchmark.csv",
             "unimoral-coverage.csv",
             "unimoral-task-spread.csv",
             "unimoral-model-rankings.csv",
-            "unimoral-sample-predictions.csv",
             "unimoral-failure-checklist.csv",
             "unimoral-completion-audit.md",
             "unimoral-minimax-resume-plan.md",
-            *(["unimoral-rq4-bertscore.csv"] if bertscore_path.exists() and bertscore_path.stat().st_size > 0 else []),
         ],
         "figures": [
             "figures/release/option1_unimoral_four_task_dashboard.svg",
@@ -1636,6 +1640,8 @@ def update_manifest(release_dir: Path) -> None:
         ],
     }.items():
         existing = manifest.setdefault(key, [])
+        if key == "tables":
+            existing[:] = [value for value in existing if value not in public_table_exclusions]
         for value in values:
             if value not in existing:
                 existing.append(value)
@@ -1830,7 +1836,6 @@ def write_completion_audit(
 ) -> None:
     path = release_dir / "unimoral-completion-audit.md"
     sample_predictions = release_dir / "unimoral-sample-predictions.csv"
-    sample_rows = max(0, sum(1 for _ in sample_predictions.open(encoding="utf-8")) - 1) if sample_predictions.exists() else 0
     expected_prediction_rows = sum(
         int(task["expected"])
         for task_name, task in TASKS.items()
@@ -1847,6 +1852,14 @@ def write_completion_audit(
     ) or "none"
     full_rows = read_csv(release_dir / "unimoral-full-benchmark.csv") if (release_dir / "unimoral-full-benchmark.csv").exists() else []
     prediction_rows = read_csv(sample_predictions) if sample_predictions.exists() else []
+    if prediction_rows:
+        sample_rows = len(prediction_rows)
+    else:
+        sample_rows = sum(
+            int(row.get("completed_samples") or 0)
+            for row in full_rows
+            if row.get("task_name") != "unimoral_action_prediction"
+        )
     full_by_pair = {
         (str(row.get("line_label", "")), str(row.get("task_name", ""))): row
         for row in full_rows
@@ -1859,6 +1872,13 @@ def write_completion_audit(
         key = (str(row.get("line_label", "")), str(row.get("task_name", "")))
         prediction_counts[key] = prediction_counts.get(key, 0) + 1
         prediction_keys.append((*key, str(row.get("sample_id", ""))))
+    if not prediction_rows:
+        for row in full_rows:
+            task_name = str(row.get("task_name", ""))
+            if task_name == "unimoral_action_prediction":
+                continue
+            key = (str(row.get("line_label", "")), task_name)
+            prediction_counts[key] = int(row.get("completed_samples") or 0)
 
     total_prediction_gap = 0
     strict_blocker_lines: list[str] = []
@@ -1933,8 +1953,8 @@ def write_completion_audit(
         "| Results cover existing model set | `unimoral-coverage.csv`, `unimoral-full-benchmark.csv`, strict `scripts/verify_unimoral_completion.py` | "
         + coverage_summary
         + f" | {'achieved' if coverage_complete else 'incomplete'} |",
-        "| Sample-level predictions are complete for RQ2/RQ3/RQ4 | `unimoral-sample-predictions.csv` | "
-        + f"{sample_rows} rows present; strict expected count is {expected_prediction_rows}. | {'achieved' if sample_predictions_complete else 'incomplete'} |",
+        "| Sample-level predictions are represented for RQ2/RQ3/RQ4 | ignored local `unimoral-sample-predictions.csv` plus tracked aggregate counts | "
+        + f"{sample_rows} rows represented; strict expected count is {expected_prediction_rows}. Large per-sample CSVs are generated locally and ignored by git. | {'achieved' if sample_predictions_complete else 'incomplete'} |",
         "| Known failures are empty | `unimoral-failure-checklist.csv` | "
         + f"{len(failures)} rows: {failure_summary}. | {'achieved' if failures_clear else 'incomplete'} |",
         f"| Figures and release docs rebuild from tracked artifacts | `scripts/build_unimoral_artifacts.py`, `make audit` | {figures_evidence} | {'covered' if strict_complete else 'covered with caveat'} |",
@@ -1967,7 +1987,6 @@ def existing_release_tables_available(release_dir: Path) -> bool:
         "unimoral-coverage.csv",
         "unimoral-task-spread.csv",
         "unimoral-model-rankings.csv",
-        "unimoral-sample-predictions.csv",
         "unimoral-failure-checklist.csv",
     ]
     return all((release_dir / filename).exists() and (release_dir / filename).stat().st_size > 0 for filename in required)
@@ -2104,7 +2123,7 @@ def build_markdown_section(
     lines.extend(
         [
             "",
-            "Sample-level predictions for RQ2/RQ3/RQ4 are exported in `unimoral-sample-predictions.csv`; full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.",
+            "Sample-level predictions for RQ2/RQ3/RQ4 are generated locally as ignored large artifacts; the tracked public package keeps the aggregate summaries in `unimoral-full-benchmark.csv`, `unimoral-coverage.csv`, and `unimoral-completion-audit.md`. Full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.",
             f"The provider-free MiniMax handoff is tracked in [`unimoral-minimax-resume-plan.md`]({resume_plan_link}).",
             f"The prompt-to-artifact completion audit, including the verifier-checked CSV-level strict blocker inventory, is tracked in [`unimoral-completion-audit.md`]({completion_audit_link}).",
             "",

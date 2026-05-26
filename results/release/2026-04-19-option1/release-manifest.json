@@ -89,8 +89,6 @@
     "unimoral_generation_quality_figure": "figures/release/option1_unimoral_generation_quality.svg",
     "unimoral_minimax_resume_plan": "results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md",
     "unimoral_model_rankings": "results/release/2026-04-19-option1/unimoral-model-rankings.csv",
-    "unimoral_rq4_bertscore": "results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv",
-    "unimoral_sample_predictions": "results/release/2026-04-19-option1/unimoral-sample-predictions.csv",
     "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
     "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
     "unimoral_task_spread": "results/release/2026-04-19-option1/unimoral-task-spread.csv",
@@ -128,6 +126,10 @@
     "The completed local Llama small line sits outside the frozen Option 1 totals.",
     "Raw results/inspect artifacts are local provenance inputs, not required public dependencies for release regeneration."
   ],
+  "local_artifacts": {
+    "unimoral_rq4_bertscore": "results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv",
+    "unimoral_sample_predictions": "results/release/2026-04-19-option1/unimoral-sample-predictions.csv"
+  },
   "model_families": [
     "Qwen",
     "MiniMax",
@@ -174,11 +176,11 @@
     },
     "current_cost_scope": "User-confirmed total spend through the latest saved reruns parsed in this repo.",
     "current_total_cost": "$870.30",
-    "date": "2026-05-24",
+    "date": "2026-05-26",
     "frozen_snapshot_date": "2026-04-19",
     "metric_definition_summary": "Stricter visible-answer parsing is now versioned explicitly: UniMoral, SMID, and Value Kaleidoscope use structured visible-answer extraction; CCD-Bench coverage requires a parseable visible 1-10 choice; CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; Denevil appendix coverage counts non-empty visible proxy answers while the headline proxy figures classify visible behavior categories.",
     "metric_definition_version": "2026-04-30",
-    "operations_note": "Updated May 24, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `DeepSeek-L`, `Llama-L`, `DeepSeek-S`, `MiniMax-L`, and `MiniMax-S`, and no published follow-up line is still live.",
+    "operations_note": "Updated May 26, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `DeepSeek-L`, `Llama-L`, `DeepSeek-S`, `MiniMax-L`, and `MiniMax-S`, and no published follow-up line is still live.",
     "owner": "Jenny Zhu",
     "provider": "OpenRouter + direct MiniMax + OpenAI",
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",
@@ -244,11 +246,9 @@
     "unimoral-coverage.csv",
     "unimoral-task-spread.csv",
     "unimoral-model-rankings.csv",
-    "unimoral-sample-predictions.csv",
     "unimoral-failure-checklist.csv",
     "unimoral-completion-audit.md",
-    "unimoral-minimax-resume-plan.md",
-    "unimoral-rq4-bertscore.csv"
+    "unimoral-minimax-resume-plan.md"
   ],
   "target_matrix": {
     "benchmarks": 5,

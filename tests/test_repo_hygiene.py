@@ -57,6 +57,12 @@ def test_gitignore_covers_env_local():
     assert ".env.local" in content
 
 
+def test_gitignore_covers_large_unimoral_generated_payloads():
+    content = (ROOT / ".gitignore").read_text(encoding="utf-8")
+    assert "results/release/2026-04-19-option1/unimoral-sample-predictions.csv" in content
+    assert "results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv" in content
+
+
 def test_env_example_exists_and_documents_core_inputs():
     env_example = ROOT / ".env.example"
     assert env_example.exists()
