@@ -11537,10 +11537,48 @@ def append_release_status_and_artifacts_section(
     )
 
 
-def append_readiness_and_replication_section(lines: list[str]) -> None:
+def append_deliverables_for_today_section(lines: list[str], readiness_tier_matrix: list[dict[str, Any]]) -> None:
+    tier3_cells = sum(row.get("readiness_tier") == "Tier 3" for row in readiness_tier_matrix)
+    blocked_cells = sum(row.get("result_status") == "blocked" for row in readiness_tier_matrix)
+    total_cells = len(readiness_tier_matrix)
     lines.extend(
         [
-            "## Result Readiness and Replication Calibration",
+            "## Deliverables To Use Today",
+            "",
+            "If you are reviewing or forwarding this repo today, start here. The README gives the friendly reading path; the linked CSVs are the audit trail behind each claim.",
+            "",
+            "| Deliverable | What it answers | Where to open |",
+            "| --- | --- | --- |",
+            "| Main visual story | What are the benchmark results, and how should each graph be read? | [Benchmark Result Visuals](#benchmark-result-visuals) |",
+            "| Short executive read | What is the bottom-line result without reading every table? | [TL;DR](#tldr) |",
+            f"| Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `{tier3_cells}` of `{total_cells}` cells are Tier 3; `{blocked_cells}` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |",
+            "| S/M/L family progress table | Which public family-size slots are done, missing a route, or proxy-only? | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
+            "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv) and [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+            "| Reproducibility package | Can a reviewer rebuild the public results without local secrets? | [Reproducibility](#reproducibility); run `make bootstrap` |",
+            "| Full appendix | Where are the detailed tables, caveats, and generated release files? | [Release appendix](results/release/2026-04-19-option1/README.md) |",
+            "",
+        ]
+    )
+
+
+def append_readiness_and_replication_section(lines: list[str], readiness_tier_matrix: list[dict[str, Any]]) -> None:
+    benchmark_order = ["UniMoral", "SMID", "Value Kaleidoscope", "CCD-Bench", "Denevil"]
+    benchmark_display = {"Denevil": "DeNEVIL"}
+    benchmark_notes = {
+        "UniMoral": "All current public text rows have interpretable RQ1 action-prediction results; RQ2-RQ4 are reported separately below.",
+        "SMID": "Only vision-capable routes receive a tier; text-only routes stay blocked as route gaps.",
+        "Value Kaleidoscope": "Prompt-based relevance/valence rows are interpretable for this repo task; they are not Kaleido model replication.",
+        "CCD-Bench": "Interpretable as cultural-choice distribution and concentration, not as accuracy.",
+        "Denevil": "Tier 3 applies only to the FULCRA proxy behavior layer; OpenAI text refs are not run here.",
+    }
+
+    rows_by_benchmark: dict[str, list[dict[str, Any]]] = {benchmark: [] for benchmark in benchmark_order}
+    for row in readiness_tier_matrix:
+        rows_by_benchmark.setdefault(row["benchmark"], []).append(row)
+
+    lines.extend(
+        [
+            "## Result Readiness Progress",
             "",
             "Tier is a claim-readiness label for a specific `model line x benchmark result` cell. It is not a model-performance score, not a benchmark-wide label, and not a substitute for reading the benchmark-specific caveats.",
             "",
@@ -11550,14 +11588,39 @@ def append_readiness_and_replication_section(lines: list[str]) -> None:
             "| `T2` | Result valid | No format failure, missing modality, or proxy substitution. |",
             "| `T3` | Interpretable | Can be cited and compared across models without caveats. |",
             "",
+            "The full generated dashboard is [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv). It has one summary row for each public `model line x benchmark` cell and keeps blocked cells outside the tier scale.",
+            "",
+            "| Benchmark | Tier 3 cells | Blocked / no-tier cells | Reader note |",
+            "| --- | ---: | ---: | --- |",
+        ]
+    )
+    for benchmark in benchmark_order:
+        rows = rows_by_benchmark.get(benchmark, [])
+        tier3_count = sum(row.get("readiness_tier") == "Tier 3" for row in rows)
+        blocked_count = sum(not row.get("readiness_tier") for row in rows)
+        display_name = benchmark_display.get(benchmark, benchmark)
+        lines.append(
+            f"| `{display_name}` | {tier3_count}/{len(rows)} | {blocked_count}/{len(rows)} | {benchmark_notes[benchmark]} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            "## Replication And Calibration Snapshot",
+            "",
             "Related replication layer: compare each implemented benchmark against its original paper. Calibration means rerunning the same or representative paper models where model access and data availability allow it, then checking whether the repo reproduces the original paper's metric pattern closely enough for later comparisons.",
             "",
-            "The replication/calibration readout should make four things explicit:",
+            "The repo already has a generated paper-comparison table. The most important point is that current benchmark rows and original-paper replication are not the same thing for every benchmark.",
             "",
-            "- which paper models and repo models overlap",
-            "- which models the paper ran but this repo has not run",
-            "- which models this repo ran beyond the original paper",
-            "- whether same-model or representative-model reruns reproduce the original paper's reported metric pattern closely enough to treat later comparisons as calibrated",
+            "| Benchmark | Existing calibration / comparison evidence | Current status |",
+            "| --- | --- | --- |",
+            "| `UniMoral` | Current RQ1 action-accuracy rows plus saved/prior May 13 older-model rows, including Llama 3.1 8B at 0.638775. | Partial: RQ1 metric matches the paper-style action-prediction surface, but exact original paper table values are not tracked here. |",
+            "| `SMID` | Current vision-route rows measure moral-rating and foundation-classification performance. | No original LLM model roster was found locally; compare only across our current vision-capable rows. |",
+            "| `Value Kaleidoscope / ValuePrism` | Current prompt-based relevance/valence rows are scored and visible. | Not Kaleido model replication; direct paper-model replication is blocked until gated Kaleido access and execution are run. |",
+            "| `CCD-Bench` | Current choice-distribution rows plus saved/prior Mistral Nemo overlap; GPT-5.5 has 2,182/2,182 valid choices. | Partial distributional comparison only; CCD-Bench is not an accuracy benchmark. |",
+            "| `DeNEVIL / MoralPrompt` | Current FULCRA-backed proxy behavior summaries are tracked. | Proxy-only data gap; no paper-faithful MoralPrompt comparison until the original data path exists. |",
+            "",
+            "Open the full map here: [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md), and [calibration-replication.md](docs/calibration-replication.md).",
             "",
         ]
     )
@@ -11577,6 +11640,7 @@ def build_repo_readme(
     denevil_proxy_summary: list[dict[str, Any]],
     denevil_proxy_examples: list[dict[str, Any]],
     deepseek_sm_readout: list[dict[str, Any]],
+    readiness_tier_matrix: list[dict[str, Any]],
     release_dir: Path | None = None,
 ) -> str:
     public_families, public_families_label, public_family_count = public_family_summary(family_size_progress)
@@ -11596,7 +11660,8 @@ def build_repo_readme(
         f"3. a visuals-first readout plus CSV status files for the current `{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} public model families x 3 size slots` plan",
         "",
     ]
-    append_readiness_and_replication_section(lines)
+    append_deliverables_for_today_section(lines, readiness_tier_matrix)
+    append_readiness_and_replication_section(lines, readiness_tier_matrix)
     append_benchmark_result_visuals_section(lines, "figures/release")
     append_tldr_section(
         lines,
@@ -12947,6 +13012,7 @@ def main() -> None:
             denevil_proxy_summary,
             denevil_proxy_examples,
             deepseek_sm_readout,
+            readiness_tier_matrix,
             args.release_dir,
         )
         write_text(
