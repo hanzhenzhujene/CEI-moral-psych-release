@@ -10717,6 +10717,32 @@ def append_release_status_and_artifacts_section(
     )
 
 
+def append_readiness_and_replication_section(lines: list[str]) -> None:
+    lines.extend(
+        [
+            "## Result Readiness and Replication Calibration",
+            "",
+            "Tier is a claim-readiness label for a specific `model line x benchmark result` cell. It is not a model-performance score, not a benchmark-wide label, and not a substitute for reading the benchmark-specific caveats.",
+            "",
+            "| Tier | Label | Meaning |",
+            "| --- | --- | --- |",
+            "| `T1` | Harness complete | A number exists; no guarantee it is meaningful. |",
+            "| `T2` | Result valid | No format failure, missing modality, or proxy substitution. |",
+            "| `T3` | Interpretable | Can be cited and compared across models without caveats. |",
+            "",
+            "Related replication layer: compare each implemented benchmark against its original paper. Calibration means rerunning the same or representative paper models where model access and data availability allow it, then checking whether the repo reproduces the original paper's metric pattern closely enough for later comparisons.",
+            "",
+            "The replication/calibration readout should make four things explicit:",
+            "",
+            "- which paper models and repo models overlap",
+            "- which models the paper ran but this repo has not run",
+            "- which models this repo ran beyond the original paper",
+            "- whether same-model or representative-model reruns reproduce the original paper's reported metric pattern closely enough to treat later comparisons as calibrated",
+            "",
+        ]
+    )
+
+
 def build_repo_readme(
     model_summary: list[dict[str, Any]],
     benchmark_catalog: list[dict[str, Any]],
@@ -10780,6 +10806,7 @@ def build_repo_readme(
             "",
         ]
     )
+    append_readiness_and_replication_section(lines)
     append_benchmark_result_visuals_section(lines, "figures/release")
     append_public_quickstart(lines)
     append_repo_navigation(lines)

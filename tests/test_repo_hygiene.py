@@ -76,6 +76,11 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert readme.startswith("# CEI Moral-Psych Benchmark Suite")
     assert "Jenny Zhu's CEI moral-psych benchmark deliverable" in readme
     assert "## Public Quickstart" in readme
+    assert "## Result Readiness and Replication Calibration" in readme
+    assert "| `T1` | Harness complete | A number exists; no guarantee it is meaningful. |" in readme
+    assert "| `T2` | Result valid | No format failure, missing modality, or proxy substitution. |" in readme
+    assert "| `T3` | Interpretable | Can be cited and compared across models without caveats. |" in readme
+    assert "compare each implemented benchmark against its original paper" in readme
     assert "## Navigate This Repo" in readme
     assert "## Results First" in readme
     assert "### DeepSeek S/M/L Log-Derived Readout" in readme

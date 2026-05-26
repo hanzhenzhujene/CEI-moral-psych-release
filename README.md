@@ -45,6 +45,25 @@ The release follows one consistent evaluation logic:
 3. `DeNEVIL` is reported as proxy behavioral evidence from released traces because local `MoralPrompt` scoring is unavailable; it is therefore excluded from macro-accuracy claims by design.
 4. Every public table, report, and SVG is regenerated from a tracked authoritative snapshot through one builder, so the repo publishes a coherent frozen release rather than a hand-edited dashboard.
 
+## Result Readiness and Replication Calibration
+
+Tier is a claim-readiness label for a specific `model line x benchmark result` cell. It is not a model-performance score, not a benchmark-wide label, and not a substitute for reading the benchmark-specific caveats.
+
+| Tier | Label | Meaning |
+| --- | --- | --- |
+| `T1` | Harness complete | A number exists; no guarantee it is meaningful. |
+| `T2` | Result valid | No format failure, missing modality, or proxy substitution. |
+| `T3` | Interpretable | Can be cited and compared across models without caveats. |
+
+Related replication layer: compare each implemented benchmark against its original paper. Calibration means rerunning the same or representative paper models where model access and data availability allow it, then checking whether the repo reproduces the original paper's metric pattern closely enough for later comparisons.
+
+The replication/calibration readout should make four things explicit:
+
+- which paper models and repo models overlap
+- which models the paper ran but this repo has not run
+- which models this repo ran beyond the original paper
+- whether same-model or representative-model reruns reproduce the original paper's reported metric pattern closely enough to treat later comparisons as calibrated
+
 ## Benchmark Result Visuals
 
 If you want the benchmark results before the tables, start here. These visuals pull the main result surfaces for the full benchmark set to the front of the deliverable.
