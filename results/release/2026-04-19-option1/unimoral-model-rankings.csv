@@ -1,60 +1,72 @@
 task_name,task_label,rank,line_label,metric,value
 unimoral_action_prediction,Action prediction,1,DeepSeek-M,accuracy,0.683629
-unimoral_action_prediction,Action prediction,2,GPT-4o-mini Ref,accuracy,0.6727
-unimoral_action_prediction,Action prediction,3,Llama-M,accuracy,0.669854
-unimoral_action_prediction,Action prediction,4,Qwen-L,accuracy,0.665301
-unimoral_action_prediction,Action prediction,5,Qwen-M,accuracy,0.664504
-unimoral_action_prediction,Action prediction,6,Gemma-M,accuracy,0.662568
-unimoral_action_prediction,Action prediction,7,Gemma-L,accuracy,0.661088
-unimoral_action_prediction,Action prediction,8,MiniMax-S,accuracy,0.660861
-unimoral_action_prediction,Action prediction,9,DeepSeek-S,accuracy,0.660594
-unimoral_action_prediction,Action prediction,10,MiniMax-L,accuracy,0.660519
-unimoral_action_prediction,Action prediction,11,Llama-L,accuracy,0.659836
-unimoral_action_prediction,Action prediction,12,MiniMax-M,accuracy,0.658698
-unimoral_action_prediction,Action prediction,13,Llama-S,accuracy,0.647996
-unimoral_action_prediction,Action prediction,14,Qwen-S,accuracy,0.647427
-unimoral_action_prediction,Action prediction,15,Gemma-S,accuracy,0.635246
-unimoral_action_prediction,Action prediction,16,DeepSeek-L,accuracy,0.56255
-unimoral_moral_typology,Moral typology,1,Gemma-S,accuracy,0.598511
-unimoral_moral_typology,Moral typology,2,Llama-S,accuracy,0.597938
-unimoral_moral_typology,Moral typology,3,Qwen-L,accuracy,0.596506
-unimoral_moral_typology,Moral typology,4,Llama-M,accuracy,0.590779
-unimoral_moral_typology,Moral typology,5,DeepSeek-S,accuracy,0.589347
-unimoral_moral_typology,Moral typology,6,Qwen-M,accuracy,0.588774
-unimoral_moral_typology,Moral typology,7,DeepSeek-L,accuracy,0.587342
-unimoral_moral_typology,Moral typology,8,MiniMax-M,accuracy,0.586483
-unimoral_moral_typology,Moral typology,9,MiniMax-L,accuracy,0.581042
-unimoral_moral_typology,Moral typology,10,Gemma-M,accuracy,0.577892
-unimoral_moral_typology,Moral typology,11,Llama-L,accuracy,0.57417
-unimoral_moral_typology,Moral typology,12,Gemma-L,accuracy,0.571592
-unimoral_moral_typology,Moral typology,13,Qwen-S,accuracy,0.563001
-unimoral_moral_typology,Moral typology,14,DeepSeek-M,accuracy,0.556128
-unimoral_moral_typology,Moral typology,15,GPT-4o-mini Ref,accuracy,0.553551
+unimoral_action_prediction,Action prediction,2,GPT-5.5,accuracy,0.683629
+unimoral_action_prediction,Action prediction,3,GPT-5 mini,accuracy,0.677937
+unimoral_action_prediction,Action prediction,4,GPT-4o-mini Ref,accuracy,0.6727
+unimoral_action_prediction,Action prediction,5,Llama-M,accuracy,0.669854
+unimoral_action_prediction,Action prediction,6,Qwen-L,accuracy,0.665301
+unimoral_action_prediction,Action prediction,7,Qwen-M,accuracy,0.664504
+unimoral_action_prediction,Action prediction,8,Gemma-M,accuracy,0.662568
+unimoral_action_prediction,Action prediction,9,Gemma-L,accuracy,0.661088
+unimoral_action_prediction,Action prediction,10,MiniMax-S,accuracy,0.660861
+unimoral_action_prediction,Action prediction,11,DeepSeek-S,accuracy,0.660594
+unimoral_action_prediction,Action prediction,12,MiniMax-L,accuracy,0.660519
+unimoral_action_prediction,Action prediction,13,Llama-L,accuracy,0.659836
+unimoral_action_prediction,Action prediction,14,MiniMax-M,accuracy,0.658698
+unimoral_action_prediction,Action prediction,15,GPT-5 nano,accuracy,0.653575
+unimoral_action_prediction,Action prediction,16,Llama-S,accuracy,0.647996
+unimoral_action_prediction,Action prediction,17,Qwen-S,accuracy,0.647427
+unimoral_action_prediction,Action prediction,18,Gemma-S,accuracy,0.635246
+unimoral_action_prediction,Action prediction,19,DeepSeek-L,accuracy,0.56255
+unimoral_moral_typology,Moral typology,1,GPT-5.5,accuracy,0.637171
+unimoral_moral_typology,Moral typology,2,GPT-5 mini,accuracy,0.634021
+unimoral_moral_typology,Moral typology,3,Gemma-S,accuracy,0.598511
+unimoral_moral_typology,Moral typology,4,Llama-S,accuracy,0.597938
+unimoral_moral_typology,Moral typology,5,Qwen-L,accuracy,0.596506
+unimoral_moral_typology,Moral typology,6,GPT-5 nano,accuracy,0.595074
+unimoral_moral_typology,Moral typology,7,Llama-M,accuracy,0.590779
+unimoral_moral_typology,Moral typology,8,DeepSeek-S,accuracy,0.589347
+unimoral_moral_typology,Moral typology,9,Qwen-M,accuracy,0.588774
+unimoral_moral_typology,Moral typology,10,DeepSeek-L,accuracy,0.587342
+unimoral_moral_typology,Moral typology,11,MiniMax-M,accuracy,0.586483
+unimoral_moral_typology,Moral typology,12,MiniMax-L,accuracy,0.581042
+unimoral_moral_typology,Moral typology,13,Gemma-M,accuracy,0.577892
+unimoral_moral_typology,Moral typology,14,Llama-L,accuracy,0.57417
+unimoral_moral_typology,Moral typology,15,Gemma-L,accuracy,0.571592
+unimoral_moral_typology,Moral typology,16,Qwen-S,accuracy,0.563001
+unimoral_moral_typology,Moral typology,17,DeepSeek-M,accuracy,0.556128
+unimoral_moral_typology,Moral typology,18,GPT-4o-mini Ref,accuracy,0.553551
 unimoral_factor_attribution,Factor attribution,1,Llama-M,accuracy,0.630584
 unimoral_factor_attribution,Factor attribution,2,Gemma-L,accuracy,0.614548
 unimoral_factor_attribution,Factor attribution,3,Qwen-L,accuracy,0.609107
 unimoral_factor_attribution,Factor attribution,4,Qwen-M,accuracy,0.604811
 unimoral_factor_attribution,Factor attribution,5,Llama-S,accuracy,0.601088
-unimoral_factor_attribution,Factor attribution,6,MiniMax-M,accuracy,0.600229
-unimoral_factor_attribution,Factor attribution,7,Gemma-M,accuracy,0.599656
-unimoral_factor_attribution,Factor attribution,8,DeepSeek-M,accuracy,0.59622
-unimoral_factor_attribution,Factor attribution,9,GPT-4o-mini Ref,accuracy,0.592497
-unimoral_factor_attribution,Factor attribution,10,Gemma-S,accuracy,0.579038
-unimoral_factor_attribution,Factor attribution,11,DeepSeek-L,accuracy,0.57417
-unimoral_factor_attribution,Factor attribution,12,Llama-L,accuracy,0.566724
-unimoral_factor_attribution,Factor attribution,13,DeepSeek-S,accuracy,0.56386
-unimoral_factor_attribution,Factor attribution,14,Qwen-S,accuracy,0.560997
+unimoral_factor_attribution,Factor attribution,6,GPT-5.5,accuracy,0.600515
+unimoral_factor_attribution,Factor attribution,7,MiniMax-M,accuracy,0.600229
+unimoral_factor_attribution,Factor attribution,8,Gemma-M,accuracy,0.599656
+unimoral_factor_attribution,Factor attribution,9,DeepSeek-M,accuracy,0.59622
+unimoral_factor_attribution,Factor attribution,10,GPT-4o-mini Ref,accuracy,0.592497
+unimoral_factor_attribution,Factor attribution,11,Gemma-S,accuracy,0.579038
+unimoral_factor_attribution,Factor attribution,12,DeepSeek-L,accuracy,0.57417
+unimoral_factor_attribution,Factor attribution,13,Llama-L,accuracy,0.566724
+unimoral_factor_attribution,Factor attribution,14,DeepSeek-S,accuracy,0.56386
+unimoral_factor_attribution,Factor attribution,15,Qwen-S,accuracy,0.560997
+unimoral_factor_attribution,Factor attribution,16,GPT-5 mini,accuracy,0.54181
+unimoral_factor_attribution,Factor attribution,17,GPT-5 nano,accuracy,0.532073
 unimoral_consequence_generation,Consequence generation,1,Llama-M,bert_score_f1,0.730047
 unimoral_consequence_generation,Consequence generation,2,Llama-S,bert_score_f1,0.727378
 unimoral_consequence_generation,Consequence generation,3,Llama-L,bert_score_f1,0.72515
-unimoral_consequence_generation,Consequence generation,4,Gemma-S,bert_score_f1,0.717221
-unimoral_consequence_generation,Consequence generation,5,GPT-4o-mini Ref,bert_score_f1,0.710669
-unimoral_consequence_generation,Consequence generation,6,Gemma-L,bert_score_f1,0.706031
-unimoral_consequence_generation,Consequence generation,7,Gemma-M,bert_score_f1,0.699249
-unimoral_consequence_generation,Consequence generation,8,Qwen-M,bert_score_f1,0.698745
-unimoral_consequence_generation,Consequence generation,9,Qwen-S,bert_score_f1,0.696111
-unimoral_consequence_generation,Consequence generation,10,Qwen-L,bert_score_f1,0.690709
-unimoral_consequence_generation,Consequence generation,11,DeepSeek-S,bert_score_f1,0.680803
-unimoral_consequence_generation,Consequence generation,12,DeepSeek-L,bert_score_f1,0.63607
-unimoral_consequence_generation,Consequence generation,13,MiniMax-S,bert_score_f1,0.632457
-unimoral_consequence_generation,Consequence generation,14,DeepSeek-M,bert_score_f1,0.62888
+unimoral_consequence_generation,Consequence generation,4,GPT-5.5,bert_score_f1,0.724731
+unimoral_consequence_generation,Consequence generation,5,Gemma-S,bert_score_f1,0.717221
+unimoral_consequence_generation,Consequence generation,6,GPT-4o-mini Ref,bert_score_f1,0.710669
+unimoral_consequence_generation,Consequence generation,7,GPT-5 nano,bert_score_f1,0.706543
+unimoral_consequence_generation,Consequence generation,8,Gemma-L,bert_score_f1,0.706031
+unimoral_consequence_generation,Consequence generation,9,Gemma-M,bert_score_f1,0.699249
+unimoral_consequence_generation,Consequence generation,10,Qwen-M,bert_score_f1,0.698745
+unimoral_consequence_generation,Consequence generation,11,GPT-5 mini,bert_score_f1,0.698736
+unimoral_consequence_generation,Consequence generation,12,Qwen-S,bert_score_f1,0.696111
+unimoral_consequence_generation,Consequence generation,13,Qwen-L,bert_score_f1,0.690709
+unimoral_consequence_generation,Consequence generation,14,DeepSeek-S,bert_score_f1,0.680803
+unimoral_consequence_generation,Consequence generation,15,DeepSeek-L,bert_score_f1,0.63607
+unimoral_consequence_generation,Consequence generation,16,MiniMax-S,bert_score_f1,0.632457
+unimoral_consequence_generation,Consequence generation,17,DeepSeek-M,bert_score_f1,0.62888

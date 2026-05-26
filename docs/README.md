@@ -6,6 +6,10 @@
 - [`evaluation-methodology.md`](evaluation-methodology.md): metric taxonomy, parser/scorer controls, and the comparison rules that determine what can be claimed from the current release.
 - [`reproducibility.md`](reproducibility.md): the main public quickstart, including `make bootstrap`, setup notes, release regeneration, and benchmark run instructions.
 - [`how-to-read-results.md`](how-to-read-results.md): plain-language guide to the report terms and progress labels.
+- [`openai-reference-runs.md`](openai-reference-runs.md): completed OpenAI text-reference rows, including the promoted GPT-5.5 text-only follow-up.
+- [`paper-result-comparison.md`](paper-result-comparison.md): reviewer-facing table that separates original paper/reference models and results from the repo's current rows, overlap status, and blocked/proxy-only cases.
+- [`calibration-replication.md`](calibration-replication.md): small older-model/original-paper calibration slice and current replication limits.
+- [`paper-model-replication-map.md`](paper-model-replication-map.md): benchmark-by-benchmark map separating paper-faithful candidates, route probes, saved/prior artifacts, and proxy-only evidence.
 - [`data-access.md`](data-access.md): benchmark-by-benchmark dataset and environment-variable requirements.
 - [`legacy-baselines.md`](legacy-baselines.md): how the older lm-evaluation-harness ETHICS path fits into the repo.
 

@@ -98,6 +98,7 @@ Release tables:
 - `results/release/2026-04-19-option1/model-roster.csv`
 - `results/release/2026-04-19-option1/supplementary-model-progress.csv`
 - `results/release/2026-04-19-option1/family-size-progress.csv`
+- `results/release/2026-04-19-option1/readiness-tier-matrix.csv`
 - `results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`
 - `results/release/2026-04-19-option1/family-scaling-summary.csv`
 - `results/release/2026-04-19-option1/future-model-plan.csv`
@@ -134,6 +135,7 @@ Headline interpretation artifacts now include:
 - `unimoral-full-benchmark.csv` + `option1_unimoral_four_task_dashboard.svg` for the UniMoral RQ1-RQ4 task surfaces
 - `ccd-choice-distribution.csv` + `option1_ccd_choice_distribution.svg` for CCD-Bench cultural-cluster behavior
 - `denevil-behavior-summary.csv` + `option1_denevil_behavior_outcomes.svg` for DeNEVIL proxy behavioral outcomes
+- `readiness-tier-matrix.csv` for the generated model-line x benchmark result-readiness summary dashboard
 - appendix QA artifacts such as `denevil-proxy-summary.csv` and `option1_denevil_proxy_status_matrix.svg` for provenance, route, and visible-response diagnostics
 
 ## Refresh the Tracked Authoritative Snapshot
