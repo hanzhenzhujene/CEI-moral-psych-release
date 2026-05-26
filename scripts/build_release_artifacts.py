@@ -71,7 +71,7 @@ REPORT_STATUS_NOTE = (
 REPORT_LIVE_RERUNS_SUMMARY = "Pending refresh from the on-disk rerun monitor."
 REPORT_NEXT_ACTION_SUMMARY = "Pending refresh from the on-disk rerun monitor."
 REPORT_RELEASE_GUARDRAIL_SUMMARY = (
-    "Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only."
+    "Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only, not T3."
 )
 REPORT_STATUS_HIGHLIGHTS = [
     "Live rerun, stalled-line, and queued-line highlights are refreshed from the latest on-disk watcher and checkpoint state at build time.",
@@ -1686,7 +1686,7 @@ FAMILY_COLOR_SCALES = {
 
 STATUS_DISPLAY = {
     "done": "Done",
-    "proxy": "Proxy",
+    "proxy": "Proxy (not T3)",
     "live": "Live",
     "partial": "Partial",
     "error": "Error",
@@ -1698,7 +1698,7 @@ STATUS_DISPLAY = {
 
 STATUS_LEGEND = [
     ("Done", "Finished with a usable result."),
-    ("Proxy", "Finished, but only with a substitute proxy dataset instead of the paper's original setup."),
+    ("Proxy (not T3)", "Finished only with a substitute proxy dataset; proxy evidence is not a Tier 3 benchmark-faithful result."),
     ("Live", "Currently running locally."),
     ("Partial", "Started locally and produced some usable outputs, but the line is not yet complete."),
     ("Error", "A formal attempt exists, but the current result is not usable."),
@@ -9574,7 +9574,7 @@ def render_family_size_progress_overview_svg(rows: list[dict[str, Any]], output_
     segment_width = bar_width / 5
     bucket_specs = [
         ("done", "Paper-setup done", "#2f855a"),
-        ("proxy", "Proxy done", "#b7791f"),
+        ("proxy", "Proxy / not T3", "#b7791f"),
         ("partial", "Partial checkpoint", "#60a5fa"),
         ("live", "Running now", "#2563eb"),
         ("error", "Error", "#dc2626"),

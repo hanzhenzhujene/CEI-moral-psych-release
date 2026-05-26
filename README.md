@@ -497,6 +497,8 @@ The `/validate-results` command checks every model × task cell against a **thre
 | T2 | Result valid | No format failure, missing modality, or proxy substitution |
 | T3 | Interpretable | Can be cited and compared across models without caveats |
 
+Because proxy substitution fails T2, the current FULCRA-backed `DeNEVIL` proxy rows are **not T3**. They should be cited only as proxy behavioral evidence until the paper-faithful MoralPrompt path exists.
+
 It also checks **saturation** — whether a benchmark still discriminates between models (e.g., UniMoral action prediction was retired at 0.048 spread). Reports are saved to `results/validation/`.
 
 ### Setup

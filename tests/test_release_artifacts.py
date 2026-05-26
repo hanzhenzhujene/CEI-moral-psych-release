@@ -1174,6 +1174,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     )
     assert "curated snapshot rather than a live dashboard" in report_text
     assert "## Status Key" in report_text
+    assert "`Proxy (not T3)`" in report_text
+    assert "proxy evidence is not a Tier 3 benchmark-faithful result" in report_text
+    assert "| `Qwen-S` | Done | Done | Done | Done | Proxy (not T3) |" in report_text
     assert "option1_benchmark_difficulty_profile.svg" in report_text
     assert "option1_family_scaling_profile.svg" in report_text
     assert "Partial" in report_text
@@ -1203,6 +1206,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "## Start Here" in release_readme
     assert "## Benchmark Result Visuals" in release_readme
     assert "## Status Key" in release_readme
+    assert "`Proxy (not T3)`" in release_readme
+    assert "proxy evidence is not a Tier 3 benchmark-faithful result" in release_readme
+    assert "| `Qwen-S` | Done | Done | Done | Done | Proxy (not T3) |" in release_readme
     assert "option1_benchmark_difficulty_profile.svg" in release_readme
     assert "option1_family_scaling_profile.svg" in release_readme
     assert "## Supporting Figures" not in release_readme

@@ -100,6 +100,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
     assert "`CCD-Bench` is reported as cultural-cluster choice behavior" in readme
     assert "`DeNEVIL` is reported as proxy behavioral evidence" in readme
+    assert "FULCRA-backed `DeNEVIL` proxy rows are **not T3**" in readme
     assert "`make bootstrap`" in readme or "make audit" in readme
 
     unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")

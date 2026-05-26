@@ -411,7 +411,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | Mark | Meaning |
 | --- | --- |
 | `Done` | Finished with a usable result. |
-| `Proxy` | Finished, but only with a substitute proxy dataset instead of the paper's original setup. |
+| `Proxy (not T3)` | Finished only with a substitute proxy dataset; proxy evidence is not a Tier 3 benchmark-faithful result. |
 | `Live` | Currently running locally. |
 | `Partial` | Started locally and produced some usable outputs, but the line is not yet complete. |
 | `Error` | A formal attempt exists, but the current result is not usable. |
@@ -425,21 +425,21 @@ This is the cleanest public-facing summary of the current published matrix.
 
 | Line | UniMoral | SMID | Value Kaleidoscope | CCD-Bench | Denevil | MoralBench | EMNLP Educator | Note |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | --- |
-| `Qwen-S` | Done | Done | Done | Done | Proxy | Done | Done | Frozen Option 1 line. |
-| `Qwen-M` | Done | TBD | Done | Done | Proxy | Done | Done | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
-| `Qwen-L` | Done | Done | Done | Done | Proxy | Done | Done | SMID recovery complete; clean text rerun finished locally. |
-| `MiniMax-S` | Done | Done | Done | Done | Proxy | Done | Done | Direct MiniMax-M2.1 text rerun complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route. |
-| `MiniMax-M` | Done | TBD | Done | Done | Proxy | Done | Done | Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral action prediction 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
-| `MiniMax-L` | Done | Done | Done | Done | Proxy | Done | Done | Shared MiniMax-01 SMID recovery complete; the MiniMax-M2.5 text rerun is now fully persisted through the Denevil proxy task (100.0%). |
-| `DeepSeek-S` | Done | - | Done | Done | Proxy | Done | Done | No SMID route; May 9 no-thinking text rerun is complete and visible-answer validated. |
-| `DeepSeek-M` | Done | - | Done | Done | Proxy | Done | Done | Frozen medium text line; no SMID route was included. UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses. |
-| `DeepSeek-L` | Done | - | Done | Done | Proxy | Done | Done | No SMID route; large R1 text rerun is complete from saved shards with UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed. |
-| `Llama-S` | Done | Done | Done | Done | Proxy | Done | Done | Complete locally across all five papers. |
-| `Llama-M` | Done | - | Done | Done | Proxy | Done | Done | No SMID route; medium text line completed locally on April 22, 2026. |
-| `Llama-L` | Done | Done | Done | Done | Proxy | Done | Done | SMID complete; local text rerun is now fully persisted through the Denevil proxy task (100.0%). |
-| `Gemma-S` | Done | Done | Done | Done | Proxy | Done | Done | Frozen Option 1 recovery line. |
-| `Gemma-M` | Done | Done | Done | Done | Proxy | Done | Done | Complete local line across all five papers. |
-| `Gemma-L` | Done | Done | Done | Done | Proxy | Done | Done | Complete local line across all five papers. |
+| `Qwen-S` | Done | Done | Done | Done | Proxy (not T3) | Done | Done | Frozen Option 1 line. |
+| `Qwen-M` | Done | TBD | Done | Done | Proxy (not T3) | Done | Done | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
+| `Qwen-L` | Done | Done | Done | Done | Proxy (not T3) | Done | Done | SMID recovery complete; clean text rerun finished locally. |
+| `MiniMax-S` | Done | Done | Done | Done | Proxy (not T3) | Done | Done | Direct MiniMax-M2.1 text rerun complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; SMID uses the completed MiniMax-01 recovery route. |
+| `MiniMax-M` | Done | TBD | Done | Done | Proxy (not T3) | Done | Done | Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral action prediction 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
+| `MiniMax-L` | Done | Done | Done | Done | Proxy (not T3) | Done | Done | Shared MiniMax-01 SMID recovery complete; the MiniMax-M2.5 text rerun is now fully persisted through the Denevil proxy task (100.0%). |
+| `DeepSeek-S` | Done | - | Done | Done | Proxy (not T3) | Done | Done | No SMID route; May 9 no-thinking text rerun is complete and visible-answer validated. |
+| `DeepSeek-M` | Done | - | Done | Done | Proxy (not T3) | Done | Done | Frozen medium text line; no SMID route was included. UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses. |
+| `DeepSeek-L` | Done | - | Done | Done | Proxy (not T3) | Done | Done | No SMID route; large R1 text rerun is complete from saved shards with UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed. |
+| `Llama-S` | Done | Done | Done | Done | Proxy (not T3) | Done | Done | Complete locally across all five papers. |
+| `Llama-M` | Done | - | Done | Done | Proxy (not T3) | Done | Done | No SMID route; medium text line completed locally on April 22, 2026. |
+| `Llama-L` | Done | Done | Done | Done | Proxy (not T3) | Done | Done | SMID complete; local text rerun is now fully persisted through the Denevil proxy task (100.0%). |
+| `Gemma-S` | Done | Done | Done | Done | Proxy (not T3) | Done | Done | Frozen Option 1 recovery line. |
+| `Gemma-M` | Done | Done | Done | Done | Proxy (not T3) | Done | Done | Complete local line across all five papers. |
+| `Gemma-L` | Done | Done | Done | Done | Proxy (not T3) | Done | Done | Complete local line across all five papers. |
 
 ## Benchmark List
 
