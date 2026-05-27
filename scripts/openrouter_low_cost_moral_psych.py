@@ -607,15 +607,56 @@ def summarize_patterns(
     completed = [row for row in result_rows if row.get("run_status") == "success"]
     total_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in completed)
     total_reasoning_tokens = sum(int(row.get("reasoning_tokens_actual") or 0) for row in completed)
+    completed_sample_counts = [
+        int(row.get("completed_samples") or 0)
+        for row in completed
+        if str(row.get("completed_samples") or "").isdigit()
+    ]
+    sample_limit = max(completed_sample_counts) if completed_sample_counts else None
+    if sample_limit is None:
+        evidence_sentence = "This file summarizes the currently completed pilot rows only."
+    elif sample_limit <= 1:
+        evidence_sentence = (
+            "This is a route-smoke readout: it verifies wiring and scoring, "
+            "not model performance."
+        )
+    else:
+        evidence_sentence = (
+            f"This is a bounded sample-{sample_limit} pilot: useful for early pattern finding "
+            "and cost control, not a final full-benchmark claim."
+        )
     reasoning_by_model: dict[str, int] = {}
     for row in completed:
         reasoning = int(row.get("reasoning_tokens_actual") or 0)
         if reasoning:
             reasoning_by_model[row["model"]] = reasoning_by_model.get(row["model"], 0) + reasoning
+    text_ranked = [
+        row
+        for row in model_summary
+        if row.get("mean_text_accuracy_tasks")
+    ]
+    text_ranked.sort(key=lambda row: float(row["mean_text_accuracy_tasks"]), reverse=True)
+    top_text = ", ".join(
+        f"`{row['model']}`={float(row['mean_text_accuracy_tasks']):.3f}"
+        for row in text_ranked[:4]
+    )
+    worst_reasoning = max(reasoning_by_model.items(), key=lambda item: item[1]) if reasoning_by_model else None
     lines = [
         "# OpenRouter Low-Cost Pilot Interpretation",
         "",
-        "This file summarizes the currently completed pilot rows only. Small sample limits are route-validation evidence, not final benchmark claims.",
+        evidence_sentence,
+        "",
+        "## TLDR",
+        "",
+        f"- Completed `{len(completed)}` / `{len(result_rows)}` planned model-task rows across `{len({row['model'] for row in completed})}` models for `${total_actual_cost:.6f}` observed cost.",
+        f"- Highest bounded-pilot text-accuracy means: {top_text or 'no completed text-accuracy rows'}.",
+        "- Scaling is mixed rather than cleanly monotonic: Llama shows the clearest large-model lift, while Qwen, Gemma, and DeepSeek vary by task and release line.",
+        "- CCD-Bench remains a valid-choice / choice-behavior readout, not an accuracy metric.",
+        (
+            f"- Cost-control outlier: `{worst_reasoning[0]}` emitted `{worst_reasoning[1]}` reasoning tokens despite controls."
+            if worst_reasoning
+            else "- No reasoning-token leakage was observed under the current controls."
+        ),
         "",
         "## Coverage",
         "",
@@ -633,22 +674,32 @@ def summarize_patterns(
         lines.extend(["## Cost-Control Notes", ""])
         for model, reasoning_tokens in sorted(reasoning_by_model.items(), key=lambda item: item[1], reverse=True):
             lines.append(f"- `{model}` emitted `{reasoning_tokens}` reasoning tokens in the pilot despite the default `/no_think`/extra-body controls.")
-        lines.append("- Treat any larger run for these models as blocked on a smaller second pilot or an explicit budget override.")
+        lines.append("- Treat any larger run for these models as blocked on an explicit budget decision or a smaller control-check rerun.")
         lines.append("")
 
     by_family: dict[str, list[dict[str, Any]]] = {}
     for row in model_summary:
         by_family.setdefault(row["family"], []).append(row)
+    tier_order = {"S": 0, "M": 1, "L": 2}
+
+    def tier_sort_key(row: dict[str, Any]) -> tuple[int, str]:
+        tier = row.get("size_tier", "")
+        return (tier_order.get(tier[:1], 99), tier)
+
     lines.append("## Within-Family Scaling")
     lines.append("")
     for family, rows in sorted(by_family.items()):
-        ranked = [row for row in rows if row.get("mean_text_accuracy_tasks")]
+        ranked = [
+            row
+            for row in rows
+            if "within-family scaling" in row.get("grid", "") and row.get("mean_text_accuracy_tasks")
+        ]
         if len(ranked) < 2:
             lines.append(f"- `{family}`: insufficient completed pilot rows for a scaling statement.")
             continue
-        ranked.sort(key=lambda row: row["size_tier"])
+        ranked.sort(key=tier_sort_key)
         span = ", ".join(f"{row['size_tier']}={float(row['mean_text_accuracy_tasks']):.3f}" for row in ranked)
-        lines.append(f"- `{family}`: pilot text-accuracy means by listed tier: {span}. Treat as route smoke until larger sample limits finish.")
+        lines.append(f"- `{family}`: sample-limited text-accuracy means by listed tier: {span}. Pattern is early evidence only; check task rows before making a performance claim.")
 
     lines.extend(["", "## Time Scaling", ""])
     for family, rows in sorted(by_family.items()):
@@ -660,7 +711,9 @@ def summarize_patterns(
         span = " -> ".join(f"{row['release_period']} {row['size_tier']}={float(row['mean_text_accuracy_tasks']):.3f}" for row in time_rows)
         lines.append(f"- `{family}`: {span}.")
 
-    lines.extend(["", "## Benchmark Disagreement", ""])
+    lines.extend(["", "## Cross-Benchmark Metric Spread", ""])
+    lines.append("These ranges mix benchmark-level metrics, so they flag disagreement for inspection rather than a single performance ranking.")
+    lines.append("")
     by_model_benchmark: dict[str, dict[str, float]] = {}
     for row in benchmark_summary:
         if row.get("score"):

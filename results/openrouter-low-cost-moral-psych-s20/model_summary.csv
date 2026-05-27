@@ -1,0 +1,18 @@
+model,family,size_tier,release_period,grid,successful_tasks,mean_all_observed_scores,mean_text_accuracy_tasks,reasoning_tokens_actual,actual_cost_usd,estimated_cost_usd,actual_vs_estimated_cost_ratio
+deepseek/deepseek-chat-v3-0324,DeepSeek,chat/V3,2025-Q1,time scaling,7,0.544641,0.530000,0,0.008628,0.032239,0.268
+deepseek/deepseek-chat-v3.1,DeepSeek,chat/V3.1,2025-Q3,time scaling,7,0.547751,0.530000,0,0.008571,0.033205,0.258
+deepseek/deepseek-v3.2,DeepSeek,chat/V3.2,2025-Q4,time scaling,7,0.547034,0.530000,0,0.007934,0.020059,0.396
+deepseek/deepseek-v4-flash,DeepSeek,flash/V4,2026-Q2,time scaling,7,0.581009,0.590000,20561,0.011582,0.009696,1.195
+google/gemma-2-27b-it,Gemma,L/27B,2024-Q3,time scaling,7,0.525039,0.530000,0,0.021614,0.040456,0.534
+google/gemma-3-12b-it,Gemma,M/12B,2025-Q1,within-family scaling,7,0.579458,0.590000,0,0.001496,0.005615,0.266
+google/gemma-3-27b-it,Gemma,L/27B,2025-Q1,within-family scaling,7,0.571319,0.570000,0,0.002646,0.007756,0.341
+google/gemma-3-4b-it,Gemma,S/4B,2025-Q1,within-family scaling,7,0.573011,0.570000,0,0.001405,0.003879,0.362
+google/gemma-4-31b-it,Gemma,L/31B,2026-Q1,time scaling,7,0.610132,0.640000,0,0.004527,0.016148,0.280
+meta-llama/llama-3.1-8b-instruct,Llama,M/8B,2024-Q3,within-family scaling,7,0.547673,0.550000,0,0.000779,0.002286,0.341
+meta-llama/llama-3.2-3b-instruct,Llama,S/3B,2024-Q3,within-family scaling,7,0.533766,0.530000,0,0.003498,0.013032,0.268
+meta-llama/llama-3.3-70b-instruct,Llama,L/70B,2024-Q4,within-family scaling,7,0.633413,0.650000,0,0.004194,0.013863,0.303
+qwen/qwen-2.5-7b-instruct,Qwen,S/7B,2024-Q4,time scaling,7,0.633335,0.660000,0,0.001514,0.004572,0.331
+qwen/qwen3-235b-a22b-2507,Qwen,L/MoE 235B-A22B,2025-Q3,within-family scaling,7,0.623773,0.640000,0,0.002601,0.005426,0.479
+qwen/qwen3-32b,Qwen,M/32B,2025-Q2,within-family scaling,7,0.565624,0.570000,198,0.003451,0.011923,0.289
+qwen/qwen3-8b,Qwen,S/8B,2025-Q2,within-family scaling,7,0.578298,0.590000,0,0.002670,0.015262,0.175
+qwen/qwen3.5-9b,Qwen,S/9B,2026-Q1,time scaling,7,0.215306,0.300000,285277,0.080326,0.006308,12.734
