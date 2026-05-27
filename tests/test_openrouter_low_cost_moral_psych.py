@@ -100,6 +100,9 @@ def test_completion_audit_marks_sample_limited_live_run_as_partial(tmp_path: Pat
     assert "Evidence level: `live run complete`." in content
     assert "Full-objective status: Bounded sample-100 evidence only" in content
     assert "| Run selected models on the three allowed benchmarks | All `3` recorded model-task rows completed with `success`. | partial |" in content
+    assert "## Approved Full-Run Command" in content
+    assert "--full --output-dir results/openrouter-low-cost-moral-psych-full" in content
+    assert "--max-total-estimated-cost 60 --yes" in content
     assert "Do not treat the bounded pilot as the full benchmark" in content
 
 
@@ -112,4 +115,6 @@ def test_completion_audit_marks_full_plan_as_not_yet_run(tmp_path: Path) -> None
     assert "Evidence level: `plan only`." in content
     assert "Full-objective status: Planned, not yet run." in content
     assert "| Output model/family/size/release/benchmark/score/cost/replication tables | `benchmark_map.csv`, `model_grid.csv`, and `run_plan.csv` are present; scored result tables are created only after live rows exist. | planned only |" in content
+    assert "Run only after explicit approval for the full selected-grid OpenRouter spend." in content
+    assert "--max-total-estimated-cost 60 --yes" in content
     assert "Do not treat this plan as completed benchmark evidence." in content

@@ -34,4 +34,15 @@ Full-objective status: Bounded sample-100 evidence only; this is not a final ful
 
 Approve a full live run to turn this pilot into full selected-grid evidence. The current full-dataset selected-grid estimate is `$51.6126`. DeepSeek/Qwen reasoning-token leakage should be budgeted explicitly before that run.
 
+## Approved Full-Run Command
+
+Run only after explicit approval for the full selected-grid OpenRouter spend.
+
+```bash
+/opt/anaconda3/bin/python scripts/openrouter_low_cost_moral_psych.py run --full --output-dir results/openrouter-low-cost-moral-psych-full --max-connections 1 --max-total-estimated-cost 60 --yes
+/opt/anaconda3/bin/python scripts/openrouter_low_cost_moral_psych.py summarize --full --output-dir results/openrouter-low-cost-moral-psych-full
+```
+
+The command keeps the live run bounded by `--max-total-estimated-cost 60`, uses `--max-connections 1` for provider stability, and keeps completed rows resumable through the default `--skip-existing-success` behavior.
+
 Do not treat the bounded pilot as the full benchmark. It is a cost-controlled evidence package for early pattern finding and route validation.
