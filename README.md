@@ -554,7 +554,8 @@ OpenRouter low-cost follow-up:
 
 - The bounded sample-100 OpenRouter run covers only `UniMoral`, `ValuePrism`, and `CCD-Bench` across 17 OpenRouter-accessible models; `SMID`, `DeNEVIL`, and `MiniMax` are excluded by design.
 - The sample-100 readout is useful for route validation and early scaling/time-scaling patterns, not a final full-benchmark claim.
-- The full selected-grid run is planned separately in the full-dataset estimate folder and requires explicit approval before cost-bearing model calls.
+- The full selected-grid run is planned separately in the full-dataset estimate folder and requires explicit approval before cost-bearing model calls. Preview with `make openrouter-low-cost-full-dry-run`; after approval, run with `OPENROUTER_FULL_RUN_APPROVED=1 make openrouter-low-cost-full-run`.
+- Raw Inspect logs from the low-cost OpenRouter folders are ignored by default; commit only the summarized tables, figures, and audits unless a separate artifact contract says otherwise.
 
 Metric boundaries:
 

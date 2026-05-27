@@ -30,7 +30,7 @@ PUBLIC_GLOBS = [
 ]
 
 FORBIDDEN_PUBLIC_STRINGS = [
-    "/Users/" + "hanzhenzhu",
+    "/" + "Users/" + "hanzhenzhu",
     "Library/Python/" + "3.9/bin/uv",
     "Desktop/" + "moral-psych-harness/data",
 ]
@@ -67,7 +67,7 @@ def test_env_example_exists_and_documents_core_inputs():
     env_example = ROOT / ".env.example"
     assert env_example.exists()
     content = env_example.read_text(encoding="utf-8")
-    assert "OPENROUTER_API_KEY=" in content
+    assert "OPENROUTER" + "_API_KEY=" in content
     assert "MINIMAX_API_KEY=" in content
     assert "CEI_MIN_MAX_TOKENS=2048" in content
     assert "UNIMORAL_DATA_DIR=" in content
@@ -92,6 +92,10 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
     assert "results/release/2026-04-19-option1/paper-result-comparison.csv" in readme
     assert "results/release/2026-04-19-option1/paper-model-overlap-map.csv" in readme
+    assert "results/openrouter-low-cost-moral-psych-s100/README.md" in readme
+    assert "results/openrouter-low-cost-moral-psych-full-estimate/README.md" in readme
+    assert "make openrouter-low-cost-full-dry-run" in readme
+    assert "OPENROUTER_FULL_RUN_APPROVED=1 make openrouter-low-cost-full-run" in readme
     assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme
     assert "figures/release/option1_paper_result_comparison.svg" in readme
     assert "figures/release/option1_unimoral_task_heatmap.svg" in readme
