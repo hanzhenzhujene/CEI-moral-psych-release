@@ -107,7 +107,7 @@ The builder change was made in:
 
 After that change, this pass rebuilt the tracked public artifacts with:
 
-- `python3 /Users/hanzhenzhu/Desktop/moral-psych-harness/CEI/scripts/build_release_artifacts.py`
+- `python3 scripts/build_release_artifacts.py`
 
 That refresh propagated the current live monitor snapshot into:
 
