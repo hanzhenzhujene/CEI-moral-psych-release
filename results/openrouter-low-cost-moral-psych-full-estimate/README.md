@@ -1,6 +1,6 @@
 # Low-Cost OpenRouter Moral-Psych Pipeline
 
-OpenRouter pricing metadata fetched: `2026-05-27T14:08:56.466279+00:00` from `https://openrouter.ai/api/v1/models`.
+OpenRouter pricing metadata fetched: `2026-05-27T17:05:06.737100+00:00` from `https://openrouter.ai/api/v1/models`.
 
 Scope:
 - Included benchmarks: UniMoral, ValuePrism / Value Kaleidoscope, CCD-Bench.
@@ -9,7 +9,7 @@ Scope:
 - Price cap: input <= $3.00/1M tokens and output <= $15.00/1M tokens, unless an existing baseline row is explicitly marked.
 - CCD-Bench is reported as choice behavior / valid-choice coverage, not accuracy.
 - ValuePrism rows are prompt-based classification, not Kaleido model replication.
-- Qwen/DeepSeek live runs use a `/no_think` prompt prefix by default for cost control; set `--reasoning-prompt-prefix ''` to disable it.
+- Qwen/DeepSeek live runs use a `/no_think` prompt prefix plus `reasoning.effort=none` by default for cost control; set `--reasoning-prompt-prefix ''` or override `--extra-body-json` to change this.
 - Live run cost summaries count reasoning tokens conservatively as completion tokens when Inspect reports them.
 
 Sample limit for this plan: `full dataset` per task.

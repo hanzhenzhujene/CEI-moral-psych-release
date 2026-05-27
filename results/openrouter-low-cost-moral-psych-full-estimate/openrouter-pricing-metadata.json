@@ -1,7 +1,7 @@
 {
-  "fetched_at": "2026-05-27T14:08:56.466279+00:00",
+  "fetched_at": "2026-05-27T17:05:06.737100+00:00",
   "source_url": "https://openrouter.ai/api/v1/models",
-  "models_seen": 356,
+  "models_seen": 355,
   "selected_models": [
     "qwen/qwen3-8b",
     "qwen/qwen3-32b",
