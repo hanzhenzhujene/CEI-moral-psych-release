@@ -1,6 +1,6 @@
 # Low-Cost OpenRouter Moral-Psych Pipeline
 
-OpenRouter pricing metadata fetched: `2026-05-27T17:05:06.737100+00:00` from `https://openrouter.ai/api/v1/models`.
+OpenRouter pricing metadata fetched: `2026-05-27T17:12:09.972713+00:00` from `https://openrouter.ai/api/v1/models`.
 
 Scope:
 - Included benchmarks: UniMoral, ValuePrism / Value Kaleidoscope, CCD-Bench.
@@ -21,6 +21,7 @@ Primary outputs:
 - `model_grid.csv`: selected OpenRouter model grid and cap decision.
 - `run_plan.csv`: model x task cost estimates and planned metadata.
 - `result_summary.csv`: created after live runs.
+- `completion_audit.md`: requirement-by-requirement status for this output folder.
 - `openrouter-pricing-metadata.json`: compact pricing-source metadata for the selected model grid.
 - `figures/cost_estimate.svg`: planned cost by model.
 - `figures/pilot_scores.svg`: pilot scores after live runs.

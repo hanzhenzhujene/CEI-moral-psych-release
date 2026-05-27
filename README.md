@@ -546,6 +546,15 @@ Key links:
 - [Paper result comparison](results/release/2026-04-19-option1/paper-result-comparison.csv)
 - [Paper/model overlap map](results/release/2026-04-19-option1/paper-model-overlap-map.csv)
 - [Exact family-size progress table](results/release/2026-04-19-option1/family-size-progress.csv)
+- [Low-cost OpenRouter sample-100 readout](results/openrouter-low-cost-moral-psych-s100/README.md)
+- [Low-cost OpenRouter completion audit](results/openrouter-low-cost-moral-psych-s100/completion_audit.md)
+- [Low-cost OpenRouter full-dataset cost estimate](results/openrouter-low-cost-moral-psych-full-estimate/README.md)
+
+OpenRouter low-cost follow-up:
+
+- The bounded sample-100 OpenRouter run covers only `UniMoral`, `ValuePrism`, and `CCD-Bench` across 17 OpenRouter-accessible models; `SMID`, `DeNEVIL`, and `MiniMax` are excluded by design.
+- The sample-100 readout is useful for route validation and early scaling/time-scaling patterns, not a final full-benchmark claim.
+- The full selected-grid run is planned separately in the full-dataset estimate folder and requires explicit approval before cost-bearing model calls.
 
 Metric boundaries:
 

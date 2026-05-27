@@ -412,6 +412,7 @@ def render_cost_plot(rows: list[dict[str, Any]], output_path: Path) -> None:
         import matplotlib.pyplot as plt
     except Exception:
         return
+    plt.rcParams["svg.hashsalt"] = "openrouter-low-cost-moral-psych"
     totals: dict[str, float] = {}
     for row in rows:
         totals[row["model"]] = totals.get(row["model"], 0.0) + float(row["estimated_cost_usd"] or 0.0)
@@ -426,7 +427,7 @@ def render_cost_plot(rows: list[dict[str, Any]], output_path: Path) -> None:
     plt.title("OpenRouter Low-Cost Moral-Psych Run Plan")
     plt.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(output_path, format="svg")
+    plt.savefig(output_path, format="svg", metadata={"Date": "2026-05-27"})
     plt.close()
     strip_trailing_whitespace(output_path)
 
@@ -504,6 +505,7 @@ def render_score_plot(rows: list[dict[str, Any]], output_path: Path) -> None:
         import matplotlib.pyplot as plt
     except Exception:
         return
+    plt.rcParams["svg.hashsalt"] = "openrouter-low-cost-moral-psych"
     scored = [row for row in rows if str(row.get("score", "")).strip()]
     if not scored:
         return
@@ -518,7 +520,7 @@ def render_score_plot(rows: list[dict[str, Any]], output_path: Path) -> None:
     plt.xlim(0, 1)
     plt.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(output_path, format="svg")
+    plt.savefig(output_path, format="svg", metadata={"Date": "2026-05-27"})
     plt.close()
     strip_trailing_whitespace(output_path)
 
@@ -792,6 +794,7 @@ def write_readme(
         "- `model_grid.csv`: selected OpenRouter model grid and cap decision.",
         "- `run_plan.csv`: model x task cost estimates and planned metadata.",
         "- `result_summary.csv`: created after live runs.",
+        "- `completion_audit.md`: requirement-by-requirement status for this output folder.",
         "- `openrouter-pricing-metadata.json`: compact pricing-source metadata for the selected model grid.",
         "- `figures/cost_estimate.svg`: planned cost by model.",
         "- `figures/pilot_scores.svg`: pilot scores after live runs.",
@@ -840,6 +843,189 @@ def write_readme(
     (output_dir / "README.md").write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
 
+def write_completion_audit(
+    output_dir: Path,
+    sample_limit: int | None,
+    model_rows: list[dict[str, Any]],
+    plan_rows: list[dict[str, Any]],
+    result_rows: list[dict[str, Any]] | None = None,
+) -> None:
+    planned_cost = sum(float(row.get("estimated_cost_usd") or 0.0) for row in plan_rows)
+    eligible_rows = [row for row in model_rows if str(row.get("eligible")) == "True" or row.get("eligible") is True]
+    available_eligible_rows = [
+        row
+        for row in eligible_rows
+        if str(row.get("available")) == "True" or row.get("available") is True
+    ]
+    completed = [row for row in (result_rows or []) if row.get("run_status") == "success"]
+    total_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in completed)
+    total_reasoning_tokens = sum(int(row.get("reasoning_tokens_actual") or 0) for row in completed)
+    allowed_benchmarks = sorted({row.get("benchmark", "") for row in plan_rows if row.get("benchmark")})
+    planned_tasks = sorted({row.get("task", "") for row in plan_rows if row.get("task")})
+    completed_models = sorted({row.get("model", "") for row in completed if row.get("model")})
+    completed_tasks = sorted({row.get("task", "") for row in completed if row.get("task")})
+    completed_sample_counts = sorted(
+        {
+            int(row.get("completed_samples") or 0)
+            for row in completed
+            if str(row.get("completed_samples") or "").isdigit()
+        }
+    )
+    minmax_present = any("minimax" in str(row.get("model", "")).lower() for row in model_rows + plan_rows)
+    forbidden_benchmarks = {"SMID", "DeNEVIL", "Denevil"}
+    forbidden_present = sorted({row.get("benchmark", "") for row in plan_rows if row.get("benchmark") in forbidden_benchmarks})
+    price_violations = [
+        row["model"]
+        for row in available_eligible_rows
+        if str(row.get("existing_baseline")) not in {"True", "true", "1"}
+        and (
+            float(row.get("input_price_per_m") or 0.0) > INPUT_PRICE_CAP_PER_M
+            or float(row.get("output_price_per_m") or 0.0) > OUTPUT_PRICE_CAP_PER_M
+        )
+    ]
+
+    if result_rows is None:
+        evidence_level = "plan only"
+        live_status = "No live model calls are recorded in this output folder."
+    elif completed and len(completed) == len(result_rows):
+        evidence_level = "live run complete"
+        live_status = f"All `{len(completed)}` recorded model-task rows completed with `success`."
+    else:
+        evidence_level = "live run incomplete"
+        live_status = f"`{len(completed)}` / `{len(result_rows)}` recorded model-task rows completed with `success`."
+
+    if sample_limit is None and result_rows and completed and len(completed) == len(result_rows):
+        full_objective_status = "Proven for the full selected grid in this folder."
+        unblock = "No unblock is required for this output folder."
+    elif sample_limit is None:
+        full_objective_status = "Planned, not yet run."
+        unblock = (
+            f"Approve the full live run before spending approximately `${planned_cost:.4f}` "
+            "plus any provider-side reasoning-token overhead."
+        )
+    else:
+        full_objective_status = (
+            f"Bounded sample-{sample_limit} evidence only; this is not a final full-benchmark claim."
+        )
+        full_estimate_path = PROJECT_ROOT / "results" / "openrouter-low-cost-moral-psych-full-estimate" / "run_plan.csv"
+        full_cost_note = "See the full-estimate folder for the current full-dataset cost plan."
+        if full_estimate_path.exists():
+            full_rows = read_csv(full_estimate_path)
+            full_cost = sum(float(row.get("estimated_cost_usd") or 0.0) for row in full_rows)
+            full_cost_note = f"The current full-dataset selected-grid estimate is `${full_cost:.4f}`."
+        unblock = (
+            f"Approve a full live run to turn this pilot into full selected-grid evidence. {full_cost_note} "
+            "DeepSeek/Qwen reasoning-token leakage should be budgeted explicitly before that run."
+        )
+
+    if result_rows:
+        table_evidence = (
+            "`run_plan.csv`, `result_summary.csv`, `benchmark_summary.csv`, and `model_summary.csv` "
+            "provide the requested columns where live rows exist."
+        )
+        table_status = "proven"
+        plot_status = "proven"
+        pattern_status = "partial" if sample_limit is not None else "proven"
+    else:
+        table_evidence = (
+            "`benchmark_map.csv`, `model_grid.csv`, and `run_plan.csv` are present; scored result tables "
+            "are created only after live rows exist."
+        )
+        table_status = "planned only"
+        plot_status = "cost plot only"
+        pattern_status = "not run"
+
+    requirement_rows = [
+        (
+            "Allowed benchmarks identified",
+            f"`benchmark_map.csv` lists `{', '.join(allowed_benchmarks)}` with paper, data/prompt route, scorer, metric, and replication status.",
+            "proven" if allowed_benchmarks == ["CCD-Bench", "UniMoral", "ValuePrism"] else "needs review",
+        ),
+        (
+            "SMID, DeNEVIL, and MiniMax excluded",
+            f"Forbidden benchmarks present: `{', '.join(forbidden_present) if forbidden_present else 'none'}`; MiniMax present: `{minmax_present}`.",
+            "proven" if not forbidden_present and not minmax_present else "failed",
+        ),
+        (
+            "OpenRouter pricing fetched before planning",
+            "`openrouter-pricing-metadata.json` records the `/models` metadata fetch used for `model_grid.csv` and `run_plan.csv`.",
+            "proven",
+        ),
+        (
+            "Per-model price cap enforced",
+            f"Eligible available rows over cap without baseline exemption: `{', '.join(price_violations) if price_violations else 'none'}`.",
+            "proven" if not price_violations else "failed",
+        ),
+        (
+            "Within-family and time-scaling grids selected",
+            f"`model_grid.csv` contains `{len(available_eligible_rows)}` eligible available OpenRouter rows across the requested grid labels.",
+            "proven" if available_eligible_rows else "missing",
+        ),
+        (
+            "Run selected models on the three allowed benchmarks",
+            live_status,
+            "proven" if sample_limit is None and result_rows and completed and len(completed) == len(result_rows) else "partial",
+        ),
+        (
+            "Output model/family/size/release/benchmark/score/cost/replication tables",
+            table_evidence,
+            table_status,
+        ),
+        (
+            "Output plots",
+            "`figures/cost_estimate.svg` is generated for plans; `figures/pilot_scores.svg` is generated when scored rows exist.",
+            plot_status,
+        ),
+        (
+            "Summarize robust patterns",
+            "`interpretation.md` summarizes scaling, time-scaling, and cross-benchmark disagreement for completed rows.",
+            pattern_status,
+        ),
+    ]
+
+    lines = [
+        "# OpenRouter Low-Cost Completion Audit",
+        "",
+        f"Evidence level: `{evidence_level}`.",
+        f"Sample limit: `{sample_limit if sample_limit is not None else 'full dataset'}` per task.",
+        f"Planned model-task rows: `{len(plan_rows)}`.",
+        f"Eligible available models: `{len(available_eligible_rows)}`.",
+        f"Planned estimated cost: `${planned_cost:.4f}`.",
+        f"Full-objective status: {full_objective_status}",
+        "",
+        "## Live Evidence",
+        "",
+        f"- Successful model-task rows: `{len(completed)}` / `{len(result_rows or [])}`.",
+        f"- Completed models: `{len(completed_models)}`.",
+        f"- Completed tasks: `{len(completed_tasks)}` / `{len(planned_tasks)}`.",
+        f"- Completed sample counts observed: `{', '.join(str(value) for value in completed_sample_counts) if completed_sample_counts else 'none'}`.",
+        f"- Observed API cost from parsed Inspect logs: `${total_actual_cost:.6f}`.",
+        f"- Observed reasoning tokens: `{total_reasoning_tokens}`.",
+        "",
+        "## Requirement Audit",
+        "",
+        "| Requirement | Evidence | Status |",
+        "| :--- | :--- | :--- |",
+    ]
+    for requirement, evidence, status in requirement_rows:
+        lines.append(f"| {requirement} | {evidence} | {status} |")
+    lines.extend(
+        [
+            "",
+            "## Unblock",
+            "",
+            unblock,
+            "",
+            (
+                "Do not treat this plan as completed benchmark evidence."
+                if result_rows is None
+                else "Do not treat the bounded pilot as the full benchmark. It is a cost-controlled evidence package for early pattern finding and route validation."
+            ),
+        ]
+    )
+    (output_dir / "completion_audit.md").write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+
+
 def write_plan(output_dir: Path, sample_limit: int | None) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
     load_project_env()
     models_by_id, fetched_at = fetch_openrouter_models()
@@ -870,6 +1056,7 @@ def write_plan(output_dir: Path, sample_limit: int | None) -> tuple[list[dict[st
     write_csv(output_dir / "run_plan.csv", plan_rows)
     render_cost_plot(plan_rows, output_dir / "figures" / "cost_estimate.svg")
     write_readme(output_dir, fetched_at, sample_limit, model_rows, plan_rows)
+    write_completion_audit(output_dir, sample_limit, model_rows, plan_rows)
     return plan_rows, models_by_id
 
 
@@ -1014,6 +1201,7 @@ def main() -> None:
             result_rows = execute_plan(args, plan_rows, models_by_id)
             model_rows = read_csv(args.output_dir / "model_grid.csv")
             write_readme(args.output_dir, "see openrouter-pricing-metadata.json", args.sample_limit, model_rows, plan_rows, result_rows)
+            write_completion_audit(args.output_dir, args.sample_limit, model_rows, plan_rows, result_rows)
     else:
         models_by_id, _ = fetch_openrouter_models()
         plan_rows = read_csv(args.output_dir / "result_summary.csv")
@@ -1031,6 +1219,7 @@ def main() -> None:
             except json.JSONDecodeError:
                 pass
         write_readme(args.output_dir, fetched_at, readme_sample_limit, model_rows, planned_rows, result_rows)
+        write_completion_audit(args.output_dir, readme_sample_limit, model_rows, planned_rows, result_rows)
 
 
 if __name__ == "__main__":

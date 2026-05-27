@@ -21,6 +21,7 @@ Primary outputs:
 - `model_grid.csv`: selected OpenRouter model grid and cap decision.
 - `run_plan.csv`: model x task cost estimates and planned metadata.
 - `result_summary.csv`: created after live runs.
+- `completion_audit.md`: requirement-by-requirement status for this output folder.
 - `openrouter-pricing-metadata.json`: compact pricing-source metadata for the selected model grid.
 - `figures/cost_estimate.svg`: planned cost by model.
 - `figures/pilot_scores.svg`: pilot scores after live runs.
