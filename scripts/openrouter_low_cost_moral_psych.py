@@ -30,7 +30,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "results" / "openrouter-low-cost-moral-psych"
 DEFAULT_EXTRA_BODY_JSON = json.dumps(
     {
-        "reasoning": {"exclude": True},
+        "reasoning": {"effort": "none", "exclude": True},
         "chat_template_kwargs": {"enable_thinking": False},
     }
 )
@@ -370,7 +370,7 @@ def run_plan_rows(
                     "estimated_cost_usd": f"{cost:.6f}",
                     "input_price_per_m": model_row["input_price_per_m"],
                     "output_price_per_m": model_row["output_price_per_m"],
-                    "reasoning_cost_control": "default /no_think prefix at run time" if model_row["family"] in {"Qwen", "DeepSeek"} else "",
+                    "reasoning_cost_control": "default /no_think prefix + reasoning.effort=none at run time" if model_row["family"] in {"Qwen", "DeepSeek"} else "",
                     "replication_status": spec.replication_status,
                     "run_status": "planned",
                     "log_path": "",
@@ -653,7 +653,7 @@ def summarize_patterns(
         "- Scaling is mixed rather than cleanly monotonic: Llama shows the clearest large-model lift, while Qwen, Gemma, and DeepSeek vary by task and release line.",
         "- CCD-Bench remains a valid-choice / choice-behavior readout, not an accuracy metric.",
         (
-            f"- Cost-control outlier: `{worst_reasoning[0]}` emitted `{worst_reasoning[1]}` reasoning tokens despite controls."
+            f"- Cost-control caveat: `{worst_reasoning[0]}` emitted `{worst_reasoning[1]}` reasoning tokens despite controls."
             if worst_reasoning
             else "- No reasoning-token leakage was observed under the current controls."
         ),
@@ -668,13 +668,22 @@ def summarize_patterns(
         f"- Conservative observed cost estimate: `${total_actual_cost:.6f}` using input + output + reasoning tokens at OpenRouter metadata rates.",
         f"- Observed reasoning tokens: `{total_reasoning_tokens}`.",
         "",
+        "## Benchmark Guide",
+        "",
+        "- UniMoral action, moral-typology, and factor-attribution rows are accuracy-style text classification tasks.",
+        "- UniMoral consequence generation is a live METEOR-style generation score; do not compare its magnitude directly with accuracy rows.",
+        "- ValuePrism rows are prompt-based relevance/valence classification, not Kaleido model replication.",
+        "- CCD-Bench is valid-choice coverage and choice-format behavior, not correctness or accuracy.",
+        "",
     ]
 
     if reasoning_by_model:
         lines.extend(["## Cost-Control Notes", ""])
         for model, reasoning_tokens in sorted(reasoning_by_model.items(), key=lambda item: item[1], reverse=True):
-            lines.append(f"- `{model}` emitted `{reasoning_tokens}` reasoning tokens in the pilot despite the default `/no_think`/extra-body controls.")
-        lines.append("- Treat any larger run for these models as blocked on an explicit budget decision or a smaller control-check rerun.")
+            if reasoning_tokens >= 5_000:
+                lines.append(f"- `{model}` emitted `{reasoning_tokens}` reasoning tokens despite controls; larger runs need an explicit budget decision or a control-check rerun.")
+            else:
+                lines.append(f"- `{model}` emitted `{reasoning_tokens}` residual reasoning tokens despite controls; this was bounded in the current pilot but should be monitored.")
         lines.append("")
 
     by_family: dict[str, list[dict[str, Any]]] = {}
@@ -695,11 +704,12 @@ def summarize_patterns(
             if "within-family scaling" in row.get("grid", "") and row.get("mean_text_accuracy_tasks")
         ]
         if len(ranked) < 2:
-            lines.append(f"- `{family}`: insufficient completed pilot rows for a scaling statement.")
+            lines.append(f"- `{family}`: no S/M/L within-family grid in this plan; covered under time scaling instead.")
             continue
         ranked.sort(key=tier_sort_key)
         span = ", ".join(f"{row['size_tier']}={float(row['mean_text_accuracy_tasks']):.3f}" for row in ranked)
         lines.append(f"- `{family}`: sample-limited text-accuracy means by listed tier: {span}. Pattern is early evidence only; check task rows before making a performance claim.")
+    lines.append("- Takeaway: Llama has the clearest size-scaling lift in this pilot; Gemma improves mildly; Qwen is non-monotonic because the 32B row trails both 8B and the 235B MoE on the text-accuracy mean.")
 
     lines.extend(["", "## Time Scaling", ""])
     for family, rows in sorted(by_family.items()):
@@ -710,9 +720,11 @@ def summarize_patterns(
         time_rows.sort(key=lambda row: row["release_period"])
         span = " -> ".join(f"{row['release_period']} {row['size_tier']}={float(row['mean_text_accuracy_tasks']):.3f}" for row in time_rows)
         lines.append(f"- `{family}`: {span}.")
+    lines.append("- Takeaway: DeepSeek and Gemma improve on the text-accuracy mean, while Qwen changes only slightly; task-level rows still show reversals, especially on UniMoral action/consequence and ValuePrism valence.")
 
     lines.extend(["", "## Cross-Benchmark Metric Spread", ""])
     lines.append("These ranges mix benchmark-level metrics, so they flag disagreement for inspection rather than a single performance ranking.")
+    lines.append("The most useful comparison is within a benchmark/metric column, then across related models.")
     lines.append("")
     by_model_benchmark: dict[str, dict[str, float]] = {}
     for row in benchmark_summary:
@@ -768,7 +780,7 @@ def write_readme(
         f"- Price cap: input <= ${INPUT_PRICE_CAP_PER_M:.2f}/1M tokens and output <= ${OUTPUT_PRICE_CAP_PER_M:.2f}/1M tokens, unless an existing baseline row is explicitly marked.",
         "- CCD-Bench is reported as choice behavior / valid-choice coverage, not accuracy.",
         "- ValuePrism rows are prompt-based classification, not Kaleido model replication.",
-        "- Qwen/DeepSeek live runs use a `/no_think` prompt prefix by default for cost control; set `--reasoning-prompt-prefix ''` to disable it.",
+        "- Qwen/DeepSeek live runs use a `/no_think` prompt prefix plus `reasoning.effort=none` by default for cost control; set `--reasoning-prompt-prefix ''` or override `--extra-body-json` to change this.",
         "- Live run cost summaries count reasoning tokens conservatively as completion tokens when Inspect reports them.",
         "",
         f"Sample limit for this plan: `{sample_limit if sample_limit is not None else 'full dataset'}` per task.",
@@ -978,8 +990,8 @@ def parse_args() -> argparse.Namespace:
         "--extra-body-json",
         default=DEFAULT_EXTRA_BODY_JSON,
         help=(
-            "JSON body passed to Inspect/OpenRouter. The default asks providers to exclude "
-            "reasoning content and disables Qwen thinking templates where supported."
+            "JSON body passed to Inspect/OpenRouter. The default asks providers to disable "
+            "reasoning, exclude reasoning content, and disables Qwen thinking templates where supported."
         ),
     )
     parser.add_argument(
