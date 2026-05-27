@@ -935,16 +935,8 @@ def write_completion_audit(
         plot_status = "cost plot only"
         pattern_status = "not run"
 
-    full_run_output_dir = "results/openrouter-low-cost-moral-psych-full"
-    full_run_command = (
-        "/opt/anaconda3/bin/python scripts/openrouter_low_cost_moral_psych.py run "
-        f"--full --output-dir {full_run_output_dir} --max-connections 1 "
-        "--max-total-estimated-cost 60 --yes"
-    )
-    full_summarize_command = (
-        "/opt/anaconda3/bin/python scripts/openrouter_low_cost_moral_psych.py summarize "
-        f"--full --output-dir {full_run_output_dir}"
-    )
+    full_dry_run_command = "OPENROUTER_FULL_RUN_DRY_RUN=1 scripts/run_openrouter_low_cost_full.sh"
+    full_run_command = "OPENROUTER_FULL_RUN_APPROVED=1 scripts/run_openrouter_low_cost_full.sh"
 
     requirement_rows = [
         (
@@ -1032,11 +1024,14 @@ def write_completion_audit(
             "Run only after explicit approval for the full selected-grid OpenRouter spend.",
             "",
             "```bash",
+            "# no-call preview",
+            full_dry_run_command,
+            "",
+            "# live full run after spend approval",
             full_run_command,
-            full_summarize_command,
             "```",
             "",
-            "The command keeps the live run bounded by `--max-total-estimated-cost 60`, uses `--max-connections 1` for provider stability, and keeps completed rows resumable through the default `--skip-existing-success` behavior.",
+            "The guarded launcher keeps the live run bounded by `OPENROUTER_MAX_TOTAL_ESTIMATED_COST=60` by default, uses `OPENROUTER_MAX_CONNECTIONS=1` for provider stability, writes to `results/openrouter-low-cost-moral-psych-full`, and keeps completed rows resumable through the planner's default `--skip-existing-success` behavior.",
             "",
             (
                 "Do not treat this plan as completed benchmark evidence."

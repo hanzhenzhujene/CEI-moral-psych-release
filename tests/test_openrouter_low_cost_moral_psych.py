@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+import os
+import subprocess
 from pathlib import Path
 
 from scripts import openrouter_low_cost_moral_psych as openrouter
+
+ROOT = Path(__file__).parent.parent
 
 
 def _model_metadata(input_price_per_m: float, output_price_per_m: float) -> dict[str, object]:
@@ -101,8 +105,8 @@ def test_completion_audit_marks_sample_limited_live_run_as_partial(tmp_path: Pat
     assert "Full-objective status: Bounded sample-100 evidence only" in content
     assert "| Run selected models on the three allowed benchmarks | All `3` recorded model-task rows completed with `success`. | partial |" in content
     assert "## Approved Full-Run Command" in content
-    assert "--full --output-dir results/openrouter-low-cost-moral-psych-full" in content
-    assert "--max-total-estimated-cost 60 --yes" in content
+    assert "OPENROUTER_FULL_RUN_DRY_RUN=1 scripts/run_openrouter_low_cost_full.sh" in content
+    assert "OPENROUTER_FULL_RUN_APPROVED=1 scripts/run_openrouter_low_cost_full.sh" in content
     assert "Do not treat the bounded pilot as the full benchmark" in content
 
 
@@ -116,5 +120,43 @@ def test_completion_audit_marks_full_plan_as_not_yet_run(tmp_path: Path) -> None
     assert "Full-objective status: Planned, not yet run." in content
     assert "| Output model/family/size/release/benchmark/score/cost/replication tables | `benchmark_map.csv`, `model_grid.csv`, and `run_plan.csv` are present; scored result tables are created only after live rows exist. | planned only |" in content
     assert "Run only after explicit approval for the full selected-grid OpenRouter spend." in content
-    assert "--max-total-estimated-cost 60 --yes" in content
+    assert "OPENROUTER_FULL_RUN_APPROVED=1 scripts/run_openrouter_low_cost_full.sh" in content
     assert "Do not treat this plan as completed benchmark evidence." in content
+
+
+def test_guarded_full_run_launcher_refuses_without_approval() -> None:
+    env = os.environ.copy()
+    env.pop("OPENROUTER_FULL_RUN_APPROVED", None)
+    env.pop("OPENROUTER_FULL_RUN_DRY_RUN", None)
+
+    result = subprocess.run(
+        ["bash", "scripts/run_openrouter_low_cost_full.sh"],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 2
+    assert "Refusing to start cost-bearing OpenRouter calls." in result.stderr
+    assert "No provider calls were made." in result.stderr
+
+
+def test_guarded_full_run_launcher_dry_run_prints_command_without_approval() -> None:
+    env = os.environ.copy()
+    env.pop("OPENROUTER_FULL_RUN_APPROVED", None)
+    env["OPENROUTER_FULL_RUN_DRY_RUN"] = "1"
+    env["OPENROUTER_PYTHON"] = "fake-python"
+
+    result = subprocess.run(
+        ["bash", "scripts/run_openrouter_low_cost_full.sh"],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0
+    assert "Dry run only; no provider calls were made." in result.stdout
+    assert "--max-total-estimated-cost 60 --yes" in result.stdout
+    assert "scripts/openrouter_low_cost_moral_psych.py run --full" in result.stdout

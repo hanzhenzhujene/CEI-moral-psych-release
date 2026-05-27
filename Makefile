@@ -1,4 +1,4 @@
-.PHONY: help bootstrap setup ensure-runner test release refresh-authoritative smoke audit verify-unimoral verify-unimoral-artifacts verify-unimoral-task-builders unimoral-missing-plan unimoral-bertscore clean-release
+.PHONY: help bootstrap setup ensure-runner test release refresh-authoritative smoke audit verify-unimoral verify-unimoral-artifacts verify-unimoral-task-builders unimoral-missing-plan unimoral-bertscore openrouter-low-cost-full-plan openrouter-low-cost-full-dry-run openrouter-low-cost-full-run clean-release
 
 RELEASE_DIR := results/release/2026-04-19-option1
 RELEASE_SOURCE := $(RELEASE_DIR)/source/authoritative-summary.csv
@@ -36,6 +36,9 @@ help:
 	@echo "  make verify-unimoral-task-builders  Provider-free task-builder dry run for UniMoral registry entries"
 	@echo "  make unimoral-missing-plan  Provider-free MiniMax missing-cell dry run; prints planned ranges only"
 	@echo "  make unimoral-bertscore  Optional offline RQ4 BERTScore pass, then rebuild UniMoral artifacts"
+	@echo "  make openrouter-low-cost-full-plan  Refresh the no-call full selected-grid OpenRouter cost estimate"
+	@echo "  make openrouter-low-cost-full-dry-run  Print the guarded full-run command without provider calls"
+	@echo "  make openrouter-low-cost-full-run  Run the full OpenRouter grid only when OPENROUTER_FULL_RUN_APPROVED=1"
 	@echo "  make clean-release Remove generated release tables and figures"
 
 bootstrap:
@@ -99,6 +102,20 @@ unimoral-bertscore: ensure-runner
 		--input $(RELEASE_DIR)/unimoral-sample-predictions.csv \
 		--output $(RELEASE_DIR)/unimoral-rq4-bertscore.csv
 	$(RUN_PYTHON) scripts/build_unimoral_artifacts.py
+
+openrouter-low-cost-full-plan: ensure-runner
+	$(RUN_PYTHON) scripts/openrouter_low_cost_moral_psych.py plan \
+		--full \
+		--output-dir results/openrouter-low-cost-moral-psych-full-estimate
+
+openrouter-low-cost-full-dry-run: ensure-runner
+	OPENROUTER_FULL_RUN_DRY_RUN=1 \
+	OPENROUTER_PYTHON="$(SCRIPT_PYTHON)" \
+	$(RUN_BASH) scripts/run_openrouter_low_cost_full.sh
+
+openrouter-low-cost-full-run: ensure-runner
+	OPENROUTER_PYTHON="$(SCRIPT_PYTHON)" \
+	$(RUN_BASH) scripts/run_openrouter_low_cost_full.sh
 
 refresh-authoritative: ensure-runner
 	$(RUN_PYTHON) scripts/build_authoritative_option1_status.py

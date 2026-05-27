@@ -39,10 +39,13 @@ Approve the full live run before spending approximately `$51.6126` plus any prov
 Run only after explicit approval for the full selected-grid OpenRouter spend.
 
 ```bash
-/opt/anaconda3/bin/python scripts/openrouter_low_cost_moral_psych.py run --full --output-dir results/openrouter-low-cost-moral-psych-full --max-connections 1 --max-total-estimated-cost 60 --yes
-/opt/anaconda3/bin/python scripts/openrouter_low_cost_moral_psych.py summarize --full --output-dir results/openrouter-low-cost-moral-psych-full
+# no-call preview
+OPENROUTER_FULL_RUN_DRY_RUN=1 scripts/run_openrouter_low_cost_full.sh
+
+# live full run after spend approval
+OPENROUTER_FULL_RUN_APPROVED=1 scripts/run_openrouter_low_cost_full.sh
 ```
 
-The command keeps the live run bounded by `--max-total-estimated-cost 60`, uses `--max-connections 1` for provider stability, and keeps completed rows resumable through the default `--skip-existing-success` behavior.
+The guarded launcher keeps the live run bounded by `OPENROUTER_MAX_TOTAL_ESTIMATED_COST=60` by default, uses `OPENROUTER_MAX_CONNECTIONS=1` for provider stability, writes to `results/openrouter-low-cost-moral-psych-full`, and keeps completed rows resumable through the planner's default `--skip-existing-success` behavior.
 
 Do not treat this plan as completed benchmark evidence.

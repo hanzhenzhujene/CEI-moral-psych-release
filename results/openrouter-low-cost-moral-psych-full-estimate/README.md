@@ -1,6 +1,6 @@
 # Low-Cost OpenRouter Moral-Psych Pipeline
 
-OpenRouter pricing metadata fetched: `2026-05-27T17:17:34.704831+00:00` from `https://openrouter.ai/api/v1/models`.
+OpenRouter pricing metadata fetched: `2026-05-27T17:21:09.003803+00:00` from `https://openrouter.ai/api/v1/models`.
 
 Scope:
 - Included benchmarks: UniMoral, ValuePrism / Value Kaleidoscope, CCD-Bench.
