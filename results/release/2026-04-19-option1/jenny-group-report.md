@@ -97,21 +97,21 @@ Read it strictly:
 - `CCD-Bench` is the closest direct paper-vs-ours behavior comparison, but CCD-Bench is not accuracy.
 - `DeNEVIL` is not paper-faithful MoralPrompt in this release; the local rows are proxy-only and not T3.
 
-Full exact bridge: [paper-result-comparison.csv](paper-result-comparison.csv).
-Model-overlap map: [paper-model-overlap-map.csv](paper-model-overlap-map.csv).
+Full exact bridge: [paper-result-comparison.csv](paper-result-comparison.csv) includes paper table/source notes and source URLs.
+Model-overlap map: [paper-model-overlap-map.csv](paper-model-overlap-map.csv) lists the paper-side model roster or evidence and the closest current row.
 
 ### Exact Paper Metric Bridge
 
-| Benchmark | Original paper exact result | Our closest current result | Status |
-| :--- | :--- | :--- | :--- |
-| UniMoral RQ1 action prediction | 66.38 (Phi-3.5-mini Instruct, English) | Best current release row: DeepSeek-M 0.684 | Same benchmark; different metric/model roster |
-| UniMoral RQ2 moral typology | 57.01 (Llama-3.1-8B Instruct, Spanish) | Best accuracy: Gemma-S 0.599; best weighted-F1 bridge: Llama-S 0.354 | Same benchmark; paper uses weighted F1 while the release headline uses accuracy |
-| UniMoral RQ3 factor attribution | 38.59 (Llama-3.1-8B Instruct, Russian) | Best accuracy: Llama-M 0.631; best weighted-F1 bridge: DeepSeek-S 0.264 | Same benchmark; paper uses weighted F1 while the release headline uses accuracy |
-| UniMoral RQ4 consequence generation | BLEU 3.29; METEOR 19.08; BERTScore 87.44 | BERTScore F1: Llama-M 0.730; METEOR: Llama-L 0.157; BLEU: Llama-M 0.0166 | Metric family overlaps; scorer scale and model roster differ |
-| SMID | 2,941 images; 2,716 participants; 820,565 ratings; mean 34.88 ratings/image; averaged norms ICC >= .75 | Best current SMID average accuracy: Qwen-L 0.483; current mean 0.364 | No paper model leaderboard |
-| Value Kaleidoscope / ValuePrism | ValuePrism has 218k value/rights/duties for 31k situations; 91% high-quality; KAL SYS 11B overall win rate 58.3 vs GPT-4, accuracy win 62.5; GPT-4 valence correctness 93.1 | Best current prompt-based Value average: MiniMax-L 0.741; best OpenAI text ref: GPT-5-mini Ref 0.739 | Same source family, not Kaleido model replication |
-| CCD-Bench | 2,182 dilemmas; 17 LLMs; Nordic Europe 20.2%, Germanic Europe 12.4%; Eastern Europe and MENA about 5-6%; plural rationales 87.9%; position-bias Cramer's V 0.0586 | 19/20 current release rows are Nordic Europe dominant; GPT-5-nano Ref: option_6 (Nordic Europe) at 27.8%; effective clusters 6.79; DeepSeek-S: option_7 (Sub Saharan Africa) at 13.8%; effective clusters 9.57 | Direct behavioral comparison, but CCD-Bench is not accuracy |
-| DeNEVIL / MoralPrompt | MoralPrompt has 2,397 prompts / 522 principles; ChatGPT-prompt Table 16 reports ChatGPT APV 65.20 +/- 26.45, GPT-4 APV 79.08 +/- 21.46, LLaMA-2-70B-chat APV 76.94 +/- 18.86 | APV/EVR/MVP n/a; strongest proxy protective-response rate is Qwen-M 99.5%; all DeNEVIL proxy rows remain not T3. | Blocked/proxy only; not paper-faithful MoralPrompt and not T3 |
+| Benchmark | Paper source / metric note | Original paper exact result | Our closest current result | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| UniMoral RQ1 action prediction | ACL Table 4 reports weighted F1 for Phi, Llama, and R1 across six languages and four prompting conditions; this row uses the strongest visible cell. | 66.38 (Phi-3.5-mini Instruct, English) | Best current release row: DeepSeek-M 0.684 | Same benchmark; different metric/model roster |
+| UniMoral RQ2 moral typology | ACL Table 5 reports weighted F1 for moral-typology classification across the same three-model, six-language matrix. | 57.01 (Llama-3.1-8B Instruct, Spanish) | Best accuracy: Gemma-S 0.599; best weighted-F1 bridge: Llama-S 0.354 | Same benchmark; paper uses weighted F1 while the release headline uses accuracy |
+| UniMoral RQ3 factor attribution | ACL Table 6 reports weighted F1 for factor-attribution analysis across the same three-model, six-language matrix. | 38.59 (Llama-3.1-8B Instruct, Russian) | Best accuracy: Llama-M 0.631; best weighted-F1 bridge: DeepSeek-S 0.264 | Same benchmark; paper uses weighted F1 while the release headline uses accuracy |
+| UniMoral RQ4 consequence generation | ACL Table 7 reports BLEU, METEOR, and BERTScore for consequence generation by language and model; this row lists the strongest visible metric cells. | BLEU 3.29; METEOR 19.08; BERTScore 87.44 | BERTScore F1: Llama-M 0.730; METEOR: Llama-L 0.157; BLEU: Llama-M 0.0166 | Metric family overlaps; scorer scale and model roster differ |
+| SMID | PLOS abstract and Study 2 participant section: image count, final participant count, total ratings, and mean ratings per image. | 2,941 images; 2,716 participants; 820,565 ratings; mean 34.88 ratings/image; averaged norms ICC >= .75 | Best current SMID average accuracy: Qwen-L 0.483; current mean 0.364 | No paper model leaderboard |
+| Value Kaleidoscope / ValuePrism | AAAI/arXiv abstract plus Tables 2 and 3: ValuePrism size/quality, KaleidoSYS win rates versus GPT-4, and explanation/valence human evaluation. | ValuePrism has 218k value/rights/duties for 31k situations; 91% high-quality; KAL SYS 11B overall win rate 58.3 vs GPT-4, accuracy win 62.5; GPT-4 valence correctness 93.1 | Best current prompt-based Value average: MiniMax-L 0.741; best OpenAI text ref: GPT-5-mini Ref 0.739 | Same source family, not Kaleido model replication |
+| CCD-Bench | CCD-Bench source analysis: model_summary_comparison.csv, cluster_frequency_comparison.csv, and multi_model_summary_report.txt from the public CCD-Bench analysis package. | 2,182 dilemmas; 17 LLMs; Mean cluster shares across the paper/source 17-model analysis: Nordic Europe 20.17%, Germanic Europe 12.36%, Sub-Saharan Africa 11.51%, Anglo 11.31%, Southern Asia 10.06%, Latin Europe 8.23%, Confucian Asia 7.40%, Latin America 7.23%, Middle East 5.80%, Eastern Europe 5.62%. Plural rationales 87.9%; position-bias Cramer's V 0.0586. | 19/20 current release rows are Nordic Europe dominant; GPT-5-nano Ref: option_6 (Nordic Europe) at 27.8%; effective clusters 6.79; DeepSeek-S: option_7 (Sub Saharan Africa) at 13.8%; effective clusters 9.57 | Direct behavioral comparison, but CCD-Bench is not accuracy |
+| DeNEVIL / MoralPrompt | ICLR Table 1 / appendix Table 4 for MoralPrompt size and Table 16 for average generation results using ChatGPT prompts. | MoralPrompt has 2,397 prompts / 522 principles; ChatGPT-prompt Table 16 reports ChatGPT APV 65.20 +/- 26.45, GPT-4 APV 79.08 +/- 21.46, LLaMA-2-70B-chat APV 76.94 +/- 18.86 | APV/EVR/MVP n/a; strongest proxy protective-response rate is Qwen-M 99.5%; all DeNEVIL proxy rows remain not T3. | Blocked/proxy only; not paper-faithful MoralPrompt and not T3 |
 
 ### Model Overlap Map
 
@@ -123,11 +123,23 @@ Model-overlap map: [paper-model-overlap-map.csv](paper-model-overlap-map.csv).
 | SMID | Human norming sample | Qwen-L, MiniMax-S/L, Gemma S/M/L, Llama S/L vision rows | No paper model overlap | Compare model rows to human-norm labels, not to a paper model leaderboard. |
 | Value Kaleidoscope / ValuePrism | Kaleido 60M/220M/770M/3B/11B | No Kaleido model row | Model-access gap | Current rows are prompt-based relevance/valence classification, not Kaleido generation/evaluation. |
 | Value Kaleidoscope / ValuePrism | GPT-4 / GPT-3.5-turbo paper baselines | OpenAI text refs | Reference family only, not exact paper models | Use as current OpenAI calibration markers, not paper-baseline replication. |
-| CCD-Bench | Llama-3.3-70B-Instruct | Llama-M | Closest direct current row | Compare cluster shares and effective-cluster concentration. |
-| CCD-Bench | Llama-4-Maverick | Llama-L | Closest direct current row with lower valid-choice coverage | Compare behavior; do not treat lower coverage as accuracy. |
-| CCD-Bench | Mistral Nemo | May 13 exploratory Mistral Nemo | Saved/prior exploratory evidence outside the current family-size release table | Use as a clearly labeled follow-up row, not as a fresh rerun. |
+| CCD-Bench | AI21 Jamba-1.6-large | No current row | Not run in this release | Add a matching route before making a paper-model replication claim. |
+| CCD-Bench | Claude 3.7 Sonnet | No current row | Not run in this release | Add a matching route before making a paper-model replication claim. |
+| CCD-Bench | Claude 4 Sonnet | No current row | Not run in this release | Add a matching route before making a paper-model replication claim. |
+| CCD-Bench | Command-R 08-2024 | No current row | Not run in this release | Add a matching route before making a paper-model replication claim. |
 | CCD-Bench | DeepSeek-chat-v3-0324 | DeepSeek-M | Close model family, different version | Compare cautiously as cluster-behavior alignment. |
-| CCD-Bench | OpenAI ChatGPT-4o-latest / GPT-4.1 | GPT-4o-mini Ref / GPT-4.1-mini Ref | OpenAI reference family only, not exact model variants | Useful for calibration markers; not an OpenAI S/M/L family-size sweep. |
+| CCD-Bench | Gemini 2.0 Flash 001 | No current row | Not run in this release | Add a matching route before making a paper-model replication claim. |
+| CCD-Bench | Gemini 2.5 Flash Preview 05-20 | No current row | Not run in this release | Add a matching route before making a paper-model replication claim. |
+| CCD-Bench | Llama-3.3-70B-Instruct | Llama-M | Closest direct current row | Compare cluster shares and effective-cluster concentration. |
+| CCD-Bench | Llama-4-Maverick-17B-128E-Instruct | Llama-L | Closest direct current row with lower valid-choice coverage | Compare behavior; do not treat lower coverage as accuracy. |
+| CCD-Bench | Microsoft Phi-4 | No current row | Not run in this release | Add a matching route before making a paper-model replication claim. |
+| CCD-Bench | WizardLM-2-8x22B | No current row | Not run in this release | Add a matching route before making a paper-model replication claim. |
+| CCD-Bench | Mistral Nemo | May 13 exploratory Mistral Nemo | Saved/prior exploratory evidence outside the current family-size release table | Use as a clearly labeled follow-up row, not as a fresh rerun. |
+| CCD-Bench | OpenAI ChatGPT-4o-latest | GPT-4o-mini Ref | OpenAI reference family only, not exact model variant | Useful as a calibration marker; not an OpenAI S/M/L family-size sweep. |
+| CCD-Bench | OpenAI GPT-4.1 | GPT-4.1-mini Ref | OpenAI reference family only, not exact model variant | Useful as a calibration marker; not an OpenAI S/M/L family-size sweep. |
+| CCD-Bench | Perplexity Sonar | No current row | Not run in this release | Add a matching route before making a paper-model replication claim. |
+| CCD-Bench | Qwen2.5-72B-Instruct | Qwen-L | Closest Qwen family row only; text model version differs | Compare as family-level behavior only, not exact model replication. |
+| CCD-Bench | Grok-2-1212 | No current row | Not run in this release | Add a matching route before making a paper-model replication claim. |
 | DeNEVIL / MoralPrompt | ChatGPT, GPT-4, LLaMA2-70B-chat, and 24 other LLMs | No MoralPrompt row | Blocked data/scorer gap; proxy is not T3 | Do not compare DeNEVIL proxy categories to MoralPrompt APV/EVR/MVP. |
 
 

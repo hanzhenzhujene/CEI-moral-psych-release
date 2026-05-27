@@ -498,6 +498,7 @@ PAPER_RESULT_COMPARISON_FIELDNAMES = [
     "benchmark",
     "paper",
     "paper_metric",
+    "paper_source_detail",
     "paper_exact_result",
     "paper_models_or_subjects",
     "our_release_metric",
@@ -529,6 +530,101 @@ UNIMORAL_FULL_BENCHMARK_METRIC_FALLBACKS = {
     ("unimoral_consequence_generation", "meteor"): ("Llama-L", 0.157234),
     ("unimoral_consequence_generation", "bleu"): ("Llama-M", 0.016592),
 }
+
+CCD_PAPER_CLUSTER_MEAN_SUMMARY = (
+    "Mean cluster shares across the paper/source 17-model analysis: Nordic Europe 20.17%, "
+    "Germanic Europe 12.36%, Sub-Saharan Africa 11.51%, Anglo 11.31%, Southern Asia 10.06%, "
+    "Latin Europe 8.23%, Confucian Asia 7.40%, Latin America 7.23%, Middle East 5.80%, "
+    "Eastern Europe 5.62%."
+)
+
+CCD_PAPER_MODEL_ANCHORS = [
+    {
+        "model_key": "ai21_jamba-1.6-large_full",
+        "paper_model": "AI21 Jamba-1.6-large",
+        "anchor": "top Nordic Europe 14.7%; Germanic Europe 12.9%; plural rationales 82.6%; Cramer's V 0.106",
+    },
+    {
+        "model_key": "anthropic_claude-3.7-sonnet_full",
+        "paper_model": "Claude 3.7 Sonnet",
+        "anchor": "top Nordic Europe 21.9%; Germanic Europe 14.9%; plural rationales 90.8%; Cramer's V 0.061",
+    },
+    {
+        "model_key": "anthropic_claude-4-sonnet_full",
+        "paper_model": "Claude 4 Sonnet",
+        "anchor": "top Nordic Europe 30.6%; Germanic Europe 15.9%; plural rationales 98.6%; Cramer's V 0.054",
+    },
+    {
+        "model_key": "cohere_command-r-08-2024_full",
+        "paper_model": "Command-R 08-2024",
+        "anchor": "top Nordic Europe 16.1%; Germanic Europe 10.2%; plural rationales 78.5%; Cramer's V 0.142",
+    },
+    {
+        "model_key": "deepseek_deepseek-chat-v3-0324_full",
+        "paper_model": "DeepSeek-chat-v3-0324",
+        "anchor": "top Nordic Europe 22.9%; Germanic Europe 11.9%; plural rationales 96.8%; Cramer's V 0.161",
+    },
+    {
+        "model_key": "google_gemini-2.0-flash-001_full",
+        "paper_model": "Gemini 2.0 Flash 001",
+        "anchor": "top Nordic Europe 18.4%; Germanic Europe 12.3%; plural rationales 89.2%; Cramer's V 0.076",
+    },
+    {
+        "model_key": "google_gemini-2.5-flash-preview-05-20_full",
+        "paper_model": "Gemini 2.5 Flash Preview 05-20",
+        "anchor": "top Nordic Europe 16.5%; Germanic Europe 13.1%; plural rationales 86.9%; Cramer's V 0.097",
+    },
+    {
+        "model_key": "meta-llama_llama-3.3-70b-instruct_full",
+        "paper_model": "Llama-3.3-70B-Instruct",
+        "anchor": "top Nordic Europe 19.7%; Germanic Europe 15.3%; plural rationales 85.3%; Cramer's V 0.203",
+    },
+    {
+        "model_key": "meta-llama_llama-4-maverick-17b-128e-instruct_full",
+        "paper_model": "Llama-4-Maverick-17B-128E-Instruct",
+        "anchor": "top Nordic Europe 21.1%; Germanic Europe 14.6%; plural rationales 68.6%; Cramer's V 0.097",
+    },
+    {
+        "model_key": "microsoft_phi-4_full",
+        "paper_model": "Microsoft Phi-4",
+        "anchor": "top Nordic Europe 18.9%; Germanic Europe 7.8%; plural rationales 82.7%; Cramer's V 0.152",
+    },
+    {
+        "model_key": "microsoft_wizardlm-2-8x22b_full",
+        "paper_model": "WizardLM-2-8x22B",
+        "anchor": "top Nordic Europe 22.0%; Germanic Europe 16.4%; plural rationales 88.8%; Cramer's V 0.111",
+    },
+    {
+        "model_key": "mistralai_mistral-nemo_full",
+        "paper_model": "Mistral Nemo",
+        "anchor": "top Nordic Europe 19.0%; Germanic Europe 13.1%; plural rationales 82.0%; Cramer's V 0.130",
+    },
+    {
+        "model_key": "openai_chatgpt-4o-latest_full",
+        "paper_model": "OpenAI ChatGPT-4o-latest",
+        "anchor": "top Nordic Europe 18.4%; Germanic Europe 11.5%; plural rationales 96.8%; Cramer's V 0.186",
+    },
+    {
+        "model_key": "openai_gpt-4.1_full",
+        "paper_model": "OpenAI GPT-4.1",
+        "anchor": "top Nordic Europe 21.5%; Germanic Europe 7.6%; plural rationales 94.7%; Cramer's V 0.096",
+    },
+    {
+        "model_key": "perplexity_sonar_full",
+        "paper_model": "Perplexity Sonar",
+        "anchor": "top Nordic Europe 21.8%; Germanic Europe 12.5%; plural rationales 92.9%; Cramer's V 0.127",
+    },
+    {
+        "model_key": "qwen_qwen-2.5-72b-instruct_full",
+        "paper_model": "Qwen2.5-72B-Instruct",
+        "anchor": "top Nordic Europe 17.7%; Germanic Europe 9.4%; plural rationales 91.4%; Cramer's V 0.102",
+    },
+    {
+        "model_key": "x-ai_grok-2-1212_full",
+        "paper_model": "Grok-2-1212",
+        "anchor": "top Nordic Europe 21.6%; Germanic Europe 10.7%; plural rationales 88.0%; Cramer's V 0.123",
+    },
+]
 
 MODEL_ROUTE_METADATA = {
     "openrouter/qwen/qwen3-8b": {
@@ -8008,6 +8104,7 @@ def build_paper_result_comparison(
             "benchmark": "UniMoral RQ1 action prediction",
             "paper": "Kumar et al. (ACL Findings 2025)",
             "paper_metric": "Weighted F1, best visible Table 4 cell",
+            "paper_source_detail": "ACL Table 4 reports weighted F1 for Phi, Llama, and R1 across six languages and four prompting conditions; this row uses the strongest visible cell.",
             "paper_exact_result": "66.38 (Phi-3.5-mini Instruct, English)",
             "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
             "our_release_metric": "Exact-match action accuracy",
@@ -8022,6 +8119,7 @@ def build_paper_result_comparison(
             "benchmark": "UniMoral RQ2 moral typology",
             "paper": "Kumar et al. (ACL Findings 2025)",
             "paper_metric": "Weighted F1, best visible Table 5 cell",
+            "paper_source_detail": "ACL Table 5 reports weighted F1 for moral-typology classification across the same three-model, six-language matrix.",
             "paper_exact_result": "57.01 (Llama-3.1-8B Instruct, Spanish)",
             "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
             "our_release_metric": "Accuracy for main RQ2 readout; official weighted F1 retained as bridge metric",
@@ -8036,6 +8134,7 @@ def build_paper_result_comparison(
             "benchmark": "UniMoral RQ3 factor attribution",
             "paper": "Kumar et al. (ACL Findings 2025)",
             "paper_metric": "Weighted F1, best visible Table 6 cell",
+            "paper_source_detail": "ACL Table 6 reports weighted F1 for factor-attribution analysis across the same three-model, six-language matrix.",
             "paper_exact_result": "38.59 (Llama-3.1-8B Instruct, Russian)",
             "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
             "our_release_metric": "Accuracy for main RQ3 readout; official weighted F1 retained as bridge metric",
@@ -8050,6 +8149,7 @@ def build_paper_result_comparison(
             "benchmark": "UniMoral RQ4 consequence generation",
             "paper": "Kumar et al. (ACL Findings 2025)",
             "paper_metric": "BLEU / METEOR / BERTScore, best visible Table 7 cells",
+            "paper_source_detail": "ACL Table 7 reports BLEU, METEOR, and BERTScore for consequence generation by language and model; this row lists the strongest visible metric cells.",
             "paper_exact_result": "BLEU 3.29; METEOR 19.08; BERTScore 87.44",
             "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
             "our_release_metric": "BERTScore F1 and METEOR for headline RQ4; BLEU retained as a secondary overlap metric",
@@ -8068,6 +8168,7 @@ def build_paper_result_comparison(
             "benchmark": "SMID",
             "paper": "Crone et al. (PLOS ONE 2018)",
             "paper_metric": "Human norming reliability and stimulus coverage, not model accuracy",
+            "paper_source_detail": "PLOS abstract and Study 2 participant section: image count, final participant count, total ratings, and mean ratings per image.",
             "paper_exact_result": "2,941 images; 2,716 participants; 820,565 ratings; mean 34.88 ratings/image; averaged norms ICC >= .75",
             "paper_models_or_subjects": "Human participants; no original LLM model roster",
             "our_release_metric": "Model accuracy against moral-rating and foundation-label norms",
@@ -8082,6 +8183,7 @@ def build_paper_result_comparison(
             "benchmark": "Value Kaleidoscope / ValuePrism",
             "paper": "Sorensen et al. (AAAI 2024)",
             "paper_metric": "Kaleido model and human-preference evaluations",
+            "paper_source_detail": "AAAI/arXiv abstract plus Tables 2 and 3: ValuePrism size/quality, KaleidoSYS win rates versus GPT-4, and explanation/valence human evaluation.",
             "paper_exact_result": "ValuePrism has 218k value/rights/duties for 31k situations; 91% high-quality; KAL SYS 11B overall win rate 58.3 vs GPT-4, accuracy win 62.5; GPT-4 valence correctness 93.1",
             "paper_models_or_subjects": "Kaleido 60M/220M/770M/3B/11B; GPT-4; GPT-3.5-turbo; humans",
             "our_release_metric": "Prompt-based ValuePrism relevance/valence accuracy",
@@ -8096,7 +8198,12 @@ def build_paper_result_comparison(
             "benchmark": "CCD-Bench",
             "paper": "Rahman and Salam (2025)",
             "paper_metric": "Cultural-cluster choice distribution and rationale plurality, not accuracy",
-            "paper_exact_result": "2,182 dilemmas; 17 LLMs; Nordic Europe 20.2%, Germanic Europe 12.4%; Eastern Europe and MENA about 5-6%; plural rationales 87.9%; position-bias Cramer's V 0.0586",
+            "paper_source_detail": "CCD-Bench source analysis: model_summary_comparison.csv, cluster_frequency_comparison.csv, and multi_model_summary_report.txt from the public CCD-Bench analysis package.",
+            "paper_exact_result": (
+                "2,182 dilemmas; 17 LLMs; "
+                f"{CCD_PAPER_CLUSTER_MEAN_SUMMARY} "
+                "Plural rationales 87.9%; position-bias Cramer's V 0.0586."
+            ),
             "paper_models_or_subjects": "17 LLMs including GPT-4o/latest, GPT-4.1, Llama, DeepSeek, Mistral, Qwen, Claude, Gemini, and others",
             "our_release_metric": "Full-choice distribution over the same ten GLOBE clusters",
             "our_exact_result": "; ".join(ccd_readout_parts),
@@ -8110,6 +8217,7 @@ def build_paper_result_comparison(
             "benchmark": "DeNEVIL / MoralPrompt",
             "paper": "Duan et al. (ICLR 2024)",
             "paper_metric": "MoralPrompt value-violation metrics: EVR, APV, MVP",
+            "paper_source_detail": "ICLR Table 1 / appendix Table 4 for MoralPrompt size and Table 16 for average generation results using ChatGPT prompts.",
             "paper_exact_result": "MoralPrompt has 2,397 prompts / 522 principles; ChatGPT-prompt Table 16 reports ChatGPT APV 65.20 +/- 26.45, GPT-4 APV 79.08 +/- 21.46, LLaMA-2-70B-chat APV 76.94 +/- 18.86",
             "paper_models_or_subjects": "27 LLMs, including ChatGPT, GPT-4, Text-davinci-003, LLaMA/LLaMA2, Vicuna, Alpaca, and others",
             "our_release_metric": "Proxy visible-behavior categories only",
@@ -8132,9 +8240,10 @@ def build_paper_model_overlap_map(
     deepseek_m_ccd = _named_line(ccd_choice_distribution, "DeepSeek-M")
     gpt_4o_mini_ccd = _named_line(ccd_choice_distribution, "GPT-4o-mini Ref")
     gpt_41_mini_ccd = _named_line(ccd_choice_distribution, "GPT-4.1-mini Ref")
+    qwen_l_ccd = _named_line(ccd_choice_distribution, "Qwen-L")
     deepseek_s = _named_line(benchmark_comparison, "DeepSeek-S")
 
-    return [
+    rows = [
         {
             "benchmark": "UniMoral",
             "paper_model_or_evidence": "Phi-3.5-mini Instruct",
@@ -8191,51 +8300,73 @@ def build_paper_model_overlap_map(
             "overlap_status": "Reference family only, not exact paper models",
             "what_to_compare": "Use as current OpenAI calibration markers, not paper-baseline replication.",
         },
-        {
-            "benchmark": "CCD-Bench",
-            "paper_model_or_evidence": "Llama-3.3-70B-Instruct",
-            "paper_result_anchor": "Paper/source repo: Nordic Europe 19.7%, Germanic Europe 15.3%",
-            "our_matching_or_closest_line": "Llama-M",
-            "our_result_anchor": _format_ccd_row(llama_m_ccd),
-            "overlap_status": "Closest direct current row",
-            "what_to_compare": "Compare cluster shares and effective-cluster concentration.",
-        },
-        {
-            "benchmark": "CCD-Bench",
-            "paper_model_or_evidence": "Llama-4-Maverick",
-            "paper_result_anchor": "Paper/source repo: Nordic Europe 21.1%, Germanic Europe 14.6%",
-            "our_matching_or_closest_line": "Llama-L",
-            "our_result_anchor": _format_ccd_row(llama_l_ccd),
-            "overlap_status": "Closest direct current row with lower valid-choice coverage",
-            "what_to_compare": "Compare behavior; do not treat lower coverage as accuracy.",
-        },
-        {
-            "benchmark": "CCD-Bench",
-            "paper_model_or_evidence": "Mistral Nemo",
-            "paper_result_anchor": "Paper/source repo: Nordic Europe 19.0%, Germanic Europe 13.1%",
-            "our_matching_or_closest_line": "May 13 exploratory Mistral Nemo",
-            "our_result_anchor": "CCD Nordic Europe 25.3%; effective clusters 7.22",
-            "overlap_status": "Saved/prior exploratory evidence outside the current family-size release table",
-            "what_to_compare": "Use as a clearly labeled follow-up row, not as a fresh rerun.",
-        },
-        {
-            "benchmark": "CCD-Bench",
-            "paper_model_or_evidence": "DeepSeek-chat-v3-0324",
-            "paper_result_anchor": "Paper/source repo: Nordic Europe 22.9%, Germanic Europe 11.9%",
+    ]
+
+    ccd_matches = {
+        "deepseek_deepseek-chat-v3-0324_full": {
             "our_matching_or_closest_line": "DeepSeek-M",
             "our_result_anchor": _format_ccd_row(deepseek_m_ccd),
             "overlap_status": "Close model family, different version",
             "what_to_compare": "Compare cautiously as cluster-behavior alignment.",
         },
-        {
-            "benchmark": "CCD-Bench",
-            "paper_model_or_evidence": "OpenAI ChatGPT-4o-latest / GPT-4.1",
-            "paper_result_anchor": "Paper/source repo: GPT-4o Nordic 18.4%; GPT-4.1 Nordic 21.5%",
-            "our_matching_or_closest_line": "GPT-4o-mini Ref / GPT-4.1-mini Ref",
-            "our_result_anchor": f"{_format_ccd_row(gpt_4o_mini_ccd)}; {_format_ccd_row(gpt_41_mini_ccd)}",
-            "overlap_status": "OpenAI reference family only, not exact model variants",
-            "what_to_compare": "Useful for calibration markers; not an OpenAI S/M/L family-size sweep.",
+        "meta-llama_llama-3.3-70b-instruct_full": {
+            "our_matching_or_closest_line": "Llama-M",
+            "our_result_anchor": _format_ccd_row(llama_m_ccd),
+            "overlap_status": "Closest direct current row",
+            "what_to_compare": "Compare cluster shares and effective-cluster concentration.",
         },
+        "meta-llama_llama-4-maverick-17b-128e-instruct_full": {
+            "our_matching_or_closest_line": "Llama-L",
+            "our_result_anchor": _format_ccd_row(llama_l_ccd),
+            "overlap_status": "Closest direct current row with lower valid-choice coverage",
+            "what_to_compare": "Compare behavior; do not treat lower coverage as accuracy.",
+        },
+        "mistralai_mistral-nemo_full": {
+            "our_matching_or_closest_line": "May 13 exploratory Mistral Nemo",
+            "our_result_anchor": "CCD Nordic Europe 25.3%; effective clusters 7.22",
+            "overlap_status": "Saved/prior exploratory evidence outside the current family-size release table",
+            "what_to_compare": "Use as a clearly labeled follow-up row, not as a fresh rerun.",
+        },
+        "openai_chatgpt-4o-latest_full": {
+            "our_matching_or_closest_line": "GPT-4o-mini Ref",
+            "our_result_anchor": _format_ccd_row(gpt_4o_mini_ccd),
+            "overlap_status": "OpenAI reference family only, not exact model variant",
+            "what_to_compare": "Useful as a calibration marker; not an OpenAI S/M/L family-size sweep.",
+        },
+        "openai_gpt-4.1_full": {
+            "our_matching_or_closest_line": "GPT-4.1-mini Ref",
+            "our_result_anchor": _format_ccd_row(gpt_41_mini_ccd),
+            "overlap_status": "OpenAI reference family only, not exact model variant",
+            "what_to_compare": "Useful as a calibration marker; not an OpenAI S/M/L family-size sweep.",
+        },
+        "qwen_qwen-2.5-72b-instruct_full": {
+            "our_matching_or_closest_line": "Qwen-L",
+            "our_result_anchor": _format_ccd_row(qwen_l_ccd),
+            "overlap_status": "Closest Qwen family row only; text model version differs",
+            "what_to_compare": "Compare as family-level behavior only, not exact model replication.",
+        },
+    }
+    default_ccd_match = {
+        "our_matching_or_closest_line": "No current row",
+        "our_result_anchor": "n/a",
+        "overlap_status": "Not run in this release",
+        "what_to_compare": "Add a matching route before making a paper-model replication claim.",
+    }
+    for paper_row in CCD_PAPER_MODEL_ANCHORS:
+        match = ccd_matches.get(paper_row["model_key"], default_ccd_match)
+        rows.append(
+            {
+                "benchmark": "CCD-Bench",
+                "paper_model_or_evidence": paper_row["paper_model"],
+                "paper_result_anchor": paper_row["anchor"],
+                "our_matching_or_closest_line": match["our_matching_or_closest_line"],
+                "our_result_anchor": match["our_result_anchor"],
+                "overlap_status": match["overlap_status"],
+                "what_to_compare": match["what_to_compare"],
+            }
+        )
+
+    rows.append(
         {
             "benchmark": "DeNEVIL / MoralPrompt",
             "paper_model_or_evidence": "ChatGPT, GPT-4, LLaMA2-70B-chat, and 24 other LLMs",
@@ -8244,8 +8375,9 @@ def build_paper_model_overlap_map(
             "our_result_anchor": "FULCRA-backed proxy behavior only; APV/EVR/MVP n/a",
             "overlap_status": "Blocked data/scorer gap; proxy is not T3",
             "what_to_compare": "Do not compare DeNEVIL proxy categories to MoralPrompt APV/EVR/MVP.",
-        },
-    ]
+        }
+    )
+    return rows
 
 
 def build_coverage_matrix(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -8846,7 +8978,7 @@ def render_paper_result_comparison_svg(rows: list[dict[str, str]], output_path: 
             *svg_text_block(
                 48,
                 90,
-                "Exact paper-side metrics stay separate from our release metrics. CCD-Bench is choice behavior, not accuracy; DeNEVIL is proxy-only until MoralPrompt data and EVR/APV/MVP scoring exist.",
+                "Exact paper-side metrics stay separate from our release metrics. The CSV carries table/source notes and model-roster mapping. CCD-Bench is choice behavior, not accuracy; DeNEVIL is proxy-only until MoralPrompt data and EVR/APV/MVP scoring exist.",
                 "subtitle",
                 158,
             ),
@@ -10779,13 +10911,13 @@ def append_paper_result_comparison_section(
             "- `CCD-Bench` is the closest direct paper-vs-ours behavior comparison, but CCD-Bench is not accuracy.",
             "- `DeNEVIL` is not paper-faithful MoralPrompt in this release; the local rows are proxy-only and not T3.",
             "",
-            f"Full exact bridge: [paper-result-comparison.csv]({paper_result_link}).",
-            f"Model-overlap map: [paper-model-overlap-map.csv]({paper_overlap_link}).",
+            f"Full exact bridge: [paper-result-comparison.csv]({paper_result_link}) includes paper table/source notes and source URLs.",
+            f"Model-overlap map: [paper-model-overlap-map.csv]({paper_overlap_link}) lists the paper-side model roster or evidence and the closest current row.",
             "",
             "### Exact Paper Metric Bridge",
             "",
-            "| Benchmark | Original paper exact result | Our closest current result | Status |",
-            "| :--- | :--- | :--- | :--- |",
+            "| Benchmark | Paper source / metric note | Original paper exact result | Our closest current result | Status |",
+            "| :--- | :--- | :--- | :--- | :--- |",
         ]
     )
     for row in paper_result_comparison:
@@ -10794,6 +10926,7 @@ def append_paper_result_comparison_section(
             + " | ".join(
                 [
                     _markdown_cell(row["benchmark"]),
+                    _markdown_cell(row["paper_source_detail"]),
                     _markdown_cell(row["paper_exact_result"]),
                     _markdown_cell(row["our_exact_result"]),
                     _markdown_cell(row["comparison_status"]),

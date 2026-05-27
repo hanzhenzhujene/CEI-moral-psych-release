@@ -1063,6 +1063,7 @@ def test_release_builder_emits_expected_files(tmp_path):
             "benchmark",
             "paper",
             "paper_metric",
+            "paper_source_detail",
             "paper_exact_result",
             "paper_models_or_subjects",
             "our_release_metric",
@@ -1085,7 +1086,11 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "BERTScore 87.44" in paper_text
     assert "820,565 ratings" in paper_text
     assert "KAL SYS 11B" in paper_text
-    assert "Nordic Europe 20.2%" in paper_text
+    assert "ACL Table 4" in paper_text
+    assert "Tables 2 and 3" in paper_text
+    assert "Nordic Europe 20.17%" in paper_text
+    assert "Middle East 5.80%" in paper_text
+    assert "Eastern Europe 5.62%" in paper_text
     assert "MoralPrompt has 2,397 prompts" in paper_text
     assert "CCD-Bench is not accuracy" in paper_text
     assert "not Kaleido model replication" in paper_text
@@ -1104,14 +1109,19 @@ def test_release_builder_emits_expected_files(tmp_path):
             "what_to_compare",
         ]
         overlap_rows = list(reader)
-    assert len(overlap_rows) >= 10
+    assert len(overlap_rows) >= 24
+    assert sum(1 for row in overlap_rows if row["benchmark"] == "CCD-Bench") == 17
     overlap_text = "\n".join(
         " | ".join(row[field] for field in reader.fieldnames or [])
         for row in overlap_rows
     )
     assert "Llama-3.1-8B Instruct" in overlap_text
     assert "Kaleido 60M/220M/770M/3B/11B" in overlap_text
+    assert "AI21 Jamba-1.6-large" in overlap_text
+    assert "Claude 4 Sonnet" in overlap_text
     assert "Llama-3.3-70B-Instruct" in overlap_text
+    assert "OpenAI ChatGPT-4o-latest" in overlap_text
+    assert "Grok-2-1212" in overlap_text
     assert "Mistral Nemo" in overlap_text
     assert "proxy is not T3" in overlap_text
 
@@ -1342,7 +1352,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     paper_comparison_svg = (figure_dir / "option1_paper_result_comparison.svg").read_text(encoding="utf-8")
     assert "Paper Results Compared With Our Release" in paper_comparison_svg
     assert "Exact paper-side metrics stay separate" in paper_comparison_svg
-    assert "CCD-Bench is choice behavior, not accuracy" in paper_comparison_svg
+    assert "CCD-Bench is choice behavior" in paper_comparison_svg
+    assert "not accuracy" in paper_comparison_svg
+    assert "table/source notes" in paper_comparison_svg
     assert "DeNEVIL is proxy-only" in paper_comparison_svg
     assert "UniMoral RQ1 action" in paper_comparison_svg
     assert "66.38" in paper_comparison_svg

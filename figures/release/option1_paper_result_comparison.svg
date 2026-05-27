@@ -40,8 +40,8 @@
 <title>Paper results compared with the current release</title>
 <desc>Exact original-paper metrics shown next to the closest current release metric, with status labels separating direct comparisons from proxy-only or non-overlapping evidence.</desc>
 <text x="48" y="64" class="title">Paper Results Compared With Our Release</text>
-<text x="48" y="90" class="subtitle">Exact paper-side metrics stay separate from our release metrics. CCD-Bench is choice behavior, not accuracy; DeNEVIL is proxy-only until MoralPrompt data and</text>
-<text x="48" y="110" class="subtitle">EVR/APV/MVP scoring exist.</text>
+<text x="48" y="90" class="subtitle">Exact paper-side metrics stay separate from our release metrics. The CSV carries table/source notes and model-roster mapping. CCD-Bench is choice behavior,</text>
+<text x="48" y="110" class="subtitle">not accuracy; DeNEVIL is proxy-only until MoralPrompt data and EVR/APV/MVP scoring exist.</text>
 <text x="58" y="146" class="tiny">BENCHMARK</text>
 <text x="306" y="146" class="tiny">ORIGINAL PAPER EXACT RESULT</text>
 <text x="752" y="146" class="tiny">OUR CLOSEST CURRENT RESULT</text>
@@ -114,9 +114,11 @@
 <rect x="42" y="894" width="1416" height="110" rx="14" class="subpanel"/>
 <rect x="42" y="894" width="8" height="110" rx="4" fill="#0f766e"/>
 <text x="58" y="918" class="label">CCD-Bench</text>
-<text x="306" y="918" class="body">2,182 dilemmas; 17 LLMs; Nordic Europe 20.2%, Germanic</text>
-<text x="306" y="936" class="body">Europe 12.4%; Eastern Europe and MENA about 5-6%; plural</text>
-<text x="306" y="954" class="body">rationales 87.9%; position-bias Cramer's V 0.0586</text>
+<text x="306" y="918" class="body">2,182 dilemmas; 17 LLMs; Mean cluster shares across the</text>
+<text x="306" y="936" class="body">paper/source 17-model analysis: Nordic Europe 20.17%,</text>
+<text x="306" y="954" class="body">Germanic Europe 12.36%, Sub-Saharan Africa 11.51%, Anglo</text>
+<text x="306" y="972" class="body">11.31%, Southern Asia 10.06%, Latin Europe 8.23%,</text>
+<text x="306" y="990" class="body">Confucian Asia 7.40%, Latin America 7.23%, Middle East</text>
 <text x="752" y="918" class="body">19/20 current release rows are Nordic Europe dominant;</text>
 <text x="752" y="936" class="body">GPT-5-nano Ref: option_6 (Nordic Europe) at 27.8%;</text>
 <text x="752" y="954" class="body">effective clusters 6.79; DeepSeek-S: option_7 (Sub Saharan</text>

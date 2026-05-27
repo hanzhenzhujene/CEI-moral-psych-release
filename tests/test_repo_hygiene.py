@@ -104,6 +104,10 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "`CCD-Bench` is reported as cultural-cluster choice behavior" in readme
     assert "`DeNEVIL` is reported as proxy behavioral evidence" in readme
     assert "## Paper Result Comparison" in readme
+    assert "paper table/source notes" in readme
+    assert "Nordic Europe 20.17%" in readme
+    assert "AI21 Jamba-1.6-large" in readme
+    assert "Grok-2-1212" in readme
     assert "CCD-Bench is not accuracy" in readme
     assert "not paper-faithful MoralPrompt" in readme
     assert "FULCRA-backed `DeNEVIL` proxy rows are **not T3**" in readme
