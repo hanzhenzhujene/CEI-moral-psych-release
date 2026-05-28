@@ -124,6 +124,32 @@ def test_completion_audit_marks_full_plan_as_not_yet_run(tmp_path: Path) -> None
     assert "Do not treat this plan as completed benchmark evidence." in content
 
 
+def test_existing_log_scan_recovers_success_even_when_newer_partial_exists(tmp_path: Path, monkeypatch) -> None:
+    row = {
+        "model": "qwen/qwen3-8b",
+        "task": "unimoral_action_prediction",
+        "benchmark": "UniMoral",
+    }
+    log_dir = tmp_path / "logs" / "qwen__qwen3-8b" / "unimoral_action_prediction"
+    log_dir.mkdir(parents=True)
+    success_log = log_dir / "older-success.eval"
+    partial_log = log_dir / "newer-partial.eval"
+    success_log.write_text("success", encoding="utf-8")
+    partial_log.write_text("partial", encoding="utf-8")
+
+    def fake_parse(rows, _models_by_id):
+        parsed = dict(rows[0])
+        parsed["run_status"] = "success" if rows[0]["log_path"].endswith("older-success.eval") else "unreadable"
+        return [parsed]
+
+    monkeypatch.setattr(openrouter, "parse_run_results", fake_parse)
+
+    recovered = openrouter.scan_successful_existing_logs(tmp_path, [row], {})
+
+    assert len(recovered) == 1
+    assert recovered[0]["log_path"].endswith("older-success.eval")
+
+
 def test_guarded_full_run_launcher_refuses_without_approval() -> None:
     env = os.environ.copy()
     env.pop("OPENROUTER_FULL_RUN_APPROVED", None)

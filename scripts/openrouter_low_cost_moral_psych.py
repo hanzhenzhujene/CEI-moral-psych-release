@@ -500,6 +500,51 @@ def parse_run_results(plan_rows: list[dict[str, Any]], models_by_id: dict[str, d
     return output_rows
 
 
+def latest_eval_log(output_dir: Path, model: str, task: str) -> Path | None:
+    safe_model = model.replace("/", "__").replace(":", "_")
+    log_dir = output_dir / "logs" / safe_model / task
+    eval_logs = sorted(log_dir.glob("*.eval"), key=lambda path: path.stat().st_mtime)
+    return eval_logs[-1] if eval_logs else None
+
+
+def successful_existing_log(
+    output_dir: Path,
+    row: dict[str, Any],
+    models_by_id: dict[str, dict[str, Any]],
+) -> dict[str, Any] | None:
+    safe_model = row["model"].replace("/", "__").replace(":", "_")
+    log_dir = output_dir / "logs" / safe_model / row["task"]
+    eval_logs = sorted(log_dir.glob("*.eval"), key=lambda path: path.stat().st_mtime, reverse=True)
+    for log_path in eval_logs:
+        row_with_log = dict(row)
+        row_with_log["log_path"] = str(log_path)
+        parsed = parse_run_results([row_with_log], models_by_id)[0]
+        if parsed.get("run_status") == "success":
+            return parsed
+    return None
+
+
+def scan_successful_existing_logs(
+    output_dir: Path,
+    plan_rows: list[dict[str, Any]],
+    models_by_id: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    rows_with_logs: list[dict[str, Any]] = []
+    for row in plan_rows:
+        parsed = successful_existing_log(output_dir, row, models_by_id)
+        if parsed is not None:
+            rows_with_logs.append(parsed)
+    return rows_with_logs
+
+
+def merge_result_rows(*row_sets: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    merged: dict[tuple[str | None, str | None], dict[str, Any]] = {}
+    for rows in row_sets:
+        for row in rows:
+            merged[(row.get("model"), row.get("task"))] = row
+    return list(merged.values())
+
+
 def render_score_plot(rows: list[dict[str, Any]], output_path: Path) -> None:
     try:
         import matplotlib.pyplot as plt
@@ -1098,11 +1143,15 @@ def execute_plan(args: argparse.Namespace, plan_rows: list[dict[str, Any]], mode
 
     if not args.yes:
         raise RuntimeError("Refusing to run without --yes. Re-run after inspecting run_plan.csv.")
-    executed_rows = []
     existing_rows = read_csv(args.output_dir / "result_summary.csv")
+    scanned_rows = scan_successful_existing_logs(args.output_dir, plan_rows, models_by_id)
+    combined_rows = merge_result_rows(existing_rows, scanned_rows)
+    if len(scanned_rows) > len(existing_rows):
+        print(f"Recovered {len(scanned_rows) - len(existing_rows)} successful row(s) from existing eval logs.")
+        write_csv(args.output_dir / "result_summary.csv", combined_rows)
     existing_success = {
         (row.get("model"), row.get("task"))
-        for row in existing_rows
+        for row in combined_rows
         if row.get("run_status") == "success"
     }
     if args.skip_existing_success:
@@ -1150,23 +1199,20 @@ def execute_plan(args: argparse.Namespace, plan_rows: list[dict[str, Any]], mode
             cmd.extend(["--limit", str(args.sample_limit)])
         print(f"[{index}/{len(filtered_rows)}] running {row['model']} {row['task']} estimated=${row['estimated_cost_usd']}")
         completed = subprocess.run(cmd, cwd=PROJECT_ROOT, env=row_env, check=False)
-        eval_logs = sorted(log_dir.glob("*.eval"), key=lambda path: path.stat().st_mtime)
         out = dict(row)
-        out["log_path"] = str(eval_logs[-1]) if eval_logs else ""
+        latest_log = latest_eval_log(args.output_dir, row["model"], row["task"])
+        out["log_path"] = str(latest_log) if latest_log else ""
         if completed.returncode != 0 and not out["log_path"]:
             out["run_status"] = "failed_subprocess"
             out["error"] = f"subprocess exited {completed.returncode}"
         elif completed.returncode != 0:
             out["error"] = f"subprocess exited {completed.returncode}; see eval log"
-        executed_rows.append(out)
+        parsed_rows = parse_run_results([out], models_by_id)
+        combined_rows = merge_result_rows(combined_rows, parsed_rows)
+        write_csv(args.output_dir / "result_summary.csv", combined_rows)
         if completed.returncode != 0 and not args.continue_on_error:
             raise RuntimeError(f"Run failed for {row['model']} {row['task']} with exit code {completed.returncode}")
 
-    result_rows = parse_run_results(executed_rows, models_by_id)
-    by_key = {(row.get("model"), row.get("task")): row for row in existing_rows}
-    for row in result_rows:
-        by_key[(row.get("model"), row.get("task"))] = row
-    combined_rows = list(by_key.values())
     write_csv(args.output_dir / "result_summary.csv", combined_rows)
     write_derived_outputs(args.output_dir, combined_rows)
     return combined_rows
