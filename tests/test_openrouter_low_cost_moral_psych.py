@@ -124,6 +124,45 @@ def test_completion_audit_marks_full_plan_as_not_yet_run(tmp_path: Path) -> None
     assert "Do not treat this plan as completed benchmark evidence." in content
 
 
+def test_completion_audit_marks_full_attempt_with_blocked_cells(tmp_path: Path) -> None:
+    plan_rows = _minimal_plan_rows()
+    result_rows = [
+        {
+            **plan_rows[0],
+            "run_status": "success",
+            "actual_cost_usd": "0.01",
+            "completed_samples": "8784",
+            "reasoning_tokens_actual": "0",
+        },
+        {
+            **plan_rows[1],
+            "run_status": "error",
+            "actual_cost_usd": "0.02",
+            "completed_samples": "",
+            "reasoning_tokens_actual": "10",
+            "error": "provider route blocked",
+        },
+        {
+            **plan_rows[2],
+            "run_status": "cancelled",
+            "actual_cost_usd": "0.03",
+            "completed_samples": "",
+            "reasoning_tokens_actual": "20",
+            "error": "stale route",
+        },
+    ]
+
+    openrouter.write_completion_audit(tmp_path, None, _minimal_model_rows(), plan_rows, result_rows)
+
+    content = (tmp_path / "completion_audit.md").read_text(encoding="utf-8")
+    assert "Evidence level: `full selected-grid attempted with blocked cells`." in content
+    assert "All `3` planned rows were attempted; `1` produced scored success rows and `2` are documented" in content
+    assert "All recorded API cost from parsed Inspect logs, including blocked partial rows: `$0.060000`." in content
+    assert "| `qwen/qwen3-8b` | `value_prism_relevance` | `error` | provider route blocked |" in content
+    assert "## Approved Full-Run Command" not in content
+    assert "## Optional Targeted Retry" in content
+
+
 def test_existing_log_scan_recovers_success_even_when_newer_partial_exists(tmp_path: Path, monkeypatch) -> None:
     row = {
         "model": "qwen/qwen3-8b",

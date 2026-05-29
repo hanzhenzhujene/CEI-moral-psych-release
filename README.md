@@ -534,7 +534,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
 <!-- BEGIN JENNY_MORAL_PSYCH_RELEASE -->
 ## Jenny Moral-Psych Release TL;DR
 
-> Current project total cost: `$870.30` (MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$325.66`; OpenAI API reference sweep: `$39.98`.)
+> Current tracked project total cost: `$888.06` (MiniMax API: `$504.66`; OpenRouter model-family runs: `$343.42`, including `$17.760398` from the full selected-grid OpenRouter follow-up; OpenAI API reference sweep: `$39.98`.)
 
 This appended section is Jenny's current release readout. The shared CEI repo overview, TrolleyBench notes, ETHICS docs, Claude Code commands, and team table above remain the canonical repo-level structure.
 
@@ -546,16 +546,24 @@ Key links:
 - [Paper result comparison](results/release/2026-04-19-option1/paper-result-comparison.csv)
 - [Paper/model overlap map](results/release/2026-04-19-option1/paper-model-overlap-map.csv)
 - [Exact family-size progress table](results/release/2026-04-19-option1/family-size-progress.csv)
+- [Low-cost OpenRouter full selected-grid readout](results/openrouter-low-cost-moral-psych-full/README.md)
+- [Low-cost OpenRouter full selected-grid interpretation](results/openrouter-low-cost-moral-psych-full/interpretation.md)
+- [Low-cost OpenRouter full selected-grid completion audit](results/openrouter-low-cost-moral-psych-full/completion_audit.md)
 - [Low-cost OpenRouter sample-100 readout](results/openrouter-low-cost-moral-psych-s100/README.md)
 - [Low-cost OpenRouter completion audit](results/openrouter-low-cost-moral-psych-s100/completion_audit.md)
 - [Low-cost OpenRouter full-dataset cost estimate](results/openrouter-low-cost-moral-psych-full-estimate/README.md)
 
 OpenRouter low-cost follow-up:
 
-- The bounded sample-100 OpenRouter run covers only `UniMoral`, `ValuePrism`, and `CCD-Bench` across 17 OpenRouter-accessible models; `SMID`, `DeNEVIL`, and `MiniMax` are excluded by design.
-- The sample-100 readout is useful for route validation and early scaling/time-scaling patterns, not a final full-benchmark claim.
-- The full selected-grid run is planned separately in the full-dataset estimate folder and requires explicit approval before cost-bearing model calls. Preview with `make openrouter-low-cost-full-dry-run`; after approval, run with `OPENROUTER_FULL_RUN_APPROVED=1 make openrouter-low-cost-full-run`.
-- Raw Inspect logs from the low-cost OpenRouter folders are ignored by default; commit only the summarized tables, figures, and audits unless a separate artifact contract says otherwise.
+- The full selected-grid OpenRouter run covers `UniMoral` RQ1-RQ4, `ValuePrism` relevance/valence, and `CCD-Bench` across 17 OpenRouter-accessible models. `SMID`, `DeNEVIL`, and `MiniMax` are excluded by design.
+- Run status: 119/119 planned model-task rows have terminal states; 101 rows are scored successes, 12 are provider/error rows, and 6 are cancelled or stale-route blockers. Blocked rows are documented in the full completion audit and excluded from scored summaries.
+- Cost status: successful scored rows cost `$16.313216`; all recorded provider cost, including blocked partial rows, is `$17.760398`. `deepseek/deepseek-v4-flash` and `qwen/qwen3-32b` emitted reasoning tokens despite controls, so targeted reruns need an explicit budget check.
+- Interpretation status: use this folder for OpenRouter scaling/time-scaling evidence on text-only moral-psych tasks, not for `SMID`, `DeNEVIL`, MiniMax, Kaleido model replication, or CCD-Bench accuracy claims.
+- Raw Inspect logs from the low-cost OpenRouter folders are ignored by default; the public deliverable is the summarized tables, figures, interpretation, and audits.
+
+![Low-cost OpenRouter score plot](results/openrouter-low-cost-moral-psych-full/figures/pilot_scores.svg)
+
+![Low-cost OpenRouter cost estimate](results/openrouter-low-cost-moral-psych-full/figures/cost_estimate.svg)
 
 Metric boundaries:
 

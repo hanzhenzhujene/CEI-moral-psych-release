@@ -18,6 +18,7 @@ import os
 import subprocess
 import sys
 import urllib.request
+from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -561,7 +562,7 @@ def render_score_plot(rows: list[dict[str, Any]], output_path: Path) -> None:
     plt.figure(figsize=(11, height))
     plt.barh(labels, values, color=colors)
     plt.xlabel("Score (metric depends on task; CCD is valid-choice coverage, not accuracy)")
-    plt.title("OpenRouter Low-Cost Moral-Psych Pilot Scores")
+    plt.title("OpenRouter Low-Cost Moral-Psych Scores")
     plt.xlim(0, 1)
     plt.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -650,30 +651,38 @@ def summarize_patterns(
     benchmark_summary: list[dict[str, Any]],
     result_rows: list[dict[str, Any]],
     output_path: Path,
+    sample_limit: int | None = None,
 ) -> None:
     completed = [row for row in result_rows if row.get("run_status") == "success"]
-    total_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in completed)
-    total_reasoning_tokens = sum(int(row.get("reasoning_tokens_actual") or 0) for row in completed)
-    completed_sample_counts = [
-        int(row.get("completed_samples") or 0)
-        for row in completed
-        if str(row.get("completed_samples") or "").isdigit()
-    ]
-    sample_limit = max(completed_sample_counts) if completed_sample_counts else None
-    if sample_limit is None:
-        evidence_sentence = "This file summarizes the currently completed pilot rows only."
-    elif sample_limit <= 1:
+    status_counts = Counter(row.get("run_status") or "unknown" for row in result_rows)
+    non_success = [row for row in result_rows if row.get("run_status") != "success"]
+    success_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in completed)
+    recorded_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in result_rows)
+    total_reasoning_tokens = sum(int(row.get("reasoning_tokens_actual") or 0) for row in result_rows)
+    if sample_limit is None and result_rows:
+        title = "# OpenRouter Low-Cost Full Selected-Grid Interpretation"
+        evidence_sentence = (
+            "This is the full selected-grid readout for the allowed text-only tasks. "
+            "Every planned model-task row has a recorded terminal state; provider errors, "
+            "content-filter blocks, and stale-route cancellations are evidence limits, not scored model results."
+        )
+    elif sample_limit is not None and sample_limit <= 1:
+        title = "# OpenRouter Low-Cost Route-Smoke Interpretation"
         evidence_sentence = (
             "This is a route-smoke readout: it verifies wiring and scoring, "
             "not model performance."
         )
-    else:
+    elif sample_limit is not None:
+        title = "# OpenRouter Low-Cost Pilot Interpretation"
         evidence_sentence = (
             f"This is a bounded sample-{sample_limit} pilot: useful for early pattern finding "
             "and cost control, not a final full-benchmark claim."
         )
+    else:
+        title = "# OpenRouter Low-Cost Interpretation"
+        evidence_sentence = "This file has no scored rows yet; regenerate after live rows exist."
     reasoning_by_model: dict[str, int] = {}
-    for row in completed:
+    for row in result_rows:
         reasoning = int(row.get("reasoning_tokens_actual") or 0)
         if reasoning:
             reasoning_by_model[row["model"]] = reasoning_by_model.get(row["model"], 0) + reasoning
@@ -689,14 +698,15 @@ def summarize_patterns(
     )
     worst_reasoning = max(reasoning_by_model.items(), key=lambda item: item[1]) if reasoning_by_model else None
     lines = [
-        "# OpenRouter Low-Cost Pilot Interpretation",
+        title,
         "",
         evidence_sentence,
         "",
         "## TLDR",
         "",
-        f"- Completed `{len(completed)}` / `{len(result_rows)}` planned model-task rows across `{len({row['model'] for row in completed})}` models for `${total_actual_cost:.6f}` observed cost.",
-        f"- Highest bounded-pilot text-accuracy means: {top_text or 'no completed text-accuracy rows'}.",
+        f"- Recorded terminal states for `{len(result_rows)}` planned model-task rows: `{status_counts.get('success', 0)}` success, `{status_counts.get('error', 0)}` provider/error, `{status_counts.get('cancelled', 0)}` cancelled or stale-route.",
+        f"- Success-row API cost is `${success_actual_cost:.6f}`; all recorded provider cost, including blocked partial rows, is `${recorded_actual_cost:.6f}`.",
+        f"- Highest completed text-accuracy means: {top_text or 'no completed text-accuracy rows'}.",
         "- Scaling is mixed rather than cleanly monotonic: Llama shows the clearest large-model lift, while Qwen, Gemma, and DeepSeek vary by task and release line.",
         "- CCD-Bench remains a valid-choice / choice-behavior readout, not an accuracy metric.",
         (
@@ -708,11 +718,13 @@ def summarize_patterns(
         "## Coverage",
         "",
         f"- Models with any successful row: `{len({row['model'] for row in model_summary})}`.",
+        f"- Models with any recorded terminal state: `{len({row.get('model') for row in result_rows if row.get('model')})}`.",
         f"- Model x benchmark summary rows: `{len(benchmark_summary)}`.",
         "- Included benchmarks: UniMoral, ValuePrism, CCD-Bench.",
         "- Excluded benchmarks: SMID and DeNEVIL.",
         "- CCD-Bench is choice-format/cluster behavior, not accuracy.",
-        f"- Conservative observed cost estimate: `${total_actual_cost:.6f}` using input + output + reasoning tokens at OpenRouter metadata rates.",
+        f"- Conservative success-row cost estimate: `${success_actual_cost:.6f}` using input + output + reasoning tokens at OpenRouter metadata rates.",
+        f"- Conservative all-recorded cost estimate: `${recorded_actual_cost:.6f}` including blocked partial rows with parsed token usage.",
         f"- Observed reasoning tokens: `{total_reasoning_tokens}`.",
         "",
         "## Benchmark Guide",
@@ -728,9 +740,17 @@ def summarize_patterns(
         lines.extend(["## Cost-Control Notes", ""])
         for model, reasoning_tokens in sorted(reasoning_by_model.items(), key=lambda item: item[1], reverse=True):
             if reasoning_tokens >= 5_000:
-                lines.append(f"- `{model}` emitted `{reasoning_tokens}` reasoning tokens despite controls; larger runs need an explicit budget decision or a control-check rerun.")
+                lines.append(f"- `{model}` emitted `{reasoning_tokens}` reasoning tokens despite controls; targeted reruns need an explicit budget decision or a control-check rerun.")
             else:
-                lines.append(f"- `{model}` emitted `{reasoning_tokens}` residual reasoning tokens despite controls; this was bounded in the current pilot but should be monitored.")
+                lines.append(f"- `{model}` emitted `{reasoning_tokens}` residual reasoning tokens despite controls; monitor this on any targeted rerun.")
+        lines.append("")
+
+    if non_success:
+        lines.extend(["## Blocked Cells", ""])
+        lines.append("These rows are excluded from scored summaries; they document provider-route, content-filter, or stale-route limits.")
+        lines.append("")
+        for row in non_success:
+            lines.append(f"- `{row.get('model')}` / `{row.get('task')}`: `{row.get('run_status')}`.")
         lines.append("")
 
     by_family: dict[str, list[dict[str, Any]]] = {}
@@ -755,8 +775,9 @@ def summarize_patterns(
             continue
         ranked.sort(key=tier_sort_key)
         span = ", ".join(f"{row['size_tier']}={float(row['mean_text_accuracy_tasks']):.3f}" for row in ranked)
-        lines.append(f"- `{family}`: sample-limited text-accuracy means by listed tier: {span}. Pattern is early evidence only; check task rows before making a performance claim.")
-    lines.append("- Takeaway: Llama has the clearest size-scaling lift in this pilot; Gemma improves mildly; Qwen is non-monotonic because the 32B row trails both 8B and the 235B MoE on the text-accuracy mean.")
+        qualifier = "full selected-grid" if sample_limit is None else "sample-limited"
+        lines.append(f"- `{family}`: {qualifier} text-accuracy means by listed tier: {span}. Check task rows before making a performance claim.")
+    lines.append("- Takeaway: Llama has the clearest size-scaling lift; Gemma improves mildly then flattens; Qwen is non-monotonic because the 32B row trails both 8B and the 235B MoE on the text-accuracy mean.")
 
     lines.extend(["", "## Time Scaling", ""])
     for family, rows in sorted(by_family.items()):
@@ -767,7 +788,7 @@ def summarize_patterns(
         time_rows.sort(key=lambda row: row["release_period"])
         span = " -> ".join(f"{row['release_period']} {row['size_tier']}={float(row['mean_text_accuracy_tasks']):.3f}" for row in time_rows)
         lines.append(f"- `{family}`: {span}.")
-    lines.append("- Takeaway: DeepSeek and Gemma improve on the text-accuracy mean, while Qwen changes only slightly; task-level rows still show reversals, especially on UniMoral action/consequence and ValuePrism valence.")
+    lines.append("- Takeaway: DeepSeek is not monotonic over time, Qwen's small-model time line improves, and Gemma's time-scaling rows are limited by provider-route blockers.")
 
     lines.extend(["", "## Cross-Benchmark Metric Spread", ""])
     lines.append("These ranges mix benchmark-level metrics, so they flag disagreement for inspection rather than a single performance ranking.")
@@ -781,17 +802,17 @@ def summarize_patterns(
         if len(scores) < 2:
             continue
         values = list(scores.values())
-        lines.append(f"- `{model}`: observed benchmark score range {min(values):.3f}-{max(values):.3f} across completed pilot benchmarks.")
+        lines.append(f"- `{model}`: observed benchmark score range {min(values):.3f}-{max(values):.3f} across completed benchmark summaries.")
 
     output_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def write_derived_outputs(output_dir: Path, result_rows: list[dict[str, Any]]) -> None:
+def write_derived_outputs(output_dir: Path, result_rows: list[dict[str, Any]], sample_limit: int | None = None) -> None:
     benchmark_summary = aggregate_benchmark_summary(result_rows)
     model_summary = aggregate_model_summary(result_rows)
     write_csv(output_dir / "benchmark_summary.csv", benchmark_summary)
     write_csv(output_dir / "model_summary.csv", model_summary)
-    summarize_patterns(model_summary, benchmark_summary, result_rows, output_dir / "interpretation.md")
+    summarize_patterns(model_summary, benchmark_summary, result_rows, output_dir / "interpretation.md", sample_limit)
     render_score_plot(result_rows, output_dir / "figures" / "pilot_scores.svg")
 
 
@@ -842,7 +863,7 @@ def write_readme(
         "- `completion_audit.md`: requirement-by-requirement status for this output folder.",
         "- `openrouter-pricing-metadata.json`: compact pricing-source metadata for the selected model grid.",
         "- `figures/cost_estimate.svg`: planned cost by model.",
-        "- `figures/pilot_scores.svg`: pilot scores after live runs.",
+        "- `figures/pilot_scores.svg`: score plot after live runs.",
         "- Raw Inspect `.eval` logs under `logs/` are local-only by default and intentionally ignored; commit them only with an explicit artifact contract.",
         "",
         "## Allowed Benchmarks",
@@ -861,9 +882,12 @@ def write_readme(
         lines.append(f"| `{row['model']}` | {row['family']} | {row['size_tier']} | {row['release_period']} | {row['grid']} | {cap} |")
     if result_rows:
         completed = [row for row in result_rows if row.get("run_status") == "success"]
-        total_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in completed)
-        total_reasoning_tokens = sum(int(row.get("reasoning_tokens_actual") or 0) for row in completed)
-        reasoning_models = sorted({row.get("model") for row in completed if int(row.get("reasoning_tokens_actual") or 0)})
+        status_counts = Counter(row.get("run_status") or "unknown" for row in result_rows)
+        success_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in completed)
+        recorded_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in result_rows)
+        total_reasoning_tokens = sum(int(row.get("reasoning_tokens_actual") or 0) for row in result_rows)
+        reasoning_models = sorted({row.get("model") for row in result_rows if int(row.get("reasoning_tokens_actual") or 0)})
+        attempted_models = len({row.get("model") for row in result_rows if row.get("model")})
         completed_models = len({row.get("model") for row in completed})
         completed_tasks = len({row.get("task") for row in completed})
         lines.extend(
@@ -871,16 +895,19 @@ def write_readme(
                 "",
                 "## Live Run Snapshot",
                 "",
-                f"Successful task logs: `{len(completed)}` / `{len(result_rows)}`.",
-                f"Completed models: `{completed_models}`. Completed tasks: `{completed_tasks}`.",
-                f"Conservative observed API cost estimate from Inspect logs: `${total_actual_cost:.6f}`.",
+                f"Recorded terminal states: `{len(result_rows)}` / `{len(plan_rows)}` planned model-task rows.",
+                f"Successful scored rows: `{len(completed)}`. Provider/error rows: `{status_counts.get('error', 0)}`. Cancelled/stale-route rows: `{status_counts.get('cancelled', 0)}`.",
+                f"Attempted models: `{attempted_models}`. Models with at least one scored row: `{completed_models}`. Completed tasks represented: `{completed_tasks}`.",
+                f"Success-row API cost estimate from Inspect logs: `${success_actual_cost:.6f}`.",
+                f"All recorded provider cost estimate, including blocked partial rows: `${recorded_actual_cost:.6f}`.",
                 f"Observed reasoning tokens: `{total_reasoning_tokens}`.",
                 f"Models with reasoning tokens despite controls: `{', '.join(reasoning_models) if reasoning_models else 'none'}`.",
+                "Non-success rows are documented as provider/filter/stale-route limits and excluded from scored summaries.",
                 "",
                 "Interpretation helpers:",
                 "- `benchmark_summary.csv`: model x benchmark aggregate scores.",
-                "- `model_summary.csv`: model-level pilot aggregates and cost.",
-                "- `interpretation.md`: scaling/time/disagreement notes for completed pilot rows.",
+                "- `model_summary.csv`: model-level aggregates and success-row cost.",
+                "- `interpretation.md`: scaling/time/disagreement notes for completed scored rows.",
                 "",
             ]
         )
@@ -903,8 +930,11 @@ def write_completion_audit(
         if str(row.get("available")) == "True" or row.get("available") is True
     ]
     completed = [row for row in (result_rows or []) if row.get("run_status") == "success"]
-    total_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in completed)
-    total_reasoning_tokens = sum(int(row.get("reasoning_tokens_actual") or 0) for row in completed)
+    non_success = [row for row in (result_rows or []) if row.get("run_status") != "success"]
+    status_counts = Counter(row.get("run_status") or "unknown" for row in (result_rows or []))
+    success_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in completed)
+    recorded_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in (result_rows or []))
+    total_reasoning_tokens = sum(int(row.get("reasoning_tokens_actual") or 0) for row in (result_rows or []))
     allowed_benchmarks = sorted({row.get("benchmark", "") for row in plan_rows if row.get("benchmark")})
     planned_tasks = sorted({row.get("task", "") for row in plan_rows if row.get("task")})
     completed_models = sorted({row.get("model", "") for row in completed if row.get("model")})
@@ -929,19 +959,32 @@ def write_completion_audit(
         )
     ]
 
+    all_planned_rows_recorded = bool(result_rows) and len(result_rows) >= len(plan_rows)
     if result_rows is None:
         evidence_level = "plan only"
         live_status = "No live model calls are recorded in this output folder."
     elif completed and len(completed) == len(result_rows):
         evidence_level = "live run complete"
         live_status = f"All `{len(completed)}` recorded model-task rows completed with `success`."
+    elif sample_limit is None and all_planned_rows_recorded:
+        evidence_level = "full selected-grid attempted with blocked cells"
+        live_status = (
+            f"All `{len(result_rows)}` planned model-task rows have terminal states: "
+            f"`{len(completed)}` success, `{len(non_success)}` provider/filter/stale-route blockers."
+        )
     else:
-        evidence_level = "live run incomplete"
+        evidence_level = "live run incomplete or route-blocked"
         live_status = f"`{len(completed)}` / `{len(result_rows)}` recorded model-task rows completed with `success`."
 
     if sample_limit is None and result_rows and completed and len(completed) == len(result_rows):
         full_objective_status = "Proven for the full selected grid in this folder."
         unblock = "No unblock is required for this output folder."
+    elif sample_limit is None and all_planned_rows_recorded:
+        full_objective_status = (
+            f"All `{len(plan_rows)}` planned rows were attempted; `{len(completed)}` produced scored success rows "
+            f"and `{len(non_success)}` are documented provider/filter/stale-route blockers."
+        )
+        unblock = "No user unblock is required unless you want an explicitly budgeted targeted retry of the blocked provider routes."
     elif sample_limit is None:
         full_objective_status = "Planned, not yet run."
         unblock = (
@@ -966,7 +1009,7 @@ def write_completion_audit(
     if result_rows:
         table_evidence = (
             "`run_plan.csv`, `result_summary.csv`, `benchmark_summary.csv`, and `model_summary.csv` "
-            "provide the requested columns where live rows exist."
+            "provide the requested columns for scored rows and terminal-state metadata for blocked rows."
         )
         table_status = "proven"
         plot_status = "proven"
@@ -1012,7 +1055,13 @@ def write_completion_audit(
         (
             "Run selected models on the three allowed benchmarks",
             live_status,
-            "proven" if sample_limit is None and result_rows and completed and len(completed) == len(result_rows) else "partial",
+            (
+                "proven"
+                if sample_limit is None and result_rows and completed and len(completed) == len(result_rows)
+                else "attempted with blockers"
+                if sample_limit is None and all_planned_rows_recorded
+                else "partial"
+            ),
         ),
         (
             "Output model/family/size/release/benchmark/score/cost/replication tables",
@@ -1047,7 +1096,8 @@ def write_completion_audit(
         f"- Completed models: `{len(completed_models)}`.",
         f"- Completed tasks: `{len(completed_tasks)}` / `{len(planned_tasks)}`.",
         f"- Completed sample counts observed: `{', '.join(str(value) for value in completed_sample_counts) if completed_sample_counts else 'none'}`.",
-        f"- Observed API cost from parsed Inspect logs: `${total_actual_cost:.6f}`.",
+        f"- Success-row API cost from parsed Inspect logs: `${success_actual_cost:.6f}`.",
+        f"- All recorded API cost from parsed Inspect logs, including blocked partial rows: `${recorded_actual_cost:.6f}`.",
         f"- Observed reasoning tokens: `{total_reasoning_tokens}`.",
         "",
         "## Requirement Audit",
@@ -1057,34 +1107,61 @@ def write_completion_audit(
     ]
     for requirement, evidence, status in requirement_rows:
         lines.append(f"| {requirement} | {evidence} | {status} |")
+    if non_success:
+        lines.extend(
+            [
+                "",
+                "## Blocked / Non-Success Rows",
+                "",
+                "| Model | Task | Status | Note |",
+                "| :--- | :--- | :--- | :--- |",
+            ]
+        )
+        for row in non_success:
+            error = str(row.get("error") or "see eval log").replace("|", "\\|")
+            lines.append(f"| `{row.get('model')}` | `{row.get('task')}` | `{row.get('run_status')}` | {error} |")
     lines.extend(
         [
             "",
             "## Unblock",
             "",
             unblock,
-            "",
-            "## Approved Full-Run Command",
-            "",
-            "Run only after explicit approval for the full selected-grid OpenRouter spend.",
-            "",
-            "```bash",
-            "# no-call preview",
-            full_dry_run_command,
-            "",
-            "# live full run after spend approval",
-            full_run_command,
-            "```",
-            "",
-            "The guarded launcher keeps the live run bounded by `OPENROUTER_MAX_TOTAL_ESTIMATED_COST=60` by default, uses `OPENROUTER_MAX_CONNECTIONS=1` for provider stability, writes to `results/openrouter-low-cost-moral-psych-full`, and keeps completed rows resumable through the planner's default `--skip-existing-success` behavior.",
-            "",
-            (
-                "Do not treat this plan as completed benchmark evidence."
-                if result_rows is None
-                else "Do not treat the bounded pilot as the full benchmark. It is a cost-controlled evidence package for early pattern finding and route validation."
-            ),
         ]
     )
+    if result_rows is None or sample_limit is not None or not all_planned_rows_recorded:
+        lines.extend(
+            [
+                "",
+                "## Approved Full-Run Command",
+                "",
+                "Run only after explicit approval for the full selected-grid OpenRouter spend.",
+                "",
+                "```bash",
+                "# no-call preview",
+                full_dry_run_command,
+                "",
+                "# live full run after spend approval",
+                full_run_command,
+                "```",
+                "",
+                "The guarded launcher keeps the live run bounded by `OPENROUTER_MAX_TOTAL_ESTIMATED_COST=60` by default, uses `OPENROUTER_MAX_CONNECTIONS=1` for provider stability, writes to `results/openrouter-low-cost-moral-psych-full`, and keeps completed rows resumable through the planner's default `--skip-existing-success` behavior.",
+                "",
+                (
+                    "Do not treat this plan as completed benchmark evidence."
+                    if result_rows is None
+                    else "Do not treat the bounded pilot as the full benchmark. It is a cost-controlled evidence package for early pattern finding and route validation."
+                ),
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                "",
+                "## Optional Targeted Retry",
+                "",
+                "Do not rerun the whole grid by default. If the team approves more spend, retry only named blocked `model` x `task` cells after checking the provider route and budget.",
+            ]
+        )
     (output_dir / "completion_audit.md").write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
 
@@ -1214,7 +1291,7 @@ def execute_plan(args: argparse.Namespace, plan_rows: list[dict[str, Any]], mode
             raise RuntimeError(f"Run failed for {row['model']} {row['task']} with exit code {completed.returncode}")
 
     write_csv(args.output_dir / "result_summary.csv", combined_rows)
-    write_derived_outputs(args.output_dir, combined_rows)
+    write_derived_outputs(args.output_dir, combined_rows, args.sample_limit)
     return combined_rows
 
 
@@ -1270,10 +1347,10 @@ def main() -> None:
         plan_rows = read_csv(args.output_dir / "result_summary.csv")
         result_rows = parse_run_results(plan_rows, models_by_id)
         write_csv(args.output_dir / "result_summary.csv", result_rows)
-        write_derived_outputs(args.output_dir, result_rows)
         model_rows = read_csv(args.output_dir / "model_grid.csv")
         planned_rows = read_csv(args.output_dir / "run_plan.csv")
         readme_sample_limit = infer_uniform_sample_limit(result_rows or planned_rows, args.sample_limit)
+        write_derived_outputs(args.output_dir, result_rows, readme_sample_limit)
         fetched_at = "see openrouter-pricing-metadata.json"
         metadata_path = args.output_dir / "openrouter-pricing-metadata.json"
         if metadata_path.exists():

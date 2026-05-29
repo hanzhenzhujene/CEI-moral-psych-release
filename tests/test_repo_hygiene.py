@@ -92,10 +92,15 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
     assert "results/release/2026-04-19-option1/paper-result-comparison.csv" in readme
     assert "results/release/2026-04-19-option1/paper-model-overlap-map.csv" in readme
+    assert "results/openrouter-low-cost-moral-psych-full/README.md" in readme
+    assert "results/openrouter-low-cost-moral-psych-full/interpretation.md" in readme
+    assert "results/openrouter-low-cost-moral-psych-full/completion_audit.md" in readme
     assert "results/openrouter-low-cost-moral-psych-s100/README.md" in readme
     assert "results/openrouter-low-cost-moral-psych-full-estimate/README.md" in readme
-    assert "make openrouter-low-cost-full-dry-run" in readme
-    assert "OPENROUTER_FULL_RUN_APPROVED=1 make openrouter-low-cost-full-run" in readme
+    assert "119/119 planned model-task rows have terminal states" in readme
+    assert "101 rows are scored successes" in readme
+    assert "results/openrouter-low-cost-moral-psych-full/figures/pilot_scores.svg" in readme
+    assert "results/openrouter-low-cost-moral-psych-full/figures/cost_estimate.svg" in readme
     assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme
     assert "figures/release/option1_paper_result_comparison.svg" in readme
     assert "figures/release/option1_unimoral_task_heatmap.svg" in readme

@@ -1,0 +1,17 @@
+model,family,size_tier,release_period,grid,successful_tasks,mean_all_observed_scores,mean_text_accuracy_tasks,reasoning_tokens_actual,actual_cost_usd,estimated_cost_usd,actual_vs_estimated_cost_ratio
+deepseek/deepseek-chat-v3-0324,DeepSeek,chat/V3,2025-Q1,time scaling,7,0.589311,0.601129,0,2.072839,6.760233,0.307
+deepseek/deepseek-chat-v3.1,DeepSeek,chat/V3.1,2025-Q3,time scaling,7,0.598535,0.617754,0,2.108326,6.969262,0.303
+deepseek/deepseek-v3.2,DeepSeek,chat/V3.2,2025-Q4,time scaling,7,0.590256,0.603434,0,2.109255,4.389000,0.481
+deepseek/deepseek-v4-flash,DeepSeek,flash/V4,2026-Q2,time scaling,6,0.595864,0.609167,1016206,1.109649,1.737779,0.639
+google/gemma-2-27b-it,Gemma,L/27B,2024-Q3,time scaling,4,0.347791,0.444383,0,2.769699,5.762063,0.481
+google/gemma-3-12b-it,Gemma,M/12B,2025-Q1,within-family scaling,6,0.602715,0.628980,0,0.314598,1.055694,0.298
+google/gemma-3-27b-it,Gemma,L/27B,2025-Q1,within-family scaling,6,0.595926,0.621007,0,0.563031,1.484063,0.379
+google/gemma-3-4b-it,Gemma,S/4B,2025-Q1,within-family scaling,7,0.584404,0.598931,0,0.341772,0.836109,0.409
+meta-llama/llama-3.1-8b-instruct,Llama,M/8B,2024-Q3,within-family scaling,7,0.567804,0.569988,0,0.202619,0.487775,0.415
+meta-llama/llama-3.2-3b-instruct,Llama,S/3B,2024-Q3,within-family scaling,6,0.495118,0.568475,0,0.651071,2.592603,0.251
+meta-llama/llama-3.3-70b-instruct,Llama,L/70B,2024-Q4,within-family scaling,7,0.641409,0.669701,0,1.090193,2.926929,0.372
+qwen/qwen-2.5-7b-instruct,Qwen,S/7B,2024-Q4,time scaling,7,0.576271,0.582051,0,0.503810,0.975552,0.516
+qwen/qwen3-235b-a22b-2507,Qwen,L/MoE 235B-A22B,2025-Q3,within-family scaling,5,0.495576,0.586294,0,0.615822,0.982096,0.627
+qwen/qwen3-32b,Qwen,M/32B,2025-Q2,within-family scaling,7,0.586966,0.597851,107375,1.000439,2.508875,0.399
+qwen/qwen3-8b,Qwen,S/8B,2025-Q2,within-family scaling,5,0.575851,0.588811,0,0.441228,2.318771,0.190
+qwen/qwen3.5-9b,Qwen,S/9B,2026-Q1,time scaling,7,0.615105,0.641774,0,0.418865,1.324158,0.316
