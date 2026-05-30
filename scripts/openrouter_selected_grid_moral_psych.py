@@ -17,6 +17,7 @@ import json
 import os
 import subprocess
 import sys
+import textwrap
 import urllib.request
 from collections import Counter
 from dataclasses import dataclass
@@ -401,6 +402,10 @@ def strip_trailing_whitespace(path: Path) -> None:
         path.write_text(cleaned, encoding="utf-8")
 
 
+def wrap_plot_note(text: str, width: int = 112) -> str:
+    return "\n".join(textwrap.wrap(text, width=width))
+
+
 def read_csv(path: Path) -> list[dict[str, str]]:
     if not path.exists():
         return []
@@ -549,22 +554,286 @@ def merge_result_rows(*row_sets: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def render_score_plot(rows: list[dict[str, Any]], output_path: Path) -> None:
     try:
         import matplotlib.pyplot as plt
+        import numpy as np
     except Exception:
         return
     plt.rcParams["svg.hashsalt"] = "openrouter-selected-grid-moral-psych"
     scored = [row for row in rows if str(row.get("score", "")).strip()]
     if not scored:
         return
-    labels = [f"{row['family']} {row['size_tier']} | {row['task']}" for row in scored]
-    values = [float(row["score"]) for row in scored]
-    height = max(4, min(16, 0.34 * len(labels) + 1.5))
-    colors = ["#2f5d8c" if row["benchmark"] != "CCD-Bench" else "#7765a8" for row in scored]
-    plt.figure(figsize=(11, height))
-    plt.barh(labels, values, color=colors)
-    plt.xlabel("Score (metric depends on task; CCD is valid-choice coverage, not accuracy)")
-    plt.title("OpenRouter Selected-Grid Moral-Psych Scores")
-    plt.xlim(0, 1)
-    plt.tight_layout()
+    task_order = [spec.task_name for spec in TASK_SPECS]
+    task_labels = {
+        "unimoral_action_prediction": "UniMoral RQ1\naccuracy",
+        "unimoral_moral_typology": "UniMoral RQ2\naccuracy",
+        "unimoral_factor_attribution": "UniMoral RQ3\naccuracy",
+        "unimoral_consequence_generation": "UniMoral RQ4\nMETEOR live",
+        "value_prism_relevance": "ValuePrism\nrelevance acc.",
+        "value_prism_valence": "ValuePrism\nvalence acc.",
+        "ccd_bench_selection": "CCD valid\nchoice",
+    }
+    model_rows: dict[str, dict[str, Any]] = {}
+    for row in scored:
+        model_rows.setdefault(row["model"], row)
+    models = sorted(model_rows, key=lambda model: model_sort_key(model_rows[model]))
+    values: list[list[float]] = []
+    for model in models:
+        model_values = []
+        for task in task_order:
+            match = next((row for row in scored if row["model"] == model and row["task"] == task), None)
+            model_values.append(float(match["score"]) if match else float("nan"))
+        values.append(model_values)
+
+    matrix = np.array(values, dtype=float)
+    masked = np.ma.masked_invalid(matrix)
+    cmap = plt.cm.YlGnBu.copy()
+    cmap.set_bad("#eef2f7")
+    height = max(6, 0.46 * len(models) + 2.4)
+    fig, ax = plt.subplots(figsize=(13.2, height))
+    ax.imshow(masked, cmap=cmap, vmin=0, vmax=1, aspect="auto")
+    ax.set_xticks(range(len(task_order)), [task_labels[task] for task in task_order], fontsize=9)
+    ax.set_yticks(range(len(models)), [short_model_label(model_rows[model]) for model in models], fontsize=9)
+    ax.tick_params(axis="x", length=0, pad=8)
+    ax.tick_params(axis="y", length=0)
+    for row_index, model in enumerate(models):
+        for col_index, task in enumerate(task_order):
+            value = matrix[row_index, col_index]
+            label = "--" if np.isnan(value) else f"{value:.3f}"
+            color = "#0f172a" if np.isnan(value) or value < 0.62 else "#ffffff"
+            ax.text(col_index, row_index, label, ha="center", va="center", fontsize=8.5, color=color, fontweight="bold")
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.set_title(
+        "OpenRouter selected-grid detailed task matrix",
+        loc="left",
+        fontsize=14,
+        fontweight="bold",
+        pad=18,
+    )
+    ax.text(
+        0,
+        -0.15,
+        wrap_plot_note("Read each column by its metric label. CCD is valid-choice coverage, not moral accuracy; RQ4 is generation quality, not classification accuracy.", 126),
+        transform=ax.transAxes,
+        fontsize=9.5,
+        color="#475569",
+        va="top",
+    )
+    fig.subplots_adjust(left=0.24, right=0.98, bottom=0.17, top=0.88)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_path, format="svg", metadata={"Date": "2026-05-27"})
+    plt.close()
+    strip_trailing_whitespace(output_path)
+
+
+def model_sort_key(row: dict[str, Any]) -> tuple[int, str, int, str, str]:
+    grid_order = {"within-family scaling": 0, "time scaling": 1}
+    family_order = {"Qwen": 0, "Gemma": 1, "Llama": 2, "DeepSeek": 3}
+    tier_text = row.get("size_tier", "")
+    tier_order = {"S": 0, "M": 1, "L": 2}
+    return (
+        grid_order.get(row.get("grid", ""), 9),
+        family_order.get(row.get("family", ""), 9),
+        tier_order.get(tier_text[:1], 9),
+        row.get("release_period", ""),
+        row.get("model", ""),
+    )
+
+
+def short_model_label(row: dict[str, Any]) -> str:
+    return f"{row.get('family', '')} {row.get('size_tier', '')} ({row.get('release_period', '')})"
+
+
+def render_benchmark_matrix(benchmark_summary: list[dict[str, Any]], output_path: Path) -> None:
+    try:
+        import matplotlib.pyplot as plt
+        import numpy as np
+    except Exception:
+        return
+    rows = [row for row in benchmark_summary if row.get("score")]
+    if not rows:
+        return
+    benchmarks = ["UniMoral", "ValuePrism", "CCD-Bench"]
+    model_rows: dict[str, dict[str, Any]] = {}
+    by_model_benchmark: dict[tuple[str, str], dict[str, Any]] = {}
+    for row in rows:
+        model_rows.setdefault(row["model"], row)
+        by_model_benchmark[(row["model"], row["benchmark"])] = row
+    models = sorted(model_rows, key=lambda model: model_sort_key(model_rows[model]))
+    matrix = np.full((len(models), len(benchmarks)), np.nan)
+    task_counts: dict[tuple[int, int], str] = {}
+    for row_index, model in enumerate(models):
+        for col_index, benchmark in enumerate(benchmarks):
+            row = by_model_benchmark.get((model, benchmark))
+            if row is None:
+                continue
+            matrix[row_index, col_index] = float(row["score"])
+            task_counts[(row_index, col_index)] = str(row.get("tasks_completed", ""))
+
+    cmap = plt.cm.BuGn.copy()
+    cmap.set_bad("#eef2f7")
+    height = max(6, 0.45 * len(models) + 2.5)
+    fig, ax = plt.subplots(figsize=(10.8, height))
+    ax.imshow(np.ma.masked_invalid(matrix), cmap=cmap, vmin=0, vmax=1, aspect="auto")
+    ax.set_xticks(range(len(benchmarks)), ["UniMoral\nmixed RQ score", "ValuePrism\naccuracy mean", "CCD-Bench\nvalid-choice"], fontsize=10)
+    ax.set_yticks(range(len(models)), [short_model_label(model_rows[model]) for model in models], fontsize=9)
+    ax.tick_params(axis="x", length=0, pad=8)
+    ax.tick_params(axis="y", length=0)
+    for row_index in range(len(models)):
+        for col_index in range(len(benchmarks)):
+            value = matrix[row_index, col_index]
+            if np.isnan(value):
+                label = "--"
+                color = "#0f172a"
+            else:
+                label = f"{value:.3f}"
+                if task_counts.get((row_index, col_index)):
+                    label += f"\n{task_counts[(row_index, col_index)]} task"
+                    if task_counts[(row_index, col_index)] != "1":
+                        label += "s"
+                color = "#0f172a" if value < 0.64 else "#ffffff"
+            ax.text(col_index, row_index, label, ha="center", va="center", fontsize=8.6, color=color, fontweight="bold")
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.set_title(
+        "Benchmark comparison matrix: compare within columns first",
+        loc="left",
+        fontsize=14,
+        fontweight="bold",
+        pad=18,
+    )
+    ax.text(
+        0,
+        -0.13,
+        wrap_plot_note("The columns answer different questions. UniMoral includes RQ1-RQ4, ValuePrism is label accuracy, and CCD is choice-format coverage rather than accuracy.", 112),
+        transform=ax.transAxes,
+        fontsize=9.5,
+        color="#475569",
+        va="top",
+    )
+    fig.subplots_adjust(left=0.25, right=0.98, bottom=0.18, top=0.89)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_path, format="svg", metadata={"Date": "2026-05-27"})
+    plt.close()
+    strip_trailing_whitespace(output_path)
+
+
+def render_within_family_scaling(model_summary: list[dict[str, Any]], output_path: Path) -> None:
+    try:
+        import matplotlib.pyplot as plt
+    except Exception:
+        return
+    rows = [
+        row
+        for row in model_summary
+        if row.get("grid") == "within-family scaling" and row.get("mean_text_accuracy_tasks")
+    ]
+    if not rows:
+        return
+    colors = {"Qwen": "#2563eb", "Gemma": "#059669", "Llama": "#7c3aed"}
+    tier_positions = {"S": 0, "M": 1, "L": 2}
+    fig, ax = plt.subplots(figsize=(9.4, 5.6))
+    for family in ["Qwen", "Gemma", "Llama"]:
+        family_rows = sorted(
+            [row for row in rows if row["family"] == family],
+            key=lambda row: tier_positions.get(row["size_tier"][:1], 9),
+        )
+        if not family_rows:
+            continue
+        xs = [tier_positions.get(row["size_tier"][:1], 9) for row in family_rows]
+        ys = [float(row["mean_text_accuracy_tasks"]) for row in family_rows]
+        ax.plot(xs, ys, marker="o", linewidth=2.8, markersize=7, color=colors[family], label=family)
+        y_offsets = {"Qwen": -0.012, "Gemma": 0.012, "Llama": -0.012}
+        for x, y, row in zip(xs, ys, family_rows):
+            offset = y_offsets.get(family, 0.01)
+            if x >= 2 and family == "Llama":
+                offset = 0.006
+            elif x >= 2:
+                offset = -0.010
+            ha = "right" if x >= 2 else "left" if x <= 0 else "center"
+            va = "top" if offset < 0 else "bottom"
+            ax.text(
+                x,
+                y + offset,
+                f"{row['size_tier']}\n{y:.3f}\n{row['successful_tasks']}/7 rows",
+                ha=ha,
+                va=va,
+                fontsize=8.5,
+                color=colors[family],
+            )
+    ax.set_xticks([0, 1, 2], ["S", "M", "L / MoE"])
+    ax.set_xlim(-0.22, 2.28)
+    ax.set_ylim(0.54, 0.70)
+    ax.grid(axis="y", color="#e2e8f0", linewidth=1)
+    ax.set_ylabel("Mean text-classification score")
+    ax.set_title("Within-family scaling is mixed; Llama shows the clearest lift", loc="left", fontsize=14, fontweight="bold")
+    ax.text(
+        0,
+        -0.18,
+        wrap_plot_note("Accuracy-only mean across UniMoral RQ1-RQ3 and ValuePrism completed rows; excludes CCD and UniMoral RQ4 generation.", 106),
+        transform=ax.transAxes,
+        fontsize=9.5,
+        color="#475569",
+        va="top",
+    )
+    ax.legend(frameon=False, loc="upper left")
+    for spine in ["top", "right"]:
+        ax.spines[spine].set_visible(False)
+    fig.subplots_adjust(left=0.11, right=0.98, bottom=0.23, top=0.88)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_path, format="svg", metadata={"Date": "2026-05-27"})
+    plt.close()
+    strip_trailing_whitespace(output_path)
+
+
+def render_time_scaling(model_summary: list[dict[str, Any]], output_path: Path) -> None:
+    try:
+        import matplotlib.pyplot as plt
+    except Exception:
+        return
+    rows = [
+        row
+        for row in model_summary
+        if row.get("grid") == "time scaling" and row.get("mean_text_accuracy_tasks")
+    ]
+    if not rows:
+        return
+    release_order = sorted({row["release_period"] for row in rows})
+    x_for_release = {release: index for index, release in enumerate(release_order)}
+    colors = {"DeepSeek": "#b45309", "Qwen": "#2563eb", "Gemma": "#059669"}
+    fig, ax = plt.subplots(figsize=(10.5, 5.8))
+    for family in ["Qwen", "DeepSeek", "Gemma"]:
+        family_rows = sorted([row for row in rows if row["family"] == family], key=lambda row: row["release_period"])
+        if not family_rows:
+            continue
+        xs = [x_for_release[row["release_period"]] for row in family_rows]
+        ys = [float(row["mean_text_accuracy_tasks"]) for row in family_rows]
+        line_style = "-" if len(family_rows) > 1 else "None"
+        ax.plot(xs, ys, marker="o", linewidth=2.8, markersize=7, linestyle=line_style, color=colors[family], label=family)
+        for x, y, row in zip(xs, ys, family_rows):
+            label = f"{row['size_tier']}\n{y:.3f}"
+            if int(row.get("successful_tasks") or 0) < 7:
+                label += f"\n{row['successful_tasks']}/7 rows"
+            ha = "right" if x == len(release_order) - 1 else "left" if x == 0 else "center"
+            ax.text(x, y + 0.008, label, ha=ha, va="bottom", fontsize=8.5, color=colors[family])
+    ax.set_xticks(range(len(release_order)), release_order, rotation=0)
+    ax.set_xlim(-0.3, len(release_order) - 0.7)
+    ax.set_ylim(0.42, 0.67)
+    ax.grid(axis="y", color="#e2e8f0", linewidth=1)
+    ax.set_ylabel("Mean text-classification score")
+    ax.set_title("Time scaling is not automatic: Qwen rises, DeepSeek wobbles", loc="left", fontsize=14, fontweight="bold")
+    ax.text(
+        0,
+        -0.18,
+        wrap_plot_note("Same accuracy-only mean as the scaling figure. Gemma has only the older completed point here; newer route rows are provider-blocked.", 108),
+        transform=ax.transAxes,
+        fontsize=9.5,
+        color="#475569",
+        va="top",
+    )
+    ax.legend(frameon=False, loc="lower right")
+    for spine in ["top", "right"]:
+        ax.spines[spine].set_visible(False)
+    fig.subplots_adjust(left=0.11, right=0.98, bottom=0.23, top=0.88)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(output_path, format="svg", metadata={"Date": "2026-05-27"})
     plt.close()
@@ -814,6 +1083,9 @@ def write_derived_outputs(output_dir: Path, result_rows: list[dict[str, Any]], s
     write_csv(output_dir / "model_summary.csv", model_summary)
     summarize_patterns(model_summary, benchmark_summary, result_rows, output_dir / "interpretation.md", sample_limit)
     render_score_plot(result_rows, output_dir / "figures" / "pilot_scores.svg")
+    render_benchmark_matrix(benchmark_summary, output_dir / "figures" / "benchmark_score_matrix.svg")
+    render_within_family_scaling(model_summary, output_dir / "figures" / "within_family_scaling.svg")
+    render_time_scaling(model_summary, output_dir / "figures" / "time_scaling.svg")
 
 
 def infer_uniform_sample_limit(rows: list[dict[str, Any]], fallback: int | None) -> int | None:
@@ -862,8 +1134,11 @@ def write_readme(
         "- `result_summary.csv`: created after live runs.",
         "- `completion_audit.md`: requirement-by-requirement status for this output folder.",
         "- `openrouter-pricing-metadata.json`: compact pricing-source metadata for the selected model grid.",
-        "- `figures/cost_estimate.svg`: planned cost by model.",
-        "- `figures/pilot_scores.svg`: score plot after live runs.",
+        "- `figures/within_family_scaling.svg`: S/M/L scaling view for Qwen, Gemma, and Llama.",
+        "- `figures/time_scaling.svg`: older-vs-newer route view for Qwen, DeepSeek, and available Gemma rows.",
+        "- `figures/benchmark_score_matrix.svg`: model x benchmark matrix with metric caveats visible.",
+        "- `figures/pilot_scores.svg`: detailed task matrix after live runs.",
+        "- `figures/cost_estimate.svg`: planning/accounting appendix by model.",
         "- Raw Inspect `.eval` logs under `logs/` are local-only by default and intentionally ignored; commit them only with an explicit artifact contract.",
         "",
         "## Allowed Benchmarks",
@@ -908,6 +1183,9 @@ def write_readme(
                 "- `benchmark_summary.csv`: model x benchmark aggregate scores.",
                 "- `model_summary.csv`: model-level aggregates and success-row cost.",
                 "- `interpretation.md`: scaling/time/disagreement notes for completed scored rows.",
+                "- `figures/within_family_scaling.svg`: direct S/M/L family-size visual.",
+                "- `figures/time_scaling.svg`: older-vs-newer route visual.",
+                "- `figures/benchmark_score_matrix.svg`: benchmark comparison matrix; CCD is labeled as valid-choice coverage.",
                 "",
             ]
         )
@@ -1070,7 +1348,7 @@ def write_completion_audit(
         ),
         (
             "Output plots",
-            "`figures/cost_estimate.svg` is generated for plans; `figures/pilot_scores.svg` is generated when scored rows exist.",
+            "`figures/within_family_scaling.svg`, `figures/time_scaling.svg`, `figures/benchmark_score_matrix.svg`, and `figures/pilot_scores.svg` are generated for scored rows; `figures/cost_estimate.svg` remains the planning/accounting appendix.",
             plot_status,
         ),
         (

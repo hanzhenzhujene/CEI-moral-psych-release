@@ -97,7 +97,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert 'Current project total cost: `$888.06`' in readme
     assert "| Main visual story | What are the benchmark results, and how should each graph be read? | [Benchmark Result Visuals](#benchmark-result-visuals) |" in readme
     assert "| Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `87` of `105` cells are Tier 3; `18` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |" in readme
-    assert "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [replication visual](figures/release/option1_paper_result_comparison.svg), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |" in readme
+    assert "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |" in readme
     assert "| OpenRouter selected-grid follow-up | What happened when the text-only OpenRouter grid was run across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench? | [full readout](results/openrouter-selected-grid-moral-psych-full/README.md), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md) |" in readme
     assert "## Result Readiness Progress" in readme
     assert "| `T1` | Harness complete | A number exists; no guarantee it is meaningful. |" in readme
@@ -107,12 +107,14 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "## Replication And Calibration Snapshot" in readme
     assert "compare each implemented benchmark against its original paper" in readme
     assert "| `CCD-Bench` | Current choice-distribution rows plus saved/prior Mistral Nemo overlap; GPT-5.5 has 2,182/2,182 valid choices. | Partial distributional comparison only; CCD-Bench is not an accuracy benchmark. |" in readme
-    assert "![Original-paper replication and comparison map](figures/release/option1_paper_result_comparison.svg)" in readme
+    assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
     assert "## OpenRouter Selected-Grid Follow-Up" in readme
     assert "119/119` planned model-task rows have terminal states" in readme
     assert "101` are scored successes" in readme
-    assert "results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg" in readme
-    assert "results/openrouter-selected-grid-moral-psych-full/figures/cost_estimate.svg" in readme
+    assert "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg" in readme
+    assert "results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg" in readme
+    assert "results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg" in readme
+    assert "The figures below replace the earlier dense task-score plot as the primary reading path." in readme
     assert "## Navigate This Repo" in readme
     assert "## Results First" in readme
     assert "### DeepSeek S/M/L Log-Derived Readout" in readme
@@ -138,6 +140,23 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Metric: Accuracy" in unimoral_family_scaling_svg
     assert "Metric: BERTScore F1" in unimoral_family_scaling_svg
     assert "Metric: METEOR" in unimoral_family_scaling_svg
+
+    paper_calibration_svg = (ROOT / "figures/release/option1_paper_model_calibration_bridge.svg").read_text(encoding="utf-8")
+    assert "Paper-Model Calibration Bridge" in paper_calibration_svg
+    assert "CCD rows compare dominant cultural-cluster share, not accuracy" in paper_calibration_svg
+    assert "not Kaleido model replication" in paper_calibration_svg
+    assert "FULCRA proxy behavior" in paper_calibration_svg
+
+    openrouter_scaling_svg = (ROOT / "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg").read_text(encoding="utf-8")
+    assert "Within-family scaling is mixed" in openrouter_scaling_svg
+
+    openrouter_time_svg = (ROOT / "results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg").read_text(encoding="utf-8")
+    assert "Time scaling is not automatic" in openrouter_time_svg
+
+    openrouter_matrix_svg = (ROOT / "results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg").read_text(encoding="utf-8")
+    assert "Benchmark comparison matrix" in openrouter_matrix_svg
+    assert "CCD is" in openrouter_matrix_svg
+    assert "choice-format coverage rather than accuracy" in openrouter_matrix_svg
     assert "GPT 4o-mini 0.711" in unimoral_family_scaling_svg
     assert "GPT-5 nano" in unimoral_family_scaling_svg
     assert "GPT-5 mini" in unimoral_family_scaling_svg

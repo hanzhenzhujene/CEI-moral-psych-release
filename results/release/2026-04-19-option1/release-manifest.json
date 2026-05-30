@@ -76,6 +76,7 @@
     "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
     "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
     "manifest": "results/release/2026-04-19-option1/release-manifest.json",
+    "paper_model_calibration_bridge_figure": "figures/release/option1_paper_model_calibration_bridge.svg",
     "paper_result_alignment": "results/release/2026-04-19-option1/paper-result-alignment.csv",
     "readiness_tier_matrix": "results/release/2026-04-19-option1/readiness-tier-matrix.csv",
     "report": "results/release/2026-04-19-option1/jenny-group-report.md",
@@ -101,6 +102,7 @@
   },
   "figures": [
     "figures/release/option1_family_size_progress_overview.svg",
+    "figures/release/option1_paper_model_calibration_bridge.svg",
     "figures/release/option1_coverage_matrix.svg",
     "figures/release/option1_accuracy_heatmap.svg",
     "figures/release/option1_benchmark_accuracy_bars.svg",
@@ -172,16 +174,16 @@
     "ci_workflow_url": "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml",
     "current_cost_breakdown": {
       "minimax_api": "$504.66",
-      "openai_api_reference_sweep": "$0.76",
-      "openrouter_other_model_family_runs": "$325.66"
+      "openai_api_reference_sweep": "$39.98",
+      "openrouter_other_model_family_runs": "$343.42"
     },
-    "current_cost_scope": "User-confirmed total spend before the May 16 OpenAI Batch additions; check the OpenAI billing dashboard before publishing an exact updated dollar total.",
-    "current_total_cost": "$831.08",
-    "date": "2026-05-26",
+    "current_cost_scope": "User-confirmed total spend including the OpenRouter selected-grid follow-up and OpenAI reference-sweep additions.",
+    "current_total_cost": "$888.06",
+    "date": "2026-05-29",
     "frozen_snapshot_date": "2026-04-19",
     "metric_definition_summary": "Stricter visible-answer parsing is now versioned explicitly: UniMoral, SMID, and Value Kaleidoscope use structured visible-answer extraction; CCD-Bench coverage requires a parseable visible 1-10 choice; CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; Denevil appendix coverage counts non-empty visible proxy answers while the headline proxy figures classify visible behavior categories.",
     "metric_definition_version": "2026-04-30",
-    "operations_note": "Updated May 26, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `DeepSeek-L`, `Llama-L`, `DeepSeek-S`, `MiniMax-L`, and `MiniMax-S`, and no published follow-up line is still live.",
+    "operations_note": "Updated May 29, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `DeepSeek-L`, `Llama-L`, `DeepSeek-S`, `MiniMax-L`, and `MiniMax-S`, and no published follow-up line is still live.",
     "owner": "Jenny Zhu",
     "provider": "OpenRouter + direct MiniMax + OpenAI",
     "purpose": "Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan.",

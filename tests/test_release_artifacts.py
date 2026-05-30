@@ -167,6 +167,7 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     expected_figures = {
         "option1_family_size_progress_overview.svg",
+        "option1_paper_model_calibration_bridge.svg",
         "option1_accuracy_heatmap.svg",
         "option1_benchmark_accuracy_bars.svg",
         "option1_benchmark_difficulty_profile.svg",
@@ -196,15 +197,15 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
     assert any("OpenAI reference rows" in item and "text-only markers" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_total_cost"] == "$831.08"
+    assert manifest["report_metadata"]["current_total_cost"] == "$888.06"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
         "minimax_api": "$504.66",
-        "openrouter_other_model_family_runs": "$325.66",
-        "openai_api_reference_sweep": "$0.76",
+        "openrouter_other_model_family_runs": "$343.42",
+        "openai_api_reference_sweep": "$39.98",
     }
     assert (
         manifest["report_metadata"]["current_cost_scope"]
-        == "User-confirmed total spend before the May 16 OpenAI Batch additions; check the OpenAI billing dashboard before publishing an exact updated dollar total."
+        == "User-confirmed total spend including the OpenRouter selected-grid follow-up and OpenAI reference-sweep additions."
     )
     assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"
     assert "stricter visible-answer parsing" in manifest["report_metadata"]["metric_definition_summary"].lower()
@@ -230,6 +231,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["entry_points"]["denevil_proxy_examples"].endswith("denevil-proxy-examples.csv")
     assert manifest["entry_points"]["deepseek_sm_readout"].endswith("deepseek-sm-readout.csv")
     assert manifest["entry_points"]["readiness_tier_matrix"].endswith("readiness-tier-matrix.csv")
+    assert manifest["entry_points"]["paper_model_calibration_bridge_figure"].endswith("option1_paper_model_calibration_bridge.svg")
     assert manifest["entry_points"]["benchmark_difficulty_figure"].endswith("option1_benchmark_difficulty_profile.svg")
     assert manifest["entry_points"]["family_scaling_figure"].endswith("option1_family_scaling_profile.svg")
     assert manifest["entry_points"]["ccd_valid_choice_coverage_figure"].endswith("option1_ccd_valid_choice_coverage.svg")
@@ -252,6 +254,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "denevil-prompt-family-breakdown.csv" in manifest["tables"]
     assert "denevil-proxy-examples.csv" in manifest["tables"]
     assert "readiness-tier-matrix.csv" in manifest["tables"]
+    assert "figures/release/option1_paper_model_calibration_bridge.svg" in manifest["figures"]
     assert "figures/release/option1_benchmark_difficulty_profile.svg" in manifest["figures"]
     assert "figures/release/option1_family_scaling_profile.svg" in manifest["figures"]
     assert "figures/release/option1_ccd_valid_choice_coverage.svg" in manifest["figures"]

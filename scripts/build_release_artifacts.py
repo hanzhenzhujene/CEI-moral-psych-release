@@ -53,15 +53,16 @@ REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 202
 REPORT_PROVIDER = "OpenRouter + direct MiniMax + OpenAI"
 REPORT_TEMPERATURE = "0"
 REPORT_MINIMAX_API_COST = "$504.66"
-REPORT_OPENROUTER_COST = "$325.66"
-REPORT_OPENAI_API_COST = "$0.76"
-REPORT_CURRENT_TOTAL_COST = "$831.08"
+REPORT_OPENROUTER_COST = "$343.42"
+REPORT_OPENAI_API_COST = "$39.98"
+REPORT_CURRENT_TOTAL_COST = "$888.06"
 REPORT_CURRENT_COST_BREAKDOWN = (
-    f"MiniMax API: `{REPORT_MINIMAX_API_COST}`; OpenRouter for other model-family runs: `{REPORT_OPENROUTER_COST}`; "
+    f"MiniMax API: `{REPORT_MINIMAX_API_COST}`; OpenRouter model-family runs: `{REPORT_OPENROUTER_COST}`, "
+    "including `$17.760398` from the full selected-grid OpenRouter follow-up; "
     f"OpenAI API reference sweep: `{REPORT_OPENAI_API_COST}`."
 )
 REPORT_CURRENT_COST_SCOPE = (
-    "User-confirmed total spend before the May 16 OpenAI Batch additions; check the OpenAI billing dashboard before publishing an exact updated dollar total."
+    "User-confirmed total spend including the OpenRouter selected-grid follow-up and OpenAI reference-sweep additions."
 )
 REPORT_STATUS_NOTE = (
     f"Updated {REPORT_DATE_LONG}. "
@@ -10025,6 +10026,180 @@ def render_family_size_progress_overview_svg(rows: list[dict[str, Any]], output_
     write_text(output_path, "\n".join(lines) + "\n")
 
 
+def render_paper_model_calibration_bridge_svg(output_path: Path) -> None:
+    width, height = 1500, 1160
+    bar_max_share = 0.35
+    bar_width = 190
+    rows = [
+        {
+            "benchmark": "UniMoral",
+            "paper": "Llama-3.1-8B in paper roster",
+            "ours": "May 13 Llama 3.1 8B saved row",
+            "paper_value": None,
+            "ours_value": None,
+            "paper_text": "Paper includes Llama 3.1 8B RQ tables; exact paper values are not tracked here.",
+            "ours_text": "Saved/prior RQ1 action accuracy 0.639.",
+            "status": "Saved/prior only",
+            "note": "Useful for capability-floor context, not a fresh full RQ1-RQ4 rerun.",
+            "color": "#b45309",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper": "DeepSeek-chat-v3-0324",
+            "ours": "DeepSeek-M",
+            "paper_value": 0.229,
+            "ours_value": 0.226,
+            "paper_text": "Paper top Nordic Europe 22.9%.",
+            "ours_text": "Current Nordic Europe 22.6%; effective clusters 7.99.",
+            "status": "Close route",
+            "note": "Compare cultural-cluster behavior; version differs.",
+            "color": "#2563eb",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper": "Llama-3.3-70B-Instruct",
+            "ours": "Llama-M",
+            "paper_value": 0.197,
+            "ours_value": 0.206,
+            "paper_text": "Paper top Nordic Europe 19.7%.",
+            "ours_text": "Current Nordic Europe 20.6%; effective clusters 8.03.",
+            "status": "Closest direct row",
+            "note": "Direct CCD behavior bridge, not an accuracy comparison.",
+            "color": "#0f766e",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper": "Llama-4-Maverick",
+            "ours": "Llama-L",
+            "paper_value": 0.211,
+            "ours_value": 0.235,
+            "paper_text": "Paper top Nordic Europe 21.1%.",
+            "ours_text": "Current Nordic Europe 23.5%; effective clusters 7.67.",
+            "status": "Closest direct row",
+            "note": "Compare behavior while keeping coverage caveat visible.",
+            "color": "#0f766e",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper": "OpenAI GPT-4.1",
+            "ours": "GPT-4.1-mini Ref",
+            "paper_value": 0.215,
+            "ours_value": 0.224,
+            "paper_text": "Paper top Nordic Europe 21.5%.",
+            "ours_text": "Current Nordic Europe 22.4%; effective clusters 8.07.",
+            "status": "Reference family",
+            "note": "OpenAI calibration marker, not the exact paper variant.",
+            "color": "#334155",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper": "Qwen2.5-72B-Instruct",
+            "ours": "Qwen-L",
+            "paper_value": 0.177,
+            "ours_value": 0.234,
+            "paper_text": "Paper top Nordic Europe 17.7%.",
+            "ours_text": "Current Nordic Europe 23.4%; effective clusters 7.97.",
+            "status": "Family only",
+            "note": "Same broad family, different text route.",
+            "color": "#64748b",
+        },
+        {
+            "benchmark": "CCD-Bench",
+            "paper": "Mistral Nemo",
+            "ours": "May 13 Mistral Nemo",
+            "paper_value": 0.190,
+            "ours_value": 0.253,
+            "paper_text": "Paper top Nordic Europe 19.0%.",
+            "ours_text": "Saved/prior Nordic Europe 25.3%; effective clusters 7.22.",
+            "status": "Saved/prior",
+            "note": "Exploratory saved artifact, not a fresh rerun.",
+            "color": "#b45309",
+        },
+    ]
+    gap_cards = [
+        (
+            "Value Kaleidoscope / ValuePrism",
+            "Prompt rows are current benchmark evidence. They are not Kaleido model replication until gated Kaleido models are run.",
+            "#7c3aed",
+        ),
+        (
+            "SMID",
+            "No original LLM model roster was identified locally. Use current vision rows only for within-repo comparison.",
+            "#64748b",
+        ),
+        (
+            "DeNEVIL / MoralPrompt",
+            "Current evidence is FULCRA proxy behavior. It is not Tier 3 paper-faithful MoralPrompt comparison.",
+            "#b45309",
+        ),
+    ]
+
+    def share_bar(x: int, y: int, value: float | None, color: str, label: str) -> list[str]:
+        if value is None:
+            return [f'<text x="{x}" y="{y + 16}" class="small">no tracked paper-side value</text>']
+        scaled = min(value / bar_max_share, 1.0) * bar_width
+        return [
+            f'<rect x="{x}" y="{y}" width="{bar_width}" height="16" rx="8" class="muted-bar"/>',
+            f'<rect x="{x}" y="{y}" width="{scaled:.1f}" height="16" rx="8" fill="{color}"/>',
+            f'<text x="{x + bar_width + 10}" y="{y + 13}" class="small">{label} {value * 100:.1f}%</text>',
+        ]
+
+    lines = svg_header(width, height)
+    lines.extend(
+        [
+            f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
+            f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
+            "<title>Paper-model calibration bridge</title>",
+            "<desc>Visual bridge showing which original-paper model rows have same, near, saved/prior, reference-family, or blocked comparison evidence in the current release.</desc>",
+            '<text x="48" y="64" class="title">Paper-Model Calibration Bridge</text>',
+            '<text x="48" y="90" class="subtitle">Use this to answer: did we run the same models as the papers, and can the results be compared directly?</text>',
+            '<text x="48" y="112" class="subtitle">Only UniMoral RQ1 is an accuracy-style paper overlap here. CCD rows compare dominant cultural-cluster share, not accuracy.</text>',
+            '<text x="56" y="156" class="tiny">BENCHMARK</text>',
+            '<text x="198" y="156" class="tiny">PAPER / REFERENCE SIDE</text>',
+            '<text x="500" y="156" class="tiny">THIS REPO SIDE</text>',
+            '<text x="796" y="156" class="tiny">NUMERIC BRIDGE WHERE VALID</text>',
+            '<text x="1198" y="156" class="tiny">STATUS AND READER RULE</text>',
+        ]
+    )
+
+    row_y = 176
+    row_h = 98
+    for index, row in enumerate(rows):
+        y = row_y + index * row_h
+        lines.append(f'<rect x="42" y="{y}" width="1416" height="84" rx="14" class="subpanel"/>')
+        lines.append(f'<rect x="42" y="{y}" width="8" height="84" rx="4" fill="{row["color"]}"/>')
+        lines.extend(svg_text_block(56, y + 27, row["benchmark"], "label", 16, line_height=17))
+        lines.extend(svg_text_block(198, y + 23, f"{row['paper']}: {row['paper_text']}", "body", 48, line_height=17))
+        lines.extend(svg_text_block(500, y + 23, f"{row['ours']}: {row['ours_text']}", "body", 45, line_height=17))
+        lines.extend(share_bar(796, y + 20, row["paper_value"], "#2563eb", "paper"))
+        if row["ours_value"] is not None:
+            lines.extend(share_bar(796, y + 48, row["ours_value"], "#0f766e", "ours"))
+        lines.append(f'<circle cx="1182" cy="{y + 28}" r="7" fill="{row["color"]}"/>')
+        lines.extend(svg_text_block(1198, y + 28, f"{row['status']}: {row['note']}", "body", 38, line_height=17))
+
+    gap_top = row_y + len(rows) * row_h + 26
+    lines.extend(
+        [
+            f'<text x="48" y="{gap_top}" class="metric">Blocked or non-equivalent paper replication</text>',
+            f'<text x="48" y="{gap_top + 24}" class="subtitle">These rows should stay visible so reviewers do not mistake current benchmark evidence for paper-faithful replication.</text>',
+        ]
+    )
+    card_w = 440
+    for index, (title, body, color) in enumerate(gap_cards):
+        x = 48 + index * 470
+        y = gap_top + 48
+        lines.append(f'<rect x="{x}" y="{y}" width="{card_w}" height="128" rx="14" class="subpanel"/>')
+        lines.append(f'<rect x="{x}" y="{y}" width="8" height="128" rx="4" fill="{color}"/>')
+        lines.extend(svg_text_block(x + 22, y + 32, title, "label", 36, line_height=18))
+        lines.extend(svg_text_block(x + 22, y + 66, body, "body", 54, line_height=17))
+
+    lines.append(
+        f'<text x="48" y="{height - 58}" class="small">Source tables: paper-result-alignment.csv, paper-model-overlap-map.csv, CCD choice distributions, and saved/prior May 13 calibration artifacts.</text>'
+    )
+    lines.append("</svg>")
+    write_text(output_path, "\n".join(lines) + "\n")
+
+
 def build_topline_summary(
     rows: list[dict[str, Any]],
     model_summary: list[dict[str, Any]],
@@ -11553,7 +11728,8 @@ def append_deliverables_for_today_section(lines: list[str], readiness_tier_matri
             "| Short executive read | What is the bottom-line result without reading every table? | [TL;DR](#tldr) |",
             f"| Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `{tier3_cells}` of `{total_cells}` cells are Tier 3; `{blocked_cells}` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |",
             "| S/M/L family progress table | Which public family-size slots are done, missing a route, or proxy-only? | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
-            "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv) and [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+            "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+            "| OpenRouter selected-grid follow-up | What happened when the text-only OpenRouter grid was run across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench? | [full readout](results/openrouter-selected-grid-moral-psych-full/README.md), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md) |",
             "| Reproducibility package | Can a reviewer rebuild the public results without local secrets? | [Reproducibility](#reproducibility); run `make bootstrap` |",
             "| Full appendix | Where are the detailed tables, caveats, and generated release files? | [Release appendix](results/release/2026-04-19-option1/README.md) |",
             "",
@@ -11622,6 +11798,57 @@ def append_readiness_and_replication_section(lines: list[str], readiness_tier_ma
             "",
             "Open the full map here: [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md), and [calibration-replication.md](docs/calibration-replication.md).",
             "",
+            "The direct same/near-model comparison view is below. It separates saved/prior evidence, current near-route evidence, reference-family markers, and blocked paper-replication gaps.",
+            "",
+            "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)",
+            "",
+        ]
+    )
+
+
+def read_csv_rows_if_exists(path: Path) -> list[dict[str, str]]:
+    if not path.exists():
+        return []
+    with path.open(newline="", encoding="utf-8") as handle:
+        return [dict(row) for row in csv.DictReader(handle)]
+
+
+def append_openrouter_selected_grid_section(lines: list[str]) -> None:
+    output_dir = ROOT / "results" / "openrouter-selected-grid-moral-psych-full"
+    relative_dir = "results/openrouter-selected-grid-moral-psych-full"
+    result_rows = read_csv_rows_if_exists(output_dir / "result_summary.csv")
+    if not result_rows:
+        return
+    completed = [row for row in result_rows if row.get("run_status") == "success"]
+    status_counts = Counter(row.get("run_status") or "unknown" for row in result_rows)
+    success_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in completed)
+    recorded_actual_cost = sum(float(row.get("actual_cost_usd") or 0.0) for row in result_rows)
+    attempted_models = len({row.get("model") for row in result_rows if row.get("model")})
+    completed_models = len({row.get("model") for row in completed if row.get("model")})
+    lines.extend(
+        [
+            "## OpenRouter Selected-Grid Follow-Up",
+            "",
+            "This is a text-only follow-up package, separate from the main five-benchmark family-size release. It covers only `UniMoral` RQ1-RQ4, `ValuePrism` relevance/valence, and `CCD-Bench` across OpenRouter-accessible models; `SMID`, `DeNEVIL`, and `MiniMax` are excluded by design.",
+            "",
+            f"- Run status: `{len(result_rows)}/{len(result_rows)}` planned model-task rows have terminal states; `{len(completed)}` are scored successes, `{status_counts.get('error', 0)}` are provider/error rows, and `{status_counts.get('cancelled', 0)}` are cancelled or stale-route blockers.",
+            f"- Model coverage: `{attempted_models}` models attempted; `{completed_models}` have at least one scored row.",
+            f"- Cost accounting: successful scored rows total `${success_actual_cost:.6f}`; all recorded provider cost, including blocked partial rows, totals `${recorded_actual_cost:.6f}`.",
+            "- Interpretation boundary: use this follow-up for OpenRouter scaling/time-scaling evidence on text-only moral-psych tasks, not for SMID, DeNEVIL, MiniMax, Kaleido model replication, or CCD-Bench accuracy claims.",
+            "- The figures below replace the earlier dense task-score plot as the primary reading path.",
+            "",
+            f"![OpenRouter within-family scaling]({relative_dir}/figures/within_family_scaling.svg)",
+            "",
+            "_Read first: this chart answers whether S/M/L scaling helps inside Qwen, Gemma, and Llama on text-classification rows only. Llama has the cleanest lift; Qwen and Gemma are mixed._",
+            "",
+            f"![OpenRouter time scaling]({relative_dir}/figures/time_scaling.svg)",
+            "",
+            "_Read second: this chart asks whether newer routes beat older nearby routes. Qwen improves in this slice; DeepSeek is non-monotonic; Gemma is limited by blocked newer rows._",
+            "",
+            f"![OpenRouter benchmark comparison matrix]({relative_dir}/figures/benchmark_score_matrix.svg)",
+            "",
+            "_Read third: compare within each column before comparing across benchmarks. CCD-Bench is labeled as valid-choice behavior, not accuracy._",
+            "",
         ]
     )
 
@@ -11662,6 +11889,7 @@ def build_repo_readme(
     ]
     append_deliverables_for_today_section(lines, readiness_tier_matrix)
     append_readiness_and_replication_section(lines, readiness_tier_matrix)
+    append_openrouter_selected_grid_section(lines)
     append_benchmark_result_visuals_section(lines, "figures/release")
     append_tldr_section(
         lines,
@@ -12385,6 +12613,7 @@ def build_release_manifest(
             "benchmark_difficulty_summary": "results/release/2026-04-19-option1/benchmark-difficulty-summary.csv",
             "family_scaling_summary": "results/release/2026-04-19-option1/family-scaling-summary.csv",
             "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
+            "paper_model_calibration_bridge_figure": "figures/release/option1_paper_model_calibration_bridge.svg",
             "coverage_figure": "figures/release/option1_coverage_matrix.svg",
             "accuracy_figure": "figures/release/option1_accuracy_heatmap.svg",
             "benchmark_bar_figure": "figures/release/option1_benchmark_accuracy_bars.svg",
@@ -12431,6 +12660,7 @@ def build_release_manifest(
         ],
         "figures": [
             "figures/release/option1_family_size_progress_overview.svg",
+            "figures/release/option1_paper_model_calibration_bridge.svg",
             "figures/release/option1_coverage_matrix.svg",
             "figures/release/option1_accuracy_heatmap.svg",
             "figures/release/option1_benchmark_accuracy_bars.svg",
@@ -13090,6 +13320,7 @@ def main() -> None:
     )
 
     render_family_size_progress_overview_svg(family_size_progress, args.figure_dir / "option1_family_size_progress_overview.svg")
+    render_paper_model_calibration_bridge_svg(args.figure_dir / "option1_paper_model_calibration_bridge.svg")
     render_coverage_svg(coverage_matrix, args.figure_dir / "option1_coverage_matrix.svg")
     render_accuracy_svg(benchmark_comparison, args.figure_dir / "option1_accuracy_heatmap.svg")
     render_benchmark_accuracy_bars_svg(benchmark_comparison, args.figure_dir / "option1_benchmark_accuracy_bars.svg")
@@ -13151,6 +13382,7 @@ def main() -> None:
         ],
         "figures": [
             "option1_family_size_progress_overview.svg",
+            "option1_paper_model_calibration_bridge.svg",
             "option1_coverage_matrix.svg",
             "option1_accuracy_heatmap.svg",
             "option1_benchmark_accuracy_bars.svg",

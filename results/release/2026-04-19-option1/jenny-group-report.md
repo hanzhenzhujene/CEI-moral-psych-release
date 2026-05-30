@@ -1,6 +1,6 @@
 # Jenny Zhu Moral-Psych Benchmark Report
 
-Updated: `May 26, 2026`
+Updated: `May 29, 2026`
 
 Frozen public snapshot referenced here: `Option 1`, `April 19, 2026`
 
@@ -104,8 +104,8 @@ This section is the fastest summary for a mentor or collaborator: which lines al
 | `DeepSeek-L` | Complete local line | Done | No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed from saved R1 shards | Large R1 text rerun complete from saved logs; keep it text-only because no SMID route exists. |
 | `Llama-L` | Complete local line | Done | SMID complete; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%. | SMID complete; local text rerun finished successfully through the Denevil proxy task. |
 | `DeepSeek-S` | Complete local line | Done | No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs | May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot. |
-| `MiniMax-M` | Complete local text line | Done | Clean MiniMax-M2.5 text/proxy benchmarks complete; no medium SMID route fixed yet. | Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral action prediction 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
 | `MiniMax-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) using MiniMax-M2.5 text plus the shared MiniMax-01 SMID recovery route | The direct-provider MiniMax rerun finished successfully through the Denevil proxy task. |
+| `MiniMax-M` | Complete local text line | Done | Clean MiniMax-M2.5 text/proxy benchmarks complete; no medium SMID route fixed yet. | Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral action prediction 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
 | `MiniMax-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | MiniMax-S now uses the clean direct MiniMax-M2.1 text rerun plus the completed MiniMax-01 SMID recovery route. |
 
 ### Current Comparable Accuracy Snapshot
@@ -332,7 +332,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 - Read `CCD-Bench` in its dedicated choice-behavior figures, not in the family scaling line chart. `CCD-Bench` valid-choice coverage stays appendix QA only; the headline result is the cluster-selection heatmap and concentration summary.
 - Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
 - Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.
-- Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%`, and `Denevil visible proxy coverage = 99.8%`. These are parser/proxy coverage checks, not CCD or Denevil accuracy.
+- Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%` (2,180 / 2,182), and `Denevil visible proxy coverage = 99.8%` (20,474 / 20,518). These are parser/proxy coverage checks, not CCD or Denevil accuracy.
 - Do not call `GPT-5.5` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
 - Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI rows are text-reference markers rather than S/M/L size curves.
 - Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.
@@ -343,11 +343,11 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `May 26, 2026` |
+| Repo update date | `May 29, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
-| Current project total cost | `$831.08` |
-| Total cost breakdown | MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$325.66`; OpenAI API reference sweep: `$0.76`. |
-| Cost scope | User-confirmed total spend before the May 16 OpenAI Batch additions; check the OpenAI billing dashboard before publishing an exact updated dollar total. |
+| Current project total cost | `$888.06` |
+| Total cost breakdown | MiniMax API: `$504.66`; OpenRouter model-family runs: `$343.42`, including `$17.760398` from the full selected-grid OpenRouter follow-up; OpenAI API reference sweep: `$39.98`. |
+| Cost scope | User-confirmed total spend including the OpenRouter selected-grid follow-up and OpenAI reference-sweep additions. |
 | Purpose | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
 | Current public matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
 | Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |
