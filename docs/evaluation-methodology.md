@@ -6,7 +6,25 @@ Current public metric definition version: `2026-04-30`.
 
 This version locks in the stricter visible-answer parsing rules described below, so later parser or scorer changes must show up as an explicit version bump rather than a silent metric rewrite.
 
-## Metric Tiers
+## Result-Readiness Tiers
+
+The release exports a generated result-readiness summary dashboard at `results/release/2026-04-19-option1/readiness-tier-matrix.csv`.
+
+- `Tier 1`: the harness completed for the result cell.
+- `Tier 2`: the result is valid.
+- `Tier 3`: the result is interpretable and ready for comparison within the stated metric layer.
+
+Missing evidence is not a tier. Route gaps, data gaps, not-run cells, and blocked cells are represented separately as blocker/status values.
+
+The canonical Tier unit is a result cell:
+
+`model_id / provider_route / size_slot x benchmark x subtask_or_RQ x metric_layer x sample_set`
+
+The public `readiness-tier-matrix.csv` is a summary view at `model_line x benchmark`. It carries lower-level fields where the release builder can infer them, plus a `lower_level_limitations` field where the public row is only a summary of text/vision routes or source artifacts. It is not the canonical low-level ledger. If a benchmark summary uses multiple required subtasks, the summary reaches Tier 3 only when all required current-release cells are Tier 3; blocked cells receive no Tier. If the release intentionally exposes only one metric layer for a benchmark, the summary applies only to that metric layer.
+
+Tier is about result readiness. It is not model performance, not a family-level label, and not a claim that a Tier 3 model is "better" than another model. The metric layers below answer "what kind of evidence is this?"
+
+## Metric Layers
 
 This repo currently exposes three different kinds of result:
 
@@ -82,3 +100,13 @@ The current repo is careful about not overclaiming, but the next rigorous upgrad
 - keep bumping the public metric-definition version whenever a parser or scorer changes materially
 
 Until those upgrades land, the safest public stance is: accuracy claims live on the top row, coverage claims live on the bottom row, and the two should not be merged into a single scalar story.
+
+## UniMoral RQ4 Note
+
+The reference UniMoral RQ4 consequence-generation script reports BLEU, METEOR, and BERTScore F1. In `references/UniMoral/RQ4.py`, METEOR and BERTScore F1 are computed against each available human-written consequence for the same sample, the best reference score is kept, and those best per-sample scores are averaged.
+
+METEOR is mostly lexical: it rewards overlapping or closely related words between the generated consequence and the reference. BERTScore F1 is embedding-based: it compares contextual Transformer token embeddings, so it can reward paraphrases that use different wording. With the local `bert-score` defaults, English uses `roberta-large`, Chinese uses `bert-base-chinese`, and Spanish/Arabic/Russian/Hindi fall back to `bert-base-multilingual-cased`.
+
+The current Inspect port in `src/inspect/evals/unimoral.py` uses max ROUGE-L for `unimoral_consequence_generation`, so the release should describe current UniMoral release results as action-prediction accuracy unless the RQ4 scorer is deliberately updated to match the reference metric set.
+
+UniMoral has multiple research questions with different metric layers. The current release summary covers RQ1 action prediction only; it must not be read as a complete Tier 3 summary for RQ2, RQ3, or RQ4.

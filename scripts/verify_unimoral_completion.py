@@ -31,6 +31,9 @@ MODEL_LINES = [
     "Gemma-S",
     "Gemma-M",
     "Gemma-L",
+    "GPT-5 nano",
+    "GPT-5 mini",
+    "GPT-5.5",
     "GPT-4o-mini Ref",
 ]
 
@@ -55,11 +58,7 @@ PREDICTION_TASKS = {
     for name, task in TASKS.items()
     if name != "unimoral_action_prediction"
 }
-LOCAL_SAMPLE_ARTIFACTS = {
-    "unimoral_sample_predictions": "results/release/2026-04-19-option1/unimoral-sample-predictions.csv",
-    "unimoral_rq4_bertscore": "results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv",
-}
-FAILURE_CATEGORIES = {"api", "data", "format/parsing", "parsing", "runtime"}
+FAILURE_CATEGORIES = {"api", "api/runtime", "data", "format/parsing", "parsing", "runtime"}
 
 REQUIRED_CSV_COLUMNS = {
     "unimoral-full-benchmark.csv": {
@@ -204,6 +203,8 @@ def spread_diagnostic(spread: float) -> str:
 
 
 def family_display_for_line(line: str) -> str:
+    if line.startswith("GPT-5"):
+        return "OpenAI GPT-5"
     family = "GPT-4o-mini Ref" if line == "GPT-4o-mini Ref" else line.split("-", 1)[0]
     return DISPLAY_FAMILY_LABELS.get(family, family)
 
@@ -255,19 +256,6 @@ def _any_referenced_log_exists(full_rows: list[dict[str, str]], release_dir: Pat
             if path_text and _resolve_release_path(path_text, release_dir).exists():
                 return True
     return False
-
-
-def _expected_local_sample_artifacts() -> dict[str, str]:
-    artifacts = {
-        "unimoral_sample_predictions": LOCAL_SAMPLE_ARTIFACTS["unimoral_sample_predictions"],
-    }
-    if "unimoral_consequence_generation" in TASKS:
-        artifacts["unimoral_rq4_bertscore"] = LOCAL_SAMPLE_ARTIFACTS["unimoral_rq4_bertscore"]
-    return artifacts
-
-
-def _local_artifacts_available(release_dir: Path, artifacts: dict[str, str]) -> bool:
-    return all((release_dir / Path(path).name).exists() for path in artifacts.values())
 
 
 def _message_pair(message: str) -> tuple[str, str] | None:
@@ -334,6 +322,7 @@ def verify_release(
         "unimoral-coverage.csv",
         "unimoral-task-spread.csv",
         "unimoral-model-rankings.csv",
+        "unimoral-sample-predictions.csv",
         "unimoral-failure-checklist.csv",
         "benchmark-summary.csv",
         "benchmark-catalog.csv",
@@ -341,19 +330,10 @@ def verify_release(
         "README.md",
         "jenny-group-report.md",
     ]
+    if "unimoral_consequence_generation" in TASKS:
+        required_files.append("unimoral-rq4-bertscore.csv")
     for filename in required_files:
         require_file(release_dir / filename, errors)
-    local_artifacts = _expected_local_sample_artifacts()
-    local_artifacts_present = _local_artifacts_available(release_dir, local_artifacts)
-    if not local_artifacts_present:
-        missing_local_artifacts = [
-            Path(path).name
-            for path in local_artifacts.values()
-            if not (release_dir / Path(path).name).exists()
-        ]
-        if not allow_incomplete or len(missing_local_artifacts) != len(local_artifacts):
-            for filename in missing_local_artifacts:
-                require_file(release_dir / filename, errors)
 
     for filename in REQUIRED_FIGURE_MARKERS:
         require_file(figure_dir / filename, errors)
@@ -371,8 +351,6 @@ def verify_release(
     for filename, required_columns in REQUIRED_CSV_COLUMNS.items():
         if filename == "unimoral-rq4-bertscore.csv" and "unimoral_consequence_generation" not in TASKS:
             continue
-        if filename in {Path(path).name for path in local_artifacts.values()} and not local_artifacts_present:
-            continue
         actual_columns = csv_fieldnames(release_dir / filename)
         missing_columns = sorted(required_columns - actual_columns)
         if missing_columns:
@@ -385,11 +363,11 @@ def verify_release(
     coverage_rows = read_csv(release_dir / "unimoral-coverage.csv")
     spread_rows = read_csv(release_dir / "unimoral-task-spread.csv")
     ranking_rows = read_csv(release_dir / "unimoral-model-rankings.csv")
-    prediction_rows = read_csv(release_dir / "unimoral-sample-predictions.csv") if local_artifacts_present else []
+    prediction_rows = read_csv(release_dir / "unimoral-sample-predictions.csv")
     failure_rows = read_csv(release_dir / "unimoral-failure-checklist.csv")
     rq4_bertscore_rows = (
         read_csv(release_dir / "unimoral-rq4-bertscore.csv")
-        if "unimoral_consequence_generation" in TASKS and local_artifacts_present
+        if "unimoral_consequence_generation" in TASKS
         else []
     )
     benchmark_summary_rows = read_csv(release_dir / "benchmark-summary.csv")
@@ -577,7 +555,7 @@ def verify_release(
         for row in prediction_rows
     ]
     duplicate_prediction_count = len(prediction_keys) - len(set(prediction_keys))
-    if local_artifacts_present and len(prediction_rows) != EXPECTED_SAMPLE_PREDICTION_ROWS:
+    if len(prediction_rows) != EXPECTED_SAMPLE_PREDICTION_ROWS:
         fail(
             errors,
             f"unimoral-sample-predictions.csv has {len(prediction_rows)} rows, expected {EXPECTED_SAMPLE_PREDICTION_ROWS}",
@@ -587,21 +565,7 @@ def verify_release(
     predictions_by_pair: dict[tuple[str, str], list[dict[str, str]]] = {}
     for row in prediction_rows:
         predictions_by_pair.setdefault((row["line_label"], row["task_name"]), []).append(row)
-    prediction_count_by_pair = {
-        pair: len(rows_for_pair)
-        for pair, rows_for_pair in predictions_by_pair.items()
-    }
-    if not local_artifacts_present:
-        for row in full_rows:
-            task_name = str(row.get("task_name", ""))
-            if task_name in PREDICTION_TASKS:
-                prediction_count_by_pair[(str(row.get("line_label", "")), task_name)] = int(row.get("completed_samples") or 0)
-    sample_rows_represented = (
-        len(prediction_rows)
-        if local_artifacts_present
-        else sum(prediction_count_by_pair.values())
-    )
-    if "unimoral_consequence_generation" in TASKS and local_artifacts_present:
+    if "unimoral_consequence_generation" in TASKS:
         rq4_prediction_rows = [
             row
             for row in prediction_rows
@@ -659,16 +623,14 @@ def verify_release(
     for line in MODEL_LINES:
         for task_name, task in PREDICTION_TASKS.items():
             rows_for_pair = predictions_by_pair.get((line, task_name), [])
-            row_count = prediction_count_by_pair.get((line, task_name), 0)
-            if row_count != task["expected"]:
-                fail(errors, f"{line} {task_name} sample predictions={row_count} expected {task['expected']}")
-            if local_artifacts_present:
-                empty_scores = sum(1 for row in rows_for_pair if row.get("score_value") in {None, ""})
-                if empty_scores:
-                    fail(errors, f"{line} {task_name} has {empty_scores} empty sample score values")
+            if len(rows_for_pair) != task["expected"]:
+                fail(errors, f"{line} {task_name} sample predictions={len(rows_for_pair)} expected {task['expected']}")
+            empty_scores = sum(1 for row in rows_for_pair if row.get("score_value") in {None, ""})
+            if empty_scores:
+                fail(errors, f"{line} {task_name} has {empty_scores} empty sample score values")
             full_row = full_by_pair.get((line, task_name), {})
             status_value = str(full_row.get("status", "missing_row"))
-            prediction_gap = max(0, int(task["expected"]) - row_count)
+            prediction_gap = max(0, int(task["expected"]) - len(rows_for_pair))
             if prediction_gap:
                 strict_prediction_gap += prediction_gap
                 completion_audit_blocker_phrases.append(
@@ -677,7 +639,7 @@ def verify_release(
             elif status_value != "complete":
                 completion_audit_blocker_phrases.append(
                     f"`{line}` `{task_name}`: no sample-count gap "
-                    f"({row_count}/{task['expected']}) but status `{status_value}` prevents strict completion"
+                    f"({len(rows_for_pair)}/{task['expected']}) but status `{status_value}` prevents strict completion"
                 )
     all_tasks_complete = all(row.get("status") == "complete" for row in coverage_rows)
     if all_tasks_complete:
@@ -685,12 +647,11 @@ def verify_release(
         for row in rq4_rows:
             if row.get("bert_score_f1") in {None, ""}:
                 fail(errors, f"{row['line_label']} unimoral_consequence_generation missing official BERTScore value")
-        if local_artifacts_present:
-            for line in MODEL_LINES:
-                rows_for_pair = predictions_by_pair.get((line, "unimoral_consequence_generation"), [])
-                missing_bert = sum(1 for row in rows_for_pair if row.get("bert_score_f1") in {None, ""})
-                if missing_bert:
-                    fail(errors, f"{line} unimoral_consequence_generation has {missing_bert} missing per-sample BERTScore values")
+        for line in MODEL_LINES:
+            rows_for_pair = predictions_by_pair.get((line, "unimoral_consequence_generation"), [])
+            missing_bert = sum(1 for row in rows_for_pair if row.get("bert_score_f1") in {None, ""})
+            if missing_bert:
+                fail(errors, f"{line} unimoral_consequence_generation has {missing_bert} missing per-sample BERTScore values")
     if failure_rows:
         fail(errors, f"unimoral-failure-checklist.csv is not empty ({len(failure_rows)} rows)")
     if allow_incomplete:
@@ -841,9 +802,11 @@ def verify_release(
         "unimoral_coverage",
         "unimoral_task_spread",
         "unimoral_model_rankings",
+        "unimoral_sample_predictions",
         "unimoral_failure_checklist",
         "unimoral_completion_audit",
         "unimoral_minimax_resume_plan",
+        "unimoral_rq4_bertscore",
         "unimoral_four_task_dashboard_figure",
         "unimoral_task_heatmap_figure",
         "unimoral_generation_quality_figure",
@@ -858,20 +821,6 @@ def verify_release(
             continue
         if not _manifest_path_exists(str(entry_points[key]), release_dir, figure_dir):
             fail(errors, f"release-manifest.json entry_points.{key} points to missing artifact: {entry_points[key]}")
-
-    manifest_tables = set(manifest.get("tables", []))
-    manifest_local_artifacts = manifest.get("local_artifacts", {})
-    gitignore_text = (ROOT / ".gitignore").read_text(encoding="utf-8") if (ROOT / ".gitignore").exists() else ""
-    for key, expected_path in local_artifacts.items():
-        filename = Path(expected_path).name
-        if key in entry_points:
-            fail(errors, f"release-manifest.json entry_points.{key} should be a local_artifacts entry, not a public entry point")
-        if filename in manifest_tables:
-            fail(errors, f"release-manifest.json tables should not include ignored large artifact: {filename}")
-        if manifest_local_artifacts.get(key) != expected_path:
-            fail(errors, f"release-manifest.json missing local_artifacts.{key}={expected_path!r}")
-        if gitignore_text and expected_path not in gitignore_text:
-            fail(errors, f".gitignore missing ignored local artifact path: {expected_path}")
 
     resume_plan_entry = entry_points.get("unimoral_minimax_resume_plan")
     if resume_plan_entry:
@@ -949,11 +898,11 @@ def verify_release(
                 fail(errors, "unimoral-completion-audit.md does not mark strict-complete artifacts as achieved")
             if not strict_complete and "Status: **not achieved**." not in completion_audit_text:
                 fail(errors, "unimoral-completion-audit.md does not mark incomplete artifacts as not achieved")
-            sample_count_phrase = f"{sample_rows_represented} rows represented; strict expected count is {EXPECTED_SAMPLE_PREDICTION_ROWS}."
+            sample_count_phrase = (
+                f"{len(prediction_rows)} rows present; strict expected count is {EXPECTED_SAMPLE_PREDICTION_ROWS}."
+            )
             if sample_count_phrase not in completion_audit_text:
                 fail(errors, f"unimoral-completion-audit.md missing current sample prediction count: {sample_count_phrase!r}")
-            if "Large per-sample CSVs are generated locally and ignored by git." not in completion_audit_text:
-                fail(errors, "unimoral-completion-audit.md does not mark per-sample CSVs as ignored local artifacts")
             gap_phrase = f"Total strict sample prediction gap: **{strict_prediction_gap}** rows."
             if gap_phrase not in completion_audit_text:
                 fail(errors, f"unimoral-completion-audit.md missing current strict prediction gap: {gap_phrase!r}")

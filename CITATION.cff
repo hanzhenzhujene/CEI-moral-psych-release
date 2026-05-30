@@ -1,26 +1,19 @@
 cff-version: 1.2.0
 message: "If you use this repository, please cite it using the metadata below."
-title: "CEI Moral Psychology Benchmark Evaluation"
+title: "CEI Moral-Psych Benchmark Suite"
 type: software
 version: "2026.05.11"
 date-released: 2026-05-11
 authors:
-  - family-names: Sun
-    given-names: Joseph
   - family-names: Zhu
     given-names: Hanzhen
     alias: Jenny Zhu
-  - family-names: Nordby
-    given-names: Erik
-  - family-names: Lin
-    given-names: Jimmy
-    affiliation: Center for Ethical Intelligence
 repository-code: "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark"
 url: "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark"
 abstract: >-
-  Shared CEI benchmark evaluation repository for moral psychology and ethics
-  benchmarks, including TrolleyBench, Hendrycks ETHICS, and Jenny Zhu's
-  moral-psych release artifacts.
+  Public release package for five moral-psych benchmark papers, separating
+  benchmark-faithful comparable accuracy from CCD-Bench cultural-cluster choice
+  behavior and DeNEVIL proxy behavioral evidence.
 keywords:
   - benchmark evaluation
   - moral reasoning

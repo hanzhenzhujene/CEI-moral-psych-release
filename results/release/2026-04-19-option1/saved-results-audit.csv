@@ -27,7 +27,7 @@ MiniMax-M,MiniMax,M,ccd_bench_selection,merged_saved_shards_by_sample_id,1,2182,
 MiniMax-M,MiniMax,M,denevil_fulcra_proxy_generation,merged_saved_shards_by_sample_id,14,20518,20518,,0,20518,1.000000,complete
 MiniMax-L,MiniMax,L,unimoral_action_prediction,merged_saved_shards_by_sample_id,1,8784,8784,0.660519,8784,8784,,complete
 MiniMax-L,MiniMax,L,smid_moral_rating,merged_saved_shards_by_sample_id,3,2941,2941,0.109487,2941,2941,,complete
-MiniMax-L,MiniMax,L,smid_foundation_classification,merged_saved_shards_by_sample_id,3,2941,2941,0.287657,2941,2941,,complete
+MiniMax-L,MiniMax,L,smid_foundation_classification,merged_saved_shards_by_sample_id,3,2941,2941,0.286977,2941,2941,,complete
 MiniMax-L,MiniMax,L,value_prism_relevance,merged_saved_shards_by_sample_id,3,43680,43680,0.722734,43680,43680,,complete
 MiniMax-L,MiniMax,L,value_prism_valence,merged_saved_shards_by_sample_id,2,21840,21840,0.759661,21840,21840,,complete
 MiniMax-L,MiniMax,L,ccd_bench_selection,merged_saved_shards_by_sample_id,1,2182,2182,,0,2182,1.000000,complete

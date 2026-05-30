@@ -6,14 +6,15 @@ This is the shortest frozen-snapshot readout in the repo: what the closed public
 
 Key takeaways:
 
-- **Main landscape:** text moral reasoning is much stronger than image moral judgment. UniMoral and Value sit around 0.653-0.673 mean accuracy, but SMID image accuracy averages only 0.364; even the best image line, `Qwen-L` at 0.483, is below 0.50. In plain terms: models can talk through moral choices and values better than they can see morally important cues in images.
-- **Best all-around line:** `MiniMax-S` is the cleanest overall winner because it is not missing the image benchmark: UniMoral 0.661, SMID 0.432, Value 0.740, mean 0.611. The main warning is that the best text-only rows can look stronger, but they do not answer the image problem.
-- **Scaling law:** there is no reliable bigger-is-better rule. Scale helps in a few places, especially Qwen on images (0.368 -> 0.483) and Llama on Value from S to M (0.529 -> 0.724). But there are clear reversals: Gemma image dips then rebounds (0.417 -> 0.364 -> 0.412), DeepSeek UniMoral falls from M to L (0.684 -> 0.563), and `MiniMax-L` is an image outlier at 0.199.
-- **Family read:** Qwen is the clearest case where size helps vision; Gemma is the cleanest full S/M/L family but still non-monotonic; DeepSeek is useful for text but has no image route and its large line is not automatically better; Llama improves after the small line but M can beat L on text; MiniMax-S is the safest all-around line, while MiniMax-L is the clearest bad image outlier.
-- **UniMoral is not one skill:** a model can match the human action but still miss the moral frame, the reason, or the consequence. Task winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `Gemma-S` 0.599, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `Llama-L` 0.157. So the useful story is which part of moral reasoning each family handles, not one single moral score.
-- **Cultural-style bias:** CCD-Bench shows a strong Europe/Nordic pull, not a normal accuracy score. 19 of 20 valid lines choose `Nordic Europe` as their dominant style. `GPT-5-nano Ref` is the most collapsed onto one cluster (27.8%), while `DeepSeek-S` is the least collapsed and the only non-Nordic dominant line (13.8%, `Sub Saharan Africa`).
-- **OpenAI references:** the GPT rows mostly confirm the text baseline instead of changing the story. `GPT-4o-mini Ref` is close to the strong text band (UniMoral 0.673, Value 0.701); `GPT-5-mini Ref` beats `GPT-5-nano Ref` (0.739 vs 0.617 on Value), and `GPT-4.1-mini Ref` beats `GPT-4.1-nano Ref` (0.679 vs 0.646 on UniMoral). None of these rows has SMID, so they do not solve the image weakness.
-- **Small-model follow-up:** Mistral/Qwen/Llama older routes add one simple takeaway: there is a capability floor. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral from 0.632 to 0.648, but `Llama 3.2 1B` drops to 0.406. So these models are useful baselines, not a new top tier, and the 1B route is too small for this moral-choice setup.
+- **Bottom line:** text moral reasoning is usable; image moral judgment is the bottleneck. UniMoral and Value average 0.653-0.673, while SMID averages 0.364; even the best SMID line, `Qwen-L` at 0.483, stays below 0.50.
+- **Best comparable all-around line:** `MiniMax-S` is the cleanest line with text, image, and value evidence: UniMoral 0.661, SMID 0.432, Value 0.740, three-metric mean 0.611.
+- **Best text-only line:** `GPT-5.5` is strongest when SMID is excluded: UniMoral 0.684, Value 0.736, two-metric mean 0.710. Do not call it best overall because it has no image result.
+- **Scaling read:** bigger is not reliably better. Scale helps Qwen on SMID (0.368 -> 0.483) and Llama on Value from S to M (0.529 -> 0.724), but reverses or stalls elsewhere: Gemma SMID 0.417 -> 0.364 -> 0.412, DeepSeek UniMoral 0.684 -> 0.563, and `MiniMax-L` SMID 0.198.
+- **UniMoral readout:** do not collapse RQ1-RQ4 into one moral score. Winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `GPT-5.5` 0.637, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `GPT-5.5` 0.165, so the result is task-specific moral reasoning, not one universal rank.
+- **CCD-Bench read:** this is cultural-choice behavior, not accuracy. 20 of 21 valid lines choose `Nordic Europe` as the dominant style; `GPT-5 nano` is most concentrated (27.8%), while `DeepSeek-S` is least concentrated and the only non-Nordic dominant line (13.8%, `Sub Saharan Africa`).
+- **OpenAI/GPT read:** GPT-5 is a text-only S/M/L series: `GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L. Value jumps from 0.617 to 0.739 and then plateaus at 0.736; UniMoral tops out at `GPT-5.5` (0.684). GPT-4o/GPT-4.1 rows are separate text refs, and none has SMID or DeNEVIL. Completed GPT-5 RQ2-RQ4 follow-up: `GPT-5.5` leads the GPT-5 line on RQ2 accuracy 0.637, RQ3 accuracy 0.601, RQ4 BERTScore F1 0.725, and RQ4 METEOR 0.165. Overall semantic RQ4 still peaks at `Llama-M` 0.730, so this is strong GPT text evidence, not one universal UniMoral winner.
+- **DeNEVIL boundary:** current DeNEVIL evidence is FULCRA-backed proxy behavior, not paper-faithful MoralPrompt scoring. Use the behavioral-outcomes figure for refusal/context/risk patterns, not a benchmark accuracy ranking.
+- **Small-model floor:** the May 13 Mistral/Qwen/Llama follow-up shows a capability threshold. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral from 0.632 to 0.648; `Llama 3.2 1B` drops to 0.406.
 
 
 ## Frozen Snapshot Scope
@@ -22,8 +23,8 @@ Key takeaways:
 - paper-setup tasks: `16`
 - proxy tasks: `3`
 - total evaluated samples: `302,776`
-- current project total cost: `$870.30`
-- total cost breakdown: MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$325.66`; OpenAI API reference sweep: `$39.98`.
+- current project total cost: `$831.08`
+- total cost breakdown: MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$325.66`; OpenAI API reference sweep: `$0.76`.
 - closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`
 - key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup
 - extra local progress outside the frozen snapshot: `Llama` small is complete across `5` papers / `7` tasks and is intentionally excluded from the frozen `19 / 19` totals

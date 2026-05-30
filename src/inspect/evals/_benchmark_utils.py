@@ -8,6 +8,7 @@ small and focused on benchmark-specific logic.
 from __future__ import annotations
 
 import ast
+import asyncio
 import base64
 import json
 import math
@@ -28,7 +29,7 @@ from inspect_ai.scorer import Score, Target, accuracy, mean, scorer, stderr
 # intermittent late PermissionError failures when Inspect lazily loaded this
 # module mid-run from the shared Desktop-hosted venv.
 import inspect_ai.solver._transcript as _inspect_solver_transcript  # noqa: F401
-from inspect_ai.solver import TaskState, generate
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 from rouge_score import rouge_scorer
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
@@ -73,10 +74,55 @@ def env_bool(name: str, default: bool = False) -> bool:
     return value.lower() in {"1", "true", "yes", "on"}
 
 
+def _transient_generate_error(exc: Exception) -> bool:
+    text = f"{type(exc).__name__}: {exc}".lower()
+    if any(needle in text for needle in ("402", "payment required", "insufficient credit", "invalid api key")):
+        return False
+    return any(
+        needle in text
+        for needle in (
+            "api connection",
+            "apiconnectionerror",
+            "api timeout",
+            "apitimeouterror",
+            "connection error",
+            "connecterror",
+            "remoteprotocolerror",
+            "server disconnected",
+            "bad gateway",
+            "service unavailable",
+            "internal server error",
+            "nonetype' object is not iterable",
+        )
+    )
+
+
+@solver
+def robust_generate(max_tokens: int = 256, temperature: float = 0.0, retries: int = 3, delay_seconds: float = 2.0) -> Solver:
+    async def solve(state: TaskState, generate: Generate) -> TaskState:
+        for attempt in range(retries + 1):
+            try:
+                return await generate(state, max_tokens=max_tokens, temperature=temperature)
+            except Exception as exc:
+                if attempt >= retries or not _transient_generate_error(exc):
+                    raise
+                await asyncio.sleep(delay_seconds * (2**attempt))
+        raise RuntimeError("unreachable robust_generate retry state")
+
+    return solve
+
+
 def generation_plan(max_tokens: int = 256):
     min_max_tokens = env_int("CEI_MIN_MAX_TOKENS", max_tokens)
     effective_max_tokens = max(max_tokens, min_max_tokens)
-    return [generate(max_tokens=effective_max_tokens, temperature=env_float("CEI_TEMPERATURE", 0.0))]
+    return [
+        robust_generate(
+            max_tokens=effective_max_tokens,
+            temperature=env_float("CEI_TEMPERATURE", 0.0),
+            retries=env_int("CEI_GENERATE_RETRIES", 3),
+            delay_seconds=env_float("CEI_GENERATE_RETRY_DELAY_SECONDS", 2.0),
+        )
+    ]
 
 
 def resume_start_index(env_var: str) -> int:
@@ -90,8 +136,8 @@ def resume_start_index(env_var: str) -> int:
 
 
 def strip_think_blocks(text: str) -> str:
-    """Remove <think>...</think> blocks from reasoning model output."""
-    return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
+    """Remove hidden reasoning blocks before visible-answer scoring."""
+    return re.sub(r"<think>.*?</think>", "", str(text), flags=re.DOTALL).strip()
 
 
 def normalize_whitespace(text: str) -> str:
@@ -188,7 +234,7 @@ def extract_labeled_int(
     maximum: int | None = None,
 ) -> int | None:
     for label in labels:
-        pattern = rf"(?:{label})\s*[:=\-]?\s*(\d+)\b"
+        pattern = rf"(?:{label})\s*(?:is|=|:|\-)?\s*(\d+)\b"
         match = re.search(pattern, text, flags=re.IGNORECASE)
         if not match:
             continue
@@ -292,11 +338,10 @@ def extract_action_choice(text: str) -> str | None:
     if not normalized:
         return None
     patterns = [
-        (r"(?:selected\s+action|action\s+selected|answer|choice)\s*[:=\-]?\s*([ab])\b", "labeled"),
+        (r"(?:selected\s+action|action\s+selected|answer|choice)\s*(?:is|=|:|\-)?\s*([ab])\b", "labeled"),
         (r"(?:option)\s*([ab])\b", "option"),
         (r"^([ab])$", "exact"),
         (r"\(([ab])\)", "paren"),
-        (r"\b([ab])\s*\.?\s*$", "trailing"),
     ]
     for pattern, _ in patterns:
         match = re.search(pattern, normalized, flags=re.IGNORECASE)
@@ -404,11 +449,18 @@ def extract_explicit_label(text: str, patterns: Mapping[str, Sequence[str]]) -> 
         rf"\b(?:selected\s+action)\s*(?:is|=|:)?\s*{wrapped_alias}\b",
         rf"\b(?:dominant\s+(?:moral\s+)?foundation)\s*(?:is|=|:|appears\s+to\s+be)\s*{wrapped_alias}\b",
         rf"\b{wrapped_alias}\s*(?:is\s+the\s+(?:final\s+)?answer|is\s+the\s+dominant\s+(?:moral\s+)?foundation)\b",
-        rf"\b(?:therefore|thus|so|hence|therefor|overall|in\s+conclusion|final\s+answer)\b[^\n.。؛;:]{{0,120}}{wrapped_alias}\b",
-        rf"(?:最终|因此|所以|答案是|答案为|我选择)[^\n。；;:]{{0,80}}{wrapped_alias}",
-        rf"(?:الإجابة|الجواب|لذلك|لذا)[^\n.؛;:]{{0,120}}{wrapped_alias}",
-        rf"\b(?:the\s+)?(?:action|decision|choice)\s*(?:is|=|:|would\s+be|appears\s+to\s+be|seems\s+to\s+be)\s*{wrapped_alias}\b",
+        rf"\b(?:thus|therefore|so|overall|in\s+conclusion|conclusion|final(?:ly)?|hence|accordingly)\b[^.\n]{{0,180}}\b(?:action|decision|choice|framework|ethical\s+framework|moral\s+framework|type|classification|category|factor|contributing\s+factor|influential\s+factor|important\s+factor)\b[^.\n]{{0,120}}(?:is|=|:|would\s+be|appears\s+to\s+be|seems\s+to\s+be|points\s+to)\s*{wrapped_alias}\b",
+        rf"\b(?:thus|therefore|so|overall|in\s+conclusion|conclusion|final(?:ly)?|hence|accordingly)\s*[,:\-]?\s*{wrapped_alias}\b",
+        rf"\b(?:i(?:'d|\s+would)?\s+(?:argue|choose|select|classify|say)|my\s+(?:choice|selection|classification))\b[^.\n]{{0,160}}(?:is|=|:|as)?\s*{wrapped_alias}\b",
+        rf"(?:我\s*(?:认为|觉得|选择)|最终|最后|因此|所以|最佳匹配(?:是|为)?)[^。\n]{{0,160}}{wrapped_alias}",
+        rf"(?:答案|最终答案|回答|选择|因此|所以)\s*(?:是|为|:|：)?\s*{wrapped_alias}",
+        rf"(?:ответ|итоговый\s+ответ|финальный\s+ответ|следовательно|поэтому)\s*(?:это|:|=|\-|—)?\s*{wrapped_alias}",
+        rf"(?:الإجابة|الجواب|الإختيار|الاختيار|لذلك|لذا|إذن|بالتالي|في\s+النهاية)\s*(?:هي|هو|:|=)?\s*{wrapped_alias}",
+        rf"(?:العامل\s+(?:الحاسم|الرئيسي|الأكثر\s+تأثيرًا)|الخيار\s+(?:الأفضل|المناسب))[^.\n؛،]{{0,120}}(?:هو|هي|:)?\s*{wrapped_alias}",
+        rf"{wrapped_alias}\s*(?:هو|هي)?\s*(?:العامل\s+(?:الحاسم|الرئيسي|الأكثر\s+تأثيرًا)|كعامل\s+(?:أساسي|رئيسي|حاسم))",
+        rf"(?:اختيار|اختر|يستدعي\s+اختيار)\s*{wrapped_alias}\s*كعامل",
         rf"\b(?:the\s+)?(?:most\s+)?(?:important|influential|primary|main)\s+(?:contributing\s+)?factor\s*(?:is|=|:|would\s+be|appears\s+to\s+be|seems\s+to\s+be)\s*{wrapped_alias}\b",
+        rf"\b(?:the\s+)?(?:action|decision|choice)\s*(?:is|=|:|would\s+be|appears\s+to\s+be|seems\s+to\s+be)\s*{wrapped_alias}\b",
         rf"\b{wrapped_alias}\s*(?:is|would\s+be|appears\s+to\s+be|seems\s+to\s+be)\s+the\s+(?:most\s+)?(?:important|influential|primary|main)\s+(?:contributing\s+)?factor\b",
     ]
     for pattern in labeled_patterns:
@@ -553,10 +605,35 @@ def consequence_text_from_output(output: Any) -> tuple[str, str, str]:
 
 
 def text_from_sample_output(output: Mapping[str, Any], *, include_reasoning: bool = True) -> str:
-    visible, reasoning = model_output_text_parts(output)
-    if visible:
-        return visible
-    return reasoning if include_reasoning else ""
+    visible = []
+    reasoning = []
+    completion = output.get("completion")
+    if isinstance(completion, str) and completion.strip():
+        visible.append(completion)
+    choices = output.get("choices")
+    if isinstance(choices, list):
+        for choice in choices:
+            message = choice.get("message") if isinstance(choice, Mapping) else {}
+            content = message.get("content") if isinstance(message, Mapping) else ""
+            message_reasoning = ""
+            if isinstance(message, Mapping):
+                message_reasoning = message.get("reasoning") or message.get("reasoning_content") or ""
+            if isinstance(message_reasoning, str) and message_reasoning.strip():
+                reasoning.append(message_reasoning)
+            if isinstance(content, str):
+                visible.append(content)
+            elif isinstance(content, list):
+                for item in content:
+                    if not isinstance(item, Mapping):
+                        continue
+                    if item.get("type") == "reasoning":
+                        reasoning.append(str(item.get("reasoning") or item.get("text") or ""))
+                    else:
+                        visible.append(str(item.get("text") or ""))
+    visible_text = normalize_whitespace("\n".join(visible))
+    if visible_text:
+        return visible_text
+    return normalize_whitespace("\n".join(reasoning)) if include_reasoning else ""
 
 
 def _ngram_counts(tokens: Sequence[str], n: int) -> dict[tuple[str, ...], int]:
@@ -722,12 +799,13 @@ def ensure_extracted_zip(zip_path: Path) -> Path:
 @scorer(metrics=[accuracy(), stderr()])
 def label_membership_scorer(patterns: Mapping[str, Sequence[str]]):
     async def score(state: TaskState, target: Target) -> Score:
-        answer = canonicalize_label(strip_think_blocks(state.output.completion), patterns)
+        answer, explanation, source = canonicalize_label_from_output(state.output, patterns)
         is_correct = answer is not None and answer in target.target
         return Score(
             value=1 if is_correct else 0,
             answer=answer or "",
-            explanation=state.output.completion,
+            explanation=explanation,
+            metadata={"answer_source": source},
         )
 
     return score
@@ -736,12 +814,13 @@ def label_membership_scorer(patterns: Mapping[str, Sequence[str]]):
 @scorer(metrics=[accuracy(), stderr()])
 def parsed_label_scorer(parser):
     async def score(state: TaskState, target: Target) -> Score:
-        answer = parser(strip_think_blocks(state.output.completion))
+        visible_answer = strip_think_blocks(state.output.completion)
+        answer = parser(visible_answer)
         is_correct = answer is not None and answer in target.target
         return Score(
             value=1 if is_correct else 0,
             answer=answer or "",
-            explanation=state.output.completion,
+            explanation=visible_answer,
         )
 
     return score
@@ -750,11 +829,12 @@ def parsed_label_scorer(parser):
 @scorer(metrics=[mean(), stderr()])
 def valid_choice_scorer(minimum: int, maximum: int):
     async def score(state: TaskState, target: Target) -> Score:
-        choice = extract_structured_choice_int(strip_think_blocks(state.output.completion), minimum=minimum, maximum=maximum)
+        visible_answer = strip_think_blocks(state.output.completion)
+        choice = extract_structured_choice_int(visible_answer, minimum=minimum, maximum=maximum)
         return Score(
             value=1.0 if choice is not None else 0.0,
             answer="" if choice is None else str(choice),
-            explanation=state.output.completion,
+            explanation=visible_answer,
             metadata={"selected_option": choice},
         )
 
@@ -764,13 +844,14 @@ def valid_choice_scorer(minimum: int, maximum: int):
 @scorer(metrics=[accuracy(), stderr()])
 def bounded_integer_scorer(minimum: int, maximum: int):
     async def score(state: TaskState, target: Target) -> Score:
-        rating = extract_structured_rating_int(strip_think_blocks(state.output.completion), minimum=minimum, maximum=maximum)
+        visible_answer = strip_think_blocks(state.output.completion)
+        rating = extract_structured_rating_int(visible_answer, minimum=minimum, maximum=maximum)
         answer = "" if rating is None else str(rating)
         is_correct = answer != "" and answer in target.target
         return Score(
             value=1 if is_correct else 0,
             answer=answer,
-            explanation=state.output.completion,
+            explanation=visible_answer,
             metadata={"selected_rating": rating},
         )
 
@@ -784,7 +865,7 @@ def response_present_scorer():
         return Score(
             value=1.0 if answer else 0.0,
             answer=answer,
-            explanation=state.output.completion,
+            explanation=answer,
         )
 
     return score
@@ -795,10 +876,11 @@ def rouge_l_max_scorer():
     rouge = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
 
     async def score(state: TaskState, target: Target) -> Score:
-        prediction = normalize_whitespace(strip_think_blocks(state.output.completion))
+        visible_answer = strip_think_blocks(state.output.completion)
+        prediction = normalize_whitespace(visible_answer)
         references = [normalize_whitespace(reference) for reference in target.target if reference]
         if not prediction or not references:
-            return Score(value=0.0, answer=prediction, explanation=state.output.completion)
+            return Score(value=0.0, answer=prediction, explanation=visible_answer)
 
         best_score = 0.0
         best_reference = ""
@@ -834,15 +916,16 @@ def unimoral_consequence_scorer():
                 metadata={"bleu": 0.0, "meteor": 0.0, "rouge_l": 0.0, "best_reference": "", "answer_source": source},
             )
 
-        per_reference = [
-            {
-                "reference": reference,
-                "bleu": sentence_bleu_score(reference, prediction),
-                "meteor": meteor_score(reference, prediction),
-                "rouge_l": rouge.score(reference, prediction)["rougeL"].fmeasure,
-            }
-            for reference in references
-        ]
+        per_reference = []
+        for reference in references:
+            per_reference.append(
+                {
+                    "reference": reference,
+                    "bleu": sentence_bleu_score(reference, prediction),
+                    "meteor": meteor_score(reference, prediction),
+                    "rouge_l": rouge.score(reference, prediction)["rougeL"].fmeasure,
+                }
+            )
         best_by_meteor = max(per_reference, key=lambda item: item["meteor"])
         return Score(
             value=best_by_meteor["meteor"],

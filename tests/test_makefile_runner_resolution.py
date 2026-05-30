@@ -231,33 +231,6 @@ def test_makefile_bootstrap_reuses_fallback_python_when_uv_is_missing(tmp_path: 
     assert "fake-python invoked scripts/verify_unimoral_completion.py --allow-incomplete" in result.stdout
 
 
-def test_makefile_openrouter_low_cost_full_dry_run_uses_guarded_launcher(tmp_path: Path) -> None:
-    fake_python = _write_fake_executable(
-        tmp_path / "fake-python",
-        "#!/bin/sh\nprintf 'fake-python invoked %s\\n' \"$*\"\n",
-    )
-
-    result = subprocess.run(
-        [
-            "make",
-            "-f",
-            str(MAKEFILE),
-            "-n",
-            "openrouter-low-cost-full-dry-run",
-            "UV=definitely-not-a-real-uv",
-            f"VENV_PYTHON={fake_python}",
-        ],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-    )
-
-    assert result.returncode == 0
-    assert "OPENROUTER_FULL_RUN_DRY_RUN=1" in result.stdout
-    assert f'OPENROUTER_PYTHON="{fake_python}"' in result.stdout
-    assert "bash scripts/run_openrouter_low_cost_full.sh" in result.stdout
-
-
 def test_makefile_clean_release_covers_generated_release_tables_and_docs() -> None:
     result = subprocess.run(
         [

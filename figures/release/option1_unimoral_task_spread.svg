@@ -7,9 +7,9 @@
 <rect x="250" y="92" width="460.0" height="22" fill="#3c78d8" rx="3"/>
 <text x="732" y="108">accuracy range 0.121</text>
 <text x="36" y="157" class="axis">Moral typology</text>
-<rect x="250" y="142" width="170.8" height="22" fill="#3c78d8" rx="3"/>
-<text x="732" y="158">accuracy range 0.045</text>
+<rect x="250" y="142" width="317.7" height="22" fill="#3c78d8" rx="3"/>
+<text x="732" y="158">accuracy range 0.084</text>
 <text x="36" y="207" class="axis">Factor attribution</text>
-<rect x="250" y="192" width="264.4" height="22" fill="#3c78d8" rx="3"/>
-<text x="732" y="208">accuracy range 0.070</text>
+<rect x="250" y="192" width="374.3" height="22" fill="#3c78d8" rx="3"/>
+<text x="732" y="208">accuracy range 0.099</text>
 </svg>

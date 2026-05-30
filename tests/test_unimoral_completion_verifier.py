@@ -182,8 +182,7 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         "Status: **achieved**.\n\n"
         "## Prompt-to-Artifact Checklist\n\n"
         "Strict completion is achieved in this fixture.\n\n"
-        "2 rows represented; strict expected count is 2.\n\n"
-        "Large per-sample CSVs are generated locally and ignored by git.\n\n"
+        "2 rows present; strict expected count is 2.\n\n"
         "| MiniMax is not run without explicit authorization | "
         "`make unimoral-missing-plan` | `make unimoral-missing-plan` is "
         "dry-run only; non-dry-run MiniMax lines require "
@@ -331,6 +330,7 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         "unimoral_coverage": "results/release/unimoral-coverage.csv",
         "unimoral_task_spread": "results/release/unimoral-task-spread.csv",
         "unimoral_model_rankings": "results/release/unimoral-model-rankings.csv",
+        "unimoral_sample_predictions": "results/release/unimoral-sample-predictions.csv",
         "unimoral_failure_checklist": "results/release/unimoral-failure-checklist.csv",
         "unimoral_completion_audit": "results/release/unimoral-completion-audit.md",
         "unimoral_minimax_resume_plan": "results/release/unimoral-minimax-resume-plan.md",
@@ -341,11 +341,8 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
         "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
         "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
     }
-    local_artifacts = {
-        "unimoral_sample_predictions": "results/release/2026-04-19-option1/unimoral-sample-predictions.csv",
-    }
     if "unimoral_consequence_generation" in verifier.TASKS:
-        local_artifacts["unimoral_rq4_bertscore"] = "results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv"
+        entry_points["unimoral_rq4_bertscore"] = "results/release/unimoral-rq4-bertscore.csv"
 
     release.joinpath("release-manifest.json").write_text(
         json.dumps(
@@ -367,7 +364,6 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
                     "total_samples": len(verifier.MODEL_LINES) * sum(task["expected"] for task in verifier.TASKS.values())
                 },
                 "entry_points": entry_points,
-                "local_artifacts": local_artifacts,
             }
         )
         + "\n",
@@ -557,8 +553,7 @@ def test_unimoral_completion_verifier_allow_incomplete_keeps_structural_checks(t
         "Status: **not achieved**.\n\n"
         "## Prompt-to-Artifact Checklist\n\n"
         "Strict completion is blocked in this fixture.\n\n"
-        "1 rows represented; strict expected count is 2.\n\n"
-        "Large per-sample CSVs are generated locally and ignored by git.\n\n"
+        "1 rows present; strict expected count is 2.\n\n"
         "| MiniMax is not run without explicit authorization | "
         "`make unimoral-missing-plan` | `make unimoral-missing-plan` is "
         "dry-run only; non-dry-run MiniMax lines require "
@@ -859,8 +854,7 @@ def test_unimoral_completion_verifier_requires_current_minimax_resume_plan_row(t
         "Status: **not achieved**.\n\n"
         "## Prompt-to-Artifact Checklist\n\n"
         "Strict completion is blocked in this fixture.\n\n"
-        "1 rows represented; strict expected count is 2.\n\n"
-        "Large per-sample CSVs are generated locally and ignored by git.\n\n"
+        "1 rows present; strict expected count is 2.\n\n"
         "| MiniMax is not run without explicit authorization | "
         "`make unimoral-missing-plan` | `make unimoral-missing-plan` is "
         "dry-run only; non-dry-run MiniMax lines require "

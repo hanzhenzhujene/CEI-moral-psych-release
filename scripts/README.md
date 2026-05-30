@@ -6,7 +6,6 @@ The public release has one canonical reporting path:
 - run `make bootstrap` to verify the public QA deliverable; strict UniMoral completion is `make verify-unimoral`
 - run `make unimoral-missing-plan` to refresh the provider-free MiniMax missing-cell plan without calling providers
 - optionally run `make unimoral-bertscore` after installing `bert_score` to fill the official RQ4 BERTScore column and rebuild UniMoral artifacts
-- run `make openrouter-low-cost-full-plan` to refresh the no-call OpenRouter full-grid cost estimate; the live full-grid launcher is guarded behind `OPENROUTER_FULL_RUN_APPROVED=1`
 
 Everything below supports that path, but not every script is meant to be a public entrypoint.
 
@@ -35,7 +34,6 @@ Everything below supports that path, but not every script is meant to be a publi
 - For MiniMax direct reruns, populate `MINIMAX_API_KEY`. The provider router sends `MiniMax-M2.5` text runs directly and maps the `SMID` route to `MiniMax-Text-01` with an inline base64 image prompt because MiniMax's OpenAI-compatible endpoint does not accept `image_url` blocks. Keep `CEI_MIN_MAX_TOKENS=2048` or higher so `MiniMax-M2.5` has enough reasoning-token headroom.
 - `qwen_large_smid_recovery.sh`: safer `Qwen-L` `SMID` recovery launcher using `qwen2.5-vl-72b-instruct` plus explicit non-Alibaba provider routing.
 - `run_unimoral_missing_tasks.sh`: targeted launcher for UniMoral RQ2/RQ3/RQ4 completion. It checks full unique sample coverage before skipping a cell and reruns only missing sample ranges so split/non-prefix recovery runs do not skip gaps or duplicate logged shards; set `FORCE_RERUN=1 UNIMORAL_RERUN_UNPARSED=1` to rerun samples without a parseable scored answer, with optional `UNIMORAL_RERUN_UNPARSED_MAX_GAP` to merge nearby gaps and reduce process startup overhead. It resolves routes through `provider_config.sh` by default (`UNIMORAL_ROUTE_MODE=auto`), falls back to OpenRouter when direct-provider keys are missing, records routing metadata under the run folder, and supports `UNIMORAL_DRY_RUN=1` to print the planned ranges without calling providers. `make unimoral-missing-plan` is the provider-free MiniMax preflight wrapper for those dry-run ranges. Non-dry-run MiniMax lines require the explicit opt-in `UNIMORAL_ALLOW_MINIMAX=1`; use `UNIMORAL_SKIP_MODEL_REGEX='MiniMax|minimax'` when a partial rerun must explicitly avoid MiniMax lines. See `results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md` for the provider-free MiniMax handoff and compact resume commands.
-- `run_openrouter_low_cost_full.sh`: guarded launcher for the low-cost OpenRouter follow-up grid. It runs only `UniMoral`, `ValuePrism`, and `CCD-Bench`, uses the tracked planner's OpenRouter `/models` price metadata and cap checks, defaults to `results/openrouter-low-cost-moral-psych-full`, refuses live provider calls unless `OPENROUTER_FULL_RUN_APPROVED=1`, and supports `OPENROUTER_FULL_RUN_DRY_RUN=1` for a no-call command preview.
 
 These launchers are historical and operationally useful, but the public release package should be generated from `build_release_artifacts.py` rather than by reading raw run folders directly.
 

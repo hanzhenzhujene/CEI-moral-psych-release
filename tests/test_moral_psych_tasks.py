@@ -385,6 +385,7 @@ def test_unimoral_artifact_builder_detects_tracked_csv_fallback(tmp_path):
         "unimoral-coverage.csv",
         "unimoral-task-spread.csv",
         "unimoral-model-rankings.csv",
+        "unimoral-sample-predictions.csv",
         "unimoral-failure-checklist.csv",
     ]:
         (release_dir / filename).write_text("header\nvalue\n", encoding="utf-8")
@@ -648,8 +649,7 @@ def test_unimoral_completion_audit_records_csv_level_blockers(tmp_path, monkeypa
 
     audit = (release_dir / "unimoral-completion-audit.md").read_text(encoding="utf-8")
     assert "## CSV-Level Strict Blockers" in audit
-    assert "3 rows represented; strict expected count is 4." in audit
-    assert "Large per-sample CSVs are generated locally and ignored by git." in audit
+    assert "3 rows present; strict expected count is 4." in audit
     assert "Total strict sample prediction gap: **1** rows." in audit
     assert "`Line-A` `unimoral_moral_typology`: no sample-count gap (2/2) but status `complete_recovered_logs` prevents strict completion." in audit
     assert "`Line-B` `unimoral_moral_typology`: 1 sample predictions missing (1/2); status `partial`." in audit
@@ -708,8 +708,7 @@ def test_unimoral_completion_audit_marks_complete_artifacts_achieved(tmp_path, m
     audit = (release_dir / "unimoral-completion-audit.md").read_text(encoding="utf-8")
     assert "Status: **achieved**." in audit
     assert "unimoral_moral_typology 1/1 complete | achieved |" in audit
-    assert "2 rows represented; strict expected count is 2." in audit
-    assert "Large per-sample CSVs are generated locally and ignored by git. | achieved |" in audit
+    assert "2 rows present; strict expected count is 2. | achieved |" in audit
     assert "0 rows: none. | achieved |" in audit
     assert "No CSV-level strict blockers remain" in audit
     assert "current user instruction" not in audit
@@ -767,8 +766,7 @@ def test_unimoral_completion_audit_blocks_duplicate_prediction_keys(tmp_path, mo
 
     audit = (release_dir / "unimoral-completion-audit.md").read_text(encoding="utf-8")
     assert "Status: **not achieved**." in audit
-    assert "2 rows represented; strict expected count is 2." in audit
-    assert "Large per-sample CSVs are generated locally and ignored by git. | incomplete |" in audit
+    assert "2 rows present; strict expected count is 2. | incomplete |" in audit
     assert "`unimoral-sample-predictions.csv`: 1 duplicate line/task/sample prediction rows prevent strict completion." in audit
 
 
@@ -939,8 +937,6 @@ def test_unimoral_minimax_resume_plan_registers_handoff_artifact(tmp_path):
         == "results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md"
     )
     assert "unimoral-minimax-resume-plan.md" in manifest["tables"]
-    assert "unimoral-sample-predictions.csv" not in manifest["tables"]
-    assert manifest["local_artifacts"]["unimoral_sample_predictions"].endswith("unimoral-sample-predictions.csv")
 
 
 def test_unimoral_artifact_reader_prefers_visible_text_before_reasoning():

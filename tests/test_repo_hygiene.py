@@ -57,17 +57,11 @@ def test_gitignore_covers_env_local():
     assert ".env.local" in content
 
 
-def test_gitignore_covers_large_unimoral_generated_payloads():
-    content = (ROOT / ".gitignore").read_text(encoding="utf-8")
-    assert "results/release/2026-04-19-option1/unimoral-sample-predictions.csv" in content
-    assert "results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv" in content
-
-
 def test_env_example_exists_and_documents_core_inputs():
     env_example = ROOT / ".env.example"
     assert env_example.exists()
     content = env_example.read_text(encoding="utf-8")
-    assert "OPENROUTER" + "_API_KEY=" in content
+    assert "OPENROUTER_API_KEY=" in content
     assert "MINIMAX_API_KEY=" in content
     assert "CEI_MIN_MAX_TOKENS=2048" in content
     assert "UNIMORAL_DATA_DIR=" in content
@@ -79,30 +73,34 @@ def test_env_example_exists_and_documents_core_inputs():
 
 def test_root_readme_points_to_final_moral_psych_deliverable():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert readme.startswith("# CEI")
-    assert "## Architecture" in readme
-    assert "### Data Flow (TrolleyBench)" in readme
-    assert "## Hendrycks ETHICS Benchmark" in readme
-    assert "## Claude Code Slash Commands" in readme
-    assert "## Team" in readme
-    assert "<!-- BEGIN JENNY_MORAL_PSYCH_RELEASE -->" in readme
-    assert "## Jenny Moral-Psych Release TL;DR" in readme
-    assert "### TL;DR" in readme
-    assert "results/release/2026-04-19-option1/README.md" in readme
-    assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
-    assert "results/release/2026-04-19-option1/paper-result-comparison.csv" in readme
-    assert "results/release/2026-04-19-option1/paper-model-overlap-map.csv" in readme
-    assert "results/openrouter-low-cost-moral-psych-full/README.md" in readme
-    assert "results/openrouter-low-cost-moral-psych-full/interpretation.md" in readme
-    assert "results/openrouter-low-cost-moral-psych-full/completion_audit.md" in readme
-    assert "results/openrouter-low-cost-moral-psych-s100/README.md" in readme
-    assert "results/openrouter-low-cost-moral-psych-full-estimate/README.md" in readme
-    assert "119/119 planned model-task rows have terminal states" in readme
-    assert "101 rows are scored successes" in readme
+    assert readme.startswith("# CEI Moral-Psych Benchmark Suite")
+    assert "Jenny Zhu's CEI moral-psych benchmark deliverable" in readme
+    assert "## Public Quickstart" in readme
+    assert "## Deliverables To Use Today" in readme
+    assert 'Current project total cost: `$888.06`' in readme
+    assert "| Main visual story | What are the benchmark results, and how should each graph be read? | [Benchmark Result Visuals](#benchmark-result-visuals) |" in readme
+    assert "| Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `87` of `105` cells are Tier 3; `18` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |" in readme
+    assert "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv) and [paper-result-comparison.md](docs/paper-result-comparison.md) |" in readme
+    assert "| OpenRouter low-cost follow-up | What happened when the text-only OpenRouter grid was run across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench? | [full readout](results/openrouter-low-cost-moral-psych-full/README.md), [interpretation](results/openrouter-low-cost-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-low-cost-moral-psych-full/completion_audit.md) |" in readme
+    assert "## Result Readiness Progress" in readme
+    assert "| `T1` | Harness complete | A number exists; no guarantee it is meaningful. |" in readme
+    assert "| `T2` | Result valid | No format failure, missing modality, or proxy substitution. |" in readme
+    assert "| `T3` | Interpretable | Can be cited and compared across models without caveats. |" in readme
+    assert "| `SMID` | 9/21 | 12/21 | Only vision-capable routes receive a tier; text-only routes stay blocked as route gaps. |" in readme
+    assert "## Replication And Calibration Snapshot" in readme
+    assert "compare each implemented benchmark against its original paper" in readme
+    assert "| `CCD-Bench` | Current choice-distribution rows plus saved/prior Mistral Nemo overlap; GPT-5.5 has 2,182/2,182 valid choices. | Partial distributional comparison only; CCD-Bench is not an accuracy benchmark. |" in readme
+    assert "## OpenRouter Low-Cost Follow-Up" in readme
+    assert "119/119` planned model-task rows have terminal states" in readme
+    assert "101` are scored successes" in readme
     assert "results/openrouter-low-cost-moral-psych-full/figures/pilot_scores.svg" in readme
     assert "results/openrouter-low-cost-moral-psych-full/figures/cost_estimate.svg" in readme
+    assert "## Navigate This Repo" in readme
+    assert "## Results First" in readme
+    assert "### DeepSeek S/M/L Log-Derived Readout" in readme
+    assert "results/release/2026-04-19-option1/README.md" in readme
+    assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
     assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme
-    assert "figures/release/option1_paper_result_comparison.svg" in readme
     assert "figures/release/option1_unimoral_task_heatmap.svg" in readme
     assert "figures/release/option1_unimoral_generation_quality.svg" in readme
     assert "figures/release/option1_unimoral_family_scaling.svg" in readme
@@ -112,27 +110,27 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
     assert "`CCD-Bench` is reported as cultural-cluster choice behavior" in readme
     assert "`DeNEVIL` is reported as proxy behavioral evidence" in readme
-    assert "## Paper Result Comparison" in readme
-    assert "paper table/source notes" in readme
-    assert "Nordic Europe 20.17%" in readme
-    assert "AI21 Jamba-1.6-large" in readme
-    assert "Grok-2-1212" in readme
-    assert "CCD-Bench is not accuracy" in readme
-    assert "not paper-faithful MoralPrompt" in readme
-    assert "FULCRA-backed `DeNEVIL` proxy rows are **not T3**" in readme
     assert "`make bootstrap`" in readme or "make audit" in readme
 
     unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
     assert "UniMoral family-size scaling by RQ" in unimoral_family_scaling_svg
-    assert "OpenAI reference is GPT-4o-mini only in this UniMoral RQ figure" in unimoral_family_scaling_svg
+    assert "OpenAI GPT-5 is the black S/M/L line across RQ1-RQ4" in unimoral_family_scaling_svg
+    assert "OpenAI GPT-5 is black and appears across RQ1-RQ4" in unimoral_family_scaling_svg
+    assert "GPT-5.5 is strongest inside GPT-5 on RQ2, RQ3, and both RQ4 metrics" in unimoral_family_scaling_svg
     assert "Metric: Accuracy" in unimoral_family_scaling_svg
     assert "Metric: BERTScore F1" in unimoral_family_scaling_svg
     assert "Metric: METEOR" in unimoral_family_scaling_svg
     assert "GPT 4o-mini 0.711" in unimoral_family_scaling_svg
-    assert "GPT 5-mini" not in unimoral_family_scaling_svg
-    assert "GPT 4.1-mini" not in unimoral_family_scaling_svg
+    assert "GPT-5 nano" in unimoral_family_scaling_svg
+    assert "GPT-5 mini" in unimoral_family_scaling_svg
+    assert "GPT-5.5" in unimoral_family_scaling_svg
+    assert "GPT 4.1-mini" in unimoral_family_scaling_svg
     assert ">Ref<" not in unimoral_family_scaling_svg
+    assert "OpenAI GPT-5" in unimoral_family_scaling_svg
     assert "OpenAI Ref" in unimoral_family_scaling_svg
+    assert "OpenAI GPT-5 is black and appears across RQ1-RQ4" in unimoral_family_scaling_svg
+    assert 'stroke="#000000"' in unimoral_family_scaling_svg
+    assert 'fill="#000000"' in unimoral_family_scaling_svg
     assert "#dc2626" in unimoral_family_scaling_svg
 
 

@@ -19,6 +19,20 @@ This repo uses a few status words repeatedly. This page explains them in plain l
 - `tbd`: the model route or size slot has not been finalized yet
 - `-`: this line is not planned right now
 
+## Tier Labels
+
+The generated dashboard `results/release/2026-04-19-option1/readiness-tier-matrix.csv` uses result-readiness tiers:
+
+- `Tier 1`: harness completed
+- `Tier 2`: result is valid
+- `Tier 3`: result is interpretable and ready for comparison within the stated metric layer
+
+Blocked, not-run, route-gap, and data-gap cells are not assigned a tier. They are listed with separate status fields.
+
+The dashboard is a public summary at `model_line x benchmark`. The canonical internal unit is lower level: `model_id / provider_route / size_slot x benchmark x subtask_or_RQ x metric_layer x sample_set`. A tier is not a model score, not a model-family score, and not a benchmark-only label.
+
+These tiers are paired with metric layers. Tier 3 CCD-Bench is still choice-distribution behavior, not accuracy, and Tier 3 DeNEVIL in this release is proxy behavior/provenance, not paper-faithful MoralPrompt scoring.
+
 ## Reporting Rules Used Here
 
 - `Qwen`, `DeepSeek`, and `Gemma` are inside the frozen `Option 1` snapshot.
