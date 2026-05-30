@@ -1,0 +1,18 @@
+model,family,size_tier,release_period,grid,rationale,existing_baseline,available,eligible,skip_reason,input_price_per_m,output_price_per_m,context_length
+qwen/qwen3-8b,Qwen,S/8B,2025-Q2,within-family scaling,Qwen3 small baseline,True,True,True,,0.05,0.4,131072
+qwen/qwen3-32b,Qwen,M/32B,2025-Q2,within-family scaling,Qwen3 medium,False,True,True,,0.08,0.28,131072
+qwen/qwen3-235b-a22b-2507,Qwen,L/MoE 235B-A22B,2025-Q3,within-family scaling,Qwen3 large MoE,False,True,True,,0.071,0.1,262144
+google/gemma-3-4b-it,Gemma,S/4B,2025-Q1,within-family scaling,Gemma 3 small baseline,True,True,True,,0.04,0.08,131072
+google/gemma-3-12b-it,Gemma,M/12B,2025-Q1,within-family scaling,Gemma 3 medium baseline,True,True,True,,0.04,0.13,131072
+google/gemma-3-27b-it,Gemma,L/27B,2025-Q1,within-family scaling,Gemma 3 large baseline,True,True,True,,0.08,0.16,131072
+meta-llama/llama-3.2-3b-instruct,Llama,S/3B,2024-Q3,within-family scaling,Llama small,False,True,True,,0.0509,0.335,131072
+meta-llama/llama-3.1-8b-instruct,Llama,M/8B,2024-Q3,within-family scaling,Llama medium/paper-adjacent,False,True,True,,0.02,0.05,131072
+meta-llama/llama-3.3-70b-instruct,Llama,L/70B,2024-Q4,within-family scaling,Llama large / CCD paper overlap,False,True,True,,0.1,0.32,131072
+qwen/qwen-2.5-7b-instruct,Qwen,S/7B,2024-Q4,time scaling,Older Qwen small,False,True,True,,0.04,0.1,131072
+qwen/qwen3.5-9b,Qwen,S/9B,2026-Q1,time scaling,Newer Qwen small,False,True,True,,0.04,0.15,262144
+google/gemma-2-27b-it,Gemma,L/27B,2024-Q3,time scaling,Older Gemma 27B,False,True,True,,0.65,0.65,8192
+google/gemma-4-31b-it,Gemma,L/31B,2026-Q1,time scaling,Newer Gemma large,False,True,True,,0.12,0.37,262144
+deepseek/deepseek-chat-v3-0324,DeepSeek,chat/V3,2025-Q1,time scaling,CCD paper overlap / older V3,False,True,True,,0.2,0.77,163840
+deepseek/deepseek-chat-v3.1,DeepSeek,chat/V3.1,2025-Q3,time scaling,Existing DeepSeek text baseline,True,True,True,,0.21,0.79,163840
+deepseek/deepseek-v3.2,DeepSeek,chat/V3.2,2025-Q4,time scaling,Newer DeepSeek V3 line,False,True,True,,0.252,0.378,131072
+deepseek/deepseek-v4-flash,DeepSeek,flash/V4,2026-Q2,time scaling,Newest DeepSeek flash route,False,True,True,,0.1,0.2,1048576
