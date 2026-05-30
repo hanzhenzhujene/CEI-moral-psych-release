@@ -23,8 +23,11 @@ Primary outputs:
 - `result_summary.csv`: created after live runs.
 - `completion_audit.md`: requirement-by-requirement status for this output folder.
 - `openrouter-pricing-metadata.json`: compact pricing-source metadata for the selected model grid.
-- `figures/cost_estimate.svg`: planned cost by model.
-- `figures/pilot_scores.svg`: score plot after live runs.
+- `figures/within_family_scaling.svg`: S/M/L scaling view for Qwen, Gemma, and Llama.
+- `figures/time_scaling.svg`: older-vs-newer route view for Qwen, DeepSeek, and available Gemma rows.
+- `figures/benchmark_score_matrix.svg`: model x benchmark matrix with metric caveats visible.
+- `figures/pilot_scores.svg`: detailed task matrix after live runs.
+- `figures/cost_estimate.svg`: planning/accounting appendix by model.
 - Raw Inspect `.eval` logs under `logs/` are local-only by default and intentionally ignored; commit them only with an explicit artifact contract.
 
 ## Allowed Benchmarks
@@ -72,3 +75,6 @@ Interpretation helpers:
 - `benchmark_summary.csv`: model x benchmark aggregate scores.
 - `model_summary.csv`: model-level aggregates and success-row cost.
 - `interpretation.md`: scaling/time/disagreement notes for completed scored rows.
+- `figures/within_family_scaling.svg`: direct S/M/L family-size visual.
+- `figures/time_scaling.svg`: older-vs-newer route visual.
+- `figures/benchmark_score_matrix.svg`: benchmark comparison matrix; CCD is labeled as valid-choice coverage.

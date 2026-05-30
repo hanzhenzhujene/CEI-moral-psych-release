@@ -28,7 +28,7 @@ Full-objective status: All `119` planned rows were attempted; `101` produced sco
 | Within-family and time-scaling grids selected | `model_grid.csv` contains `17` eligible available OpenRouter rows across the requested grid labels. | proven |
 | Run selected models on the three allowed benchmarks | All `119` planned model-task rows have terminal states: `101` success, `18` provider/filter/stale-route blockers. | attempted with blockers |
 | Output model/family/size/release/benchmark/score/cost/replication tables | `run_plan.csv`, `result_summary.csv`, `benchmark_summary.csv`, and `model_summary.csv` provide the requested columns for scored rows and terminal-state metadata for blocked rows. | proven |
-| Output plots | `figures/cost_estimate.svg` is generated for plans; `figures/pilot_scores.svg` is generated when scored rows exist. | proven |
+| Output plots | `figures/within_family_scaling.svg`, `figures/time_scaling.svg`, `figures/benchmark_score_matrix.svg`, and `figures/pilot_scores.svg` are generated for scored rows; `figures/cost_estimate.svg` remains the planning/accounting appendix. | proven |
 | Summarize robust patterns | `interpretation.md` summarizes scaling, time-scaling, and cross-benchmark disagreement for completed rows. | proven |
 
 ## Blocked / Non-Success Rows

@@ -22,7 +22,7 @@ If you are reviewing or forwarding this repo today, start here. The README gives
 | Short executive read | What is the bottom-line result without reading every table? | [TL;DR](#tldr) |
 | Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `87` of `105` cells are Tier 3; `18` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |
 | S/M/L family progress table | Which public family-size slots are done, missing a route, or proxy-only? | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
-| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [replication visual](figures/release/option1_paper_result_comparison.svg), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |
+| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |
 | OpenRouter selected-grid follow-up | What happened when the text-only OpenRouter grid was run across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench? | [full readout](results/openrouter-selected-grid-moral-psych-full/README.md), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md) |
 | Reproducibility package | Can a reviewer rebuild the public results without local secrets? | [Reproducibility](#reproducibility); run `make bootstrap` |
 | Full appendix | Where are the detailed tables, caveats, and generated release files? | [Release appendix](results/release/2026-04-19-option1/README.md) |
@@ -63,20 +63,31 @@ The repo already has a generated paper-comparison table. The most important poin
 
 Open the full map here: [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md), and [calibration-replication.md](docs/calibration-replication.md).
 
-![Original-paper replication and comparison map](figures/release/option1_paper_result_comparison.svg)
+The direct same/near-model comparison view is below. It separates saved/prior evidence, current near-route evidence, reference-family markers, and blocked paper-replication gaps.
+
+![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)
 
 ## OpenRouter Selected-Grid Follow-Up
 
-This is a text-only follow-up package, separate from the main 5-benchmark family-size release. It covers only `UniMoral` RQ1-RQ4, `ValuePrism` relevance/valence, and `CCD-Bench` across 17 OpenRouter-accessible models; `SMID`, `DeNEVIL`, and `MiniMax` are excluded by design.
+This is a text-only follow-up package, separate from the main five-benchmark family-size release. It covers only `UniMoral` RQ1-RQ4, `ValuePrism` relevance/valence, and `CCD-Bench` across OpenRouter-accessible models; `SMID`, `DeNEVIL`, and `MiniMax` are excluded by design.
 
 - Run status: `119/119` planned model-task rows have terminal states; `101` are scored successes, `12` are provider/error rows, and `6` are cancelled or stale-route blockers.
-- Cost status: successful scored rows cost `$16.313216`; all recorded provider cost, including blocked partial rows, is `$17.760398`.
-- Interpretation boundary: use the follow-up for OpenRouter scaling/time-scaling evidence on text-only moral-psych tasks, not for SMID, DeNEVIL, MiniMax, Kaleido model replication, or CCD-Bench accuracy claims.
-- Audit boundary: raw Inspect `.eval` logs stay local and ignored; the public package is the summarized CSVs, SVG figures, interpretation, and completion audit.
+- Model coverage: `17` models attempted; `16` have at least one scored row.
+- Cost accounting: successful scored rows total `$16.313216`; all recorded provider cost, including blocked partial rows, totals `$17.760398`.
+- Interpretation boundary: use this follow-up for OpenRouter scaling/time-scaling evidence on text-only moral-psych tasks, not for SMID, DeNEVIL, MiniMax, Kaleido model replication, or CCD-Bench accuracy claims.
+- The figures below replace the earlier dense task-score plot as the primary reading path.
 
-![Selected-grid OpenRouter score plot](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg)
+![OpenRouter within-family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)
 
-![Selected-grid OpenRouter cost estimate](results/openrouter-selected-grid-moral-psych-full/figures/cost_estimate.svg)
+_Read first: this chart answers whether S/M/L scaling helps inside Qwen, Gemma, and Llama on text-classification rows only. Llama has the cleanest lift; Qwen and Gemma are mixed._
+
+![OpenRouter time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)
+
+_Read second: this chart asks whether newer routes beat older nearby routes. Qwen improves in this slice; DeepSeek is non-monotonic; Gemma is limited by blocked newer rows._
+
+![OpenRouter benchmark comparison matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)
+
+_Read third: compare within each column before comparing across benchmarks. CCD-Bench is labeled as valid-choice behavior, not accuracy._
 
 ## Benchmark Result Visuals
 
@@ -509,7 +520,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 - Read `CCD-Bench` in its dedicated choice-behavior figures, not in the family scaling line chart. `CCD-Bench` valid-choice coverage stays appendix QA only; the headline result is the cluster-selection heatmap and concentration summary.
 - Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
 - Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.
-- Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%`, and `Denevil visible proxy coverage = 99.8%`. These are parser/proxy coverage checks, not CCD or Denevil accuracy.
+- Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%` (2,180 / 2,182), and `Denevil visible proxy coverage = 99.8%` (20,474 / 20,518). These are parser/proxy coverage checks, not CCD or Denevil accuracy.
 - Do not call `GPT-5.5` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
 - Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI rows are text-reference markers rather than S/M/L size curves.
 - Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.

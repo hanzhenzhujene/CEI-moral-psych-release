@@ -185,7 +185,7 @@
 <rect x="48" y="936" width="18" height="18" rx="4" fill="#2f855a"/>
 <text x="76" y="950" class="label">Paper-setup done</text>
 <rect x="238" y="936" width="18" height="18" rx="4" fill="#b7791f"/>
-<text x="266" y="950" class="label">Proxy / not T3</text>
+<text x="266" y="950" class="label">Proxy done</text>
 <rect x="428" y="936" width="18" height="18" rx="4" fill="#60a5fa"/>
 <text x="456" y="950" class="label">Partial checkpoint</text>
 <rect x="618" y="936" width="18" height="18" rx="4" fill="#2563eb"/>
