@@ -65,6 +65,11 @@ FRAMEWORK_PATTERNS = {
 }
 
 
+def _strip_think_blocks(text: str) -> str:
+    """Remove <think>...</think> blocks from reasoning model output."""
+    return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
+
+
 def extract_action(response_text: str) -> str | None:
     """Extract binary action choice from response text.
 
@@ -76,7 +81,7 @@ def extract_action(response_text: str) -> str | None:
     """
     if not response_text:
         return None
-    text = response_text.lower()
+    text = _strip_think_blocks(response_text).lower()
 
     # Score no_act first
     no_act_score = sum(1 for p in NO_ACT_KEYWORDS if re.search(p, text, re.IGNORECASE))
@@ -104,7 +109,7 @@ def extract_framework(response_text: str) -> str:
     """Classify the ethical framework cited in the response."""
     if not response_text:
         return "unclassified"
-    text = response_text.lower()
+    text = _strip_think_blocks(response_text).lower()
     scores = {}
     for framework, patterns in FRAMEWORK_PATTERNS.items():
         scores[framework] = sum(1 for p in patterns if re.search(p, text, re.IGNORECASE))

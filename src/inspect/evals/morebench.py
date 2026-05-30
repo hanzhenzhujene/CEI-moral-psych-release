@@ -25,7 +25,7 @@ from inspect_ai.dataset import MemoryDataset, Sample
 from inspect_ai.scorer import Score, Target, mean, scorer, stderr
 from inspect_ai.solver import TaskState, system_message
 
-from evals._benchmark_utils import env_str, generation_plan, normalize_whitespace
+from evals._benchmark_utils import env_str, generation_plan, normalize_whitespace, strip_think_blocks
 
 
 MOREBENCH_DATA_DIR = env_str("MOREBENCH_DATA_DIR")
@@ -125,7 +125,7 @@ def _rubric_reasoning_scorer():
     """
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = (state.output.completion or "").lower()
+        response = strip_think_blocks(state.output.completion or "").lower()
 
         if not response.strip():
             return Score(value=0.0, explanation="Empty response")

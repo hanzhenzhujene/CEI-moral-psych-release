@@ -22,7 +22,7 @@ from inspect_ai.dataset import MemoryDataset, Sample
 from inspect_ai.scorer import Score, Target, mean, scorer, stderr
 from inspect_ai.solver import TaskState
 
-from evals._benchmark_utils import env_str, generation_plan
+from evals._benchmark_utils import env_str, generation_plan, strip_think_blocks
 
 
 MORALLENS_DATA_DIR = env_str("MORALLENS_DATA_DIR")
@@ -142,7 +142,7 @@ def _framework_detection_scorer():
     """Detect whether reasoning is consequentialist or deontological."""
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = (state.output.completion or "").lower()
+        response = strip_think_blocks(state.output.completion or "").lower()
         if not response.strip():
             return Score(value=0.0, explanation="Empty response")
 
@@ -186,7 +186,7 @@ def _double_standard_scorer():
     """Detect the double-standard effect: CoT→deontological, post-hoc→consequentialist."""
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = (state.output.completion or "").lower()
+        response = strip_think_blocks(state.output.completion or "").lower()
         condition = (state.metadata or {}).get("condition", "")
 
         if not response.strip():

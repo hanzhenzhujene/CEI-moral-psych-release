@@ -30,7 +30,7 @@ PUBLIC_GLOBS = [
 ]
 
 FORBIDDEN_PUBLIC_STRINGS = [
-    "/Users/" + "hanzhenzhu",
+    "/" + "Users/" + "hanzhenzhu",
     "Library/Python/" + "3.9/bin/uv",
     "Desktop/" + "moral-psych-harness/data",
 ]
@@ -77,9 +77,11 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Jenny Zhu's CEI moral-psych benchmark deliverable" in readme
     assert "## Public Quickstart" in readme
     assert "## Deliverables To Use Today" in readme
+    assert 'Current project total cost: `$888.06`' in readme
     assert "| Main visual story | What are the benchmark results, and how should each graph be read? | [Benchmark Result Visuals](#benchmark-result-visuals) |" in readme
     assert "| Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `87` of `105` cells are Tier 3; `18` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |" in readme
     assert "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv) and [paper-result-comparison.md](docs/paper-result-comparison.md) |" in readme
+    assert "| OpenRouter low-cost follow-up | What happened when the text-only OpenRouter grid was run across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench? | [full readout](results/openrouter-low-cost-moral-psych-full/README.md), [interpretation](results/openrouter-low-cost-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-low-cost-moral-psych-full/completion_audit.md) |" in readme
     assert "## Result Readiness Progress" in readme
     assert "| `T1` | Harness complete | A number exists; no guarantee it is meaningful. |" in readme
     assert "| `T2` | Result valid | No format failure, missing modality, or proxy substitution. |" in readme
@@ -88,6 +90,11 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "## Replication And Calibration Snapshot" in readme
     assert "compare each implemented benchmark against its original paper" in readme
     assert "| `CCD-Bench` | Current choice-distribution rows plus saved/prior Mistral Nemo overlap; GPT-5.5 has 2,182/2,182 valid choices. | Partial distributional comparison only; CCD-Bench is not an accuracy benchmark. |" in readme
+    assert "## OpenRouter Low-Cost Follow-Up" in readme
+    assert "119/119` planned model-task rows have terminal states" in readme
+    assert "101` are scored successes" in readme
+    assert "results/openrouter-low-cost-moral-psych-full/figures/pilot_scores.svg" in readme
+    assert "results/openrouter-low-cost-moral-psych-full/figures/cost_estimate.svg" in readme
     assert "## Navigate This Repo" in readme
     assert "## Results First" in readme
     assert "### DeepSeek S/M/L Log-Derived Readout" in readme

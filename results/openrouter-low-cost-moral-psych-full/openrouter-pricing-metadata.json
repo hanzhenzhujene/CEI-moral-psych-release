@@ -1,0 +1,26 @@
+{
+  "fetched_at": "2026-05-28T00:37:09.154648+00:00",
+  "source_url": "https://openrouter.ai/api/v1/models",
+  "models_seen": 356,
+  "selected_models": [
+    "qwen/qwen3-8b",
+    "qwen/qwen3-32b",
+    "qwen/qwen3-235b-a22b-2507",
+    "google/gemma-3-4b-it",
+    "google/gemma-3-12b-it",
+    "google/gemma-3-27b-it",
+    "meta-llama/llama-3.2-3b-instruct",
+    "meta-llama/llama-3.1-8b-instruct",
+    "meta-llama/llama-3.3-70b-instruct",
+    "qwen/qwen-2.5-7b-instruct",
+    "qwen/qwen3.5-9b",
+    "google/gemma-2-27b-it",
+    "google/gemma-4-31b-it",
+    "deepseek/deepseek-chat-v3-0324",
+    "deepseek/deepseek-chat-v3.1",
+    "deepseek/deepseek-v3.2",
+    "deepseek/deepseek-v4-flash"
+  ],
+  "input_price_cap_per_million": 3.0,
+  "output_price_cap_per_million": 15.0
+}

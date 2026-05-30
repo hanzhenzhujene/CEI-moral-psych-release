@@ -26,7 +26,7 @@ from inspect_ai.dataset import MemoryDataset, Sample
 from inspect_ai.scorer import Score, Target, accuracy, mean, scorer, stderr
 from inspect_ai.solver import TaskState
 
-from evals._benchmark_utils import env_str, generation_plan
+from evals._benchmark_utils import env_str, generation_plan, strip_think_blocks
 
 
 M3ORAL_DATA_DIR = env_str("M3ORAL_DATA_DIR")
@@ -132,7 +132,7 @@ def _mc_choice_scorer():
     """Score multiple-choice answers (A/B or A/B/C/D/E/F)."""
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = (state.output.completion or "").strip()
+        response = strip_think_blocks(state.output.completion or "").strip()
         if not response:
             return Score(value=0, answer="", explanation="Empty response")
 
@@ -167,7 +167,7 @@ def _response_quality_scorer():
     """Score response generation quality based on reasoning presence."""
 
     async def score(state: TaskState, target: Target) -> Score:
-        response = (state.output.completion or "").lower()
+        response = strip_think_blocks(state.output.completion or "").lower()
         if not response.strip():
             return Score(value=0.0, explanation="Empty response")
 

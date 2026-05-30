@@ -215,3 +215,9 @@ results/cache/
 results/inspect/logs/
 results/inspect/full-runs/
 results/inspect/smoke-batch/
+results/openrouter-low-cost-moral-psych*/logs/
+
+# Large generated UniMoral per-sample artifacts.
+# Recreate locally with `make release` / `make unimoral-bertscore`.
+results/release/2026-04-19-option1/unimoral-sample-predictions.csv
+results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv

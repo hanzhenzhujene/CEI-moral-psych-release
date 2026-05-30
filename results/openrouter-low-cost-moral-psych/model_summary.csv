@@ -1,0 +1,18 @@
+model,family,size_tier,release_period,grid,successful_tasks,mean_all_observed_scores,mean_text_accuracy_tasks,reasoning_tokens_actual,actual_cost_usd,estimated_cost_usd,actual_vs_estimated_cost_ratio
+deepseek/deepseek-chat-v3-0324,DeepSeek,chat/V3,2025-Q1,time scaling,7,0.428571,0.400000,0,0.000380,0.001597,0.238
+deepseek/deepseek-chat-v3.1,DeepSeek,chat/V3.1,2025-Q3,time scaling,7,0.428571,0.400000,0,0.000412,0.001645,0.250
+deepseek/deepseek-v3.2,DeepSeek,chat/V3.2,2025-Q4,time scaling,7,0.285714,0.200000,0,0.000418,0.000985,0.424
+deepseek/deepseek-v4-flash,DeepSeek,flash/V4,2026-Q2,time scaling,7,0.714286,0.800000,954,0.000548,0.000477,1.149
+google/gemma-2-27b-it,Gemma,L/27B,2024-Q3,time scaling,7,0.428571,0.400000,0,0.001059,0.001977,0.536
+google/gemma-3-12b-it,Gemma,M/12B,2025-Q1,within-family scaling,7,0.428571,0.400000,0,0.000072,0.000277,0.260
+google/gemma-3-27b-it,Gemma,L/27B,2025-Q1,within-family scaling,7,0.285714,0.200000,0,0.000138,0.000383,0.360
+google/gemma-3-4b-it,Gemma,S/4B,2025-Q1,within-family scaling,7,0.428571,0.400000,0,0.000069,0.000191,0.361
+google/gemma-4-31b-it,Gemma,L/31B,2026-Q1,time scaling,7,0.428571,0.400000,0,0.000223,0.000799,0.279
+meta-llama/llama-3.1-8b-instruct,Llama,M/8B,2024-Q3,within-family scaling,7,0.285714,0.200000,0,0.000039,0.000112,0.348
+meta-llama/llama-3.2-3b-instruct,Llama,S/3B,2024-Q3,within-family scaling,7,0.285714,0.200000,0,0.000139,0.000647,0.215
+meta-llama/llama-3.3-70b-instruct,Llama,L/70B,2024-Q4,within-family scaling,7,0.714286,0.800000,0,0.000211,0.000686,0.308
+qwen/qwen-2.5-7b-instruct,Qwen,S/7B,2024-Q4,time scaling,7,0.428571,0.400000,0,0.000082,0.000227,0.361
+qwen/qwen3-235b-a22b-2507,Qwen,L/MoE 235B-A22B,2025-Q3,within-family scaling,7,0.428571,0.400000,0,0.000148,0.000266,0.556
+qwen/qwen3-32b,Qwen,M/32B,2025-Q2,within-family scaling,7,0.428571,0.400000,8,0.000173,0.000591,0.293
+qwen/qwen3-8b,Qwen,S/8B,2025-Q2,within-family scaling,7,0.428571,0.400000,0,0.000135,0.000760,0.178
+qwen/qwen3.5-9b,Qwen,S/9B,2026-Q1,time scaling,7,0.142857,0.200000,14084,0.003953,0.000313,12.629

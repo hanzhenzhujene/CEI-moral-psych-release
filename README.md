@@ -4,7 +4,7 @@
 
 This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.
 
-> Current project total cost: `$831.08` (MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$325.66`; OpenAI API reference sweep: `$0.76`.)
+> Current project total cost: `$888.06` (MiniMax API: `$504.66`; OpenRouter model-family runs: `$343.42`, including `$17.760398` from the full selected-grid OpenRouter follow-up; OpenAI API reference sweep: `$39.98`.)
 
 It combines three things in one clean public surface:
 
@@ -23,6 +23,7 @@ If you are reviewing or forwarding this repo today, start here. The README gives
 | Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `87` of `105` cells are Tier 3; `18` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |
 | S/M/L family progress table | Which public family-size slots are done, missing a route, or proxy-only? | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
 | Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv) and [paper-result-comparison.md](docs/paper-result-comparison.md) |
+| OpenRouter low-cost follow-up | What happened when the text-only OpenRouter grid was run across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench? | [full readout](results/openrouter-low-cost-moral-psych-full/README.md), [interpretation](results/openrouter-low-cost-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-low-cost-moral-psych-full/completion_audit.md) |
 | Reproducibility package | Can a reviewer rebuild the public results without local secrets? | [Reproducibility](#reproducibility); run `make bootstrap` |
 | Full appendix | Where are the detailed tables, caveats, and generated release files? | [Release appendix](results/release/2026-04-19-option1/README.md) |
 
@@ -61,6 +62,19 @@ The repo already has a generated paper-comparison table. The most important poin
 | `DeNEVIL / MoralPrompt` | Current FULCRA-backed proxy behavior summaries are tracked. | Proxy-only data gap; no paper-faithful MoralPrompt comparison until the original data path exists. |
 
 Open the full map here: [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md), and [calibration-replication.md](docs/calibration-replication.md).
+
+## OpenRouter Low-Cost Follow-Up
+
+This is a text-only follow-up package, separate from the main 5-benchmark family-size release. It covers only `UniMoral` RQ1-RQ4, `ValuePrism` relevance/valence, and `CCD-Bench` across 17 OpenRouter-accessible models; `SMID`, `DeNEVIL`, and `MiniMax` are excluded by design.
+
+- Run status: `119/119` planned model-task rows have terminal states; `101` are scored successes, `12` are provider/error rows, and `6` are cancelled or stale-route blockers.
+- Cost status: successful scored rows cost `$16.313216`; all recorded provider cost, including blocked partial rows, is `$17.760398`.
+- Interpretation boundary: use the follow-up for OpenRouter scaling/time-scaling evidence on text-only moral-psych tasks, not for SMID, DeNEVIL, MiniMax, Kaleido model replication, or CCD-Bench accuracy claims.
+- Audit boundary: raw Inspect `.eval` logs stay local and ignored; the public package is the summarized CSVs, SVG figures, interpretation, and completion audit.
+
+![Low-cost OpenRouter score plot](results/openrouter-low-cost-moral-psych-full/figures/pilot_scores.svg)
+
+![Low-cost OpenRouter cost estimate](results/openrouter-low-cost-moral-psych-full/figures/cost_estimate.svg)
 
 ## Benchmark Result Visuals
 

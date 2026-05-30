@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1274" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<defs>
+<linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffffff"/>
+<stop offset="100%" stop-color="#f8fafc"/>
+</linearGradient>
+<pattern id="diagonalHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+<line x1="0" y1="0" x2="0" y2="8" stroke="#cdd6e1" stroke-width="3"/>
+</pattern>
+<filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+<feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#9fb0c2" flood-opacity="0.18"/>
+</filter>
+<style>
+.canvas { fill: #f3f6fa; }
+.title { font: 700 26px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.subtitle { font: 400 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.axis { font: 600 14px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.label { font: 500 13px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.metric { font: 700 20px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #12263a; }
+.celltext { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #ffffff; }
+.celltext-dark { font: 700 16px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #173042; }
+.cellsub { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: rgba(255,255,255,0.88); }
+.cellsub-dark { font: 600 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #385062; }
+.body { font: 500 12px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #22313f; }
+.small { font: 500 11px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #5c6b7a; }
+.tiny { font: 600 10px 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif; fill: #6b7c8f; letter-spacing: 0.04em; }
+.grid { fill: #ffffff; stroke: #d7dee6; stroke-width: 1.25; }
+.panel { fill: url(#panelGradient); stroke: #dbe4ee; stroke-width: 1.25; filter: url(#softShadow); }
+.subpanel { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }
+.legend-card { fill: #ffffff; stroke: #dbe4ee; stroke-width: 1; }
+.guide { stroke: #d7dee6; stroke-width: 1; stroke-dasharray: 4 6; }
+.baseline { stroke: #aab7c6; stroke-width: 1.1; }
+.muted-cell { fill: #eef2f7; stroke: #d7dee6; stroke-width: 1; }
+.muted-bar { fill: #ecf1f6; stroke: #d7dee6; stroke-width: 1; }
+.outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
+</style>
+</defs>
+<rect x="0" y="0" width="1500" height="1274" class="canvas"/>
+<rect x="24" y="24" width="1452" height="1226" rx="22" class="panel"/>
+<title>Paper results compared with the current release</title>
+<desc>Exact original-paper metrics shown next to the closest current release metric, with status labels separating direct comparisons from proxy-only or non-overlapping evidence.</desc>
+<text x="48" y="64" class="title">Paper Results Compared With Our Release</text>
+<text x="48" y="90" class="subtitle">Exact paper-side metrics stay separate from our release metrics. The CSV carries table/source notes and model-roster mapping. CCD-Bench is choice behavior,</text>
+<text x="48" y="110" class="subtitle">not accuracy; DeNEVIL is proxy-only until MoralPrompt data and EVR/APV/MVP scoring exist.</text>
+<text x="58" y="146" class="tiny">BENCHMARK</text>
+<text x="306" y="146" class="tiny">ORIGINAL PAPER EXACT RESULT</text>
+<text x="752" y="146" class="tiny">OUR CLOSEST CURRENT RESULT</text>
+<text x="1210" y="146" class="tiny">COMPARISON STATUS</text>
+<rect x="42" y="150" width="1416" height="110" rx="14" class="subpanel"/>
+<rect x="42" y="150" width="8" height="110" rx="4" fill="#b45309"/>
+<text x="58" y="174" class="label">UniMoral RQ1 action</text>
+<text x="58" y="192" class="label">prediction</text>
+<text x="306" y="174" class="body">66.38 (Phi-3.5-mini Instruct, English)</text>
+<text x="752" y="174" class="body">Best current release row: DeepSeek-M 0.684</text>
+<text x="1210" y="174" class="body">Same benchmark; different</text>
+<text x="1210" y="192" class="body">metric/model roster</text>
+<circle cx="1192" cy="172" r="7" fill="#b45309"/>
+<rect x="42" y="274" width="1416" height="110" rx="14" class="subpanel"/>
+<rect x="42" y="274" width="8" height="110" rx="4" fill="#2563eb"/>
+<text x="58" y="298" class="label">UniMoral RQ2 moral typology</text>
+<text x="306" y="298" class="body">57.01 (Llama-3.1-8B Instruct, Spanish)</text>
+<text x="752" y="298" class="body">Best accuracy: Gemma-S 0.599; best weighted-F1 bridge:</text>
+<text x="752" y="316" class="body">Llama-S 0.354</text>
+<text x="1210" y="298" class="body">Same benchmark; paper uses</text>
+<text x="1210" y="316" class="body">weighted F1 while the</text>
+<text x="1210" y="334" class="body">release headline uses</text>
+<text x="1210" y="352" class="body">accuracy</text>
+<circle cx="1192" cy="296" r="7" fill="#2563eb"/>
+<rect x="42" y="398" width="1416" height="110" rx="14" class="subpanel"/>
+<rect x="42" y="398" width="8" height="110" rx="4" fill="#2563eb"/>
+<text x="58" y="422" class="label">UniMoral RQ3 factor</text>
+<text x="58" y="440" class="label">attribution</text>
+<text x="306" y="422" class="body">38.59 (Llama-3.1-8B Instruct, Russian)</text>
+<text x="752" y="422" class="body">Best accuracy: Llama-M 0.631; best weighted-F1 bridge:</text>
+<text x="752" y="440" class="body">DeepSeek-S 0.264</text>
+<text x="1210" y="422" class="body">Same benchmark; paper uses</text>
+<text x="1210" y="440" class="body">weighted F1 while the</text>
+<text x="1210" y="458" class="body">release headline uses</text>
+<text x="1210" y="476" class="body">accuracy</text>
+<circle cx="1192" cy="420" r="7" fill="#2563eb"/>
+<rect x="42" y="522" width="1416" height="110" rx="14" class="subpanel"/>
+<rect x="42" y="522" width="8" height="110" rx="4" fill="#b45309"/>
+<text x="58" y="546" class="label">UniMoral RQ4 consequence</text>
+<text x="58" y="564" class="label">generation</text>
+<text x="306" y="546" class="body">BLEU 3.29; METEOR 19.08; BERTScore 87.44</text>
+<text x="752" y="546" class="body">BERTScore F1: Llama-M 0.730; METEOR: Llama-L 0.157; BLEU:</text>
+<text x="752" y="564" class="body">Llama-M 0.0166</text>
+<text x="1210" y="546" class="body">Metric family overlaps;</text>
+<text x="1210" y="564" class="body">scorer scale and model</text>
+<text x="1210" y="582" class="body">roster differ</text>
+<circle cx="1192" cy="544" r="7" fill="#b45309"/>
+<rect x="42" y="646" width="1416" height="110" rx="14" class="subpanel"/>
+<rect x="42" y="646" width="8" height="110" rx="4" fill="#475569"/>
+<text x="58" y="670" class="label">SMID</text>
+<text x="306" y="670" class="body">2,941 images; 2,716 participants; 820,565 ratings; mean</text>
+<text x="306" y="688" class="body">34.88 ratings/image; averaged norms ICC &gt;= .75</text>
+<text x="752" y="670" class="body">Best current SMID average accuracy: Qwen-L 0.483; current</text>
+<text x="752" y="688" class="body">mean 0.364</text>
+<text x="1210" y="670" class="body">No paper model leaderboard</text>
+<circle cx="1192" cy="668" r="7" fill="#475569"/>
+<rect x="42" y="770" width="1416" height="110" rx="14" class="subpanel"/>
+<rect x="42" y="770" width="8" height="110" rx="4" fill="#b45309"/>
+<text x="58" y="794" class="label">Value Kaleidoscope /</text>
+<text x="58" y="812" class="label">ValuePrism</text>
+<text x="306" y="794" class="body">ValuePrism has 218k value/rights/duties for 31k</text>
+<text x="306" y="812" class="body">situations; 91% high-quality; KAL SYS 11B overall win rate</text>
+<text x="306" y="830" class="body">58.3 vs GPT-4, accuracy win 62.5; GPT-4 valence</text>
+<text x="306" y="848" class="body">correctness 93.1</text>
+<text x="752" y="794" class="body">Best current prompt-based Value average: MiniMax-L 0.741;</text>
+<text x="752" y="812" class="body">best OpenAI text ref: GPT-5-mini Ref 0.739</text>
+<text x="1210" y="794" class="body">Same source family, not</text>
+<text x="1210" y="812" class="body">Kaleido model replication</text>
+<circle cx="1192" cy="792" r="7" fill="#b45309"/>
+<rect x="42" y="894" width="1416" height="110" rx="14" class="subpanel"/>
+<rect x="42" y="894" width="8" height="110" rx="4" fill="#0f766e"/>
+<text x="58" y="918" class="label">CCD-Bench</text>
+<text x="306" y="918" class="body">2,182 dilemmas; 17 LLMs; Mean cluster shares across the</text>
+<text x="306" y="936" class="body">paper/source 17-model analysis: Nordic Europe 20.17%,</text>
+<text x="306" y="954" class="body">Germanic Europe 12.36%, Sub-Saharan Africa 11.51%, Anglo</text>
+<text x="306" y="972" class="body">11.31%, Southern Asia 10.06%, Latin Europe 8.23%,</text>
+<text x="306" y="990" class="body">Confucian Asia 7.40%, Latin America 7.23%, Middle East</text>
+<text x="752" y="918" class="body">19/20 current release rows are Nordic Europe dominant;</text>
+<text x="752" y="936" class="body">GPT-5-nano Ref: option_6 (Nordic Europe) at 27.8%;</text>
+<text x="752" y="954" class="body">effective clusters 6.79; DeepSeek-S: option_7 (Sub Saharan</text>
+<text x="752" y="972" class="body">Africa) at 13.8%; effective clusters 9.57</text>
+<text x="1210" y="918" class="body">Direct behavioral</text>
+<text x="1210" y="936" class="body">comparison, but CCD-Bench is</text>
+<text x="1210" y="954" class="body">not accuracy</text>
+<circle cx="1192" cy="916" r="7" fill="#0f766e"/>
+<rect x="42" y="1018" width="1416" height="110" rx="14" class="subpanel"/>
+<rect x="42" y="1018" width="8" height="110" rx="4" fill="#b91c1c"/>
+<text x="58" y="1042" class="label">DeNEVIL / MoralPrompt</text>
+<text x="306" y="1042" class="body">MoralPrompt has 2,397 prompts / 522 principles;</text>
+<text x="306" y="1060" class="body">ChatGPT-prompt Table 16 reports ChatGPT APV 65.20 +/-</text>
+<text x="306" y="1078" class="body">26.45, GPT-4 APV 79.08 +/- 21.46, LLaMA-2-70B-chat APV</text>
+<text x="306" y="1096" class="body">76.94 +/- 18.86</text>
+<text x="752" y="1042" class="body">APV/EVR/MVP n/a; strongest proxy protective-response rate</text>
+<text x="752" y="1060" class="body">is Qwen-M 99.5%; all DeNEVIL proxy rows remain not T3.</text>
+<text x="1210" y="1042" class="body">Blocked/proxy only; not</text>
+<text x="1210" y="1060" class="body">paper-faithful MoralPrompt</text>
+<text x="1210" y="1078" class="body">and not T3</text>
+<circle cx="1192" cy="1040" r="7" fill="#b91c1c"/>
+<rect x="58" y="1193" width="20" height="20" rx="5" fill="#0f766e"/>
+<text x="88" y="1208" class="label">Direct behavior comparison</text>
+<rect x="398" y="1193" width="20" height="20" rx="5" fill="#b45309"/>
+<text x="428" y="1208" class="label">Same family, metric/model caveat</text>
+<rect x="738" y="1193" width="20" height="20" rx="5" fill="#475569"/>
+<text x="768" y="1208" class="label">No paper model leaderboard</text>
+<rect x="1078" y="1193" width="20" height="20" rx="5" fill="#b91c1c"/>
+<text x="1108" y="1208" class="label">Proxy/blocked, not T3</text>
+</svg>

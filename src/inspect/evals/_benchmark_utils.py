@@ -135,6 +135,11 @@ def resume_start_index(env_var: str) -> int:
         raise ValueError(f"{env_var} must be a non-negative integer, got: {raw_value!r}") from exc
 
 
+def strip_think_blocks(text: str) -> str:
+    """Remove hidden reasoning blocks before visible-answer scoring."""
+    return re.sub(r"<think>.*?</think>", "", str(text), flags=re.DOTALL).strip()
+
+
 def normalize_whitespace(text: str) -> str:
     return " ".join(str(text).split())
 
@@ -329,7 +334,7 @@ def extract_structured_rating_int(text: str, *, minimum: int, maximum: int) -> i
 
 
 def extract_action_choice(text: str) -> str | None:
-    normalized = normalize_whitespace(text)
+    normalized = normalize_whitespace(strip_think_blocks(text))
     if not normalized:
         return None
     patterns = [
@@ -559,7 +564,7 @@ def model_output_text_parts(output: Any) -> tuple[str, str]:
                     reasoning.append(reason or text)
                 elif text:
                     visible.append(text)
-    return normalize_whitespace("\n".join(visible)), normalize_whitespace("\n".join(reasoning))
+    return normalize_whitespace(strip_think_blocks("\n".join(visible))), normalize_whitespace("\n".join(reasoning))
 
 
 def canonicalize_label_from_output(output: Any, patterns: Mapping[str, Sequence[str]]) -> tuple[str | None, str, str]:
@@ -809,12 +814,13 @@ def label_membership_scorer(patterns: Mapping[str, Sequence[str]]):
 @scorer(metrics=[accuracy(), stderr()])
 def parsed_label_scorer(parser):
     async def score(state: TaskState, target: Target) -> Score:
-        answer = parser(state.output.completion)
+        visible_answer = strip_think_blocks(state.output.completion)
+        answer = parser(visible_answer)
         is_correct = answer is not None and answer in target.target
         return Score(
             value=1 if is_correct else 0,
             answer=answer or "",
-            explanation=state.output.completion,
+            explanation=visible_answer,
         )
 
     return score
@@ -823,11 +829,12 @@ def parsed_label_scorer(parser):
 @scorer(metrics=[mean(), stderr()])
 def valid_choice_scorer(minimum: int, maximum: int):
     async def score(state: TaskState, target: Target) -> Score:
-        choice = extract_structured_choice_int(state.output.completion, minimum=minimum, maximum=maximum)
+        visible_answer = strip_think_blocks(state.output.completion)
+        choice = extract_structured_choice_int(visible_answer, minimum=minimum, maximum=maximum)
         return Score(
             value=1.0 if choice is not None else 0.0,
             answer="" if choice is None else str(choice),
-            explanation=state.output.completion,
+            explanation=visible_answer,
             metadata={"selected_option": choice},
         )
 
@@ -837,13 +844,14 @@ def valid_choice_scorer(minimum: int, maximum: int):
 @scorer(metrics=[accuracy(), stderr()])
 def bounded_integer_scorer(minimum: int, maximum: int):
     async def score(state: TaskState, target: Target) -> Score:
-        rating = extract_structured_rating_int(state.output.completion, minimum=minimum, maximum=maximum)
+        visible_answer = strip_think_blocks(state.output.completion)
+        rating = extract_structured_rating_int(visible_answer, minimum=minimum, maximum=maximum)
         answer = "" if rating is None else str(rating)
         is_correct = answer != "" and answer in target.target
         return Score(
             value=1 if is_correct else 0,
             answer=answer,
-            explanation=state.output.completion,
+            explanation=visible_answer,
             metadata={"selected_rating": rating},
         )
 
@@ -853,11 +861,11 @@ def bounded_integer_scorer(minimum: int, maximum: int):
 @scorer(metrics=[mean(), stderr()])
 def response_present_scorer():
     async def score(state: TaskState, target: Target) -> Score:
-        answer = normalize_whitespace(state.output.completion)
+        answer = normalize_whitespace(strip_think_blocks(state.output.completion))
         return Score(
             value=1.0 if answer else 0.0,
             answer=answer,
-            explanation=state.output.completion,
+            explanation=answer,
         )
 
     return score
@@ -868,10 +876,11 @@ def rouge_l_max_scorer():
     rouge = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
 
     async def score(state: TaskState, target: Target) -> Score:
-        prediction = normalize_whitespace(state.output.completion)
+        visible_answer = strip_think_blocks(state.output.completion)
+        prediction = normalize_whitespace(visible_answer)
         references = [normalize_whitespace(reference) for reference in target.target if reference]
         if not prediction or not references:
-            return Score(value=0.0, answer=prediction, explanation=state.output.completion)
+            return Score(value=0.0, answer=prediction, explanation=visible_answer)
 
         best_score = 0.0
         best_reference = ""
