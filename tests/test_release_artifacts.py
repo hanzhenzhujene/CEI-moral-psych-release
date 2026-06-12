@@ -181,6 +181,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         "option1_denevil_proxy_sample_volume.svg",
         "option1_denevil_proxy_valid_response_rate.svg",
         "option1_denevil_proxy_pipeline.svg",
+        "option1_paper_result_alignment_map.svg",
         "option1_sample_volume.svg",
     }
     actual_figures = {path.name for path in figure_dir.glob("*.svg")}
@@ -217,6 +218,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["model_families"] == ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"]
     assert manifest["entry_points"]["report"].endswith("jenny-group-report.md")
     assert manifest["entry_points"]["paper_result_alignment"].endswith("paper-result-alignment.csv")
+    assert manifest["entry_points"]["paper_result_alignment_figure"].endswith("option1_paper_result_alignment_map.svg")
     assert manifest["entry_points"]["supplementary_progress"].endswith("supplementary-model-progress.csv")
     assert manifest["entry_points"]["family_size_progress"].endswith("family-size-progress.csv")
     assert manifest["entry_points"]["benchmark_difficulty_summary"].endswith("benchmark-difficulty-summary.csv")
@@ -277,6 +279,13 @@ def test_release_builder_emits_expected_files(tmp_path):
             "Clean direct MiniMax-M2.5 text run is complete" in report_text
             and "no medium SMID route fixed yet" in report_text
         )
+    release_readme_text = (release_dir / "README.md").read_text(encoding="utf-8")
+    assert "## Where The Main Results Live" in release_readme_text
+    assert "I found `CCD-Bench` in this repo; I did not find a separate `CCG-Bench` result surface." in release_readme_text
+    assert "results/release/2026-04-19-option1/unimoral-full-benchmark.csv" in release_readme_text
+    assert "smid_average_accuracy" in release_readme_text
+    assert "results/release/2026-04-19-option1/ccd-choice-distribution.csv" in release_readme_text
+    assert "option1_paper_result_alignment_map.svg" in release_readme_text
     topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     assert "## TL;DR" in topline_text
     assert "`GPT-5.5`" in topline_text
@@ -1529,6 +1538,15 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Paper setup:" in sample_volume_svg
     assert "Proxy:" in sample_volume_svg
     assert "% of release" in sample_volume_svg
+
+    paper_alignment_svg = (figure_dir / "option1_paper_result_alignment_map.svg").read_text(encoding="utf-8")
+    assert "Paper-vs-current Replication Map" in paper_alignment_svg
+    assert "Partial overlap" in paper_alignment_svg
+    assert "Distributional comparison only; do not" in paper_alignment_svg
+    assert "read CCD as accuracy." in paper_alignment_svg
+    assert "Proxy-only evidence; no paper-faithful" in paper_alignment_svg
+    assert "MoralPrompt comparison." in paper_alignment_svg
+    assert " ".join(("low", "cost")) not in paper_alignment_svg.lower()
 
 
 def test_default_release_builder_leaves_repo_readme_untouched(tmp_path):

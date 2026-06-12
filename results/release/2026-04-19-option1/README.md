@@ -70,6 +70,12 @@ _What it tests: DeNEVIL-style evaluation looks for value vulnerabilities under r
 
 _How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._
 
+### 7. Replication / calibration: paper-vs-current alignment
+
+![Paper-vs-current replication map](../../../figures/release/option1_paper_result_alignment_map.svg)
+
+_What it answers: which benchmark-paper results can be compared directly, which are current-only benchmark comparisons, which rely on saved/prior evidence, and which are blocked or proxy-only._
+
 Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
 
 ## TL;DR
@@ -86,6 +92,19 @@ Key takeaways:
 - **DeNEVIL boundary:** current DeNEVIL evidence is FULCRA-backed proxy behavior, not paper-faithful MoralPrompt scoring. Use the behavioral-outcomes figure for refusal/context/risk patterns, not a benchmark accuracy ranking.
 - **Small-model floor:** the May 13 Mistral/Qwen/Llama follow-up shows a capability threshold. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral from 0.632 to 0.648; `Llama 3.2 1B` drops to 0.406.
 
+
+## Where The Main Results Live
+
+Use this map when you need to answer: where is the result, what does the number mean, and how do I rebuild the visual? I found `CCD-Bench` in this repo; I did not find a separate `CCG-Bench` result surface.
+
+| Benchmark | Main result files | Metric meaning | Key visuals / reproduction |
+| --- | --- | --- | --- |
+| `UniMoral RQ1-RQ4` | `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`<br/>`results/release/2026-04-19-option1/unimoral-model-rankings.csv`<br/>`results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv`<br/>sample-level audit: `results/release/2026-04-19-option1/unimoral-sample-predictions.csv` | RQ1-RQ3 use exact-match accuracy. RQ4 is generation quality: BERTScore F1 for semantic overlap and METEOR for lexical overlap. Do not collapse RQ1-RQ4 into one universal moral score. | `option1_unimoral_task_heatmap.svg`, `option1_unimoral_generation_quality.svg`, and `option1_unimoral_family_scaling.svg` under `figures/release/`. Rebuild with `make release` or `make release VENV_PYTHON=/path/to/python` when no local `.venv` exists. |
+| `SMID` | `results/release/2026-04-19-option1/benchmark-comparison.csv` (`smid_average_accuracy`)<br/>`results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`<br/>`results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of moral-rating prediction and foundation-classification accuracy for rows with a public vision route. Missing OpenAI/DeepSeek text-only cells are route gaps, not failed text parses. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |
+| `CCD-Bench` | `results/release/2026-04-19-option1/ccd-choice-distribution.csv` | Choice-distribution behavior over ten canonical cultural clusters: valid-choice rate, per-option share/deviation, dominant option, dominant share, and effective cluster count. This is not accuracy. | `option1_ccd_choice_distribution.svg` and `option1_ccd_dominant_option_share.svg` under `figures/release/`. Rebuild through the same `make release` path. |
+| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg` under `figures/release/`. Rebuild through the same `make release` path. |
+
+Quick visual links: [UniMoral heatmap](../../../figures/release/option1_unimoral_task_heatmap.svg), [SMID/Value bars](../../../figures/release/option1_benchmark_accuracy_bars.svg), [CCD choice map](../../../figures/release/option1_ccd_choice_distribution.svg), [replication map](../../../figures/release/option1_paper_result_alignment_map.svg).
 
 ## Results First
 
@@ -344,7 +363,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `May 21, 2026` |
+| Repo update date | `June 12, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
 | Current project total cost | `$831.08` |
 | Total cost breakdown | MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$325.66`; OpenAI API reference sweep: `$0.76`. |
@@ -433,6 +452,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 - [CCD choice heatmap](../../../figures/release/option1_ccd_choice_distribution.svg): main CCD-Bench result showing deviation from the 10% uniform baseline across the ten canonical clusters
 - [CCD concentration summary](../../../figures/release/option1_ccd_dominant_option_share.svg): dominant-cluster share plus effective-cluster count
 - [DeNEVIL behavioral outcomes](../../../figures/release/option1_denevil_behavior_outcomes.svg): main proxy-result view showing visible behavior categories by model line
+- [paper-vs-current replication map](../../../figures/release/option1_paper_result_alignment_map.svg): visual map of paper-faithful overlap, current-only rows, blocked model routes, and proxy-only evidence
 
 ## Status Key
 

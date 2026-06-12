@@ -1,6 +1,6 @@
 # Jenny Zhu Moral-Psych Benchmark Report
 
-Updated: `May 21, 2026`
+Updated: `June 12, 2026`
 
 Frozen public snapshot referenced here: `Option 1`, `April 19, 2026`
 
@@ -68,6 +68,12 @@ _How to read it: this is the compact CCD-Bench summary, showing how much each li
 _What it tests: DeNEVIL-style evaluation looks for value vulnerabilities under risky or ethically loaded prompts. In this release the paper-faithful MoralPrompt export is not local, so this figure reports auditable proxy behavior categories from saved traces._
 
 _How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._
+
+### 7. Replication / calibration: paper-vs-current alignment
+
+![Paper-vs-current replication map](../../../figures/release/option1_paper_result_alignment_map.svg)
+
+_What it answers: which benchmark-paper results can be compared directly, which are current-only benchmark comparisons, which rely on saved/prior evidence, and which are blocked or proxy-only._
 
 Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
 
@@ -343,7 +349,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `May 21, 2026` |
+| Repo update date | `June 12, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
 | Current project total cost | `$831.08` |
 | Total cost breakdown | MiniMax API: `$504.66`; OpenRouter for other model-family runs: `$325.66`; OpenAI API reference sweep: `$0.76`. |
