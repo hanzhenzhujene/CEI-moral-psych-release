@@ -100,8 +100,8 @@
 <rect x="56" y="551" width="10" height="10" rx="3" fill="#cfc3f0"/>
 <text x="78" y="565" class="label">Gemma-L</text>
 <rect x="280" y="546" width="800" height="28" rx="10" fill="#e2e8f0"/>
-<rect x="280" y="546" width="329.68" height="28" rx="10" fill="#cfc3f0"/>
-<text x="619.68" y="565" text-anchor="start" class="label">41.2%</text>
+<rect x="280" y="546" width="329.82" height="28" rx="10" fill="#cfc3f0"/>
+<text x="619.82" y="565" text-anchor="start" class="label">41.2%</text>
 <rect x="42" y="626" width="1136" height="960" rx="18" class="subpanel"/>
 <text x="48" y="654" class="axis">Value Kaleidoscope</text>
 <text x="48" y="674" class="subtitle">Average of relevance and valence accuracy</text>

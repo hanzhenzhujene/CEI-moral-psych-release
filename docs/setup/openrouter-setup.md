@@ -44,7 +44,7 @@ from openai import OpenAI
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key="sk-or-v1-xxx",  # your OpenRouter key
+    api_key="YOUR_OPENROUTER_KEY",  # your OpenRouter key
 )
 
 MODELS = [

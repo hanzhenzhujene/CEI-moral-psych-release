@@ -209,7 +209,7 @@
 <rect x="184" y="728" width="56" height="30" rx="12" fill="#f87171"/>
 <text x="212.00" y="749.00" text-anchor="middle" class="celltext-dark">S</text>
 <text x="258" y="749.00" class="label">Llama-S</text>
-<rect x="430" y="722" width="170" height="42" fill="#85ba8b" stroke="#ffffff" stroke-width="1.2"/>
+<rect x="430" y="722" width="170" height="42" fill="#85b98b" stroke="#ffffff" stroke-width="1.2"/>
 <text x="515.00" y="749.00" text-anchor="middle" class="celltext-dark">98%</text>
 <rect x="600" y="722" width="170" height="42" fill="#83b98a" stroke="#ffffff" stroke-width="1.2"/>
 <text x="685.00" y="749.00" text-anchor="middle" class="celltext-dark">99%</text>

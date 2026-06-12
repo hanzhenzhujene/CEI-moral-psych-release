@@ -43,6 +43,7 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 - `option1_denevil_proxy_sample_volume.svg`: appendix QA sample-volume chart
 - `option1_denevil_proxy_valid_response_rate.svg`: appendix QA visible-response coverage chart
 - `option1_denevil_proxy_pipeline.svg`: one-slide diagram of the public proxy pipeline and its limitations
+- `option1_paper_result_alignment_map.svg`: replication/calibration map showing paper-faithful overlap, current-only comparisons, blocked routes, and proxy-only evidence
 
 The figure set is intentionally split between:
 

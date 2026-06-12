@@ -85,14 +85,14 @@
 <circle cx="572.00" cy="469.86" r="4.2" fill="#dc2626"/>
 <line x1="162.00" y1="458.37" x2="373.00" y2="478.24" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
 <line x1="162.00" y1="458.37" x2="373.00" y2="478.24" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
-<line x1="373.00" y1="478.24" x2="584.00" y2="460.15" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
-<line x1="373.00" y1="478.24" x2="584.00" y2="460.15" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
+<line x1="373.00" y1="478.24" x2="584.00" y2="460.08" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round" opacity="0.95"/>
+<line x1="373.00" y1="478.24" x2="584.00" y2="460.08" stroke="#a996e3" stroke-width="4.4" stroke-linecap="round"/>
 <circle cx="162.00" cy="458.37" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
 <circle cx="162.00" cy="458.37" r="4.2" fill="#a996e3"/>
 <circle cx="373.00" cy="478.24" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
 <circle cx="373.00" cy="478.24" r="4.2" fill="#a996e3"/>
-<circle cx="584.00" cy="460.15" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
-<circle cx="584.00" cy="460.15" r="4.2" fill="#a996e3"/>
+<circle cx="584.00" cy="460.08" r="8" fill="#ffffff" stroke="#a996e3" stroke-width="3.4"/>
+<circle cx="584.00" cy="460.08" r="4.2" fill="#a996e3"/>
 <line x1="128.00" y1="476.59" x2="550.00" y2="433.74" stroke="#ffffff" stroke-width="7.2" stroke-linecap="round" opacity="0.95" stroke-dasharray="7 6"/>
 <line x1="128.00" y1="476.59" x2="550.00" y2="433.74" stroke="#65b8ac" stroke-width="5.2" stroke-linecap="round" stroke-dasharray="7 6"/>
 <circle cx="128.00" cy="476.59" r="8" fill="#ffffff" stroke="#65b8ac" stroke-width="3.4"/>

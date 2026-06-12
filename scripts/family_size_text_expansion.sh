@@ -58,8 +58,8 @@ CCD_BENCH_DATA_FILE="${CCD_BENCH_DATA_FILE:-$DATA_ROOT/ccd-bench/CCD-Bench.json}
 VALUEPRISM_RELEVANCE_FILE="${VALUEPRISM_RELEVANCE_FILE:-$DATA_ROOT/valueprism/relevance/relevance_test.csv}"
 VALUEPRISM_VALENCE_FILE="${VALUEPRISM_VALENCE_FILE:-$DATA_ROOT/valueprism/valence/valence_test.csv}"
 
-# Cheapest-first rough order based on current OpenRouter pricing and the observed
-# token profile of the completed non-image Llama line.
+# Rough launch order based on route availability and the observed token profile
+# of the completed non-image Llama line.
 jobs=(
   gemma_27b_large
   gemma_12b_medium

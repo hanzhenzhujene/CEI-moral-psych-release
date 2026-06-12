@@ -8575,6 +8575,121 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
     write_text(output_path, "\n".join(lines) + "\n")
 
 
+def render_paper_result_alignment_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
+    width, height = 1220, 760
+    top = 176
+    row_h = 92
+    col_x = {
+        "benchmark": 58,
+        "paper": 220,
+        "current": 510,
+        "comparison": 824,
+    }
+    visual_rows = {
+        "UniMoral": {
+            "paper": "RQ1 action-prediction accuracy; original table values not tracked here.",
+            "current": "Current RQ1 accuracy rows plus saved/prior May 13 Llama 3.1 8B evidence.",
+            "comparison": "Partial overlap: same RQ1 metric, saved/prior overlap only.",
+            "status": "Partial overlap",
+            "color": "#d97706",
+        },
+        "SMID": {
+            "paper": "Human-normed image stimulus set; no original LLM roster found locally.",
+            "current": "Current vision-route moral-rating and foundation-classification rows.",
+            "comparison": "No paper-model comparison; compare current vision-capable rows only.",
+            "status": "No paper roster",
+            "color": "#64748b",
+        },
+        "Value Kaleidoscope / ValuePrism": {
+            "paper": "Kaleido model family and ValuePrism relevance/valence setup.",
+            "current": "Prompt-based LLM relevance and valence classification rows.",
+            "comparison": "Blocked for paper-model replication until Kaleido access and execution are run.",
+            "status": "Blocked route",
+            "color": "#7c3aed",
+        },
+        "CCD-Bench": {
+            "paper": "Ten-cluster cultural-choice behavior and concentration metrics.",
+            "current": "Choice distributions, dominant-cluster share, and effective clusters.",
+            "comparison": "Distributional comparison only; do not read CCD as accuracy.",
+            "status": "Behavior map",
+            "color": "#0f766e",
+        },
+        "DeNEVIL / MoralPrompt": {
+            "paper": "Paper-faithful MoralPrompt export is missing locally.",
+            "current": "FULCRA-backed proxy visible-behavior summaries from saved traces.",
+            "comparison": "Proxy-only evidence; no paper-faithful MoralPrompt comparison.",
+            "status": "Proxy only",
+            "color": "#b45309",
+        },
+    }
+
+    lines = svg_header(width, height)
+    lines.extend(
+        [
+            f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
+            f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
+            "<title>Paper-vs-current replication and calibration map</title>",
+            "<desc>Reviewer-facing map showing where original-paper model/result evidence overlaps with current release rows, where only current benchmark comparison is supported, and where paper-faithful replication is blocked or proxy-only.</desc>",
+            '<text x="48" y="64" class="title">Paper-vs-current Replication Map</text>',
+            *svg_text_block(
+                48,
+                90,
+                "Use this as the visual index for replication/calibration: paper-faithful overlap, saved/prior evidence, current-only comparisons, blocked model access, and proxy-only evidence stay separate.",
+                "subtitle",
+                134,
+            ),
+            f'<text x="{col_x["benchmark"]}" y="144" class="tiny">BENCHMARK</text>',
+            f'<text x="{col_x["paper"]}" y="144" class="tiny">ORIGINAL PAPER / REFERENCE SIDE</text>',
+            f'<text x="{col_x["current"]}" y="144" class="tiny">CURRENT REPO RESULT SIDE</text>',
+            f'<text x="{col_x["comparison"]}" y="144" class="tiny">SAFE COMPARISON CLAIM</text>',
+        ]
+    )
+
+    for index, row in enumerate(rows):
+        benchmark = row["benchmark"]
+        item = visual_rows[benchmark]
+        y = top + index * row_h
+        color = item["color"]
+        lines.append(f'<rect x="42" y="{y - 30}" width="{width - 84}" height="{row_h - 12}" rx="18" class="subpanel"/>')
+        lines.append(f'<rect x="{col_x["benchmark"]}" y="{y - 10}" width="116" height="36" rx="11" fill="{color}"/>')
+        for line_index, line in enumerate(_wrap_svg_text(benchmark, 14)[:2]):
+            lines.append(
+                f'<text x="{col_x["benchmark"] + 58}" y="{y + 5 + line_index * 14}" text-anchor="middle" class="cellsub">{escape_xml(line)}</text>'
+            )
+        lines.append(f'<rect x="{col_x["comparison"]}" y="{y + 28}" width="164" height="24" rx="10" fill="{color}" opacity="0.92"/>')
+        lines.append(
+            f'<text x="{col_x["comparison"] + 82}" y="{y + 45}" text-anchor="middle" class="cellsub">{escape_xml(item["status"])}</text>'
+        )
+        for text_index, (x, text, max_chars) in enumerate(
+            (
+                (col_x["paper"], item["paper"], 36),
+                (col_x["current"], item["current"], 38),
+                (col_x["comparison"], item["comparison"], 42),
+            )
+        ):
+            text_y = y - 4
+            if text_index == 2:
+                text_y = y - 2
+            lines.extend(svg_text_block(x, text_y, text, "body", max_chars, line_height=16)[:3])
+
+    legend_y = height - 86
+    lines.append(f'<rect x="48" y="{legend_y - 28}" width="{width - 96}" height="54" rx="16" class="legend-card"/>')
+    lines.append(f'<text x="72" y="{legend_y - 4}" class="tiny">READ THIS FIGURE</text>')
+    lines.extend(
+        svg_text_block(
+            72,
+            legend_y + 18,
+            "Only UniMoral RQ1 has a clean paper-faithful metric overlap here; CCD is distributional behavior, DeNEVIL is proxy-only, and Value/Kaleido is blocked until the gated model route is run.",
+            "body",
+            142,
+            line_height=17,
+        )
+    )
+
+    lines.append("</svg>")
+    write_text(output_path, "\n".join(lines) + "\n")
+
+
 def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
     width = 1220
     panel_left, panel_width = 280, 800
@@ -10946,6 +11061,12 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "_How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._",
             "",
+            "### 7. Replication / calibration: paper-vs-current alignment",
+            "",
+            f"![Paper-vs-current replication map]({figure_prefix}/option1_paper_result_alignment_map.svg)",
+            "",
+            "_What it answers: which benchmark-paper results can be compared directly, which are current-only benchmark comparisons, which rely on saved/prior evidence, and which are blocked or proxy-only._",
+            "",
             "Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.",
             "",
         ]
@@ -11020,6 +11141,17 @@ def append_interpretation_sections(
     deepseek_coverage = deepseek_medium_coverage_diagnostics() or {}
     deepseek_ccd = deepseek_coverage.get("ccd")
     deepseek_denevil = deepseek_coverage.get("denevil")
+    deepseek_fallback = DEEPSEEK_SM_READOUT_FALLBACKS.get("DeepSeek-S")
+    if deepseek_fallback is not None and deepseek_ccd is None:
+        deepseek_ccd = {
+            "positive_scores": deepseek_fallback["ccd_valid_choice_count"],
+            "total": deepseek_fallback["ccd_total_samples"],
+        }
+    if deepseek_fallback is not None and deepseek_denevil is None:
+        deepseek_denevil = {
+            "positive_scores": deepseek_fallback["denevil_visible_response_count"],
+            "total": deepseek_fallback["denevil_total_samples"],
+        }
     deepseek_ccd_ratio = (
         f" ({fmt_ratio(deepseek_ccd['positive_scores'], deepseek_ccd['total'])})"
         if deepseek_ccd is not None
@@ -11338,7 +11470,7 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
         [
             "## Supporting Figures",
             "",
-            "Figures 1 through 13 are already embedded above in context; this gallery keeps the full set together without repeating the surrounding interpretation text.",
+            "Figures 1 through 13 and the replication map are already embedded above in context; this gallery keeps the full set together without repeating the surrounding interpretation text.",
             "",
             "| Figure | Why it matters | File |",
             "| --- | --- | --- |",
@@ -11358,6 +11490,7 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             f"| Figure 14 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
             f"| Figure 15 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
             f"| Figure 16 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | {markdown_link('option1_sample_volume.svg', f'{figure_prefix}/option1_sample_volume.svg')} |",
+            f"| Figure 17 | Replication/calibration map showing paper-faithful overlap, current-only rows, blocked routes, and proxy-only evidence. | {markdown_link('option1_paper_result_alignment_map.svg', f'{figure_prefix}/option1_paper_result_alignment_map.svg')} |",
             "",
             f"![Accuracy heatmap]({figure_prefix}/option1_accuracy_heatmap.svg)",
             "",
@@ -11370,6 +11503,10 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             f"![Sample volume by benchmark]({figure_prefix}/option1_sample_volume.svg)",
             "",
             "_Figure 16. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._",
+            "",
+            f"![Paper-vs-current replication map]({figure_prefix}/option1_paper_result_alignment_map.svg)",
+            "",
+            "_Figure 17. Replication/calibration map showing which original-paper comparisons are direct, partial, blocked, current-only, or proxy-only._",
             "",
         ]
     )
@@ -11481,6 +11618,26 @@ def append_public_quickstart(lines: list[str]) -> None:
             "| Run a live benchmark smoke test | `make setup && cp .env.example .env && make smoke` | Yes |",
             "",
             "`make bootstrap` is the reviewer-safe path. It rebuilds the tracked release package and runs the full public QA gate from a clean checkout without requiring `OPENROUTER_API_KEY` or local benchmark data. It is not the strict UniMoral completion gate; use `make verify-unimoral` for that.",
+            "",
+        ]
+    )
+
+
+def append_main_result_file_map(lines: list[str], figure_prefix: str) -> None:
+    lines.extend(
+        [
+            "## Where The Main Results Live",
+            "",
+            "Use this map when you need to answer: where is the result, what does the number mean, and how do I rebuild the visual? I found `CCD-Bench` in this repo; I did not find a separate `CCG-Bench` result surface.",
+            "",
+            "| Benchmark | Main result files | Metric meaning | Key visuals / reproduction |",
+            "| --- | --- | --- | --- |",
+            "| `UniMoral RQ1-RQ4` | `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`<br/>`results/release/2026-04-19-option1/unimoral-model-rankings.csv`<br/>`results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv`<br/>sample-level audit: `results/release/2026-04-19-option1/unimoral-sample-predictions.csv` | RQ1-RQ3 use exact-match accuracy. RQ4 is generation quality: BERTScore F1 for semantic overlap and METEOR for lexical overlap. Do not collapse RQ1-RQ4 into one universal moral score. | `option1_unimoral_task_heatmap.svg`, `option1_unimoral_generation_quality.svg`, and `option1_unimoral_family_scaling.svg` under `figures/release/`. Rebuild with `make release` or `make release VENV_PYTHON=/path/to/python` when no local `.venv` exists. |",
+            "| `SMID` | `results/release/2026-04-19-option1/benchmark-comparison.csv` (`smid_average_accuracy`)<br/>`results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`<br/>`results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of moral-rating prediction and foundation-classification accuracy for rows with a public vision route. Missing OpenAI/DeepSeek text-only cells are route gaps, not failed text parses. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
+            "| `CCD-Bench` | `results/release/2026-04-19-option1/ccd-choice-distribution.csv` | Choice-distribution behavior over ten canonical cultural clusters: valid-choice rate, per-option share/deviation, dominant option, dominant share, and effective cluster count. This is not accuracy. | `option1_ccd_choice_distribution.svg` and `option1_ccd_dominant_option_share.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
+            "| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
+            "",
+            f"Quick visual links: {markdown_link('UniMoral heatmap', f'{figure_prefix}/option1_unimoral_task_heatmap.svg')}, {markdown_link('SMID/Value bars', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')}, {markdown_link('CCD choice map', f'{figure_prefix}/option1_ccd_choice_distribution.svg')}, {markdown_link('replication map', f'{figure_prefix}/option1_paper_result_alignment_map.svg')}.",
             "",
         ]
     )
@@ -11922,6 +12079,7 @@ def build_repo_readme(
         ]
     )
     append_public_quickstart(lines)
+    append_main_result_file_map(lines, "figures/release")
     append_repo_navigation(lines)
     append_repo_layout(lines)
     append_models_section(lines, family_size_progress)
@@ -12033,6 +12191,7 @@ def build_repo_readme(
             "- `figures/release/option1_ccd_choice_distribution.svg`",
             "- `figures/release/option1_ccd_dominant_option_share.svg`",
             "- `figures/release/option1_denevil_behavior_outcomes.svg`",
+            "- `figures/release/option1_paper_result_alignment_map.svg`",
             "- `figures/release/option1_unimoral_task_heatmap.svg`",
             "- `figures/release/option1_unimoral_generation_quality.svg`",
             "- `figures/release/option1_unimoral_family_scaling.svg`",
@@ -12126,6 +12285,7 @@ def build_release_readme(
         denevil_behavior_summary,
         release_dir,
     )
+    append_main_result_file_map(lines, "../../../figures/release")
     lines.extend(
         [
         "## Results First",
@@ -12247,6 +12407,7 @@ def build_release_readme(
             f"- {markdown_link('CCD choice heatmap', '../../../figures/release/option1_ccd_choice_distribution.svg')}: main CCD-Bench result showing deviation from the 10% uniform baseline across the ten canonical clusters",
             f"- {markdown_link('CCD concentration summary', '../../../figures/release/option1_ccd_dominant_option_share.svg')}: dominant-cluster share plus effective-cluster count",
             f"- {markdown_link('DeNEVIL behavioral outcomes', '../../../figures/release/option1_denevil_behavior_outcomes.svg')}: main proxy-result view showing visible behavior categories by model line",
+            f"- {markdown_link('paper-vs-current replication map', '../../../figures/release/option1_paper_result_alignment_map.svg')}: visual map of paper-faithful overlap, current-only rows, blocked model routes, and proxy-only evidence",
             "",
             "## Status Key",
             "",
@@ -12628,6 +12789,7 @@ def build_release_manifest(
             "denevil_proxy_sample_volume_figure": "figures/release/option1_denevil_proxy_sample_volume.svg",
             "denevil_proxy_valid_response_rate_figure": "figures/release/option1_denevil_proxy_valid_response_rate.svg",
             "denevil_proxy_pipeline_figure": "figures/release/option1_denevil_proxy_pipeline.svg",
+            "paper_result_alignment_figure": "figures/release/option1_paper_result_alignment_map.svg",
             "sample_volume_figure": "figures/release/option1_sample_volume.svg",
         },
         "tables": [
@@ -12675,6 +12837,7 @@ def build_release_manifest(
             "figures/release/option1_denevil_proxy_sample_volume.svg",
             "figures/release/option1_denevil_proxy_valid_response_rate.svg",
             "figures/release/option1_denevil_proxy_pipeline.svg",
+            "figures/release/option1_paper_result_alignment_map.svg",
             "figures/release/option1_sample_volume.svg",
         ],
         "interpretation_guardrails": [
@@ -13345,6 +13508,7 @@ def main() -> None:
         args.figure_dir / "option1_denevil_proxy_valid_response_rate.svg",
     )
     render_denevil_proxy_pipeline_svg(args.figure_dir / "option1_denevil_proxy_pipeline.svg")
+    render_paper_result_alignment_svg(paper_result_alignment, args.figure_dir / "option1_paper_result_alignment_map.svg")
     render_sample_volume_svg(rows, args.figure_dir / "option1_sample_volume.svg")
 
     _clear_release_builder_caches()
@@ -13397,6 +13561,7 @@ def main() -> None:
             "option1_denevil_proxy_sample_volume.svg",
             "option1_denevil_proxy_valid_response_rate.svg",
             "option1_denevil_proxy_pipeline.svg",
+            "option1_paper_result_alignment_map.svg",
             "option1_sample_volume.svg",
         ],
     }, indent=2))
