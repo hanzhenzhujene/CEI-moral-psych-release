@@ -47,6 +47,8 @@ TASKS = {
     "unimoral_factor_attribution": {"rq": "RQ3", "expected": 3492, "metric": "accuracy"},
     "unimoral_consequence_generation": {"rq": "RQ4", "expected": 1782, "metric": "bert_score_f1"},
 }
+GENERATION_TASK_NAME = "unimoral_consequence_generation"
+GENERATION_RESULT_METRICS = ("bert_score_f1", "meteor")
 
 EXPECTED_SAMPLE_PREDICTION_ROWS = len(MODEL_LINES) * sum(
     task["expected"]
@@ -186,6 +188,48 @@ def row_metric_value(row: dict[str, str]) -> float | None:
     if value in {None, ""}:
         return None
     return float(value)
+
+
+def result_metrics_for_task(task_name: str) -> tuple[str, ...]:
+    task = TASKS.get(task_name, {})
+    if task_name == GENERATION_TASK_NAME:
+        return GENERATION_RESULT_METRICS
+    metric = str(task.get("metric") or "")
+    return (metric,) if metric else ("",)
+
+
+def full_benchmark_csv_key(row: dict[str, str]) -> tuple[str, str, str]:
+    return (
+        str(row.get("line_label") or ""),
+        str(row.get("task_name") or ""),
+        str(row.get("primary_metric") or ""),
+    )
+
+
+def expected_full_benchmark_csv_keys() -> set[tuple[str, str, str]]:
+    return {
+        (line, task_name, metric)
+        for line in MODEL_LINES
+        for task_name in TASKS
+        for metric in result_metrics_for_task(task_name)
+    }
+
+
+def collapse_full_benchmark_rows(full_rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    collapsed: dict[tuple[str, str], dict[str, str]] = {}
+    for row in full_rows:
+        key = (str(row.get("line_label") or ""), str(row.get("task_name") or ""))
+        if key not in collapsed:
+            collapsed[key] = dict(row)
+        else:
+            target = collapsed[key]
+            for field, value in row.items():
+                if target.get(field) in {None, ""} and value not in {None, ""}:
+                    target[field] = value
+        task_name = key[1]
+        if task_name == GENERATION_TASK_NAME and task_name in TASKS:
+            collapsed[key]["primary_metric"] = TASKS[task_name]["metric"]
+    return list(collapsed.values())
 
 
 def float_matches(actual: str | None, expected: float) -> bool:
@@ -360,6 +404,7 @@ def verify_release(
         return errors
 
     full_rows = read_csv(release_dir / "unimoral-full-benchmark.csv")
+    canonical_full_rows = collapse_full_benchmark_rows(full_rows)
     coverage_rows = read_csv(release_dir / "unimoral-coverage.csv")
     spread_rows = read_csv(release_dir / "unimoral-task-spread.csv")
     ranking_rows = read_csv(release_dir / "unimoral-model-rankings.csv")
@@ -374,7 +419,7 @@ def verify_release(
     benchmark_catalog_rows = read_csv(release_dir / "benchmark-catalog.csv")
     incomplete_pairs = {
         (row.get("line_label", ""), row.get("task_name", ""))
-        for row in full_rows
+        for row in canonical_full_rows
         if row.get("task_name") in PREDICTION_TASKS and row.get("status") != "complete"
     }
     documented_incomplete_pairs = {
@@ -387,21 +432,29 @@ def verify_release(
         for row in coverage_rows
         if row.get("task_name") in PREDICTION_TASKS and row.get("status") != "complete"
     }
-    full_by_pair = {(row["line_label"], row["task_name"]): row for row in full_rows}
+    full_by_pair = {(row["line_label"], row["task_name"]): row for row in canonical_full_rows}
     referenced_logs_available = _any_referenced_log_exists(full_rows, release_dir)
 
     expected_pairs = {(line, task) for line in MODEL_LINES for task in TASKS}
-    actual_pairs = {(row["line_label"], row["task_name"]) for row in full_rows}
+    actual_pairs = {(row["line_label"], row["task_name"]) for row in canonical_full_rows}
     missing_pairs = sorted(expected_pairs - actual_pairs)
     extra_pairs = sorted(actual_pairs - expected_pairs)
+    expected_metric_keys = expected_full_benchmark_csv_keys()
+    actual_metric_keys = {full_benchmark_csv_key(row) for row in full_rows}
+    missing_metric_keys = sorted(expected_metric_keys - actual_metric_keys)
+    extra_metric_keys = sorted(actual_metric_keys - expected_metric_keys)
     if missing_pairs:
         fail(errors, f"missing model-task rows: {missing_pairs[:10]}")
     if extra_pairs:
         fail(errors, f"unexpected model-task rows: {extra_pairs[:10]}")
-    if len(full_rows) != len(expected_pairs):
-        fail(errors, f"unimoral-full-benchmark.csv has {len(full_rows)} rows, expected {len(expected_pairs)}")
-    if len(actual_pairs) != len(full_rows):
-        fail(errors, "unimoral-full-benchmark.csv contains duplicate model-task rows")
+    if missing_metric_keys:
+        fail(errors, f"missing model-task-metric rows: {missing_metric_keys[:10]}")
+    if extra_metric_keys:
+        fail(errors, f"unexpected model-task-metric rows: {extra_metric_keys[:10]}")
+    if len(full_rows) != len(expected_metric_keys):
+        fail(errors, f"unimoral-full-benchmark.csv has {len(full_rows)} rows, expected {len(expected_metric_keys)}")
+    if len(actual_metric_keys) != len(full_rows):
+        fail(errors, "unimoral-full-benchmark.csv contains duplicate model-task-metric rows")
 
     coverage_by_task = {row["task_name"]: row for row in coverage_rows}
     if len(coverage_by_task) != len(coverage_rows):
@@ -417,7 +470,7 @@ def verify_release(
         row = coverage_by_task.get(task_name)
         if row is None:
             continue
-        task_full_rows = [full_row for full_row in full_rows if full_row["task_name"] == task_name]
+        task_full_rows = [full_row for full_row in canonical_full_rows if full_row["task_name"] == task_name]
         complete_model_lines = sum(1 for full_row in task_full_rows if full_row.get("status") == "complete")
         reported_model_lines = sum(1 for full_row in task_full_rows if str(full_row.get("status", "")).startswith("complete"))
         expected_coverage = {
@@ -448,7 +501,7 @@ def verify_release(
         fail(errors, f"unimoral-task-spread.csv contains unexpected task rows: {extra_spread_tasks}")
     expected_rankings: list[tuple[str, str, int, str, str, float]] = []
     for task_name, task in TASKS.items():
-        task_full_rows = [row for row in full_rows if row["task_name"] == task_name]
+        task_full_rows = [row for row in canonical_full_rows if row["task_name"] == task_name]
         task_label = task_full_rows[0].get("task_label", "") if task_full_rows else ""
         complete_values = [
             (row, value)
@@ -514,8 +567,13 @@ def verify_release(
             continue
         if row.get("rq") != task["rq"]:
             fail(errors, f"{row['line_label']} {task_name} has rq={row.get('rq')} expected {task['rq']}")
-        if row.get("primary_metric") != task["metric"]:
-            fail(errors, f"{row['line_label']} {task_name} has primary_metric={row.get('primary_metric')} expected {task['metric']}")
+        expected_metrics = result_metrics_for_task(task_name)
+        if row.get("primary_metric") not in expected_metrics:
+            fail(
+                errors,
+                f"{row['line_label']} {task_name} has primary_metric={row.get('primary_metric')} "
+                f"expected one of {expected_metrics}",
+            )
         if row.get("expected_samples") != str(task["expected"]):
             fail(errors, f"{row['line_label']} {task_name} expected_samples={row.get('expected_samples')} expected {task['expected']}")
         if row.get("completed_samples") != str(task["expected"]):
@@ -610,10 +668,18 @@ def verify_release(
         completion_audit_blocker_phrases.append(
             f"`unimoral-full-benchmark.csv`: {len(extra_pairs)} unexpected model-task rows present"
         )
-    duplicate_model_task_count = len(full_rows) - len(actual_pairs)
-    if duplicate_model_task_count:
+    if missing_metric_keys:
         completion_audit_blocker_phrases.append(
-            f"`unimoral-full-benchmark.csv`: {duplicate_model_task_count} duplicate model-task rows prevent strict completion"
+            f"`unimoral-full-benchmark.csv`: {len(missing_metric_keys)} expected model-task-metric rows missing"
+        )
+    if extra_metric_keys:
+        completion_audit_blocker_phrases.append(
+            f"`unimoral-full-benchmark.csv`: {len(extra_metric_keys)} unexpected model-task-metric rows present"
+        )
+    duplicate_model_task_metric_count = len(full_rows) - len(actual_metric_keys)
+    if duplicate_model_task_metric_count:
+        completion_audit_blocker_phrases.append(
+            f"`unimoral-full-benchmark.csv`: {duplicate_model_task_metric_count} duplicate model-task-metric rows prevent strict completion"
         )
     if duplicate_prediction_count:
         completion_audit_blocker_phrases.append(
@@ -643,7 +709,7 @@ def verify_release(
                 )
     all_tasks_complete = all(row.get("status") == "complete" for row in coverage_rows)
     if all_tasks_complete:
-        rq4_rows = [row for row in full_rows if row.get("task_name") == "unimoral_consequence_generation"]
+        rq4_rows = [row for row in canonical_full_rows if row.get("task_name") == "unimoral_consequence_generation"]
         for row in rq4_rows:
             if row.get("bert_score_f1") in {None, ""}:
                 fail(errors, f"{row['line_label']} unimoral_consequence_generation missing official BERTScore value")

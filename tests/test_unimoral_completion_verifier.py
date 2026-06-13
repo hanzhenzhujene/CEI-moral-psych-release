@@ -110,10 +110,13 @@ def _write_overview_metadata(release: Path, *, documented_incomplete: bool = Fal
 
 
 def _write_tiny_summary_artifacts(release: Path, full_rows: list[dict[str, object]]) -> None:
+    canonical_full_rows = verifier.collapse_full_benchmark_rows(
+        [{key: str(value) for key, value in row.items()} for row in full_rows]
+    )
     spread_rows = []
     ranking_rows = []
     for task_name, task in verifier.TASKS.items():
-        task_rows = [row for row in full_rows if row["task_name"] == task_name]
+        task_rows = [row for row in canonical_full_rows if row["task_name"] == task_name]
         complete_rows = [row for row in task_rows if row["status"] == "complete"]
         valued_rows = [
             (row, float(row[task["metric"]]))
@@ -208,27 +211,28 @@ def _write_minimal_complete_artifacts(root: Path) -> tuple[Path, Path]:
     full_rows = []
     for line in verifier.MODEL_LINES:
         for task_name, task in verifier.TASKS.items():
-            row = {
-                "line_label": line,
-                "family": line.split("-")[0],
-                "size_slot": "",
-                "task_name": task_name,
-                "rq": task["rq"],
-                "task_label": task_name,
-                "primary_metric": task["metric"],
-                "expected_samples": task["expected"],
-                "completed_samples": task["expected"],
-                "status": "complete",
-                "accuracy": "0.5" if task_name != "unimoral_consequence_generation" else "",
-                "official_weighted_f1": "0.5" if task["metric"] == "official_weighted_f1" else "",
-                "bleu": "",
-                "meteor": "0.1" if task["metric"] == "meteor" else "",
-                "bert_score_f1": "0.9" if task_name == "unimoral_consequence_generation" else "",
-                "rouge_l": "",
-                "parsed_count": task["expected"],
-                "log_path": "" if task_name == "unimoral_action_prediction" else "results/inspect/logs/example.eval",
-            }
-            full_rows.append(row)
+            for metric in verifier.result_metrics_for_task(task_name):
+                row = {
+                    "line_label": line,
+                    "family": line.split("-")[0],
+                    "size_slot": "",
+                    "task_name": task_name,
+                    "rq": task["rq"],
+                    "task_label": task_name,
+                    "primary_metric": metric,
+                    "expected_samples": task["expected"],
+                    "completed_samples": task["expected"],
+                    "status": "complete",
+                    "accuracy": "0.5" if task_name != "unimoral_consequence_generation" else "",
+                    "official_weighted_f1": "0.5" if task["metric"] == "official_weighted_f1" else "",
+                    "bleu": "",
+                    "meteor": "0.1" if task_name == "unimoral_consequence_generation" else "",
+                    "bert_score_f1": "0.9" if task_name == "unimoral_consequence_generation" else "",
+                    "rouge_l": "",
+                    "parsed_count": task["expected"],
+                    "log_path": "" if task_name == "unimoral_action_prediction" else "results/inspect/logs/example.eval",
+                }
+                full_rows.append(row)
     _write_csv(release / "unimoral-full-benchmark.csv", full_rows, list(full_rows[0]))
 
     coverage_rows = [
@@ -443,7 +447,7 @@ def test_unimoral_completion_verifier_requires_model_task_blocker_audit(tmp_path
 
     errors = verifier.verify_release(release, figures, allow_incomplete=True)
 
-    assert any("contains duplicate model-task rows" in error for error in errors)
+    assert any("contains duplicate model-task-metric rows" in error for error in errors)
     assert any("missing CSV blocker phrase" in error for error in errors)
 
 
@@ -699,6 +703,13 @@ def test_unimoral_completion_verifier_checks_rq4_bertscore_alignment(tmp_path, m
     monkeypatch.setattr(verifier, "ROOT", tmp_path)
 
     assert verifier.verify_release(release, figures, allow_incomplete=False) == []
+    full_rows = list(csv.DictReader((release / "unimoral-full-benchmark.csv").open(newline="", encoding="utf-8")))
+    rq4_primary_metrics = [
+        row["primary_metric"]
+        for row in full_rows
+        if row["task_name"] == "unimoral_consequence_generation"
+    ]
+    assert rq4_primary_metrics == ["bert_score_f1", "meteor"]
 
     rows = list(csv.DictReader((release / "unimoral-rq4-bertscore.csv").open(newline="", encoding="utf-8")))
     rows[0]["bert_score_f1"] = "0.1"

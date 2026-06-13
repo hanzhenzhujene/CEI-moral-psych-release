@@ -117,6 +117,7 @@ CLASSIFICATION_TASK_NAMES = [
     "unimoral_factor_attribution",
 ]
 GENERATION_TASK_NAME = "unimoral_consequence_generation"
+GENERATION_RESULT_METRICS = ("bert_score_f1", "meteor")
 
 MINIMAX_RESUME_PLAN = {
     ("MiniMax-S", "unimoral_moral_typology"): {
@@ -730,6 +731,64 @@ def sort_result_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
             TASK_ORDER.get(str(row.get("task_name") or ""), len(TASK_ORDER)),
         ),
     )
+
+
+def result_metrics_for_task(task_name: str) -> tuple[str, ...]:
+    task = TASKS.get(task_name, {})
+    if task_name == GENERATION_TASK_NAME:
+        return GENERATION_RESULT_METRICS
+    metric = str(task.get("metric") or "")
+    return (metric,) if metric else ("",)
+
+
+def expand_full_benchmark_rows_for_csv(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    output: list[dict[str, object]] = []
+    for row in sort_result_rows(rows):
+        task_name = str(row.get("task_name") or "")
+        if task_name != GENERATION_TASK_NAME:
+            output.append(dict(row))
+            continue
+        for metric in result_metrics_for_task(task_name):
+            metric_row = dict(row)
+            metric_row["primary_metric"] = metric
+            output.append(metric_row)
+    return output
+
+
+def collapse_full_benchmark_rows_from_csv(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    collapsed: dict[tuple[str, str], dict[str, object]] = {}
+    for row in rows:
+        key = (str(row.get("line_label") or ""), str(row.get("task_name") or ""))
+        if key not in collapsed:
+            collapsed[key] = dict(row)
+        else:
+            target = collapsed[key]
+            for field, value in row.items():
+                if target.get(field) in {None, ""} and value not in {None, ""}:
+                    target[field] = value
+        task_name = key[1]
+        if task_name == GENERATION_TASK_NAME and task_name in TASKS:
+            collapsed[key]["primary_metric"] = TASKS[task_name]["metric"]
+    return sort_result_rows(list(collapsed.values()))
+
+
+def full_benchmark_csv_key(row: dict[str, object]) -> tuple[str, str, str]:
+    task_name = str(row.get("task_name") or "")
+    metric = str(row.get("primary_metric") or TASKS.get(task_name, {}).get("metric") or "")
+    return (
+        str(row.get("line_label") or ""),
+        task_name,
+        metric,
+    )
+
+
+def expected_full_benchmark_csv_keys() -> set[tuple[str, str, str]]:
+    return {
+        (display_line_label(line_label), task_name, metric)
+        for line_label, _family, _size_slot, _slug in MODEL_LINES
+        for task_name in TASKS
+        for metric in result_metrics_for_task(task_name)
+    }
 
 
 def sort_prediction_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
@@ -2290,13 +2349,16 @@ def write_completion_audit(
         for row in failures
     ) or "none"
     full_rows = read_csv(release_dir / "unimoral-full-benchmark.csv") if (release_dir / "unimoral-full-benchmark.csv").exists() else []
+    canonical_full_rows = collapse_full_benchmark_rows_from_csv(full_rows)
     prediction_rows = read_csv(sample_predictions) if sample_predictions.exists() else []
     full_by_pair = {
         (str(row.get("line_label", "")), str(row.get("task_name", ""))): row
-        for row in full_rows
+        for row in canonical_full_rows
     }
     expected_pairs = {(display_line_label(line_label), task_name) for line_label, _, _, _ in MODEL_LINES for task_name in TASKS}
     actual_pairs = set(full_by_pair)
+    expected_metric_keys = expected_full_benchmark_csv_keys()
+    actual_metric_keys = {full_benchmark_csv_key(row) for row in full_rows}
     prediction_counts: dict[tuple[str, str], int] = {}
     prediction_keys: list[tuple[str, str, str]] = []
     for row in prediction_rows:
@@ -2308,7 +2370,9 @@ def write_completion_audit(
     strict_blocker_lines: list[str] = []
     missing_pairs = sorted(expected_pairs - actual_pairs)
     extra_pairs = sorted(actual_pairs - expected_pairs)
-    duplicate_model_task_count = len(full_rows) - len(actual_pairs)
+    missing_metric_keys = sorted(expected_metric_keys - actual_metric_keys)
+    extra_metric_keys = sorted(actual_metric_keys - expected_metric_keys)
+    duplicate_model_task_metric_count = len(full_rows) - len(actual_metric_keys)
     if missing_pairs:
         strict_blocker_lines.append(
             f"- `unimoral-full-benchmark.csv`: {len(missing_pairs)} expected model-task rows missing."
@@ -2317,9 +2381,17 @@ def write_completion_audit(
         strict_blocker_lines.append(
             f"- `unimoral-full-benchmark.csv`: {len(extra_pairs)} unexpected model-task rows present."
         )
-    if duplicate_model_task_count:
+    if missing_metric_keys:
         strict_blocker_lines.append(
-            f"- `unimoral-full-benchmark.csv`: {duplicate_model_task_count} duplicate model-task rows prevent strict completion."
+            f"- `unimoral-full-benchmark.csv`: {len(missing_metric_keys)} expected model-task-metric rows missing."
+        )
+    if extra_metric_keys:
+        strict_blocker_lines.append(
+            f"- `unimoral-full-benchmark.csv`: {len(extra_metric_keys)} unexpected model-task-metric rows present."
+        )
+    if duplicate_model_task_metric_count:
+        strict_blocker_lines.append(
+            f"- `unimoral-full-benchmark.csv`: {duplicate_model_task_metric_count} duplicate model-task-metric rows prevent strict completion."
         )
     duplicate_prediction_count = len(prediction_keys) - len(set(prediction_keys))
     if duplicate_prediction_count:
@@ -2662,7 +2734,7 @@ def build_root_markdown_section(
             f"- [completion audit]({completion_audit_link})",
             "- [release appendix UniMoral section](results/release/2026-04-19-option1/README.md#unimoral-full-benchmark-coverage)",
             "",
-            "Metric boundary: RQ1-RQ3 use exact-match accuracy; RQ4 reports two higher-better generation metrics, BERTScore F1 and METEOR.",
+            "Metric boundary: RQ1-RQ3 use exact-match accuracy; RQ4 has two higher-better generation rows, BERTScore F1 and METEOR.",
         ]
     )
     return "\n".join(lines).strip() + "\n"
@@ -2755,7 +2827,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if not log_root_has_evals(args.log_root) and existing_release_tables_available(args.release_dir):
-        rows = read_csv(args.release_dir / "unimoral-full-benchmark.csv")
+        rows = collapse_full_benchmark_rows_from_csv(read_csv(args.release_dir / "unimoral-full-benchmark.csv"))
         predictions = read_csv(args.release_dir / "unimoral-sample-predictions.csv")
         promoted_openai = openai_gpt5_rq234_run_available(args.openai_gpt5_rq234_run_root)
         if promoted_openai:
@@ -2784,7 +2856,7 @@ def main() -> None:
             failures = failure_rows(rows)
             write_csv(
                 args.release_dir / "unimoral-full-benchmark.csv",
-                rows,
+                expand_full_benchmark_rows_for_csv(rows),
                 csv_fieldnames(args.release_dir / "unimoral-full-benchmark.csv"),
             )
             write_csv(args.release_dir / "unimoral-coverage.csv", coverage, list(coverage[0]))
@@ -2879,7 +2951,7 @@ def main() -> None:
         "parsed_count",
         "log_path",
     ]
-    write_csv(args.release_dir / "unimoral-full-benchmark.csv", rows, result_fields)
+    write_csv(args.release_dir / "unimoral-full-benchmark.csv", expand_full_benchmark_rows_for_csv(rows), result_fields)
     write_csv(args.release_dir / "unimoral-coverage.csv", coverage, list(coverage[0]))
     write_csv(args.release_dir / "unimoral-task-spread.csv", spreads, list(spreads[0]))
     write_csv(args.release_dir / "unimoral-model-rankings.csv", rankings, list(rankings[0]) if rankings else ["task_name", "task_label", "rank", "line_label", "metric", "value"])

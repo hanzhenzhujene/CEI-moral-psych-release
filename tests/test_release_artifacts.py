@@ -24,6 +24,7 @@ from scripts.build_unimoral_artifacts import update_markdown
 
 SCRIPT = ROOT / "scripts" / "build_release_artifacts.py"
 SOURCE = ROOT / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
+UNIMORAL_FULL_BENCHMARK = ROOT / "results" / "release" / "2026-04-19-option1" / "unimoral-full-benchmark.csv"
 
 
 def markdown_h2_section(text: str, heading: str) -> str:
@@ -108,6 +109,26 @@ def test_unimoral_readme_block_stays_before_org_owned_tail_sections(tmp_path):
     assert content.index("<!-- UNIMORAL_FULL_BENCHMARK_START -->") < content.index("## Claude Code Slash Commands")
     assert "| `/validate-results` | Validate results. |" in content
     assert "## Team" in content
+
+
+def test_unimoral_full_benchmark_splits_rq4_metric_rows():
+    with UNIMORAL_FULL_BENCHMARK.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+
+    rq_counts: dict[str, int] = {}
+    rq4_metrics: dict[str, int] = {}
+    rq4_by_line: dict[str, list[str]] = {}
+    for row in rows:
+        rq_counts[row["rq"]] = rq_counts.get(row["rq"], 0) + 1
+        if row["task_name"] != "unimoral_consequence_generation":
+            continue
+        rq4_metrics[row["primary_metric"]] = rq4_metrics.get(row["primary_metric"], 0) + 1
+        rq4_by_line.setdefault(row["line_label"], []).append(row["primary_metric"])
+
+    assert len(rows) == 95
+    assert rq_counts == {"RQ1": 19, "RQ2": 19, "RQ3": 19, "RQ4": 38}
+    assert rq4_metrics == {"bert_score_f1": 19, "meteor": 19}
+    assert all(metrics == ["bert_score_f1", "meteor"] for metrics in rq4_by_line.values())
 
 
 def test_release_builder_emits_expected_files(tmp_path):

@@ -823,7 +823,7 @@ def test_unimoral_completion_audit_blocks_duplicate_model_task_rows(tmp_path, mo
 
     audit = (release_dir / "unimoral-completion-audit.md").read_text(encoding="utf-8")
     assert "Status: **not achieved**." in audit
-    assert "`unimoral-full-benchmark.csv`: 1 duplicate model-task rows prevent strict completion." in audit
+    assert "`unimoral-full-benchmark.csv`: 1 duplicate model-task-metric rows prevent strict completion." in audit
 
 
 @pytest.mark.parametrize(

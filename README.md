@@ -24,7 +24,7 @@ Use these benchmark-specific CSVs for the actual results.
 
 | Benchmark | Result CSV | What it contains |
 | --- | --- | --- |
-| `UniMoral RQ1-RQ4` | [unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv) | RQ1-RQ3 exact-match accuracy; RQ4 BERTScore F1 and METEOR. |
+| `UniMoral RQ1-RQ4` | [unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv) | RQ1-RQ3 exact-match accuracy; RQ4 has separate BERTScore F1 and METEOR rows. |
 | `SMID` | [smid-results.csv](results/release/2026-04-19-option1/smid-results.csv) | SMID average accuracy by model line; missing text-only vision routes are marked as route gaps. |
 | `Value Kaleidoscope` | [value-kaleidoscope-results.csv](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) | Prompt-based ValuePrism relevance/valence average accuracy by text line. |
 
@@ -184,7 +184,7 @@ Useful links:
 - [completion audit](results/release/2026-04-19-option1/unimoral-completion-audit.md)
 - [release appendix UniMoral section](results/release/2026-04-19-option1/README.md#unimoral-full-benchmark-coverage)
 
-Metric boundary: RQ1-RQ3 use exact-match accuracy; RQ4 reports two higher-better generation metrics, BERTScore F1 and METEOR.
+Metric boundary: RQ1-RQ3 use exact-match accuracy; RQ4 has two higher-better generation rows, BERTScore F1 and METEOR.
 <!-- UNIMORAL_FULL_BENCHMARK_END -->
 ## Claude Code Slash Commands
 

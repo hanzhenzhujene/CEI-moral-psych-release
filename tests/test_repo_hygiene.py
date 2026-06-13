@@ -131,7 +131,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "**DATA, CLICK HERE:**" in readme
     assert "| RQ4 | Consequence generation | BERTScore F1 + METEOR |" in readme
     assert "BERTScore: Llama-M (0.730); METEOR: GPT-5.5 (0.165)" in readme
-    assert "RQ1-RQ3 use exact-match accuracy; RQ4 reports two higher-better generation metrics, BERTScore F1 and METEOR." in readme
+    assert "RQ1-RQ3 use exact-match accuracy; RQ4 has two higher-better generation rows, BERTScore F1 and METEOR." in readme
     assert "`make bootstrap`" in readme or "make audit" in readme
 
     figures_readme = (ROOT / "figures/README.md").read_text(encoding="utf-8")
