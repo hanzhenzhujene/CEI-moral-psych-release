@@ -11629,13 +11629,13 @@ def append_public_quickstart(lines: list[str]) -> None:
 def append_main_result_file_map(lines: list[str], figure_prefix: str) -> None:
     lines.extend(
         [
-            "## Where The Main Results Live",
+            "## DATA, CLICK HERE: Main Result Files",
             "",
             "Use this map when you need to answer: where is the result, what does the number mean, and how do I rebuild the visual? I found `CCD-Bench` in this repo; I did not find a separate `CCG-Bench` result surface.",
             "",
             "| Benchmark | Main result files | Metric meaning | Key visuals / reproduction |",
             "| --- | --- | --- | --- |",
-            "| `UniMoral RQ1-RQ4` | `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`<br/>`results/release/2026-04-19-option1/unimoral-model-rankings.csv`<br/>`results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv`<br/>sample-level audit: `results/release/2026-04-19-option1/unimoral-sample-predictions.csv` | RQ1-RQ3 use exact-match accuracy. RQ4 is generation quality: BERTScore F1 for semantic overlap and METEOR for lexical overlap. Do not collapse RQ1-RQ4 into one universal moral score. | `option1_unimoral_task_heatmap.svg`, `option1_unimoral_generation_quality.svg`, and `option1_unimoral_family_scaling.svg` under `figures/release/`. Rebuild with `make release` or `make release VENV_PYTHON=/path/to/python` when no local `.venv` exists. |",
+            "| `UniMoral RQ1-RQ4` | both RQ4 metrics: `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`<br/>model rankings: `results/release/2026-04-19-option1/unimoral-model-rankings.csv`<br/>sample-level BERTScore audit: `results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv`<br/>sample-level predictions: `results/release/2026-04-19-option1/unimoral-sample-predictions.csv` | RQ1-RQ3 use exact-match accuracy. RQ4 is generation quality: BERTScore F1 for semantic overlap and METEOR for lexical overlap. Do not collapse RQ1-RQ4 into one universal moral score. | `option1_unimoral_task_heatmap.svg`, `option1_unimoral_generation_quality.svg`, and `option1_unimoral_family_scaling.svg` under `figures/release/`. Rebuild with `make release` or `make release VENV_PYTHON=/path/to/python` when no local `.venv` exists. |",
             "| `SMID` | `results/release/2026-04-19-option1/benchmark-comparison.csv` (`smid_average_accuracy`)<br/>`results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`<br/>`results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of moral-rating prediction and foundation-classification accuracy for rows with a public vision route. Missing OpenAI/DeepSeek text-only cells are route gaps, not failed text parses. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| `CCD-Bench` | `results/release/2026-04-19-option1/ccd-choice-distribution.csv` | Choice-distribution behavior over ten canonical cultural clusters: valid-choice rate, per-option share/deviation, dominant option, dominant share, and effective cluster count. This is not accuracy. | `option1_ccd_choice_distribution.svg` and `option1_ccd_dominant_option_share.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
@@ -12070,6 +12070,7 @@ def build_repo_readme(
         "",
         "| Need | Open |",
         "| --- | --- |",
+        "| **DATA, CLICK HERE:** | [all release tables](results/release/2026-04-19-option1/), especially [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv), [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), and [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv) |",
         "| Executive result read | [Key Takeaways](#key-takeaways) |",
         "| Main comparable numbers | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv) |",
         "| Main figures | [Main Figures](#main-figures) |",
@@ -12379,6 +12380,13 @@ def build_release_readme(
         [
             "",
             "## Start Here",
+            "",
+            "### DATA, CLICK HERE:",
+            "",
+            "- Main comparable numbers: [benchmark-comparison.csv](benchmark-comparison.csv)",
+            "- All release tables: [results/release/2026-04-19-option1/](./)",
+            "- Readiness/progress: [readiness-tier-matrix.csv](readiness-tier-matrix.csv) and [family-size-progress.csv](family-size-progress.csv)",
+            "- Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv) and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)",
             "",
             "### Reports",
             "",

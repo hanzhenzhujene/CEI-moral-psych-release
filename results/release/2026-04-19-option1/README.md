@@ -93,13 +93,13 @@ Key takeaways:
 - **Small-model floor:** the May 13 Mistral/Qwen/Llama follow-up shows a capability threshold. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral from 0.632 to 0.648; `Llama 3.2 1B` drops to 0.406.
 
 
-## Where The Main Results Live
+## DATA, CLICK HERE: Main Result Files
 
 Use this map when you need to answer: where is the result, what does the number mean, and how do I rebuild the visual? I found `CCD-Bench` in this repo; I did not find a separate `CCG-Bench` result surface.
 
 | Benchmark | Main result files | Metric meaning | Key visuals / reproduction |
 | --- | --- | --- | --- |
-| `UniMoral RQ1-RQ4` | `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`<br/>`results/release/2026-04-19-option1/unimoral-model-rankings.csv`<br/>`results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv`<br/>sample-level audit: `results/release/2026-04-19-option1/unimoral-sample-predictions.csv` | RQ1-RQ3 use exact-match accuracy. RQ4 is generation quality: BERTScore F1 for semantic overlap and METEOR for lexical overlap. Do not collapse RQ1-RQ4 into one universal moral score. | `option1_unimoral_task_heatmap.svg`, `option1_unimoral_generation_quality.svg`, and `option1_unimoral_family_scaling.svg` under `figures/release/`. Rebuild with `make release` or `make release VENV_PYTHON=/path/to/python` when no local `.venv` exists. |
+| `UniMoral RQ1-RQ4` | both RQ4 metrics: `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`<br/>model rankings: `results/release/2026-04-19-option1/unimoral-model-rankings.csv`<br/>sample-level BERTScore audit: `results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv`<br/>sample-level predictions: `results/release/2026-04-19-option1/unimoral-sample-predictions.csv` | RQ1-RQ3 use exact-match accuracy. RQ4 is generation quality: BERTScore F1 for semantic overlap and METEOR for lexical overlap. Do not collapse RQ1-RQ4 into one universal moral score. | `option1_unimoral_task_heatmap.svg`, `option1_unimoral_generation_quality.svg`, and `option1_unimoral_family_scaling.svg` under `figures/release/`. Rebuild with `make release` or `make release VENV_PYTHON=/path/to/python` when no local `.venv` exists. |
 | `SMID` | `results/release/2026-04-19-option1/benchmark-comparison.csv` (`smid_average_accuracy`)<br/>`results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`<br/>`results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of moral-rating prediction and foundation-classification accuracy for rows with a public vision route. Missing OpenAI/DeepSeek text-only cells are route gaps, not failed text parses. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |
 | `CCD-Bench` | `results/release/2026-04-19-option1/ccd-choice-distribution.csv` | Choice-distribution behavior over ten canonical cultural clusters: valid-choice rate, per-option share/deviation, dominant option, dominant share, and effective cluster count. This is not accuracy. | `option1_ccd_choice_distribution.svg` and `option1_ccd_dominant_option_share.svg` under `figures/release/`. Rebuild through the same `make release` path. |
 | Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg` under `figures/release/`. Rebuild through the same `make release` path. |
@@ -433,6 +433,13 @@ This checkpoint summarizes the broader family-size expansion separately from the
 
 ## Start Here
 
+### DATA, CLICK HERE:
+
+- Main comparable numbers: [benchmark-comparison.csv](benchmark-comparison.csv)
+- All release tables: [results/release/2026-04-19-option1/](./)
+- Readiness/progress: [readiness-tier-matrix.csv](readiness-tier-matrix.csv) and [family-size-progress.csv](family-size-progress.csv)
+- Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv) and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)
+
 ### Reports
 
 - `jenny-group-report.md`: mentor-facing report with the benchmark list, model roster, and current results
@@ -526,14 +533,14 @@ make audit
 
 The release now implements all four UniMoral task definitions and exports scored artifacts where model runs completed, but the current model-line matrix is not yet fully complete. Incomplete or parse-limited cells are listed in `unimoral-failure-checklist.csv`; action prediction remains the legacy comparable scalar and is retained as RQ1.
 
-Metric sanity check: UniMoral has four RQs. Because the frozen RQ1 source exposes only aggregate action accuracy, the main RQ1-RQ3 comparison uses one shared exact-match accuracy metric. In the current strict-complete cells, exact-match accuracy spans RQ2 0.554-0.637 and RQ3 0.532-0.631. RQ4 is a generation task, so it is separated and read with semantic similarity instead of accuracy: BERTScore F1 spans 0.629-0.730, with METEOR 0.077-0.165 as a lexical side metric.
+Metric sanity check: UniMoral has four RQs. Because the frozen RQ1 source exposes only aggregate action accuracy, the main RQ1-RQ3 comparison uses one shared exact-match accuracy metric. In the current strict-complete cells, exact-match accuracy spans RQ2 0.554-0.637 and RQ3 0.532-0.631. RQ4 is a generation task, so it is separated from accuracy and reported with two higher-better metrics: BERTScore F1 spans 0.629-0.730, and METEOR spans 0.077-0.165.
 
-| RQ | Task | Status | Strict complete | Reported cells | Primary metric | Mean | Range | Top line | Diagnostic read |
+| RQ | Task | Status | Strict complete | Reported cells | Metric(s) | Mean | Range | Top line | Diagnostic read |
 | --- | --- | --- | ---: | ---: | --- | ---: | ---: | --- | --- |
 | RQ1 | Action prediction | complete | 19/19 | 19/19 | accuracy | 0.657 | 0.121 | DeepSeek-M (0.684) | diagnostic |
 | RQ2 | Moral typology | incomplete | 18/19 | 19/19 | accuracy | 0.588 | 0.084 | GPT-5.5 (0.637) | moderately diagnostic |
 | RQ3 | Factor attribution | incomplete | 17/19 | 18/19 | accuracy | 0.586 | 0.099 | Llama-M (0.631) | moderately diagnostic |
-| RQ4 | Consequence generation | incomplete | 17/19 | 18/19 | bert_score_f1 | 0.695 | 0.101 | Llama-M (0.730) | diagnostic |
+| RQ4 | Consequence generation | incomplete | 17/19 | 18/19 | BERTScore F1 + METEOR | BERTScore 0.695; METEOR 0.122 | BERTScore 0.101; METEOR 0.088 | BERTScore: Llama-M (0.730); METEOR: GPT-5.5 (0.165) | diagnostic |
 
 Sample-level predictions for RQ2/RQ3/RQ4 are exported in `unimoral-sample-predictions.csv`; full Inspect `.eval` logs remain under the ignored `results/inspect/logs/2026-05-16-unimoral-full/` run directory.
 The provider-free MiniMax handoff is tracked in [`unimoral-minimax-resume-plan.md`](unimoral-minimax-resume-plan.md).
@@ -544,7 +551,7 @@ The prompt-to-artifact completion audit, including the verifier-checked CSV-leve
 | RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | Main figure uses exact-match accuracy because the frozen release source exposes only aggregate action accuracy. |
 | RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Main figure uses exact-match accuracy for horizontal comparison with RQ1/RQ3. |
 | RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Main figure uses exact-match accuracy for horizontal comparison with RQ1/RQ2. |
-| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | BERTScore F1 is the semantic-similarity metric; METEOR, BLEU, and ROUGE-L are lexical side metrics. RQ4 is kept separate from classification accuracy charts. |
+| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | BERTScore F1 and METEOR are the two reported generation metrics: BERTScore F1 reads semantic similarity, and METEOR reads lexical overlap. BLEU and ROUGE-L remain diagnostics when present. RQ4 is kept separate from classification accuracy charts. |
 
 ![UniMoral classification accuracy heatmap](../../../figures/release/option1_unimoral_task_heatmap.svg)
 

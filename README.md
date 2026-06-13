@@ -8,6 +8,7 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 
 | Need | Open |
 | --- | --- |
+| **DATA, CLICK HERE:** | [all release tables](results/release/2026-04-19-option1/), especially [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv), [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), and [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv) |
 | Executive result read | [Key Takeaways](#key-takeaways) |
 | Main comparable numbers | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv) |
 | Main figures | [Main Figures](#main-figures) |
@@ -148,23 +149,23 @@ If this repo informs a paper, proposal, slide deck, or benchmark comparison, cit
 
 UniMoral has four task surfaces. The root README keeps only the compact status map; the full table, sample-level audit, and figures live in the release appendix.
 
-| RQ | What it measures | Primary metric | Current status | Top line |
+| RQ | What it measures | Metric(s) | Current status | Top line |
 | --- | --- | --- | --- | --- |
 | RQ1 | Action prediction | accuracy | 19/19 strict-complete lines; 19/19 reported | DeepSeek-M (0.684) |
 | RQ2 | Moral typology | accuracy | 18/19 strict-complete lines; 19/19 reported | GPT-5.5 (0.637) |
 | RQ3 | Factor attribution | accuracy | 17/19 strict-complete lines; 18/19 reported | Llama-M (0.631) |
-| RQ4 | Consequence generation | bert_score_f1 | 17/19 strict-complete lines; 18/19 reported | Llama-M (0.730) |
+| RQ4 | Consequence generation | BERTScore F1 + METEOR | 17/19 strict-complete lines; 18/19 reported | BERTScore: Llama-M (0.730); METEOR: GPT-5.5 (0.165) |
 
 Useful links:
 
 - [UniMoral full benchmark CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv)
 - [sample-level predictions](results/release/2026-04-19-option1/unimoral-sample-predictions.csv)
-- [RQ4 BERTScore/METEOR table](results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv)
+- [RQ4 sample-level BERTScore table](results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv)
 - [MiniMax resume plan](results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md)
 - [completion audit](results/release/2026-04-19-option1/unimoral-completion-audit.md)
 - [release appendix UniMoral section](results/release/2026-04-19-option1/README.md#unimoral-full-benchmark-coverage)
 
-Metric boundary: RQ1-RQ3 use exact-match accuracy; RQ4 uses BERTScore F1 as the primary semantic-generation metric, with METEOR as a lexical side metric.
+Metric boundary: RQ1-RQ3 use exact-match accuracy; RQ4 reports two higher-better generation metrics, BERTScore F1 and METEOR.
 <!-- UNIMORAL_FULL_BENCHMARK_END -->
 ## Claude Code Slash Commands
 

@@ -24,7 +24,7 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 
 - `option1_unimoral_four_task_dashboard.svg`: supporting UniMoral RQ1-RQ4 dashboard, showing coverage and metric boundaries
 - `option1_unimoral_task_heatmap.svg`: main all-line view across RQ1-RQ3 using one shared exact-match accuracy metric, with family blocks and S/M/L badges
-- `option1_unimoral_generation_quality.svg`: RQ4 consequence-generation quality view, using BERTScore F1 as the main semantic metric and METEOR as a side metric
+- `option1_unimoral_generation_quality.svg`: RQ4 consequence-generation quality view, using two reported generation metrics: BERTScore F1 for semantic similarity and METEOR for lexical overlap
 - `option1_unimoral_family_scaling.svg`: RQ-by-RQ family-size line charts; read it as task-specific scaling, not as a single UniMoral scalar
 - `option1_unimoral_task_spread.svg`: exact-match accuracy spread readout for the RQ1-RQ3 classification tasks
 - `option1_unimoral_task_rankings.svg`: per-task exact-match accuracy rankings for the completed UniMoral classification cells

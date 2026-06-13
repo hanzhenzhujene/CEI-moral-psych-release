@@ -123,8 +123,15 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
     assert "figures/release/option1_paper_result_alignment_map.svg" in readme
     assert "## UniMoral RQ1-RQ4 Artifact Pointer" in readme
-    assert "RQ1-RQ3 use exact-match accuracy; RQ4 uses BERTScore F1" in readme
+    assert "**DATA, CLICK HERE:**" in readme
+    assert "| RQ4 | Consequence generation | BERTScore F1 + METEOR |" in readme
+    assert "BERTScore: Llama-M (0.730); METEOR: GPT-5.5 (0.165)" in readme
+    assert "RQ1-RQ3 use exact-match accuracy; RQ4 reports two higher-better generation metrics, BERTScore F1 and METEOR." in readme
     assert "`make bootstrap`" in readme or "make audit" in readme
+
+    figures_readme = (ROOT / "figures/README.md").read_text(encoding="utf-8")
+    assert "side" + " metric" not in figures_readme
+    assert "two reported generation metrics: BERTScore F1" in figures_readme
 
     unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
     assert "UniMoral family-size scaling by RQ" in unimoral_family_scaling_svg

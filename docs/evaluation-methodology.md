@@ -53,7 +53,7 @@ The current code deliberately uses stricter answer extraction than earlier itera
 
 - `UniMoral` action prediction now looks for an explicit `a` / `b` choice instead of matching any stray article-like token.
 - `UniMoral` moral typology and factor attribution use label-membership parsing against the official RQ2/RQ3 label sets and report exact-match accuracy as the primary release metric.
-- `UniMoral` consequence generation extracts the explicit generated consequence and reports BERTScore F1 as the primary semantic metric, with METEOR retained as the lexical side metric.
+- `UniMoral` consequence generation extracts the explicit generated consequence and reports two generation metrics: BERTScore F1 for semantic similarity and METEOR for lexical overlap.
 - `Value Kaleidoscope` now resolves `not relevant` before `relevant`, and `Either` before `Supports` / `Opposes`, so overlapping phrases do not get misclassified by regex order.
 - `CCD-Bench` coverage now expects a structured visible `1-10` choice rather than blindly trusting the first integer mentioned anywhere in the completion.
 - `SMID` moral rating now expects a bounded visible integer rather than any incidental digit captured by a loose regex.
@@ -65,7 +65,7 @@ These controls matter because many modern provider routes emit hidden reasoning 
 Use these rules when writing claims from the current release:
 
 - Compare legacy `UniMoral` action prediction, `SMID`, and `Value Kaleidoscope` as accuracy-style benchmark results.
-- Read the expanded `UniMoral` RQ2/RQ3/RQ4 artifacts separately: RQ2/RQ3 are classification tasks scored by exact-match accuracy, and RQ4 is a generation task scored mainly by BERTScore F1 plus METEOR.
+- Read the expanded `UniMoral` RQ2/RQ3/RQ4 artifacts separately: RQ2/RQ3 are classification tasks scored by exact-match accuracy, and RQ4 is a generation task scored with BERTScore F1 plus METEOR.
 - Treat `CCD-Bench` as two separate public surfaces: valid-choice coverage, then choice-distribution / dominant-option concentration among valid visible selections. Do not collapse those into a scalar accuracy claim.
 - Treat `Denevil` as proxy-only coverage and traceability evidence unless and until the repo exposes a paper-aligned comparable scalar for it.
 - Do not fold `Denevil` into any macro-accuracy average.

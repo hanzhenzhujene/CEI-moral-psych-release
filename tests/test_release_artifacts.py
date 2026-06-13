@@ -283,9 +283,11 @@ def test_release_builder_emits_expected_files(tmp_path):
             and "no medium SMID route fixed yet" in report_text
         )
     release_readme_text = (release_dir / "README.md").read_text(encoding="utf-8")
-    assert "## Where The Main Results Live" in release_readme_text
+    assert "## DATA, CLICK HERE: Main Result Files" in release_readme_text
     assert "I found `CCD-Bench` in this repo; I did not find a separate `CCG-Bench` result surface." in release_readme_text
     assert "results/release/2026-04-19-option1/unimoral-full-benchmark.csv" in release_readme_text
+    assert "both RQ4 metrics" in release_readme_text
+    assert "sample-level BERTScore audit" in release_readme_text
     assert "smid_average_accuracy" in release_readme_text
     assert "results/release/2026-04-19-option1/ccd-choice-distribution.csv" in release_readme_text
     assert "option1_paper_result_alignment_map.svg" in release_readme_text
@@ -1333,6 +1335,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "benchmark difficulty profile" in release_readme
     assert "family scaling profile" in release_readme
     assert "## Start Here" in release_readme
+    assert "### DATA, CLICK HERE:" in release_readme
+    assert "[benchmark-comparison.csv](benchmark-comparison.csv)" in release_readme
     assert "## Benchmark Result Visuals" in release_readme
     assert "## Status Key" in release_readme
     assert "option1_benchmark_difficulty_profile.svg" in release_readme
@@ -1655,6 +1659,8 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert root_readme.index("## What To Trust First") < root_readme.index("## Key Takeaways")
     assert root_readme.index("## Key Takeaways") < root_readme.index("## Main Figures")
     assert "The main comparison uses three benchmark-faithful accuracy columns." in root_readme
+    assert "**DATA, CLICK HERE:**" in root_readme
+    assert "[all release tables](results/release/2026-04-19-option1/)" in root_readme
     assert "`UniMoral action accuracy`" in root_readme
     assert "`SMID average accuracy`" in root_readme
     assert "`Value Kaleidoscope average`" in root_readme

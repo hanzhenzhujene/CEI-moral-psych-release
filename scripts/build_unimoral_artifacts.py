@@ -105,6 +105,7 @@ TASKS = {
         "rq": "RQ4",
         "label": "Consequence generation",
         "metric": "bert_score_f1",
+        "display_metric": "BERTScore F1 + METEOR",
         "expected": 1782,
     },
 }
@@ -1423,7 +1424,7 @@ def score_scale_note(rows: list[dict[str, object]]) -> str:
         "Metric sanity check: UniMoral has four RQs. Because the frozen RQ1 source exposes only aggregate action accuracy, "
         "the main RQ1-RQ3 comparison uses one shared exact-match accuracy metric. "
         f"In the current strict-complete cells, exact-match accuracy spans RQ2 {rq2_accuracy} and RQ3 {rq3_accuracy}. "
-        f"RQ4 is a generation task, so it is separated and read with semantic similarity instead of accuracy: BERTScore F1 spans {rq4_bertscore}, with METEOR {rq4_meteor} as a lexical side metric."
+        f"RQ4 is a generation task, so it is separated from accuracy and reported with two higher-better metrics: BERTScore F1 spans {rq4_bertscore}, and METEOR spans {rq4_meteor}."
     )
 
 
@@ -2493,6 +2494,53 @@ def format_value(value: object) -> str:
     return f"{float(value):.3f}"
 
 
+def complete_metric_values(rows: list[dict[str, object]], task_name: str, field: str) -> list[float]:
+    return [
+        value
+        for value in (
+            field_value(row, field)
+            for row in rows
+            if row.get("task_name") == task_name and row.get("status") == "complete"
+        )
+        if value is not None
+    ]
+
+
+def metric_mean_cell(rows: list[dict[str, object]], spread: dict[str, object], task_name: str) -> str:
+    if task_name != "unimoral_consequence_generation":
+        return format_value(spread["mean"])
+    meteor_values = complete_metric_values(rows, task_name, "meteor")
+    meteor_mean = format_value(mean(meteor_values)) if meteor_values else ""
+    return f"BERTScore {format_value(spread['mean'])}; METEOR {meteor_mean}"
+
+
+def metric_range_cell(rows: list[dict[str, object]], spread: dict[str, object], task_name: str) -> str:
+    if task_name != "unimoral_consequence_generation":
+        return format_value(spread["range"])
+    meteor_values = complete_metric_values(rows, task_name, "meteor")
+    meteor_range = format_value(max(meteor_values) - min(meteor_values)) if meteor_values else ""
+    return f"BERTScore {format_value(spread['range'])}; METEOR {meteor_range}"
+
+
+def metric_top_cell(rows: list[dict[str, object]], task_name: str, top: dict[str, object]) -> str:
+    if not top:
+        return ""
+    if task_name != "unimoral_consequence_generation":
+        return f"{display_line_label(top['line_label'])} ({format_value(top['value'])})"
+    meteor_candidates = [
+        (display_line_label(row.get("line_label", "")), value)
+        for row in rows
+        if row.get("task_name") == task_name
+        and row.get("status") == "complete"
+        and (value := field_value(row, "meteor")) is not None
+    ]
+    bert_top = f"BERTScore: {display_line_label(top['line_label'])} ({format_value(top['value'])})"
+    if not meteor_candidates:
+        return bert_top
+    meteor_label, meteor_value = max(meteor_candidates, key=lambda item: item[1])
+    return f"{bert_top}; METEOR: {meteor_label} ({format_value(meteor_value)})"
+
+
 def build_markdown_section(
     rows: list[dict[str, object]],
     coverage: list[dict[str, object]],
@@ -2518,7 +2566,7 @@ def build_markdown_section(
         "",
         score_note,
         "",
-        "| RQ | Task | Status | Strict complete | Reported cells | Primary metric | Mean | Range | Top line | Diagnostic read |",
+        "| RQ | Task | Status | Strict complete | Reported cells | Metric(s) | Mean | Range | Top line | Diagnostic read |",
         "| --- | --- | --- | ---: | ---: | --- | ---: | ---: | --- | --- |",
     ]
     for item in coverage:
@@ -2526,9 +2574,7 @@ def build_markdown_section(
         task = TASKS[task_name]
         spread = spread_by_task[task_name]
         top = top_by_task.get(task_name, {})
-        top_cell = ""
-        if top:
-            top_cell = f"{display_line_label(top['line_label'])} ({format_value(top['value'])})"
+        top_cell = metric_top_cell(rows, task_name, top)
         lines.append(
             "| {rq} | {task_label} | {status} | {complete}/{expected} | {reported}/{expected} | {metric} | {mean} | {range_} | {top} | {diagnostic} |".format(
                 rq=item["rq"],
@@ -2537,9 +2583,9 @@ def build_markdown_section(
                 complete=item["complete_model_lines"],
                 reported=item["reported_model_lines"],
                 expected=item["expected_model_lines"],
-                metric=task["metric"],
-                mean=format_value(spread["mean"]),
-                range_=format_value(spread["range"]),
+                metric=task.get("display_metric", task["metric"]),
+                mean=metric_mean_cell(rows, spread, task_name),
+                range_=metric_range_cell(rows, spread, task_name),
                 top=top_cell,
                 diagnostic=spread["diagnostic_read"],
             )
@@ -2556,7 +2602,7 @@ def build_markdown_section(
             "| RQ1 action prediction | Selects the crowd-endorsed action from a two-action dilemma. | Main figure uses exact-match accuracy because the frozen release source exposes only aggregate action accuracy. |",
             "| RQ2 moral typology | Classifies the selected action as deontological, utilitarian, rights-based, or virtuous using `Action_criteria`. | Main figure uses exact-match accuracy for horizontal comparison with RQ1/RQ3. |",
             "| RQ3 factor attribution | Classifies the main contributor to the annotator decision using `Contributing_factors`. | Main figure uses exact-match accuracy for horizontal comparison with RQ1/RQ2. |",
-            "| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | BERTScore F1 is the semantic-similarity metric; METEOR, BLEU, and ROUGE-L are lexical side metrics. RQ4 is kept separate from classification accuracy charts. |",
+            "| RQ4 consequence generation | Generates likely consequences for the selected action using `Consequence` references. | BERTScore F1 and METEOR are the two reported generation metrics: BERTScore F1 reads semantic similarity, and METEOR reads lexical overlap. BLEU and ROUGE-L remain diagnostics when present. RQ4 is kept separate from classification accuracy charts. |",
             "",
             f"![UniMoral classification accuracy heatmap]({figure_prefix}option1_unimoral_task_heatmap.svg)",
             "",
@@ -2569,6 +2615,7 @@ def build_markdown_section(
 
 
 def build_root_markdown_section(
+    rows: list[dict[str, object]],
     coverage: list[dict[str, object]],
     spreads: list[dict[str, object]],
     rankings: list[dict[str, object]],
@@ -2583,7 +2630,7 @@ def build_root_markdown_section(
         "",
         "UniMoral has four task surfaces. The root README keeps only the compact status map; the full table, sample-level audit, and figures live in the release appendix.",
         "",
-        "| RQ | What it measures | Primary metric | Current status | Top line |",
+        "| RQ | What it measures | Metric(s) | Current status | Top line |",
         "| --- | --- | --- | --- | --- |",
     ]
     for item in coverage:
@@ -2591,14 +2638,12 @@ def build_root_markdown_section(
         task = TASKS[task_name]
         spread = spread_by_task[task_name]
         top = top_by_task.get(task_name, {})
-        top_cell = ""
-        if top:
-            top_cell = f"{display_line_label(top['line_label'])} ({format_value(top['value'])})"
+        top_cell = metric_top_cell(rows, task_name, top)
         lines.append(
             "| {rq} | {task_label} | {metric} | {complete}/{expected} strict-complete lines; {reported}/{expected} reported | {top} |".format(
                 rq=item["rq"],
                 task_label=item["task_label"],
-                metric=task["metric"],
+                metric=task.get("display_metric", task["metric"]),
                 complete=item["complete_model_lines"],
                 expected=item["expected_model_lines"],
                 reported=item["reported_model_lines"],
@@ -2612,12 +2657,12 @@ def build_root_markdown_section(
             "",
             "- [UniMoral full benchmark CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv)",
             "- [sample-level predictions](results/release/2026-04-19-option1/unimoral-sample-predictions.csv)",
-            "- [RQ4 BERTScore/METEOR table](results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv)",
+            "- [RQ4 sample-level BERTScore table](results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv)",
             f"- [MiniMax resume plan]({resume_plan_link})",
             f"- [completion audit]({completion_audit_link})",
             "- [release appendix UniMoral section](results/release/2026-04-19-option1/README.md#unimoral-full-benchmark-coverage)",
             "",
-            "Metric boundary: RQ1-RQ3 use exact-match accuracy; RQ4 uses BERTScore F1 as the primary semantic-generation metric, with METEOR as a lexical side metric.",
+            "Metric boundary: RQ1-RQ3 use exact-match accuracy; RQ4 reports two higher-better generation metrics, BERTScore F1 and METEOR.",
         ]
     )
     return "\n".join(lines).strip() + "\n"
@@ -2669,6 +2714,7 @@ def update_markdown_reports(
     rankings: list[dict[str, object]],
 ) -> None:
     root_section = build_root_markdown_section(
+        rows,
         coverage,
         spreads,
         rankings,
