@@ -8,9 +8,9 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 
 | Need | Open |
 | --- | --- |
-| **DATA, CLICK HERE:** | [all release tables](results/release/2026-04-19-option1/), especially [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv), [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), and [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv) |
+| **DATA, CLICK HERE:** | [Result Tables](#data-click-here-result-tables) |
 | Executive result read | [Key Takeaways](#key-takeaways) |
-| Main comparable numbers | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv) |
+| Main result CSVs | [UniMoral](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [SMID](results/release/2026-04-19-option1/smid-results.csv), [Value Kaleidoscope](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |
 | Main figures | [Main Figures](#main-figures) |
 | Exact progress / readiness | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) and [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
 | Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |
@@ -18,15 +18,32 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 | Full detailed appendix | [results/release/2026-04-19-option1/README.md](results/release/2026-04-19-option1/README.md) |
 | Rebuild / verify | [Reproduce](#reproduce) with `make bootstrap` |
 
+## DATA, CLICK HERE: Result Tables
+
+Use these benchmark-specific CSVs for the actual results.
+
+| Benchmark | Result CSV | What it contains |
+| --- | --- | --- |
+| `UniMoral RQ1-RQ4` | [unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv) | RQ1-RQ3 exact-match accuracy; RQ4 BERTScore F1 and METEOR. |
+| `SMID` | [smid-results.csv](results/release/2026-04-19-option1/smid-results.csv) | SMID average accuracy by model line; missing text-only vision routes are marked as route gaps. |
+| `Value Kaleidoscope` | [value-kaleidoscope-results.csv](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) | Prompt-based ValuePrism relevance/valence average accuracy by text line. |
+
+| Supporting table | CSV |
+| --- | --- |
+| `CCD-Bench` behavior | [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) |
+| `DeNEVIL` proxy behavior | [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv) |
+| Readiness / progress | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
+| Replication / calibration | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |
+
 ## What To Trust First
 
 The main comparison uses three benchmark-faithful accuracy columns. The other two benchmark layers are useful, but they are not the headline ranking surface.
 
 | Evidence layer | Use it for | Main artifact | Reader boundary |
 | --- | --- | --- | --- |
-| `UniMoral action accuracy` | Text moral-choice prediction; UniMoral RQ1 is the comparable scalar. | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv), [UniMoral RQ files](#unimoral-rq1-rq4-artifact-pointer) | RQ2/RQ3/RQ4 are reported separately; do not collapse them into one moral score. |
-| `SMID average accuracy` | Vision moral judgment: moral rating plus foundation classification. | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv) | Missing text-only rows are route gaps, not failed scores. |
-| `Value Kaleidoscope average` | Text value relevance plus valence. | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv) | This is prompt-based ValuePrism scoring, not Kaleido model replication. |
+| `UniMoral action accuracy` | Text moral-choice prediction; UniMoral RQ1 is the comparable scalar. | [unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [UniMoral RQ files](#unimoral-rq1-rq4-artifact-pointer) | RQ2/RQ3/RQ4 are reported separately; do not collapse them into one moral score. |
+| `SMID average accuracy` | Vision moral judgment: moral rating plus foundation classification. | [smid-results.csv](results/release/2026-04-19-option1/smid-results.csv) | Missing text-only rows are route gaps, not failed scores. |
+| `Value Kaleidoscope average` | Text value relevance plus valence. | [value-kaleidoscope-results.csv](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) | This is prompt-based ValuePrism scoring, not Kaleido model replication. |
 | `CCD-Bench` | Cultural-cluster choice distribution and concentration. | [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) | Not accuracy; use it as behavior/style evidence. |
 | `DeNEVIL` | FULCRA-backed proxy behavior categories from saved traces. | [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv) | Proxy-only; not paper-faithful MoralPrompt scoring. |
 
@@ -60,7 +77,9 @@ These are the fastest visual entry points. The appendix keeps the full figure ga
 ```text
 Question                         Go here
 -------------------------------  ----------------------------------------------
-Primary numeric results          results/release/2026-04-19-option1/benchmark-comparison.csv
+UniMoral results                 results/release/2026-04-19-option1/unimoral-full-benchmark.csv
+SMID results                     results/release/2026-04-19-option1/smid-results.csv
+Value results                    results/release/2026-04-19-option1/value-kaleidoscope-results.csv
 All release tables               results/release/2026-04-19-option1/
 All release figures              figures/release/
 Paper replication/calibration    docs/paper-result-comparison.md

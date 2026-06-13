@@ -576,7 +576,7 @@ PAPER_RESULT_ALIGNMENT_ROWS = [
         "paper_metric_or_result_surface": "Action-prediction accuracy for RQ1; other RQs use separate classification or generation metrics.",
         "paper_models_or_reference_routes_identified": "Reference code names Phi-3.5-mini-instruct, Llama-3.1-8B-Instruct, and DeepSeek-R1-Distill-Llama-8B. The local May 13 calibration sweep also includes Mistral Nemo, Qwen2.5 7B, Llama 3 8B, and Llama 3.2 1B as saved/prior comparison rows.",
         "paper_results_available_in_repo": "Exact original-paper table values are not tracked in this repo. Saved/prior May 13 UniMoral values are available: Mistral Nemo 0.648110; Qwen2.5 7B 0.640255; Llama 3.1 8B 0.638775; Llama 3 8B 0.631831; Llama 3.2 1B 0.405624.",
-        "current_repo_result_surface": "Current release reports UniMoral action accuracy in benchmark-comparison.csv. The strongest current UniMoral rows are DeepSeek-M 0.683629 and GPT-5.5 0.683629; GPT-5.5 is text-only and has no SMID or DeNEVIL row.",
+        "current_repo_result_surface": "Current release reports UniMoral action accuracy in unimoral-full-benchmark.csv. The strongest current UniMoral rows are DeepSeek-M 0.683629 and GPT-5.5 0.683629; GPT-5.5 is text-only and has no SMID or DeNEVIL row.",
         "same_or_near_model_overlap": "Saved/prior exact overlap exists for Llama 3.1 8B, but this PR does not contain a fresh full original-paper-model rerun. DeepSeek current rows are not the same as the paper-named 8B distill route.",
         "paper_only_models_or_routes": "Phi-3.5-mini-instruct; DeepSeek-R1-Distill-Llama-8B; Llama-3.1-8B-Instruct as paper/reference routes unless deliberately rerun.",
         "ours_only_models_or_routes": "Qwen S/M/L, MiniMax S/M/L, DeepSeek S/M/L current routes, Llama S/M/L current routes, Gemma S/M/L, and OpenAI text-only reference rows including GPT-5.5.",
@@ -584,7 +584,7 @@ PAPER_RESULT_ALIGNMENT_ROWS = [
         "can_compare_directly": "Partly. RQ1 action accuracy is the same kind of metric, but the exact paper table values are not tracked here and the exact overlapping model evidence is saved/prior rather than a fresh rerun.",
         "classification_quality_readout": "Yes for the scored task metric: RQ1/RQ2/RQ3 use higher-better accuracy, while RQ4 uses higher-better BERTScore F1 and METEOR. Only RQ1 should be described as the clean paper-faithful action-prediction overlap.",
         "reviewer_takeaway": "Use UniMoral as the cleanest paper-faithful accuracy comparison layer, while labeling the Llama 3.1 8B overlap as saved/prior evidence and GPT-5.5 as a current text-only reference.",
-        "evidence_sources": "benchmark-comparison.csv; results/exploratory/2026-05-13-additional-model-sweep/unimoral-summary.csv; docs/calibration-replication.md; local reference checkout for UniMoral RQ1 code.",
+        "evidence_sources": "unimoral-full-benchmark.csv; results/exploratory/2026-05-13-additional-model-sweep/unimoral-summary.csv; docs/calibration-replication.md; local reference checkout for UniMoral RQ1 code.",
     },
     {
         "benchmark": "SMID",
@@ -592,7 +592,7 @@ PAPER_RESULT_ALIGNMENT_ROWS = [
         "paper_metric_or_result_surface": "Human normative ratings and labels, not an original LLM model leaderboard.",
         "paper_models_or_reference_routes_identified": "No original LLM model roster was identified in the local reference material.",
         "paper_results_available_in_repo": "The repo has local SMID data adapters and current model benchmark rows, but no paper-original LLM result table to reproduce.",
-        "current_repo_result_surface": "Current release reports a SMID average over moral-rating prediction and foundation classification in benchmark-comparison.csv. Best current SMID row is Qwen-L 0.482829; GPT-5.5 and other OpenAI text-only refs intentionally have no SMID route.",
+        "current_repo_result_surface": "Current release reports a SMID average over moral-rating prediction and foundation classification in smid-results.csv. Best current SMID row is Qwen-L 0.482829; GPT-5.5 and other OpenAI text-only refs intentionally have no SMID route.",
         "same_or_near_model_overlap": "None. This is a current benchmark comparison layer rather than paper-model replication.",
         "paper_only_models_or_routes": "Not applicable because no paper LLM roster was identified.",
         "ours_only_models_or_routes": "Vision-capable current rows for Qwen, MiniMax, Llama, and Gemma where routes exist.",
@@ -600,7 +600,7 @@ PAPER_RESULT_ALIGNMENT_ROWS = [
         "can_compare_directly": "No paper-model comparison. The current SMID result is directly comparable across our own vision-capable model rows, not against an original paper model table.",
         "classification_quality_readout": "Moderate and high-variance: SMID has the lowest mean and widest spread among the current comparable accuracy metrics, so low absolute scores should be read with image ambiguity and norm-consensus limits in mind.",
         "reviewer_takeaway": "Do not ask 'did we beat the paper model' for SMID. Ask which current vision-capable rows best recover the human norm labels.",
-        "evidence_sources": "benchmark-comparison.csv; benchmark-difficulty-summary.csv; docs/paper-model-replication-map.md; docs/calibration-replication.md.",
+        "evidence_sources": "smid-results.csv; benchmark-difficulty-summary.csv; docs/paper-model-replication-map.md; docs/calibration-replication.md.",
     },
     {
         "benchmark": "Value Kaleidoscope / ValuePrism",
@@ -608,7 +608,7 @@ PAPER_RESULT_ALIGNMENT_ROWS = [
         "paper_metric_or_result_surface": "Kaleido model relevance and valence scoring, plus generation of candidate values/rights/duties.",
         "paper_models_or_reference_routes_identified": "Kaleido model family: tsor13/kaleido-small, tsor13/kaleido-base, tsor13/kaleido-large, tsor13/kaleido-xl, and tsor13/kaleido-xxl.",
         "paper_results_available_in_repo": "Exact Kaleido paper scores are not extracted into the release. Local reference docs identify the gated model family and inference path, but the current release has not run the Kaleido models.",
-        "current_repo_result_surface": "Current release reports prompt-based LLM relevance and valence classification in benchmark-comparison.csv. Strong current rows include MiniMax-L 0.741197, MiniMax-S 0.739942, GPT-5 mini 0.738897, and GPT-5.5 0.735646.",
+        "current_repo_result_surface": "Current release reports prompt-based LLM relevance and valence classification in value-kaleidoscope-results.csv. Strong current rows include MiniMax-L 0.741197, MiniMax-S 0.739942, GPT-5 mini 0.738897, and GPT-5.5 0.735646.",
         "same_or_near_model_overlap": "None. Prompt-based LLM rows are not Kaleido model replication.",
         "paper_only_models_or_routes": "Kaleido small/base/large/xl/xxl.",
         "ours_only_models_or_routes": "All current LLM families and OpenAI text-only references, including GPT-5.5.",
@@ -616,7 +616,7 @@ PAPER_RESULT_ALIGNMENT_ROWS = [
         "can_compare_directly": "No. The label space is related, but the model route is different; a direct paper-model comparison needs approved Kaleido access and a separate local-model execution path.",
         "classification_quality_readout": "Yes for the repo task only: high relevance/valence accuracy means good structured value tagging and polarity assignment. It is not proof of Kaleido model replication or value-conflict resolution.",
         "reviewer_takeaway": "Keep ValuePrism rows in the current benchmark-comparison layer and mark Kaleido replication as blocked until the gated model route is run.",
-        "evidence_sources": "benchmark-comparison.csv; docs/paper-model-replication-map.md; docs/calibration-replication.md; local reference checkout for Kaleido README.",
+        "evidence_sources": "value-kaleidoscope-results.csv; docs/paper-model-replication-map.md; docs/calibration-replication.md; local reference checkout for Kaleido README.",
     },
     {
         "benchmark": "CCD-Bench",
@@ -6638,6 +6638,62 @@ def openai_reference_benchmark_row(spec: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _benchmark_result_status(row: dict[str, Any], field: str) -> str:
+    if row.get(field) is not None:
+        return "complete"
+    if field == "smid_average_accuracy":
+        return "route_gap"
+    return "not_run"
+
+
+def build_smid_results(benchmark_comparison: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for row in benchmark_comparison:
+        status = _benchmark_result_status(row, "smid_average_accuracy")
+        rows.append(
+            {
+                "line_label": row["line_label"],
+                "family": row["family"],
+                "size_slot": row["size_slot"],
+                "route": row.get("route") or "",
+                "benchmark": "SMID",
+                "metric": "average_accuracy",
+                "smid_average_accuracy": row.get("smid_average_accuracy"),
+                "result_status": status,
+                "reader_note": (
+                    "Average of moral-rating prediction and foundation-classification accuracy."
+                    if status == "complete"
+                    else "No public vision-capable SMID route for this line in the current release; this is a route gap, not a failed score."
+                ),
+            }
+        )
+    return rows
+
+
+def build_value_kaleidoscope_results(benchmark_comparison: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for row in benchmark_comparison:
+        status = _benchmark_result_status(row, "value_average_accuracy")
+        rows.append(
+            {
+                "line_label": row["line_label"],
+                "family": row["family"],
+                "size_slot": row["size_slot"],
+                "route": row.get("route") or "",
+                "benchmark": "Value Kaleidoscope",
+                "metric": "average_accuracy",
+                "value_average_accuracy": row.get("value_average_accuracy"),
+                "result_status": status,
+                "reader_note": (
+                    "Average of prompt-based ValuePrism relevance and valence accuracy; this is not Kaleido model replication."
+                    if status == "complete"
+                    else "No current release Value Kaleidoscope result for this line."
+                ),
+            }
+        )
+    return rows
+
+
 def openai_reference_ccd_distribution_row(spec: dict[str, Any]) -> dict[str, Any]:
     cluster_counts = spec["ccd_cluster_counts"]
     ccd_valid = spec["ccd_valid"]
@@ -6763,6 +6819,12 @@ def build_readiness_tier_matrix(
             "SMID": "moral_rating + foundation_classification",
             "Value Kaleidoscope": "value_relevance + value_valence",
         }[benchmark]
+        source_file = {
+            "UniMoral": "unimoral-full-benchmark.csv",
+            "SMID": "smid-results.csv",
+            "Value Kaleidoscope": "value-kaleidoscope-results.csv",
+        }[benchmark]
+        source_artifact = f"results/release/2026-04-19-option1/{source_file}"
         if value is None:
             blocker_status = "route_gap" if benchmark == "SMID" else "not_run"
             append_row(
@@ -6777,8 +6839,8 @@ def build_readiness_tier_matrix(
                 evidence_status=blocker_status,
                 primary_metric="accuracy",
                 primary_metric_value="",
-                source_file="benchmark-comparison.csv",
-                run_id_or_source_artifact="results/release/2026-04-19-option1/benchmark-comparison.csv",
+                source_file=source_file,
+                run_id_or_source_artifact=source_artifact,
                 interpretation="No result-readiness tier is assigned because the required accuracy result cell is blocked or not run.",
             )
             return
@@ -6794,8 +6856,8 @@ def build_readiness_tier_matrix(
             evidence_status="completed_valid_interpretable",
             primary_metric="accuracy",
             primary_metric_value=fmt_float(float(value), 6),
-            source_file="benchmark-comparison.csv",
-            run_id_or_source_artifact="results/release/2026-04-19-option1/benchmark-comparison.csv",
+            source_file=source_file,
+            run_id_or_source_artifact=source_artifact,
             interpretation="Tier 3 result-readiness: completed, valid, and interpretable for comparison within this benchmark and metric layer.",
         )
 
@@ -11635,9 +11697,11 @@ def append_main_result_file_map(lines: list[str], figure_prefix: str) -> None:
             "",
             "| Benchmark | Main result files | Metric meaning | Key visuals / reproduction |",
             "| --- | --- | --- | --- |",
-            "| `UniMoral RQ1-RQ4` | both RQ4 metrics: `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`<br/>model rankings: `results/release/2026-04-19-option1/unimoral-model-rankings.csv`<br/>sample-level BERTScore audit: `results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv`<br/>sample-level predictions: `results/release/2026-04-19-option1/unimoral-sample-predictions.csv` | RQ1-RQ3 use exact-match accuracy. RQ4 is generation quality: BERTScore F1 for semantic overlap and METEOR for lexical overlap. Do not collapse RQ1-RQ4 into one universal moral score. | `option1_unimoral_task_heatmap.svg`, `option1_unimoral_generation_quality.svg`, and `option1_unimoral_family_scaling.svg` under `figures/release/`. Rebuild with `make release` or `make release VENV_PYTHON=/path/to/python` when no local `.venv` exists. |",
-            "| `SMID` | `results/release/2026-04-19-option1/benchmark-comparison.csv` (`smid_average_accuracy`)<br/>`results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`<br/>`results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of moral-rating prediction and foundation-classification accuracy for rows with a public vision route. Missing OpenAI/DeepSeek text-only cells are route gaps, not failed text parses. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
+            "| `UniMoral RQ1-RQ4` | primary result: `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`<br/>model rankings: `results/release/2026-04-19-option1/unimoral-model-rankings.csv`<br/>sample-level predictions: `results/release/2026-04-19-option1/unimoral-sample-predictions.csv`<br/>sample-level BERTScore audit: `results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv` | RQ1-RQ3 use exact-match accuracy. RQ4 is generation quality: BERTScore F1 for semantic overlap and METEOR for lexical overlap. Do not collapse RQ1-RQ4 into one universal moral score. | `option1_unimoral_task_heatmap.svg`, `option1_unimoral_generation_quality.svg`, and `option1_unimoral_family_scaling.svg` under `figures/release/`. Rebuild with `make release` or `make release VENV_PYTHON=/path/to/python` when no local `.venv` exists. |",
+            "| `SMID` | primary result: `results/release/2026-04-19-option1/smid-results.csv`<br/>readiness: `results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of moral-rating prediction and foundation-classification accuracy for rows with a public vision route. Missing OpenAI/DeepSeek text-only cells are route gaps, not failed text parses. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
+            "| `Value Kaleidoscope` | primary result: `results/release/2026-04-19-option1/value-kaleidoscope-results.csv`<br/>readiness: `results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of prompt-based ValuePrism relevance and valence accuracy. This is not Kaleido model replication. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| `CCD-Bench` | `results/release/2026-04-19-option1/ccd-choice-distribution.csv` | Choice-distribution behavior over ten canonical cultural clusters: valid-choice rate, per-option share/deviation, dominant option, dominant share, and effective cluster count. This is not accuracy. | `option1_ccd_choice_distribution.svg` and `option1_ccd_dominant_option_share.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
+            "| `DeNEVIL` | `results/release/2026-04-19-option1/denevil-behavior-summary.csv`<br/>`results/release/2026-04-19-option1/denevil-proxy-summary.csv` | FULCRA-backed proxy behavior only; not paper-faithful MoralPrompt scoring. | `option1_denevil_behavior_outcomes.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "",
             f"Quick visual links: {markdown_link('UniMoral heatmap', f'{figure_prefix}/option1_unimoral_task_heatmap.svg')}, {markdown_link('SMID/Value bars', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')}, {markdown_link('CCD choice map', f'{figure_prefix}/option1_ccd_choice_distribution.svg')}, {markdown_link('replication map', f'{figure_prefix}/option1_paper_result_alignment_map.svg')}.",
@@ -12070,9 +12134,9 @@ def build_repo_readme(
         "",
         "| Need | Open |",
         "| --- | --- |",
-        "| **DATA, CLICK HERE:** | [all release tables](results/release/2026-04-19-option1/), especially [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv), [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), and [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv) |",
+        "| **DATA, CLICK HERE:** | [Result Tables](#data-click-here-result-tables) |",
         "| Executive result read | [Key Takeaways](#key-takeaways) |",
-        "| Main comparable numbers | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv) |",
+        "| Main result CSVs | [UniMoral](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [SMID](results/release/2026-04-19-option1/smid-results.csv), [Value Kaleidoscope](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |",
         "| Main figures | [Main Figures](#main-figures) |",
         "| Exact progress / readiness | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) and [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
         "| Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |",
@@ -12080,15 +12144,32 @@ def build_repo_readme(
         "| Full detailed appendix | [results/release/2026-04-19-option1/README.md](results/release/2026-04-19-option1/README.md) |",
         "| Rebuild / verify | [Reproduce](#reproduce) with `make bootstrap` |",
         "",
+        "## DATA, CLICK HERE: Result Tables",
+        "",
+        "Use these benchmark-specific CSVs for the actual results.",
+        "",
+        "| Benchmark | Result CSV | What it contains |",
+        "| --- | --- | --- |",
+        "| `UniMoral RQ1-RQ4` | [unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv) | RQ1-RQ3 exact-match accuracy; RQ4 BERTScore F1 and METEOR. |",
+        "| `SMID` | [smid-results.csv](results/release/2026-04-19-option1/smid-results.csv) | SMID average accuracy by model line; missing text-only vision routes are marked as route gaps. |",
+        "| `Value Kaleidoscope` | [value-kaleidoscope-results.csv](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) | Prompt-based ValuePrism relevance/valence average accuracy by text line. |",
+        "",
+        "| Supporting table | CSV |",
+        "| --- | --- |",
+        "| `CCD-Bench` behavior | [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) |",
+        "| `DeNEVIL` proxy behavior | [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv) |",
+        "| Readiness / progress | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
+        "| Replication / calibration | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+        "",
         "## What To Trust First",
         "",
         "The main comparison uses three benchmark-faithful accuracy columns. The other two benchmark layers are useful, but they are not the headline ranking surface.",
         "",
         "| Evidence layer | Use it for | Main artifact | Reader boundary |",
         "| --- | --- | --- | --- |",
-        "| `UniMoral action accuracy` | Text moral-choice prediction; UniMoral RQ1 is the comparable scalar. | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv), [UniMoral RQ files](#unimoral-rq1-rq4-artifact-pointer) | RQ2/RQ3/RQ4 are reported separately; do not collapse them into one moral score. |",
-        "| `SMID average accuracy` | Vision moral judgment: moral rating plus foundation classification. | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv) | Missing text-only rows are route gaps, not failed scores. |",
-        "| `Value Kaleidoscope average` | Text value relevance plus valence. | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv) | This is prompt-based ValuePrism scoring, not Kaleido model replication. |",
+        "| `UniMoral action accuracy` | Text moral-choice prediction; UniMoral RQ1 is the comparable scalar. | [unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [UniMoral RQ files](#unimoral-rq1-rq4-artifact-pointer) | RQ2/RQ3/RQ4 are reported separately; do not collapse them into one moral score. |",
+        "| `SMID average accuracy` | Vision moral judgment: moral rating plus foundation classification. | [smid-results.csv](results/release/2026-04-19-option1/smid-results.csv) | Missing text-only rows are route gaps, not failed scores. |",
+        "| `Value Kaleidoscope average` | Text value relevance plus valence. | [value-kaleidoscope-results.csv](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) | This is prompt-based ValuePrism scoring, not Kaleido model replication. |",
         "| `CCD-Bench` | Cultural-cluster choice distribution and concentration. | [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) | Not accuracy; use it as behavior/style evidence. |",
         "| `DeNEVIL` | FULCRA-backed proxy behavior categories from saved traces. | [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv) | Proxy-only; not paper-faithful MoralPrompt scoring. |",
         "",
@@ -12122,7 +12203,9 @@ def build_repo_readme(
         "```text",
         "Question                         Go here",
         "-------------------------------  ----------------------------------------------",
-        "Primary numeric results          results/release/2026-04-19-option1/benchmark-comparison.csv",
+        "UniMoral results                 results/release/2026-04-19-option1/unimoral-full-benchmark.csv",
+        "SMID results                     results/release/2026-04-19-option1/smid-results.csv",
+        "Value results                    results/release/2026-04-19-option1/value-kaleidoscope-results.csv",
         "All release tables               results/release/2026-04-19-option1/",
         "All release figures              figures/release/",
         "Paper replication/calibration    docs/paper-result-comparison.md",
@@ -12383,7 +12466,11 @@ def build_release_readme(
             "",
             "### DATA, CLICK HERE:",
             "",
-            "- Main comparable numbers: [benchmark-comparison.csv](benchmark-comparison.csv)",
+            "- UniMoral results: [unimoral-full-benchmark.csv](unimoral-full-benchmark.csv)",
+            "- SMID results: [smid-results.csv](smid-results.csv)",
+            "- Value Kaleidoscope results: [value-kaleidoscope-results.csv](value-kaleidoscope-results.csv)",
+            "- CCD-Bench behavior: [ccd-choice-distribution.csv](ccd-choice-distribution.csv)",
+            "- DeNEVIL proxy behavior: [denevil-behavior-summary.csv](denevil-behavior-summary.csv)",
             "- All release tables: [results/release/2026-04-19-option1/](./)",
             "- Readiness/progress: [readiness-tier-matrix.csv](readiness-tier-matrix.csv) and [family-size-progress.csv](family-size-progress.csv)",
             "- Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv) and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)",
@@ -12451,7 +12538,10 @@ def build_release_readme(
             "- `topline-summary.md`: concise release narrative",
             "- `release-manifest.json`: machine-readable index of counts, files, and caveats",
             "- `family-size-progress.csv`: current published family-size matrix",
-            "- `benchmark-comparison.csv`: current comparable accuracy table used for the grouped bar figure",
+            "- `unimoral-full-benchmark.csv`: UniMoral RQ1-RQ4 result table, including RQ4 BERTScore F1 and METEOR",
+            "- `smid-results.csv`: SMID average accuracy table by model line",
+            "- `value-kaleidoscope-results.csv`: prompt-based ValuePrism relevance/valence average table by model line",
+            "- `benchmark-comparison.csv`: cross-benchmark summary used by some generated figures; it has route gaps and is not the primary result table",
             "- `paper-result-alignment.csv`: paper-vs-ours alignment map, including original/reference model evidence, overlap status, blocked/proxy states, and safe comparison boundaries",
             "- `ccd-choice-distribution.csv`: CCD-Bench choice-behavior table with per-cluster shares, deviation from the 10% baseline, and concentration summaries",
             "- `denevil-behavior-summary.csv`: DeNEVIL proxy behavioral outcome mix by model line",
@@ -12763,6 +12853,9 @@ def build_release_manifest(
             "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
             "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
             "benchmark_comparison": "results/release/2026-04-19-option1/benchmark-comparison.csv",
+            "unimoral_full_benchmark": "results/release/2026-04-19-option1/unimoral-full-benchmark.csv",
+            "smid_results": "results/release/2026-04-19-option1/smid-results.csv",
+            "value_kaleidoscope_results": "results/release/2026-04-19-option1/value-kaleidoscope-results.csv",
             "ccd_choice_distribution": "results/release/2026-04-19-option1/ccd-choice-distribution.csv",
             "denevil_proxy_summary": "results/release/2026-04-19-option1/denevil-proxy-summary.csv",
             "denevil_behavior_summary": "results/release/2026-04-19-option1/denevil-behavior-summary.csv",
@@ -12804,6 +12897,9 @@ def build_release_manifest(
             "model-roster.csv",
             "supplementary-model-progress.csv",
             "family-size-progress.csv",
+            "unimoral-full-benchmark.csv",
+            "smid-results.csv",
+            "value-kaleidoscope-results.csv",
             "benchmark-comparison.csv",
             "ccd-choice-distribution.csv",
             "denevil-proxy-summary.csv",
@@ -12892,6 +12988,8 @@ def main() -> None:
     ccd_choice_distribution = build_ccd_choice_distribution_rows(family_size_progress, benchmark_comparison)
     ccd_valid_choice_coverage = build_ccd_valid_choice_coverage_rows(family_size_progress, ccd_choice_distribution)
     add_openai_reference_outputs(benchmark_comparison, ccd_choice_distribution, ccd_valid_choice_coverage)
+    smid_results = build_smid_results(benchmark_comparison)
+    value_kaleidoscope_results = build_value_kaleidoscope_results(benchmark_comparison)
     denevil_behavior_summary = build_denevil_behavior_rows(family_size_progress)
     denevil_prompt_family_breakdown = build_denevil_prompt_family_breakdown_rows(family_size_progress)
     denevil_proxy_summary = build_denevil_proxy_summary_rows(family_size_progress)
@@ -13031,6 +13129,48 @@ def main() -> None:
             "smid_average_accuracy",
             "value_average_accuracy",
             "comparison_note",
+        ],
+    )
+    write_csv(
+        args.release_dir / "smid-results.csv",
+        [
+            {
+                **row,
+                "smid_average_accuracy": fmt_float(row["smid_average_accuracy"], 6),
+            }
+            for row in smid_results
+        ],
+        [
+            "line_label",
+            "family",
+            "size_slot",
+            "route",
+            "benchmark",
+            "metric",
+            "smid_average_accuracy",
+            "result_status",
+            "reader_note",
+        ],
+    )
+    write_csv(
+        args.release_dir / "value-kaleidoscope-results.csv",
+        [
+            {
+                **row,
+                "value_average_accuracy": fmt_float(row["value_average_accuracy"], 6),
+            }
+            for row in value_kaleidoscope_results
+        ],
+        [
+            "line_label",
+            "family",
+            "size_slot",
+            "route",
+            "benchmark",
+            "metric",
+            "value_average_accuracy",
+            "result_status",
+            "reader_note",
         ],
     )
     write_csv(
@@ -13523,6 +13663,9 @@ def main() -> None:
             "model-roster.csv",
             "supplementary-model-progress.csv",
             "family-size-progress.csv",
+            "unimoral-full-benchmark.csv",
+            "smid-results.csv",
+            "value-kaleidoscope-results.csv",
             "benchmark-comparison.csv",
             "ccd-choice-distribution.csv",
             "denevil-behavior-summary.csv",

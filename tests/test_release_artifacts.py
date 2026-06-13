@@ -134,6 +134,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         "benchmark-catalog.csv",
         "paper-result-alignment.csv",
         "benchmark-comparison.csv",
+        "smid-results.csv",
+        "value-kaleidoscope-results.csv",
         "ccd-choice-distribution.csv",
         "denevil-behavior-summary.csv",
         "denevil-prompt-family-breakdown.csv",
@@ -249,6 +251,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["entry_points"]["denevil_proxy_pipeline_figure"].endswith("option1_denevil_proxy_pipeline.svg")
     assert "benchmark-difficulty-summary.csv" in manifest["tables"]
     assert "paper-result-alignment.csv" in manifest["tables"]
+    assert "smid-results.csv" in manifest["tables"]
+    assert "value-kaleidoscope-results.csv" in manifest["tables"]
     assert "family-scaling-summary.csv" in manifest["tables"]
     assert "ccd-choice-distribution.csv" in manifest["tables"]
     assert "denevil-proxy-summary.csv" in manifest["tables"]
@@ -286,9 +290,11 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "## DATA, CLICK HERE: Main Result Files" in release_readme_text
     assert "I found `CCD-Bench` in this repo; I did not find a separate `CCG-Bench` result surface." in release_readme_text
     assert "results/release/2026-04-19-option1/unimoral-full-benchmark.csv" in release_readme_text
-    assert "both RQ4 metrics" in release_readme_text
+    assert "results/release/2026-04-19-option1/smid-results.csv" in release_readme_text
+    assert "results/release/2026-04-19-option1/value-kaleidoscope-results.csv" in release_readme_text
     assert "sample-level BERTScore audit" in release_readme_text
-    assert "smid_average_accuracy" in release_readme_text
+    assert "SMID results" in release_readme_text
+    assert "Value Kaleidoscope results" in release_readme_text
     assert "results/release/2026-04-19-option1/ccd-choice-distribution.csv" in release_readme_text
     assert "option1_paper_result_alignment_map.svg" in release_readme_text
     topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
@@ -1336,7 +1342,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "family scaling profile" in release_readme
     assert "## Start Here" in release_readme
     assert "### DATA, CLICK HERE:" in release_readme
-    assert "[benchmark-comparison.csv](benchmark-comparison.csv)" in release_readme
+    assert "[unimoral-full-benchmark.csv](unimoral-full-benchmark.csv)" in release_readme
+    assert "[smid-results.csv](smid-results.csv)" in release_readme
+    assert "[value-kaleidoscope-results.csv](value-kaleidoscope-results.csv)" in release_readme
     assert "## Benchmark Result Visuals" in release_readme
     assert "## Status Key" in release_readme
     assert "option1_benchmark_difficulty_profile.svg" in release_readme
@@ -1656,11 +1664,16 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
 
     root_readme = (repo_copy / "README.md").read_text(encoding="utf-8")
     assert root_readme.index("## Start Here") < root_readme.index("## What To Trust First")
+    assert root_readme.index("## Start Here") < root_readme.index("## DATA, CLICK HERE: Result Tables")
+    assert root_readme.index("## DATA, CLICK HERE: Result Tables") < root_readme.index("## What To Trust First")
     assert root_readme.index("## What To Trust First") < root_readme.index("## Key Takeaways")
     assert root_readme.index("## Key Takeaways") < root_readme.index("## Main Figures")
     assert "The main comparison uses three benchmark-faithful accuracy columns." in root_readme
     assert "**DATA, CLICK HERE:**" in root_readme
-    assert "[all release tables](results/release/2026-04-19-option1/)" in root_readme
+    assert "[unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv)" in root_readme
+    assert "[smid-results.csv](results/release/2026-04-19-option1/smid-results.csv)" in root_readme
+    assert "[value-kaleidoscope-results.csv](results/release/2026-04-19-option1/value-kaleidoscope-results.csv)" in root_readme
+    assert "benchmark-comparison.csv" not in root_readme
     assert "`UniMoral action accuracy`" in root_readme
     assert "`SMID average accuracy`" in root_readme
     assert "`Value Kaleidoscope average`" in root_readme

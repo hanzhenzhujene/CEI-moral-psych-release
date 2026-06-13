@@ -93,8 +93,13 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert readme.startswith("# CEI Moral-Psych Benchmark Suite")
     assert "Jenny Zhu's CEI moral-psych benchmark deliverable" in readme
     assert "## Start Here" in readme
+    assert "## DATA, CLICK HERE: Result Tables" in readme
     assert "## What To Trust First" in readme
     assert "The main comparison uses three benchmark-faithful accuracy columns." in readme
+    assert "benchmark-comparison.csv" not in readme
+    assert "[unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv)" in readme
+    assert "[smid-results.csv](results/release/2026-04-19-option1/smid-results.csv)" in readme
+    assert "[value-kaleidoscope-results.csv](results/release/2026-04-19-option1/value-kaleidoscope-results.csv)" in readme
     assert "`UniMoral action accuracy`" in readme
     assert "`SMID average accuracy`" in readme
     assert "`Value Kaleidoscope average`" in readme

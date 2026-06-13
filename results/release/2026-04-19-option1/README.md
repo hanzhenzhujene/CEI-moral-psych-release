@@ -99,9 +99,11 @@ Use this map when you need to answer: where is the result, what does the number 
 
 | Benchmark | Main result files | Metric meaning | Key visuals / reproduction |
 | --- | --- | --- | --- |
-| `UniMoral RQ1-RQ4` | both RQ4 metrics: `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`<br/>model rankings: `results/release/2026-04-19-option1/unimoral-model-rankings.csv`<br/>sample-level BERTScore audit: `results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv`<br/>sample-level predictions: `results/release/2026-04-19-option1/unimoral-sample-predictions.csv` | RQ1-RQ3 use exact-match accuracy. RQ4 is generation quality: BERTScore F1 for semantic overlap and METEOR for lexical overlap. Do not collapse RQ1-RQ4 into one universal moral score. | `option1_unimoral_task_heatmap.svg`, `option1_unimoral_generation_quality.svg`, and `option1_unimoral_family_scaling.svg` under `figures/release/`. Rebuild with `make release` or `make release VENV_PYTHON=/path/to/python` when no local `.venv` exists. |
-| `SMID` | `results/release/2026-04-19-option1/benchmark-comparison.csv` (`smid_average_accuracy`)<br/>`results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`<br/>`results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of moral-rating prediction and foundation-classification accuracy for rows with a public vision route. Missing OpenAI/DeepSeek text-only cells are route gaps, not failed text parses. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |
+| `UniMoral RQ1-RQ4` | primary result: `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`<br/>model rankings: `results/release/2026-04-19-option1/unimoral-model-rankings.csv`<br/>sample-level predictions: `results/release/2026-04-19-option1/unimoral-sample-predictions.csv`<br/>sample-level BERTScore audit: `results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv` | RQ1-RQ3 use exact-match accuracy. RQ4 is generation quality: BERTScore F1 for semantic overlap and METEOR for lexical overlap. Do not collapse RQ1-RQ4 into one universal moral score. | `option1_unimoral_task_heatmap.svg`, `option1_unimoral_generation_quality.svg`, and `option1_unimoral_family_scaling.svg` under `figures/release/`. Rebuild with `make release` or `make release VENV_PYTHON=/path/to/python` when no local `.venv` exists. |
+| `SMID` | primary result: `results/release/2026-04-19-option1/smid-results.csv`<br/>readiness: `results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of moral-rating prediction and foundation-classification accuracy for rows with a public vision route. Missing OpenAI/DeepSeek text-only cells are route gaps, not failed text parses. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |
+| `Value Kaleidoscope` | primary result: `results/release/2026-04-19-option1/value-kaleidoscope-results.csv`<br/>readiness: `results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of prompt-based ValuePrism relevance and valence accuracy. This is not Kaleido model replication. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |
 | `CCD-Bench` | `results/release/2026-04-19-option1/ccd-choice-distribution.csv` | Choice-distribution behavior over ten canonical cultural clusters: valid-choice rate, per-option share/deviation, dominant option, dominant share, and effective cluster count. This is not accuracy. | `option1_ccd_choice_distribution.svg` and `option1_ccd_dominant_option_share.svg` under `figures/release/`. Rebuild through the same `make release` path. |
+| `DeNEVIL` | `results/release/2026-04-19-option1/denevil-behavior-summary.csv`<br/>`results/release/2026-04-19-option1/denevil-proxy-summary.csv` | FULCRA-backed proxy behavior only; not paper-faithful MoralPrompt scoring. | `option1_denevil_behavior_outcomes.svg` under `figures/release/`. Rebuild through the same `make release` path. |
 | Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg` under `figures/release/`. Rebuild through the same `make release` path. |
 
 Quick visual links: [UniMoral heatmap](../../../figures/release/option1_unimoral_task_heatmap.svg), [SMID/Value bars](../../../figures/release/option1_benchmark_accuracy_bars.svg), [CCD choice map](../../../figures/release/option1_ccd_choice_distribution.svg), [replication map](../../../figures/release/option1_paper_result_alignment_map.svg).
@@ -435,7 +437,11 @@ This checkpoint summarizes the broader family-size expansion separately from the
 
 ### DATA, CLICK HERE:
 
-- Main comparable numbers: [benchmark-comparison.csv](benchmark-comparison.csv)
+- UniMoral results: [unimoral-full-benchmark.csv](unimoral-full-benchmark.csv)
+- SMID results: [smid-results.csv](smid-results.csv)
+- Value Kaleidoscope results: [value-kaleidoscope-results.csv](value-kaleidoscope-results.csv)
+- CCD-Bench behavior: [ccd-choice-distribution.csv](ccd-choice-distribution.csv)
+- DeNEVIL proxy behavior: [denevil-behavior-summary.csv](denevil-behavior-summary.csv)
 - All release tables: [results/release/2026-04-19-option1/](./)
 - Readiness/progress: [readiness-tier-matrix.csv](readiness-tier-matrix.csv) and [family-size-progress.csv](family-size-progress.csv)
 - Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv) and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)
@@ -501,7 +507,10 @@ Exact per-line family-size status is saved as [family-size-progress.csv](family-
 - `topline-summary.md`: concise release narrative
 - `release-manifest.json`: machine-readable index of counts, files, and caveats
 - `family-size-progress.csv`: current published family-size matrix
-- `benchmark-comparison.csv`: current comparable accuracy table used for the grouped bar figure
+- `unimoral-full-benchmark.csv`: UniMoral RQ1-RQ4 result table, including RQ4 BERTScore F1 and METEOR
+- `smid-results.csv`: SMID average accuracy table by model line
+- `value-kaleidoscope-results.csv`: prompt-based ValuePrism relevance/valence average table by model line
+- `benchmark-comparison.csv`: cross-benchmark summary used by some generated figures; it has route gaps and is not the primary result table
 - `paper-result-alignment.csv`: paper-vs-ours alignment map, including original/reference model evidence, overlap status, blocked/proxy states, and safe comparison boundaries
 - `ccd-choice-distribution.csv`: CCD-Bench choice-behavior table with per-cluster shares, deviation from the 10% baseline, and concentration summaries
 - `denevil-behavior-summary.csv`: DeNEVIL proxy behavioral outcome mix by model line

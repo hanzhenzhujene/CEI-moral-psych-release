@@ -83,6 +83,7 @@
     "report": "results/release/2026-04-19-option1/jenny-group-report.md",
     "sample_volume_figure": "figures/release/option1_sample_volume.svg",
     "saved_results_audit": "results/release/2026-04-19-option1/saved-results-audit.csv",
+    "smid_results": "results/release/2026-04-19-option1/smid-results.csv",
     "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
     "topline_summary": "results/release/2026-04-19-option1/topline-summary.md",
     "unimoral_completion_audit": "results/release/2026-04-19-option1/unimoral-completion-audit.md",
@@ -99,7 +100,8 @@
     "unimoral_task_heatmap_figure": "figures/release/option1_unimoral_task_heatmap.svg",
     "unimoral_task_rankings_figure": "figures/release/option1_unimoral_task_rankings.svg",
     "unimoral_task_spread": "results/release/2026-04-19-option1/unimoral-task-spread.csv",
-    "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg"
+    "unimoral_task_spread_figure": "figures/release/option1_unimoral_task_spread.svg",
+    "value_kaleidoscope_results": "results/release/2026-04-19-option1/value-kaleidoscope-results.csv"
   },
   "figures": [
     "figures/release/option1_family_size_progress_overview.svg",
@@ -234,6 +236,9 @@
     "model-roster.csv",
     "supplementary-model-progress.csv",
     "family-size-progress.csv",
+    "unimoral-full-benchmark.csv",
+    "smid-results.csv",
+    "value-kaleidoscope-results.csv",
     "benchmark-comparison.csv",
     "ccd-choice-distribution.csv",
     "denevil-proxy-summary.csv",
@@ -249,7 +254,6 @@
     "benchmark-summary.csv",
     "faithful-metrics.csv",
     "coverage-matrix.csv",
-    "unimoral-full-benchmark.csv",
     "unimoral-coverage.csv",
     "unimoral-task-spread.csv",
     "unimoral-model-rankings.csv",
