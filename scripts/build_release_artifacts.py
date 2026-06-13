@@ -6817,8 +6817,11 @@ def build_readiness_tier_matrix(
                 result_status="interpretable_comparable",
                 blocker_status="",
                 evidence_status=ccd_status,
-                primary_metric="valid_choice_rate_pct",
-                primary_metric_value=fmt_pct_number_or_na(ccd.get("valid_selection_rate"), 6),
+                primary_metric="choice_distribution",
+                primary_metric_value=(
+                    f"dominant={ccd.get('dominant_option')}; "
+                    f"effective_clusters={fmt_float_or_na(ccd.get('effective_cluster_count'), 6)}"
+                ),
                 source_file="ccd-choice-distribution.csv",
                 run_id_or_source_artifact="results/release/2026-04-19-option1/ccd-choice-distribution.csv",
                 interpretation="Tier 3 result-readiness for CCD choice-distribution behavior; this is distributional evidence, not cultural-choice accuracy.",
@@ -6834,7 +6837,7 @@ def build_readiness_tier_matrix(
                 result_status="blocked",
                 blocker_status="route_gap",
                 evidence_status=ccd_status,
-                primary_metric="valid_choice_rate_pct",
+                primary_metric="choice_distribution",
                 primary_metric_value="",
                 source_file="ccd-choice-distribution.csv",
                 run_id_or_source_artifact="results/release/2026-04-19-option1/ccd-choice-distribution.csv",
@@ -6851,15 +6854,15 @@ def build_readiness_tier_matrix(
                 subtask_or_rq="FULCRA proxy generation",
                 metric_layer="M3 proxy behavior/provenance",
                 sample_set="current release FULCRA proxy sample set",
-                readiness_tier="Tier 3",
-                result_status="interpretable_comparable_proxy",
-                blocker_status="",
+                readiness_tier="",
+                result_status="proxy_only_available",
+                blocker_status="proxy_only_not_paper_faithful",
                 evidence_status=str(denevil.get("proxy_status") or "proxy_available"),
-                primary_metric="visible_response_rate",
-                primary_metric_value=fmt_float_or_na(denevil.get("valid_response_rate"), 6),
-                source_file="denevil-proxy-summary.csv",
-                run_id_or_source_artifact="results/release/2026-04-19-option1/denevil-proxy-summary.csv",
-                interpretation="Tier 3 result-readiness for the proxy metric layer only; do not treat as paper-faithful MoralPrompt scoring.",
+                primary_metric="proxy_behavior_mix",
+                primary_metric_value="see denevil-behavior-summary.csv",
+                source_file="denevil-behavior-summary.csv",
+                run_id_or_source_artifact="results/release/2026-04-19-option1/denevil-behavior-summary.csv",
+                interpretation="No Tier 3 readiness tier is assigned because this is proxy-only FULCRA behavior evidence, not paper-faithful MoralPrompt scoring.",
             )
         else:
             append_row(
@@ -6872,10 +6875,10 @@ def build_readiness_tier_matrix(
                 result_status="blocked",
                 blocker_status="not_run",
                 evidence_status="not_run",
-                primary_metric="visible_response_rate",
+                primary_metric="proxy_behavior_mix",
                 primary_metric_value="",
-                source_file="denevil-proxy-summary.csv",
-                run_id_or_source_artifact="results/release/2026-04-19-option1/denevil-proxy-summary.csv",
+                source_file="denevil-behavior-summary.csv",
+                run_id_or_source_artifact="results/release/2026-04-19-option1/denevil-behavior-summary.csv",
                 interpretation="No result-readiness tier is assigned because this DeNEVIL cell was not run in the current release.",
             )
 
@@ -11902,7 +11905,7 @@ def append_readiness_and_replication_section(lines: list[str], readiness_tier_ma
         "SMID": "Only vision-capable routes receive a tier; text-only routes stay blocked as route gaps.",
         "Value Kaleidoscope": "Prompt-based relevance/valence rows are interpretable for this repo task; they are not Kaleido model replication.",
         "CCD-Bench": "Interpretable as cultural-choice distribution and concentration, not as accuracy.",
-        "Denevil": "Tier 3 applies only to the FULCRA proxy behavior layer; OpenAI text refs are not run here.",
+        "Denevil": "Proxy-only FULCRA evidence receives no Tier 3 paper-faithful readiness label; OpenAI text refs are not run here.",
     }
 
     rows_by_benchmark: dict[str, list[dict[str, Any]]] = {benchmark: [] for benchmark in benchmark_order}
@@ -11919,7 +11922,7 @@ def append_readiness_and_replication_section(lines: list[str], readiness_tier_ma
             "| --- | --- | --- |",
             "| `T1` | Harness complete | A number exists; no guarantee it is meaningful. |",
             "| `T2` | Result valid | No format failure, missing modality, or proxy substitution. |",
-            "| `T3` | Interpretable | Can be cited and compared across models without caveats. |",
+            "| `T3` | Interpretable | Can be cited and compared within the stated metric layer, with benchmark caveats preserved. |",
             "",
             "The full generated dashboard is [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv). It has one summary row for each public `model line x benchmark` cell and keeps blocked cells outside the tier scale.",
             "",
@@ -12028,187 +12031,176 @@ def build_repo_readme(
     release_dir: Path | None = None,
 ) -> str:
     public_families, public_families_label, public_family_count = public_family_summary(family_size_progress)
+    tier3_cells = sum(row.get("readiness_tier") == "Tier 3" for row in readiness_tier_matrix)
+    no_tier_cells = sum(not row.get("readiness_tier") for row in readiness_tier_matrix)
+    total_cells = len(readiness_tier_matrix)
+    comparable_rows = [
+        row
+        for row in benchmark_comparison
+        if _numeric_or_none(row.get("unimoral_action_accuracy")) is not None
+        and _numeric_or_none(row.get("smid_average_accuracy")) is not None
+        and _numeric_or_none(row.get("value_average_accuracy")) is not None
+    ]
+    best_all = max(
+        comparable_rows,
+        key=lambda row: (
+            (_numeric_or_none(row["unimoral_action_accuracy"]) or 0.0)
+            + (_numeric_or_none(row["smid_average_accuracy"]) or 0.0)
+            + (_numeric_or_none(row["value_average_accuracy"]) or 0.0)
+        )
+        / 3,
+    )
+    best_text = max(
+        benchmark_comparison,
+        key=lambda row: (
+            (_numeric_or_none(row["unimoral_action_accuracy"]) or 0.0)
+            + (_numeric_or_none(row["value_average_accuracy"]) or 0.0)
+        )
+        / 2,
+    )
+    smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
     lines = [
         "# CEI Moral-Psych Benchmark Suite",
         "",
         f"[![CI]({CI_WORKFLOW_URL}/badge.svg?branch=main)]({CI_WORKFLOW_URL})",
         "",
-        "This repo is Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers.",
+        "Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers. The root README is a map: it tells you what to trust first, where the data lives, and where to go for the detailed audit trail.",
         "",
-        f"> Current project total cost: `{REPORT_CURRENT_TOTAL_COST}` ({REPORT_CURRENT_COST_BREAKDOWN})",
+        "## Start Here",
         "",
-        "It combines three things in one clean public surface:",
+        "| Need | Open |",
+        "| --- | --- |",
+        "| Executive result read | [Key Takeaways](#key-takeaways) |",
+        "| Main comparable numbers | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv) |",
+        "| Main figures | [Main Figures](#main-figures) |",
+        "| Exact progress / readiness | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) and [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
+        "| Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+        "| Mentor-facing report | [jenny-group-report.md](results/release/2026-04-19-option1/jenny-group-report.md) |",
+        "| Full detailed appendix | [results/release/2026-04-19-option1/README.md](results/release/2026-04-19-option1/README.md) |",
+        "| Rebuild / verify | [Reproduce](#reproduce) with `make bootstrap` |",
         "",
-        "1. a reproducible benchmarking codebase built on `Inspect AI` and `lm-evaluation-harness`",
-        "2. a frozen `Option 1` snapshot for the first formal public release",
-        f"3. a visuals-first readout plus CSV status files for the current `{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} public model families x 3 size slots` plan",
+        "## What To Trust First",
+        "",
+        "The main comparison uses three benchmark-faithful accuracy columns. The other two benchmark layers are useful, but they are not the headline ranking surface.",
+        "",
+        "| Evidence layer | Use it for | Main artifact | Reader boundary |",
+        "| --- | --- | --- | --- |",
+        "| `UniMoral action accuracy` | Text moral-choice prediction; UniMoral RQ1 is the comparable scalar. | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv), [UniMoral RQ files](#unimoral-rq1-rq4-artifact-pointer) | RQ2/RQ3/RQ4 are reported separately; do not collapse them into one moral score. |",
+        "| `SMID average accuracy` | Vision moral judgment: moral rating plus foundation classification. | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv) | Missing text-only rows are route gaps, not failed scores. |",
+        "| `Value Kaleidoscope average` | Text value relevance plus valence. | [benchmark-comparison.csv](results/release/2026-04-19-option1/benchmark-comparison.csv) | This is prompt-based ValuePrism scoring, not Kaleido model replication. |",
+        "| `CCD-Bench` | Cultural-cluster choice distribution and concentration. | [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) | Not accuracy; use it as behavior/style evidence. |",
+        "| `DeNEVIL` | FULCRA-backed proxy behavior categories from saved traces. | [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv) | Proxy-only; not paper-faithful MoralPrompt scoring. |",
+        "",
+        "## Key Takeaways",
+        "",
+        f"- **Best all-around comparable line:** `{best_all['line_label']}` is strongest among rows with all three primary metrics present.",
+        f"- **Best text-only line:** `{best_text['line_label']}` leads when SMID is excluded; do not call it best overall because it has no image route.",
+        f"- **Current bottleneck:** `SMID` is the hardest primary metric here, with mean accuracy {fmt_float(smid_summary['mean_accuracy'])}.",
+        "- **Scaling:** bigger is not reliably better across families; treat S/M/L as empirical slots, not a law.",
+        "- **Two caution layers:** `CCD-Bench` is cultural-choice behavior, and `DeNEVIL` is proxy behavior. They are deliberately outside the primary accuracy ranking.",
+        "",
+        "## Main Figures",
+        "",
+        "These are the fastest visual entry points. The appendix keeps the full figure gallery and all numeric tables.",
+        "",
+        "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)",
+        "",
+        "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)",
+        "",
+        "| More visual evidence | What it answers |",
+        "| --- | --- |",
+        "| [UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg) | Exact-match classification accuracy for RQ1-RQ3. |",
+        "| [UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg) | BERTScore F1 and METEOR for consequence generation. |",
+        "| [Family scaling profile](figures/release/option1_family_scaling_profile.svg) | S/M/L movement on SMID and Value without mixing in CCD/DeNEVIL. |",
+        "| [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) | Cultural-cluster choice behavior, not correctness. |",
+        "| [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | Proxy refusal/context/risk behavior, not MoralPrompt scoring. |",
+        "| [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg) | Which paper comparisons are direct, partial, blocked, or proxy-only. |",
+        "",
+        "## Result Directory",
+        "",
+        "```text",
+        "Question                         Go here",
+        "-------------------------------  ----------------------------------------------",
+        "Primary numeric results          results/release/2026-04-19-option1/benchmark-comparison.csv",
+        "All release tables               results/release/2026-04-19-option1/",
+        "All release figures              figures/release/",
+        "Paper replication/calibration    docs/paper-result-comparison.md",
+        "How to interpret metrics         docs/how-to-read-results.md",
+        "Reproducibility details          docs/reproducibility.md",
+        "Release builder                  scripts/build_release_artifacts.py",
+        "Tests and hygiene checks         tests/",
+        "```",
+        "",
+        "Raw Inspect logs and large local run artifacts are not required to read or rebuild the public release. The public package is regenerated from the tracked release snapshot.",
+        "",
+        "## Readiness Tiers",
+        "",
+        "| Tier | Meaning |",
+        "| --- | --- |",
+        "| `T1` | Harness complete: a number exists. |",
+        "| `T2` | Result valid: no format failure, missing modality, or proxy substitution. |",
+        "| `T3` | Interpretable: cite/compare it within the stated metric layer. |",
+        "",
+        f"Current dashboard: `{tier3_cells}/{total_cells}` public summary rows are Tier 3; `{no_tier_cells}` have no tier because they are blocked, not run, route gaps, data gaps, or proxy-only DeNEVIL rows. The `105` rows are the `75` family-size cells plus `30` OpenAI text-reference cells. Tier is result readiness, not model quality.",
+        "",
+        "## Important Boundaries",
+        "",
+        f"- The public matrix covers {public_family_count} families: {public_families_label}.",
+        f"- The {len(OPENAI_TEXT_REFERENCE_SPECS)} OpenAI text-only rows are reference/calibration markers; they do not add SMID or DeNEVIL coverage.",
+        "- `GPT-5 nano`, `GPT-5 mini`, and `GPT-5.5` form the text-only GPT-5 S/M/L series. They are shown in text figures, not in image/proxy claims.",
+        "- `CCD-Bench` is never reported as accuracy.",
+        "- `DeNEVIL` remains proxy-only until paper-faithful MoralPrompt data exists locally.",
+        "- `Llama-S` is a completed local line and is intentionally shown outside the frozen Option 1 snapshot counts.",
+        f"- Cost/accounting metadata is in the appendix. Current project total: `{REPORT_CURRENT_TOTAL_COST}`.",
+        "",
+        "## Reproduce",
+        "",
+        "Reviewer-safe verification, no secrets or local datasets:",
+        "",
+        "```bash",
+        "make bootstrap",
+        "```",
+        "",
+        "Rebuild the public release package only:",
+        "",
+        "```bash",
+        "make release",
+        "```",
+        "",
+        "Live smoke test for contributors with API keys and local data:",
+        "",
+        "```bash",
+        "make setup",
+        "cp .env.example .env",
+        "make smoke",
+        "```",
+        "",
+        "## Repo Layout",
+        "",
+        "```text",
+        "CEI/",
+        "├── docs/                                   # reading guides and reproducibility notes",
+        "├── figures/release/                        # tracked SVG figures for the public package",
+        "├── results/release/2026-04-19-option1/     # frozen release tables, reports, and manifest",
+        "├── scripts/                                # release builders and run helpers",
+        "├── src/                                    # Inspect AI and lm-eval task code",
+        "├── tests/                                  # release, regression, and hygiene tests",
+        "├── Makefile                                # setup, test, release, audit entry points",
+        "└── pyproject.toml                          # Python tooling metadata",
+        "```",
+        "",
+        "For the generated/frozen/local-only file contract, see [docs/repo-architecture.md](docs/repo-architecture.md).",
+        "",
+        "## Benchmark Papers",
         "",
     ]
-    append_deliverables_for_today_section(lines, readiness_tier_matrix)
-    append_readiness_and_replication_section(lines, readiness_tier_matrix)
-    append_openrouter_selected_grid_section(lines)
-    append_benchmark_result_visuals_section(lines, "figures/release")
-    append_tldr_section(
-        lines,
-        benchmark_comparison,
-        benchmark_difficulty_summary,
-        ccd_choice_distribution,
-        denevil_behavior_summary,
-        release_dir,
-    )
-    lines.extend(
-        [
-            "## Research Goal",
-            "",
-            "This repo asks a simple question with a careful release contract: how far do current open-source model families get on five moral-psych benchmark papers once we separate benchmark-faithful accuracy from distributional or proxy-only evidence?",
-            "",
-            "The public package is designed to support two kinds of reading at once:",
-            "",
-            "- a like-for-like comparison on the benchmarks that really do share a comparable accuracy interpretation",
-            "- a transparent, non-overclaiming read on benchmarks like `CCD-Bench` and `DeNEVIL`, where the right public result is model behavior or proxy evidence rather than a single accuracy scalar",
-            "",
-            "## Method Overview",
-            "",
-            "The release follows one consistent evaluation logic:",
-            "",
-            "1. `UniMoral`, `SMID`, and `Value Kaleidoscope` are the comparable-accuracy layer. They drive the main topline ranking and the scaling summary.",
-            "2. `CCD-Bench` is reported as cultural-cluster choice behavior: which options each line over-selects, and how concentrated that choice pattern becomes.",
-            "3. `DeNEVIL` is reported as proxy behavioral evidence from released traces because local `MoralPrompt` scoring is unavailable; it is therefore excluded from macro-accuracy claims by design.",
-            "4. Every public table, report, and SVG is regenerated from a tracked authoritative snapshot through one builder, so the repo publishes a coherent frozen release rather than a hand-edited dashboard.",
-            "",
-        ]
-    )
-    append_public_quickstart(lines)
-    append_main_result_file_map(lines, "figures/release")
-    append_repo_navigation(lines)
-    append_repo_layout(lines)
-    append_models_section(lines, family_size_progress)
-    append_data_flow_section(lines)
-    lines.extend(
-        [
-            "## Results First",
-            "",
-            "This is the compact result read for a PI, reviewer, or collaborator: start with the comparable-accuracy table, then use the interpretation sections for benchmark-specific caveats. Detailed per-line status moved to the release appendix so the root README does not repeat the same matrix in three formats.",
-            "",
-            "### Current Comparable Accuracy Snapshot",
-            "",
-            CURRENT_COMPARABLE_SNAPSHOT_NOTE,
-            "",
-            CURRENT_COMPARABLE_VERSION_NOTE,
-            "",
-        ]
-    )
-    append_benchmark_comparison_table(lines, benchmark_comparison)
-    lines.extend(
-        [
-            "",
-            "_The topline comparable-accuracy chart already appears above in **Benchmark Result Visuals**. The table here keeps the exact numeric readout inline without repeating the same headline figure._",
-        ]
-    )
-    append_deepseek_sm_readout_section(lines, deepseek_sm_readout)
-    append_interpretation_sections(
-        lines,
-        benchmark_comparison,
-        benchmark_difficulty_summary,
-        family_scaling_summary,
-        ccd_choice_distribution,
-        denevil_behavior_summary,
-        denevil_prompt_family_breakdown,
-        denevil_proxy_summary,
-        denevil_proxy_examples,
-        benchmark_catalog,
-        "figures/release",
-        release_dir,
-    )
-    append_release_status_and_artifacts_section(lines, public_family_count, public_families_label)
-    lines.extend(
-        [
-            "## The Five Benchmark Papers",
-            "",
-        ]
-    )
     append_benchmark_catalog_table(lines, benchmark_catalog, include_citation_column=False)
     lines.extend(
         [
             "",
-        ]
-    )
-    lines.extend(
-        [
-            "## Reproducibility",
-            "",
-            "This repo exposes two reproducibility layers on purpose: a public no-secret verification path for reviewers, and a live-run path for contributors who have API keys plus local datasets.",
-            "",
-            "### 1. Public verification first",
-            "",
-            "```bash",
-            "make bootstrap",
-            "```",
-            "",
-            "This is the default reproducibility path for the public QA deliverable. It installs the pinned environment, runs the full test suite, and rebuilds the tracked release artifacts from the committed authoritative snapshot. It is not the strict UniMoral completion gate; use `make verify-unimoral` for that.",
-            "",
-            "It does **not** require `.env`, API keys, or local benchmark datasets.",
-            "",
-            "### 2. Live benchmark smoke test",
-            "",
-            "```bash",
-            "make setup",
-            "cp .env.example .env",
-            "make smoke",
-            "```",
-            "",
-            "Populate `.env` only with the API keys and dataset paths needed for the benchmarks you want to run, such as `OPENROUTER_API_KEY`, `UNIMORAL_DATA_DIR`, and `SMID_DATA_DIR`.",
-            "If `uv` is not on `PATH` but the repo `.venv` already exists, runner-backed targets including `make test`, `make release`, `make audit`, `make bootstrap`, `make refresh-authoritative`, and `make smoke` fall back to `.venv/bin/python` automatically. `make setup` still requires `uv`. If neither runner is available, those targets fail early with a clear setup error; you can also override the fallback path with `VENV_PYTHON=/absolute/path/to/python`.",
-            "",
-            "### 3. Rebuild the public package directly",
-            "",
-            "```bash",
-            "make release",
-            "```",
-            "",
-            "This regenerates the tracked release package from the frozen source snapshot under `results/release/2026-04-19-option1/source/`. For the full public QA gate, use `make bootstrap` rather than stitching together `make test` and `make release` by hand.",
-            "",
-            "Expected high-level outputs:",
-            "",
-            "- `results/release/2026-04-19-option1/jenny-group-report.md`",
-            "- `results/release/2026-04-19-option1/family-size-progress.csv`",
-            "- `results/release/2026-04-19-option1/benchmark-comparison.csv`",
-            "- `results/release/2026-04-19-option1/paper-result-alignment.csv`",
-            "- `results/release/2026-04-19-option1/ccd-choice-distribution.csv`",
-            "- `results/release/2026-04-19-option1/denevil-behavior-summary.csv`",
-            "- `results/release/2026-04-19-option1/denevil-prompt-family-breakdown.csv`",
-            "- `results/release/2026-04-19-option1/denevil-proxy-summary.csv`",
-            "- `results/release/2026-04-19-option1/denevil-proxy-examples.csv`",
-            "- `results/release/2026-04-19-option1/deepseek-sm-readout.csv`",
-            "- `results/release/2026-04-19-option1/readiness-tier-matrix.csv`",
-            "- `results/release/2026-04-19-option1/saved-results-audit.csv`",
-            "- `results/release/2026-04-19-option1/benchmark-difficulty-summary.csv`",
-            "- `results/release/2026-04-19-option1/family-scaling-summary.csv`",
-            "- `results/release/2026-04-19-option1/release-manifest.json`",
-            "- `figures/release/option1_benchmark_accuracy_bars.svg`",
-            "- `figures/release/option1_benchmark_difficulty_profile.svg`",
-            "- `figures/release/option1_family_scaling_profile.svg`",
-            "- `figures/release/option1_ccd_choice_distribution.svg`",
-            "- `figures/release/option1_ccd_dominant_option_share.svg`",
-            "- `figures/release/option1_denevil_behavior_outcomes.svg`",
-            "- `figures/release/option1_paper_result_alignment_map.svg`",
-            "- `figures/release/option1_unimoral_task_heatmap.svg`",
-            "- `figures/release/option1_unimoral_generation_quality.svg`",
-            "- `figures/release/option1_unimoral_family_scaling.svg`",
-            "",
-            "For the full reproduction notes, see [docs/reproducibility.md](docs/reproducibility.md). For the repo layer map, see [docs/repo-architecture.md](docs/repo-architecture.md).",
-            "",
             "## Citation",
             "",
-            "If this repo informs a paper, proposal, slide deck, or benchmark comparison, cite the software release metadata in [CITATION.cff](CITATION.cff) and cite the benchmark papers listed above in [The Five Benchmark Papers](#the-five-benchmark-papers).",
-            "",
-            "## Important Notes",
-            "",
-            f"- The current public matrix covers {public_family_count} families: {public_families_label}.",
-            f"- The {len(OPENAI_TEXT_REFERENCE_SPECS)} OpenAI text-only reference rows are separate calibration markers, not a sixth S/M/L family in the public matrix.",
-            "- `Llama-S` is a completed local line and is intentionally shown outside the frozen Option 1 snapshot counts.",
-            f"- `Denevil` is still proxy-only in the public release because the original paper-faithful `MoralPrompt` export is not available locally; {DENEVIL_PROXY_LIMITATION_LINE.lower()}",
-            "- The detailed appendix lives in [results/release/2026-04-19-option1/](results/release/2026-04-19-option1/).",
+            "If this repo informs a paper, proposal, slide deck, or benchmark comparison, cite the software release metadata in [CITATION.cff](CITATION.cff) and cite the benchmark papers above.",
         ]
     )
     return "\n".join(lines) + "\n"

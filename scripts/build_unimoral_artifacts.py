@@ -2568,6 +2568,61 @@ def build_markdown_section(
     return "\n".join(lines).strip() + "\n"
 
 
+def build_root_markdown_section(
+    coverage: list[dict[str, object]],
+    spreads: list[dict[str, object]],
+    rankings: list[dict[str, object]],
+    *,
+    resume_plan_link: str,
+    completion_audit_link: str,
+) -> str:
+    spread_by_task = {row["task_name"]: row for row in spreads}
+    top_by_task = {row["task_name"]: row for row in rankings if str(row["rank"]) == "1"}
+    lines = [
+        "## UniMoral RQ1-RQ4 Artifact Pointer",
+        "",
+        "UniMoral has four task surfaces. The root README keeps only the compact status map; the full table, sample-level audit, and figures live in the release appendix.",
+        "",
+        "| RQ | What it measures | Primary metric | Current status | Top line |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    for item in coverage:
+        task_name = str(item["task_name"])
+        task = TASKS[task_name]
+        spread = spread_by_task[task_name]
+        top = top_by_task.get(task_name, {})
+        top_cell = ""
+        if top:
+            top_cell = f"{display_line_label(top['line_label'])} ({format_value(top['value'])})"
+        lines.append(
+            "| {rq} | {task_label} | {metric} | {complete}/{expected} strict-complete lines; {reported}/{expected} reported | {top} |".format(
+                rq=item["rq"],
+                task_label=item["task_label"],
+                metric=task["metric"],
+                complete=item["complete_model_lines"],
+                expected=item["expected_model_lines"],
+                reported=item["reported_model_lines"],
+                top=top_cell,
+            )
+        )
+    lines.extend(
+        [
+            "",
+            "Useful links:",
+            "",
+            "- [UniMoral full benchmark CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv)",
+            "- [sample-level predictions](results/release/2026-04-19-option1/unimoral-sample-predictions.csv)",
+            "- [RQ4 BERTScore/METEOR table](results/release/2026-04-19-option1/unimoral-rq4-bertscore.csv)",
+            f"- [MiniMax resume plan]({resume_plan_link})",
+            f"- [completion audit]({completion_audit_link})",
+            "- [release appendix UniMoral section](results/release/2026-04-19-option1/README.md#unimoral-full-benchmark-coverage)",
+            "",
+            "Metric boundary: RQ1-RQ3 use exact-match accuracy; RQ4 uses BERTScore F1 as the primary semantic-generation metric, with METEOR as a lexical side metric.",
+        ]
+    )
+    return "\n".join(lines).strip() + "\n"
+
+
 ORG_README_TAIL_HEADINGS = (
     "## Claude Code Slash Commands",
     "## Contributing",
@@ -2613,12 +2668,10 @@ def update_markdown_reports(
     spreads: list[dict[str, object]],
     rankings: list[dict[str, object]],
 ) -> None:
-    root_section = build_markdown_section(
-        rows,
+    root_section = build_root_markdown_section(
         coverage,
         spreads,
         rankings,
-        figure_prefix="figures/release/",
         resume_plan_link="results/release/2026-04-19-option1/unimoral-minimax-resume-plan.md",
         completion_audit_link="results/release/2026-04-19-option1/unimoral-completion-audit.md",
     )

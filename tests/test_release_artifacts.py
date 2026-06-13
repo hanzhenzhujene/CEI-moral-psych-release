@@ -213,7 +213,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["report_metadata"]["ci_workflow_url"].endswith("/actions/workflows/ci.yml")
     assert manifest["target_matrix"]["family_size_benchmark_cells"] == 75
     assert manifest["target_matrix"]["readiness_summary_cells"] == 105
-    assert manifest["target_matrix"]["tier3_summary_cells"] == 87
+    assert manifest["target_matrix"]["tier3_summary_cells"] == 72
     assert manifest["target_matrix"]["blocked_summary_cells"] == 18
     assert manifest["target_matrix"]["model_families"] == 5
     assert manifest["model_families"] == ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"]
@@ -918,7 +918,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert gpt5_mini_ccd["readiness_tier"] == "Tier 3"
     assert gpt5_mini_ccd["metric_layer"] == "M2 choice-distribution behavior"
     assert gpt5_mini_ccd["subtask_or_rq"] == "cultural_choice"
-    assert gpt5_mini_ccd["primary_metric_value"] == "100.000000"
+    assert gpt5_mini_ccd["primary_metric"] == "choice_distribution"
+    assert "dominant=option_" in gpt5_mini_ccd["primary_metric_value"]
+    assert "effective_clusters=" in gpt5_mini_ccd["primary_metric_value"]
     gpt5_mini_denevil = readiness_by_pair[("GPT-5 mini", "Denevil")]
     assert gpt5_mini_denevil["readiness_tier"] == ""
     assert gpt5_mini_denevil["metric_layer"] == "M3 proxy behavior/provenance"
@@ -926,10 +928,12 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert gpt5_mini_denevil["blocker_status"] == "not_run"
     assert gpt5_mini_denevil["evidence_status"] == "not_run"
     qwen_small_denevil = readiness_by_pair[("Qwen-S", "Denevil")]
-    assert qwen_small_denevil["readiness_tier"] == "Tier 3"
-    assert qwen_small_denevil["result_status"] == "interpretable_comparable_proxy"
-    assert qwen_small_denevil["primary_metric_value"] == "0.999854"
-    assert "proxy metric layer only" in qwen_small_denevil["interpretation"]
+    assert qwen_small_denevil["readiness_tier"] == ""
+    assert qwen_small_denevil["result_status"] == "proxy_only_available"
+    assert qwen_small_denevil["blocker_status"] == "proxy_only_not_paper_faithful"
+    assert qwen_small_denevil["primary_metric"] == "proxy_behavior_mix"
+    assert qwen_small_denevil["primary_metric_value"] == "see denevil-behavior-summary.csv"
+    assert "No Tier 3 readiness tier is assigned" in qwen_small_denevil["interpretation"]
 
     with (release_dir / "denevil-behavior-summary.csv").open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
@@ -1623,7 +1627,7 @@ def test_openai_gpt_rows_are_visible_in_unimoral_and_ccd_figures():
         assert "OpenAI refs are one-off text-only rows" not in text
 
 
-def test_write_root_readme_keeps_benchmark_visuals_section(tmp_path):
+def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     repo_copy = tmp_path / "repo"
     script_copy = repo_copy / "scripts" / "build_release_artifacts.py"
     source_copy = repo_copy / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
@@ -1647,19 +1651,26 @@ def test_write_root_readme_keeps_benchmark_visuals_section(tmp_path):
     subprocess.run([sys.executable, str(script_copy), "--write-root-readme"], check=True, cwd=repo_copy)
 
     root_readme = (repo_copy / "README.md").read_text(encoding="utf-8")
-    assert root_readme.index("## Benchmark Result Visuals") < root_readme.index("## TL;DR")
-    assert root_readme.index("## TL;DR") < root_readme.index("## Research Goal")
-    assert root_readme.index("## Benchmark Result Visuals") < root_readme.index("## Public Quickstart")
-    assert "| Go straight to the benchmark visuals | [Benchmark Result Visuals](#benchmark-result-visuals) |" in root_readme
-    assert "The GPT-5 subset is a black text-only S/M/L series (`GPT-5 nano`, `GPT-5 mini`, `GPT-5.5`)" in root_readme
-    assert "`openai/gpt-5.5`" in root_readme
-    assert "None has SMID or DeNEVIL." in root_readme
+    assert root_readme.index("## Start Here") < root_readme.index("## What To Trust First")
+    assert root_readme.index("## What To Trust First") < root_readme.index("## Key Takeaways")
+    assert root_readme.index("## Key Takeaways") < root_readme.index("## Main Figures")
+    assert "The main comparison uses three benchmark-faithful accuracy columns." in root_readme
+    assert "`UniMoral action accuracy`" in root_readme
+    assert "`SMID average accuracy`" in root_readme
+    assert "`Value Kaleidoscope average`" in root_readme
+    assert "`CCD-Bench` | Cultural-cluster choice distribution and concentration." in root_readme
+    assert "`DeNEVIL` | FULCRA-backed proxy behavior categories from saved traces." in root_readme
+    assert "The 6 OpenAI text-only rows are reference/calibration markers; they do not add SMID or DeNEVIL coverage." in root_readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
     assert "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
-    assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in root_readme
-    assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
-    assert "![CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in root_readme
-    assert "![DeNEVIL proxy behavioral outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
+    assert "[Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in root_readme
+    assert "[CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
+    assert "[DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
+    assert "[Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "## Readiness Tiers" in root_readme
+    assert "Current dashboard:" in root_readme
+    assert "public summary rows are Tier 3" in root_readme
     assert "../../../figures/release" not in root_readme
-    assert root_readme.count("## Benchmark Result Visuals") == 1
+    assert "## Benchmark Result Visuals" not in root_readme
+    assert "## TL;DR" not in root_readme
     assert "## Claude Code Slash Commands" in root_readme

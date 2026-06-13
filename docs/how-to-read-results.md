@@ -31,7 +31,7 @@ Blocked, not-run, route-gap, and data-gap cells are not assigned a tier. They ar
 
 The dashboard is a public summary at `model_line x benchmark`. The canonical internal unit is lower level: `model_id / provider_route / size_slot x benchmark x subtask_or_RQ x metric_layer x sample_set`. A tier is not a model score, not a model-family score, and not a benchmark-only label.
 
-These tiers are paired with metric layers. Tier 3 CCD-Bench is still choice-distribution behavior, not accuracy, and Tier 3 DeNEVIL in this release is proxy behavior/provenance, not paper-faithful MoralPrompt scoring.
+These tiers are paired with metric layers. Tier 3 CCD-Bench is still choice-distribution behavior, not accuracy. DeNEVIL receives no Tier 3 readiness label in this release because the available evidence is proxy-only FULCRA behavior, not paper-faithful MoralPrompt scoring.
 
 ## Reporting Rules Used Here
 

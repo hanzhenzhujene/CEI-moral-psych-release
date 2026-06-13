@@ -92,44 +92,38 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert readme.startswith("# CEI Moral-Psych Benchmark Suite")
     assert "Jenny Zhu's CEI moral-psych benchmark deliverable" in readme
-    assert "## Public Quickstart" in readme
-    assert "## Deliverables To Use Today" in readme
-    assert 'Current project total cost: `$888.06`' in readme
-    assert "| Main visual story | What are the benchmark results, and how should each graph be read? | [Benchmark Result Visuals](#benchmark-result-visuals) |" in readme
-    assert "| Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `87` of `105` cells are Tier 3; `18` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |" in readme
-    assert "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |" in readme
-    assert "| OpenRouter selected-grid follow-up | What happened when the text-only OpenRouter grid was run across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench? | [full readout](results/openrouter-selected-grid-moral-psych-full/README.md), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md) |" in readme
-    assert "## Result Readiness Progress" in readme
-    assert "| `T1` | Harness complete | A number exists; no guarantee it is meaningful. |" in readme
-    assert "| `T2` | Result valid | No format failure, missing modality, or proxy substitution. |" in readme
-    assert "| `T3` | Interpretable | Can be cited and compared across models without caveats. |" in readme
-    assert "| `SMID` | 9/21 | 12/21 | Only vision-capable routes receive a tier; text-only routes stay blocked as route gaps. |" in readme
-    assert "## Replication And Calibration Snapshot" in readme
-    assert "compare each implemented benchmark against its original paper" in readme
-    assert "| `CCD-Bench` | Current choice-distribution rows plus saved/prior Mistral Nemo overlap; GPT-5.5 has 2,182/2,182 valid choices. | Partial distributional comparison only; CCD-Bench is not an accuracy benchmark. |" in readme
-    assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
-    assert "## OpenRouter Selected-Grid Follow-Up" in readme
-    assert "119/119` planned model-task rows have terminal states" in readme
-    assert "101` are scored successes" in readme
-    assert "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg" in readme
-    assert "results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg" in readme
-    assert "results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg" in readme
-    assert "The figures below replace the earlier dense task-score plot as the primary reading path." in readme
-    assert "## Navigate This Repo" in readme
-    assert "## Results First" in readme
-    assert "### DeepSeek S/M/L Log-Derived Readout" in readme
+    assert "## Start Here" in readme
+    assert "## What To Trust First" in readme
+    assert "The main comparison uses three benchmark-faithful accuracy columns." in readme
+    assert "`UniMoral action accuracy`" in readme
+    assert "`SMID average accuracy`" in readme
+    assert "`Value Kaleidoscope average`" in readme
+    assert "`CCD-Bench` | Cultural-cluster choice distribution and concentration." in readme
+    assert "`DeNEVIL` | FULCRA-backed proxy behavior categories from saved traces." in readme
+    assert "## Key Takeaways" in readme
+    assert "**Best all-around comparable line:** `MiniMax-S`" in readme
+    assert "**Best text-only line:** `GPT-5.5`" in readme
+    assert "## Main Figures" in readme
+    assert "## Result Directory" in readme
+    assert "## Readiness Tiers" in readme
+    assert "| `T3` | Interpretable: cite/compare it within the stated metric layer. |" in readme
+    assert "Current dashboard: `72/105` public summary rows are Tier 3" in readme
+    assert "The `105` rows are the `75` family-size cells plus `30` OpenAI text-reference cells." in readme
+    assert "Cost/accounting metadata is in the appendix. Current project total: `$888.06`." in readme
+    assert "## OpenRouter Selected-Grid Follow-Up" not in readme
+    assert "## Results First" not in readme
+    assert "### DeepSeek S/M/L Log-Derived Readout" not in readme
     assert "results/release/2026-04-19-option1/README.md" in readme
-    assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
     assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme
     assert "figures/release/option1_unimoral_task_heatmap.svg" in readme
     assert "figures/release/option1_unimoral_generation_quality.svg" in readme
     assert "figures/release/option1_unimoral_family_scaling.svg" in readme
     assert "figures/release/option1_family_scaling_profile.svg" in readme
     assert "figures/release/option1_ccd_choice_distribution.svg" in readme
-    assert "figures/release/option1_ccd_dominant_option_share.svg" in readme
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
-    assert "`CCD-Bench` is reported as cultural-cluster choice behavior" in readme
-    assert "`DeNEVIL` is reported as proxy behavioral evidence" in readme
+    assert "figures/release/option1_paper_result_alignment_map.svg" in readme
+    assert "## UniMoral RQ1-RQ4 Artifact Pointer" in readme
+    assert "RQ1-RQ3 use exact-match accuracy; RQ4 uses BERTScore F1" in readme
     assert "`make bootstrap`" in readme or "make audit" in readme
 
     unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
