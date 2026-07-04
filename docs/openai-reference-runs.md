@@ -4,7 +4,7 @@ This note documents the completed OpenAI text-reference rows and the promoted GP
 
 ## Completed Reference Rows
 
-The current release builder includes six completed text-only OpenAI reference rows in `benchmark-comparison.csv`, `ccd-choice-distribution.csv`, and the generated `readiness-tier-matrix.csv` summary:
+The current release builder includes six completed text-only OpenAI reference rows. Use the benchmark-specific result tables first: `unimoral-full-benchmark.csv` for UniMoral RQ1-RQ4, `value-kaleidoscope-results.csv` for ValuePrism relevance/valence, and `ccd-choice-distribution.csv` for CCD-Bench behavior. `benchmark-comparison.csv` is a supporting generated summary for figures, not the main OpenAI data entry.
 
 - `GPT-4o mini`
 - `GPT-5 nano`

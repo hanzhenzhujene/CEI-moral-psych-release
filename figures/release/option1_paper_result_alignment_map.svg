@@ -51,14 +51,14 @@
 <text x="116" y="181" text-anchor="middle" class="cellsub">UniMoral</text>
 <rect x="824" y="204" width="164" height="24" rx="10" fill="#d97706" opacity="0.92"/>
 <text x="906" y="221" text-anchor="middle" class="cellsub">Partial overlap</text>
-<text x="220" y="172" class="body">RQ1 action-prediction accuracy;</text>
-<text x="220" y="188" class="body">original table values not tracked</text>
-<text x="220" y="204" class="body">here.</text>
+<text x="220" y="172" class="body">RQ1 action-prediction task; visible</text>
+<text x="220" y="188" class="body">paper metric anchors tracked</text>
+<text x="220" y="204" class="body">separately.</text>
 <text x="510" y="172" class="body">Current RQ1 accuracy rows plus</text>
 <text x="510" y="188" class="body">saved/prior May 13 Llama 3.1 8B</text>
 <text x="510" y="204" class="body">evidence.</text>
-<text x="824" y="174" class="body">Partial overlap: same RQ1 metric,</text>
-<text x="824" y="190" class="body">saved/prior overlap only.</text>
+<text x="824" y="174" class="body">Partial overlap: same task surface,</text>
+<text x="824" y="190" class="body">related metrics, saved/prior evidence.</text>
 <rect x="42" y="238" width="1136" height="80" rx="18" class="subpanel"/>
 <rect x="58" y="258" width="116" height="36" rx="11" fill="#64748b"/>
 <text x="116" y="273" text-anchor="middle" class="cellsub">SMID</text>
@@ -107,6 +107,6 @@
 <text x="824" y="558" class="body">MoralPrompt comparison.</text>
 <rect x="48" y="646" width="1124" height="54" rx="16" class="legend-card"/>
 <text x="72" y="670" class="tiny">READ THIS FIGURE</text>
-<text x="72" y="692" class="body">Only UniMoral RQ1 has a clean paper-faithful metric overlap here; CCD is distributional behavior, DeNEVIL is proxy-only, and Value/Kaleido is</text>
-<text x="72" y="709" class="body">blocked until the gated model route is run.</text>
+<text x="72" y="692" class="body">UniMoral RQ1 is the clearest paper-to-current task bridge, but metric/model caveats remain; CCD is distributional behavior, DeNEVIL is</text>
+<text x="72" y="709" class="body">proxy-only, and Value/Kaleido is blocked until the gated model route is run.</text>
 </svg>

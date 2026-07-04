@@ -1,6 +1,6 @@
 # Jenny Zhu Moral-Psych Benchmark Report
 
-Updated: `June 12, 2026`
+Updated: `July 4, 2026`
 
 Frozen public snapshot referenced here: `Option 1`, `April 19, 2026`
 
@@ -74,6 +74,14 @@ _How to read it: protective refusals and corrective/contextual answers are the s
 ![Paper-vs-current replication map](../../../figures/release/option1_paper_result_alignment_map.svg)
 
 _What it answers: which benchmark-paper results can be compared directly, which are current-only benchmark comparisons, which rely on saved/prior evidence, and which are blocked or proxy-only._
+
+![Paper-result comparison table](../../../figures/release/option1_paper_result_comparison.svg)
+
+_What it shows: paper metric anchors and closest current release results in one visual table. UniMoral RQ4 appears twice, once for BERTScore F1 and once for METEOR._
+
+![Paper-model calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)
+
+_How to read the bridge: same/near paper-model overlaps, saved/prior evidence, OpenAI reference-family markers, and blocked replication gaps stay visually separate._
 
 Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
 
@@ -201,7 +209,7 @@ This is the reviewer-facing lookup: what each benchmark paper contains, whether 
 
 | Benchmark | Original paper/reference side | Our current side | Direct comparison status |
 | --- | --- | --- | --- |
-| `UniMoral` | RQ1 action-prediction accuracy; reference routes identified, but original paper table values are not tracked. | Current action-accuracy rows plus saved/prior Llama 3.1 8B and May 13 calibration rows. | Partial: same RQ1 metric, saved/prior overlap only. |
+| `UniMoral` | RQ1 action-prediction task with visible paper metric anchors in the RQ-level comparison CSV. | Current action-accuracy rows plus saved/prior Llama 3.1 8B and May 13 calibration rows. | Partial: same task surface, related metrics, saved/prior overlap only. |
 | `SMID` | Human-normed image stimulus set; no original LLM model roster found locally. | Current vision-route moral-rating plus foundation-classification average. | No paper-model comparison; compare only across our current vision-capable rows. |
 | `Value Kaleidoscope / ValuePrism` | Kaleido gated model family and ValuePrism relevance/valence setup. | Prompt-based LLM relevance and valence classification rows. | No direct comparison until Kaleido model access and execution are run. |
 | `CCD-Bench` | Ten-cluster cultural-choice behavior; reference artifacts include 17 model routes. | Current CCD choice distributions, dominant-cluster share, and effective clusters. | Compare distributions only; never read CCD as accuracy. |
@@ -349,7 +357,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `June 12, 2026` |
+| Repo update date | `July 4, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
 | Current project total cost | `$888.06` |
 | Total cost breakdown | MiniMax API: `$504.66`; OpenRouter model-family runs: `$343.42`, including `$17.760398` from the full selected-grid OpenRouter follow-up; OpenAI API reference sweep: `$39.98`. |

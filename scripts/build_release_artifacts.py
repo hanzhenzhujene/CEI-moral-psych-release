@@ -456,7 +456,6 @@ LEGACY_OPENAI_REFERENCE_LINE_LABELS = {
     "GPT-5-nano Ref",
     "GPT-4.1 nano",
     "GPT-5 mini",
-    "GPT-5-mini Ref",
     "GPT-5.5",
     "GPT-4.1 mini",
 }
@@ -572,18 +571,18 @@ PAPER_RESULT_ALIGNMENT_FIELDNAMES = [
 PAPER_RESULT_ALIGNMENT_ROWS = [
     {
         "benchmark": "UniMoral",
-        "paper_question_or_task": "RQ1 action prediction is the clean paper-faithful overlap: choose the human-selected action from a moral dilemma and two candidate actions. The release also reports repo-local UniMoral RQ2 typology, RQ3 factor attribution, and RQ4 consequence generation, but those should be read as additional benchmark tasks rather than exact paper-table replication.",
-        "paper_metric_or_result_surface": "Action-prediction accuracy for RQ1; other RQs use separate classification or generation metrics.",
+        "paper_question_or_task": "RQ1 action prediction is the cleanest task overlap: choose the human-selected action from a moral dilemma and two candidate actions. The release also reports repo-local UniMoral RQ2 typology, RQ3 factor attribution, and RQ4 consequence generation, but those should be read as additional benchmark tasks rather than exact paper-table replication.",
+        "paper_metric_or_result_surface": "Paper tables use weighted F1 for RQ1-RQ3 and BLEU/METEOR/BERTScore for RQ4; the release headline uses exact-match accuracy for RQ1-RQ3 and BERTScore F1/METEOR for RQ4.",
         "paper_models_or_reference_routes_identified": "Reference code names Phi-3.5-mini-instruct, Llama-3.1-8B-Instruct, and DeepSeek-R1-Distill-Llama-8B. The local May 13 calibration sweep also includes Mistral Nemo, Qwen2.5 7B, Llama 3 8B, and Llama 3.2 1B as saved/prior comparison rows.",
-        "paper_results_available_in_repo": "Exact original-paper table values are not tracked in this repo. Saved/prior May 13 UniMoral values are available: Mistral Nemo 0.648110; Qwen2.5 7B 0.640255; Llama 3.1 8B 0.638775; Llama 3 8B 0.631831; Llama 3.2 1B 0.405624.",
+        "paper_results_available_in_repo": "Visible paper metric anchors for RQ1-RQ4 are tracked in paper-result-comparison.csv; exact full paper-table replication still requires the paper model roster and metric setup. Saved/prior May 13 UniMoral values are available: Mistral Nemo 0.648110; Qwen2.5 7B 0.640255; Llama 3.1 8B 0.638775; Llama 3 8B 0.631831; Llama 3.2 1B 0.405624.",
         "current_repo_result_surface": "Current release reports UniMoral action accuracy in unimoral-full-benchmark.csv. The strongest current UniMoral rows are DeepSeek-M 0.683629 and GPT-5.5 0.683629; GPT-5.5 is text-only and has no SMID or DeNEVIL row.",
         "same_or_near_model_overlap": "Saved/prior exact overlap exists for Llama 3.1 8B, but this PR does not contain a fresh full original-paper-model rerun. DeepSeek current rows are not the same as the paper-named 8B distill route.",
         "paper_only_models_or_routes": "Phi-3.5-mini-instruct; DeepSeek-R1-Distill-Llama-8B; Llama-3.1-8B-Instruct as paper/reference routes unless deliberately rerun.",
         "ours_only_models_or_routes": "Qwen S/M/L, MiniMax S/M/L, DeepSeek S/M/L current routes, Llama S/M/L current routes, Gemma S/M/L, and OpenAI text-only reference rows including GPT-5.5.",
         "comparison_status": "saved_prior_overlap",
-        "can_compare_directly": "Partly. RQ1 action accuracy is the same kind of metric, but the exact paper table values are not tracked here and the exact overlapping model evidence is saved/prior rather than a fresh rerun.",
-        "classification_quality_readout": "Yes for the scored task metric: RQ1/RQ2/RQ3 use higher-better accuracy, while RQ4 uses higher-better BERTScore F1 and METEOR. Only RQ1 should be described as the clean paper-faithful action-prediction overlap.",
-        "reviewer_takeaway": "Use UniMoral as the cleanest paper-faithful accuracy comparison layer, while labeling the Llama 3.1 8B overlap as saved/prior evidence and GPT-5.5 as a current text-only reference.",
+        "can_compare_directly": "Partly. RQ1 has the same task surface, but paper and release scoring are related rather than identical, and the exact overlapping model evidence is saved/prior rather than a fresh rerun.",
+        "classification_quality_readout": "Yes for the current scored task metric: RQ1/RQ2/RQ3 use higher-better exact-match accuracy, while RQ4 uses higher-better BERTScore F1 and METEOR. Treat paper-table comparisons as metric-bridged calibration rather than direct replication.",
+        "reviewer_takeaway": "Use UniMoral as the clearest paper-to-current task bridge, while labeling the Llama 3.1 8B overlap as saved/prior evidence and GPT-5.5 as a current text-only reference.",
         "evidence_sources": "unimoral-full-benchmark.csv; results/exploratory/2026-05-13-additional-model-sweep/unimoral-summary.csv; docs/calibration-replication.md; local reference checkout for UniMoral RQ1 code.",
     },
     {
@@ -650,6 +649,197 @@ PAPER_RESULT_ALIGNMENT_ROWS = [
         "reviewer_takeaway": "Keep DeNEVIL as proxy-only evidence outside macro-accuracy and paper-replication claims until a real MoralPrompt export exists.",
         "evidence_sources": "denevil-behavior-summary.csv; denevil-prompt-family-breakdown.csv; denevil-proxy-summary.csv; docs/paper-model-replication-map.md; docs/calibration-replication.md.",
     },
+]
+
+PAPER_RESULT_COMPARISON_FIELDNAMES = [
+    "benchmark",
+    "paper",
+    "paper_metric",
+    "paper_source_detail",
+    "paper_exact_result",
+    "paper_models_or_subjects",
+    "our_release_metric",
+    "our_exact_result",
+    "our_closest_line",
+    "comparison_status",
+    "same_model_overlap",
+    "reviewer_takeaway",
+    "source_url",
+]
+
+PAPER_RESULT_COMPARISON_ROWS = [
+    {
+        "benchmark": "UniMoral RQ1 action prediction",
+        "paper": "Kumar et al. (ACL Findings 2025)",
+        "paper_metric": "Weighted F1, best visible Table 4 cell",
+        "paper_source_detail": "ACL Table 4 reports weighted F1 for Phi, Llama, and R1 across six languages and four prompting conditions; this row uses the strongest visible cell.",
+        "paper_exact_result": "66.38 (Phi-3.5-mini Instruct, English)",
+        "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
+        "our_release_metric": "Exact-match action accuracy",
+        "our_exact_result": "Best current release row: DeepSeek-M 0.684",
+        "our_closest_line": "DeepSeek-M",
+        "comparison_status": "Same benchmark; different metric/model roster",
+        "same_model_overlap": "Saved/prior Llama 3.1 8B action result exists separately; current main release best is not one of the paper's exact three rows.",
+        "reviewer_takeaway": "Use as a directional benchmark bridge, not as a strict paper leaderboard replication.",
+        "source_url": "https://aclanthology.org/2025.acl-long.294/",
+    },
+    {
+        "benchmark": "UniMoral RQ2 moral typology",
+        "paper": "Kumar et al. (ACL Findings 2025)",
+        "paper_metric": "Weighted F1, best visible Table 5 cell",
+        "paper_source_detail": "ACL Table 5 reports weighted F1 for moral-typology classification across the same three-model, six-language matrix.",
+        "paper_exact_result": "57.01 (Llama-3.1-8B Instruct, Spanish)",
+        "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
+        "our_release_metric": "Accuracy for main RQ2 readout; official weighted F1 retained as bridge metric",
+        "our_exact_result": "Best accuracy: Gemma-S 0.599; best weighted-F1 bridge: Llama-S 0.354",
+        "our_closest_line": "Gemma-S / Llama-S",
+        "comparison_status": "Same benchmark; paper uses weighted F1 while the release headline uses accuracy",
+        "same_model_overlap": "No current public full RQ2 row for the paper's exact three-model roster.",
+        "reviewer_takeaway": "Do not compare the paper's 57.01 weighted F1 directly to the release accuracy number.",
+        "source_url": "https://aclanthology.org/2025.acl-long.294/",
+    },
+    {
+        "benchmark": "UniMoral RQ3 factor attribution",
+        "paper": "Kumar et al. (ACL Findings 2025)",
+        "paper_metric": "Weighted F1, best visible Table 6 cell",
+        "paper_source_detail": "ACL Table 6 reports weighted F1 for factor-attribution analysis across the same three-model, six-language matrix.",
+        "paper_exact_result": "38.59 (Llama-3.1-8B Instruct, Russian)",
+        "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
+        "our_release_metric": "Accuracy for main RQ3 readout; official weighted F1 retained as bridge metric",
+        "our_exact_result": "Best accuracy: Llama-M 0.631; best weighted-F1 bridge: DeepSeek-S 0.264",
+        "our_closest_line": "Llama-M / DeepSeek-S",
+        "comparison_status": "Same benchmark; paper uses weighted F1 while the release headline uses accuracy",
+        "same_model_overlap": "No current public full RQ3 row for the paper's exact three-model roster.",
+        "reviewer_takeaway": "RQ3 is comparable as a task family, but not as an exact replicated table cell.",
+        "source_url": "https://aclanthology.org/2025.acl-long.294/",
+    },
+    {
+        "benchmark": "UniMoral RQ4 consequence generation - BERTScore F1",
+        "paper": "Kumar et al. (ACL Findings 2025)",
+        "paper_metric": "BERTScore, best visible Table 7 cell",
+        "paper_source_detail": "ACL Table 7 reports BERTScore for consequence generation by language and model; this row keeps the semantic-overlap metric separate from METEOR.",
+        "paper_exact_result": "BERTScore 87.44",
+        "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
+        "our_release_metric": "BERTScore F1 for headline RQ4",
+        "our_exact_result": "Best current BERTScore F1: Llama-M 0.730; GPT-5.5 0.725",
+        "our_closest_line": "Llama-M",
+        "comparison_status": "Metric family overlaps; scorer scale and model roster differ",
+        "same_model_overlap": "No current public full RQ4 row for the paper's exact three-model roster.",
+        "reviewer_takeaway": "Read this as semantic generation-quality calibration, not accuracy and not an exact reproduced Table 7.",
+        "source_url": "https://aclanthology.org/2025.acl-long.294/",
+    },
+    {
+        "benchmark": "UniMoral RQ4 consequence generation - METEOR",
+        "paper": "Kumar et al. (ACL Findings 2025)",
+        "paper_metric": "METEOR, best visible Table 7 cell",
+        "paper_source_detail": "ACL Table 7 reports METEOR for consequence generation by language and model; this row keeps the lexical-overlap metric separate from BERTScore.",
+        "paper_exact_result": "METEOR 19.08",
+        "paper_models_or_subjects": "Phi-3.5-mini Instruct; Llama-3.1-8B Instruct; DeepSeek-R1-Distill-Llama-8B",
+        "our_release_metric": "METEOR for headline RQ4",
+        "our_exact_result": "Best current METEOR: GPT-5.5 0.165; Llama-L 0.157",
+        "our_closest_line": "GPT-5.5",
+        "comparison_status": "Metric family overlaps; scorer scale and model roster differ",
+        "same_model_overlap": "No current public full RQ4 row for the paper's exact three-model roster.",
+        "reviewer_takeaway": "Read this as lexical generation-quality calibration, not accuracy and not an exact reproduced Table 7.",
+        "source_url": "https://aclanthology.org/2025.acl-long.294/",
+    },
+    {
+        "benchmark": "SMID",
+        "paper": "Crone et al. (PLOS ONE 2018)",
+        "paper_metric": "Human norming reliability and stimulus coverage, not model accuracy",
+        "paper_source_detail": "PLOS abstract and Study 2 participant section: image count, final participant count, total ratings, and mean ratings per image.",
+        "paper_exact_result": "2,941 images; 2,716 participants; 820,565 ratings; mean 34.88 ratings/image; averaged norms ICC >= .75",
+        "paper_models_or_subjects": "Human participants; no original LLM model roster",
+        "our_release_metric": "Model accuracy against moral-rating and foundation-label norms",
+        "our_exact_result": "Best current SMID average accuracy: Qwen-L 0.483; current mean 0.364",
+        "our_closest_line": "Qwen-L",
+        "comparison_status": "No paper model leaderboard",
+        "same_model_overlap": "Not applicable: the paper validates a stimulus set with human ratings.",
+        "reviewer_takeaway": "Our SMID table is a new model-vs-human-norm benchmark layer, not a replication of paper model accuracy.",
+        "source_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0190954",
+    },
+    {
+        "benchmark": "Value Kaleidoscope / ValuePrism",
+        "paper": "Sorensen et al. (AAAI 2024)",
+        "paper_metric": "Kaleido model and human-preference evaluations",
+        "paper_source_detail": "AAAI/arXiv abstract plus Tables 2 and 3: ValuePrism size/quality, KaleidoSYS win rates versus GPT-4, and explanation/valence human evaluation.",
+        "paper_exact_result": "ValuePrism has 218k value/rights/duties for 31k situations; 91% high-quality; KAL SYS 11B overall win rate 58.3 vs GPT-4, accuracy win 62.5; GPT-4 valence correctness 93.1",
+        "paper_models_or_subjects": "Kaleido 60M/220M/770M/3B/11B; GPT-4; GPT-3.5-turbo; humans",
+        "our_release_metric": "Prompt-based ValuePrism relevance/valence accuracy",
+        "our_exact_result": "Best current prompt-based Value average: MiniMax-L 0.741; best OpenAI text row: GPT-5 mini 0.739",
+        "our_closest_line": "MiniMax-L",
+        "comparison_status": "Same source family, not Kaleido model replication",
+        "same_model_overlap": "No Kaleido model execution path is in the current release; OpenAI refs are mini/nano text markers, not the paper's GPT-4/GPT-3.5 rows.",
+        "reviewer_takeaway": "Do not describe prompt-based ValuePrism rows as Kaleido replication.",
+        "source_url": "https://arxiv.org/abs/2309.00779",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper": "Rahman and Salam (2025)",
+        "paper_metric": "Cultural-cluster choice distribution and rationale plurality, not accuracy",
+        "paper_source_detail": "CCD-Bench source analysis: model_summary_comparison.csv, cluster_frequency_comparison.csv, and multi_model_summary_report.txt from the public CCD-Bench analysis package.",
+        "paper_exact_result": "2,182 dilemmas; 17 LLMs; Mean cluster shares across the paper/source 17-model analysis: Nordic Europe 20.17%, Germanic Europe 12.36%, Sub-Saharan Africa 11.51%, Anglo 11.31%, Southern Asia 10.06%, Latin Europe 8.23%, Confucian Asia 7.40%, Latin America 7.23%, Middle East 5.80%, Eastern Europe 5.62%. Plural rationales 87.9%; position-bias Cramer's V 0.0586.",
+        "paper_models_or_subjects": "17 LLMs including GPT-4o/latest, GPT-4.1, Llama, DeepSeek, Mistral, Qwen, Claude, Gemini, and others",
+        "our_release_metric": "Full-choice distribution over the same ten GLOBE clusters",
+        "our_exact_result": "19/20 current release rows are Nordic Europe dominant; GPT-5-nano Ref: option_6 (Nordic Europe) at 27.8%; effective clusters 6.79; DeepSeek-S: option_7 (Sub Saharan Africa) at 13.8%; effective clusters 9.57",
+        "our_closest_line": "Current full release rows plus May 13 exploratory Mistral/Llama/Qwen follow-up",
+        "comparison_status": "Direct behavioral comparison, but CCD-Bench is not accuracy",
+        "same_model_overlap": "Partial overlap: several current routes are close to paper routes, but not always exact model/date variants.",
+        "reviewer_takeaway": "This is the cleanest paper-vs-ours behavior bridge: compare cluster shares and concentration, not correctness.",
+        "source_url": "https://github.com/smartlab-nyu/CCD-Bench",
+    },
+    {
+        "benchmark": "DeNEVIL / MoralPrompt",
+        "paper": "Duan et al. (ICLR 2024)",
+        "paper_metric": "MoralPrompt value-violation metrics: EVR, APV, MVP",
+        "paper_source_detail": "ICLR Table 1 / appendix Table 4 for MoralPrompt size and Table 16 for average generation results using ChatGPT prompts.",
+        "paper_exact_result": "MoralPrompt has 2,397 prompts / 522 principles; ChatGPT-prompt Table 16 reports ChatGPT APV 65.20 +/- 26.45, GPT-4 APV 79.08 +/- 21.46, LLaMA-2-70B-chat APV 76.94 +/- 18.86",
+        "paper_models_or_subjects": "27 LLMs, including ChatGPT, GPT-4, Text-davinci-003, LLaMA/LLaMA2, Vicuna, Alpaca, and others",
+        "our_release_metric": "Proxy visible-behavior categories only",
+        "our_exact_result": "APV/EVR/MVP n/a; strongest proxy protective-response rate is Qwen-M 99.5%; all DeNEVIL proxy rows remain not T3.",
+        "our_closest_line": "Qwen-M",
+        "comparison_status": "Blocked/proxy only; not paper-faithful MoralPrompt and not T3",
+        "same_model_overlap": "No paper-faithful MoralPrompt export or APV/EVR/MVP scorer is available locally.",
+        "reviewer_takeaway": "DeNEVIL should stay out of benchmark-faithful comparison tables until MoralPrompt data and scoring are present.",
+        "source_url": "https://arxiv.org/abs/2310.11053",
+    },
+]
+
+PAPER_MODEL_OVERLAP_FIELDNAMES = [
+    "benchmark",
+    "paper_model_or_evidence",
+    "paper_result_anchor",
+    "our_matching_or_closest_line",
+    "our_result_anchor",
+    "overlap_status",
+    "what_to_compare",
+]
+
+PAPER_MODEL_OVERLAP_ROW_VALUES = [
+    ("UniMoral", "Phi-3.5-mini Instruct", "Best RQ1 table cell: 66.38 weighted F1", "No exact current public row", "n/a", "Not run in this release", "Run full paper-style UniMoral tasks if exact replication is needed."),
+    ("UniMoral", "Llama-3.1-8B Instruct", "RQ2/RQ3/RQ4 paper tables include this model", "Saved/prior Llama 3.1 8B action-only follow-up", "UniMoral action accuracy 0.639 in the May 13 exploratory sweep", "Saved/prior evidence, not a fresh full RQ1-RQ4 replication", "Use only for action-prediction capability-floor context."),
+    ("UniMoral", "DeepSeek-R1-Distill-Llama-8B", "Paper table model", "DeepSeek-S", "DeepSeek-S action accuracy 0.661", "Close family label only; current row is the 70B distill recovery route, not the paper's exact 8B model", "Do not call it exact replication."),
+    ("SMID", "Human norming sample", "2,716 participants and 820,565 ratings", "Qwen-L, MiniMax-S/L, Gemma S/M/L, Llama S/L vision rows", "Best SMID average accuracy is Qwen-L 0.483", "No paper model overlap", "Compare model rows to human-norm labels, not to a paper model leaderboard."),
+    ("Value Kaleidoscope / ValuePrism", "Kaleido 60M/220M/770M/3B/11B", "KAL SYS 11B overall win rate 58.3 vs GPT-4", "No Kaleido model row", "Best current prompt-based Value average is MiniMax-L 0.741", "Model-access gap", "Current rows are prompt-based relevance/valence classification, not Kaleido generation/evaluation."),
+    ("Value Kaleidoscope / ValuePrism", "GPT-4 / GPT-3.5-turbo paper baselines", "GPT-4 valence correctness 93.1; GPT-3.5 overall win rate 39.5 vs GPT-4", "OpenAI text refs", "GPT-5 mini Value average 0.739; GPT-4.1-mini Ref 0.735; GPT-4o-mini Ref 0.701", "Reference family only, not exact paper models", "Use as current OpenAI calibration markers, not paper-baseline replication."),
+    ("CCD-Bench", "AI21 Jamba-1.6-large", "top Nordic Europe 14.7%; Germanic Europe 12.9%; plural rationales 82.6%; Cramer's V 0.106", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
+    ("CCD-Bench", "Claude 3.7 Sonnet", "top Nordic Europe 21.9%; Germanic Europe 14.9%; plural rationales 90.8%; Cramer's V 0.061", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
+    ("CCD-Bench", "Claude 4 Sonnet", "top Nordic Europe 30.6%; Germanic Europe 15.9%; plural rationales 98.6%; Cramer's V 0.054", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
+    ("CCD-Bench", "Command-R 08-2024", "top Nordic Europe 16.1%; Germanic Europe 10.2%; plural rationales 78.5%; Cramer's V 0.142", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
+    ("CCD-Bench", "DeepSeek-chat-v3-0324", "top Nordic Europe 22.9%; Germanic Europe 11.9%; plural rationales 96.8%; Cramer's V 0.161", "DeepSeek-M", "DeepSeek-M: option_6 (Nordic Europe) at 22.6%; effective clusters 7.99", "Close model family, different version", "Compare cautiously as cluster-behavior alignment."),
+    ("CCD-Bench", "Gemini 2.0 Flash 001", "top Nordic Europe 18.4%; Germanic Europe 12.3%; plural rationales 89.2%; Cramer's V 0.076", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
+    ("CCD-Bench", "Gemini 2.5 Flash Preview 05-20", "top Nordic Europe 16.5%; Germanic Europe 13.1%; plural rationales 86.9%; Cramer's V 0.097", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
+    ("CCD-Bench", "Llama-3.3-70B-Instruct", "top Nordic Europe 19.7%; Germanic Europe 15.3%; plural rationales 85.3%; Cramer's V 0.203", "Llama-M", "Llama-M: option_6 (Nordic Europe) at 20.6%; effective clusters 8.03", "Closest direct current row", "Compare cluster shares and effective-cluster concentration."),
+    ("CCD-Bench", "Llama-4-Maverick-17B-128E-Instruct", "top Nordic Europe 21.1%; Germanic Europe 14.6%; plural rationales 68.6%; Cramer's V 0.097", "Llama-L", "Llama-L: option_6 (Nordic Europe) at 23.5%; effective clusters 7.67", "Closest direct current row with lower valid-choice coverage", "Compare behavior; do not treat lower coverage as accuracy."),
+    ("CCD-Bench", "Microsoft Phi-4", "top Nordic Europe 18.9%; Germanic Europe 7.8%; plural rationales 82.7%; Cramer's V 0.152", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
+    ("CCD-Bench", "WizardLM-2-8x22B", "top Nordic Europe 22.0%; Germanic Europe 16.4%; plural rationales 88.8%; Cramer's V 0.111", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
+    ("CCD-Bench", "Mistral Nemo", "top Nordic Europe 19.0%; Germanic Europe 13.1%; plural rationales 82.0%; Cramer's V 0.130", "May 13 exploratory Mistral Nemo", "CCD Nordic Europe 25.3%; effective clusters 7.22", "Saved/prior exploratory evidence outside the current family-size release table", "Use as a clearly labeled follow-up row, not as a fresh rerun."),
+    ("CCD-Bench", "OpenAI ChatGPT-4o-latest", "top Nordic Europe 18.4%; Germanic Europe 11.5%; plural rationales 96.8%; Cramer's V 0.186", "GPT-4o-mini Ref", "GPT-4o-mini Ref: option_6 (Nordic Europe) at 17.1%; effective clusters 8.94", "OpenAI reference family only, not exact model variant", "Useful as a calibration marker; not an OpenAI S/M/L family-size sweep."),
+    ("CCD-Bench", "OpenAI GPT-4.1", "top Nordic Europe 21.5%; Germanic Europe 7.6%; plural rationales 94.7%; Cramer's V 0.096", "GPT-4.1-mini Ref", "GPT-4.1-mini Ref: option_6 (Nordic Europe) at 22.4%; effective clusters 8.07", "OpenAI reference family only, not exact model variant", "Useful as a calibration marker; not an OpenAI S/M/L family-size sweep."),
+    ("CCD-Bench", "Perplexity Sonar", "top Nordic Europe 21.8%; Germanic Europe 12.5%; plural rationales 92.9%; Cramer's V 0.127", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
+    ("CCD-Bench", "Qwen2.5-72B-Instruct", "top Nordic Europe 17.7%; Germanic Europe 9.4%; plural rationales 91.4%; Cramer's V 0.102", "Qwen-L", "Qwen-L: option_6 (Nordic Europe) at 23.4%; effective clusters 7.97", "Closest Qwen family row only; text model version differs", "Compare as family-level behavior only, not exact model replication."),
+    ("CCD-Bench", "Grok-2-1212", "top Nordic Europe 21.6%; Germanic Europe 10.7%; plural rationales 88.0%; Cramer's V 0.123", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
+    ("DeNEVIL / MoralPrompt", "ChatGPT, GPT-4, LLaMA2-70B-chat, and 24 other LLMs", "Paper reports EVR/APV/MVP over MoralPrompt; e.g. ChatGPT APV 65.20 +/- 26.45", "No MoralPrompt row", "FULCRA-backed proxy behavior only; APV/EVR/MVP n/a", "Blocked data/scorer gap; proxy is not T3", "Do not compare DeNEVIL proxy categories to MoralPrompt APV/EVR/MVP."),
 ]
 
 MODEL_ROUTE_METADATA = {
@@ -4888,6 +5078,14 @@ def build_paper_result_alignment_rows() -> list[dict[str, Any]]:
     return [dict(row) for row in PAPER_RESULT_ALIGNMENT_ROWS]
 
 
+def build_paper_result_comparison_rows() -> list[dict[str, Any]]:
+    return [dict(row) for row in PAPER_RESULT_COMPARISON_ROWS]
+
+
+def build_paper_model_overlap_rows() -> list[dict[str, Any]]:
+    return [dict(zip(PAPER_MODEL_OVERLAP_FIELDNAMES, row, strict=True)) for row in PAPER_MODEL_OVERLAP_ROW_VALUES]
+
+
 def build_model_roster(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
@@ -8652,9 +8850,9 @@ def render_paper_result_alignment_svg(rows: list[dict[str, Any]], output_path: P
     }
     visual_rows = {
         "UniMoral": {
-            "paper": "RQ1 action-prediction accuracy; original table values not tracked here.",
+            "paper": "RQ1 action-prediction task; visible paper metric anchors tracked separately.",
             "current": "Current RQ1 accuracy rows plus saved/prior May 13 Llama 3.1 8B evidence.",
-            "comparison": "Partial overlap: same RQ1 metric, saved/prior overlap only.",
+            "comparison": "Partial overlap: same task surface, related metrics, saved/prior evidence.",
             "status": "Partial overlap",
             "color": "#d97706",
         },
@@ -8744,7 +8942,7 @@ def render_paper_result_alignment_svg(rows: list[dict[str, Any]], output_path: P
         svg_text_block(
             72,
             legend_y + 18,
-            "Only UniMoral RQ1 has a clean paper-faithful metric overlap here; CCD is distributional behavior, DeNEVIL is proxy-only, and Value/Kaleido is blocked until the gated model route is run.",
+            "UniMoral RQ1 is the clearest paper-to-current task bridge, but metric/model caveats remain; CCD is distributional behavior, DeNEVIL is proxy-only, and Value/Kaleido is blocked until the gated model route is run.",
             "body",
             142,
             line_height=17,
@@ -10217,7 +10415,7 @@ def render_paper_model_calibration_bridge_svg(output_path: Path) -> None:
             "ours": "May 13 Llama 3.1 8B saved row",
             "paper_value": None,
             "ours_value": None,
-            "paper_text": "Paper includes Llama 3.1 8B RQ tables; exact paper values are not tracked here.",
+            "paper_text": "Paper includes Llama 3.1 8B RQ tables; visible metric anchors are tracked in the RQ-level CSV.",
             "ours_text": "Saved/prior RQ1 action accuracy 0.639.",
             "status": "Saved/prior only",
             "note": "Useful for capability-floor context, not a fresh full RQ1-RQ4 rerun.",
@@ -10333,7 +10531,7 @@ def render_paper_model_calibration_bridge_svg(output_path: Path) -> None:
             "<desc>Visual bridge showing which original-paper model rows have same, near, saved/prior, reference-family, or blocked comparison evidence in the current release.</desc>",
             '<text x="48" y="64" class="title">Paper-Model Calibration Bridge</text>',
             '<text x="48" y="90" class="subtitle">Use this to answer: did we run the same models as the papers, and can the results be compared directly?</text>',
-            '<text x="48" y="112" class="subtitle">Only UniMoral RQ1 is an accuracy-style paper overlap here. CCD rows compare dominant cultural-cluster share, not accuracy.</text>',
+            '<text x="48" y="112" class="subtitle">UniMoral RQ1 is a task-surface bridge with metric caveats. CCD rows compare dominant cultural-cluster share, not accuracy.</text>',
             '<text x="56" y="156" class="tiny">BENCHMARK</text>',
             '<text x="198" y="156" class="tiny">PAPER / REFERENCE SIDE</text>',
             '<text x="500" y="156" class="tiny">THIS REPO SIDE</text>',
@@ -10375,6 +10573,81 @@ def render_paper_model_calibration_bridge_svg(output_path: Path) -> None:
 
     lines.append(
         f'<text x="48" y="{height - 58}" class="small">Source tables: paper-result-alignment.csv, paper-model-overlap-map.csv, CCD choice distributions, and saved/prior May 13 calibration artifacts.</text>'
+    )
+    lines.append("</svg>")
+    write_text(output_path, "\n".join(lines) + "\n")
+
+
+def render_paper_result_comparison_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
+    width = 1500
+    row_h = 110
+    top = 160
+    height = top + len(rows) * row_h + 118
+    color_by_status = {
+        "No paper model leaderboard": "#64748b",
+        "Same source family, not Kaleido model replication": "#b45309",
+        "Direct behavioral comparison, but CCD-Bench is not accuracy": "#0f766e",
+        "Blocked/proxy only; not paper-faithful MoralPrompt and not T3": "#991b1b",
+    }
+    default_color = "#2563eb"
+    metric_caveat_color = "#b45309"
+
+    def capped_text_block(
+        x: int,
+        y: int,
+        text: str,
+        class_name: str,
+        max_chars: int,
+        max_lines: int,
+        line_height: int = 17,
+    ) -> list[str]:
+        wrapped = _wrap_svg_text(text, max_chars)
+        if len(wrapped) > max_lines:
+            wrapped = wrapped[:max_lines]
+            wrapped[-1] = wrapped[-1].rstrip(" .,;:") + "..."
+        return [
+            f'<text x="{x}" y="{y + line_index * line_height}" class="{class_name}">{escape_xml(line)}</text>'
+            for line_index, line in enumerate(wrapped)
+        ]
+
+    lines = svg_header(width, height)
+    lines.extend(
+        [
+            f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
+            f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
+            "<title>Paper results compared with the current release</title>",
+            "<desc>Exact paper-side result anchors shown next to the closest current release result, with metric and model-roster caveats kept visible.</desc>",
+            '<text x="48" y="64" class="title">Paper Results Compared With Our Release</text>',
+            *svg_text_block(
+                48,
+                90,
+                "Exact paper-side anchors stay separate from current release metrics. UniMoral RQ4 is split into BERTScore F1 and METEOR rows; CCD-Bench is choice behavior, not accuracy; DeNEVIL is proxy-only.",
+                "subtitle",
+                156,
+                line_height=20,
+            ),
+            '<text x="58" y="142" class="tiny">BENCHMARK / PAPER</text>',
+            '<text x="292" y="142" class="tiny">ORIGINAL PAPER ANCHOR</text>',
+            '<text x="720" y="142" class="tiny">OUR CLOSEST CURRENT RESULT</text>',
+            '<text x="1136" y="142" class="tiny">COMPARISON STATUS</text>',
+        ]
+    )
+
+    for index, row in enumerate(rows):
+        y = top + index * row_h
+        status = row["comparison_status"]
+        color = color_by_status.get(status, metric_caveat_color if "metric" in status.lower() else default_color)
+        lines.append(f'<rect x="42" y="{y}" width="1416" height="94" rx="14" class="subpanel"/>')
+        lines.append(f'<rect x="42" y="{y}" width="8" height="94" rx="4" fill="{color}"/>')
+        lines.extend(capped_text_block(58, y + 24, row["benchmark"], "label", 28, 2, line_height=17))
+        lines.extend(capped_text_block(58, y + 62, row["paper"], "small", 30, 2, line_height=15))
+        lines.extend(capped_text_block(292, y + 24, row["paper_exact_result"], "body", 54, 4, line_height=17))
+        lines.extend(capped_text_block(720, y + 24, row["our_exact_result"], "body", 48, 4, line_height=17))
+        lines.append(f'<circle cx="1118" cy="{y + 28}" r="7" fill="{color}"/>')
+        lines.extend(capped_text_block(1136, y + 27, status, "body", 38, 4, line_height=17))
+
+    lines.append(
+        f'<text x="48" y="{height - 58}" class="small">Source table: paper-result-comparison.csv. Read as calibration evidence, not a single leaderboard.</text>'
     )
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -10571,9 +10844,9 @@ def append_benchmark_reading_guide_table(lines: list[str], _rows: list[dict[str,
 def append_paper_result_alignment_table(lines: list[str], rows: list[dict[str, Any]], csv_path: str, doc_path: str) -> None:
     overview = {
         "UniMoral": {
-            "paper_side": "RQ1 action-prediction accuracy; reference routes identified, but original paper table values are not tracked.",
+            "paper_side": "RQ1 action-prediction task with visible paper metric anchors in the RQ-level comparison CSV.",
             "our_side": "Current action-accuracy rows plus saved/prior Llama 3.1 8B and May 13 calibration rows.",
-            "compare": "Partial: same RQ1 metric, saved/prior overlap only.",
+            "compare": "Partial: same task surface, related metrics, saved/prior overlap only.",
         },
         "SMID": {
             "paper_side": "Human-normed image stimulus set; no original LLM model roster found locally.",
@@ -11131,6 +11404,14 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             f"![Paper-vs-current replication map]({figure_prefix}/option1_paper_result_alignment_map.svg)",
             "",
             "_What it answers: which benchmark-paper results can be compared directly, which are current-only benchmark comparisons, which rely on saved/prior evidence, and which are blocked or proxy-only._",
+            "",
+            f"![Paper-result comparison table]({figure_prefix}/option1_paper_result_comparison.svg)",
+            "",
+            "_What it shows: paper metric anchors and closest current release results in one visual table. UniMoral RQ4 appears twice, once for BERTScore F1 and once for METEOR._",
+            "",
+            f"![Paper-model calibration bridge]({figure_prefix}/option1_paper_model_calibration_bridge.svg)",
+            "",
+            "_How to read the bridge: same/near paper-model overlaps, saved/prior evidence, OpenAI reference-family markers, and blocked replication gaps stay visually separate._",
             "",
             "Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.",
             "",
@@ -11693,7 +11974,7 @@ def append_main_result_file_map(lines: list[str], figure_prefix: str) -> None:
         [
             "## DATA, CLICK HERE: Main Result Files",
             "",
-            "Use this map when you need to answer: where is the result, what does the number mean, and how do I rebuild the visual? I found `CCD-Bench` in this repo; I did not find a separate `CCG-Bench` result surface.",
+            "Use this map when you need to answer: where is the result, what does the number mean, and how do I rebuild the visual? This release has a `CCD-Bench` result surface; no separate `CCG-Bench` result surface is part of the public package.",
             "",
             "| Benchmark | Main result files | Metric meaning | Key visuals / reproduction |",
             "| --- | --- | --- | --- |",
@@ -11702,9 +11983,9 @@ def append_main_result_file_map(lines: list[str], figure_prefix: str) -> None:
             "| `Value Kaleidoscope` | primary result: `results/release/2026-04-19-option1/value-kaleidoscope-results.csv`<br/>readiness: `results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of prompt-based ValuePrism relevance and valence accuracy. This is not Kaleido model replication. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| `CCD-Bench` | `results/release/2026-04-19-option1/ccd-choice-distribution.csv` | Choice-distribution behavior over ten canonical cultural clusters: valid-choice rate, per-option share/deviation, dominant option, dominant share, and effective cluster count. This is not accuracy. | `option1_ccd_choice_distribution.svg` and `option1_ccd_dominant_option_share.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| `DeNEVIL` | `results/release/2026-04-19-option1/denevil-behavior-summary.csv`<br/>`results/release/2026-04-19-option1/denevil-proxy-summary.csv` | FULCRA-backed proxy behavior only; not paper-faithful MoralPrompt scoring. | `option1_denevil_behavior_outcomes.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
-            "| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
+            "| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`results/release/2026-04-19-option1/paper-result-comparison.csv`<br/>`results/release/2026-04-19-option1/paper-model-overlap-map.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg`, `option1_paper_result_comparison.svg`, and `option1_paper_model_calibration_bridge.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "",
-            f"Quick visual links: {markdown_link('UniMoral heatmap', f'{figure_prefix}/option1_unimoral_task_heatmap.svg')}, {markdown_link('SMID/Value bars', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')}, {markdown_link('CCD choice map', f'{figure_prefix}/option1_ccd_choice_distribution.svg')}, {markdown_link('replication map', f'{figure_prefix}/option1_paper_result_alignment_map.svg')}.",
+            f"Quick visual links: {markdown_link('UniMoral heatmap', f'{figure_prefix}/option1_unimoral_task_heatmap.svg')}, {markdown_link('SMID/Value bars', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')}, {markdown_link('CCD choice map', f'{figure_prefix}/option1_ccd_choice_distribution.svg')}, {markdown_link('paper result comparison', f'{figure_prefix}/option1_paper_result_comparison.svg')}, {markdown_link('replication map', f'{figure_prefix}/option1_paper_result_alignment_map.svg')}.",
             "",
         ]
     )
@@ -11952,7 +12233,7 @@ def append_deliverables_for_today_section(lines: list[str], readiness_tier_matri
             "| Short executive read | What is the bottom-line result without reading every table? | [TL;DR](#tldr) |",
             f"| Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `{tier3_cells}` of `{total_cells}` cells are Tier 3; `{blocked_cells}` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |",
             "| S/M/L family progress table | Which public family-size slots are done, missing a route, or proxy-only? | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
-            "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+            "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |",
             "| OpenRouter selected-grid follow-up | What happened when the text-only OpenRouter grid was run across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench? | [full readout](results/openrouter-selected-grid-moral-psych-full/README.md), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md) |",
             "| Reproducibility package | Can a reviewer rebuild the public results without local secrets? | [Reproducibility](#reproducibility); run `make bootstrap` |",
             "| Full appendix | Where are the detailed tables, caveats, and generated release files? | [Release appendix](results/release/2026-04-19-option1/README.md) |",
@@ -12014,13 +12295,13 @@ def append_readiness_and_replication_section(lines: list[str], readiness_tier_ma
             "",
             "| Benchmark | Existing calibration / comparison evidence | Current status |",
             "| --- | --- | --- |",
-            "| `UniMoral` | Current RQ1 action-accuracy rows plus saved/prior May 13 older-model rows, including Llama 3.1 8B at 0.638775. | Partial: RQ1 metric matches the paper-style action-prediction surface, but exact original paper table values are not tracked here. |",
+            "| `UniMoral` | Current RQ1 action-accuracy rows plus saved/prior May 13 older-model rows, including Llama 3.1 8B at 0.638775; visible paper metric anchors are tracked in `paper-result-comparison.csv`. | Partial: same task surface, related scoring metrics, saved/prior overlap only. |",
             "| `SMID` | Current vision-route rows measure moral-rating and foundation-classification performance. | No original LLM model roster was found locally; compare only across our current vision-capable rows. |",
             "| `Value Kaleidoscope / ValuePrism` | Current prompt-based relevance/valence rows are scored and visible. | Not Kaleido model replication; direct paper-model replication is blocked until gated Kaleido access and execution are run. |",
             "| `CCD-Bench` | Current choice-distribution rows plus saved/prior Mistral Nemo overlap; GPT-5.5 has 2,182/2,182 valid choices. | Partial distributional comparison only; CCD-Bench is not an accuracy benchmark. |",
             "| `DeNEVIL / MoralPrompt` | Current FULCRA-backed proxy behavior summaries are tracked. | Proxy-only data gap; no paper-faithful MoralPrompt comparison until the original data path exists. |",
             "",
-            "Open the full map here: [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md), and [calibration-replication.md](docs/calibration-replication.md).",
+            "Open the full map here: [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-result-comparison.md](docs/paper-result-comparison.md), and [calibration-replication.md](docs/calibration-replication.md).",
             "",
             "The direct same/near-model comparison view is below. It separates saved/prior evidence, current near-route evidence, reference-family markers, and blocked paper-replication gaps.",
             "",
@@ -12122,6 +12403,19 @@ def build_repo_readme(
         )
         / 2,
     )
+    best_all_mean = (
+        (_numeric_or_none(best_all["unimoral_action_accuracy"]) or 0.0)
+        + (_numeric_or_none(best_all["smid_average_accuracy"]) or 0.0)
+        + (_numeric_or_none(best_all["value_average_accuracy"]) or 0.0)
+    ) / 3
+    best_text_mean = (
+        (_numeric_or_none(best_text["unimoral_action_accuracy"]) or 0.0)
+        + (_numeric_or_none(best_text["value_average_accuracy"]) or 0.0)
+    ) / 2
+    best_smid = max(
+        (row for row in benchmark_comparison if _numeric_or_none(row["smid_average_accuracy"]) is not None),
+        key=lambda row: _numeric_or_none(row["smid_average_accuracy"]) or 0.0,
+    )
     smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
     lines = [
         "# CEI Moral-Psych Benchmark Suite",
@@ -12135,18 +12429,28 @@ def build_repo_readme(
         "| Need | Open |",
         "| --- | --- |",
         "| **DATA, CLICK HERE:** | [Result Tables](#data-click-here-result-tables) |",
-        "| Executive result read | [Key Takeaways](#key-takeaways) |",
+        "| Executive result read | [Best Results At A Glance](#best-results-at-a-glance) and [Key Takeaways](#key-takeaways) |",
         "| Main result CSVs | [UniMoral](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [SMID](results/release/2026-04-19-option1/smid-results.csv), [Value Kaleidoscope](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |",
         "| Main figures | [Main Figures](#main-figures) |",
         "| Exact progress / readiness | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) and [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
-        "| Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+        "| Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |",
         "| Mentor-facing report | [jenny-group-report.md](results/release/2026-04-19-option1/jenny-group-report.md) |",
         "| Full detailed appendix | [results/release/2026-04-19-option1/README.md](results/release/2026-04-19-option1/README.md) |",
         "| Rebuild / verify | [Reproduce](#reproduce) with `make bootstrap` |",
         "",
+        "## Best Results At A Glance",
+        "",
+        "| Reader question | Current answer | Where to verify |",
+        "| --- | --- | --- |",
+        f"| Best fully observed comparable line | `{best_all['line_label']}`: UniMoral {fmt_float(best_all['unimoral_action_accuracy'])}, SMID {fmt_float(best_all['smid_average_accuracy'])}, Value {fmt_float(best_all['value_average_accuracy'])}; three-metric mean {fmt_float(best_all_mean)}. | [benchmark accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg), [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [Value CSV](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |",
+        f"| Best text-only line | `{best_text['line_label']}`: UniMoral {fmt_float(best_text['unimoral_action_accuracy'])}, Value {fmt_float(best_text['value_average_accuracy'])}; two-metric mean {fmt_float(best_text_mean)}. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |",
+        f"| Hardest primary metric | `SMID` has mean accuracy {fmt_float(smid_summary['mean_accuracy'])}; best current line is `{best_smid['line_label']}` at {fmt_float(best_smid['smid_average_accuracy'])}. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |",
+        "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |",
+        "| Paper comparison status | UniMoral is a partial task/metric bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg) |",
+        "",
         "## DATA, CLICK HERE: Result Tables",
         "",
-        "Use these benchmark-specific CSVs for the actual results.",
+        "Use these three benchmark-specific CSVs for the primary result numbers. Supporting behavior/proxy/calibration tables are listed separately so the headline ranking surface stays clean.",
         "",
         "| Benchmark | Result CSV | What it contains |",
         "| --- | --- | --- |",
@@ -12159,7 +12463,7 @@ def build_repo_readme(
         "| `CCD-Bench` behavior | [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) |",
         "| `DeNEVIL` proxy behavior | [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv) |",
         "| Readiness / progress | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
-        "| Replication / calibration | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+        "| Replication / calibration | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |",
         "",
         "## What To Trust First",
         "",
@@ -12189,14 +12493,18 @@ def build_repo_readme(
         "",
         "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)",
         "",
+        "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)",
+        "",
         "| More visual evidence | What it answers |",
         "| --- | --- |",
         "| [UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg) | Exact-match classification accuracy for RQ1-RQ3. |",
         "| [UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg) | BERTScore F1 and METEOR for consequence generation. |",
         "| [Family scaling profile](figures/release/option1_family_scaling_profile.svg) | S/M/L movement on SMID and Value without mixing in CCD/DeNEVIL. |",
         "| [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) | Cultural-cluster choice behavior, not correctness. |",
-        "| [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | Proxy refusal/context/risk behavior, not MoralPrompt scoring. |",
-        "| [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg) | Which paper comparisons are direct, partial, blocked, or proxy-only. |",
+            "| [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | Proxy refusal/context/risk behavior, not MoralPrompt scoring. |",
+            "| [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg) | Which paper comparisons are direct, partial, blocked, or proxy-only. |",
+            "| [Paper result comparison](figures/release/option1_paper_result_comparison.svg) | Paper metric anchors next to closest current release rows; UniMoral RQ4 has separate BERTScore F1 and METEOR rows. |",
+            "| [Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Same/near paper-model overlaps, saved/prior evidence, and blocked replication gaps. |",
         "",
         "## Result Directory",
         "",
@@ -12464,7 +12772,7 @@ def build_release_readme(
             "",
             "## Start Here",
             "",
-            "### DATA, CLICK HERE:",
+            "### Release File Index",
             "",
             "- UniMoral results: [unimoral-full-benchmark.csv](unimoral-full-benchmark.csv)",
             "- SMID results: [smid-results.csv](smid-results.csv)",
@@ -12473,7 +12781,7 @@ def build_release_readme(
             "- DeNEVIL proxy behavior: [denevil-behavior-summary.csv](denevil-behavior-summary.csv)",
             "- All release tables: [results/release/2026-04-19-option1/](./)",
             "- Readiness/progress: [readiness-tier-matrix.csv](readiness-tier-matrix.csv) and [family-size-progress.csv](family-size-progress.csv)",
-            "- Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv) and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)",
+            "- Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv), [paper-result-comparison.csv](paper-result-comparison.csv), and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)",
             "",
             "### Reports",
             "",
@@ -12495,6 +12803,8 @@ def build_release_readme(
             f"- {markdown_link('CCD concentration summary', '../../../figures/release/option1_ccd_dominant_option_share.svg')}: dominant-cluster share plus effective-cluster count",
             f"- {markdown_link('DeNEVIL behavioral outcomes', '../../../figures/release/option1_denevil_behavior_outcomes.svg')}: main proxy-result view showing visible behavior categories by model line",
             f"- {markdown_link('paper-vs-current replication map', '../../../figures/release/option1_paper_result_alignment_map.svg')}: visual map of paper-faithful overlap, current-only rows, blocked model routes, and proxy-only evidence",
+            f"- {markdown_link('paper result comparison', '../../../figures/release/option1_paper_result_comparison.svg')}: exact paper metric anchors beside closest current rows, with UniMoral RQ4 split into BERTScore F1 and METEOR",
+            f"- {markdown_link('paper-model calibration bridge', '../../../figures/release/option1_paper_model_calibration_bridge.svg')}: same/near paper-model overlaps, saved/prior rows, reference-family markers, and blocked replication gaps",
             "",
             "## Status Key",
             "",
@@ -12543,6 +12853,8 @@ def build_release_readme(
             "- `value-kaleidoscope-results.csv`: prompt-based ValuePrism relevance/valence average table by model line",
             "- `benchmark-comparison.csv`: cross-benchmark summary used by some generated figures; it has route gaps and is not the primary result table",
             "- `paper-result-alignment.csv`: paper-vs-ours alignment map, including original/reference model evidence, overlap status, blocked/proxy states, and safe comparison boundaries",
+            "- `paper-result-comparison.csv`: RQ-level paper-calibration table; UniMoral RQ4 is split into separate BERTScore F1 and METEOR rows",
+            "- `paper-model-overlap-map.csv`: model/route overlap map used by the paper-model calibration bridge figure",
             "- `ccd-choice-distribution.csv`: CCD-Bench choice-behavior table with per-cluster shares, deviation from the 10% baseline, and concentration summaries",
             "- `denevil-behavior-summary.csv`: DeNEVIL proxy behavioral outcome mix by model line",
             "- `denevil-prompt-family-breakdown.csv`: DeNEVIL protective-response rates by heuristic prompt family",
@@ -12825,6 +13137,7 @@ def build_release_manifest(
             "proxy_tasks": sum(row["benchmark_mode"] == "proxy" for row in rows),
             "total_samples": sum(row["total_samples"] for row in rows),
             "paper_result_alignment_rows": len(PAPER_RESULT_ALIGNMENT_ROWS),
+            "paper_result_comparison_rows": len(PAPER_RESULT_COMPARISON_ROWS),
         },
         "model_families": public_families,
         "benchmarks": benchmark_summary,
@@ -12850,6 +13163,8 @@ def build_release_manifest(
             "manifest": "results/release/2026-04-19-option1/release-manifest.json",
             "benchmark_catalog": "results/release/2026-04-19-option1/benchmark-catalog.csv",
             "paper_result_alignment": "results/release/2026-04-19-option1/paper-result-alignment.csv",
+            "paper_result_comparison": "results/release/2026-04-19-option1/paper-result-comparison.csv",
+            "paper_model_overlap_map": "results/release/2026-04-19-option1/paper-model-overlap-map.csv",
             "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
             "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
             "benchmark_comparison": "results/release/2026-04-19-option1/benchmark-comparison.csv",
@@ -12868,6 +13183,7 @@ def build_release_manifest(
             "family_scaling_summary": "results/release/2026-04-19-option1/family-scaling-summary.csv",
             "family_size_progress_figure": "figures/release/option1_family_size_progress_overview.svg",
             "paper_model_calibration_bridge_figure": "figures/release/option1_paper_model_calibration_bridge.svg",
+            "paper_result_comparison_figure": "figures/release/option1_paper_result_comparison.svg",
             "coverage_figure": "figures/release/option1_coverage_matrix.svg",
             "accuracy_figure": "figures/release/option1_accuracy_heatmap.svg",
             "benchmark_bar_figure": "figures/release/option1_benchmark_accuracy_bars.svg",
@@ -12893,6 +13209,8 @@ def build_release_manifest(
             "release-manifest.json",
             "benchmark-catalog.csv",
             "paper-result-alignment.csv",
+            "paper-result-comparison.csv",
+            "paper-model-overlap-map.csv",
             "model-summary.csv",
             "model-roster.csv",
             "supplementary-model-progress.csv",
@@ -12919,6 +13237,7 @@ def build_release_manifest(
         "figures": [
             "figures/release/option1_family_size_progress_overview.svg",
             "figures/release/option1_paper_model_calibration_bridge.svg",
+            "figures/release/option1_paper_result_comparison.svg",
             "figures/release/option1_coverage_matrix.svg",
             "figures/release/option1_accuracy_heatmap.svg",
             "figures/release/option1_benchmark_accuracy_bars.svg",
@@ -12980,6 +13299,8 @@ def main() -> None:
     benchmark_summary = build_benchmark_summary(rows)
     benchmark_catalog = build_benchmark_catalog(rows)
     paper_result_alignment = build_paper_result_alignment_rows()
+    paper_result_comparison = build_paper_result_comparison_rows()
+    paper_model_overlap = build_paper_model_overlap_rows()
     model_roster = build_model_roster(rows)
     future_model_plan = filter_public_family_rows(build_future_model_plan())
     supplementary_model_progress = filter_public_family_rows(build_supplementary_model_progress())
@@ -13053,6 +13374,16 @@ def main() -> None:
         args.release_dir / "paper-result-alignment.csv",
         paper_result_alignment,
         PAPER_RESULT_ALIGNMENT_FIELDNAMES,
+    )
+    write_csv(
+        args.release_dir / "paper-result-comparison.csv",
+        paper_result_comparison,
+        PAPER_RESULT_COMPARISON_FIELDNAMES,
+    )
+    write_csv(
+        args.release_dir / "paper-model-overlap-map.csv",
+        paper_model_overlap,
+        PAPER_MODEL_OVERLAP_FIELDNAMES,
     )
     write_csv(
         args.release_dir / "model-roster.csv",
@@ -13624,6 +13955,7 @@ def main() -> None:
 
     render_family_size_progress_overview_svg(family_size_progress, args.figure_dir / "option1_family_size_progress_overview.svg")
     render_paper_model_calibration_bridge_svg(args.figure_dir / "option1_paper_model_calibration_bridge.svg")
+    render_paper_result_comparison_svg(paper_result_comparison, args.figure_dir / "option1_paper_result_comparison.svg")
     render_coverage_svg(coverage_matrix, args.figure_dir / "option1_coverage_matrix.svg")
     render_accuracy_svg(benchmark_comparison, args.figure_dir / "option1_accuracy_heatmap.svg")
     render_benchmark_accuracy_bars_svg(benchmark_comparison, args.figure_dir / "option1_benchmark_accuracy_bars.svg")
@@ -13659,6 +13991,8 @@ def main() -> None:
         "tables": [
             "benchmark-catalog.csv",
             "paper-result-alignment.csv",
+            "paper-result-comparison.csv",
+            "paper-model-overlap-map.csv",
             "model-summary.csv",
             "model-roster.csv",
             "supplementary-model-progress.csv",
@@ -13690,6 +14024,7 @@ def main() -> None:
         "figures": [
             "option1_family_size_progress_overview.svg",
             "option1_paper_model_calibration_bridge.svg",
+            "option1_paper_result_comparison.svg",
             "option1_coverage_matrix.svg",
             "option1_accuracy_heatmap.svg",
             "option1_benchmark_accuracy_bars.svg",

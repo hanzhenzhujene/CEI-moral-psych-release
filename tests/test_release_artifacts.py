@@ -25,6 +25,7 @@ from scripts.build_unimoral_artifacts import update_markdown
 SCRIPT = ROOT / "scripts" / "build_release_artifacts.py"
 SOURCE = ROOT / "results" / "release" / "2026-04-19-option1" / "source" / "authoritative-summary.csv"
 UNIMORAL_FULL_BENCHMARK = ROOT / "results" / "release" / "2026-04-19-option1" / "unimoral-full-benchmark.csv"
+PAPER_RESULT_COMPARISON = ROOT / "results" / "release" / "2026-04-19-option1" / "paper-result-comparison.csv"
 
 
 def markdown_h2_section(text: str, heading: str) -> str:
@@ -131,6 +132,29 @@ def test_unimoral_full_benchmark_splits_rq4_metric_rows():
     assert all(metrics == ["bert_score_f1", "meteor"] for metrics in rq4_by_line.values())
 
 
+def test_paper_result_comparison_splits_unimoral_rq4_metric_rows():
+    with PAPER_RESULT_COMPARISON.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+
+    rq4_rows = [
+        row
+        for row in rows
+        if row["benchmark"].startswith("UniMoral RQ4 consequence generation")
+    ]
+
+    assert [row["benchmark"] for row in rq4_rows] == [
+        "UniMoral RQ4 consequence generation - BERTScore F1",
+        "UniMoral RQ4 consequence generation - METEOR",
+    ]
+    assert [row["our_release_metric"] for row in rq4_rows] == [
+        "BERTScore F1 for headline RQ4",
+        "METEOR for headline RQ4",
+    ]
+    assert "Llama-M 0.730" in rq4_rows[0]["our_exact_result"]
+    assert "GPT-5.5 0.165" in rq4_rows[1]["our_exact_result"]
+    assert all("not accuracy" in row["reviewer_takeaway"] for row in rq4_rows)
+
+
 def test_release_builder_emits_expected_files(tmp_path):
     release_dir = tmp_path / "release"
     figure_dir = tmp_path / "figures"
@@ -154,6 +178,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         "README.md",
         "benchmark-catalog.csv",
         "paper-result-alignment.csv",
+        "paper-result-comparison.csv",
         "benchmark-comparison.csv",
         "smid-results.csv",
         "value-kaleidoscope-results.csv",
@@ -191,6 +216,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     expected_figures = {
         "option1_family_size_progress_overview.svg",
         "option1_paper_model_calibration_bridge.svg",
+        "option1_paper_result_comparison.svg",
         "option1_accuracy_heatmap.svg",
         "option1_benchmark_accuracy_bars.svg",
         "option1_benchmark_difficulty_profile.svg",
@@ -217,6 +243,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["authoritative_tasks"] == 19
     assert manifest["counts"]["proxy_tasks"] == 3
     assert manifest["counts"]["paper_result_alignment_rows"] == 5
+    assert manifest["counts"]["paper_result_comparison_rows"] == 9
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
     assert any("OpenAI reference rows" in item and "text-only markers" in item for item in manifest["interpretation_guardrails"])
@@ -242,7 +269,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["model_families"] == ["Qwen", "MiniMax", "DeepSeek", "Llama", "Gemma"]
     assert manifest["entry_points"]["report"].endswith("jenny-group-report.md")
     assert manifest["entry_points"]["paper_result_alignment"].endswith("paper-result-alignment.csv")
+    assert manifest["entry_points"]["paper_result_comparison"].endswith("paper-result-comparison.csv")
+    assert manifest["entry_points"]["paper_model_overlap_map"].endswith("paper-model-overlap-map.csv")
     assert manifest["entry_points"]["paper_result_alignment_figure"].endswith("option1_paper_result_alignment_map.svg")
+    assert manifest["entry_points"]["paper_result_comparison_figure"].endswith("option1_paper_result_comparison.svg")
     assert manifest["entry_points"]["supplementary_progress"].endswith("supplementary-model-progress.csv")
     assert manifest["entry_points"]["family_size_progress"].endswith("family-size-progress.csv")
     assert manifest["entry_points"]["benchmark_difficulty_summary"].endswith("benchmark-difficulty-summary.csv")
@@ -272,6 +302,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["entry_points"]["denevil_proxy_pipeline_figure"].endswith("option1_denevil_proxy_pipeline.svg")
     assert "benchmark-difficulty-summary.csv" in manifest["tables"]
     assert "paper-result-alignment.csv" in manifest["tables"]
+    assert "paper-result-comparison.csv" in manifest["tables"]
+    assert "paper-model-overlap-map.csv" in manifest["tables"]
     assert "smid-results.csv" in manifest["tables"]
     assert "value-kaleidoscope-results.csv" in manifest["tables"]
     assert "family-scaling-summary.csv" in manifest["tables"]
@@ -282,6 +314,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "denevil-proxy-examples.csv" in manifest["tables"]
     assert "readiness-tier-matrix.csv" in manifest["tables"]
     assert "figures/release/option1_paper_model_calibration_bridge.svg" in manifest["figures"]
+    assert "figures/release/option1_paper_result_comparison.svg" in manifest["figures"]
     assert "figures/release/option1_benchmark_difficulty_profile.svg" in manifest["figures"]
     assert "figures/release/option1_family_scaling_profile.svg" in manifest["figures"]
     assert "figures/release/option1_ccd_valid_choice_coverage.svg" in manifest["figures"]
@@ -309,7 +342,8 @@ def test_release_builder_emits_expected_files(tmp_path):
         )
     release_readme_text = (release_dir / "README.md").read_text(encoding="utf-8")
     assert "## DATA, CLICK HERE: Main Result Files" in release_readme_text
-    assert "I found `CCD-Bench` in this repo; I did not find a separate `CCG-Bench` result surface." in release_readme_text
+    assert "This release has a `CCD-Bench` result surface; no separate `CCG-Bench` result surface is part of the public package." in release_readme_text
+    assert "I found `CCD-Bench`" not in release_readme_text
     assert "results/release/2026-04-19-option1/unimoral-full-benchmark.csv" in release_readme_text
     assert "results/release/2026-04-19-option1/smid-results.csv" in release_readme_text
     assert "results/release/2026-04-19-option1/value-kaleidoscope-results.csv" in release_readme_text
@@ -318,6 +352,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Value Kaleidoscope results" in release_readme_text
     assert "results/release/2026-04-19-option1/ccd-choice-distribution.csv" in release_readme_text
     assert "option1_paper_result_alignment_map.svg" in release_readme_text
+    assert "option1_paper_model_calibration_bridge.svg" in release_readme_text
+    assert "option1_paper_result_comparison.svg" in release_readme_text
     topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     assert "## TL;DR" in topline_text
     assert "`GPT-5.5`" in topline_text
@@ -1362,7 +1398,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "benchmark difficulty profile" in release_readme
     assert "family scaling profile" in release_readme
     assert "## Start Here" in release_readme
-    assert "### DATA, CLICK HERE:" in release_readme
+    assert "### Release File Index" in release_readme
+    assert release_readme.count("DATA, CLICK HERE") == 1
     assert "[unimoral-full-benchmark.csv](unimoral-full-benchmark.csv)" in release_readme
     assert "[smid-results.csv](smid-results.csv)" in release_readme
     assert "[value-kaleidoscope-results.csv](value-kaleidoscope-results.csv)" in release_readme
@@ -1685,15 +1722,21 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
 
     root_readme = (repo_copy / "README.md").read_text(encoding="utf-8")
     assert root_readme.index("## Start Here") < root_readme.index("## What To Trust First")
+    assert root_readme.index("## Start Here") < root_readme.index("## Best Results At A Glance")
     assert root_readme.index("## Start Here") < root_readme.index("## DATA, CLICK HERE: Result Tables")
+    assert root_readme.index("## Best Results At A Glance") < root_readme.index("## DATA, CLICK HERE: Result Tables")
     assert root_readme.index("## DATA, CLICK HERE: Result Tables") < root_readme.index("## What To Trust First")
     assert root_readme.index("## What To Trust First") < root_readme.index("## Key Takeaways")
     assert root_readme.index("## Key Takeaways") < root_readme.index("## Main Figures")
     assert "The main comparison uses three benchmark-faithful accuracy columns." in root_readme
     assert "**DATA, CLICK HERE:**" in root_readme
+    assert "Use these three benchmark-specific CSVs for the primary result numbers." in root_readme
     assert "[unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv)" in root_readme
     assert "[smid-results.csv](results/release/2026-04-19-option1/smid-results.csv)" in root_readme
     assert "[value-kaleidoscope-results.csv](results/release/2026-04-19-option1/value-kaleidoscope-results.csv)" in root_readme
+    assert "Best fully observed comparable line | `" in root_readme
+    assert "Best text-only line | `" in root_readme
+    assert "Best UniMoral RQ4 generation rows |" in root_readme
     assert "benchmark-comparison.csv" not in root_readme
     assert "`UniMoral action accuracy`" in root_readme
     assert "`SMID average accuracy`" in root_readme
@@ -1707,6 +1750,9 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "[CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
     assert "[DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
     assert "[Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in root_readme
+    assert "[Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
+    assert "[paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in root_readme
     assert "## Readiness Tiers" in root_readme
     assert "Current dashboard:" in root_readme
     assert "public summary rows are Tier 3" in root_readme

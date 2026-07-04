@@ -9,18 +9,28 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 | Need | Open |
 | --- | --- |
 | **DATA, CLICK HERE:** | [Result Tables](#data-click-here-result-tables) |
-| Executive result read | [Key Takeaways](#key-takeaways) |
+| Executive result read | [Best Results At A Glance](#best-results-at-a-glance) and [Key Takeaways](#key-takeaways) |
 | Main result CSVs | [UniMoral](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [SMID](results/release/2026-04-19-option1/smid-results.csv), [Value Kaleidoscope](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |
 | Main figures | [Main Figures](#main-figures) |
 | Exact progress / readiness | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) and [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
-| Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |
+| Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |
 | Mentor-facing report | [jenny-group-report.md](results/release/2026-04-19-option1/jenny-group-report.md) |
 | Full detailed appendix | [results/release/2026-04-19-option1/README.md](results/release/2026-04-19-option1/README.md) |
 | Rebuild / verify | [Reproduce](#reproduce) with `make bootstrap` |
 
+## Best Results At A Glance
+
+| Reader question | Current answer | Where to verify |
+| --- | --- | --- |
+| Best fully observed comparable line | `MiniMax-S`: UniMoral 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611. | [benchmark accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg), [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [Value CSV](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |
+| Best text-only line | `GPT-5.5`: UniMoral 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |
+| Hardest primary metric | `SMID` has mean accuracy 0.364; best current line is `Qwen-L` at 0.483. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |
+| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |
+| Paper comparison status | UniMoral is a partial task/metric bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg) |
+
 ## DATA, CLICK HERE: Result Tables
 
-Use these benchmark-specific CSVs for the actual results.
+Use these three benchmark-specific CSVs for the primary result numbers. Supporting behavior/proxy/calibration tables are listed separately so the headline ranking surface stays clean.
 
 | Benchmark | Result CSV | What it contains |
 | --- | --- | --- |
@@ -33,7 +43,7 @@ Use these benchmark-specific CSVs for the actual results.
 | `CCD-Bench` behavior | [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) |
 | `DeNEVIL` proxy behavior | [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv) |
 | Readiness / progress | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
-| Replication / calibration | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |
+| Replication / calibration | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |
 
 ## What To Trust First
 
@@ -63,6 +73,8 @@ These are the fastest visual entry points. The appendix keeps the full figure ga
 
 ![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
 
+![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)
+
 | More visual evidence | What it answers |
 | --- | --- |
 | [UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg) | Exact-match classification accuracy for RQ1-RQ3. |
@@ -71,6 +83,8 @@ These are the fastest visual entry points. The appendix keeps the full figure ga
 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) | Cultural-cluster choice behavior, not correctness. |
 | [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | Proxy refusal/context/risk behavior, not MoralPrompt scoring. |
 | [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg) | Which paper comparisons are direct, partial, blocked, or proxy-only. |
+| [Paper result comparison](figures/release/option1_paper_result_comparison.svg) | Paper metric anchors next to closest current release rows; UniMoral RQ4 has separate BERTScore F1 and METEOR rows. |
+| [Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Same/near paper-model overlaps, saved/prior evidence, and blocked replication gaps. |
 
 ## Result Directory
 

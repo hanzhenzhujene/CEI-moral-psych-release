@@ -76,6 +76,14 @@ _How to read it: protective refusals and corrective/contextual answers are the s
 
 _What it answers: which benchmark-paper results can be compared directly, which are current-only benchmark comparisons, which rely on saved/prior evidence, and which are blocked or proxy-only._
 
+![Paper-result comparison table](../../../figures/release/option1_paper_result_comparison.svg)
+
+_What it shows: paper metric anchors and closest current release results in one visual table. UniMoral RQ4 appears twice, once for BERTScore F1 and once for METEOR._
+
+![Paper-model calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)
+
+_How to read the bridge: same/near paper-model overlaps, saved/prior evidence, OpenAI reference-family markers, and blocked replication gaps stay visually separate._
+
 Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
 
 ## TL;DR
@@ -95,7 +103,7 @@ Key takeaways:
 
 ## DATA, CLICK HERE: Main Result Files
 
-Use this map when you need to answer: where is the result, what does the number mean, and how do I rebuild the visual? I found `CCD-Bench` in this repo; I did not find a separate `CCG-Bench` result surface.
+Use this map when you need to answer: where is the result, what does the number mean, and how do I rebuild the visual? This release has a `CCD-Bench` result surface; no separate `CCG-Bench` result surface is part of the public package.
 
 | Benchmark | Main result files | Metric meaning | Key visuals / reproduction |
 | --- | --- | --- | --- |
@@ -104,9 +112,9 @@ Use this map when you need to answer: where is the result, what does the number 
 | `Value Kaleidoscope` | primary result: `results/release/2026-04-19-option1/value-kaleidoscope-results.csv`<br/>readiness: `results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of prompt-based ValuePrism relevance and valence accuracy. This is not Kaleido model replication. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |
 | `CCD-Bench` | `results/release/2026-04-19-option1/ccd-choice-distribution.csv` | Choice-distribution behavior over ten canonical cultural clusters: valid-choice rate, per-option share/deviation, dominant option, dominant share, and effective cluster count. This is not accuracy. | `option1_ccd_choice_distribution.svg` and `option1_ccd_dominant_option_share.svg` under `figures/release/`. Rebuild through the same `make release` path. |
 | `DeNEVIL` | `results/release/2026-04-19-option1/denevil-behavior-summary.csv`<br/>`results/release/2026-04-19-option1/denevil-proxy-summary.csv` | FULCRA-backed proxy behavior only; not paper-faithful MoralPrompt scoring. | `option1_denevil_behavior_outcomes.svg` under `figures/release/`. Rebuild through the same `make release` path. |
-| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg` under `figures/release/`. Rebuild through the same `make release` path. |
+| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`results/release/2026-04-19-option1/paper-result-comparison.csv`<br/>`results/release/2026-04-19-option1/paper-model-overlap-map.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg`, `option1_paper_result_comparison.svg`, and `option1_paper_model_calibration_bridge.svg` under `figures/release/`. Rebuild through the same `make release` path. |
 
-Quick visual links: [UniMoral heatmap](../../../figures/release/option1_unimoral_task_heatmap.svg), [SMID/Value bars](../../../figures/release/option1_benchmark_accuracy_bars.svg), [CCD choice map](../../../figures/release/option1_ccd_choice_distribution.svg), [replication map](../../../figures/release/option1_paper_result_alignment_map.svg).
+Quick visual links: [UniMoral heatmap](../../../figures/release/option1_unimoral_task_heatmap.svg), [SMID/Value bars](../../../figures/release/option1_benchmark_accuracy_bars.svg), [CCD choice map](../../../figures/release/option1_ccd_choice_distribution.svg), [paper result comparison](../../../figures/release/option1_paper_result_comparison.svg), [replication map](../../../figures/release/option1_paper_result_alignment_map.svg).
 
 ## Results First
 
@@ -217,7 +225,7 @@ This is the reviewer-facing lookup: what each benchmark paper contains, whether 
 
 | Benchmark | Original paper/reference side | Our current side | Direct comparison status |
 | --- | --- | --- | --- |
-| `UniMoral` | RQ1 action-prediction accuracy; reference routes identified, but original paper table values are not tracked. | Current action-accuracy rows plus saved/prior Llama 3.1 8B and May 13 calibration rows. | Partial: same RQ1 metric, saved/prior overlap only. |
+| `UniMoral` | RQ1 action-prediction task with visible paper metric anchors in the RQ-level comparison CSV. | Current action-accuracy rows plus saved/prior Llama 3.1 8B and May 13 calibration rows. | Partial: same task surface, related metrics, saved/prior overlap only. |
 | `SMID` | Human-normed image stimulus set; no original LLM model roster found locally. | Current vision-route moral-rating plus foundation-classification average. | No paper-model comparison; compare only across our current vision-capable rows. |
 | `Value Kaleidoscope / ValuePrism` | Kaleido gated model family and ValuePrism relevance/valence setup. | Prompt-based LLM relevance and valence classification rows. | No direct comparison until Kaleido model access and execution are run. |
 | `CCD-Bench` | Ten-cluster cultural-choice behavior; reference artifacts include 17 model routes. | Current CCD choice distributions, dominant-cluster share, and effective clusters. | Compare distributions only; never read CCD as accuracy. |
@@ -365,7 +373,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `June 12, 2026` |
+| Repo update date | `July 4, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
 | Current project total cost | `$888.06` |
 | Total cost breakdown | MiniMax API: `$504.66`; OpenRouter model-family runs: `$343.42`, including `$17.760398` from the full selected-grid OpenRouter follow-up; OpenAI API reference sweep: `$39.98`. |
@@ -435,7 +443,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 
 ## Start Here
 
-### DATA, CLICK HERE:
+### Release File Index
 
 - UniMoral results: [unimoral-full-benchmark.csv](unimoral-full-benchmark.csv)
 - SMID results: [smid-results.csv](smid-results.csv)
@@ -444,7 +452,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 - DeNEVIL proxy behavior: [denevil-behavior-summary.csv](denevil-behavior-summary.csv)
 - All release tables: [results/release/2026-04-19-option1/](./)
 - Readiness/progress: [readiness-tier-matrix.csv](readiness-tier-matrix.csv) and [family-size-progress.csv](family-size-progress.csv)
-- Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv) and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)
+- Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv), [paper-result-comparison.csv](paper-result-comparison.csv), and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)
 
 ### Reports
 
@@ -466,6 +474,8 @@ This checkpoint summarizes the broader family-size expansion separately from the
 - [CCD concentration summary](../../../figures/release/option1_ccd_dominant_option_share.svg): dominant-cluster share plus effective-cluster count
 - [DeNEVIL behavioral outcomes](../../../figures/release/option1_denevil_behavior_outcomes.svg): main proxy-result view showing visible behavior categories by model line
 - [paper-vs-current replication map](../../../figures/release/option1_paper_result_alignment_map.svg): visual map of paper-faithful overlap, current-only rows, blocked model routes, and proxy-only evidence
+- [paper result comparison](../../../figures/release/option1_paper_result_comparison.svg): exact paper metric anchors beside closest current rows, with UniMoral RQ4 split into BERTScore F1 and METEOR
+- [paper-model calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg): same/near paper-model overlaps, saved/prior rows, reference-family markers, and blocked replication gaps
 
 ## Status Key
 
@@ -512,6 +522,8 @@ Exact per-line family-size status is saved as [family-size-progress.csv](family-
 - `value-kaleidoscope-results.csv`: prompt-based ValuePrism relevance/valence average table by model line
 - `benchmark-comparison.csv`: cross-benchmark summary used by some generated figures; it has route gaps and is not the primary result table
 - `paper-result-alignment.csv`: paper-vs-ours alignment map, including original/reference model evidence, overlap status, blocked/proxy states, and safe comparison boundaries
+- `paper-result-comparison.csv`: RQ-level paper-calibration table; UniMoral RQ4 is split into separate BERTScore F1 and METEOR rows
+- `paper-model-overlap-map.csv`: model/route overlap map used by the paper-model calibration bridge figure
 - `ccd-choice-distribution.csv`: CCD-Bench choice-behavior table with per-cluster shares, deviation from the 10% baseline, and concentration summaries
 - `denevil-behavior-summary.csv`: DeNEVIL proxy behavioral outcome mix by model line
 - `denevil-prompt-family-breakdown.csv`: DeNEVIL protective-response rates by heuristic prompt family

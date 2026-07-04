@@ -41,7 +41,7 @@
 <desc>Visual bridge showing which original-paper model rows have same, near, saved/prior, reference-family, or blocked comparison evidence in the current release.</desc>
 <text x="48" y="64" class="title">Paper-Model Calibration Bridge</text>
 <text x="48" y="90" class="subtitle">Use this to answer: did we run the same models as the papers, and can the results be compared directly?</text>
-<text x="48" y="112" class="subtitle">Only UniMoral RQ1 is an accuracy-style paper overlap here. CCD rows compare dominant cultural-cluster share, not accuracy.</text>
+<text x="48" y="112" class="subtitle">UniMoral RQ1 is a task-surface bridge with metric caveats. CCD rows compare dominant cultural-cluster share, not accuracy.</text>
 <text x="56" y="156" class="tiny">BENCHMARK</text>
 <text x="198" y="156" class="tiny">PAPER / REFERENCE SIDE</text>
 <text x="500" y="156" class="tiny">THIS REPO SIDE</text>
@@ -51,8 +51,8 @@
 <rect x="42" y="176" width="8" height="84" rx="4" fill="#b45309"/>
 <text x="56" y="203" class="label">UniMoral</text>
 <text x="198" y="199" class="body">Llama-3.1-8B in paper roster: Paper includes</text>
-<text x="198" y="216" class="body">Llama 3.1 8B RQ tables; exact paper values are</text>
-<text x="198" y="233" class="body">not tracked here.</text>
+<text x="198" y="216" class="body">Llama 3.1 8B RQ tables; visible metric anchors</text>
+<text x="198" y="233" class="body">are tracked in the RQ-level CSV.</text>
 <text x="500" y="199" class="body">May 13 Llama 3.1 8B saved row: Saved/prior</text>
 <text x="500" y="216" class="body">RQ1 action accuracy 0.639.</text>
 <text x="796" y="212" class="small">no tracked paper-side value</text>
