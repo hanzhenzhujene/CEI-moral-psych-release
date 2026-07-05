@@ -8381,7 +8381,7 @@ def _scaling_interpretation_for_family(family: str, metric_points: dict[str, lis
     if family == OPENAI_REFERENCE_FAMILY_LABEL:
         return (
             "Three GPT-4o/GPT-4.1 text-only reference rows outside the GPT-5 S/M/L series.",
-            "These OpenAI rows are text-side context/reference points for GPT-4o and GPT-4.1 routes. They do not answer the vision question and should not be folded into the GPT-5 S/M/L curve or paper-model calibration bridge.",
+            "These OpenAI rows are text-side context/reference points for GPT-4o and GPT-4.1 routes. They do not answer the vision question and should not be folded into the GPT-5 S/M/L curve or direct paper-model comparison.",
         )
     available_metrics = sum(1 for points in metric_points.values() if points)
     return (
@@ -11349,10 +11349,6 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "_What it shows: paper metric anchors and closest current release results in one visual table. UniMoral RQ4 appears twice, once for BERTScore F1 and once for METEOR._",
             "",
-            f"![Paper-model calibration bridge]({figure_prefix}/option1_paper_model_calibration_bridge.svg)",
-            "",
-            "_How to read the bridge: only exact same-model saved/prior evidence is plotted. Near-family, reference-family, route-probe, blocked, and proxy rows stay outside the one-to-one calibration bars._",
-            "",
             "Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.",
             "",
         ]
@@ -11923,7 +11919,7 @@ def append_main_result_file_map(lines: list[str], figure_prefix: str) -> None:
             "| `Value Kaleidoscope` | primary result: `results/release/2026-04-19-option1/value-kaleidoscope-results.csv`<br/>readiness: `results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of prompt-based ValuePrism relevance and valence accuracy. This is not Kaleido model replication. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| `CCD-Bench` | `results/release/2026-04-19-option1/ccd-choice-distribution.csv` | Choice-distribution behavior over ten canonical cultural clusters: valid-choice rate, per-option share/deviation, dominant option, dominant share, and effective cluster count. This is not accuracy. | `option1_ccd_choice_distribution.svg` and `option1_ccd_dominant_option_share.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| `DeNEVIL` | `results/release/2026-04-19-option1/denevil-behavior-summary.csv`<br/>`results/release/2026-04-19-option1/denevil-proxy-summary.csv` | FULCRA-backed proxy behavior only; not paper-faithful MoralPrompt scoring. | `option1_denevil_behavior_outcomes.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
-            "| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`results/release/2026-04-19-option1/paper-result-comparison.csv`<br/>`results/release/2026-04-19-option1/paper-model-overlap-map.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg`, `option1_paper_result_comparison.svg`, and `option1_paper_model_calibration_bridge.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
+            "| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`results/release/2026-04-19-option1/paper-result-comparison.csv`<br/>`results/release/2026-04-19-option1/paper-model-overlap-map.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg` and `option1_paper_result_comparison.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "",
             f"Quick visual links: {markdown_link('UniMoral heatmap', f'{figure_prefix}/option1_unimoral_task_heatmap.svg')}, {markdown_link('SMID/Value bars', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')}, {markdown_link('CCD choice map', f'{figure_prefix}/option1_ccd_choice_distribution.svg')}, {markdown_link('paper result comparison', f'{figure_prefix}/option1_paper_result_comparison.svg')}, {markdown_link('replication map', f'{figure_prefix}/option1_paper_result_alignment_map.svg')}.",
             "",
@@ -12173,7 +12169,7 @@ def append_deliverables_for_today_section(lines: list[str], readiness_tier_matri
             "| Short executive read | What is the bottom-line result without reading every table? | [TL;DR](#tldr) |",
             f"| Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `{tier3_cells}` of `{total_cells}` cells are Tier 3; `{blocked_cells}` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |",
             "| S/M/L family progress table | Which public family-size slots are done, missing a route, or proxy-only? | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
-            "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+            "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |",
             "| OpenRouter selected-grid follow-up | What happened when the text-only OpenRouter grid was run across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench? | [full readout](results/openrouter-selected-grid-moral-psych-full/README.md), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md) |",
             "| Reproducibility package | Can a reviewer rebuild the public results without local secrets? | [Reproducibility](#reproducibility); run `make bootstrap` |",
             "| Full appendix | Where are the detailed tables, caveats, and generated release files? | [Release appendix](results/release/2026-04-19-option1/README.md) |",
@@ -12242,11 +12238,6 @@ def append_readiness_and_replication_section(lines: list[str], readiness_tier_ma
             "| `DeNEVIL / MoralPrompt` | Current FULCRA-backed proxy behavior summaries are tracked. | Proxy-only data gap; no paper-faithful MoralPrompt comparison until the original data path exists. |",
             "",
             "Open the full map here: [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-result-comparison.md](docs/paper-result-comparison.md), and [calibration-replication.md](docs/calibration-replication.md).",
-            "",
-            "The direct same-model comparison view is below. It plots only exact same-model saved/prior evidence; near-route, reference-family, blocked, and proxy rows stay outside the one-to-one calibration bars.",
-            "",
-            "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)",
-            "",
         ]
     )
 
@@ -12444,7 +12435,6 @@ def build_repo_readme(
             "| [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | Proxy refusal/context/risk behavior, not MoralPrompt scoring. |",
             "| [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg) | Which paper comparisons are direct, partial, blocked, or proxy-only. |",
             "| [Paper result comparison](figures/release/option1_paper_result_comparison.svg) | Paper metric anchors next to closest current release rows; UniMoral RQ4 has separate BERTScore F1 and METEOR rows. |",
-            "| [Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Exact same-model saved/prior rows only; near-family rows stay in audit tables. |",
         "",
         "## Result Directory",
         "",
@@ -12744,7 +12734,6 @@ def build_release_readme(
             f"- {markdown_link('DeNEVIL behavioral outcomes', '../../../figures/release/option1_denevil_behavior_outcomes.svg')}: main proxy-result view showing visible behavior categories by model line",
             f"- {markdown_link('paper-vs-current replication map', '../../../figures/release/option1_paper_result_alignment_map.svg')}: visual map of paper-faithful overlap, current-only rows, blocked model routes, and proxy-only evidence",
             f"- {markdown_link('paper result comparison', '../../../figures/release/option1_paper_result_comparison.svg')}: exact paper metric anchors beside closest current rows, with UniMoral RQ4 split into BERTScore F1 and METEOR",
-            f"- {markdown_link('paper-model calibration bridge', '../../../figures/release/option1_paper_model_calibration_bridge.svg')}: exact same-model saved/prior rows only; near-family and reference-family rows are audit context",
             "",
             "## Status Key",
             "",
@@ -12794,7 +12783,7 @@ def build_release_readme(
             "- `benchmark-comparison.csv`: cross-benchmark summary used by some generated figures; it has route gaps and is not the primary result table",
             "- `paper-result-alignment.csv`: paper-vs-ours alignment map, including original/reference model evidence, overlap status, blocked/proxy states, and safe comparison boundaries",
             "- `paper-result-comparison.csv`: RQ-level paper-calibration table; UniMoral RQ4 is split into separate BERTScore F1 and METEOR rows",
-            "- `paper-model-overlap-map.csv`: model/route overlap map used by the paper-model calibration bridge figure",
+            "- `paper-model-overlap-map.csv`: model/route overlap audit map for exact, context-only, blocked, and proxy paper-model evidence",
             "- `ccd-choice-distribution.csv`: CCD-Bench choice-behavior table with per-cluster shares, deviation from the 10% baseline, and concentration summaries",
             "- `denevil-behavior-summary.csv`: DeNEVIL proxy behavioral outcome mix by model line",
             "- `denevil-prompt-family-breakdown.csv`: DeNEVIL protective-response rates by heuristic prompt family",

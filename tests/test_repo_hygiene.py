@@ -133,7 +133,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
     assert "figures/release/option1_paper_result_alignment_map.svg" in readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in readme
-    assert "figures/release/option1_paper_model_calibration_bridge.svg" in readme
+    assert "figures/release/option1_paper_model_calibration_bridge.svg" not in readme
+    assert "Paper-model calibration bridge" not in readme
     assert "[paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in readme
     assert "## UniMoral RQ1-RQ4 Artifact Pointer" in readme
     assert "**DATA, CLICK HERE:**" in readme
@@ -146,7 +147,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "side" + " metric" not in figures_readme
     assert "two reported generation metrics: BERTScore F1" in figures_readme
     assert "option1_paper_result_comparison.svg" in figures_readme
-    assert "option1_paper_model_calibration_bridge.svg" in figures_readme
+    assert "option1_paper_model_calibration_bridge.svg" not in figures_readme
     assert "## Replication / calibration figures" in figures_readme
     assert figures_readme.index("## Replication / calibration figures") < figures_readme.index("option1_paper_result_alignment_map.svg")
 

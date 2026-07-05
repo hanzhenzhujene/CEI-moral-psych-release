@@ -84,7 +84,6 @@ These are the fastest visual entry points. The appendix keeps the full figure ga
 | [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | Proxy refusal/context/risk behavior, not MoralPrompt scoring. |
 | [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg) | Which paper comparisons are direct, partial, blocked, or proxy-only. |
 | [Paper result comparison](figures/release/option1_paper_result_comparison.svg) | Paper metric anchors next to closest current release rows; UniMoral RQ4 has separate BERTScore F1 and METEOR rows. |
-| [Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Exact same-model saved/prior rows only; near-family rows stay in audit tables. |
 
 ## Result Directory
 
