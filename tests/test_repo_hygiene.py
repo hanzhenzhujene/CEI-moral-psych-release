@@ -120,6 +120,16 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "**Best all-around comparable line:** `MiniMax-S`" in readme
     assert "**Best text-only line:** `GPT-5.5`" in readme
     assert "## Main Figures" in readme
+    assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in readme
+    assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in readme
+    assert "![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)" in readme
+    assert "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
+    assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in readme
+    assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
+    assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in readme
+    assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in readme
+    assert "![Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert readme.count("![") >= 10
     assert "## Result Directory" in readme
     assert "## Readiness Tiers" in readme
     assert "| `T3` | Interpretable: cite/compare it within the stated metric layer. |" in readme
