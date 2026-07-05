@@ -1728,10 +1728,18 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert root_readme.index("## Start Here") < root_readme.index("## What To Trust First")
     assert root_readme.index("## Start Here") < root_readme.index("## Best Results At A Glance")
     assert root_readme.index("## Start Here") < root_readme.index("## DATA, CLICK HERE: Result Tables")
-    assert root_readme.index("## Best Results At A Glance") < root_readme.index("## DATA, CLICK HERE: Result Tables")
+    assert root_readme.index("## Best Results At A Glance") < root_readme.index("## Status: What Is Usable")
+    assert root_readme.index("## Status: What Is Usable") < root_readme.index("## DATA, CLICK HERE: Result Tables")
     assert root_readme.index("## DATA, CLICK HERE: Result Tables") < root_readme.index("## What To Trust First")
     assert root_readme.index("## What To Trust First") < root_readme.index("## Key Takeaways")
     assert root_readme.index("## Key Takeaways") < root_readme.index("## Main Figures")
+    assert "The public readiness dashboard has `" in root_readme
+    assert "model-line x benchmark cells. `" in root_readme
+    assert "are Tier 3 and can be cited or compared within their stated metric layer" in root_readme
+    assert "have no tier because they are blocked, not run, route gaps, data gaps, or proxy-only." in root_readme
+    assert "| `UniMoral RQ1-RQ4` | Text moral reasoning: RQ1-RQ3 use accuracy; RQ4 uses BERTScore F1 and METEOR." in root_readme
+    assert "| `SMID` | Vision moral judgment: moral rating plus foundation classification." in root_readme
+    assert "| `DeNEVIL` | FULCRA-backed proxy behavior from saved traces." in root_readme
     assert "The main comparison uses three benchmark-faithful accuracy columns." in root_readme
     assert "**DATA, CLICK HERE:**" in root_readme
     assert "Use these three benchmark-specific CSVs for the primary result numbers." in root_readme

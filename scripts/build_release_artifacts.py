@@ -12348,6 +12348,19 @@ def build_repo_readme(
         key=lambda row: _numeric_or_none(row["smid_average_accuracy"]) or 0.0,
     )
     smid_summary = next(row for row in benchmark_difficulty_summary if row["benchmark"] == "SMID")
+
+    def benchmark_readiness_counts(benchmark: str) -> tuple[int, int, int]:
+        rows = [row for row in readiness_tier_matrix if row.get("benchmark") == benchmark]
+        tier3 = sum(row.get("readiness_tier") == "Tier 3" for row in rows)
+        no_tier = sum(not row.get("readiness_tier") for row in rows)
+        return tier3, no_tier, len(rows)
+
+    unimoral_tier3, unimoral_no_tier, unimoral_total = benchmark_readiness_counts("UniMoral")
+    value_tier3, value_no_tier, value_total = benchmark_readiness_counts("Value Kaleidoscope")
+    ccd_tier3, ccd_no_tier, ccd_total = benchmark_readiness_counts("CCD-Bench")
+    smid_tier3, smid_no_tier, smid_total = benchmark_readiness_counts("SMID")
+    denevil_tier3, denevil_no_tier, denevil_total = benchmark_readiness_counts("Denevil")
+
     lines = [
         "# CEI Moral-Psych Benchmark Suite",
         "",
@@ -12378,6 +12391,18 @@ def build_repo_readme(
         f"| Hardest primary metric | `SMID` has mean accuracy {fmt_float(smid_summary['mean_accuracy'])}; best current line is `{best_smid['line_label']}` at {fmt_float(best_smid['smid_average_accuracy'])}. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |",
         "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |",
         "| Paper comparison status | UniMoral is a partial task/metric bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg) |",
+        "",
+        "## Status: What Is Usable",
+        "",
+        f"The public readiness dashboard has `{total_cells}` model-line x benchmark cells. `{tier3_cells}` are Tier 3 and can be cited or compared within their stated metric layer; `{no_tier_cells}` have no tier because they are blocked, not run, route gaps, data gaps, or proxy-only.",
+        "",
+        "| Part | What it is | Current status | How to read it |",
+        "| --- | --- | --- | --- |",
+        f"| `UniMoral RQ1-RQ4` | Text moral reasoning: RQ1-RQ3 use accuracy; RQ4 uses BERTScore F1 and METEOR. | `{unimoral_tier3}/{unimoral_total}` Tier 3; `{unimoral_no_tier}/{unimoral_total}` no tier. | Usable. Keep RQ1-RQ4 separate instead of collapsing them into one score. |",
+        f"| `Value Kaleidoscope` | Prompt-based ValuePrism relevance and valence classification. | `{value_tier3}/{value_total}` Tier 3; `{value_no_tier}/{value_total}` no tier. | Usable as current value-tagging evidence; not Kaleido model replication. |",
+        f"| `CCD-Bench` | Cultural-cluster choice distribution and concentration. | `{ccd_tier3}/{ccd_total}` Tier 3; `{ccd_no_tier}/{ccd_total}` no tier. | Usable for behavior/style evidence; never read it as accuracy. |",
+        f"| `SMID` | Vision moral judgment: moral rating plus foundation classification. | `{smid_tier3}/{smid_total}` Tier 3; `{smid_no_tier}/{smid_total}` no tier. | Usable only where a vision route exists. Current scores are modest, so treat SMID as the visual-moral bottleneck. |",
+        f"| `DeNEVIL` | FULCRA-backed proxy behavior from saved traces. | `{denevil_tier3}/{denevil_total}` Tier 3; `{denevil_no_tier}/{denevil_total}` no tier. | Not usable as benchmark-faithful scoring yet; read only as proxy behavior and audit evidence. |",
         "",
         "## DATA, CLICK HERE: Result Tables",
         "",
@@ -12418,7 +12443,7 @@ def build_repo_readme(
         "",
         "## Main Figures",
         "",
-        "These are the fastest visual entry points. The appendix keeps the full figure gallery and all numeric tables.",
+        "These are the fastest visual entry points: first UniMoral by RQ, then the primary comparable accuracy bars, then the paper-result comparison. The appendix keeps the full figure gallery and all numeric tables.",
         "",
         "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)",
         "",

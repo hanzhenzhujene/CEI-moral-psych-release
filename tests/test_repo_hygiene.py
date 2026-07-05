@@ -94,8 +94,14 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Jenny Zhu's CEI moral-psych benchmark deliverable" in readme
     assert "## Start Here" in readme
     assert "## Best Results At A Glance" in readme
+    assert "## Status: What Is Usable" in readme
     assert "## DATA, CLICK HERE: Result Tables" in readme
     assert "## What To Trust First" in readme
+    assert "The public readiness dashboard has `105` model-line x benchmark cells. `72` are Tier 3" in readme
+    assert "`33` have no tier because they are blocked, not run, route gaps, data gaps, or proxy-only." in readme
+    assert "| `UniMoral RQ1-RQ4` | Text moral reasoning: RQ1-RQ3 use accuracy; RQ4 uses BERTScore F1 and METEOR. | `21/21` Tier 3; `0/21` no tier." in readme
+    assert "| `SMID` | Vision moral judgment: moral rating plus foundation classification. | `9/21` Tier 3; `12/21` no tier." in readme
+    assert "| `DeNEVIL` | FULCRA-backed proxy behavior from saved traces. | `0/21` Tier 3; `21/21` no tier." in readme
     assert "The main comparison uses three benchmark-faithful accuracy columns." in readme
     assert "benchmark-comparison.csv" not in readme
     assert "Use these three benchmark-specific CSVs for the primary result numbers." in readme

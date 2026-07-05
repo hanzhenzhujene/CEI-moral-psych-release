@@ -28,6 +28,18 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 | Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |
 | Paper comparison status | UniMoral is a partial task/metric bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg) |
 
+## Status: What Is Usable
+
+The public readiness dashboard has `105` model-line x benchmark cells. `72` are Tier 3 and can be cited or compared within their stated metric layer; `33` have no tier because they are blocked, not run, route gaps, data gaps, or proxy-only.
+
+| Part | What it is | Current status | How to read it |
+| --- | --- | --- | --- |
+| `UniMoral RQ1-RQ4` | Text moral reasoning: RQ1-RQ3 use accuracy; RQ4 uses BERTScore F1 and METEOR. | `21/21` Tier 3; `0/21` no tier. | Usable. Keep RQ1-RQ4 separate instead of collapsing them into one score. |
+| `Value Kaleidoscope` | Prompt-based ValuePrism relevance and valence classification. | `21/21` Tier 3; `0/21` no tier. | Usable as current value-tagging evidence; not Kaleido model replication. |
+| `CCD-Bench` | Cultural-cluster choice distribution and concentration. | `21/21` Tier 3; `0/21` no tier. | Usable for behavior/style evidence; never read it as accuracy. |
+| `SMID` | Vision moral judgment: moral rating plus foundation classification. | `9/21` Tier 3; `12/21` no tier. | Usable only where a vision route exists. Current scores are modest, so treat SMID as the visual-moral bottleneck. |
+| `DeNEVIL` | FULCRA-backed proxy behavior from saved traces. | `0/21` Tier 3; `21/21` no tier. | Not usable as benchmark-faithful scoring yet; read only as proxy behavior and audit evidence. |
+
 ## DATA, CLICK HERE: Result Tables
 
 Use these three benchmark-specific CSVs for the primary result numbers. Supporting behavior/proxy/calibration tables are listed separately so the headline ranking surface stays clean.
@@ -67,7 +79,7 @@ The main comparison uses three benchmark-faithful accuracy columns. The other tw
 
 ## Main Figures
 
-These are the fastest visual entry points. The appendix keeps the full figure gallery and all numeric tables.
+These are the fastest visual entry points: first UniMoral by RQ, then the primary comparable accuracy bars, then the paper-result comparison. The appendix keeps the full figure gallery and all numeric tables.
 
 ![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
 
