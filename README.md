@@ -26,7 +26,7 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 | Best text-only line | `GPT-5.5`: UniMoral 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |
 | Hardest primary metric | `SMID` has mean accuracy 0.364; best current line is `Qwen-L` at 0.483. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |
 | Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |
-| Paper comparison status | UniMoral is a partial task/metric bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [same-model bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper comparison figure](figures/release/option1_paper_result_comparison.svg) |
+| Paper comparison status | UniMoral is a partial task/metric bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg), [replication map](figures/release/option1_paper_result_alignment_map.svg) |
 
 ## Status: What Is Usable
 
@@ -94,8 +94,6 @@ These are the audience-facing result figures to use in the deck or meeting reado
 ![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)
 
 ![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)
-
-![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)
 
 ![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)
 

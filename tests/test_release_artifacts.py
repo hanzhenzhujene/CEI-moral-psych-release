@@ -362,7 +362,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "results/release/2026-04-19-option1/ccd-choice-distribution.csv" in release_readme_text
     assert "option1_paper_result_alignment_map.svg" in release_readme_text
     assert "option1_paper_model_calibration_bridge.svg" in release_readme_text
-    assert "Paper-model calibration bridge" in release_readme_text
+    visual_section = markdown_h2_section(release_readme_text, "## Benchmark Result Visuals")
+    assert "![Paper-model calibration bridge]" not in visual_section
+    assert "same-model paper calibration bridge" in release_readme_text
     assert "paper-model-calibration-ledger.csv" in release_readme_text
     assert "paper-model-calibration-bridge.csv" in release_readme_text
     assert "option1_paper_result_comparison.svg" in release_readme_text
@@ -1774,10 +1776,10 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in root_readme
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
-    assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in root_readme
     assert "![Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
-    assert root_readme.count("![") >= 10
+    assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" not in root_readme
+    assert root_readme.count("![") >= 9
     assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in root_readme
     assert "[paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in root_readme
     assert "[paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in root_readme

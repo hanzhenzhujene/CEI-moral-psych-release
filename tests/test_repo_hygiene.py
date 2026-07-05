@@ -150,7 +150,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
     assert "figures/release/option1_paper_result_alignment_map.svg" in readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in readme
-    assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
+    assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" not in readme
     assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in readme
     assert "[paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in readme
     assert "[paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in readme

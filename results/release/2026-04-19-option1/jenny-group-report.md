@@ -75,10 +75,6 @@ _How to read it: protective refusals and corrective/contextual answers are the s
 
 _What it answers: which benchmark-paper results can be compared directly, which are current-only benchmark comparisons, which rely on saved/prior evidence, and which are blocked or proxy-only._
 
-![Paper-model calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)
-
-_What it shows: strict same-model calibration rows only. If the exact paper model is missing, a near-family route or a route probe stays out of this visual and remains in the ledger CSV._
-
 ![Paper-result comparison table](../../../figures/release/option1_paper_result_comparison.svg)
 
 _What it shows: paper metric anchors and closest current release results in one visual table. UniMoral RQ4 appears twice, once for BERTScore F1 and once for METEOR._
