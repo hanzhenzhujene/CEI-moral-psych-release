@@ -14,6 +14,8 @@ Use it as an evidence-status map, not as a leaderboard. Current benchmark rows, 
 | Machine-readable alignment table | [paper-result-alignment.csv](../results/release/2026-04-19-option1/paper-result-alignment.csv) |
 | RQ-level paper/result comparison table | [paper-result-comparison.csv](../results/release/2026-04-19-option1/paper-result-comparison.csv) |
 | Paper-model overlap table | [paper-model-overlap-map.csv](../results/release/2026-04-19-option1/paper-model-overlap-map.csv) |
+| Same-model calibration planning ledger | [paper-model-calibration-ledger.csv](../results/release/2026-04-19-option1/paper-model-calibration-ledger.csv) |
+| Strict same-model bridge table | [paper-model-calibration-bridge.csv](../results/release/2026-04-19-option1/paper-model-calibration-bridge.csv) |
 | Planning / route-status notes | [calibration-replication.md](calibration-replication.md), [paper-model-replication-map.md](paper-model-replication-map.md) |
 
 ## Visual Summary
@@ -28,7 +30,7 @@ _Result table: paper metric anchors sit beside closest current rows; UniMoral RQ
 
 ![Paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)
 
-_Model bridge: only exact same-model saved/prior evidence is plotted; near-family and route-probe rows are audit context only._
+_Model bridge: only exact same-model evidence is plotted; near-family, blocked, proxy, and route-probe rows stay in the ledger table._
 
 ## TL;DR
 
@@ -37,16 +39,18 @@ _Model bridge: only exact same-model saved/prior evidence is plotted; near-famil
 | `UniMoral` | Partial task overlap for RQ1 action prediction; paper metric anchors are tracked separately. | Call it action-prediction calibration, not full UniMoral paper replication. |
 | `SMID` | No original LLM roster found locally. | Compare current vision-capable rows only. |
 | `Value Kaleidoscope / ValuePrism` | Current rows are prompt-based ValuePrism tasks. | Do not call them Kaleido model replication. |
-| `CCD-Bench` | Same-model saved/prior Mistral Nemo supports distributional calibration; near-family rows are context only. | Never describe CCD-Bench as accuracy. |
+| `CCD-Bench` | Exact same-model Mistral Nemo and Llama-3.3 rows support distributional calibration; near-family rows are context only. | Never describe CCD-Bench as accuracy. |
 | `DeNEVIL / MoralPrompt` | Current evidence is FULCRA proxy behavior only. | No paper-faithful MoralPrompt comparison until the data path exists. |
 
 ## What This Means
 
 - The strongest paper-to-current bridge is narrow: UniMoral RQ1 action prediction can support directional calibration, while metric/model caveats remain explicit.
-- The cleanest same-model behavior bridge is CCD-Bench `Mistral Nemo`, because both sides expose ten-cluster choice distributions for the same model; near-family CCD rows are useful context, not one-to-one calibration.
+- The cleanest same-model behavior bridges are CCD-Bench `Mistral Nemo` and `Llama-3.3-70B-Instruct`, because both sides expose ten-cluster choice distributions for the same model.
+  near-family CCD rows are useful context, not one-to-one calibration.
 - The current ValuePrism rows are useful current benchmark evidence, but Kaleido model replication remains blocked until the gated model route is run.
 - SMID and DeNEVIL answer different questions from their source papers in this release: SMID is a current model-vs-human-norm layer, and DeNEVIL is proxy-only audit evidence.
-- For review, cite the CSV/figure pair that matches the claim: use the alignment map for status, the calibration bridge for model overlap, and the RQ-level CSV for paper metric anchors.
+- For review, cite the CSV/figure pair that matches the claim: use the alignment map for status, the calibration ledger for exact model-name/run planning,
+  the calibration bridge for one-to-one model overlap, and the RQ-level CSV for paper metric anchors.
 
 ## Benchmark Cards
 
@@ -54,7 +58,7 @@ _Model bridge: only exact same-model saved/prior evidence is plotted; near-famil
 
 - Paper/reference side: original setup has multiple RQs. The clean task overlap is RQ1 action prediction; local reference code names Phi-3.5 mini, Llama 3.1 8B, and DeepSeek-R1-Distill-Llama-8B.
 - Current repo side: all eligible text rows have UniMoral action accuracy. DeepSeek-M and GPT-5.5 both reach `0.683629`.
-- Calibration evidence: saved/prior May 13 Llama 3.1 8B action accuracy is `0.638775`.
+- Calibration evidence: current full-grid Llama 3.1 8B results are in the bridge table; saved/prior May 13 Llama 3.1 8B action accuracy is `0.638775`.
 - Direct comparison: partial. Visible paper metric anchors are tracked in the RQ-level CSV, but the release headline uses exact-match accuracy while the paper tables report weighted F1/BLEU/METEOR/BERTScore cells.
 - Reviewer takeaway: use UniMoral as the clearest paper-to-current task bridge, but keep metric caveats and RQ2/RQ3/RQ4 separation visible.
 
@@ -80,7 +84,8 @@ _Model bridge: only exact same-model saved/prior evidence is plotted; near-famil
 - Current repo side: the release reports choice distributions, dominant-cluster share, valid-choice coverage, and effective clusters.
 - Current GPT-5.5 anchor: `2,182/2,182` valid choices; dominant option 6 at `27.268561%`; effective clusters `7.058620`.
 - Saved/prior anchor: Mistral Nemo has `2,178/2,182` valid choices, Nordic Europe `25.344353%`, and effective clusters `7.222264`.
-- Direct comparison: partial. Distribution and concentration can be compared for the saved/prior same-model `Mistral Nemo` row; near-family routes are not one-to-one calibration rows, and accuracy is not a CCD metric.
+- Direct comparison: partial. Distribution and concentration can be compared for exact same-model `Mistral Nemo` and `Llama-3.3-70B-Instruct` rows.
+  Near-family routes are not one-to-one calibration rows, and accuracy is not a CCD metric.
 - Reviewer takeaway: use the behavior/concentration map, not a leaderboard.
 
 ### DeNEVIL / MoralPrompt

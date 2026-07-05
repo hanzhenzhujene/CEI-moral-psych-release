@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 760" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 776" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,67 +35,91 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1500" height="760" class="canvas"/>
-<rect x="24" y="24" width="1452" height="712" rx="22" class="panel"/>
+<rect x="0" y="0" width="1500" height="776" class="canvas"/>
+<rect x="24" y="24" width="1452" height="728" rx="22" class="panel"/>
 <title>Same-model paper calibration bridge</title>
-<desc>Visual bridge showing only exact same-model saved/prior evidence. Near-family or reference-family rows are excluded from the one-to-one calibration bars.</desc>
+<desc>Data-backed visual bridge showing exact same-model paper calibration evidence only. Route-probe, near-route, blocked, and proxy rows are kept out of the plotted comparison.</desc>
 <text x="48" y="64" class="title">Same-Model Paper Calibration Bridge</text>
-<text x="48" y="90" class="subtitle">Only exact same-model evidence is plotted here. Near-family, reference-family, route-probe, blocked, and proxy rows are deliberately excluded from the bars.</text>
-<text x="48" y="112" class="subtitle">UniMoral Llama 3.1 8B is action-prediction saved/prior evidence; CCD Mistral Nemo is distributional behavior, not accuracy.</text>
+<text x="48" y="90" class="subtitle">Only exact same-model evidence is plotted here. Near-family, route-probe, blocked, and proxy rows stay in the ledger CSV.</text>
+<text x="48" y="112" class="subtitle">CCD rows are cultural-choice distribution comparisons, not accuracy. UniMoral uses a task bridge because paper and repo metrics differ.</text>
 <text x="56" y="156" class="tiny">BENCHMARK</text>
-<text x="198" y="156" class="tiny">PAPER / REFERENCE SIDE</text>
-<text x="500" y="156" class="tiny">THIS REPO SIDE</text>
-<text x="796" y="156" class="tiny">NUMERIC BRIDGE WHERE VALID</text>
-<text x="1198" y="156" class="tiny">STATUS AND READER RULE</text>
-<rect x="42" y="176" width="1416" height="84" rx="14" class="subpanel"/>
-<rect x="42" y="176" width="8" height="84" rx="4" fill="#b45309"/>
-<text x="56" y="203" class="label">UniMoral</text>
-<text x="198" y="199" class="body">Llama-3.1-8B Instruct: Paper includes Llama 3.1</text>
-<text x="198" y="216" class="body">8B RQ tables; visible metric anchors are tracked</text>
-<text x="198" y="233" class="body">in the RQ-level CSV.</text>
-<text x="500" y="199" class="body">May 13 Llama 3.1 8B saved row: Saved/prior</text>
-<text x="500" y="216" class="body">RQ1 action accuracy 0.639.</text>
-<text x="796" y="212" class="small">no tracked paper-side value</text>
-<circle cx="1182" cy="204" r="7" fill="#b45309"/>
-<text x="1198" y="204" class="body">Exact same model, saved/prior: Use</text>
-<text x="1198" y="221" class="body">only as action-prediction calibration;</text>
-<text x="1198" y="238" class="body">not a fresh full RQ1-RQ4 rerun.</text>
-<rect x="42" y="274" width="1416" height="84" rx="14" class="subpanel"/>
-<rect x="42" y="274" width="8" height="84" rx="4" fill="#b45309"/>
-<text x="56" y="301" class="label">CCD-Bench</text>
-<text x="198" y="297" class="body">Mistral Nemo: Paper top Nordic Europe 19.0%.</text>
-<text x="500" y="297" class="body">May 13 Mistral Nemo: Saved/prior Nordic</text>
-<text x="500" y="314" class="body">Europe 25.3%; effective clusters 7.22.</text>
-<rect x="796" y="294" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="796" y="294" width="103.1" height="16" rx="8" fill="#2563eb"/>
-<text x="996" y="307" class="small">paper 19.0%</text>
-<rect x="796" y="322" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="796" y="322" width="137.3" height="16" rx="8" fill="#0f766e"/>
-<text x="996" y="335" class="small">ours 25.3%</text>
-<circle cx="1182" cy="302" r="7" fill="#b45309"/>
-<text x="1198" y="302" class="body">Exact same model, saved/prior: Use as</text>
-<text x="1198" y="319" class="body">CCD distribution calibration, not</text>
-<text x="1198" y="336" class="body">accuracy and not a fresh rerun.</text>
-<text x="48" y="398" class="metric">Not in the same-model bridge</text>
-<text x="48" y="422" class="subtitle">These categories stay visible as audit context, but they are not plotted as paper-model calibration comparisons.</text>
-<rect x="48" y="446" width="440" height="128" rx="14" class="subpanel"/>
-<rect x="48" y="446" width="8" height="128" rx="4" fill="#7c3aed"/>
-<text x="70" y="478" class="label">Near-family rows not plotted</text>
-<text x="70" y="512" class="body">Llama, OpenAI, DeepSeek, and Qwen current rows differ</text>
-<text x="70" y="529" class="body">by route or version. They remain context in CSVs, not</text>
-<text x="70" y="546" class="body">one-to-one calibration bars.</text>
-<rect x="518" y="446" width="440" height="128" rx="14" class="subpanel"/>
-<rect x="518" y="446" width="8" height="128" rx="4" fill="#64748b"/>
-<text x="540" y="478" class="label">Blocked exact paper routes</text>
-<text x="540" y="512" class="body">Phi-3.5 mini, DeepSeek-R1-Distill-Llama-8B, Kaleido</text>
-<text x="540" y="529" class="body">models, Claude/Gemini/Phi/Jamba/Sonar/Grok, and</text>
-<text x="540" y="546" class="body">MoralPrompt routes are not exact completed local rows</text>
-<text x="540" y="563" class="body">here.</text>
-<rect x="988" y="446" width="440" height="128" rx="14" class="subpanel"/>
-<rect x="988" y="446" width="8" height="128" rx="4" fill="#b45309"/>
-<text x="1010" y="478" class="label">Route probes are not results</text>
-<text x="1010" y="512" class="body">Fresh May 21 Llama 3.1 and Mistral Nemo checks were</text>
-<text x="1010" y="529" class="body">1-sample route probes. The plotted evidence is</text>
-<text x="1010" y="546" class="body">saved/prior full artifacts only.</text>
-<text x="48" y="702" class="small">Source tables: paper-result-alignment.csv, paper-model-overlap-map.csv, CCD choice distributions, and saved/prior May 13 artifacts. Near-family rows are not plotted.</text>
+<text x="198" y="156" class="tiny">PAPER MODEL / METRIC</text>
+<text x="514" y="156" class="tiny">THIS REPO EVIDENCE</text>
+<text x="820" y="156" class="tiny">ONE-TO-ONE VALUE WHEN VALID</text>
+<text x="1198" y="156" class="tiny">STATUS AND BOUNDARY</text>
+<rect x="42" y="176" width="1416" height="96" rx="14" class="subpanel"/>
+<rect x="42" y="176" width="8" height="96" rx="4" fill="#2563eb"/>
+<text x="56" y="204" class="label">UniMoral</text>
+<text x="198" y="200" class="body">Llama-3.1-8B Instruct: Paper weighted F1 / METEOR</text>
+<text x="198" y="217" class="body">/ BERTScore = RQ1 66.17; RQ2 57.01; RQ3 38.59; RQ4</text>
+<text x="198" y="234" class="body">METEOR 19.08 and BERTScore 87.44</text>
+<text x="514" y="200" class="body">meta-llama/llama-3.1-8b-instruct current</text>
+<text x="514" y="217" class="body">full-grid: Accuracy for RQ1-RQ3; live METEOR</text>
+<text x="514" y="234" class="body">for RQ4 = RQ1 0.628757; RQ2 0.595074; RQ3</text>
+<text x="514" y="251" class="body">0.599943; RQ4 METEOR 0.124689</text>
+<text x="820" y="214" class="small">paper: metric scale differs</text>
+<text x="820" y="242" class="small">ours: metric scale differs</text>
+<circle cx="1182" cy="204" r="7" fill="#2563eb"/>
+<text x="1198" y="204" class="body">current full grid verified; Exact same</text>
+<text x="1198" y="221" class="body">model, but paper and repo metric</text>
+<text x="1198" y="238" class="body">scales differ; compare direction and</text>
+<text x="1198" y="255" class="body">task coverage, not a one-number delta.</text>
+<rect x="42" y="288" width="1416" height="96" rx="14" class="subpanel"/>
+<rect x="42" y="288" width="8" height="96" rx="4" fill="#b45309"/>
+<text x="56" y="316" class="label">CCD-Bench</text>
+<text x="198" y="312" class="body">Mistral Nemo: Nordic Europe top-cluster share =</text>
+<text x="198" y="329" class="body">0.190</text>
+<text x="514" y="312" class="body">May 13 Mistral Nemo saved/prior follow-up:</text>
+<text x="514" y="329" class="body">Nordic Europe dominant-cluster share =</text>
+<text x="514" y="346" class="body">0.2534435262</text>
+<rect x="820" y="310" width="190" height="16" rx="8" class="muted-bar"/>
+<rect x="820" y="310" width="103.1" height="16" rx="8" fill="#2563eb"/>
+<text x="1020" y="323" class="small">paper 19.0%</text>
+<rect x="820" y="338" width="190" height="16" rx="8" class="muted-bar"/>
+<rect x="820" y="338" width="137.6" height="16" rx="8" fill="#0f766e"/>
+<text x="1020" y="351" class="small">ours 25.3%</text>
+<circle cx="1182" cy="316" r="7" fill="#b45309"/>
+<text x="1198" y="316" class="body">saved prior verified; CCD is</text>
+<text x="1198" y="333" class="body">distributional behavior, not accuracy;</text>
+<text x="1198" y="350" class="body">saved/prior evidence is not a fresh</text>
+<text x="1198" y="367" class="body">rerun.</text>
+<rect x="42" y="400" width="1416" height="96" rx="14" class="subpanel"/>
+<rect x="42" y="400" width="8" height="96" rx="4" fill="#0f766e"/>
+<text x="56" y="428" class="label">CCD-Bench</text>
+<text x="198" y="424" class="body">Llama-3.3-70B-Instruct: Nordic Europe top-cluster</text>
+<text x="198" y="441" class="body">share = 0.197</text>
+<text x="514" y="424" class="body">Llama-M current release row: Nordic Europe</text>
+<text x="514" y="441" class="body">dominant-cluster share = 0.20553731</text>
+<rect x="820" y="422" width="190" height="16" rx="8" class="muted-bar"/>
+<rect x="820" y="422" width="106.9" height="16" rx="8" fill="#2563eb"/>
+<text x="1020" y="435" class="small">paper 19.7%</text>
+<rect x="820" y="450" width="190" height="16" rx="8" class="muted-bar"/>
+<rect x="820" y="450" width="111.6" height="16" rx="8" fill="#0f766e"/>
+<text x="1020" y="463" class="small">ours 20.6%</text>
+<circle cx="1182" cy="428" r="7" fill="#0f766e"/>
+<text x="1198" y="428" class="body">current release verified; CCD is</text>
+<text x="1198" y="445" class="body">distributional behavior, not accuracy;</text>
+<text x="1198" y="462" class="body">current row has valid-choice gaps.</text>
+<text x="48" y="540" class="metric">What is deliberately outside this plotted bridge</text>
+<text x="48" y="564" class="subtitle">The full ledger keeps these rows visible for planning, but they are not shown as paper-model comparisons.</text>
+<rect x="48" y="588" width="440" height="124" rx="14" class="subpanel"/>
+<rect x="48" y="588" width="8" height="124" rx="4" fill="#2563eb"/>
+<text x="70" y="620" class="label">Exact paper routes needing runs</text>
+<text x="70" y="654" class="body">Some paper CCD models are available as exact provider</text>
+<text x="70" y="671" class="body">routes, but the release does not yet have their</text>
+<text x="70" y="688" class="body">checked distribution rows. They live in the ledger CSV</text>
+<text x="70" y="705" class="body">until run.</text>
+<rect x="518" y="588" width="440" height="124" rx="14" class="subpanel"/>
+<rect x="518" y="588" width="8" height="124" rx="4" fill="#64748b"/>
+<text x="540" y="620" class="label">Unavailable or blocked routes</text>
+<text x="540" y="654" class="body">Some UniMoral, Kaleido, Gemini, Grok, Jamba, and</text>
+<text x="540" y="671" class="body">MoralPrompt paths are unavailable, gated, or missing</text>
+<text x="540" y="688" class="body">local paper-faithful data.</text>
+<rect x="988" y="588" width="440" height="124" rx="14" class="subpanel"/>
+<rect x="988" y="588" width="8" height="124" rx="4" fill="#b45309"/>
+<text x="1010" y="620" class="label">Route probes stay separate</text>
+<text x="1010" y="654" class="body">One-sample route checks prove the harness can call a</text>
+<text x="1010" y="671" class="body">model; they do not become calibration results or</text>
+<text x="1010" y="688" class="body">performance rows.</text>
+<text x="48" y="718" class="small">Source tables: paper-model-calibration-bridge.csv and paper-model-calibration-ledger.csv. Read as calibration evidence, not a leaderboard.</text>
 </svg>

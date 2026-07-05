@@ -139,13 +139,13 @@
 <text x="292" y="971" class="body">the paper/source 17-model analysis: Nordic Europe</text>
 <text x="292" y="988" class="body">20.17%, Germanic Europe 12.36%, Sub-Saharan Africa</text>
 <text x="292" y="1005" class="body">11.51%, Anglo 11.31%, Southern Asia 10.06%, Latin...</text>
-<text x="720" y="954" class="body">Same-model saved/prior row: Mistral Nemo</text>
-<text x="720" y="971" class="body">2,178/2,182 valid choices; Nordic Europe 25.3%;</text>
-<text x="720" y="988" class="body">effective clusters 7.22. Current release</text>
-<text x="720" y="1005" class="body">context: 19/20 rows are Nordic Europe dominant.</text>
+<text x="720" y="954" class="body">Same-model rows: Mistral Nemo 2,178/2,182 valid</text>
+<text x="720" y="971" class="body">choices, Nordic Europe 25.3%, effective clusters</text>
+<text x="720" y="988" class="body">7.22; Llama-M / Llama-3.3 2,131/2,182 valid</text>
+<text x="720" y="1005" class="body">choices, Nordic Europe 20.6%, effective clusters...</text>
 <circle cx="1118" cy="958" r="7" fill="#2563eb"/>
-<text x="1136" y="957" class="body">Same-model saved/prior behavioral</text>
-<text x="1136" y="974" class="body">bridge; CCD-Bench is not accuracy</text>
+<text x="1136" y="957" class="body">Same-model behavioral bridge;</text>
+<text x="1136" y="974" class="body">CCD-Bench is not accuracy</text>
 <rect x="42" y="1040" width="1416" height="94" rx="14" class="subpanel"/>
 <rect x="42" y="1040" width="8" height="94" rx="4" fill="#991b1b"/>
 <text x="58" y="1064" class="label">DeNEVIL / MoralPrompt</text>

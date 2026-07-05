@@ -179,6 +179,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         "benchmark-catalog.csv",
         "paper-result-alignment.csv",
         "paper-result-comparison.csv",
+        "paper-model-overlap-map.csv",
+        "paper-model-calibration-ledger.csv",
+        "paper-model-calibration-bridge.csv",
         "benchmark-comparison.csv",
         "smid-results.csv",
         "value-kaleidoscope-results.csv",
@@ -244,6 +247,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert manifest["counts"]["paper_result_alignment_rows"] == 5
     assert manifest["counts"]["paper_result_comparison_rows"] == 9
+    assert manifest["counts"]["paper_model_calibration_bridge_rows"] == 3
+    assert manifest["counts"]["paper_model_calibration_ledger_rows"] >= 20
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
     assert any("OpenAI reference rows" in item and "text-only markers" in item for item in manifest["interpretation_guardrails"])
@@ -271,6 +276,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["entry_points"]["paper_result_alignment"].endswith("paper-result-alignment.csv")
     assert manifest["entry_points"]["paper_result_comparison"].endswith("paper-result-comparison.csv")
     assert manifest["entry_points"]["paper_model_overlap_map"].endswith("paper-model-overlap-map.csv")
+    assert manifest["entry_points"]["paper_model_calibration_ledger"].endswith("paper-model-calibration-ledger.csv")
+    assert manifest["entry_points"]["paper_model_calibration_bridge"].endswith("paper-model-calibration-bridge.csv")
     assert manifest["entry_points"]["paper_result_alignment_figure"].endswith("option1_paper_result_alignment_map.svg")
     assert manifest["entry_points"]["paper_result_comparison_figure"].endswith("option1_paper_result_comparison.svg")
     assert manifest["entry_points"]["supplementary_progress"].endswith("supplementary-model-progress.csv")
@@ -304,6 +311,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "paper-result-alignment.csv" in manifest["tables"]
     assert "paper-result-comparison.csv" in manifest["tables"]
     assert "paper-model-overlap-map.csv" in manifest["tables"]
+    assert "paper-model-calibration-ledger.csv" in manifest["tables"]
+    assert "paper-model-calibration-bridge.csv" in manifest["tables"]
     assert "smid-results.csv" in manifest["tables"]
     assert "value-kaleidoscope-results.csv" in manifest["tables"]
     assert "family-scaling-summary.csv" in manifest["tables"]
@@ -352,8 +361,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Value Kaleidoscope results" in release_readme_text
     assert "results/release/2026-04-19-option1/ccd-choice-distribution.csv" in release_readme_text
     assert "option1_paper_result_alignment_map.svg" in release_readme_text
-    assert "option1_paper_model_calibration_bridge.svg" not in release_readme_text
-    assert "Paper-model calibration bridge" not in release_readme_text
+    assert "option1_paper_model_calibration_bridge.svg" in release_readme_text
+    assert "Paper-model calibration bridge" in release_readme_text
+    assert "paper-model-calibration-ledger.csv" in release_readme_text
+    assert "paper-model-calibration-bridge.csv" in release_readme_text
     assert "option1_paper_result_comparison.svg" in release_readme_text
     topline_text = (release_dir / "topline-summary.md").read_text(encoding="utf-8")
     assert "## TL;DR" in topline_text
@@ -390,7 +401,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert len(paper_alignment_rows) == 5
     ccd_alignment = next(row for row in paper_alignment_rows if row["benchmark"] == "CCD-Bench")
     assert ccd_alignment["comparison_status"] == "distributional_comparison_available_not_accuracy"
-    assert "same-model bridge is the saved/prior Mistral Nemo row" in ccd_alignment["can_compare_directly"]
+    assert "same-model bridge includes saved/prior Mistral Nemo and current Llama-3.3-70B-Instruct" in ccd_alignment["can_compare_directly"]
     assert "Near-family rows should stay out of one-to-one calibration visuals" in ccd_alignment["can_compare_directly"]
     denevil_alignment = next(row for row in paper_alignment_rows if row["benchmark"] == "DeNEVIL / MoralPrompt")
     assert denevil_alignment["comparison_status"] == "proxy_only_data_gap"
@@ -1763,10 +1774,12 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in root_readme
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
+    assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in root_readme
     assert "![Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
     assert root_readme.count("![") >= 10
-    assert "[Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" not in root_readme
+    assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in root_readme
+    assert "[paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in root_readme
     assert "[paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in root_readme
     assert "## Readiness Tiers" in root_readme
     assert "Current dashboard:" in root_readme

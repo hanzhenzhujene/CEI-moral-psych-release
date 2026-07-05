@@ -76,6 +76,10 @@ _How to read it: protective refusals and corrective/contextual answers are the s
 
 _What it answers: which benchmark-paper results can be compared directly, which are current-only benchmark comparisons, which rely on saved/prior evidence, and which are blocked or proxy-only._
 
+![Paper-model calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)
+
+_What it shows: strict same-model calibration rows only. If the exact paper model is missing, a near-family route or a route probe stays out of this visual and remains in the ledger CSV._
+
 ![Paper-result comparison table](../../../figures/release/option1_paper_result_comparison.svg)
 
 _What it shows: paper metric anchors and closest current release results in one visual table. UniMoral RQ4 appears twice, once for BERTScore F1 and once for METEOR._
@@ -108,9 +112,9 @@ Use this map when you need to answer: where is the result, what does the number 
 | `Value Kaleidoscope` | primary result: `results/release/2026-04-19-option1/value-kaleidoscope-results.csv`<br/>readiness: `results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of prompt-based ValuePrism relevance and valence accuracy. This is not Kaleido model replication. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |
 | `CCD-Bench` | `results/release/2026-04-19-option1/ccd-choice-distribution.csv` | Choice-distribution behavior over ten canonical cultural clusters: valid-choice rate, per-option share/deviation, dominant option, dominant share, and effective cluster count. This is not accuracy. | `option1_ccd_choice_distribution.svg` and `option1_ccd_dominant_option_share.svg` under `figures/release/`. Rebuild through the same `make release` path. |
 | `DeNEVIL` | `results/release/2026-04-19-option1/denevil-behavior-summary.csv`<br/>`results/release/2026-04-19-option1/denevil-proxy-summary.csv` | FULCRA-backed proxy behavior only; not paper-faithful MoralPrompt scoring. | `option1_denevil_behavior_outcomes.svg` under `figures/release/`. Rebuild through the same `make release` path. |
-| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`results/release/2026-04-19-option1/paper-result-comparison.csv`<br/>`results/release/2026-04-19-option1/paper-model-overlap-map.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg` and `option1_paper_result_comparison.svg` under `figures/release/`. Rebuild through the same `make release` path. |
+| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`results/release/2026-04-19-option1/paper-result-comparison.csv`<br/>`results/release/2026-04-19-option1/paper-model-overlap-map.csv`<br/>`results/release/2026-04-19-option1/paper-model-calibration-ledger.csv`<br/>`results/release/2026-04-19-option1/paper-model-calibration-bridge.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_model_calibration_bridge.svg`, `option1_paper_result_alignment_map.svg`, and `option1_paper_result_comparison.svg` under `figures/release/`. Rebuild through the same `make release` path. |
 
-Quick visual links: [UniMoral heatmap](../../../figures/release/option1_unimoral_task_heatmap.svg), [SMID/Value bars](../../../figures/release/option1_benchmark_accuracy_bars.svg), [CCD choice map](../../../figures/release/option1_ccd_choice_distribution.svg), [paper result comparison](../../../figures/release/option1_paper_result_comparison.svg), [replication map](../../../figures/release/option1_paper_result_alignment_map.svg).
+Quick visual links: [UniMoral heatmap](../../../figures/release/option1_unimoral_task_heatmap.svg), [SMID/Value bars](../../../figures/release/option1_benchmark_accuracy_bars.svg), [CCD choice map](../../../figures/release/option1_ccd_choice_distribution.svg), [same-model calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg), [paper result comparison](../../../figures/release/option1_paper_result_comparison.svg), [replication map](../../../figures/release/option1_paper_result_alignment_map.svg).
 
 ## Results First
 
@@ -448,7 +452,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 - DeNEVIL proxy behavior: [denevil-behavior-summary.csv](denevil-behavior-summary.csv)
 - All release tables: [results/release/2026-04-19-option1/](./)
 - Readiness/progress: [readiness-tier-matrix.csv](readiness-tier-matrix.csv) and [family-size-progress.csv](family-size-progress.csv)
-- Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv), [paper-result-comparison.csv](paper-result-comparison.csv), and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)
+- Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv), [paper-result-comparison.csv](paper-result-comparison.csv), [paper-model-calibration-ledger.csv](paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](paper-model-calibration-bridge.csv), and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)
 
 ### Reports
 
@@ -470,6 +474,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 - [CCD concentration summary](../../../figures/release/option1_ccd_dominant_option_share.svg): dominant-cluster share plus effective-cluster count
 - [DeNEVIL behavioral outcomes](../../../figures/release/option1_denevil_behavior_outcomes.svg): main proxy-result view showing visible behavior categories by model line
 - [paper-vs-current replication map](../../../figures/release/option1_paper_result_alignment_map.svg): visual map of paper-faithful overlap, current-only rows, blocked model routes, and proxy-only evidence
+- [same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg): strict visual bridge for exact same-model calibration rows only
 - [paper result comparison](../../../figures/release/option1_paper_result_comparison.svg): exact paper metric anchors beside closest current rows, with UniMoral RQ4 split into BERTScore F1 and METEOR
 
 ## Status Key
@@ -519,6 +524,8 @@ Exact per-line family-size status is saved as [family-size-progress.csv](family-
 - `paper-result-alignment.csv`: paper-vs-ours alignment map, including original/reference model evidence, overlap status, blocked/proxy states, and safe comparison boundaries
 - `paper-result-comparison.csv`: RQ-level paper-calibration table; UniMoral RQ4 is split into separate BERTScore F1 and METEOR rows
 - `paper-model-overlap-map.csv`: model/route overlap audit map for exact, context-only, blocked, and proxy paper-model evidence
+- `paper-model-calibration-ledger.csv`: comprehensive same-model calibration planning ledger with verified paper model names, OpenRouter availability, current evidence state, and rerun action
+- `paper-model-calibration-bridge.csv`: strict same-model bridge rows used by the public calibration figure
 - `ccd-choice-distribution.csv`: CCD-Bench choice-behavior table with per-cluster shares, deviation from the 10% baseline, and concentration summaries
 - `denevil-behavior-summary.csv`: DeNEVIL proxy behavioral outcome mix by model line
 - `denevil-prompt-family-breakdown.csv`: DeNEVIL protective-response rates by heuristic prompt family

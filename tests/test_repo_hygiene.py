@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import csv
 import re
 from pathlib import Path
 
@@ -149,8 +150,9 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
     assert "figures/release/option1_paper_result_alignment_map.svg" in readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in readme
-    assert "figures/release/option1_paper_model_calibration_bridge.svg" not in readme
-    assert "Paper-model calibration bridge" not in readme
+    assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
+    assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in readme
+    assert "[paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in readme
     assert "[paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in readme
     assert "## UniMoral RQ1-RQ4 Artifact Pointer" in readme
     assert "**DATA, CLICK HERE:**" in readme
@@ -163,7 +165,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "side" + " metric" not in figures_readme
     assert "two reported generation metrics: BERTScore F1" in figures_readme
     assert "option1_paper_result_comparison.svg" in figures_readme
-    assert "option1_paper_model_calibration_bridge.svg" not in figures_readme
+    assert "option1_paper_model_calibration_bridge.svg" in figures_readme
     assert "## Replication / calibration figures" in figures_readme
     assert figures_readme.index("## Replication / calibration figures") < figures_readme.index("option1_paper_result_alignment_map.svg")
 
@@ -181,10 +183,24 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Only exact same-model evidence is plotted here" in paper_calibration_svg
     assert "Llama-3.1-8B Instruct" in paper_calibration_svg
     assert "Mistral Nemo" in paper_calibration_svg
+    assert "Llama-3.3-70B-Instruct" in paper_calibration_svg
     assert "DeepSeek-chat-v3-0324" not in paper_calibration_svg
-    assert "Llama-3.3-70B-Instruct" not in paper_calibration_svg
     assert "OpenAI GPT-4.1" not in paper_calibration_svg
     assert "Qwen2.5-72B-Instruct" not in paper_calibration_svg
+
+    with (ROOT / "results/release/2026-04-19-option1/paper-model-calibration-bridge.csv").open(newline="", encoding="utf-8") as handle:
+        bridge_rows = list(csv.DictReader(handle))
+    assert {row["model_match_class"] for row in bridge_rows} == {"exact_same_model"}
+    assert {row["paper_model"] for row in bridge_rows} == {
+        "Llama-3.1-8B Instruct",
+        "Mistral Nemo",
+        "Llama-3.3-70B-Instruct",
+    }
+
+    with (ROOT / "results/release/2026-04-19-option1/paper-model-calibration-ledger.csv").open(newline="", encoding="utf-8") as handle:
+        ledger_rows = list(csv.DictReader(handle))
+    assert any(row["paper_model"] == "Qwen2.5-72B-Instruct" and row["repo_evidence_state"] == "needs_run" for row in ledger_rows)
+    assert any(row["benchmark"] == "DeNEVIL / MoralPrompt" and "proxy" in row["comparison_boundary"].lower() for row in ledger_rows)
 
     paper_comparison_doc = (ROOT / "docs/paper-result-comparison.md").read_text(encoding="utf-8")
     assert "# Paper Result Calibration and Comparison" in paper_comparison_doc
@@ -197,8 +213,10 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)" in paper_comparison_doc
     assert "[paper-result-comparison.csv](../results/release/2026-04-19-option1/paper-result-comparison.csv)" in paper_comparison_doc
     assert "[paper-model-overlap-map.csv](../results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in paper_comparison_doc
+    assert "[paper-model-calibration-ledger.csv](../results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in paper_comparison_doc
+    assert "[paper-model-calibration-bridge.csv](../results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in paper_comparison_doc
     assert "UniMoral RQ1 action prediction can support directional calibration" in paper_comparison_doc
-    assert "only exact same-model saved/prior evidence is plotted" in paper_comparison_doc
+    assert "only exact same-model evidence is plotted" in paper_comparison_doc
     assert "near-family CCD rows are useful context, not one-to-one calibration" in paper_comparison_doc
     assert max(len(line) for line in paper_comparison_doc.splitlines()) <= 220
 

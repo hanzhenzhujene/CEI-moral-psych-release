@@ -13,7 +13,7 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 | Main result CSVs | [UniMoral](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [SMID](results/release/2026-04-19-option1/smid-results.csv), [Value Kaleidoscope](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |
 | Main figures | [Main Figures](#main-figures) |
 | Exact progress / readiness | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) and [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
-| Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |
+| Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |
 | Mentor-facing report | [jenny-group-report.md](results/release/2026-04-19-option1/jenny-group-report.md) |
 | Full detailed appendix | [results/release/2026-04-19-option1/README.md](results/release/2026-04-19-option1/README.md) |
 | Rebuild / verify | [Reproduce](#reproduce) with `make bootstrap` |
@@ -26,7 +26,7 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 | Best text-only line | `GPT-5.5`: UniMoral 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |
 | Hardest primary metric | `SMID` has mean accuracy 0.364; best current line is `Qwen-L` at 0.483. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |
 | Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |
-| Paper comparison status | UniMoral is a partial task/metric bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg) |
+| Paper comparison status | UniMoral is a partial task/metric bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [same-model bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper comparison figure](figures/release/option1_paper_result_comparison.svg) |
 
 ## Status: What Is Usable
 
@@ -55,7 +55,7 @@ Use these three benchmark-specific CSVs for the primary result numbers. Supporti
 | `CCD-Bench` behavior | [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) |
 | `DeNEVIL` proxy behavior | [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv) |
 | Readiness / progress | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
-| Replication / calibration | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |
+| Replication / calibration | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |
 
 ## What To Trust First
 
@@ -94,6 +94,8 @@ These are the audience-facing result figures to use in the deck or meeting reado
 ![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)
 
 ![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)
+
+![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)
 
 ![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)
 

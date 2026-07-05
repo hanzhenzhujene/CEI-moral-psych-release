@@ -624,13 +624,13 @@ PAPER_RESULT_ALIGNMENT_ROWS = [
         "paper_models_or_reference_routes_identified": "Local reference artifacts include 17 full model routes: Mistral Nemo, Qwen2.5 72B, GPT-4o latest, GPT-4.1, Llama 3.3 70B, Llama 4 Maverick, DeepSeek Chat V3 0324, Gemini 2.0/2.5 Flash, Claude 3.7/4 Sonnet, Phi-4, WizardLM, Jamba, Command-R, Sonar, and Grok.",
         "paper_results_available_in_repo": "Reference CCD summaries are available locally. Example reference values: Mistral Nemo model-bias score 0.137427, entropy 3.210635, multi-dimensional rate 81.989%. Saved/prior May 13 Mistral Nemo CCD artifact has 2,178/2,182 valid choices, dominant Nordic Europe share 25.344%, and 7.222 effective clusters.",
         "current_repo_result_surface": "Current release reports line-level CCD choice distributions in ccd-choice-distribution.csv, not accuracy. GPT-5.5 has 2,182/2,182 valid choices, dominant option_6 Nordic Europe 27.268561%, and 7.058620 effective clusters.",
-        "same_model_overlap_or_context": "Exact saved/prior overlap exists for Mistral Nemo only. Same-family or near-route rows for Llama, OpenAI, DeepSeek, and Qwen are context only and are not one-to-one paper-model calibration rows.",
+        "same_model_overlap_or_context": "Exact overlap exists for saved/prior Mistral Nemo and the current Llama-3.3-70B-Instruct / Llama-M row. OpenAI, DeepSeek, Qwen, and near-route Llama 4 rows remain context only unless exact route identity is verified and rerun.",
         "paper_only_models_or_routes": "Claude, Gemini, Mistral Nemo, Phi-4, WizardLM, Jamba, Command-R, Sonar, Grok, and several exact route versions not in the current release table.",
         "ours_only_models_or_routes": "Qwen3 S/M/L, MiniMax S/M/L, Gemma3 S/M/L, DeepSeek R1/R1-distill current rows, OpenAI GPT-5/GPT-4.1 nano/mini references, and GPT-5.5.",
         "comparison_status": "distributional_comparison_available_not_accuracy",
-        "can_compare_directly": "Partly. The same-model bridge is the saved/prior Mistral Nemo row, and the metric is distribution/concentration rather than accuracy. Near-family rows should stay out of one-to-one calibration visuals.",
+        "can_compare_directly": "Partly. The same-model bridge includes saved/prior Mistral Nemo and current Llama-3.3-70B-Instruct distribution rows; the metric is distribution/concentration rather than accuracy. Near-family rows should stay out of one-to-one calibration visuals.",
         "classification_quality_readout": "Do not call it classification quality or accuracy. The useful question is whether a model collapses narrowly onto one cultural cluster or spreads choices across the ten canonical options.",
-        "reviewer_takeaway": "CCD-Bench needs a visual/map rather than a winner table: compare exact same-model Mistral Nemo distribution evidence when calibrating to the paper, keep near-family rows as context only, and remove all accuracy language.",
+        "reviewer_takeaway": "CCD-Bench needs a visual/map rather than a winner table: compare exact same-model Mistral Nemo and Llama-3.3 distribution evidence when calibrating to the paper, keep near-family rows as context only, and remove all accuracy language.",
         "evidence_sources": "ccd-choice-distribution.csv; results/exploratory/2026-05-13-additional-model-sweep/ccd-summary.csv; docs/calibration-replication.md; local reference checkout for CCD-Bench multi_model_analysis/model_summary_comparison.csv.",
     },
     {
@@ -781,11 +781,11 @@ PAPER_RESULT_COMPARISON_ROWS = [
         "paper_exact_result": "2,182 dilemmas; 17 LLMs; Mean cluster shares across the paper/source 17-model analysis: Nordic Europe 20.17%, Germanic Europe 12.36%, Sub-Saharan Africa 11.51%, Anglo 11.31%, Southern Asia 10.06%, Latin Europe 8.23%, Confucian Asia 7.40%, Latin America 7.23%, Middle East 5.80%, Eastern Europe 5.62%. Plural rationales 87.9%; position-bias Cramer's V 0.0586.",
         "paper_models_or_subjects": "17 LLMs including GPT-4o/latest, GPT-4.1, Llama, DeepSeek, Mistral, Qwen, Claude, Gemini, and others",
         "our_release_metric": "Full-choice distribution over the same ten GLOBE clusters",
-        "our_exact_result": "Same-model saved/prior row: Mistral Nemo 2,178/2,182 valid choices; Nordic Europe 25.3%; effective clusters 7.22. Current release context: 19/20 rows are Nordic Europe dominant.",
-        "our_closest_line": "May 13 Mistral Nemo saved/prior follow-up",
-        "comparison_status": "Same-model saved/prior behavioral bridge; CCD-Bench is not accuracy",
-        "same_model_overlap": "Exact same-model overlap exists only for saved/prior Mistral Nemo. Current Llama/OpenAI/DeepSeek/Qwen rows are not exact paper-model matches.",
-        "reviewer_takeaway": "Use Mistral Nemo for the one-to-one paper-model calibration bridge. Treat other current CCD rows as context, not paper-model replication.",
+        "our_exact_result": "Same-model rows: Mistral Nemo 2,178/2,182 valid choices, Nordic Europe 25.3%, effective clusters 7.22; Llama-M / Llama-3.3 2,131/2,182 valid choices, Nordic Europe 20.6%, effective clusters 8.03.",
+        "our_closest_line": "May 13 Mistral Nemo saved/prior follow-up; Llama-M current release row",
+        "comparison_status": "Same-model behavioral bridge; CCD-Bench is not accuracy",
+        "same_model_overlap": "Exact same-model overlap exists for saved/prior Mistral Nemo and current Llama-3.3-70B-Instruct / Llama-M. OpenAI/DeepSeek/Qwen current rows are not exact paper-model matches.",
+        "reviewer_takeaway": "Use Mistral Nemo and Llama-3.3 for the one-to-one paper-model calibration bridge. Treat other current CCD rows as context, not paper-model replication.",
         "source_url": "https://github.com/smartlab-nyu/CCD-Bench",
     },
     {
@@ -829,7 +829,7 @@ PAPER_MODEL_OVERLAP_ROW_VALUES = [
     ("CCD-Bench", "DeepSeek-chat-v3-0324", "top Nordic Europe 22.9%; Germanic Europe 11.9%; plural rationales 96.8%; Cramer's V 0.161", "DeepSeek-M", "DeepSeek-M: option_6 (Nordic Europe) at 22.6%; effective clusters 7.99", "Not exact model/version; context only; not plotted in the same-model calibration bridge", "Use only as CCD context, not one-to-one paper calibration."),
     ("CCD-Bench", "Gemini 2.0 Flash 001", "top Nordic Europe 18.4%; Germanic Europe 12.3%; plural rationales 89.2%; Cramer's V 0.076", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
     ("CCD-Bench", "Gemini 2.5 Flash Preview 05-20", "top Nordic Europe 16.5%; Germanic Europe 13.1%; plural rationales 86.9%; Cramer's V 0.097", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
-    ("CCD-Bench", "Llama-3.3-70B-Instruct", "top Nordic Europe 19.7%; Germanic Europe 15.3%; plural rationales 85.3%; Cramer's V 0.203", "Llama-M", "Llama-M: option_6 (Nordic Europe) at 20.6%; effective clusters 8.03", "Not exact paper route; context only; not plotted in the same-model calibration bridge", "Use only as CCD context, not one-to-one paper calibration."),
+    ("CCD-Bench", "Llama-3.3-70B-Instruct", "top Nordic Europe 19.7%; Germanic Europe 15.3%; plural rationales 85.3%; Cramer's V 0.203", "Llama-M", "Llama-M: option_6 (Nordic Europe) at 20.6%; effective clusters 8.03", "Exact same-model current release evidence", "Use as a CCD distribution bridge, not accuracy."),
     ("CCD-Bench", "Llama-4-Maverick-17B-128E-Instruct", "top Nordic Europe 21.1%; Germanic Europe 14.6%; plural rationales 68.6%; Cramer's V 0.097", "Llama-L", "Llama-L: option_6 (Nordic Europe) at 23.5%; effective clusters 7.67", "Not exact paper route; context only; not plotted in the same-model calibration bridge", "Use only as CCD context, not one-to-one paper calibration."),
     ("CCD-Bench", "Microsoft Phi-4", "top Nordic Europe 18.9%; Germanic Europe 7.8%; plural rationales 82.7%; Cramer's V 0.152", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
     ("CCD-Bench", "WizardLM-2-8x22B", "top Nordic Europe 22.0%; Germanic Europe 16.4%; plural rationales 88.8%; Cramer's V 0.111", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
@@ -840,6 +840,380 @@ PAPER_MODEL_OVERLAP_ROW_VALUES = [
     ("CCD-Bench", "Qwen2.5-72B-Instruct", "top Nordic Europe 17.7%; Germanic Europe 9.4%; plural rationales 91.4%; Cramer's V 0.102", "Qwen-L", "Qwen-L: option_6 (Nordic Europe) at 23.4%; effective clusters 7.97", "Not exact model/version; context only; not plotted in the same-model calibration bridge", "Compare as family-level behavior only, not exact model replication."),
     ("CCD-Bench", "Grok-2-1212", "top Nordic Europe 21.6%; Germanic Europe 10.7%; plural rationales 88.0%; Cramer's V 0.123", "No current row", "n/a", "Not run in this release", "Add a matching route before making a paper-model replication claim."),
     ("DeNEVIL / MoralPrompt", "ChatGPT, GPT-4, LLaMA2-70B-chat, and 24 other LLMs", "Paper reports EVR/APV/MVP over MoralPrompt; e.g. ChatGPT APV 65.20 +/- 26.45", "No MoralPrompt row", "FULCRA-backed proxy behavior only; APV/EVR/MVP n/a", "Blocked data/scorer gap; proxy is not T3", "Do not compare DeNEVIL proxy categories to MoralPrompt APV/EVR/MVP."),
+]
+
+PAPER_MODEL_CALIBRATION_LEDGER_FIELDNAMES = [
+    "benchmark",
+    "paper_model",
+    "paper_model_string",
+    "openrouter_exact_model_id",
+    "openrouter_availability",
+    "paper_metric_anchor",
+    "paper_result_anchor",
+    "repo_result_anchor",
+    "repo_evidence_state",
+    "repo_evidence_path",
+    "calibration_action",
+    "comparison_boundary",
+]
+
+PAPER_MODEL_CALIBRATION_LEDGER_ROWS = [
+    {
+        "benchmark": "UniMoral RQ1-RQ4",
+        "paper_model": "Llama-3.1-8B Instruct",
+        "paper_model_string": "Llama-3.1-8B Instruct",
+        "openrouter_exact_model_id": "meta-llama/llama-3.1-8b-instruct",
+        "openrouter_availability": "available_exact",
+        "paper_metric_anchor": "Weighted F1 for RQ1-RQ3; METEOR and BERTScore for RQ4",
+        "paper_result_anchor": "RQ1 Llama best visible WF1 66.17; RQ2 57.01; RQ3 38.59; RQ4 METEOR 19.08 and BERTScore 87.44",
+        "repo_result_anchor": "Current full-grid row: RQ1 accuracy 0.628757; RQ2 accuracy 0.595074; RQ3 accuracy 0.599943; RQ4 live METEOR 0.124689. Saved/prior RQ1 accuracy 0.638775.",
+        "repo_evidence_state": "current_full_grid_verified",
+        "repo_evidence_path": "results/openrouter-selected-grid-moral-psych-full/result_summary.csv; results/exploratory/2026-05-13-additional-model-sweep/unimoral-summary.csv",
+        "calibration_action": "Use as exact same-model UniMoral calibration with metric-scale caveats; rerun only if raw .eval logs are required for audit.",
+        "comparison_boundary": "Same model and same task family, but paper reports weighted F1 / 0-100 generation metrics while the repo reports accuracy and 0-1 live METEOR.",
+    },
+    {
+        "benchmark": "UniMoral RQ1-RQ4",
+        "paper_model": "Phi-3.5-mini Instruct",
+        "paper_model_string": "Phi-3.5-mini Instruct",
+        "openrouter_exact_model_id": "",
+        "openrouter_availability": "not_found_in_openrouter_catalog_2026-07-05",
+        "paper_metric_anchor": "Weighted F1 for RQ1-RQ3; METEOR and BERTScore for RQ4",
+        "paper_result_anchor": "Paper tables include Phi across RQ1-RQ4; RQ1 best visible paper cell is Phi English moral WF1 66.38.",
+        "repo_result_anchor": "No exact current row.",
+        "repo_evidence_state": "not_run_route_unavailable",
+        "repo_evidence_path": "",
+        "calibration_action": "Do not run through OpenRouter unless the exact Phi-3.5-mini route becomes available.",
+        "comparison_boundary": "No same-model repo evidence.",
+    },
+    {
+        "benchmark": "UniMoral RQ1-RQ4",
+        "paper_model": "DeepSeek-R1-Distill-Llama-8B",
+        "paper_model_string": "DeepSeek-R1-Distill-Llama-8B",
+        "openrouter_exact_model_id": "",
+        "openrouter_availability": "not_found_in_openrouter_catalog_2026-07-05",
+        "paper_metric_anchor": "Weighted F1 for RQ1-RQ3; METEOR and BERTScore for RQ4",
+        "paper_result_anchor": "Paper tables include R1 across RQ1-RQ4.",
+        "repo_result_anchor": "No exact 8B distill row. Current DeepSeek rows are different routes.",
+        "repo_evidence_state": "not_run_route_unavailable",
+        "repo_evidence_path": "",
+        "calibration_action": "Do not substitute DeepSeek chat or 70B distill rows into the same-model bridge.",
+        "comparison_boundary": "Near-family rows are context only.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Mistral Nemo",
+        "paper_model_string": "mistralai/mistral-nemo",
+        "openrouter_exact_model_id": "mistralai/mistral-nemo",
+        "openrouter_availability": "available_exact",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 19.0%; Germanic Europe 13.1%; plural rationales 82.0%; Cramer's V 0.130",
+        "repo_result_anchor": "Saved/prior CCD row: 2,178/2,182 valid choices; Nordic Europe 25.344%; effective clusters 7.222.",
+        "repo_evidence_state": "saved_prior_verified",
+        "repo_evidence_path": "results/exploratory/2026-05-13-additional-model-sweep/ccd-summary.csv",
+        "calibration_action": "Use as exact same-model CCD distribution bridge; run a fresh CCD row only if current logs are required.",
+        "comparison_boundary": "CCD is distributional behavior, not accuracy.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Llama-3.3-70B-Instruct",
+        "paper_model_string": "meta-llama/llama-3.3-70b-instruct",
+        "openrouter_exact_model_id": "meta-llama/llama-3.3-70b-instruct",
+        "openrouter_availability": "available_exact",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 19.7%; Germanic Europe 15.3%; plural rationales 85.3%; Cramer's V 0.203",
+        "repo_result_anchor": "Current release row Llama-M: 2,131/2,182 valid choices; Nordic Europe 20.554%; effective clusters 8.028.",
+        "repo_evidence_state": "current_release_verified",
+        "repo_evidence_path": "results/release/2026-04-19-option1/ccd-choice-distribution.csv",
+        "calibration_action": "Use as exact same-model CCD distribution bridge, with valid-choice coverage caveat visible.",
+        "comparison_boundary": "CCD is distributional behavior, not accuracy.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "DeepSeek-chat-v3-0324",
+        "paper_model_string": "deepseek/deepseek-chat-v3-0324",
+        "openrouter_exact_model_id": "deepseek/deepseek-chat-v3-0324",
+        "openrouter_availability": "available_exact",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 22.9%; Germanic Europe 11.9%; plural rationales 96.8%; Cramer's V 0.161",
+        "repo_result_anchor": "Current full-grid row verifies 2,182/2,182 valid choices, but the raw cluster distribution is not tracked in the checked-out full-grid logs.",
+        "repo_evidence_state": "current_full_grid_valid_choice_only",
+        "repo_evidence_path": "results/openrouter-selected-grid-moral-psych-full/result_summary.csv",
+        "calibration_action": "Run exact CCD rerun to recover the full cluster distribution for the strict bridge.",
+        "comparison_boundary": "Do not use the current DeepSeek-M release row as exact because it is deepseek-chat-v3.1.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Qwen2.5-72B-Instruct",
+        "paper_model_string": "qwen/qwen-2.5-72b-instruct",
+        "openrouter_exact_model_id": "qwen/qwen-2.5-72b-instruct",
+        "openrouter_availability": "available_exact",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 17.7%; Germanic Europe 9.4%; plural rationales 91.4%; Cramer's V 0.102",
+        "repo_result_anchor": "No exact current 72B row; Qwen-L is Qwen3-32B and Qwen2.5-VL for SMID only.",
+        "repo_evidence_state": "needs_run",
+        "repo_evidence_path": "",
+        "calibration_action": "Run exact CCD row through OpenRouter if budget allows.",
+        "comparison_boundary": "Do not substitute Qwen-L.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "OpenAI GPT-4.1",
+        "paper_model_string": "openai/gpt-4.1",
+        "openrouter_exact_model_id": "openai/gpt-4.1",
+        "openrouter_availability": "available_exact",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 21.5%; Germanic Europe 7.6%; plural rationales 94.7%; Cramer's V 0.096",
+        "repo_result_anchor": "No exact GPT-4.1 current row; existing OpenAI rows are nano/mini/text references.",
+        "repo_evidence_state": "needs_run",
+        "repo_evidence_path": "",
+        "calibration_action": "Run exact CCD row through OpenRouter if budget allows.",
+        "comparison_boundary": "Do not substitute GPT-4.1-mini or GPT-4.1-nano.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Command-R 08-2024",
+        "paper_model_string": "cohere/command-r-08-2024",
+        "openrouter_exact_model_id": "cohere/command-r-08-2024",
+        "openrouter_availability": "available_exact",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 16.1%; Germanic Europe 10.2%; plural rationales 78.5%; Cramer's V 0.142",
+        "repo_result_anchor": "No exact current row.",
+        "repo_evidence_state": "needs_run",
+        "repo_evidence_path": "",
+        "calibration_action": "Run exact CCD row through OpenRouter if budget allows.",
+        "comparison_boundary": "CCD is distributional behavior, not accuracy.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Microsoft Phi-4",
+        "paper_model_string": "microsoft/phi-4",
+        "openrouter_exact_model_id": "microsoft/phi-4",
+        "openrouter_availability": "available_exact",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 18.9%; Germanic Europe 7.8%; plural rationales 82.7%; Cramer's V 0.152",
+        "repo_result_anchor": "No exact current row.",
+        "repo_evidence_state": "needs_run",
+        "repo_evidence_path": "",
+        "calibration_action": "Run exact CCD row through OpenRouter if budget allows.",
+        "comparison_boundary": "CCD is distributional behavior, not accuracy.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "WizardLM-2-8x22B",
+        "paper_model_string": "microsoft/wizardlm-2-8x22b",
+        "openrouter_exact_model_id": "microsoft/wizardlm-2-8x22b",
+        "openrouter_availability": "available_exact",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 22.0%; Germanic Europe 16.4%; plural rationales 88.8%; Cramer's V 0.111",
+        "repo_result_anchor": "No exact current row.",
+        "repo_evidence_state": "needs_run",
+        "repo_evidence_path": "",
+        "calibration_action": "Run exact CCD row through OpenRouter if budget allows.",
+        "comparison_boundary": "CCD is distributional behavior, not accuracy.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Perplexity Sonar",
+        "paper_model_string": "perplexity/sonar",
+        "openrouter_exact_model_id": "perplexity/sonar",
+        "openrouter_availability": "available_exact",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 21.8%; Germanic Europe 12.5%; plural rationales 92.9%; Cramer's V 0.127",
+        "repo_result_anchor": "No exact current row.",
+        "repo_evidence_state": "needs_run",
+        "repo_evidence_path": "",
+        "calibration_action": "Run exact CCD row through OpenRouter if budget allows.",
+        "comparison_boundary": "CCD is distributional behavior, not accuracy.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Claude 4 Sonnet",
+        "paper_model_string": "anthropic/claude-sonnet-4",
+        "openrouter_exact_model_id": "anthropic/claude-sonnet-4",
+        "openrouter_availability": "available_exact",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 30.6%; Germanic Europe 15.9%; plural rationales 98.6%; Cramer's V 0.054",
+        "repo_result_anchor": "No exact current row.",
+        "repo_evidence_state": "needs_run",
+        "repo_evidence_path": "",
+        "calibration_action": "Run exact CCD row only if the live cost guard remains under budget.",
+        "comparison_boundary": "CCD is distributional behavior, not accuracy.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Llama-4-Maverick-17B-128E-Instruct",
+        "paper_model_string": "meta-llama/llama-4-maverick-17b-128e-instruct",
+        "openrouter_exact_model_id": "meta-llama/llama-4-maverick",
+        "openrouter_availability": "available_near_route_needs_variant_confirmation",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 21.1%; Germanic Europe 14.6%; plural rationales 68.6%; Cramer's V 0.097",
+        "repo_result_anchor": "Current Llama-L route is not pinned to the full paper variant string.",
+        "repo_evidence_state": "near_route_context_only",
+        "repo_evidence_path": "results/release/2026-04-19-option1/ccd-choice-distribution.csv",
+        "calibration_action": "Keep out of strict bridge unless provider metadata confirms exact variant identity.",
+        "comparison_boundary": "Near-route context only.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "AI21 Jamba-1.6-large",
+        "paper_model_string": "ai21/jamba-1.6-large",
+        "openrouter_exact_model_id": "",
+        "openrouter_availability": "not_found_in_openrouter_catalog_2026-07-05",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 14.7%; Germanic Europe 12.9%; plural rationales 82.6%; Cramer's V 0.106",
+        "repo_result_anchor": "No exact current row.",
+        "repo_evidence_state": "not_run_route_unavailable",
+        "repo_evidence_path": "",
+        "calibration_action": "Do not substitute Jamba 1.7.",
+        "comparison_boundary": "No same-model repo evidence.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Claude 3.7 Sonnet",
+        "paper_model_string": "anthropic/claude-3.7-sonnet",
+        "openrouter_exact_model_id": "",
+        "openrouter_availability": "not_found_in_openrouter_catalog_2026-07-05",
+        "paper_metric_anchor": "Top cultural cluster share; Cramer's V; multi-dimensional rationale rate",
+        "paper_result_anchor": "Nordic Europe 21.9%; Germanic Europe 14.9%; plural rationales 90.8%; Cramer's V 0.061",
+        "repo_result_anchor": "No exact current row.",
+        "repo_evidence_state": "not_run_route_unavailable",
+        "repo_evidence_path": "",
+        "calibration_action": "Do not substitute newer/later Claude routes.",
+        "comparison_boundary": "No same-model repo evidence.",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Gemini 2.0 Flash 001 / Gemini 2.5 Flash Preview 05-20 / Grok-2-1212 / ChatGPT-4o-latest",
+        "paper_model_string": "multiple exact routes",
+        "openrouter_exact_model_id": "",
+        "openrouter_availability": "not_found_in_openrouter_catalog_2026-07-05",
+        "paper_metric_anchor": "CCD paper distribution metrics",
+        "paper_result_anchor": "Paper anchors are tracked in paper-model-overlap-map.csv.",
+        "repo_result_anchor": "No exact current rows.",
+        "repo_evidence_state": "not_run_route_unavailable",
+        "repo_evidence_path": "results/release/2026-04-19-option1/paper-model-overlap-map.csv",
+        "calibration_action": "Keep as not-run/unavailable until exact provider IDs are available.",
+        "comparison_boundary": "Do not substitute stable Gemini, Grok 4, or GPT-4o variants.",
+    },
+    {
+        "benchmark": "Value Kaleidoscope / ValuePrism",
+        "paper_model": "Kaleido small/base/large/xl/xxl",
+        "paper_model_string": "tsor13/kaleido-small; tsor13/kaleido-base; tsor13/kaleido-large; tsor13/kaleido-xl; tsor13/kaleido-xxl",
+        "openrouter_exact_model_id": "",
+        "openrouter_availability": "not_openrouter_models",
+        "paper_metric_anchor": "Kaleido model and human preference evaluation",
+        "paper_result_anchor": "KAL SYS 11B overall win rate 58.3 vs GPT-4.",
+        "repo_result_anchor": "No Kaleido model execution row. Current ValuePrism rows are prompt-based LLM classification.",
+        "repo_evidence_state": "blocked_model_access_and_execution_path",
+        "repo_evidence_path": "results/release/2026-04-19-option1/value-kaleidoscope-results.csv",
+        "calibration_action": "Requires separate gated HF/model route; do not run through OpenRouter.",
+        "comparison_boundary": "Prompt-based ValuePrism is not Kaleido replication.",
+    },
+    {
+        "benchmark": "SMID",
+        "paper_model": "Human norming sample",
+        "paper_model_string": "human participants",
+        "openrouter_exact_model_id": "",
+        "openrouter_availability": "not_applicable",
+        "paper_metric_anchor": "Stimulus reliability and human normative ratings",
+        "paper_result_anchor": "2,716 participants; 820,565 ratings; averaged norms ICC >= .75.",
+        "repo_result_anchor": "Current model rows compare against human-norm labels; best SMID average is Qwen-L 0.483.",
+        "repo_evidence_state": "no_original_llm_roster",
+        "repo_evidence_path": "results/release/2026-04-19-option1/smid-results.csv",
+        "calibration_action": "No paper-model rerun exists to perform.",
+        "comparison_boundary": "Current SMID is model-vs-human-norm, not paper-model calibration.",
+    },
+    {
+        "benchmark": "DeNEVIL / MoralPrompt",
+        "paper_model": "ChatGPT, GPT-4, LLaMA2-70B-chat, and other MoralPrompt rows",
+        "paper_model_string": "MoralPrompt paper roster",
+        "openrouter_exact_model_id": "",
+        "openrouter_availability": "blocked_by_missing_moralprompt_data",
+        "paper_metric_anchor": "EVR, APV, MVP over MoralPrompt",
+        "paper_result_anchor": "ChatGPT APV 65.20 +/- 26.45; GPT-4 APV 79.08 +/- 21.46; LLaMA-2-70B-chat APV 76.94 +/- 18.86.",
+        "repo_result_anchor": "Current evidence is FULCRA-backed proxy behavior only; APV/EVR/MVP are n/a.",
+        "repo_evidence_state": "blocked_data_and_scorer_gap_proxy_only",
+        "repo_evidence_path": "results/release/2026-04-19-option1/denevil-behavior-summary.csv",
+        "calibration_action": "Do not run proxy rows as paper calibration.",
+        "comparison_boundary": "DeNEVIL proxy is not paper-faithful MoralPrompt replication.",
+    },
+]
+
+PAPER_MODEL_CALIBRATION_BRIDGE_FIELDNAMES = [
+    "benchmark",
+    "paper_model",
+    "repo_model_or_line",
+    "model_match_class",
+    "evidence_state",
+    "fresh_rerun",
+    "task_scope",
+    "paper_metric",
+    "paper_value",
+    "repo_metric",
+    "repo_value",
+    "valid_n",
+    "total_n",
+    "can_plot_numeric",
+    "comparison_boundary",
+    "source_artifacts",
+]
+
+PAPER_MODEL_CALIBRATION_BRIDGE_ROWS = [
+    {
+        "benchmark": "UniMoral",
+        "paper_model": "Llama-3.1-8B Instruct",
+        "repo_model_or_line": "meta-llama/llama-3.1-8b-instruct current full-grid",
+        "model_match_class": "exact_same_model",
+        "evidence_state": "current_full_grid_verified",
+        "fresh_rerun": "no",
+        "task_scope": "RQ1-RQ4 current full-grid; RQ4 live METEOR only until offline BERTScore is recomputed",
+        "paper_metric": "Paper weighted F1 / METEOR / BERTScore",
+        "paper_value": "RQ1 66.17; RQ2 57.01; RQ3 38.59; RQ4 METEOR 19.08 and BERTScore 87.44",
+        "repo_metric": "Accuracy for RQ1-RQ3; live METEOR for RQ4",
+        "repo_value": "RQ1 0.628757; RQ2 0.595074; RQ3 0.599943; RQ4 METEOR 0.124689",
+        "valid_n": "17550",
+        "total_n": "17550",
+        "can_plot_numeric": "no_metric_scale_differs",
+        "comparison_boundary": "Exact same model, but paper and repo metric scales differ; compare direction and task coverage, not a one-number delta.",
+        "source_artifacts": "results/openrouter-selected-grid-moral-psych-full/result_summary.csv; ACL paper Tables 4-7",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Mistral Nemo",
+        "repo_model_or_line": "May 13 Mistral Nemo saved/prior follow-up",
+        "model_match_class": "exact_same_model",
+        "evidence_state": "saved_prior_verified",
+        "fresh_rerun": "no",
+        "task_scope": "Full CCD-Bench choice distribution",
+        "paper_metric": "Nordic Europe top-cluster share",
+        "paper_value": "0.190",
+        "repo_metric": "Nordic Europe dominant-cluster share",
+        "repo_value": "0.2534435262",
+        "valid_n": "2178",
+        "total_n": "2182",
+        "can_plot_numeric": "yes",
+        "comparison_boundary": "CCD is distributional behavior, not accuracy; saved/prior evidence is not a fresh rerun.",
+        "source_artifacts": "results/exploratory/2026-05-13-additional-model-sweep/ccd-summary.csv; CCD-Bench reference model_summary_comparison.csv",
+    },
+    {
+        "benchmark": "CCD-Bench",
+        "paper_model": "Llama-3.3-70B-Instruct",
+        "repo_model_or_line": "Llama-M current release row",
+        "model_match_class": "exact_same_model",
+        "evidence_state": "current_release_verified",
+        "fresh_rerun": "no",
+        "task_scope": "Full CCD-Bench choice distribution",
+        "paper_metric": "Nordic Europe top-cluster share",
+        "paper_value": "0.197",
+        "repo_metric": "Nordic Europe dominant-cluster share",
+        "repo_value": "0.20553731",
+        "valid_n": "2131",
+        "total_n": "2182",
+        "can_plot_numeric": "yes",
+        "comparison_boundary": "CCD is distributional behavior, not accuracy; current row has valid-choice gaps.",
+        "source_artifacts": "results/release/2026-04-19-option1/ccd-choice-distribution.csv; CCD-Bench reference model_summary_comparison.csv",
+    },
 ]
 
 MODEL_ROUTE_METADATA = {
@@ -5084,6 +5458,14 @@ def build_paper_result_comparison_rows() -> list[dict[str, Any]]:
 
 def build_paper_model_overlap_rows() -> list[dict[str, Any]]:
     return [dict(zip(PAPER_MODEL_OVERLAP_FIELDNAMES, row, strict=True)) for row in PAPER_MODEL_OVERLAP_ROW_VALUES]
+
+
+def build_paper_model_calibration_ledger_rows() -> list[dict[str, Any]]:
+    return [dict(row) for row in PAPER_MODEL_CALIBRATION_LEDGER_ROWS]
+
+
+def build_paper_model_calibration_bridge_rows() -> list[dict[str, Any]]:
+    return [dict(row) for row in PAPER_MODEL_CALIBRATION_BRIDGE_ROWS]
 
 
 def build_model_roster(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -10404,57 +10786,49 @@ def render_family_size_progress_overview_svg(rows: list[dict[str, Any]], output_
     write_text(output_path, "\n".join(lines) + "\n")
 
 
-def render_paper_model_calibration_bridge_svg(output_path: Path) -> None:
-    width, height = 1500, 760
+def render_paper_model_calibration_bridge_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
+    width = 1500
+    row_y = 176
+    row_h = 112
+    gap_top = row_y + len(rows) * row_h + 28
+    height = gap_top + 236
     bar_max_share = 0.35
     bar_width = 190
-    rows = [
-        {
-            "benchmark": "UniMoral",
-            "paper": "Llama-3.1-8B Instruct",
-            "ours": "May 13 Llama 3.1 8B saved row",
-            "paper_value": None,
-            "ours_value": None,
-            "paper_text": "Paper includes Llama 3.1 8B RQ tables; visible metric anchors are tracked in the RQ-level CSV.",
-            "ours_text": "Saved/prior RQ1 action accuracy 0.639.",
-            "status": "Exact same model, saved/prior",
-            "note": "Use only as action-prediction calibration; not a fresh full RQ1-RQ4 rerun.",
-            "color": "#b45309",
-        },
-        {
-            "benchmark": "CCD-Bench",
-            "paper": "Mistral Nemo",
-            "ours": "May 13 Mistral Nemo",
-            "paper_value": 0.190,
-            "ours_value": 0.253,
-            "paper_text": "Paper top Nordic Europe 19.0%.",
-            "ours_text": "Saved/prior Nordic Europe 25.3%; effective clusters 7.22.",
-            "status": "Exact same model, saved/prior",
-            "note": "Use as CCD distribution calibration, not accuracy and not a fresh rerun.",
-            "color": "#b45309",
-        },
-    ]
+    color_by_state = {
+        "current_full_grid_verified": "#2563eb",
+        "current_release_verified": "#0f766e",
+        "saved_prior_verified": "#b45309",
+    }
     gap_cards = [
         (
-            "Near-family rows not plotted",
-            "Llama, OpenAI, DeepSeek, and Qwen current rows differ by route or version. They remain context in CSVs, not one-to-one calibration bars.",
-            "#7c3aed",
+            "Exact paper routes needing runs",
+            "Some paper CCD models are available as exact provider routes, but the release does not yet have their checked distribution rows. They live in the ledger CSV until run.",
+            "#2563eb",
         ),
         (
-            "Blocked exact paper routes",
-            "Phi-3.5 mini, DeepSeek-R1-Distill-Llama-8B, Kaleido models, Claude/Gemini/Phi/Jamba/Sonar/Grok, and MoralPrompt routes are not exact completed local rows here.",
+            "Unavailable or blocked routes",
+            "Some UniMoral, Kaleido, Gemini, Grok, Jamba, and MoralPrompt paths are unavailable, gated, or missing local paper-faithful data.",
             "#64748b",
         ),
         (
-            "Route probes are not results",
-            "Fresh May 21 Llama 3.1 and Mistral Nemo checks were 1-sample route probes. The plotted evidence is saved/prior full artifacts only.",
+            "Route probes stay separate",
+            "One-sample route checks prove the harness can call a model; they do not become calibration results or performance rows.",
             "#b45309",
         ),
     ]
 
+    def parse_share(text: str) -> float | None:
+        try:
+            value = float(text)
+        except (TypeError, ValueError):
+            return None
+        if value > 1.0:
+            value = value / 100.0
+        return value
+
     def share_bar(x: int, y: int, value: float | None, color: str, label: str) -> list[str]:
         if value is None:
-            return [f'<text x="{x}" y="{y + 16}" class="small">no tracked paper-side value</text>']
+            return [f'<text x="{x}" y="{y + 16}" class="small">{label}: metric scale differs</text>']
         scaled = min(value / bar_max_share, 1.0) * bar_width
         return [
             f'<rect x="{x}" y="{y}" width="{bar_width}" height="16" rx="8" class="muted-bar"/>',
@@ -10468,51 +10842,57 @@ def render_paper_model_calibration_bridge_svg(output_path: Path) -> None:
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Same-model paper calibration bridge</title>",
-            "<desc>Visual bridge showing only exact same-model saved/prior evidence. Near-family or reference-family rows are excluded from the one-to-one calibration bars.</desc>",
+            "<desc>Data-backed visual bridge showing exact same-model paper calibration evidence only. Route-probe, near-route, blocked, and proxy rows are kept out of the plotted comparison.</desc>",
             '<text x="48" y="64" class="title">Same-Model Paper Calibration Bridge</text>',
-            '<text x="48" y="90" class="subtitle">Only exact same-model evidence is plotted here. Near-family, reference-family, route-probe, blocked, and proxy rows are deliberately excluded from the bars.</text>',
-            '<text x="48" y="112" class="subtitle">UniMoral Llama 3.1 8B is action-prediction saved/prior evidence; CCD Mistral Nemo is distributional behavior, not accuracy.</text>',
+            '<text x="48" y="90" class="subtitle">Only exact same-model evidence is plotted here. Near-family, route-probe, blocked, and proxy rows stay in the ledger CSV.</text>',
+            '<text x="48" y="112" class="subtitle">CCD rows are cultural-choice distribution comparisons, not accuracy. UniMoral uses a task bridge because paper and repo metrics differ.</text>',
             '<text x="56" y="156" class="tiny">BENCHMARK</text>',
-            '<text x="198" y="156" class="tiny">PAPER / REFERENCE SIDE</text>',
-            '<text x="500" y="156" class="tiny">THIS REPO SIDE</text>',
-            '<text x="796" y="156" class="tiny">NUMERIC BRIDGE WHERE VALID</text>',
-            '<text x="1198" y="156" class="tiny">STATUS AND READER RULE</text>',
+            '<text x="198" y="156" class="tiny">PAPER MODEL / METRIC</text>',
+            '<text x="514" y="156" class="tiny">THIS REPO EVIDENCE</text>',
+            '<text x="820" y="156" class="tiny">ONE-TO-ONE VALUE WHEN VALID</text>',
+            '<text x="1198" y="156" class="tiny">STATUS AND BOUNDARY</text>',
         ]
     )
 
-    row_y = 176
-    row_h = 98
     for index, row in enumerate(rows):
         y = row_y + index * row_h
-        lines.append(f'<rect x="42" y="{y}" width="1416" height="84" rx="14" class="subpanel"/>')
-        lines.append(f'<rect x="42" y="{y}" width="8" height="84" rx="4" fill="{row["color"]}"/>')
-        lines.extend(svg_text_block(56, y + 27, row["benchmark"], "label", 16, line_height=17))
-        lines.extend(svg_text_block(198, y + 23, f"{row['paper']}: {row['paper_text']}", "body", 48, line_height=17))
-        lines.extend(svg_text_block(500, y + 23, f"{row['ours']}: {row['ours_text']}", "body", 45, line_height=17))
-        lines.extend(share_bar(796, y + 20, row["paper_value"], "#2563eb", "paper"))
-        if row["ours_value"] is not None:
-            lines.extend(share_bar(796, y + 48, row["ours_value"], "#0f766e", "ours"))
-        lines.append(f'<circle cx="1182" cy="{y + 28}" r="7" fill="{row["color"]}"/>')
-        lines.extend(svg_text_block(1198, y + 28, f"{row['status']}: {row['note']}", "body", 38, line_height=17))
+        state = row["evidence_state"]
+        color = color_by_state.get(state, "#64748b")
+        paper_value = parse_share(row["paper_value"]) if row["can_plot_numeric"] == "yes" else None
+        repo_value = parse_share(row["repo_value"]) if row["can_plot_numeric"] == "yes" else None
+        lines.append(f'<rect x="42" y="{y}" width="1416" height="96" rx="14" class="subpanel"/>')
+        lines.append(f'<rect x="42" y="{y}" width="8" height="96" rx="4" fill="{color}"/>')
+        lines.extend(svg_text_block(56, y + 28, row["benchmark"], "label", 17, line_height=17))
+        paper_text = f"{row['paper_model']}: {row['paper_metric']} = {row['paper_value']}"
+        repo_text = f"{row['repo_model_or_line']}: {row['repo_metric']} = {row['repo_value']}"
+        lines.extend(svg_text_block(198, y + 24, paper_text, "body", 50, line_height=17))
+        lines.extend(svg_text_block(514, y + 24, repo_text, "body", 46, line_height=17))
+        lines.extend(share_bar(820, y + 22, paper_value, "#2563eb", "paper"))
+        lines.extend(share_bar(820, y + 50, repo_value, "#0f766e", "ours"))
+        lines.append(f'<circle cx="1182" cy="{y + 28}" r="7" fill="{color}"/>')
+        status_text = (
+            f"{row['evidence_state'].replace('_', ' ')}; "
+            f"{row['comparison_boundary']}"
+        )
+        lines.extend(svg_text_block(1198, y + 28, status_text, "body", 38, line_height=17))
 
-    gap_top = row_y + len(rows) * row_h + 26
     lines.extend(
         [
-            f'<text x="48" y="{gap_top}" class="metric">Not in the same-model bridge</text>',
-            f'<text x="48" y="{gap_top + 24}" class="subtitle">These categories stay visible as audit context, but they are not plotted as paper-model calibration comparisons.</text>',
+            f'<text x="48" y="{gap_top}" class="metric">What is deliberately outside this plotted bridge</text>',
+            f'<text x="48" y="{gap_top + 24}" class="subtitle">The full ledger keeps these rows visible for planning, but they are not shown as paper-model comparisons.</text>',
         ]
     )
     card_w = 440
     for index, (title, body, color) in enumerate(gap_cards):
         x = 48 + index * 470
         y = gap_top + 48
-        lines.append(f'<rect x="{x}" y="{y}" width="{card_w}" height="128" rx="14" class="subpanel"/>')
-        lines.append(f'<rect x="{x}" y="{y}" width="8" height="128" rx="4" fill="{color}"/>')
+        lines.append(f'<rect x="{x}" y="{y}" width="{card_w}" height="124" rx="14" class="subpanel"/>')
+        lines.append(f'<rect x="{x}" y="{y}" width="8" height="124" rx="4" fill="{color}"/>')
         lines.extend(svg_text_block(x + 22, y + 32, title, "label", 36, line_height=18))
         lines.extend(svg_text_block(x + 22, y + 66, body, "body", 54, line_height=17))
 
     lines.append(
-        f'<text x="48" y="{height - 58}" class="small">Source tables: paper-result-alignment.csv, paper-model-overlap-map.csv, CCD choice distributions, and saved/prior May 13 artifacts. Near-family rows are not plotted.</text>'
+        f'<text x="48" y="{height - 58}" class="small">Source tables: paper-model-calibration-bridge.csv and paper-model-calibration-ledger.csv. Read as calibration evidence, not a leaderboard.</text>'
     )
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -11345,6 +11725,10 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "_What it answers: which benchmark-paper results can be compared directly, which are current-only benchmark comparisons, which rely on saved/prior evidence, and which are blocked or proxy-only._",
             "",
+            f"![Paper-model calibration bridge]({figure_prefix}/option1_paper_model_calibration_bridge.svg)",
+            "",
+            "_What it shows: strict same-model calibration rows only. If the exact paper model is missing, a near-family route or a route probe stays out of this visual and remains in the ledger CSV._",
+            "",
             f"![Paper-result comparison table]({figure_prefix}/option1_paper_result_comparison.svg)",
             "",
             "_What it shows: paper metric anchors and closest current release results in one visual table. UniMoral RQ4 appears twice, once for BERTScore F1 and once for METEOR._",
@@ -11773,6 +12157,7 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             f"| Figure 15 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
             f"| Figure 16 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | {markdown_link('option1_sample_volume.svg', f'{figure_prefix}/option1_sample_volume.svg')} |",
             f"| Figure 17 | Replication/calibration map showing paper-faithful overlap, current-only rows, blocked routes, and proxy-only evidence. | {markdown_link('option1_paper_result_alignment_map.svg', f'{figure_prefix}/option1_paper_result_alignment_map.svg')} |",
+            f"| Figure 18 | Strict same-model calibration bridge for exact paper-model rows only. | {markdown_link('option1_paper_model_calibration_bridge.svg', f'{figure_prefix}/option1_paper_model_calibration_bridge.svg')} |",
             "",
             f"![Accuracy heatmap]({figure_prefix}/option1_accuracy_heatmap.svg)",
             "",
@@ -11789,6 +12174,10 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             f"![Paper-vs-current replication map]({figure_prefix}/option1_paper_result_alignment_map.svg)",
             "",
             "_Figure 17. Replication/calibration map showing which original-paper comparisons are direct, partial, blocked, current-only, or proxy-only._",
+            "",
+            f"![Paper-model calibration bridge]({figure_prefix}/option1_paper_model_calibration_bridge.svg)",
+            "",
+            "_Figure 18. Strict same-model calibration bridge; route-probe, near-family, blocked, and proxy rows stay in the ledger table._",
             "",
         ]
     )
@@ -11919,9 +12308,9 @@ def append_main_result_file_map(lines: list[str], figure_prefix: str) -> None:
             "| `Value Kaleidoscope` | primary result: `results/release/2026-04-19-option1/value-kaleidoscope-results.csv`<br/>readiness: `results/release/2026-04-19-option1/readiness-tier-matrix.csv` | Average of prompt-based ValuePrism relevance and valence accuracy. This is not Kaleido model replication. | `option1_benchmark_accuracy_bars.svg` and `option1_family_scaling_profile.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| `CCD-Bench` | `results/release/2026-04-19-option1/ccd-choice-distribution.csv` | Choice-distribution behavior over ten canonical cultural clusters: valid-choice rate, per-option share/deviation, dominant option, dominant share, and effective cluster count. This is not accuracy. | `option1_ccd_choice_distribution.svg` and `option1_ccd_dominant_option_share.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| `DeNEVIL` | `results/release/2026-04-19-option1/denevil-behavior-summary.csv`<br/>`results/release/2026-04-19-option1/denevil-proxy-summary.csv` | FULCRA-backed proxy behavior only; not paper-faithful MoralPrompt scoring. | `option1_denevil_behavior_outcomes.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
-            "| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`results/release/2026-04-19-option1/paper-result-comparison.csv`<br/>`results/release/2026-04-19-option1/paper-model-overlap-map.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_result_alignment_map.svg` and `option1_paper_result_comparison.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
+        "| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`results/release/2026-04-19-option1/paper-result-comparison.csv`<br/>`results/release/2026-04-19-option1/paper-model-overlap-map.csv`<br/>`results/release/2026-04-19-option1/paper-model-calibration-ledger.csv`<br/>`results/release/2026-04-19-option1/paper-model-calibration-bridge.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is an evidence-status map, not a performance metric: paper-faithful overlap, saved/prior evidence, current-only rows, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_model_calibration_bridge.svg`, `option1_paper_result_alignment_map.svg`, and `option1_paper_result_comparison.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "",
-            f"Quick visual links: {markdown_link('UniMoral heatmap', f'{figure_prefix}/option1_unimoral_task_heatmap.svg')}, {markdown_link('SMID/Value bars', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')}, {markdown_link('CCD choice map', f'{figure_prefix}/option1_ccd_choice_distribution.svg')}, {markdown_link('paper result comparison', f'{figure_prefix}/option1_paper_result_comparison.svg')}, {markdown_link('replication map', f'{figure_prefix}/option1_paper_result_alignment_map.svg')}.",
+            f"Quick visual links: {markdown_link('UniMoral heatmap', f'{figure_prefix}/option1_unimoral_task_heatmap.svg')}, {markdown_link('SMID/Value bars', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')}, {markdown_link('CCD choice map', f'{figure_prefix}/option1_ccd_choice_distribution.svg')}, {markdown_link('same-model calibration bridge', f'{figure_prefix}/option1_paper_model_calibration_bridge.svg')}, {markdown_link('paper result comparison', f'{figure_prefix}/option1_paper_result_comparison.svg')}, {markdown_link('replication map', f'{figure_prefix}/option1_paper_result_alignment_map.svg')}.",
             "",
         ]
     )
@@ -12169,7 +12558,7 @@ def append_deliverables_for_today_section(lines: list[str], readiness_tier_matri
             "| Short executive read | What is the bottom-line result without reading every table? | [TL;DR](#tldr) |",
             f"| Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `{tier3_cells}` of `{total_cells}` cells are Tier 3; `{blocked_cells}` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |",
             "| S/M/L family progress table | Which public family-size slots are done, missing a route, or proxy-only? | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
-            "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+        "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |",
             "| OpenRouter selected-grid follow-up | What happened when the text-only OpenRouter grid was run across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench? | [full readout](results/openrouter-selected-grid-moral-psych-full/README.md), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md) |",
             "| Reproducibility package | Can a reviewer rebuild the public results without local secrets? | [Reproducibility](#reproducibility); run `make bootstrap` |",
             "| Full appendix | Where are the detailed tables, caveats, and generated release files? | [Release appendix](results/release/2026-04-19-option1/README.md) |",
@@ -12237,7 +12626,7 @@ def append_readiness_and_replication_section(lines: list[str], readiness_tier_ma
             "| `CCD-Bench` | Current choice-distribution rows plus saved/prior Mistral Nemo overlap; GPT-5.5 has 2,182/2,182 valid choices. | Partial distributional comparison only; CCD-Bench is not an accuracy benchmark. |",
             "| `DeNEVIL / MoralPrompt` | Current FULCRA-backed proxy behavior summaries are tracked. | Proxy-only data gap; no paper-faithful MoralPrompt comparison until the original data path exists. |",
             "",
-            "Open the full map here: [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-result-comparison.md](docs/paper-result-comparison.md), and [calibration-replication.md](docs/calibration-replication.md).",
+            "Open the full map here: [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv), [paper-result-comparison.md](docs/paper-result-comparison.md), and [calibration-replication.md](docs/calibration-replication.md).",
         ]
     )
 
@@ -12377,7 +12766,7 @@ def build_repo_readme(
         "| Main result CSVs | [UniMoral](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [SMID](results/release/2026-04-19-option1/smid-results.csv), [Value Kaleidoscope](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |",
         "| Main figures | [Main Figures](#main-figures) |",
         "| Exact progress / readiness | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) and [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
-        "| Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+        "| Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |",
         "| Mentor-facing report | [jenny-group-report.md](results/release/2026-04-19-option1/jenny-group-report.md) |",
         "| Full detailed appendix | [results/release/2026-04-19-option1/README.md](results/release/2026-04-19-option1/README.md) |",
         "| Rebuild / verify | [Reproduce](#reproduce) with `make bootstrap` |",
@@ -12390,7 +12779,7 @@ def build_repo_readme(
         f"| Best text-only line | `{best_text['line_label']}`: UniMoral {fmt_float(best_text['unimoral_action_accuracy'])}, Value {fmt_float(best_text['value_average_accuracy'])}; two-metric mean {fmt_float(best_text_mean)}. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |",
         f"| Hardest primary metric | `SMID` has mean accuracy {fmt_float(smid_summary['mean_accuracy'])}; best current line is `{best_smid['line_label']}` at {fmt_float(best_smid['smid_average_accuracy'])}. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |",
         "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |",
-        "| Paper comparison status | UniMoral is a partial task/metric bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg) |",
+        "| Paper comparison status | UniMoral is a partial task/metric bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [same-model bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper comparison figure](figures/release/option1_paper_result_comparison.svg) |",
         "",
         "## Status: What Is Usable",
         "",
@@ -12419,7 +12808,7 @@ def build_repo_readme(
         "| `CCD-Bench` behavior | [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) |",
         "| `DeNEVIL` proxy behavior | [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv) |",
         "| Readiness / progress | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
-        "| Replication / calibration | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+        "| Replication / calibration | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |",
         "",
         "## What To Trust First",
         "",
@@ -12458,6 +12847,8 @@ def build_repo_readme(
         "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)",
         "",
         "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)",
+        "",
+        "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)",
         "",
         "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)",
         "",
@@ -12746,7 +13137,7 @@ def build_release_readme(
             "- DeNEVIL proxy behavior: [denevil-behavior-summary.csv](denevil-behavior-summary.csv)",
             "- All release tables: [results/release/2026-04-19-option1/](./)",
             "- Readiness/progress: [readiness-tier-matrix.csv](readiness-tier-matrix.csv) and [family-size-progress.csv](family-size-progress.csv)",
-            "- Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv), [paper-result-comparison.csv](paper-result-comparison.csv), and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)",
+            "- Paper replication/calibration: [paper-result-alignment.csv](paper-result-alignment.csv), [paper-result-comparison.csv](paper-result-comparison.csv), [paper-model-calibration-ledger.csv](paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](paper-model-calibration-bridge.csv), and [paper-result-comparison.md](../../../docs/paper-result-comparison.md)",
             "",
             "### Reports",
             "",
@@ -12768,6 +13159,7 @@ def build_release_readme(
             f"- {markdown_link('CCD concentration summary', '../../../figures/release/option1_ccd_dominant_option_share.svg')}: dominant-cluster share plus effective-cluster count",
             f"- {markdown_link('DeNEVIL behavioral outcomes', '../../../figures/release/option1_denevil_behavior_outcomes.svg')}: main proxy-result view showing visible behavior categories by model line",
             f"- {markdown_link('paper-vs-current replication map', '../../../figures/release/option1_paper_result_alignment_map.svg')}: visual map of paper-faithful overlap, current-only rows, blocked model routes, and proxy-only evidence",
+            f"- {markdown_link('same-model paper calibration bridge', '../../../figures/release/option1_paper_model_calibration_bridge.svg')}: strict visual bridge for exact same-model calibration rows only",
             f"- {markdown_link('paper result comparison', '../../../figures/release/option1_paper_result_comparison.svg')}: exact paper metric anchors beside closest current rows, with UniMoral RQ4 split into BERTScore F1 and METEOR",
             "",
             "## Status Key",
@@ -12819,6 +13211,8 @@ def build_release_readme(
             "- `paper-result-alignment.csv`: paper-vs-ours alignment map, including original/reference model evidence, overlap status, blocked/proxy states, and safe comparison boundaries",
             "- `paper-result-comparison.csv`: RQ-level paper-calibration table; UniMoral RQ4 is split into separate BERTScore F1 and METEOR rows",
             "- `paper-model-overlap-map.csv`: model/route overlap audit map for exact, context-only, blocked, and proxy paper-model evidence",
+            "- `paper-model-calibration-ledger.csv`: comprehensive same-model calibration planning ledger with verified paper model names, OpenRouter availability, current evidence state, and rerun action",
+            "- `paper-model-calibration-bridge.csv`: strict same-model bridge rows used by the public calibration figure",
             "- `ccd-choice-distribution.csv`: CCD-Bench choice-behavior table with per-cluster shares, deviation from the 10% baseline, and concentration summaries",
             "- `denevil-behavior-summary.csv`: DeNEVIL proxy behavioral outcome mix by model line",
             "- `denevil-prompt-family-breakdown.csv`: DeNEVIL protective-response rates by heuristic prompt family",
@@ -13102,6 +13496,8 @@ def build_release_manifest(
             "total_samples": sum(row["total_samples"] for row in rows),
             "paper_result_alignment_rows": len(PAPER_RESULT_ALIGNMENT_ROWS),
             "paper_result_comparison_rows": len(PAPER_RESULT_COMPARISON_ROWS),
+            "paper_model_calibration_ledger_rows": len(PAPER_MODEL_CALIBRATION_LEDGER_ROWS),
+            "paper_model_calibration_bridge_rows": len(PAPER_MODEL_CALIBRATION_BRIDGE_ROWS),
         },
         "model_families": public_families,
         "benchmarks": benchmark_summary,
@@ -13129,6 +13525,8 @@ def build_release_manifest(
             "paper_result_alignment": "results/release/2026-04-19-option1/paper-result-alignment.csv",
             "paper_result_comparison": "results/release/2026-04-19-option1/paper-result-comparison.csv",
             "paper_model_overlap_map": "results/release/2026-04-19-option1/paper-model-overlap-map.csv",
+            "paper_model_calibration_ledger": "results/release/2026-04-19-option1/paper-model-calibration-ledger.csv",
+            "paper_model_calibration_bridge": "results/release/2026-04-19-option1/paper-model-calibration-bridge.csv",
             "supplementary_progress": "results/release/2026-04-19-option1/supplementary-model-progress.csv",
             "family_size_progress": "results/release/2026-04-19-option1/family-size-progress.csv",
             "benchmark_comparison": "results/release/2026-04-19-option1/benchmark-comparison.csv",
@@ -13175,6 +13573,8 @@ def build_release_manifest(
             "paper-result-alignment.csv",
             "paper-result-comparison.csv",
             "paper-model-overlap-map.csv",
+            "paper-model-calibration-ledger.csv",
+            "paper-model-calibration-bridge.csv",
             "model-summary.csv",
             "model-roster.csv",
             "supplementary-model-progress.csv",
@@ -13265,6 +13665,8 @@ def main() -> None:
     paper_result_alignment = build_paper_result_alignment_rows()
     paper_result_comparison = build_paper_result_comparison_rows()
     paper_model_overlap = build_paper_model_overlap_rows()
+    paper_model_calibration_ledger = build_paper_model_calibration_ledger_rows()
+    paper_model_calibration_bridge = build_paper_model_calibration_bridge_rows()
     model_roster = build_model_roster(rows)
     future_model_plan = filter_public_family_rows(build_future_model_plan())
     supplementary_model_progress = filter_public_family_rows(build_supplementary_model_progress())
@@ -13348,6 +13750,16 @@ def main() -> None:
         args.release_dir / "paper-model-overlap-map.csv",
         paper_model_overlap,
         PAPER_MODEL_OVERLAP_FIELDNAMES,
+    )
+    write_csv(
+        args.release_dir / "paper-model-calibration-ledger.csv",
+        paper_model_calibration_ledger,
+        PAPER_MODEL_CALIBRATION_LEDGER_FIELDNAMES,
+    )
+    write_csv(
+        args.release_dir / "paper-model-calibration-bridge.csv",
+        paper_model_calibration_bridge,
+        PAPER_MODEL_CALIBRATION_BRIDGE_FIELDNAMES,
     )
     write_csv(
         args.release_dir / "model-roster.csv",
@@ -13918,7 +14330,10 @@ def main() -> None:
     )
 
     render_family_size_progress_overview_svg(family_size_progress, args.figure_dir / "option1_family_size_progress_overview.svg")
-    render_paper_model_calibration_bridge_svg(args.figure_dir / "option1_paper_model_calibration_bridge.svg")
+    render_paper_model_calibration_bridge_svg(
+        paper_model_calibration_bridge,
+        args.figure_dir / "option1_paper_model_calibration_bridge.svg",
+    )
     render_paper_result_comparison_svg(paper_result_comparison, args.figure_dir / "option1_paper_result_comparison.svg")
     render_coverage_svg(coverage_matrix, args.figure_dir / "option1_coverage_matrix.svg")
     render_accuracy_svg(benchmark_comparison, args.figure_dir / "option1_accuracy_heatmap.svg")
@@ -13957,6 +14372,8 @@ def main() -> None:
             "paper-result-alignment.csv",
             "paper-result-comparison.csv",
             "paper-model-overlap-map.csv",
+            "paper-model-calibration-ledger.csv",
+            "paper-model-calibration-bridge.csv",
             "model-summary.csv",
             "model-roster.csv",
             "supplementary-model-progress.csv",

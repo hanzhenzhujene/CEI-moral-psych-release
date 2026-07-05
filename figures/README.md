@@ -47,6 +47,7 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 ## Replication / calibration figures
 
 - `option1_paper_result_alignment_map.svg`: replication/calibration map showing paper-faithful overlap, current-only comparisons, blocked routes, and proxy-only evidence
+- `option1_paper_model_calibration_bridge.svg`: strict same-model paper calibration bridge; exact model rows only, with near-family, blocked, proxy, and route-probe rows left in the ledger table
 - `option1_paper_result_comparison.svg`: RQ-level paper-result comparison figure, with UniMoral RQ4 split into BERTScore F1 and METEOR rows
 
 The figure set is intentionally split between:
