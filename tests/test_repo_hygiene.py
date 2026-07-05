@@ -160,10 +160,14 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Metric: METEOR" in unimoral_family_scaling_svg
 
     paper_calibration_svg = (ROOT / "figures/release/option1_paper_model_calibration_bridge.svg").read_text(encoding="utf-8")
-    assert "Paper-Model Calibration Bridge" in paper_calibration_svg
-    assert "CCD rows compare dominant cultural-cluster share, not accuracy" in paper_calibration_svg
-    assert "not Kaleido model replication" in paper_calibration_svg
-    assert "FULCRA proxy behavior" in paper_calibration_svg
+    assert "Same-Model Paper Calibration Bridge" in paper_calibration_svg
+    assert "Only exact same-model evidence is plotted here" in paper_calibration_svg
+    assert "Llama-3.1-8B Instruct" in paper_calibration_svg
+    assert "Mistral Nemo" in paper_calibration_svg
+    assert "DeepSeek-chat-v3-0324" not in paper_calibration_svg
+    assert "Llama-3.3-70B-Instruct" not in paper_calibration_svg
+    assert "OpenAI GPT-4.1" not in paper_calibration_svg
+    assert "Qwen2.5-72B-Instruct" not in paper_calibration_svg
 
     paper_comparison_doc = (ROOT / "docs/paper-result-comparison.md").read_text(encoding="utf-8")
     assert "# Paper Result Calibration and Comparison" in paper_comparison_doc
@@ -177,6 +181,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[paper-result-comparison.csv](../results/release/2026-04-19-option1/paper-result-comparison.csv)" in paper_comparison_doc
     assert "[paper-model-overlap-map.csv](../results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in paper_comparison_doc
     assert "UniMoral RQ1 action prediction can support directional calibration" in paper_comparison_doc
+    assert "only exact same-model saved/prior evidence is plotted" in paper_comparison_doc
+    assert "near-family CCD rows are useful context, not one-to-one calibration" in paper_comparison_doc
     assert max(len(line) for line in paper_comparison_doc.splitlines()) <= 220
 
     openrouter_scaling_svg = (ROOT / "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg").read_text(encoding="utf-8")
@@ -202,16 +208,21 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert 'fill="#000000"' in unimoral_family_scaling_svg
     assert "#dc2626" in unimoral_family_scaling_svg
 
+    root_readme = (ROOT / "README.md").read_text(encoding="utf-8")
     paper_alignment_svg = (ROOT / "figures/release/option1_paper_result_alignment_map.svg").read_text(encoding="utf-8")
     paper_result_comparison_svg = (ROOT / "figures/release/option1_paper_result_comparison.svg").read_text(encoding="utf-8")
     release_readme = (ROOT / "results/release/2026-04-19-option1/README.md").read_text(encoding="utf-8")
+    family_scaling_summary_csv = (ROOT / "results/release/2026-04-19-option1/family-scaling-summary.csv").read_text(encoding="utf-8")
     paper_result_comparison_csv = (ROOT / "results/release/2026-04-19-option1/paper-result-comparison.csv").read_text(encoding="utf-8")
     paper_model_overlap_csv = (ROOT / "results/release/2026-04-19-option1/paper-model-overlap-map.csv").read_text(encoding="utf-8")
-    calibration_surfaces = "\n".join([paper_comparison_doc, paper_calibration_svg, paper_alignment_svg, paper_result_comparison_svg, release_readme, paper_result_comparison_csv, paper_model_overlap_csv])
+    calibration_surfaces = "\n".join([root_readme, paper_comparison_doc, paper_calibration_svg, paper_alignment_svg, paper_result_comparison_svg, release_readme, family_scaling_summary_csv, paper_result_comparison_csv, paper_model_overlap_csv])
     assert "same RQ1 metric" not in calibration_surfaces
     assert "original paper table values are not tracked" not in calibration_surfaces
     assert "clean paper-faithful metric overlap" not in calibration_surfaces
     assert "I found `CCD-Bench`" not in calibration_surfaces
+    assert "same/near" not in calibration_surfaces
+    assert "Same/near" not in calibration_surfaces
+    assert "calibration points" not in calibration_surfaces
     assert "GPT-5-mini Ref" not in calibration_surfaces
     assert "best OpenAI text row: GPT-5 mini 0.739" in calibration_surfaces
     assert "visible paper metric anchors" in calibration_surfaces

@@ -22,9 +22,9 @@ This note supports the Phase 1 goal from Jimmy's May 19 framing: make the model-
 
 - UniMoral original-model overlap: `Llama 3.1 8B` saved May 13 artifact, full 8,784-row UniMoral action-prediction run, accuracy 0.6388.
 - UniMoral capability floor: `Llama 3.2 1B` saved May 13 artifact, accuracy 0.4056 and lower answer rate.
-- CCD exact overlap: `mistralai/mistral-nemo` saved May 13 CCD artifact, 2,178/2,182 valid choices, dominant Nordic Europe share 25.3%.
-- CCD near-family checks: saved OpenAI text references and Qwen2.5 7B saved artifact compared with CCD reference rows.
-- Current-release anchors: Qwen-S, DeepSeek-M, Gemma-S, and the OpenAI text-only reference rows should be used as current/SOTA context, not as original-paper replication.
+- CCD exact same-model overlap: `mistralai/mistral-nemo` saved May 13 CCD artifact, 2,178/2,182 valid choices, dominant Nordic Europe share 25.3%.
+- CCD context rows only: saved OpenAI text references and Qwen/Qwen2.5 rows differ from the exact paper model or route version, so they should not be used in the one-to-one calibration bridge.
+- Current-release anchors: Qwen-S, DeepSeek-M, Gemma-S, and the OpenAI text-only reference rows should be used as current/SOTA context, not as original-paper replication or same-model calibration.
 
 These are saved/prior artifacts, not fresh reruns.
 

@@ -48,7 +48,7 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 
 - `option1_paper_result_alignment_map.svg`: replication/calibration map showing paper-faithful overlap, current-only comparisons, blocked routes, and proxy-only evidence
 - `option1_paper_result_comparison.svg`: RQ-level paper-result comparison figure, with UniMoral RQ4 split into BERTScore F1 and METEOR rows
-- `option1_paper_model_calibration_bridge.svg`: paper-model calibration bridge showing same/near model overlaps, saved/prior evidence, and blocked replication gaps
+- `option1_paper_model_calibration_bridge.svg`: exact same-model calibration bridge showing only saved/prior Llama 3.1 8B and Mistral Nemo evidence; near-family rows stay in audit tables, not the one-to-one visual
 
 The figure set is intentionally split between:
 

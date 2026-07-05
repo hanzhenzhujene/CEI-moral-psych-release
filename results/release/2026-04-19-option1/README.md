@@ -82,7 +82,7 @@ _What it shows: paper metric anchors and closest current release results in one 
 
 ![Paper-model calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)
 
-_How to read the bridge: same/near paper-model overlaps, saved/prior evidence, OpenAI reference-family markers, and blocked replication gaps stay visually separate._
+_How to read the bridge: only exact same-model saved/prior evidence is plotted. Near-family, reference-family, route-probe, blocked, and proxy rows stay outside the one-to-one calibration bars._
 
 Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
 
@@ -255,7 +255,7 @@ _The headline family-scaling figure already appears above in **Benchmark Result 
 | `Llama` | Text benchmarks now have S/M/L comparable points, and SMID has S/L evidence. | UniMoral: S 0.648 -> M 0.670 -> L 0.660<br/>SMID: S 0.216 -> L 0.386<br/>Value Kaleidoscope: S 0.529 -> M 0.724 -> L 0.692 | Llama gets much better after the small line, especially on text, and S-to-L also helps SMID. But M still beats L on some text metrics, so the useful story is improvement after S, not a clean monotonic ladder. |
 | `Gemma` | Full S/M/L comparable sweep on all three comparable benchmarks. | UniMoral: S 0.635 -> M 0.663 -> L 0.661<br/>SMID: S 0.417 -> M 0.364 -> L 0.412<br/>Value Kaleidoscope: S 0.593 -> M 0.664 -> L 0.656 | Gemma is the cleanest size test in this repo, and it still does not give a simple bigger-is-better story: text tasks improve overall, but SMID dips at M and rebounds at L. |
 | `OpenAI GPT-5` | Text-only GPT-5 S/M/L series on the eligible OpenAI reference task set; no SMID or DeNEVIL route. | UniMoral: S 0.654 -> M 0.678 -> L 0.684<br/>Value Kaleidoscope: S 0.617 -> M 0.739 -> L 0.736 | OpenAI GPT-5 is a useful text-only size read: GPT-5 nano is S, GPT-5 mini is M, and GPT-5.5 is L. It should not be described as all-benchmark OpenAI coverage because the vision and DeNEVIL proxy surfaces are absent. |
-| `OpenAI Ref` | Three GPT-4o/GPT-4.1 text-only reference rows outside the GPT-5 S/M/L series. | UniMoral: range 0.646-0.679<br/>best GPT-4.1-mini Ref 0.679<br/>Value Kaleidoscope: range 0.673-0.735<br/>best GPT-4.1-mini Ref 0.735 | These OpenAI rows are text-side reference markers for GPT-4o and GPT-4.1 routes. They are useful calibration points, but they do not answer the vision question and should not be folded into the GPT-5 S/M/L curve. |
+| `OpenAI Ref` | Three GPT-4o/GPT-4.1 text-only reference rows outside the GPT-5 S/M/L series. | UniMoral: range 0.646-0.679<br/>best GPT-4.1-mini Ref 0.679<br/>Value Kaleidoscope: range 0.673-0.735<br/>best GPT-4.1-mini Ref 0.735 | These OpenAI rows are text-side context/reference points for GPT-4o and GPT-4.1 routes. They do not answer the vision question and should not be folded into the GPT-5 S/M/L curve or paper-model calibration bridge. |
 
 ### Small-Model Follow-Up: Capability Floor
 
@@ -373,7 +373,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `July 4, 2026` |
+| Repo update date | `July 5, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
 | Current project total cost | `$888.06` |
 | Total cost breakdown | MiniMax API: `$504.66`; OpenRouter model-family runs: `$343.42`, including `$17.760398` from the full selected-grid OpenRouter follow-up; OpenAI API reference sweep: `$39.98`. |
@@ -475,7 +475,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 - [DeNEVIL behavioral outcomes](../../../figures/release/option1_denevil_behavior_outcomes.svg): main proxy-result view showing visible behavior categories by model line
 - [paper-vs-current replication map](../../../figures/release/option1_paper_result_alignment_map.svg): visual map of paper-faithful overlap, current-only rows, blocked model routes, and proxy-only evidence
 - [paper result comparison](../../../figures/release/option1_paper_result_comparison.svg): exact paper metric anchors beside closest current rows, with UniMoral RQ4 split into BERTScore F1 and METEOR
-- [paper-model calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg): same/near paper-model overlaps, saved/prior rows, reference-family markers, and blocked replication gaps
+- [paper-model calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg): exact same-model saved/prior rows only; near-family and reference-family rows are audit context
 
 ## Status Key
 

@@ -383,11 +383,14 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert reader.fieldnames is not None
         assert "comparison_status" in reader.fieldnames
         assert "can_compare_directly" in reader.fieldnames
+        assert "same_model_overlap_or_context" in reader.fieldnames
+        assert "same_or_near_model_overlap" not in reader.fieldnames
         paper_alignment_rows = list(reader)
     assert len(paper_alignment_rows) == 5
     ccd_alignment = next(row for row in paper_alignment_rows if row["benchmark"] == "CCD-Bench")
     assert ccd_alignment["comparison_status"] == "distributional_comparison_available_not_accuracy"
-    assert "not the metric surface" in ccd_alignment["can_compare_directly"]
+    assert "same-model bridge is the saved/prior Mistral Nemo row" in ccd_alignment["can_compare_directly"]
+    assert "Near-family rows should stay out of one-to-one calibration visuals" in ccd_alignment["can_compare_directly"]
     denevil_alignment = next(row for row in paper_alignment_rows if row["benchmark"] == "DeNEVIL / MoralPrompt")
     assert denevil_alignment["comparison_status"] == "proxy_only_data_gap"
     assert "proxy-only" in denevil_alignment["reviewer_takeaway"]
@@ -1743,7 +1746,7 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "`Value Kaleidoscope average`" in root_readme
     assert "`CCD-Bench` | Cultural-cluster choice distribution and concentration." in root_readme
     assert "`DeNEVIL` | FULCRA-backed proxy behavior categories from saved traces." in root_readme
-    assert "The 6 OpenAI text-only rows are reference/calibration markers; they do not add SMID or DeNEVIL coverage." in root_readme
+    assert "The 6 OpenAI text-only rows are reference rows; they do not add SMID or DeNEVIL coverage and are not paper-model calibration rows." in root_readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
     assert "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
     assert "[Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in root_readme

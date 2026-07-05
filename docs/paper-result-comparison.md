@@ -10,7 +10,7 @@ Use it as an evidence-status map, not as a leaderboard. Current benchmark rows, 
 | --- | --- |
 | Visual map of direct, partial, blocked, and proxy-only evidence | [paper-vs-current replication map](../figures/release/option1_paper_result_alignment_map.svg) |
 | Visual table of paper result anchors vs current rows | [paper result comparison](../figures/release/option1_paper_result_comparison.svg) |
-| Visual bridge for same/near paper-model comparisons | [paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg) |
+| Visual bridge for exact same-model calibration only | [paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg) |
 | Machine-readable alignment table | [paper-result-alignment.csv](../results/release/2026-04-19-option1/paper-result-alignment.csv) |
 | RQ-level paper/result comparison table | [paper-result-comparison.csv](../results/release/2026-04-19-option1/paper-result-comparison.csv) |
 | Paper-model overlap table | [paper-model-overlap-map.csv](../results/release/2026-04-19-option1/paper-model-overlap-map.csv) |
@@ -28,7 +28,7 @@ _Result table: paper metric anchors sit beside closest current rows; UniMoral RQ
 
 ![Paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)
 
-_Model bridge: same/near-route and saved/prior overlaps are shown separately from blocked paper-replication gaps._
+_Model bridge: only exact same-model saved/prior evidence is plotted; near-family and route-probe rows are audit context only._
 
 ## TL;DR
 
@@ -37,13 +37,13 @@ _Model bridge: same/near-route and saved/prior overlaps are shown separately fro
 | `UniMoral` | Partial task overlap for RQ1 action prediction; paper metric anchors are tracked separately. | Call it action-prediction calibration, not full UniMoral paper replication. |
 | `SMID` | No original LLM roster found locally. | Compare current vision-capable rows only. |
 | `Value Kaleidoscope / ValuePrism` | Current rows are prompt-based ValuePrism tasks. | Do not call them Kaleido model replication. |
-| `CCD-Bench` | Distributional behavior can be compared for same/near routes. | Never describe CCD-Bench as accuracy. |
+| `CCD-Bench` | Same-model saved/prior Mistral Nemo supports distributional calibration; near-family rows are context only. | Never describe CCD-Bench as accuracy. |
 | `DeNEVIL / MoralPrompt` | Current evidence is FULCRA proxy behavior only. | No paper-faithful MoralPrompt comparison until the data path exists. |
 
 ## What This Means
 
 - The strongest paper-to-current bridge is narrow: UniMoral RQ1 action prediction can support directional calibration, while metric/model caveats remain explicit.
-- The cleanest behavior bridge is CCD-Bench because both sides expose ten-cluster choice distributions; the result is about concentration and cultural-choice spread, not correctness.
+- The cleanest same-model behavior bridge is CCD-Bench `Mistral Nemo`, because both sides expose ten-cluster choice distributions for the same model; near-family CCD rows are useful context, not one-to-one calibration.
 - The current ValuePrism rows are useful current benchmark evidence, but Kaleido model replication remains blocked until the gated model route is run.
 - SMID and DeNEVIL answer different questions from their source papers in this release: SMID is a current model-vs-human-norm layer, and DeNEVIL is proxy-only audit evidence.
 - For review, cite the CSV/figure pair that matches the claim: use the alignment map for status, the calibration bridge for model overlap, and the RQ-level CSV for paper metric anchors.
@@ -80,7 +80,7 @@ _Model bridge: same/near-route and saved/prior overlaps are shown separately fro
 - Current repo side: the release reports choice distributions, dominant-cluster share, valid-choice coverage, and effective clusters.
 - Current GPT-5.5 anchor: `2,182/2,182` valid choices; dominant option 6 at `27.268561%`; effective clusters `7.058620`.
 - Saved/prior anchor: Mistral Nemo has `2,178/2,182` valid choices, Nordic Europe `25.344353%`, and effective clusters `7.222264`.
-- Direct comparison: partial. Distribution and concentration can be compared for same/near routes; accuracy cannot.
+- Direct comparison: partial. Distribution and concentration can be compared for the saved/prior same-model `Mistral Nemo` row; near-family routes are not one-to-one calibration rows, and accuracy is not a CCD metric.
 - Reviewer takeaway: use the behavior/concentration map, not a leaderboard.
 
 ### DeNEVIL / MoralPrompt
@@ -93,12 +93,12 @@ _Model bridge: same/near-route and saved/prior overlaps are shown separately fro
 
 ## Model Overlap Summary
 
-| Benchmark | Same / near overlap | Missing or blocked paper side | Ours-only current routes |
+| Benchmark | Same-model overlap | Missing or blocked paper side | Current context only |
 | --- | --- | --- | --- |
 | `UniMoral` | Saved/prior Llama 3.1 8B action run. | Phi-3.5 mini and DeepSeek-R1-Distill-Llama-8B exact paper rows. | Qwen, MiniMax, DeepSeek, Llama, Gemma, and OpenAI text refs including GPT-5.5. |
 | `SMID` | None found. | Original LLM roster is not identified locally. | Current vision-capable Qwen, MiniMax, Llama, and Gemma rows where routes exist. |
 | `Value Kaleidoscope / ValuePrism` | None. | Kaleido small/base/large/xl/xxl gated route. | All current prompt-based LLM rows and OpenAI text refs. |
-| `CCD-Bench` | Saved/prior Mistral Nemo; near-family Llama, OpenAI, DeepSeek, and Qwen rows. | Several exact reference routes remain unrun here. | Qwen3, MiniMax, Gemma3, DeepSeek, OpenAI refs, and GPT-5.5. |
+| `CCD-Bench` | Saved/prior `Mistral Nemo` only. | Several exact reference routes remain unrun here. | Qwen3, MiniMax, Gemma3, DeepSeek, OpenAI refs, and GPT-5.5 are context only, not plotted as same-model calibration. |
 | `DeNEVIL / MoralPrompt` | None for paper-faithful DeNEVIL. | MoralPrompt paper-faithful data path. | Current FULCRA-backed proxy rows. |
 
 ## Metric Reading Rules

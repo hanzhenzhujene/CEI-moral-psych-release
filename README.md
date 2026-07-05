@@ -84,7 +84,7 @@ These are the fastest visual entry points. The appendix keeps the full figure ga
 | [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | Proxy refusal/context/risk behavior, not MoralPrompt scoring. |
 | [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg) | Which paper comparisons are direct, partial, blocked, or proxy-only. |
 | [Paper result comparison](figures/release/option1_paper_result_comparison.svg) | Paper metric anchors next to closest current release rows; UniMoral RQ4 has separate BERTScore F1 and METEOR rows. |
-| [Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Same/near paper-model overlaps, saved/prior evidence, and blocked replication gaps. |
+| [Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Exact same-model saved/prior rows only; near-family rows stay in audit tables. |
 
 ## Result Directory
 
@@ -118,7 +118,7 @@ Current dashboard: `72/105` public summary rows are Tier 3; `33` have no tier be
 ## Important Boundaries
 
 - The public matrix covers 5 families: `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma`.
-- The 6 OpenAI text-only rows are reference/calibration markers; they do not add SMID or DeNEVIL coverage.
+- The 6 OpenAI text-only rows are reference rows; they do not add SMID or DeNEVIL coverage and are not paper-model calibration rows.
 - `GPT-5 nano`, `GPT-5 mini`, and `GPT-5.5` form the text-only GPT-5 S/M/L series. They are shown in text figures, not in image/proxy claims.
 - `CCD-Bench` is never reported as accuracy.
 - `DeNEVIL` remains proxy-only until paper-faithful MoralPrompt data exists locally.
