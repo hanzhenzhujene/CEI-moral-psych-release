@@ -207,6 +207,16 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
         figures_readme.index("## Audience-Facing Result Figures") : figures_readme.index("## UniMoral figures")
     ]
     appendix_block = figures_readme[figures_readme.index("## Appendix QA / Provenance Figures") :]
+    assert "| Order | Open | Use it for | Read it as |" in audience_block
+    assert "[UniMoral family-size scaling](release/option1_unimoral_family_scaling.svg)" in audience_block
+    assert "[Comparable accuracy bars](release/option1_benchmark_accuracy_bars.svg)" in audience_block
+    assert "[CCD choice distribution](release/option1_ccd_choice_distribution.svg)" in audience_block
+    assert "[DeNEVIL behavior outcomes](release/option1_denevil_behavior_outcomes.svg)" in audience_block
+    assert "[Paper-vs-current replication map](release/option1_paper_result_alignment_map.svg)" in audience_block
+    assert "Task-by-task scaling, not one overall moral score." in audience_block
+    assert "Cultural-choice behavior, not accuracy." in audience_block
+    assert "Proxy behavior evidence, not MoralPrompt scoring." in audience_block
+    assert "Status map, not a leaderboard." in audience_block
     assert "option1_unimoral_family_scaling.svg" in audience_block
     assert "option1_ccd_choice_distribution.svg" in audience_block
     assert "option1_denevil_behavior_outcomes.svg" in audience_block

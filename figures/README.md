@@ -11,18 +11,18 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 
 Open these first for a meeting, deck, or reviewer skim. They are the figures that support the main result story.
 
-| Order | Figure | Use it for |
-| ---: | --- | --- |
-| 1 | `option1_unimoral_family_scaling.svg` | Task-specific UniMoral S/M/L movement across RQ1-RQ4. |
-| 2 | `option1_unimoral_task_heatmap.svg` | UniMoral RQ1-RQ3 exact-match accuracy across model lines. |
-| 3 | `option1_unimoral_generation_quality.svg` | UniMoral RQ4 generation quality with BERTScore F1 and METEOR. |
-| 4 | `option1_benchmark_accuracy_bars.svg` | Benchmark-faithful SMID and Value accuracy after the separate UniMoral block. |
-| 5 | `option1_benchmark_difficulty_profile.svg` | Comparable score spread and the SMID visual-moral bottleneck. |
-| 6 | `option1_family_scaling_profile.svg` | Size effects on SMID and Value without mixing CCD or DeNEVIL. |
-| 7 | `option1_ccd_choice_distribution.svg` | CCD-Bench cultural-cluster choice behavior, not accuracy. |
-| 8 | `option1_denevil_behavior_outcomes.svg` | DeNEVIL proxy behavior outcomes from saved traces. |
-| 9 | `option1_paper_result_comparison.svg` | Paper metric anchors beside current release rows with metric boundaries visible. |
-| 10 | `option1_paper_result_alignment_map.svg` | Replication/calibration status: direct, partial, current-only, blocked, and proxy-only evidence. |
+| Order | Open | Use it for | Read it as |
+| ---: | --- | --- | --- |
+| 1 | [UniMoral family-size scaling](release/option1_unimoral_family_scaling.svg) | Task-specific UniMoral S/M/L movement across RQ1-RQ4. | Task-by-task scaling, not one overall moral score. |
+| 2 | [UniMoral task heatmap](release/option1_unimoral_task_heatmap.svg) | UniMoral RQ1-RQ3 exact-match accuracy across model lines. | Classification accuracy only; RQ4 is separate. |
+| 3 | [UniMoral RQ4 generation quality](release/option1_unimoral_generation_quality.svg) | UniMoral RQ4 generation quality with BERTScore F1 and METEOR. | Higher-better generation overlap, not accuracy. |
+| 4 | [Comparable accuracy bars](release/option1_benchmark_accuracy_bars.svg) | Benchmark-faithful SMID and Value accuracy after the separate UniMoral block. | Main comparable accuracy view after UniMoral. |
+| 5 | [Comparable score spread](release/option1_benchmark_difficulty_profile.svg) | Comparable score spread and the SMID visual-moral bottleneck. | Bottleneck/spread view, not a new metric. |
+| 6 | [Family scaling profile](release/option1_family_scaling_profile.svg) | Size effects on SMID and Value without mixing CCD or DeNEVIL. | Size trends only where metrics are comparable. |
+| 7 | [CCD choice distribution](release/option1_ccd_choice_distribution.svg) | CCD-Bench cultural-cluster choice behavior. | Cultural-choice behavior, not accuracy. |
+| 8 | [DeNEVIL behavior outcomes](release/option1_denevil_behavior_outcomes.svg) | DeNEVIL proxy behavior outcomes from saved traces. | Proxy behavior evidence, not MoralPrompt scoring. |
+| 9 | [Paper-result comparison](release/option1_paper_result_comparison.svg) | Paper metric anchors beside current release rows with metric boundaries visible. | Evidence map with metric caveats. |
+| 10 | [Paper-vs-current replication map](release/option1_paper_result_alignment_map.svg) | Replication/calibration status: direct, partial, current-only, blocked, and proxy-only evidence. | Status map, not a leaderboard. |
 
 ## UniMoral figures
 
