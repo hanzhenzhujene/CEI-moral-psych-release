@@ -180,11 +180,33 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
 
     figures_readme = (ROOT / "figures/README.md").read_text(encoding="utf-8")
     assert "side" + " metric" not in figures_readme
+    assert "## Audience-Facing Result Figures" in figures_readme
+    assert "## Appendix QA / Provenance Figures" in figures_readme
+    audience_block = figures_readme[
+        figures_readme.index("## Audience-Facing Result Figures") : figures_readme.index("## UniMoral figures")
+    ]
+    appendix_block = figures_readme[figures_readme.index("## Appendix QA / Provenance Figures") :]
+    assert "option1_unimoral_family_scaling.svg" in audience_block
+    assert "option1_ccd_choice_distribution.svg" in audience_block
+    assert "option1_denevil_behavior_outcomes.svg" in audience_block
+    assert "option1_paper_result_alignment_map.svg" in audience_block
+    assert "option1_family_size_progress_overview.svg" not in audience_block
+    assert "option1_coverage_matrix.svg" not in audience_block
+    assert "option1_sample_volume.svg" not in audience_block
+    assert "option1_family_size_progress_overview.svg" in appendix_block
+    assert "option1_coverage_matrix.svg" in appendix_block
+    assert "option1_sample_volume.svg" in appendix_block
+    assert figures_readme.index("## Audience-Facing Result Figures") < figures_readme.index("## Appendix QA / Provenance Figures")
     assert "two reported generation metrics: BERTScore F1" in figures_readme
     assert "option1_paper_result_comparison.svg" in figures_readme
     assert "option1_paper_model_calibration_bridge.svg" in figures_readme
     assert "## Replication / calibration figures" in figures_readme
-    assert figures_readme.index("## Replication / calibration figures") < figures_readme.index("option1_paper_result_alignment_map.svg")
+    replication_block = figures_readme[
+        figures_readme.index("## Replication / calibration figures") : figures_readme.index("## Appendix QA / Provenance Figures")
+    ]
+    assert "option1_paper_result_alignment_map.svg" in replication_block
+    assert "option1_paper_model_calibration_bridge.svg" in replication_block
+    assert "option1_paper_result_comparison.svg" in replication_block
 
     unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
     assert "UniMoral family-size scaling by RQ" in unimoral_family_scaling_svg
@@ -398,6 +420,7 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "option1_ccd_choice_distribution.svg" in figures_readme
     assert "option1_denevil_behavior_outcomes.svg" in figures_readme
     assert "appendix QA / provenance" in figures_readme
+    assert "Appendix QA / Provenance Figures" in figures_readme
 
     results_readme = (ROOT / "results" / "README.md").read_text(encoding="utf-8")
     assert "## Public Result Layers" in results_readme
