@@ -20,6 +20,20 @@ This repo uses a few status words repeatedly. This page explains them in plain l
 | OpenRouter selected-grid follow-up | `results/openrouter-selected-grid-moral-psych-full/` | Text-only scaling/time-scaling readout across UniMoral, ValuePrism, and CCD-Bench. | Separate from the frozen ranking surface; excludes SMID, DeNEVIL, and MiniMax. |
 | Exploratory follow-up sweep | `results/exploratory/2026-05-13-additional-model-sweep/` | Supporting older/smaller route context. | Not the headline release matrix. |
 
+## Visual Reading Order
+
+For a presentation, deck, or reviewer skim, open [`figures/README.md`](../figures/README.md) first. It gives the ordered figure list and separates audience-facing visuals from appendix/provenance visuals.
+
+| Question | Open first | Boundary |
+| --- | --- | --- |
+| What is the main task-specific moral-reasoning result? | `figures/release/option1_unimoral_family_scaling.svg` | Read UniMoral RQ1-RQ4 separately; do not collapse them into one score. |
+| Which text classification rows are strongest? | `figures/release/option1_unimoral_task_heatmap.svg` | RQ1-RQ3 are exact-match accuracy only. |
+| Which model is strongest on consequence generation? | `figures/release/option1_unimoral_generation_quality.svg` | RQ4 uses BERTScore F1 and METEOR, not accuracy. |
+| Where is the visual-moral bottleneck? | `figures/release/option1_benchmark_accuracy_bars.svg` and `figures/release/option1_benchmark_difficulty_profile.svg` | SMID and Value are comparable accuracy panels; UniMoral has its own RQ block. |
+| What does CCD-Bench show? | `figures/release/option1_ccd_choice_distribution.svg` | Cultural-cluster choice behavior, not right/wrong correctness. |
+| What does DeNEVIL show? | `figures/release/option1_denevil_behavior_outcomes.svg` | Proxy behavior from saved traces, not paper-faithful MoralPrompt scoring. |
+| What matches the original papers? | `figures/release/option1_paper_result_alignment_map.svg` | Status/evidence map, not a leaderboard. |
+
 ## Progress Table Labels
 
 - `done`: this benchmark line finished and the result is usable

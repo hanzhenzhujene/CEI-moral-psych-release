@@ -533,6 +533,14 @@ def test_root_readme_links_release_methodology_and_summary_paths():
     assert "results/release/2026-04-19-option1/README.md" in readme
     assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
 
+    docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
+    assert "../figures/README.md" in docs_index
+    assert "audience-facing figure order, visual caveats, and appendix/provenance figure map" in docs_index
+    assert "## Visual Reader Path" in docs_index
+    assert "UniMoral RQ4 is generation quality rather than accuracy" in docs_index
+    assert "CCD-Bench is cultural-choice behavior rather than correctness" in docs_index
+    assert "DeNEVIL is proxy behavior rather than paper-faithful MoralPrompt scoring" in docs_index
+
 
 def test_evaluation_methodology_versions_current_metric_definition():
     methodology = (ROOT / "docs" / "evaluation-methodology.md").read_text(encoding="utf-8")
@@ -553,6 +561,14 @@ def test_evaluation_methodology_versions_current_metric_definition():
     assert "results/openrouter-selected-grid-moral-psych-full/" in how_to_read
     assert "Separate from the frozen ranking surface" in how_to_read
     assert "excludes SMID, DeNEVIL, and MiniMax" in how_to_read
+    assert "## Visual Reading Order" in how_to_read
+    assert "figures/release/option1_unimoral_family_scaling.svg" in how_to_read
+    assert "figures/release/option1_unimoral_generation_quality.svg" in how_to_read
+    assert "figures/release/option1_ccd_choice_distribution.svg" in how_to_read
+    assert "figures/release/option1_denevil_behavior_outcomes.svg" in how_to_read
+    assert "Cultural-cluster choice behavior, not right/wrong correctness." in how_to_read
+    assert "Proxy behavior from saved traces, not paper-faithful MoralPrompt scoring." in how_to_read
+    assert "Status/evidence map, not a leaderboard." in how_to_read
     assert "larger in-progress matrix" not in how_to_read
 
 

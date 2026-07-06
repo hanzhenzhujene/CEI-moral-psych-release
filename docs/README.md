@@ -16,9 +16,21 @@
 ## Public Release Entry Points
 
 - [`../README.md`](../README.md): high-level project framing and key results
+- [`../figures/README.md`](../figures/README.md): audience-facing figure order, visual caveats, and appendix/provenance figure map
 - [`../results/release/2026-04-19-option1/README.md`](../results/release/2026-04-19-option1/README.md): release artifact index
 - [`../results/release/2026-04-19-option1/source/README.md`](../results/release/2026-04-19-option1/source/README.md): provenance note for the tracked authoritative snapshot
 - [`../results/openrouter-selected-grid-moral-psych-full/README.md`](../results/openrouter-selected-grid-moral-psych-full/README.md): separate text-only OpenRouter selected-grid follow-up, with figures, interpretation, and blocked-cell audit
+
+## Visual Reader Path
+
+Use [`../figures/README.md`](../figures/README.md) when you need the presentation order for result visuals. It separates:
+
+- audience-facing figures for the main story
+- appendix QA / provenance figures
+- replication and calibration figures
+- separate OpenRouter selected-grid follow-up figures
+
+The most important boundaries are visible there too: UniMoral RQ4 is generation quality rather than accuracy, CCD-Bench is cultural-choice behavior rather than correctness, and DeNEVIL is proxy behavior rather than paper-faithful MoralPrompt scoring.
 
 ## Archived Planning And Status
 
