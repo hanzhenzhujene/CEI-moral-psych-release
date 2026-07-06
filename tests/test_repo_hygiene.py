@@ -115,6 +115,13 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| Best text-only line | `GPT-5.5`: UniMoral 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route." in readme
     assert "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165." in readme
     assert "UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge" in readme
+    assert "RQ4 METEOR 0.121 and BERTScore F1 0.656" in readme
+    assert "CCD-Bench has exact same-model distribution bridges for ten paper routes" in readme
+    assert "remaining exact routes are unavailable or blocked rather than substituted" in readme
+    assert "[calibration-summary.csv](results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv)" in readme
+    assert "[RQ4 BERTScore rows](results/paper-calibration-exact-20260706-unimoral-llama31/unimoral-rq4-bertscore.csv)" in readme
+    assert "[calibration-summary.csv](results/paper-calibration-exact-20260705/calibration-summary.csv)" in readme
+    assert "[run-manifest.csv](results/paper-calibration-exact-20260705/run-manifest.csv)" in readme
     assert "`UniMoral action accuracy`" in readme
     assert "`SMID average accuracy`" in readme
     assert "`Value Kaleidoscope average`" in readme
@@ -229,6 +236,15 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert any(row["paper_model"] == "Llama-4-Maverick-17B-128E-Instruct" and row["repo_evidence_state"] == "current_release_verified" for row in ledger_rows)
     assert any(row["paper_model"] == "WizardLM-2-8x22B" and row["repo_evidence_state"] == "current_fresh_verified" for row in ledger_rows)
     assert any(row["benchmark"] == "DeNEVIL / MoralPrompt" and "proxy" in row["comparison_boundary"].lower() for row in ledger_rows)
+
+    release_readme = (ROOT / "results/release/2026-04-19-option1/README.md").read_text(encoding="utf-8")
+    assert "Fresh exact UniMoral Llama calibration" in release_readme
+    assert "results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv" in release_readme
+    assert "results/paper-calibration-exact-20260706-unimoral-llama31/unimoral-rq4-bertscore.csv" in release_readme
+    assert "Fresh exact CCD paper-model calibration" in release_readme
+    assert "results/paper-calibration-exact-20260705/calibration-summary.csv" in release_readme
+    assert "results/paper-calibration-exact-20260705/run-manifest.csv" in release_readme
+    assert "Remaining exact routes stay marked unavailable or blocked until the exact model ID exists" in release_readme
 
     paper_comparison_doc = (ROOT / "docs/paper-result-comparison.md").read_text(encoding="utf-8")
     assert "# Paper Result Calibration and Comparison" in paper_comparison_doc
