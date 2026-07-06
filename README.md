@@ -87,16 +87,16 @@ These are the audience-facing result figures to use in the deck or meeting reado
 
 | Open in this order | Figure | What it answers |
 | --- | --- | --- |
-| 1 | UniMoral family-size scaling | Do model families change consistently from S to M to L across RQ1-RQ4? |
-| 2 | UniMoral task heatmap | Which model line is strongest for action prediction, moral typology, and factor attribution? |
-| 3 | UniMoral RQ4 generation quality | Which model line best generates plausible consequences under BERTScore F1 and METEOR? |
-| 4 | Comparable accuracy bars | Which rows are strongest on SMID and Value after the separate UniMoral result block? |
-| 5 | Comparable score spread | Which comparable metric is the visual bottleneck, and where is cross-line spread largest? |
-| 6 | Family scaling profile | Where does size help or stall on SMID and Value Kaleidoscope? |
-| 7 | CCD choice distribution | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |
-| 8 | DeNEVIL behavior outcomes | What proxy behavior mix appears in the saved traces? |
-| 9 | Paper-result comparison table | What original paper metric anchors can be placed beside current rows? |
-| 10 | Paper-vs-current replication map | Which evidence is direct, partial, current-only, blocked, or proxy-only? |
+| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg) | Do model families change consistently from S to M to L across RQ1-RQ4? |
+| 2 | [UniMoral task heatmap](figures/release/option1_unimoral_task_heatmap.svg) | Which model line is strongest for action prediction, moral typology, and factor attribution? |
+| 3 | [UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg) | Which model line best generates plausible consequences under BERTScore F1 and METEOR? |
+| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg) | Which rows are strongest on SMID and Value after the separate UniMoral result block? |
+| 5 | [Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg) | Which comparable metric is the visual bottleneck, and where is cross-line spread largest? |
+| 6 | [Family scaling profile](figures/release/option1_family_scaling_profile.svg) | Where does size help or stall on SMID and Value Kaleidoscope? |
+| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |
+| 8 | [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | What proxy behavior mix appears in the saved traces? |
+| 9 | [Paper-result comparison table](figures/release/option1_paper_result_comparison.svg) | What original paper metric anchors can be placed beside current rows? |
+| 10 | [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg) | Which evidence is direct, partial, current-only, blocked, or proxy-only? |
 
 ![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
 

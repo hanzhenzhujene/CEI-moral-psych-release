@@ -20,3 +20,16 @@ Outcome: all eight routes returned OpenRouter `402 Insufficient credits` before 
 | `google/gemma-4-31b-it` | `unimoral_action_prediction` | OpenRouter `402 Insufficient credits` |
 
 Next action: add OpenRouter credits before retrying. After credits are available, retry named cells in this order: CCD-Bench cells first, UniMoral cells next, ValuePrism valence cells next, and ValuePrism relevance cells last because they have the largest sample count.
+
+## 2026-07-06 21:14 UTC
+
+Purpose: verify whether the cost-aware, faster route-first retry plan is currently runnable before launching any parallel full-task jobs. The probe used one sample only and did not produce a scored benchmark row.
+
+Outcome: OpenRouter remains blocked by account credits, and the direct OpenAI paper route checked here is unavailable to the current API key. No scored rows were added, no raw completions were committed, and no full-task parallel batch was launched.
+
+| Route | Task | Probe size | Outcome |
+| :--- | :--- | :--- | :--- |
+| `openrouter/qwen/qwen3-235b-a22b-2507` | `ccd_bench_selection` | 1 sample | OpenRouter `402 Insufficient credits` |
+| `openai/chatgpt-4o-latest` | `ccd_bench_selection` | 1 sample | OpenAI `model_not_found` / no access for exact paper route |
+
+Next action: after OpenRouter credits are available, retry the named OpenRouter cells in the same cost-aware order: CCD-Bench first, UniMoral next, ValuePrism valence next, and ValuePrism relevance last. Do not substitute `gpt-4o` for `chatgpt-4o-latest` in the paper-calibration bridge unless the team explicitly changes the same-model rule.

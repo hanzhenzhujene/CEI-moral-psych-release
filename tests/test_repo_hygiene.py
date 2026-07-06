@@ -145,6 +145,10 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "UniMoral spans 0.563 to 0.684 across the comparable slice" in readme
     assert "0.048 spread" not in readme
     assert "## Main Figures" in readme
+    assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in readme
+    assert "| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
+    assert "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
+    assert "| 10 | [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in readme
     assert "![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)" in readme
