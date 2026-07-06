@@ -1779,6 +1779,9 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in root_readme
     assert "![Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "Use this first: OpenAI GPT-5 is the black text-only S/M/L line" in root_readme
+    assert "CCD behavior view: clusters are choices relative to a uniform baseline, not right/wrong labels." in root_readme
+    assert "Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring." in root_readme
     assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" not in root_readme
     assert root_readme.count("![") >= 9
     assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in root_readme
