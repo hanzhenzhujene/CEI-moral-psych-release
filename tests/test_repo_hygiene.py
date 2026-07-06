@@ -92,6 +92,8 @@ def test_env_example_exists_and_documents_core_inputs():
 def test_root_readme_points_to_final_moral_psych_deliverable():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert readme.startswith("# CEI Moral-Psych Benchmark Suite")
+    assert "github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml" in readme
+    assert "github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml" not in readme
     assert "Jenny Zhu's CEI moral-psych benchmark deliverable" in readme
     assert "## Start Here" in readme
     assert "## Best Results At A Glance" in readme

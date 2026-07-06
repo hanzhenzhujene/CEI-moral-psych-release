@@ -8,8 +8,8 @@ authors:
   - family-names: Zhu
     given-names: Hanzhen
     alias: Jenny Zhu
-repository-code: "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark"
-url: "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark"
+repository-code: "https://github.com/hanzhenzhujene/CEI-moral-psych-release"
+url: "https://github.com/hanzhenzhujene/CEI-moral-psych-release"
 abstract: >-
   Public release package for five moral-psych benchmark papers, separating
   benchmark-faithful comparable accuracy from CCD-Bench cultural-cluster choice

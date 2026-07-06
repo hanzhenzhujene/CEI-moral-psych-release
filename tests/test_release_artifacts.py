@@ -263,9 +263,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         manifest["report_metadata"]["current_cost_scope"]
         == "User-confirmed total spend including the OpenRouter selected-grid follow-up, exact CCD calibration pass, and OpenAI reference-sweep additions."
     )
+    assert manifest["report_metadata"]["ci_workflow_url"] == "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
     assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"
     assert "stricter visible-answer parsing" in manifest["report_metadata"]["metric_definition_summary"].lower()
-    assert manifest["report_metadata"]["ci_workflow_url"].endswith("/actions/workflows/ci.yml")
     assert manifest["target_matrix"]["family_size_benchmark_cells"] == 75
     assert manifest["target_matrix"]["readiness_summary_cells"] == 105
     assert manifest["target_matrix"]["tier3_summary_cells"] == 72

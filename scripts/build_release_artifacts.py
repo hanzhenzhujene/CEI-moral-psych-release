@@ -170,7 +170,7 @@ PUBLIC_WITHHELD_LINES: set[str] = set()
 PUBLIC_WITHHELD_FAMILY_STATUS = ""
 PUBLIC_WITHHELD_FAMILY_NOTE = ""
 PUBLIC_NEXT_QUEUED_NOTE = "Pending refresh from the on-disk rerun monitor."
-CI_WORKFLOW_URL = "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml"
+CI_WORKFLOW_URL = "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
 TEXT_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-text-expansion"
 IMAGE_EXPANSION_RUN_PATH = "results/inspect/full-runs/2026-04-19-family-size-image-expansion"
 

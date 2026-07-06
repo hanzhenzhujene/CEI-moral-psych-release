@@ -369,7 +369,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Current live reruns | No currently published line is still running locally. |
 | Next restart focus | No published rerun is active right now. |
 | Release guardrail | Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables. |
-| CI workflow | [CI workflow](https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml) |
+| CI workflow | [CI workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml) |
 | Total evaluated samples in this release | `302,776` |
 
 ### Current Operations Highlights

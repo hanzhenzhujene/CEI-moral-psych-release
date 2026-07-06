@@ -1,6 +1,6 @@
 # CEI Moral-Psych Benchmark Suite
 
-[![CI](https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml)
+[![CI](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml)
 
 Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark papers. The root README is a map: it tells you what to trust first, where the data lives, and where to go for the detailed audit trail.
 

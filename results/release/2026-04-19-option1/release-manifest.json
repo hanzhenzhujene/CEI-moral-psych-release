@@ -184,7 +184,7 @@
   ],
   "release_id": "2026-04-19-option1",
   "report_metadata": {
-    "ci_workflow_url": "https://github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml",
+    "ci_workflow_url": "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml",
     "current_cost_breakdown": {
       "minimax_api": "$504.66",
       "openai_api_reference_sweep": "$39.98",
