@@ -79,6 +79,9 @@ Interpretation helpers:
 - `figures/time_scaling.svg`: older-vs-newer route visual.
 - `figures/benchmark_score_matrix.svg`: benchmark comparison matrix; CCD is labeled as valid-choice coverage.
 
+Latest targeted retry:
+- `targeted-retry-log.md`: bounded retry evidence for named non-success cells. It is operational evidence only; scored summaries change only when a route produces a successful eval row.
+
 ## Figures To Open First
 
 Use these as the visual path through the follow-up. They are text-only follow-up figures, not replacements for the frozen release figures.

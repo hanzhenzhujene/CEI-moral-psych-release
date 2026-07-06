@@ -57,6 +57,10 @@ Full-objective status: All `119` planned rows were attempted; `102` produced sco
 
 No user unblock is required unless you want an explicitly budgeted targeted retry of the blocked provider routes.
 
+## Latest Targeted Retry
+
+`targeted-retry-log.md` records the newest bounded retry of named non-success cells. Treat it as provider/account evidence, not as a new scored result, unless `result_summary.csv` gains successful rows.
+
 ## Optional Targeted Retry
 
 Do not rerun the whole grid by default. If the team approves more spend, retry only named blocked `model` x `task` cells after checking the provider route and budget.

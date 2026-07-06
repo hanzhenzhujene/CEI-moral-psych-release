@@ -152,6 +152,7 @@ def test_completion_audit_marks_full_attempt_with_blocked_cells(tmp_path: Path) 
         },
     ]
 
+    (tmp_path / "targeted-retry-log.md").write_text("# retry\n", encoding="utf-8")
     openrouter.write_completion_audit(tmp_path, None, _minimal_model_rows(), plan_rows, result_rows)
 
     content = (tmp_path / "completion_audit.md").read_text(encoding="utf-8")
@@ -159,6 +160,8 @@ def test_completion_audit_marks_full_attempt_with_blocked_cells(tmp_path: Path) 
     assert "All `3` planned rows were attempted; `1` produced scored success rows and `2` are documented" in content
     assert "All recorded API cost from parsed Inspect logs, including blocked partial rows: `$0.060000`." in content
     assert "| `qwen/qwen3-8b` | `value_prism_relevance` | `error` | provider route blocked |" in content
+    assert "## Latest Targeted Retry" in content
+    assert "`targeted-retry-log.md` records the newest bounded retry" in content
     assert "## Approved Full-Run Command" not in content
     assert "## Optional Targeted Retry" in content
 
@@ -176,6 +179,7 @@ def test_selected_grid_readme_surfaces_first_figures(tmp_path: Path) -> None:
         for row in plan_rows
     ]
 
+    (tmp_path / "targeted-retry-log.md").write_text("# retry\n", encoding="utf-8")
     openrouter.write_readme(tmp_path, "test-fetch", 100, _minimal_model_rows(), plan_rows, result_rows)
 
     content = (tmp_path / "README.md").read_text(encoding="utf-8")
@@ -185,6 +189,7 @@ def test_selected_grid_readme_surfaces_first_figures(tmp_path: Path) -> None:
     assert "![Benchmark comparison matrix](figures/benchmark_score_matrix.svg)" in content
     assert "text-only follow-up figures, not replacements for the frozen release figures" in content
     assert "CCD-Bench is valid-choice behavior, not correctness or accuracy" in content
+    assert "`targeted-retry-log.md`: bounded retry evidence for named non-success cells" in content
 
 
 def test_existing_log_scan_recovers_success_even_when_newer_partial_exists(tmp_path: Path, monkeypatch) -> None:

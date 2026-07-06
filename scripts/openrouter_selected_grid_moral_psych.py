@@ -1186,6 +1186,15 @@ def write_readme(
                 "- `figures/within_family_scaling.svg`: direct S/M/L family-size visual.",
                 "- `figures/time_scaling.svg`: older-vs-newer route visual.",
                 "- `figures/benchmark_score_matrix.svg`: benchmark comparison matrix; CCD is labeled as valid-choice coverage.",
+                *(
+                    [
+                        "",
+                        "Latest targeted retry:",
+                        "- `targeted-retry-log.md`: bounded retry evidence for named non-success cells. It is operational evidence only; scored summaries change only when a route produces a successful eval row.",
+                    ]
+                    if (output_dir / "targeted-retry-log.md").exists()
+                    else []
+                ),
                 "",
                 "## Figures To Open First",
                 "",
@@ -1422,6 +1431,15 @@ def write_completion_audit(
             unblock,
         ]
     )
+    if (output_dir / "targeted-retry-log.md").exists():
+        lines.extend(
+            [
+                "",
+                "## Latest Targeted Retry",
+                "",
+                "`targeted-retry-log.md` records the newest bounded retry of named non-success cells. Treat it as provider/account evidence, not as a new scored result, unless `result_summary.csv` gains successful rows.",
+            ]
+        )
     if result_rows is None or sample_limit is not None or not all_planned_rows_recorded:
         lines.extend(
             [
