@@ -136,7 +136,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| `T3` | Interpretable: cite/compare it within the stated metric layer. |" in readme
     assert "Current dashboard: `72/105` public summary rows are Tier 3" in readme
     assert "The `105` rows are the `75` family-size cells plus `30` OpenAI text-reference cells." in readme
-    assert "Cost/accounting metadata is in the appendix. Current project total: `$888.06`." in readme
+    assert "Cost/accounting metadata is in the appendix. Current project total: `$896.91`." in readme
     assert "## OpenRouter Selected-Grid Follow-Up" not in readme
     assert "## Results First" not in readme
     assert "### DeepSeek S/M/L Log-Derived Readout" not in readme

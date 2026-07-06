@@ -53,16 +53,16 @@ REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 202
 REPORT_PROVIDER = "OpenRouter + direct MiniMax + OpenAI"
 REPORT_TEMPERATURE = "0"
 REPORT_MINIMAX_API_COST = "$504.66"
-REPORT_OPENROUTER_COST = "$343.42"
+REPORT_OPENROUTER_COST = "$352.27"
 REPORT_OPENAI_API_COST = "$39.98"
-REPORT_CURRENT_TOTAL_COST = "$888.06"
+REPORT_CURRENT_TOTAL_COST = "$896.91"
 REPORT_CURRENT_COST_BREAKDOWN = (
-    f"MiniMax API: `{REPORT_MINIMAX_API_COST}`; OpenRouter model-family runs: `{REPORT_OPENROUTER_COST}`, "
-    "including `$17.760398` from the full selected-grid OpenRouter follow-up; "
+    f"MiniMax API: `{REPORT_MINIMAX_API_COST}`; OpenRouter model-family/calibration runs: `{REPORT_OPENROUTER_COST}`, "
+    "including `$17.760398` from the full selected-grid OpenRouter follow-up and `$8.849093` from the exact same-model CCD calibration pass; "
     f"OpenAI API reference sweep: `{REPORT_OPENAI_API_COST}`."
 )
 REPORT_CURRENT_COST_SCOPE = (
-    "User-confirmed total spend including the OpenRouter selected-grid follow-up and OpenAI reference-sweep additions."
+    "User-confirmed total spend including the OpenRouter selected-grid follow-up, exact CCD calibration pass, and OpenAI reference-sweep additions."
 )
 REPORT_STATUS_NOTE = (
     f"Updated {REPORT_DATE_LONG}. "

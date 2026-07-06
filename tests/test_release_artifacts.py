@@ -253,15 +253,15 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
     assert any("OpenAI reference rows" in item and "text-only markers" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_total_cost"] == "$888.06"
+    assert manifest["report_metadata"]["current_total_cost"] == "$896.91"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
         "minimax_api": "$504.66",
-        "openrouter_other_model_family_runs": "$343.42",
+        "openrouter_other_model_family_runs": "$352.27",
         "openai_api_reference_sweep": "$39.98",
     }
     assert (
         manifest["report_metadata"]["current_cost_scope"]
-        == "User-confirmed total spend including the OpenRouter selected-grid follow-up and OpenAI reference-sweep additions."
+        == "User-confirmed total spend including the OpenRouter selected-grid follow-up, exact CCD calibration pass, and OpenAI reference-sweep additions."
     )
     assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"
     assert "stricter visible-answer parsing" in manifest["report_metadata"]["metric_definition_summary"].lower()
