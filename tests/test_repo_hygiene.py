@@ -130,6 +130,9 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "## Key Takeaways" in readme
     assert "**Best all-around comparable line:** `MiniMax-S`" in readme
     assert "**Best text-only line:** `GPT-5.5`" in readme
+    assert "diagnostic spread" in readme
+    assert "UniMoral spans 0.563 to 0.684 across the comparable slice" in readme
+    assert "0.048 spread" not in readme
     assert "## Main Figures" in readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in readme
@@ -192,6 +195,13 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Metric: BERTScore F1" in unimoral_family_scaling_svg
     assert "Metric: METEOR" in unimoral_family_scaling_svg
 
+    unimoral_task_spread_svg = (ROOT / "figures/release/option1_unimoral_task_spread.svg").read_text(encoding="utf-8")
+    assert "UniMoral RQ1-RQ3 Score Spread: exact-match accuracy" in unimoral_task_spread_svg
+    assert "Range is max-min across complete model lines" in unimoral_task_spread_svg
+    assert "not proof that the task is solved" in unimoral_task_spread_svg
+    assert "RQ4 is excluded here because it uses BERTScore F1 and METEOR generation metrics" in unimoral_task_spread_svg
+    assert "saturation" not in unimoral_task_spread_svg.lower()
+
     paper_calibration_svg = (ROOT / "figures/release/option1_paper_model_calibration_bridge.svg").read_text(encoding="utf-8")
     assert "Same-Model Paper Calibration Bridge" in paper_calibration_svg
     assert "Only exact same-model evidence is plotted here" in paper_calibration_svg
@@ -252,6 +262,9 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "results/paper-calibration-exact-20260705/calibration-summary.csv" in release_readme
     assert "results/paper-calibration-exact-20260705/run-manifest.csv" in release_readme
     assert "Remaining exact routes stay marked unavailable or blocked until the exact model ID exists" in release_readme
+    assert "| Tightest comparable spread | `UniMoral` has the tightest range" in release_readme
+    assert "not proof of benchmark saturation" in release_readme
+    assert "Closest thing to saturation" not in release_readme
 
     paper_comparison_doc = (ROOT / "docs/paper-result-comparison.md").read_text(encoding="utf-8")
     assert "# Paper Result Calibration and Comparison" in paper_comparison_doc

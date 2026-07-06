@@ -155,7 +155,7 @@ REQUIRED_FIGURE_MARKERS = {
     "option1_unimoral_generation_quality.svg": "UniMoral RQ4 generation quality",
     "option1_unimoral_family_scaling.svg": "UniMoral family-size scaling by RQ",
     "option1_unimoral_task_rankings.svg": "UniMoral per-task model rankings",
-    "option1_unimoral_task_spread.svg": "UniMoral task spread and saturation",
+    "option1_unimoral_task_spread.svg": "UniMoral RQ1-RQ3 Score Spread",
 }
 
 

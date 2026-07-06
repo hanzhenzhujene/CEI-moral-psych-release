@@ -17,7 +17,7 @@ _See: [family scaling profile](../results/release/2026-04-19-option1/jenny-group
 
 ## 2. Vision Is the Real Bottleneck
 
-Text-based moral classification is approaching saturation (UniMoral spread is only 0.048 across all models). But when models have to judge morality from images, accuracy drops to 0.378 mean with massive variance. The next frontier for moral AI is not reading — it is seeing.
+Text-based moral classification is much tighter than image moral judgment in the current release: UniMoral spans 0.563 to 0.684 across the comparable slice, while SMID has a lower mean of 0.364 and the widest spread at 0.285. Treat that as a bottleneck and diagnostic-spread result, not proof that UniMoral is saturated. The next frontier for moral AI is not only reading text — it is seeing morally relevant cues in images.
 
 _See: [benchmark difficulty profile](../results/release/2026-04-19-option1/jenny-group-report.md#benchmark-difficulty-profile)_
 

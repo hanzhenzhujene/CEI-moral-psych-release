@@ -1,15 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="980" height="330" viewBox="0 0 980 330">
-<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:20px;font-weight:700}.subtitle{font-size:12px;fill:#4b5563}.axis{font-weight:700}</style>
-<rect width="100%" height="100%" fill="white"/>
-<text x="24" y="34" class="title">UniMoral task spread and saturation: exact-match accuracy</text>
-<text x="24" y="58" class="subtitle">Same metric for RQ1-RQ3. Longer bars mean more cross-line separation; short bars indicate near-saturation.</text>
-<text x="36" y="107" class="axis">Action prediction</text>
-<rect x="250" y="92" width="460.0" height="22" fill="#3c78d8" rx="3"/>
-<text x="732" y="108">accuracy range 0.121</text>
-<text x="36" y="157" class="axis">Moral typology</text>
-<rect x="250" y="142" width="317.7" height="22" fill="#3c78d8" rx="3"/>
-<text x="732" y="158">accuracy range 0.084</text>
-<text x="36" y="207" class="axis">Factor attribution</text>
-<rect x="250" y="192" width="374.3" height="22" fill="#3c78d8" rx="3"/>
-<text x="732" y="208">accuracy range 0.099</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="570" viewBox="0 0 1280 570">
+<style>text{font-family:Arial,sans-serif;font-size:13px;fill:#17202a}.title{font-size:24px;font-weight:700}.subtitle{font-size:13px;fill:#4b5563}.axis{font-size:12px;fill:#64748b}.label{font-weight:700}.small{font-size:11px;fill:#64748b}.value{font-size:12px;font-weight:700}</style>
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text x="40" y="44" class="title">UniMoral RQ1-RQ3 Score Spread: exact-match accuracy</text>
+<text x="40" y="70" class="subtitle">Range is max-min across complete model lines. Shorter ranges mean less separation in this slice, not proof that the task is solved.</text>
+<line x1="330.0" y1="126" x2="330.0" y2="488" stroke="#e2e8f0"/>
+<text x="330.0" y="114" class="axis" text-anchor="middle">0.50</text>
+<line x1="475.0" y1="126" x2="475.0" y2="488" stroke="#e2e8f0"/>
+<text x="475.0" y="114" class="axis" text-anchor="middle">0.55</text>
+<line x1="620.0" y1="126" x2="620.0" y2="488" stroke="#e2e8f0"/>
+<text x="620.0" y="114" class="axis" text-anchor="middle">0.60</text>
+<line x1="765.0" y1="126" x2="765.0" y2="488" stroke="#e2e8f0"/>
+<text x="765.0" y="114" class="axis" text-anchor="middle">0.65</text>
+<line x1="910.0" y1="126" x2="910.0" y2="488" stroke="#e2e8f0"/>
+<text x="910.0" y="114" class="axis" text-anchor="middle">0.70</text>
+<text x="330" y="90" class="axis">Shared accuracy axis</text>
+<rect x="32" y="126" width="1216" height="92" fill="white" stroke="#d8dee4" rx="8"/>
+<text x="56" y="156" class="label">RQ1: Action prediction</text>
+<text x="56" y="180" class="small">n=21 complete lines; mean 0.658; range 0.121</text>
+<line x1="330" y1="164" x2="910" y2="164" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round"/>
+<line x1="511.4" y1="164" x2="862.5" y2="164" stroke="#2563eb" stroke-width="14" stroke-linecap="round"/>
+<circle cx="511.4" cy="164" r="8" fill="#f97316"/>
+<circle cx="787.7" cy="164" r="8" fill="#111827"/>
+<circle cx="862.5" cy="164" r="8" fill="#059669"/>
+<text x="330" y="198" class="small">Lowest: DeepSeek-L 0.563</text>
+<text x="787.7" y="146" class="small" text-anchor="middle">Mean 0.658</text>
+<text x="910" y="198" class="small" text-anchor="end">Best: DeepSeek-M 0.684</text>
+<text x="972" y="159" class="value">Separation: 0.121</text>
+<text x="972" y="182" class="small">Use this to judge diagnostic spread, not overall model morality.</text>
+<rect x="32" y="242" width="1216" height="92" fill="white" stroke="#d8dee4" rx="8"/>
+<text x="56" y="272" class="label">RQ2: Moral typology</text>
+<text x="56" y="296" class="small">n=18 complete lines; mean 0.588; range 0.084</text>
+<line x1="330" y1="280" x2="910" y2="280" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round"/>
+<line x1="485.3" y1="280" x2="727.8" y2="280" stroke="#2563eb" stroke-width="14" stroke-linecap="round"/>
+<circle cx="485.3" cy="280" r="8" fill="#f97316"/>
+<circle cx="584.4" cy="280" r="8" fill="#111827"/>
+<circle cx="727.8" cy="280" r="8" fill="#059669"/>
+<text x="330" y="314" class="small">Lowest: GPT-4o-mini Ref 0.554</text>
+<text x="584.4" y="262" class="small" text-anchor="middle">Mean 0.588</text>
+<text x="910" y="314" class="small" text-anchor="end">Best: GPT-5.5 0.637</text>
+<text x="972" y="275" class="value">Separation: 0.084</text>
+<text x="972" y="298" class="small">Use this to judge diagnostic spread, not overall model morality.</text>
+<rect x="32" y="358" width="1216" height="92" fill="white" stroke="#d8dee4" rx="8"/>
+<text x="56" y="388" class="label">RQ3: Factor attribution</text>
+<text x="56" y="412" class="small">n=17 complete lines; mean 0.586; range 0.099</text>
+<line x1="330" y1="396" x2="910" y2="396" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round"/>
+<line x1="423.0" y1="396" x2="708.7" y2="396" stroke="#2563eb" stroke-width="14" stroke-linecap="round"/>
+<circle cx="423.0" cy="396" r="8" fill="#f97316"/>
+<circle cx="580.4" cy="396" r="8" fill="#111827"/>
+<circle cx="708.7" cy="396" r="8" fill="#059669"/>
+<text x="330" y="430" class="small">Lowest: GPT-5 nano 0.532</text>
+<text x="580.4" y="378" class="small" text-anchor="middle">Mean 0.586</text>
+<text x="910" y="430" class="small" text-anchor="end">Best: Llama-M 0.631</text>
+<text x="972" y="391" class="value">Separation: 0.099</text>
+<text x="972" y="414" class="small">Use this to judge diagnostic spread, not overall model morality.</text>
+<circle cx="48" cy="526" r="6" fill="#f97316"/><text x="62" y="530" class="small">lowest current row</text>
+<circle cx="202" cy="526" r="6" fill="#111827"/><text x="216" y="530" class="small">mean</text>
+<circle cx="282" cy="526" r="6" fill="#059669"/><text x="296" y="530" class="small">best current row</text>
+<text x="1240" y="530" class="small" text-anchor="end">RQ4 is excluded here because it uses BERTScore F1 and METEOR generation metrics.</text>
 </svg>

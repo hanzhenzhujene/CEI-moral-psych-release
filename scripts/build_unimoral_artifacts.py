@@ -1811,28 +1811,84 @@ def svg_rankings(rows: list[dict[str, object]], path: Path) -> None:
 
 
 def svg_spread(rows: list[dict[str, object]], path: Path) -> None:
-    width, height = 980, 330
+    width, height = 1280, 570
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
-    parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:20px;font-weight:700}.subtitle{font-size:12px;fill:#4b5563}.axis{font-weight:700}</style>")
-    parts.append('<rect width="100%" height="100%" fill="white"/>')
-    parts.append('<text x="24" y="34" class="title">UniMoral task spread and saturation: exact-match accuracy</text>')
-    parts.append('<text x="24" y="58" class="subtitle">Same metric for RQ1-RQ3. Longer bars mean more cross-line separation; short bars indicate near-saturation.</text>')
-    spread_rows = []
+    parts.append(
+        "<style>"
+        "text{font-family:Arial,sans-serif;font-size:13px;fill:#17202a}"
+        ".title{font-size:24px;font-weight:700}"
+        ".subtitle{font-size:13px;fill:#4b5563}"
+        ".axis{font-size:12px;fill:#64748b}"
+        ".label{font-weight:700}"
+        ".small{font-size:11px;fill:#64748b}"
+        ".value{font-size:12px;font-weight:700}"
+        "</style>"
+    )
+    parts.append('<rect width="100%" height="100%" fill="#f8fafc"/>')
+    parts.append('<text x="40" y="44" class="title">UniMoral RQ1-RQ3 Score Spread: exact-match accuracy</text>')
+    parts.append(
+        '<text x="40" y="70" class="subtitle">Range is max-min across complete model lines. Shorter ranges mean less separation in this slice, not proof that the task is solved.</text>'
+    )
+    plot_x0, plot_x1 = 330, 910
+    axis_min, axis_max = 0.50, 0.70
+    spread_rows: list[tuple[str, str, str, float, float, float, str, str]] = []
     for task_name in CLASSIFICATION_TASK_NAMES:
-        values = [
-            value
-            for value in (field_value(row, "accuracy") for row in rows if row["task_name"] == task_name and row["status"] == "complete")
-            if value is not None
+        task_rows = [
+            row
+            for row in rows
+            if row["task_name"] == task_name and row["status"] == "complete" and field_value(row, "accuracy") is not None
         ]
-        if values:
-            spread_rows.append((TASKS[task_name]["label"], max(values) - min(values)))
-    max_range = max((spread for _, spread in spread_rows), default=1.0)
-    for idx, (label, spread) in enumerate(spread_rows):
-        y = 92 + idx * 50
-        bar_w = 460 * spread / max_range if max_range else 0
-        parts.append(f'<text x="36" y="{y + 15}" class="axis">{html.escape(str(label))}</text>')
-        parts.append(f'<rect x="250" y="{y}" width="{bar_w:.1f}" height="22" fill="#3c78d8" rx="3"/>')
-        parts.append(f'<text x="732" y="{y + 16}">accuracy range {spread:.3f}</text>')
+        if not task_rows:
+            continue
+        low_row = min(task_rows, key=lambda row: float(row["accuracy"]))
+        high_row = max(task_rows, key=lambda row: float(row["accuracy"]))
+        values = [float(row["accuracy"]) for row in task_rows]
+        spread_rows.append(
+            (
+                str(TASKS[task_name]["rq"]),
+                str(TASKS[task_name]["label"]),
+                str(len(task_rows)),
+                min(values),
+                sum(values) / len(values),
+                max(values),
+                display_line_label(str(low_row["line_label"])),
+                display_line_label(str(high_row["line_label"])),
+            )
+        )
+
+    def x_for(value: float) -> float:
+        clamped = min(axis_max, max(axis_min, value))
+        return plot_x0 + (clamped - axis_min) / (axis_max - axis_min) * (plot_x1 - plot_x0)
+
+    tick_y = 126
+    for tick in (0.50, 0.55, 0.60, 0.65, 0.70):
+        x = x_for(tick)
+        parts.append(f'<line x1="{x:.1f}" y1="{tick_y}" x2="{x:.1f}" y2="{height - 82}" stroke="#e2e8f0"/>')
+        parts.append(f'<text x="{x:.1f}" y="{tick_y - 12}" class="axis" text-anchor="middle">{tick:.2f}</text>')
+    parts.append(f'<text x="{plot_x0}" y="{tick_y - 36}" class="axis">Shared accuracy axis</text>')
+    for idx, (rq, label, n_rows, low, avg, high, low_label, high_label) in enumerate(spread_rows):
+        y = 164 + idx * 116
+        low_x, avg_x, high_x = x_for(low), x_for(avg), x_for(high)
+        parts.append(f'<rect x="32" y="{y - 38}" width="{width - 64}" height="92" fill="white" stroke="#d8dee4" rx="8"/>')
+        parts.append(f'<text x="56" y="{y - 8}" class="label">{html.escape(rq)}: {html.escape(label)}</text>')
+        parts.append(f'<text x="56" y="{y + 16}" class="small">n={html.escape(n_rows)} complete lines; mean {avg:.3f}; range {high - low:.3f}</text>')
+        parts.append(f'<line x1="{plot_x0}" y1="{y}" x2="{plot_x1}" y2="{y}" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round"/>')
+        parts.append(f'<line x1="{low_x:.1f}" y1="{y}" x2="{high_x:.1f}" y2="{y}" stroke="#2563eb" stroke-width="14" stroke-linecap="round"/>')
+        parts.append(f'<circle cx="{low_x:.1f}" cy="{y}" r="8" fill="#f97316"/>')
+        parts.append(f'<circle cx="{avg_x:.1f}" cy="{y}" r="8" fill="#111827"/>')
+        parts.append(f'<circle cx="{high_x:.1f}" cy="{y}" r="8" fill="#059669"/>')
+        parts.append(f'<text x="{plot_x0}" y="{y + 34}" class="small">Lowest: {html.escape(low_label)} {low:.3f}</text>')
+        parts.append(f'<text x="{avg_x:.1f}" y="{y - 18}" class="small" text-anchor="middle">Mean {avg:.3f}</text>')
+        parts.append(f'<text x="{plot_x1}" y="{y + 34}" class="small" text-anchor="end">Best: {html.escape(high_label)} {high:.3f}</text>')
+        parts.append(f'<text x="972" y="{y - 5}" class="value">Separation: {high - low:.3f}</text>')
+        parts.append(f'<text x="972" y="{y + 18}" class="small">Use this to judge diagnostic spread, not overall model morality.</text>')
+    legend_y = height - 44
+    parts.append(f'<circle cx="48" cy="{legend_y}" r="6" fill="#f97316"/><text x="62" y="{legend_y + 4}" class="small">lowest current row</text>')
+    parts.append(f'<circle cx="202" cy="{legend_y}" r="6" fill="#111827"/><text x="216" y="{legend_y + 4}" class="small">mean</text>')
+    parts.append(f'<circle cx="282" cy="{legend_y}" r="6" fill="#059669"/><text x="296" y="{legend_y + 4}" class="small">best current row</text>')
+    parts.append(
+        f'<text x="{width - 40}" y="{legend_y + 4}" class="small" text-anchor="end">RQ4 is excluded here because it uses BERTScore F1 and METEOR generation metrics.</text>'
+    )
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 

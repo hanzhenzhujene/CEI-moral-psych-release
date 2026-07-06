@@ -270,7 +270,7 @@ This repo includes project-level [Claude Code](https://claude.com/claude-code) s
 | `/run-moral-psych` | Run Jenny's 5 moral-psych benchmarks |
 | `/release` | Build release artifacts (CSVs, SVGs, reports) |
 | `/create-pr` | Create a PR against the org repo with reviewers |
-| `/validate-results` | Validate results against three-tier acceptance criteria and saturation policy |
+| `/validate-results` | Validate results against three-tier acceptance criteria and diagnostic-spread policy |
 
 You can pass arguments after the command, e.g.:
 
@@ -291,7 +291,7 @@ The `/validate-results` command checks every model × task cell against a **thre
 | T2 | Result valid | No format failure, missing modality, or proxy substitution |
 | T3 | Interpretable | Can be cited and compared within the stated metric layer, with benchmark caveats preserved |
 
-It also checks **saturation** — whether a benchmark still discriminates between models (e.g., UniMoral action prediction was retired at 0.048 spread). Reports are saved to `results/validation/`.
+It also checks **diagnostic spread** — whether a benchmark still separates models without treating a tight range as proof of saturation. In the current release, UniMoral spans 0.563 to 0.684 across the comparable slice. Reports are saved to `results/validation/`.
 
 ### Setup
 
