@@ -18,6 +18,7 @@
 - [`../README.md`](../README.md): high-level project framing and key results
 - [`../results/release/2026-04-19-option1/README.md`](../results/release/2026-04-19-option1/README.md): release artifact index
 - [`../results/release/2026-04-19-option1/source/README.md`](../results/release/2026-04-19-option1/source/README.md): provenance note for the tracked authoritative snapshot
+- [`../results/openrouter-selected-grid-moral-psych-full/README.md`](../results/openrouter-selected-grid-moral-psych-full/README.md): separate text-only OpenRouter selected-grid follow-up, with figures, interpretation, and blocked-cell audit
 
 ## Archived Planning And Status
 

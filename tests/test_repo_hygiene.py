@@ -411,6 +411,8 @@ def test_docs_index_mentions_repo_architecture():
     docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
     assert "repo-architecture.md" in docs_index
     assert "evaluation-methodology.md" in docs_index
+    assert "../results/openrouter-selected-grid-moral-psych-full/README.md" in docs_index
+    assert "separate text-only OpenRouter selected-grid follow-up" in docs_index
 
 
 def test_ci_workflow_uses_native_node24_action_releases() -> None:
@@ -443,6 +445,14 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
 
     results_readme = (ROOT / "results" / "README.md").read_text(encoding="utf-8")
     assert "## Public Result Layers" in results_readme
+    assert "## OpenRouter Selected-Grid Follow-Up" in results_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/result_summary.csv" in results_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/benchmark_summary.csv" in results_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/model_summary.csv" in results_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg" in results_readme
+    assert "separate from the frozen Option 1 ranking surface" in results_readme
+    assert "`benchmark-comparison.csv` is a supporting generated summary for figures, not the main data entry point" in results_readme
+    assert "CCD-Bench is valid-choice behavior, not accuracy" in results_readme
     assert "ccd-choice-distribution.csv" in results_readme
     assert "denevil-behavior-summary.csv" in results_readme
     assert "Appendix QA / provenance" in results_readme

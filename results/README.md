@@ -14,11 +14,13 @@ The most useful public entry points are:
 
 - `results/release/2026-04-19-option1/jenny-group-report.md`
 - `results/release/2026-04-19-option1/README.md`
-- `results/release/2026-04-19-option1/family-size-progress.csv`
-- `results/release/2026-04-19-option1/readiness-tier-matrix.csv`
-- `results/release/2026-04-19-option1/benchmark-comparison.csv`
+- `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`
+- `results/release/2026-04-19-option1/smid-results.csv`
+- `results/release/2026-04-19-option1/value-kaleidoscope-results.csv`
 - `results/release/2026-04-19-option1/ccd-choice-distribution.csv`
 - `results/release/2026-04-19-option1/denevil-behavior-summary.csv`
+- `results/release/2026-04-19-option1/readiness-tier-matrix.csv`
+- `results/release/2026-04-19-option1/family-size-progress.csv`
 
 ## Exploratory Follow-Up Sweeps
 
@@ -31,14 +33,39 @@ release matrix. It summarizes older or smaller OpenRouter routes on `UniMoral`
 and `CCD-Bench`, with final UniMoral accuracy and CCD cultural-cluster
 concentration tables.
 
+## OpenRouter Selected-Grid Follow-Up
+
+The completed text-only selected-grid follow-up lives under:
+
+- `results/openrouter-selected-grid-moral-psych-full/`
+
+Use it for OpenRouter-accessible text routes across `UniMoral RQ1-RQ4`, `ValuePrism`, and `CCD-Bench`.
+It is separate from the frozen Option 1 ranking surface and excludes `SMID`, `DeNEVIL`, and `MiniMax`.
+
+Open these first:
+
+- `results/openrouter-selected-grid-moral-psych-full/README.md`
+- `results/openrouter-selected-grid-moral-psych-full/interpretation.md`
+- `results/openrouter-selected-grid-moral-psych-full/completion_audit.md`
+- `results/openrouter-selected-grid-moral-psych-full/result_summary.csv`
+- `results/openrouter-selected-grid-moral-psych-full/benchmark_summary.csv`
+- `results/openrouter-selected-grid-moral-psych-full/model_summary.csv`
+
+Visual entry points:
+
+- `results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg`
+- `results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg`
+- `results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg`
+
 ## Public Result Layers
 
 The current release separates three layers on purpose:
 
-- **Comparable accuracy:** `benchmark-comparison.csv` plus the main bar/heatmap/scaling figures for `UniMoral`, `SMID`, and `Value Kaleidoscope`
+- **Comparable accuracy:** `unimoral-full-benchmark.csv`, `smid-results.csv`, and `value-kaleidoscope-results.csv`; `benchmark-comparison.csv` is a supporting generated summary for figures, not the main data entry point
 - **Behavioral / distributional evidence:** `ccd-choice-distribution.csv` for CCD-Bench and `denevil-behavior-summary.csv` plus `denevil-prompt-family-breakdown.csv` for DeNEVIL
 - **Appendix QA / provenance:** `denevil-proxy-summary.csv`, `denevil-proxy-examples.csv`, and the QA-only coverage / status figures
 - **Result-readiness summary dashboard:** `readiness-tier-matrix.csv`, which summarizes model-line x benchmark readiness while keeping the metric layer explicit. Tier 1 = harness completed, Tier 2 = valid result, Tier 3 = interpretable/comparable result; blocked or missing cells are not assigned a tier.
+- **OpenRouter text-only follow-up:** `results/openrouter-selected-grid-moral-psych-full/result_summary.csv`, `benchmark_summary.csv`, and `model_summary.csv` summarize the separate selected-grid follow-up; CCD-Bench is valid-choice behavior, not accuracy.
 
 This split keeps the public package honest: coverage, parser health, route provenance, and timestamps remain inspectable, but they are not promoted into headline performance claims.
 
