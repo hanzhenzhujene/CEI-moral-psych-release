@@ -44,7 +44,7 @@
   "counts": {
     "authoritative_tasks": 92,
     "benchmark_faithful_tasks": 89,
-    "paper_model_calibration_bridge_rows": 10,
+    "paper_model_calibration_bridge_rows": 11,
     "paper_model_calibration_ledger_rows": 20,
     "paper_result_alignment_rows": 5,
     "paper_result_comparison_rows": 9,

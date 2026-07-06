@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1560" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1672" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,8 +35,8 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1500" height="1560" class="canvas"/>
-<rect x="24" y="24" width="1452" height="1512" rx="22" class="panel"/>
+<rect x="0" y="0" width="1500" height="1672" class="canvas"/>
+<rect x="24" y="24" width="1452" height="1624" rx="22" class="panel"/>
 <title>Same-model paper calibration bridge</title>
 <desc>Data-backed visual bridge showing exact same-model paper calibration evidence only. Route-probe, near-route, blocked, and proxy rows are kept out of the plotted comparison.</desc>
 <text x="48" y="64" class="title">Same-Model Paper Calibration Bridge</text>
@@ -101,144 +101,161 @@
 <text x="1198" y="445" class="body">distributional behavior, not accuracy;</text>
 <text x="1198" y="462" class="body">current row has valid-choice gaps.</text>
 <rect x="42" y="512" width="1416" height="96" rx="14" class="subpanel"/>
-<rect x="42" y="512" width="8" height="96" rx="4" fill="#7c3aed"/>
+<rect x="42" y="512" width="8" height="96" rx="4" fill="#0f766e"/>
 <text x="56" y="540" class="label">CCD-Bench</text>
-<text x="198" y="536" class="body">DeepSeek-chat-v3-0324: Nordic Europe top-cluster</text>
-<text x="198" y="553" class="body">share = 0.229</text>
-<text x="514" y="536" class="body">fresh exact CCD rerun: Nordic Europe</text>
-<text x="514" y="553" class="body">dominant-cluster share = 0.232448</text>
+<text x="198" y="536" class="body">Llama-4-Maverick-17B-128E-Instruct: Nordic Europe</text>
+<text x="198" y="553" class="body">top-cluster share = 0.211</text>
+<text x="514" y="536" class="body">Llama-L current release row: Nordic Europe</text>
+<text x="514" y="553" class="body">dominant-cluster share = 0.23546945</text>
 <rect x="820" y="534" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="534" width="124.3" height="16" rx="8" fill="#2563eb"/>
-<text x="1020" y="547" class="small">paper 22.9%</text>
+<rect x="820" y="534" width="114.5" height="16" rx="8" fill="#2563eb"/>
+<text x="1020" y="547" class="small">paper 21.1%</text>
 <rect x="820" y="562" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="562" width="126.2" height="16" rx="8" fill="#0f766e"/>
-<text x="1020" y="575" class="small">ours 23.2%</text>
-<circle cx="1182" cy="540" r="7" fill="#7c3aed"/>
-<text x="1198" y="540" class="body">current fresh verified; CCD is</text>
+<rect x="820" y="562" width="127.8" height="16" rx="8" fill="#0f766e"/>
+<text x="1020" y="575" class="small">ours 23.5%</text>
+<circle cx="1182" cy="540" r="7" fill="#0f766e"/>
+<text x="1198" y="540" class="body">current release verified; CCD is</text>
 <text x="1198" y="557" class="body">distributional behavior, not accuracy;</text>
-<text x="1198" y="574" class="body">fresh rerun has valid-choice gaps.</text>
+<text x="1198" y="574" class="body">current row has valid-choice gaps.</text>
 <rect x="42" y="624" width="1416" height="96" rx="14" class="subpanel"/>
 <rect x="42" y="624" width="8" height="96" rx="4" fill="#7c3aed"/>
 <text x="56" y="652" class="label">CCD-Bench</text>
-<text x="198" y="648" class="body">Qwen2.5-72B-Instruct: Nordic Europe top-cluster</text>
-<text x="198" y="665" class="body">share = 0.177</text>
+<text x="198" y="648" class="body">DeepSeek-chat-v3-0324: Nordic Europe top-cluster</text>
+<text x="198" y="665" class="body">share = 0.229</text>
 <text x="514" y="648" class="body">fresh exact CCD rerun: Nordic Europe</text>
-<text x="514" y="665" class="body">dominant-cluster share = 0.211274</text>
+<text x="514" y="665" class="body">dominant-cluster share = 0.232448</text>
 <rect x="820" y="646" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="646" width="96.1" height="16" rx="8" fill="#2563eb"/>
-<text x="1020" y="659" class="small">paper 17.7%</text>
+<rect x="820" y="646" width="124.3" height="16" rx="8" fill="#2563eb"/>
+<text x="1020" y="659" class="small">paper 22.9%</text>
 <rect x="820" y="674" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="674" width="114.7" height="16" rx="8" fill="#0f766e"/>
-<text x="1020" y="687" class="small">ours 21.1%</text>
+<rect x="820" y="674" width="126.2" height="16" rx="8" fill="#0f766e"/>
+<text x="1020" y="687" class="small">ours 23.2%</text>
 <circle cx="1182" cy="652" r="7" fill="#7c3aed"/>
 <text x="1198" y="652" class="body">current fresh verified; CCD is</text>
 <text x="1198" y="669" class="body">distributional behavior, not accuracy;</text>
-<text x="1198" y="686" class="body">routed rerun excluded Novita after</text>
-<text x="1198" y="703" class="body">provider endpoint failure.</text>
+<text x="1198" y="686" class="body">fresh rerun has valid-choice gaps.</text>
 <rect x="42" y="736" width="1416" height="96" rx="14" class="subpanel"/>
 <rect x="42" y="736" width="8" height="96" rx="4" fill="#7c3aed"/>
 <text x="56" y="764" class="label">CCD-Bench</text>
-<text x="198" y="760" class="body">OpenAI GPT-4.1: Nordic Europe top-cluster share =</text>
-<text x="198" y="777" class="body">0.215</text>
+<text x="198" y="760" class="body">Qwen2.5-72B-Instruct: Nordic Europe top-cluster</text>
+<text x="198" y="777" class="body">share = 0.177</text>
 <text x="514" y="760" class="body">fresh exact CCD rerun: Nordic Europe</text>
-<text x="514" y="777" class="body">dominant-cluster share = 0.222731</text>
+<text x="514" y="777" class="body">dominant-cluster share = 0.211274</text>
 <rect x="820" y="758" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="758" width="116.7" height="16" rx="8" fill="#2563eb"/>
-<text x="1020" y="771" class="small">paper 21.5%</text>
+<rect x="820" y="758" width="96.1" height="16" rx="8" fill="#2563eb"/>
+<text x="1020" y="771" class="small">paper 17.7%</text>
 <rect x="820" y="786" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="786" width="120.9" height="16" rx="8" fill="#0f766e"/>
-<text x="1020" y="799" class="small">ours 22.3%</text>
+<rect x="820" y="786" width="114.7" height="16" rx="8" fill="#0f766e"/>
+<text x="1020" y="799" class="small">ours 21.1%</text>
 <circle cx="1182" cy="764" r="7" fill="#7c3aed"/>
 <text x="1198" y="764" class="body">current fresh verified; CCD is</text>
 <text x="1198" y="781" class="body">distributional behavior, not accuracy;</text>
-<text x="1198" y="798" class="body">this is an exact paper-model CCD row,</text>
-<text x="1198" y="815" class="body">not an OpenAI family-size sweep.</text>
+<text x="1198" y="798" class="body">routed rerun excluded Novita after</text>
+<text x="1198" y="815" class="body">provider endpoint failure.</text>
 <rect x="42" y="848" width="1416" height="96" rx="14" class="subpanel"/>
 <rect x="42" y="848" width="8" height="96" rx="4" fill="#7c3aed"/>
 <text x="56" y="876" class="label">CCD-Bench</text>
-<text x="198" y="872" class="body">Command-R 08-2024: Nordic Europe top-cluster share</text>
-<text x="198" y="889" class="body">= 0.161</text>
+<text x="198" y="872" class="body">OpenAI GPT-4.1: Nordic Europe top-cluster share =</text>
+<text x="198" y="889" class="body">0.215</text>
 <text x="514" y="872" class="body">fresh exact CCD rerun: Nordic Europe</text>
-<text x="514" y="889" class="body">dominant-cluster share = 0.226856</text>
+<text x="514" y="889" class="body">dominant-cluster share = 0.222731</text>
 <rect x="820" y="870" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="870" width="87.4" height="16" rx="8" fill="#2563eb"/>
-<text x="1020" y="883" class="small">paper 16.1%</text>
+<rect x="820" y="870" width="116.7" height="16" rx="8" fill="#2563eb"/>
+<text x="1020" y="883" class="small">paper 21.5%</text>
 <rect x="820" y="898" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="898" width="123.2" height="16" rx="8" fill="#0f766e"/>
-<text x="1020" y="911" class="small">ours 22.7%</text>
+<rect x="820" y="898" width="120.9" height="16" rx="8" fill="#0f766e"/>
+<text x="1020" y="911" class="small">ours 22.3%</text>
 <circle cx="1182" cy="876" r="7" fill="#7c3aed"/>
 <text x="1198" y="876" class="body">current fresh verified; CCD is</text>
-<text x="1198" y="893" class="body">distributional behavior, not accuracy.</text>
+<text x="1198" y="893" class="body">distributional behavior, not accuracy;</text>
+<text x="1198" y="910" class="body">this is an exact paper-model CCD row,</text>
+<text x="1198" y="927" class="body">not an OpenAI family-size sweep.</text>
 <rect x="42" y="960" width="1416" height="96" rx="14" class="subpanel"/>
 <rect x="42" y="960" width="8" height="96" rx="4" fill="#7c3aed"/>
 <text x="56" y="988" class="label">CCD-Bench</text>
-<text x="198" y="984" class="body">Microsoft Phi-4: Nordic Europe top-cluster share =</text>
-<text x="198" y="1001" class="body">0.189</text>
+<text x="198" y="984" class="body">Command-R 08-2024: Nordic Europe top-cluster share</text>
+<text x="198" y="1001" class="body">= 0.161</text>
 <text x="514" y="984" class="body">fresh exact CCD rerun: Nordic Europe</text>
-<text x="514" y="1001" class="body">dominant-cluster share = 0.206691</text>
+<text x="514" y="1001" class="body">dominant-cluster share = 0.226856</text>
 <rect x="820" y="982" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="982" width="102.6" height="16" rx="8" fill="#2563eb"/>
-<text x="1020" y="995" class="small">paper 18.9%</text>
+<rect x="820" y="982" width="87.4" height="16" rx="8" fill="#2563eb"/>
+<text x="1020" y="995" class="small">paper 16.1%</text>
 <rect x="820" y="1010" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="1010" width="112.2" height="16" rx="8" fill="#0f766e"/>
-<text x="1020" y="1023" class="small">ours 20.7%</text>
+<rect x="820" y="1010" width="123.2" height="16" rx="8" fill="#0f766e"/>
+<text x="1020" y="1023" class="small">ours 22.7%</text>
 <circle cx="1182" cy="988" r="7" fill="#7c3aed"/>
 <text x="1198" y="988" class="body">current fresh verified; CCD is</text>
 <text x="1198" y="1005" class="body">distributional behavior, not accuracy.</text>
 <rect x="42" y="1072" width="1416" height="96" rx="14" class="subpanel"/>
 <rect x="42" y="1072" width="8" height="96" rx="4" fill="#7c3aed"/>
 <text x="56" y="1100" class="label">CCD-Bench</text>
-<text x="198" y="1096" class="body">Perplexity Sonar: Nordic Europe top-cluster share</text>
-<text x="198" y="1113" class="body">= 0.218</text>
+<text x="198" y="1096" class="body">Microsoft Phi-4: Nordic Europe top-cluster share =</text>
+<text x="198" y="1113" class="body">0.189</text>
 <text x="514" y="1096" class="body">fresh exact CCD rerun: Nordic Europe</text>
-<text x="514" y="1113" class="body">dominant-cluster share = 0.143446</text>
+<text x="514" y="1113" class="body">dominant-cluster share = 0.206691</text>
 <rect x="820" y="1094" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="1094" width="118.3" height="16" rx="8" fill="#2563eb"/>
-<text x="1020" y="1107" class="small">paper 21.8%</text>
+<rect x="820" y="1094" width="102.6" height="16" rx="8" fill="#2563eb"/>
+<text x="1020" y="1107" class="small">paper 18.9%</text>
 <rect x="820" y="1122" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="1122" width="77.9" height="16" rx="8" fill="#0f766e"/>
-<text x="1020" y="1135" class="small">ours 14.3%</text>
+<rect x="820" y="1122" width="112.2" height="16" rx="8" fill="#0f766e"/>
+<text x="1020" y="1135" class="small">ours 20.7%</text>
 <circle cx="1182" cy="1100" r="7" fill="#7c3aed"/>
 <text x="1198" y="1100" class="body">current fresh verified; CCD is</text>
-<text x="1198" y="1117" class="body">distributional behavior, not accuracy;</text>
-<text x="1198" y="1134" class="body">this row is notably more diffuse than</text>
-<text x="1198" y="1151" class="body">the paper anchor.</text>
+<text x="1198" y="1117" class="body">distributional behavior, not accuracy.</text>
 <rect x="42" y="1184" width="1416" height="96" rx="14" class="subpanel"/>
 <rect x="42" y="1184" width="8" height="96" rx="4" fill="#7c3aed"/>
 <text x="56" y="1212" class="label">CCD-Bench</text>
-<text x="198" y="1208" class="body">Claude 4 Sonnet: Nordic Europe top-cluster share =</text>
-<text x="198" y="1225" class="body">0.306</text>
+<text x="198" y="1208" class="body">Perplexity Sonar: Nordic Europe top-cluster share</text>
+<text x="198" y="1225" class="body">= 0.218</text>
 <text x="514" y="1208" class="body">fresh exact CCD rerun: Nordic Europe</text>
-<text x="514" y="1225" class="body">dominant-cluster share = 0.302475</text>
+<text x="514" y="1225" class="body">dominant-cluster share = 0.143446</text>
 <rect x="820" y="1206" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="1206" width="166.1" height="16" rx="8" fill="#2563eb"/>
-<text x="1020" y="1219" class="small">paper 30.6%</text>
+<rect x="820" y="1206" width="118.3" height="16" rx="8" fill="#2563eb"/>
+<text x="1020" y="1219" class="small">paper 21.8%</text>
 <rect x="820" y="1234" width="190" height="16" rx="8" class="muted-bar"/>
-<rect x="820" y="1234" width="164.2" height="16" rx="8" fill="#0f766e"/>
-<text x="1020" y="1247" class="small">ours 30.2%</text>
+<rect x="820" y="1234" width="77.9" height="16" rx="8" fill="#0f766e"/>
+<text x="1020" y="1247" class="small">ours 14.3%</text>
 <circle cx="1182" cy="1212" r="7" fill="#7c3aed"/>
 <text x="1198" y="1212" class="body">current fresh verified; CCD is</text>
-<text x="1198" y="1229" class="body">distributional behavior, not accuracy.</text>
-<text x="48" y="1324" class="metric">What is deliberately outside this plotted bridge</text>
-<text x="48" y="1348" class="subtitle">The full ledger keeps these rows visible for planning, but they are not shown as paper-model comparisons.</text>
-<rect x="48" y="1372" width="440" height="124" rx="14" class="subpanel"/>
-<rect x="48" y="1372" width="8" height="124" rx="4" fill="#2563eb"/>
-<text x="70" y="1404" class="label">Exact paper routes needing runs</text>
-<text x="70" y="1438" class="body">Some paper CCD models are available as exact provider</text>
-<text x="70" y="1455" class="body">routes, but the release does not yet have their</text>
-<text x="70" y="1472" class="body">checked distribution rows. They live in the ledger CSV</text>
-<text x="70" y="1489" class="body">until run.</text>
-<rect x="518" y="1372" width="440" height="124" rx="14" class="subpanel"/>
-<rect x="518" y="1372" width="8" height="124" rx="4" fill="#64748b"/>
-<text x="540" y="1404" class="label">Unavailable or blocked routes</text>
-<text x="540" y="1438" class="body">Some UniMoral, Kaleido, Gemini, Grok, Jamba, and</text>
-<text x="540" y="1455" class="body">MoralPrompt paths are unavailable, gated, or missing</text>
-<text x="540" y="1472" class="body">local paper-faithful data.</text>
-<rect x="988" y="1372" width="440" height="124" rx="14" class="subpanel"/>
-<rect x="988" y="1372" width="8" height="124" rx="4" fill="#b45309"/>
-<text x="1010" y="1404" class="label">Route probes stay separate</text>
-<text x="1010" y="1438" class="body">One-sample route checks prove the harness can call a</text>
-<text x="1010" y="1455" class="body">model; they do not become calibration results or</text>
-<text x="1010" y="1472" class="body">performance rows.</text>
-<text x="48" y="1502" class="small">Source tables: paper-model-calibration-bridge.csv and paper-model-calibration-ledger.csv. Read as calibration evidence, not a leaderboard.</text>
+<text x="1198" y="1229" class="body">distributional behavior, not accuracy;</text>
+<text x="1198" y="1246" class="body">this row is notably more diffuse than</text>
+<text x="1198" y="1263" class="body">the paper anchor.</text>
+<rect x="42" y="1296" width="1416" height="96" rx="14" class="subpanel"/>
+<rect x="42" y="1296" width="8" height="96" rx="4" fill="#7c3aed"/>
+<text x="56" y="1324" class="label">CCD-Bench</text>
+<text x="198" y="1320" class="body">Claude 4 Sonnet: Nordic Europe top-cluster share =</text>
+<text x="198" y="1337" class="body">0.306</text>
+<text x="514" y="1320" class="body">fresh exact CCD rerun: Nordic Europe</text>
+<text x="514" y="1337" class="body">dominant-cluster share = 0.302475</text>
+<rect x="820" y="1318" width="190" height="16" rx="8" class="muted-bar"/>
+<rect x="820" y="1318" width="166.1" height="16" rx="8" fill="#2563eb"/>
+<text x="1020" y="1331" class="small">paper 30.6%</text>
+<rect x="820" y="1346" width="190" height="16" rx="8" class="muted-bar"/>
+<rect x="820" y="1346" width="164.2" height="16" rx="8" fill="#0f766e"/>
+<text x="1020" y="1359" class="small">ours 30.2%</text>
+<circle cx="1182" cy="1324" r="7" fill="#7c3aed"/>
+<text x="1198" y="1324" class="body">current fresh verified; CCD is</text>
+<text x="1198" y="1341" class="body">distributional behavior, not accuracy.</text>
+<text x="48" y="1436" class="metric">What is deliberately outside this plotted bridge</text>
+<text x="48" y="1460" class="subtitle">The full ledger keeps these rows visible for planning, but they are not shown as paper-model comparisons.</text>
+<rect x="48" y="1484" width="440" height="124" rx="14" class="subpanel"/>
+<rect x="48" y="1484" width="8" height="124" rx="4" fill="#2563eb"/>
+<text x="70" y="1516" class="label">Exact paper routes needing runs</text>
+<text x="70" y="1550" class="body">Some paper CCD models are available as exact provider</text>
+<text x="70" y="1567" class="body">routes, but the release does not yet have their</text>
+<text x="70" y="1584" class="body">checked distribution rows. They live in the ledger CSV</text>
+<text x="70" y="1601" class="body">until run.</text>
+<rect x="518" y="1484" width="440" height="124" rx="14" class="subpanel"/>
+<rect x="518" y="1484" width="8" height="124" rx="4" fill="#64748b"/>
+<text x="540" y="1516" class="label">Unavailable or blocked routes</text>
+<text x="540" y="1550" class="body">Some UniMoral, Kaleido, Gemini, Grok, Jamba, and</text>
+<text x="540" y="1567" class="body">MoralPrompt paths are unavailable, gated, or missing</text>
+<text x="540" y="1584" class="body">local paper-faithful data.</text>
+<rect x="988" y="1484" width="440" height="124" rx="14" class="subpanel"/>
+<rect x="988" y="1484" width="8" height="124" rx="4" fill="#b45309"/>
+<text x="1010" y="1516" class="label">Route probes stay separate</text>
+<text x="1010" y="1550" class="body">One-sample route checks prove the harness can call a</text>
+<text x="1010" y="1567" class="body">model; they do not become calibration results or</text>
+<text x="1010" y="1584" class="body">performance rows.</text>
+<text x="48" y="1614" class="small">Source tables: paper-model-calibration-bridge.csv and paper-model-calibration-ledger.csv. Read as calibration evidence, not a leaderboard.</text>
 </svg>

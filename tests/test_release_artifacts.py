@@ -247,7 +247,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert manifest["counts"]["paper_result_alignment_rows"] == 5
     assert manifest["counts"]["paper_result_comparison_rows"] == 9
-    assert manifest["counts"]["paper_model_calibration_bridge_rows"] == 10
+    assert manifest["counts"]["paper_model_calibration_bridge_rows"] == 11
     assert manifest["counts"]["paper_model_calibration_ledger_rows"] >= 20
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
@@ -403,8 +403,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert len(paper_alignment_rows) == 5
     ccd_alignment = next(row for row in paper_alignment_rows if row["benchmark"] == "CCD-Bench")
     assert ccd_alignment["comparison_status"] == "distributional_comparison_available_not_accuracy"
+    assert "current Llama-4-Maverick-17B-128E-Instruct" in ccd_alignment["can_compare_directly"]
     assert "fresh verified CCD distribution rows for DeepSeek-chat-v3-0324" in ccd_alignment["can_compare_directly"]
-    assert "Near-family rows stay out of one-to-one calibration visuals" in ccd_alignment["can_compare_directly"]
     denevil_alignment = next(row for row in paper_alignment_rows if row["benchmark"] == "DeNEVIL / MoralPrompt")
     assert denevil_alignment["comparison_status"] == "proxy_only_data_gap"
     assert "proxy-only" in denevil_alignment["reviewer_takeaway"]

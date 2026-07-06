@@ -39,16 +39,16 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
 | `UniMoral` | Partial task overlap for RQ1 action prediction; paper metric anchors are tracked separately. | Call it action-prediction calibration, not full UniMoral paper replication. |
 | `SMID` | No original LLM roster found locally. | Compare current vision-capable rows only. |
 | `Value Kaleidoscope / ValuePrism` | Current rows are prompt-based ValuePrism tasks. | Do not call them Kaleido model replication. |
-| `CCD-Bench` | The strict same-model bridge now has ten exact/saved CCD distribution rows; the ledger keeps cancelled and near-family routes separate. | Never describe CCD-Bench as accuracy. |
+| `CCD-Bench` | The strict same-model bridge now has eleven exact/saved CCD distribution rows; the ledger keeps cancelled and unavailable routes separate. | Never describe CCD-Bench as accuracy. |
 | `DeNEVIL / MoralPrompt` | Current evidence is FULCRA proxy behavior only. | No paper-faithful MoralPrompt comparison until the data path exists. |
 
 ## What This Means
 
 - The strongest paper-to-current bridge is narrow: UniMoral RQ1 action prediction can support directional calibration, while metric/model caveats remain explicit.
 - The cleanest same-model behavior bridge is now CCD-Bench: the strict bridge keeps saved/prior `Mistral Nemo`, current `Llama-3.3-70B-Instruct`,
-  and fresh exact reruns for `DeepSeek-chat-v3-0324`, `Qwen2.5-72B-Instruct`, `OpenAI GPT-4.1`, `Command-R 08-2024`,
+  current `Llama-4-Maverick-17B-128E-Instruct`, and fresh exact reruns for `DeepSeek-chat-v3-0324`, `Qwen2.5-72B-Instruct`, `OpenAI GPT-4.1`, `Command-R 08-2024`,
   `Microsoft Phi-4`, `Perplexity Sonar`, and `Claude 4 Sonnet`.
-  Near-family rows are useful context, and the cancelled `WizardLM-2-8x22B` attempt stays out of the plotted bridge.
+  Unavailable routes are tracked in the ledger, and the cancelled `WizardLM-2-8x22B` attempt stays out of the plotted bridge.
 - The current ValuePrism rows are useful current benchmark evidence, but Kaleido model replication remains blocked until the gated model route is run.
 - SMID and DeNEVIL answer different questions from their source papers in this release: SMID is a current model-vs-human-norm layer, and DeNEVIL is proxy-only audit evidence.
 - For review, cite the CSV/figure pair that matches the claim: use the alignment map for status, the calibration ledger for exact model-name/run planning,
@@ -87,9 +87,9 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
 - Current GPT-5.5 anchor: `2,182/2,182` valid choices; dominant option 6 at `27.268561%`; effective clusters `7.058620`.
 - Saved/prior anchor: Mistral Nemo has `2,178/2,182` valid choices, Nordic Europe `25.344353%`, and effective clusters `7.222264`.
 - Direct comparison: partial but expanded. Distribution and concentration can be compared for exact same-model `Mistral Nemo`,
-  `Llama-3.3-70B-Instruct`, `DeepSeek-chat-v3-0324`, `Qwen2.5-72B-Instruct`, `OpenAI GPT-4.1`,
+  `Llama-3.3-70B-Instruct`, `Llama-4-Maverick-17B-128E-Instruct`, `DeepSeek-chat-v3-0324`, `Qwen2.5-72B-Instruct`, `OpenAI GPT-4.1`,
   `Command-R 08-2024`, `Microsoft Phi-4`, `Perplexity Sonar`, and `Claude 4 Sonnet` rows.
-  Near-family routes and cancelled partial attempts are not one-to-one calibration rows, and accuracy is not a CCD metric.
+  Cancelled partial attempts are not one-to-one calibration rows, and accuracy is not a CCD metric.
 - Reviewer takeaway: use the behavior/concentration map, not a leaderboard.
 
 ### DeNEVIL / MoralPrompt
@@ -107,7 +107,7 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
 | `UniMoral` | Saved/prior Llama 3.1 8B action run. | Phi-3.5 mini and DeepSeek-R1-Distill-Llama-8B exact paper rows. | Qwen, MiniMax, DeepSeek, Llama, Gemma, and OpenAI text refs including GPT-5.5. |
 | `SMID` | None found. | Original LLM roster is not identified locally. | Current vision-capable Qwen, MiniMax, Llama, and Gemma rows where routes exist. |
 | `Value Kaleidoscope / ValuePrism` | None. | Kaleido small/base/large/xl/xxl gated route. | All current prompt-based LLM rows and OpenAI text refs. |
-| `CCD-Bench` | Ten exact/saved rows in the strict bridge. | WizardLM is cancelled/partial; near-family routes stay ledger-only. | Current family rows are context unless exact identity matches. |
+| `CCD-Bench` | Eleven exact/saved rows in the strict bridge. | WizardLM is cancelled/partial; unavailable exact paper routes stay ledger-only. | Current family rows are context unless exact identity matches. |
 | `DeNEVIL / MoralPrompt` | None for paper-faithful DeNEVIL. | MoralPrompt paper-faithful data path. | Current FULCRA-backed proxy rows. |
 
 ## Metric Reading Rules

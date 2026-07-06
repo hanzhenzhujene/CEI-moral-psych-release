@@ -186,6 +186,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Llama-3.1-8B Instruct" in paper_calibration_svg
     assert "Mistral Nemo" in paper_calibration_svg
     assert "Llama-3.3-70B-Instruct" in paper_calibration_svg
+    assert "Llama-4-Maverick-17B-128E-Instruct" in paper_calibration_svg
     assert "DeepSeek-chat-v3-0324" in paper_calibration_svg
     assert "OpenAI GPT-4.1" in paper_calibration_svg
     assert "Qwen2.5-72B-Instruct" in paper_calibration_svg
@@ -202,6 +203,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
         "Llama-3.1-8B Instruct",
         "Mistral Nemo",
         "Llama-3.3-70B-Instruct",
+        "Llama-4-Maverick-17B-128E-Instruct",
         "DeepSeek-chat-v3-0324",
         "Qwen2.5-72B-Instruct",
         "OpenAI GPT-4.1",
@@ -214,6 +216,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     with (ROOT / "results/release/2026-04-19-option1/paper-model-calibration-ledger.csv").open(newline="", encoding="utf-8") as handle:
         ledger_rows = list(csv.DictReader(handle))
     assert any(row["paper_model"] == "Qwen2.5-72B-Instruct" and row["repo_evidence_state"] == "current_fresh_verified" for row in ledger_rows)
+    assert any(row["paper_model"] == "Llama-4-Maverick-17B-128E-Instruct" and row["repo_evidence_state"] == "current_release_verified" for row in ledger_rows)
     assert any(row["paper_model"] == "WizardLM-2-8x22B" and row["repo_evidence_state"] == "attempt_cancelled_partial_not_verified" for row in ledger_rows)
     assert any(row["benchmark"] == "DeNEVIL / MoralPrompt" and "proxy" in row["comparison_boundary"].lower() for row in ledger_rows)
 
@@ -232,7 +235,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[paper-model-calibration-bridge.csv](../results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in paper_comparison_doc
     assert "UniMoral RQ1 action prediction can support directional calibration" in paper_comparison_doc
     assert "only exact same-model evidence is plotted" in paper_comparison_doc
-    assert "Near-family rows are useful context" in paper_comparison_doc
+    assert "current `Llama-4-Maverick-17B-128E-Instruct`" in paper_comparison_doc
     assert "cancelled `WizardLM-2-8x22B` attempt stays out of the plotted bridge" in paper_comparison_doc
     assert max(len(line) for line in paper_comparison_doc.splitlines()) <= 220
 

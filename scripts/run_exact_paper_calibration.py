@@ -403,11 +403,20 @@ def summarize(args: argparse.Namespace) -> list[dict[str, Any]]:
 
     manifest = read_csv(args.output_dir / "run-manifest.csv")
     by_model = {row["openrouter_model_id"]: row for row in manifest}
+    existing_rows = {
+        (row.get("openrouter_model_id", ""), row.get("run_stage", "")): row
+        for row in read_csv(args.output_dir / "calibration-summary.csv")
+    }
     rows: list[dict[str, Any]] = []
     for candidate in selected_candidates(args):
         for stage in ("smoke", "full"):
             log_dir = args.output_dir / "logs" / safe_model_id(candidate.model_id) / stage
             eval_path = latest_eval(log_dir)
+            if eval_path is None:
+                existing_row = existing_rows.get((candidate.model_id, stage))
+                if existing_row and existing_row.get("run_status") not in {"", "not_started"}:
+                    rows.append(dict(existing_row))
+                    continue
             status = "" if eval_path is None else eval_status(eval_path)
             distribution = inspect_ccd_choice_distribution(eval_path) if eval_path is not None and status == "success" else None
             input_tokens, output_tokens, reasoning_tokens = parse_usage(eval_path)
