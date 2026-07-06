@@ -8,7 +8,7 @@ google/gemma-3-12b-it,Gemma,M/12B,2025-Q1,within-family scaling,6,0.602715,0.628
 google/gemma-3-27b-it,Gemma,L/27B,2025-Q1,within-family scaling,6,0.595926,0.621007,0,0.563031,1.484063,0.379
 google/gemma-3-4b-it,Gemma,S/4B,2025-Q1,within-family scaling,7,0.584404,0.598931,0,0.341772,0.836109,0.409
 meta-llama/llama-3.1-8b-instruct,Llama,M/8B,2024-Q3,within-family scaling,7,0.567804,0.569988,0,0.202619,0.487775,0.415
-meta-llama/llama-3.2-3b-instruct,Llama,S/3B,2024-Q3,within-family scaling,6,0.495118,0.568475,0,0.651071,2.592603,0.251
+meta-llama/llama-3.2-3b-instruct,Llama,S/3B,2024-Q3,within-family scaling,7,0.567244,0.568475,0,0.731734,2.689849,0.272
 meta-llama/llama-3.3-70b-instruct,Llama,L/70B,2024-Q4,within-family scaling,7,0.641409,0.669701,0,1.090193,2.926929,0.372
 qwen/qwen-2.5-7b-instruct,Qwen,S/7B,2024-Q4,time scaling,7,0.576271,0.582051,0,0.503810,0.975552,0.516
 qwen/qwen3-235b-a22b-2507,Qwen,L/MoE 235B-A22B,2025-Q3,within-family scaling,5,0.495576,0.586294,0,0.615822,0.982096,0.627

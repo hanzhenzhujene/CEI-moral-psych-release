@@ -4,8 +4,8 @@ This is the full selected-grid readout for the allowed text-only tasks. Every pl
 
 ## TLDR
 
-- Recorded terminal states for `119` planned model-task rows: `101` success, `12` provider/error, `6` cancelled or stale-route.
-- Success-row API cost is `$16.313216`; all recorded provider cost, including blocked partial rows, is `$17.760398`.
+- Recorded terminal states for `119` planned model-task rows: `102` success, `13` provider/error, `4` cancelled or stale-route.
+- Success-row API cost is `$16.393879`; all recorded provider cost, including blocked partial rows, is `$18.166308`.
 - Highest completed text-accuracy means: `meta-llama/llama-3.3-70b-instruct`=0.670, `qwen/qwen3.5-9b`=0.642, `google/gemma-3-12b-it`=0.629, `google/gemma-3-27b-it`=0.621.
 - Scaling is mixed rather than cleanly monotonic: Llama shows the clearest large-model lift, while Qwen, Gemma, and DeepSeek vary by task and release line.
 - CCD-Bench remains a valid-choice / choice-behavior readout, not an accuracy metric.
@@ -15,13 +15,13 @@ This is the full selected-grid readout for the allowed text-only tasks. Every pl
 
 - Models with any successful row: `16`.
 - Models with any recorded terminal state: `17`.
-- Model x benchmark summary rows: `43`.
+- Model x benchmark summary rows: `44`.
 - Included benchmarks: UniMoral, ValuePrism, CCD-Bench.
 - Excluded benchmarks: SMID and DeNEVIL.
 - CCD-Bench is choice-format/cluster behavior, not accuracy.
-- Conservative success-row cost estimate: `$16.313216` using input + output + reasoning tokens at OpenRouter metadata rates.
-- Conservative all-recorded cost estimate: `$17.760398` including blocked partial rows with parsed token usage.
-- Observed reasoning tokens: `1278564`.
+- Conservative success-row cost estimate: `$16.393879` using input + output + reasoning tokens at OpenRouter metadata rates.
+- Conservative all-recorded cost estimate: `$18.166308` including blocked partial rows with parsed token usage.
+- Observed reasoning tokens: `1284967`.
 
 ## Benchmark Guide
 
@@ -34,6 +34,7 @@ This is the full selected-grid readout for the allowed text-only tasks. Every pl
 
 - `deepseek/deepseek-v4-flash` emitted `1171189` reasoning tokens despite controls; targeted reruns need an explicit budget decision or a control-check rerun.
 - `qwen/qwen3-32b` emitted `107375` reasoning tokens despite controls; targeted reruns need an explicit budget decision or a control-check rerun.
+- `google/gemma-4-31b-it` emitted `6403` reasoning tokens despite controls; targeted reruns need an explicit budget decision or a control-check rerun.
 
 ## Blocked Cells
 
@@ -42,10 +43,9 @@ These rows are excluded from scored summaries; they document provider-route, con
 - `qwen/qwen3-8b` / `value_prism_relevance`: `error`.
 - `qwen/qwen3-8b` / `value_prism_valence`: `error`.
 - `qwen/qwen3-235b-a22b-2507` / `value_prism_valence`: `cancelled`.
-- `qwen/qwen3-235b-a22b-2507` / `ccd_bench_selection`: `cancelled`.
+- `qwen/qwen3-235b-a22b-2507` / `ccd_bench_selection`: `error`.
 - `google/gemma-3-12b-it` / `value_prism_valence`: `cancelled`.
 - `google/gemma-3-27b-it` / `value_prism_valence`: `cancelled`.
-- `meta-llama/llama-3.2-3b-instruct` / `ccd_bench_selection`: `cancelled`.
 - `google/gemma-2-27b-it` / `value_prism_relevance`: `error`.
 - `google/gemma-2-27b-it` / `value_prism_valence`: `error`.
 - `google/gemma-2-27b-it` / `ccd_bench_selection`: `error`.
@@ -87,7 +87,7 @@ The most useful comparison is within a benchmark/metric column, then across rela
 - `google/gemma-3-27b-it`: observed benchmark score range 0.480-1.000 across completed benchmark summaries.
 - `google/gemma-3-4b-it`: observed benchmark score range 0.477-1.000 across completed benchmark summaries.
 - `meta-llama/llama-3.1-8b-instruct`: observed benchmark score range 0.487-1.000 across completed benchmark summaries.
-- `meta-llama/llama-3.2-3b-instruct`: observed benchmark score range 0.470-0.545 across completed benchmark summaries.
+- `meta-llama/llama-3.2-3b-instruct`: observed benchmark score range 0.470-1.000 across completed benchmark summaries.
 - `meta-llama/llama-3.3-70b-instruct`: observed benchmark score range 0.511-1.000 across completed benchmark summaries.
 - `qwen/qwen-2.5-7b-instruct`: observed benchmark score range 0.472-1.000 across completed benchmark summaries.
 - `qwen/qwen3-235b-a22b-2507`: observed benchmark score range 0.463-0.626 across completed benchmark summaries.

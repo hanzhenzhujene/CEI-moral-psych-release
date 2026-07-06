@@ -63,12 +63,12 @@ Primary outputs:
 ## Live Run Snapshot
 
 Recorded terminal states: `119` / `119` planned model-task rows.
-Successful scored rows: `101`. Provider/error rows: `12`. Cancelled/stale-route rows: `6`.
+Successful scored rows: `102`. Provider/error rows: `13`. Cancelled/stale-route rows: `4`.
 Attempted models: `17`. Models with at least one scored row: `16`. Completed tasks represented: `7`.
-Success-row API cost estimate from Inspect logs: `$16.313216`.
-All recorded provider cost estimate, including blocked partial rows: `$17.760398`.
-Observed reasoning tokens: `1278564`.
-Models with reasoning tokens despite controls: `deepseek/deepseek-v4-flash, qwen/qwen3-32b`.
+Success-row API cost estimate from Inspect logs: `$16.393879`.
+All recorded provider cost estimate, including blocked partial rows: `$18.166308`.
+Observed reasoning tokens: `1284967`.
+Models with reasoning tokens despite controls: `deepseek/deepseek-v4-flash, google/gemma-4-31b-it, qwen/qwen3-32b`.
 Non-success rows are documented as provider/filter/stale-route limits and excluded from scored summaries.
 
 Interpretation helpers:
