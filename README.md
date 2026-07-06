@@ -87,11 +87,12 @@ These are the audience-facing result figures to use in the deck or meeting reado
 | 2 | UniMoral task heatmap | Which model line is strongest for action prediction, moral typology, and factor attribution? |
 | 3 | UniMoral RQ4 generation quality | Which model line best generates plausible consequences under BERTScore F1 and METEOR? |
 | 4 | Comparable accuracy bars | Which rows are strongest on SMID and Value after the separate UniMoral result block? |
-| 5 | Family scaling profile | Where does size help or stall on SMID and Value Kaleidoscope? |
-| 6 | CCD choice distribution | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |
-| 7 | DeNEVIL behavior outcomes | What proxy behavior mix appears in the saved traces? |
-| 8 | Paper-result comparison table | What original paper metric anchors can be placed beside current rows? |
-| 9 | Paper-vs-current replication map | Which evidence is direct, partial, current-only, blocked, or proxy-only? |
+| 5 | Comparable score spread | Which comparable metric is the visual bottleneck, and where is cross-line spread largest? |
+| 6 | Family scaling profile | Where does size help or stall on SMID and Value Kaleidoscope? |
+| 7 | CCD choice distribution | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |
+| 8 | DeNEVIL behavior outcomes | What proxy behavior mix appears in the saved traces? |
+| 9 | Paper-result comparison table | What original paper metric anchors can be placed beside current rows? |
+| 10 | Paper-vs-current replication map | Which evidence is direct, partial, current-only, blocked, or proxy-only? |
 
 ![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
 
@@ -108,6 +109,10 @@ _Generation view: BERTScore F1 and METEOR are higher-better overlap metrics, not
 ![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
 
 _SMID/Value accuracy view: UniMoral is excluded here because it has its own RQ figures._
+
+![Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg)
+
+_Bottleneck view: SMID has the lowest mean and largest spread among the directly comparable metrics._
 
 ![Family scaling profile](figures/release/option1_family_scaling_profile.svg)
 

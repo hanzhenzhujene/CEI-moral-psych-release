@@ -1413,7 +1413,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         flags=re.MULTILINE,
     )
     assert "sample volume chart" not in release_readme
-    assert "benchmark difficulty profile" in release_readme
+    assert "comparable score spread" in release_readme
     assert "family scaling profile" in release_readme
     assert "## Start Here" in release_readme
     assert "### Release File Index" in release_readme
@@ -1776,6 +1776,7 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in root_readme
     assert "![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)" in root_readme
     assert "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
+    assert "![Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg)" in root_readme
     assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in root_readme
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme

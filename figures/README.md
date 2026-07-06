@@ -14,7 +14,7 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 - `option1_unimoral_family_scaling.svg`: UniMoral RQ1-RQ4 family-size line charts, showing S/M/L movement within each task
 - `option1_family_size_progress_overview.svg`: line-level completion overview across the published family-size matrix
 - `option1_benchmark_accuracy_bars.svg`: benchmark-faithful comparable-accuracy comparison for `SMID` and `Value Kaleidoscope`; UniMoral is handled in the separate accuracy/generation figures
-- `option1_benchmark_difficulty_profile.svg`: benchmark-level mean / range summary for the comparable slice
+- `option1_benchmark_difficulty_profile.svg`: comparable score-spread summary for the current bottleneck view
 - `option1_family_scaling_profile.svg`: family-size comparison for `SMID` and `Value Kaleidoscope`; UniMoral is shown in the separate RQ figures
 - `option1_accuracy_heatmap.svg`: compact heatmap of the currently comparable benchmark results
 - `option1_coverage_matrix.svg`: release-level coverage map showing paper-setup, proxy-only, and unavailable cells

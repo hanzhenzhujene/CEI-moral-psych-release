@@ -464,7 +464,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 - [UniMoral RQ4 generation quality](../../../figures/release/option1_unimoral_generation_quality.svg): separate generation-quality view using BERTScore F1 and METEOR
 - [UniMoral family-size scaling](../../../figures/release/option1_unimoral_family_scaling.svg): RQ-by-RQ S/M/L line charts for the UniMoral result surface
 - [grouped bar chart](../../../figures/release/option1_benchmark_accuracy_bars.svg): SMID/Value cross-model comparison after the UniMoral figures
-- [benchmark difficulty profile](../../../figures/release/option1_benchmark_difficulty_profile.svg): mean and spread for the directly comparable benchmark groups
+- [comparable score spread](../../../figures/release/option1_benchmark_difficulty_profile.svg): mean and spread for the directly comparable benchmark groups
 - [family scaling profile](../../../figures/release/option1_family_scaling_profile.svg): family-size scaling across SMID and Value only
 - [CCD choice heatmap](../../../figures/release/option1_ccd_choice_distribution.svg): main CCD-Bench result showing deviation from the 10% uniform baseline across the ten canonical clusters
 - [CCD concentration summary](../../../figures/release/option1_ccd_dominant_option_share.svg): dominant-cluster share plus effective-cluster count

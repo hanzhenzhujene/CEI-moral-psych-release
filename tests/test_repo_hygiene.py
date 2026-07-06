@@ -128,6 +128,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in readme
     assert "![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)" in readme
     assert "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
+    assert "![Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg)" in readme
     assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in readme
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in readme
@@ -145,6 +146,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "### DeepSeek S/M/L Log-Derived Readout" not in readme
     assert "results/release/2026-04-19-option1/README.md" in readme
     assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme
+    assert "figures/release/option1_benchmark_difficulty_profile.svg" in readme
     assert "figures/release/option1_unimoral_task_heatmap.svg" in readme
     assert "figures/release/option1_unimoral_generation_quality.svg" in readme
     assert "figures/release/option1_unimoral_family_scaling.svg" in readme
