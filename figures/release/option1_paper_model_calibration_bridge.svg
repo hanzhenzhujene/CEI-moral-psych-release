@@ -54,9 +54,10 @@
 <text x="198" y="217" class="body">/ BERTScore = RQ1 66.17; RQ2 57.01; RQ3 38.59; RQ4</text>
 <text x="198" y="234" class="body">METEOR 19.08 and BERTScore 87.44</text>
 <text x="514" y="200" class="body">fresh exact UniMoral rerun: Accuracy for</text>
-<text x="514" y="217" class="body">RQ1-RQ3; live METEOR for RQ4 = RQ1 0.621926;</text>
-<text x="514" y="234" class="body">RQ2 0.602234; RQ3 0.594788; RQ4 METEOR</text>
-<text x="514" y="251" class="body">0.121226</text>
+<text x="514" y="217" class="body">RQ1-RQ3; live METEOR and offline BERTScore F1</text>
+<text x="514" y="234" class="body">for RQ4 = RQ1 0.621926; RQ2 0.602234; RQ3</text>
+<text x="514" y="251" class="body">0.594788; RQ4 METEOR 0.121226; RQ4 BERTScore</text>
+<text x="514" y="268" class="body">F1 0.655539</text>
 <text x="820" y="214" class="small">paper: metric scale differs</text>
 <text x="820" y="242" class="small">ours: metric scale differs</text>
 <circle cx="1182" cy="204" r="7" fill="#7c3aed"/>

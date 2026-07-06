@@ -1638,7 +1638,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Paper-vs-current Replication Map" in paper_alignment_svg
     assert "Fresh exact bridge" in paper_alignment_svg
     assert "Same-model calibration with" in paper_alignment_svg
-    assert "RQ4 BERTScore pending." in paper_alignment_svg
+    assert "RQ4 has METEOR and BERTScore." in paper_alignment_svg
     assert "Distributional comparison only; do not" in paper_alignment_svg
     assert "read CCD as accuracy." in paper_alignment_svg
     assert "Proxy-only evidence; no paper-faithful" in paper_alignment_svg

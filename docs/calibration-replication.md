@@ -20,7 +20,7 @@ This note supports the Phase 1 goal from Jimmy's May 19 framing: make the model-
 
 ## Representative Calibration Subset
 
-- UniMoral original-model overlap: fresh exact `Llama 3.1 8B` RQ1-RQ4 rerun, summarized at `results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv`: RQ1 accuracy 0.6219, RQ2 accuracy 0.6022, RQ3 accuracy 0.5948, and RQ4 live METEOR 0.1212.
+- UniMoral original-model overlap: fresh exact `Llama 3.1 8B` RQ1-RQ4 rerun, summarized at `results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv`: RQ1 accuracy 0.6219, RQ2 accuracy 0.6022, RQ3 accuracy 0.5948, RQ4 live METEOR 0.1212, and RQ4 offline BERTScore F1 0.6555.
 - UniMoral capability floor: `Llama 3.2 1B` saved May 13 artifact, accuracy 0.4056 and lower answer rate.
 - CCD exact same-model overlap: `mistralai/mistral-nemo` saved May 13 CCD artifact, 2,178/2,182 valid choices, dominant Nordic Europe share 25.3%.
 - CCD context rows only: saved OpenAI text references and Qwen/Qwen2.5 rows differ from the exact paper model or route version, so they should not be used in the one-to-one calibration bridge.
@@ -31,7 +31,7 @@ The CCD May 13 artifacts and UniMoral exploratory sweep remain saved/prior artif
 ## Fresh Rerun Status
 
 - `mistralai/mistral-nemo` CCD-Bench route probe: fresh 1-sample route check succeeded on May 21, 2026 under `results/inspect/logs/2026-05-21-calibration-route-probes/mistral_nemo_ccd_probe/`.
-- `meta-llama/llama-3.1-8b-instruct` UniMoral full rerun: after confirming the data path and exact OpenRouter route, RQ1-RQ4 completed successfully on July 6, 2026. This is fresh same-model calibration evidence, with metric-scale caveats because the paper reports weighted F1 and 0-100 generation metrics while the repo reports accuracy and 0-1 live METEOR.
+- `meta-llama/llama-3.1-8b-instruct` UniMoral full rerun: after confirming the data path and exact OpenRouter route, RQ1-RQ4 completed successfully on July 6, 2026. RQ4 now has both live METEOR and offline BERTScore F1. This is fresh same-model calibration evidence, with metric-scale caveats because the paper reports weighted F1 and 0-100 generation metrics while the repo reports 0-1 accuracy / generation metrics.
 - Exact Phi-3.5-mini Instruct and DeepSeek-R1-Distill-Llama-8B routes were not found in the checked OpenRouter catalog, so they were not substituted.
 
 ## Replication Categories

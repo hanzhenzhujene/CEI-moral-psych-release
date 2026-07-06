@@ -56,7 +56,7 @@
 <text x="510" y="172" class="body">Fresh exact Llama 3.1 RQ1-RQ4 rerun</text>
 <text x="510" y="188" class="body">plus current release rows.</text>
 <text x="824" y="174" class="body">Same-model calibration with metric-scale</text>
-<text x="824" y="190" class="body">caveats; RQ4 BERTScore pending.</text>
+<text x="824" y="190" class="body">caveats; RQ4 has METEOR and BERTScore.</text>
 <rect x="42" y="238" width="1136" height="80" rx="18" class="subpanel"/>
 <rect x="58" y="258" width="116" height="36" rx="11" fill="#64748b"/>
 <text x="116" y="273" text-anchor="middle" class="cellsub">SMID</text>

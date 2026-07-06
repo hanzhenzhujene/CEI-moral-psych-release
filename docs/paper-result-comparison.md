@@ -60,9 +60,11 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
 
 - Paper/reference side: original setup has multiple RQs. The reference roster names Phi-3.5 mini, Llama 3.1 8B, and DeepSeek-R1-Distill-Llama-8B.
 - Current repo side: all eligible text rows have UniMoral action accuracy. DeepSeek-M and GPT-5.5 both reach `0.683629`.
-- Calibration evidence: fresh exact Llama 3.1 8B UniMoral rerun completed locally with RQ1 accuracy `0.621926`, RQ2 accuracy `0.602234`, RQ3 accuracy `0.594788`, and RQ4 live METEOR `0.121226`.
+- Calibration evidence: fresh exact Llama 3.1 8B UniMoral rerun completed locally with RQ1 accuracy `0.621926`,
+  RQ2 accuracy `0.602234`, RQ3 accuracy `0.594788`, RQ4 live METEOR `0.121226`, and RQ4 offline BERTScore F1 `0.655539`.
 - Direct comparison: partial. Visible paper metric anchors are tracked in the RQ-level CSV, but the release headline uses exact-match accuracy while the paper tables
-  report weighted F1/BLEU/METEOR/BERTScore cells. RQ4 BERTScore for this fresh run still needs the offline scoring pass.
+  report weighted F1/BLEU/METEOR/BERTScore cells on a different scale. The fresh run now has the repo-side RQ4 BERTScore F1
+  and METEOR metrics, but it should still be read as metric-bridged calibration rather than reproduced paper table values.
 - Reviewer takeaway: use UniMoral as the clearest same-model paper-calibration bridge, but keep metric caveats and RQ2/RQ3/RQ4 separation visible.
 
 ### SMID

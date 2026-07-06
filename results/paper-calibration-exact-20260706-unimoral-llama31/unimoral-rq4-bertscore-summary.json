@@ -1,0 +1,9 @@
+{
+  "metric": "bert_score_f1_offline",
+  "score": 0.655539454,
+  "stderr": 0.002386534,
+  "rows": 1782,
+  "input_eval": "results/paper-calibration-exact-20260706-unimoral-llama31/logs/meta-llama__llama-3.1-8b-instruct/unimoral_consequence_generation/full/2026-07-06T18-01-23-00-00_unimoral-consequence-generation_DcSaipKrcbGS7aJXZiNtcW.eval",
+  "output": "results/paper-calibration-exact-20260706-unimoral-llama31/unimoral-rq4-bertscore.csv",
+  "completed_at": "2026-07-06T18:48:48.216781+00:00"
+}

@@ -221,7 +221,7 @@ This is the reviewer-facing lookup: what each benchmark paper contains, whether 
 
 | Benchmark | Original paper/reference side | Our current side | Direct comparison status |
 | --- | --- | --- | --- |
-| `UniMoral` | RQ1-RQ4 paper tables include Llama 3.1 8B; visible paper metric anchors are in the RQ-level comparison CSV. | Fresh exact Llama 3.1 8B RQ1-RQ4 rerun plus current release rows. | Same-model calibration is available, with metric-scale caveats and RQ4 BERTScore still pending offline scoring. |
+| `UniMoral` | RQ1-RQ4 paper tables include Llama 3.1 8B; visible paper metric anchors are in the RQ-level comparison CSV. | Fresh exact Llama 3.1 8B RQ1-RQ4 rerun plus current release rows. | Same-model calibration is available, with metric-scale caveats; RQ4 has METEOR and BERTScore. |
 | `SMID` | Human-normed image stimulus set; no original LLM model roster found locally. | Current vision-route moral-rating plus foundation-classification average. | No paper-model comparison; compare only across our current vision-capable rows. |
 | `Value Kaleidoscope / ValuePrism` | Kaleido gated model family and ValuePrism relevance/valence setup. | Prompt-based LLM relevance and valence classification rows. | No direct comparison until Kaleido model access and execution are run. |
 | `CCD-Bench` | Ten-cluster cultural-choice behavior; reference artifacts include 17 model routes. | Current CCD choice distributions, dominant-cluster share, and effective clusters. | Compare distributions only; never read CCD as accuracy. |

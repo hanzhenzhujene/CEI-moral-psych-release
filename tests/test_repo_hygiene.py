@@ -244,7 +244,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[paper-model-calibration-ledger.csv](../results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in paper_comparison_doc
     assert "[paper-model-calibration-bridge.csv](../results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in paper_comparison_doc
     assert "fresh exact Llama 3.1 8B UniMoral rerun completed locally" in paper_comparison_doc
-    assert "RQ4 BERTScore for this fresh run still needs the offline scoring pass" in paper_comparison_doc
+    assert "RQ4 offline BERTScore F1 `0.655539`" in paper_comparison_doc
+    assert "metric-bridged calibration rather than reproduced paper table values" in paper_comparison_doc
     assert "only exact same-model evidence is plotted" in paper_comparison_doc
     assert "current `Llama-4-Maverick-17B-128E-Instruct`" in paper_comparison_doc
     assert "`WizardLM-2-8x22B`" in paper_comparison_doc
