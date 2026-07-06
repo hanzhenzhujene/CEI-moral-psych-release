@@ -11893,6 +11893,8 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "_What it shows: paper metric anchors and closest current release results in one visual table. UniMoral RQ4 appears twice, once for BERTScore F1 and once for METEOR._",
             "",
+            f"_For strict one-to-one model calibration, open the {markdown_link('same-model paper calibration bridge', f'{figure_prefix}/option1_paper_model_calibration_bridge.svg')}. It plots exact paper-model rows only and keeps near-family, unavailable, and proxy rows out of the visual comparison._",
+            "",
             "Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.",
             "",
         ]
@@ -13058,6 +13060,7 @@ def build_repo_readme(
             "| [Sample volume](figures/release/option1_sample_volume.svg) | Public sample-volume QA by benchmark layer. |",
             "| [CCD valid-choice coverage](figures/release/option1_ccd_valid_choice_coverage.svg) | CCD parser/completion QA, not result ranking. |",
             "| [DeNEVIL proxy status matrix](figures/release/option1_denevil_proxy_status_matrix.svg) | Proxy route/status provenance. |",
+            "| [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Exact paper-model visual bridge only; near-family, blocked, and proxy rows stay out of the plotted comparison. |",
         "",
         "## Result Directory",
         "",

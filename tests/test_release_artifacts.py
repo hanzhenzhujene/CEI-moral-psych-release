@@ -364,6 +364,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "option1_paper_model_calibration_bridge.svg" in release_readme_text
     visual_section = markdown_h2_section(release_readme_text, "## Benchmark Result Visuals")
     assert "![Paper-model calibration bridge]" not in visual_section
+    assert "For strict one-to-one model calibration" in visual_section
+    assert "[same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)" in visual_section
     assert "same-model paper calibration bridge" in release_readme_text
     assert "paper-model-calibration-ledger.csv" in release_readme_text
     assert "paper-model-calibration-bridge.csv" in release_readme_text
@@ -1786,6 +1788,8 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "CCD behavior view: clusters are choices relative to a uniform baseline, not right/wrong labels." in root_readme
     assert "Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring." in root_readme
     assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" not in root_readme
+    assert "[Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
+    assert "Exact paper-model visual bridge only; near-family, blocked, and proxy rows stay out of the plotted comparison." in root_readme
     assert root_readme.count("![") >= 9
     assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in root_readme
     assert "[paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in root_readme

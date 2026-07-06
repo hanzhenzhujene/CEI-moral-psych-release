@@ -143,6 +143,7 @@ _Replication status view: direct, partial, blocked, current-only, and proxy-only
 | [Sample volume](figures/release/option1_sample_volume.svg) | Public sample-volume QA by benchmark layer. |
 | [CCD valid-choice coverage](figures/release/option1_ccd_valid_choice_coverage.svg) | CCD parser/completion QA, not result ranking. |
 | [DeNEVIL proxy status matrix](figures/release/option1_denevil_proxy_status_matrix.svg) | Proxy route/status provenance. |
+| [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Exact paper-model visual bridge only; near-family, blocked, and proxy rows stay out of the plotted comparison. |
 
 ## Result Directory
 

@@ -80,6 +80,8 @@ _What it answers: which benchmark-paper results can be compared directly, which 
 
 _What it shows: paper metric anchors and closest current release results in one visual table. UniMoral RQ4 appears twice, once for BERTScore F1 and once for METEOR._
 
+_For strict one-to-one model calibration, open the [same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg). It plots exact paper-model rows only and keeps near-family, unavailable, and proxy rows out of the visual comparison._
+
 Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
 
 ## TL;DR
