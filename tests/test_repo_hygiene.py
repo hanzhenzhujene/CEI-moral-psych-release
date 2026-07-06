@@ -156,6 +156,12 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in readme
     assert "![Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in readme
     assert readme.count("![") >= 10
+    assert "| Separate follow-up visual evidence | What it answers |" in readme
+    assert "[Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
+    assert "[Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in readme
+    assert "[Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in readme
+    assert "Separate from the frozen Option 1 ranking surface." in readme
+    assert "CCD-Bench remains valid-choice behavior, not accuracy." in readme
     assert "## Result Directory" in readme
     assert "## Readiness Tiers" in readme
     assert "| `T3` | Interpretable: cite/compare it within the stated metric layer. |" in readme

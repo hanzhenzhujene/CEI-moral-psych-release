@@ -147,6 +147,12 @@ _Replication status view: direct, partial, blocked, current-only, and proxy-only
 | [DeNEVIL proxy status matrix](figures/release/option1_denevil_proxy_status_matrix.svg) | Proxy route/status provenance. |
 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Exact paper-model visual bridge only; near-family, blocked, and proxy rows stay out of the plotted comparison. |
 
+| Separate follow-up visual evidence | What it answers |
+| --- | --- |
+| [Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg) | Text-only OpenRouter follow-up S/M/L movement for Qwen, Gemma, and Llama. Separate from the frozen Option 1 ranking surface. |
+| [Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg) | Older-vs-newer OpenRouter route view for Qwen, DeepSeek, and available Gemma rows. |
+| [Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg) | Model x benchmark matrix for scored follow-up rows; CCD-Bench remains valid-choice behavior, not accuracy. |
+
 ## Result Directory
 
 ```text

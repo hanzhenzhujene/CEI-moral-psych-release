@@ -1778,6 +1778,9 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg" in root_readme
     assert "results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg" in root_readme
     assert "results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg" in root_readme
+    assert "| Separate follow-up visual evidence | What it answers |" in root_readme
+    assert "Separate from the frozen Option 1 ranking surface." in root_readme
+    assert "CCD-Bench remains valid-choice behavior, not accuracy." in root_readme
     assert "Best fully observed comparable line | `" in root_readme
     assert "Best text-only line | `" in root_readme
     assert "Best UniMoral RQ4 generation rows |" in root_readme
