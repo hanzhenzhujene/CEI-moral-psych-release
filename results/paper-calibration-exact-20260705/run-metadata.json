@@ -1,0 +1,18 @@
+{
+  "created_at": "2026-07-06T08:08:21.531316+00:00",
+  "openrouter_models_fetched_at": "2026-07-06T08:08:18.841267+00:00",
+  "task": "ccd_bench_selection",
+  "task_path": "src/inspect/evals/ccd_bench.py::ccd_bench_selection",
+  "max_estimated_cost_usd": 50.0,
+  "selected_models": [
+    "deepseek/deepseek-chat-v3-0324",
+    "qwen/qwen-2.5-72b-instruct",
+    "openai/gpt-4.1",
+    "cohere/command-r-08-2024",
+    "microsoft/phi-4",
+    "microsoft/wizardlm-2-8x22b",
+    "perplexity/sonar",
+    "anthropic/claude-sonnet-4"
+  ],
+  "total_estimated_cost_usd": 10.320513
+}

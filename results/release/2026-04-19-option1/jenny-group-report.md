@@ -1,6 +1,6 @@
 # Jenny Zhu Moral-Psych Benchmark Report
 
-Updated: `July 5, 2026`
+Updated: `July 6, 2026`
 
 Frozen public snapshot referenced here: `Option 1`, `April 19, 2026`
 
@@ -353,7 +353,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Field | Value |
 | --- | --- |
 | Report owner | `Jenny Zhu` |
-| Repo update date | `July 5, 2026` |
+| Repo update date | `July 6, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
 | Current project total cost | `$888.06` |
 | Total cost breakdown | MiniMax API: `$504.66`; OpenRouter model-family runs: `$343.42`, including `$17.760398` from the full selected-grid OpenRouter follow-up; OpenAI API reference sweep: `$39.98`. |

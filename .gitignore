@@ -216,6 +216,9 @@ results/inspect/logs/
 results/inspect/full-runs/
 results/inspect/smoke-batch/
 results/openrouter-selected-grid-moral-psych*/logs/
+results/paper-calibration-exact-*/logs/
+results/paper-calibration-exact-*/full-run.*
+outputs/
 
 # Large generated UniMoral per-sample artifacts.
 # Recreate locally with `make release` / `make unimoral-bertscore`.
