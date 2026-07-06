@@ -11,6 +11,7 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 | **DATA, CLICK HERE:** | [Result Tables](#data-click-here-result-tables) |
 | Executive result read | [Best Results At A Glance](#best-results-at-a-glance) and [Key Takeaways](#key-takeaways) |
 | Main result CSVs | [UniMoral](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [SMID](results/release/2026-04-19-option1/smid-results.csv), [Value Kaleidoscope](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |
+| OpenRouter text-only follow-up | [selected-grid readout](results/openrouter-selected-grid-moral-psych-full/README.md), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md) |
 | Main figures | [Main Figures](#main-figures) |
 | Exact progress / readiness | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) and [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
 | Paper replication / calibration status | [paper-result-comparison.md](docs/paper-result-comparison.md), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), and the [calibration tables](#data-click-here-result-tables) |
@@ -54,6 +55,7 @@ Use these three benchmark-specific CSVs for the primary result numbers. Supporti
 | --- | --- |
 | `CCD-Bench` behavior | [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) |
 | `DeNEVIL` proxy behavior | [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv) |
+| OpenRouter selected-grid follow-up | [result_summary.csv](results/openrouter-selected-grid-moral-psych-full/result_summary.csv), [benchmark_summary.csv](results/openrouter-selected-grid-moral-psych-full/benchmark_summary.csv), [model_summary.csv](results/openrouter-selected-grid-moral-psych-full/model_summary.csv), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md) |
 | Readiness / progress | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
 | Exact UniMoral Llama calibration | [calibration-summary.csv](results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv), [RQ4 BERTScore rows](results/paper-calibration-exact-20260706-unimoral-llama31/unimoral-rq4-bertscore.csv), [README](results/paper-calibration-exact-20260706-unimoral-llama31/README.md) |
 | Exact CCD paper-model calibration | [calibration-summary.csv](results/paper-calibration-exact-20260705/calibration-summary.csv), [run-manifest.csv](results/paper-calibration-exact-20260705/run-manifest.csv), [README](results/paper-calibration-exact-20260705/README.md) |
@@ -155,6 +157,7 @@ SMID results                     results/release/2026-04-19-option1/smid-results
 Value results                    results/release/2026-04-19-option1/value-kaleidoscope-results.csv
 All release tables               results/release/2026-04-19-option1/
 All release figures              figures/release/
+OpenRouter text-only follow-up   results/openrouter-selected-grid-moral-psych-full/
 Paper replication/calibration    docs/paper-result-comparison.md
 How to interpret metrics         docs/how-to-read-results.md
 Reproducibility details          docs/reproducibility.md
@@ -182,6 +185,7 @@ Current dashboard: `72/105` public summary rows are Tier 3; `33` have no tier be
 - `CCD-Bench` is never reported as accuracy.
 - `DeNEVIL` remains proxy-only until paper-faithful MoralPrompt data exists locally.
 - `Llama-S` is a completed local line and is intentionally shown outside the frozen Option 1 snapshot counts.
+- The OpenRouter selected-grid follow-up is separate from the frozen primary ranking surface: it is text-only, excludes SMID/DeNEVIL/MiniMax, and has `102/119` scored rows after the latest targeted retry.
 - Cost/accounting metadata is in the appendix. Current project total: `$897.58`.
 
 ## Reproduce

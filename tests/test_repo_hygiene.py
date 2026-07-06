@@ -111,6 +111,12 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv)" in readme
     assert "[smid-results.csv](results/release/2026-04-19-option1/smid-results.csv)" in readme
     assert "[value-kaleidoscope-results.csv](results/release/2026-04-19-option1/value-kaleidoscope-results.csv)" in readme
+    assert "[selected-grid readout](results/openrouter-selected-grid-moral-psych-full/README.md)" in readme
+    assert "[result_summary.csv](results/openrouter-selected-grid-moral-psych-full/result_summary.csv)" in readme
+    assert "[benchmark_summary.csv](results/openrouter-selected-grid-moral-psych-full/benchmark_summary.csv)" in readme
+    assert "[model_summary.csv](results/openrouter-selected-grid-moral-psych-full/model_summary.csv)" in readme
+    assert "OpenRouter text-only follow-up   results/openrouter-selected-grid-moral-psych-full/" in readme
+    assert "it is text-only, excludes SMID/DeNEVIL/MiniMax, and has `102/119` scored rows" in readme
     assert "| Best fully observed comparable line | `MiniMax-S`: UniMoral 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611." in readme
     assert "| Best text-only line | `GPT-5.5`: UniMoral 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route." in readme
     assert "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165." in readme
@@ -287,6 +293,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| Tightest comparable spread | `UniMoral` has the tightest range" in release_readme
     assert "not proof of benchmark saturation" in release_readme
     assert "Closest thing to saturation" not in release_readme
+    assert "$18.166308` from the full selected-grid OpenRouter follow-up" in release_readme
+    assert "$17.760398` from the full selected-grid OpenRouter follow-up" not in release_readme
 
     paper_comparison_doc = (ROOT / "docs/paper-result-comparison.md").read_text(encoding="utf-8")
     assert "# Paper Result Calibration and Comparison" in paper_comparison_doc
