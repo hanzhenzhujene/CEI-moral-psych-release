@@ -301,6 +301,14 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "results/paper-calibration-exact-20260705/calibration-summary.csv" in release_readme
     assert "results/paper-calibration-exact-20260705/run-manifest.csv" in release_readme
     assert "Remaining exact routes stay marked unavailable or blocked until the exact model ID exists" in release_readme
+    assert "OpenRouter selected-grid follow-up" in release_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/result_summary.csv" in release_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/benchmark_summary.csv" in release_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/model_summary.csv" in release_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/targeted-retry-log.md" in release_readme
+    assert "`102/119` model-task rows are scored" in release_readme
+    assert "Provider/credit blockers stay documented as non-scored evidence limits" in release_readme
+    assert "This package excludes SMID, DeNEVIL, and MiniMax; CCD-Bench is valid-choice behavior, not accuracy." in release_readme
     assert "| Tightest comparable spread | `UniMoral` has the tightest range" in release_readme
     assert "not proof of benchmark saturation" in release_readme
     assert "Closest thing to saturation" not in release_readme

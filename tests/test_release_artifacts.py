@@ -360,6 +360,16 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "SMID results" in release_readme_text
     assert "Value Kaleidoscope results" in release_readme_text
     assert "results/release/2026-04-19-option1/ccd-choice-distribution.csv" in release_readme_text
+    assert "OpenRouter selected-grid follow-up" in release_readme_text
+    assert "results/openrouter-selected-grid-moral-psych-full/result_summary.csv" in release_readme_text
+    assert "results/openrouter-selected-grid-moral-psych-full/benchmark_summary.csv" in release_readme_text
+    assert "results/openrouter-selected-grid-moral-psych-full/model_summary.csv" in release_readme_text
+    assert "results/openrouter-selected-grid-moral-psych-full/targeted-retry-log.md" in release_readme_text
+    assert "`102/119` model-task rows are scored" in release_readme_text
+    assert "Provider/credit blockers stay documented as non-scored evidence limits" in release_readme_text
+    assert "This package excludes SMID, DeNEVIL, and MiniMax; CCD-Bench is valid-choice behavior, not accuracy." in release_readme_text
+    assert "selected-grid family scaling" in release_readme_text
+    assert "selected-grid benchmark matrix" in release_readme_text
     assert "option1_paper_result_alignment_map.svg" in release_readme_text
     assert "option1_paper_model_calibration_bridge.svg" in release_readme_text
     visual_section = markdown_h2_section(release_readme_text, "## Benchmark Result Visuals")
