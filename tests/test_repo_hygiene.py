@@ -216,6 +216,12 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
 
     with (ROOT / "results/release/2026-04-19-option1/paper-model-calibration-ledger.csv").open(newline="", encoding="utf-8") as handle:
         ledger_rows = list(csv.DictReader(handle))
+    assert any(
+        row["paper_model"] == "Llama-3.1-8B Instruct"
+        and row["repo_evidence_state"] == "current_fresh_verified"
+        and "20260706-unimoral-llama31" in row["repo_evidence_path"]
+        for row in ledger_rows
+    )
     assert any(row["paper_model"] == "Qwen2.5-72B-Instruct" and row["repo_evidence_state"] == "current_fresh_verified" for row in ledger_rows)
     assert any(row["paper_model"] == "Llama-4-Maverick-17B-128E-Instruct" and row["repo_evidence_state"] == "current_release_verified" for row in ledger_rows)
     assert any(row["paper_model"] == "WizardLM-2-8x22B" and row["repo_evidence_state"] == "current_fresh_verified" for row in ledger_rows)
@@ -234,7 +240,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[paper-model-overlap-map.csv](../results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in paper_comparison_doc
     assert "[paper-model-calibration-ledger.csv](../results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in paper_comparison_doc
     assert "[paper-model-calibration-bridge.csv](../results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in paper_comparison_doc
-    assert "UniMoral RQ1 action prediction can support directional calibration" in paper_comparison_doc
+    assert "fresh exact Llama 3.1 8B UniMoral rerun completed locally" in paper_comparison_doc
+    assert "RQ4 BERTScore for this fresh run still needs the offline scoring pass" in paper_comparison_doc
     assert "only exact same-model evidence is plotted" in paper_comparison_doc
     assert "current `Llama-4-Maverick-17B-128E-Instruct`" in paper_comparison_doc
     assert "`WizardLM-2-8x22B`" in paper_comparison_doc

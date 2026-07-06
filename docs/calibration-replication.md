@@ -20,25 +20,25 @@ This note supports the Phase 1 goal from Jimmy's May 19 framing: make the model-
 
 ## Representative Calibration Subset
 
-- UniMoral original-model overlap: `Llama 3.1 8B` saved May 13 artifact, full 8,784-row UniMoral action-prediction run, accuracy 0.6388.
+- UniMoral original-model overlap: fresh exact `Llama 3.1 8B` RQ1-RQ4 rerun, summarized at `results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv`: RQ1 accuracy 0.6219, RQ2 accuracy 0.6022, RQ3 accuracy 0.5948, and RQ4 live METEOR 0.1212.
 - UniMoral capability floor: `Llama 3.2 1B` saved May 13 artifact, accuracy 0.4056 and lower answer rate.
 - CCD exact same-model overlap: `mistralai/mistral-nemo` saved May 13 CCD artifact, 2,178/2,182 valid choices, dominant Nordic Europe share 25.3%.
 - CCD context rows only: saved OpenAI text references and Qwen/Qwen2.5 rows differ from the exact paper model or route version, so they should not be used in the one-to-one calibration bridge.
 - Current-release anchors: Qwen-S, DeepSeek-M, Gemma-S, and the OpenAI text-only reference rows should be used as current/SOTA context, not as original-paper replication or same-model calibration.
 
-These are saved/prior artifacts, not fresh reruns.
+The CCD May 13 artifacts and UniMoral exploratory sweep remain saved/prior artifacts unless explicitly labeled as fresh reruns.
 
 ## Fresh Rerun Status
 
 - `mistralai/mistral-nemo` CCD-Bench route probe: fresh 1-sample route check succeeded on May 21, 2026 under `results/inspect/logs/2026-05-21-calibration-route-probes/mistral_nemo_ccd_probe/`.
-- `meta-llama/llama-3.1-8b-instruct` UniMoral route probe: the earlier run was blocked before model call because `UNIMORAL_DATA_DIR` was not set; after setting it to the local `data/unimoral` export, a fresh 1-sample route probe succeeded under `results/inspect/logs/2026-05-21-calibration-route-probes/llama31_unimoral_probe_retry/`.
-- Full fresh older-model replication runs were not launched because the saved May 13 artifacts already contain full UniMoral/CCD sample sets, and rerunning the full subset would duplicate cost without changing the release evidence unless explicitly requested.
+- `meta-llama/llama-3.1-8b-instruct` UniMoral full rerun: after confirming the data path and exact OpenRouter route, RQ1-RQ4 completed successfully on July 6, 2026. This is fresh same-model calibration evidence, with metric-scale caveats because the paper reports weighted F1 and 0-100 generation metrics while the repo reports accuracy and 0-1 live METEOR.
+- Exact Phi-3.5-mini Instruct and DeepSeek-R1-Distill-Llama-8B routes were not found in the checked OpenRouter catalog, so they were not substituted.
 
 ## Replication Categories
 
 - Paper-faithful replication: available only for benchmark/task paths where the repo has the same setup and data. Current best candidates are UniMoral RQ1 action prediction and CCD-Bench choice selection.
 - Proxy-only evidence: DeNEVIL FULCRA proxy evidence is useful for behavior/provenance, but it is not paper-faithful MoralPrompt replication.
-- Saved artifact comparison: May 13 exploratory results and OpenAI text-reference sweeps are valid saved comparisons when labeled as prior artifacts.
+- Saved artifact comparison: May 13 exploratory results and OpenAI text-reference sweeps are valid saved comparisons when labeled as prior artifacts. The July 6 Llama 3.1 UniMoral rerun is separate fresh evidence.
 - Blocked fresh reruns: Kaleido model replication needs approved HF access/model route and separate model execution; DeNEVIL paper-faithful replication needs MoralPrompt data. UniMoral is no longer blocked by local data path after setting `UNIMORAL_DATA_DIR`.
 
 ## Interpretation

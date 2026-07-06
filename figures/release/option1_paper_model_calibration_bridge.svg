@@ -48,19 +48,19 @@
 <text x="820" y="156" class="tiny">ONE-TO-ONE VALUE WHEN VALID</text>
 <text x="1198" y="156" class="tiny">STATUS AND BOUNDARY</text>
 <rect x="42" y="176" width="1416" height="96" rx="14" class="subpanel"/>
-<rect x="42" y="176" width="8" height="96" rx="4" fill="#2563eb"/>
+<rect x="42" y="176" width="8" height="96" rx="4" fill="#7c3aed"/>
 <text x="56" y="204" class="label">UniMoral</text>
 <text x="198" y="200" class="body">Llama-3.1-8B Instruct: Paper weighted F1 / METEOR</text>
 <text x="198" y="217" class="body">/ BERTScore = RQ1 66.17; RQ2 57.01; RQ3 38.59; RQ4</text>
 <text x="198" y="234" class="body">METEOR 19.08 and BERTScore 87.44</text>
-<text x="514" y="200" class="body">meta-llama/llama-3.1-8b-instruct current</text>
-<text x="514" y="217" class="body">full-grid: Accuracy for RQ1-RQ3; live METEOR</text>
-<text x="514" y="234" class="body">for RQ4 = RQ1 0.628757; RQ2 0.595074; RQ3</text>
-<text x="514" y="251" class="body">0.599943; RQ4 METEOR 0.124689</text>
+<text x="514" y="200" class="body">fresh exact UniMoral rerun: Accuracy for</text>
+<text x="514" y="217" class="body">RQ1-RQ3; live METEOR for RQ4 = RQ1 0.621926;</text>
+<text x="514" y="234" class="body">RQ2 0.602234; RQ3 0.594788; RQ4 METEOR</text>
+<text x="514" y="251" class="body">0.121226</text>
 <text x="820" y="214" class="small">paper: metric scale differs</text>
 <text x="820" y="242" class="small">ours: metric scale differs</text>
-<circle cx="1182" cy="204" r="7" fill="#2563eb"/>
-<text x="1198" y="204" class="body">current full grid verified; Exact same</text>
+<circle cx="1182" cy="204" r="7" fill="#7c3aed"/>
+<text x="1198" y="204" class="body">current fresh verified; Exact same</text>
 <text x="1198" y="221" class="body">model, but paper and repo metric</text>
 <text x="1198" y="238" class="body">scales differ; compare direction and</text>
 <text x="1198" y="255" class="body">task coverage, not a one-number delta.</text>

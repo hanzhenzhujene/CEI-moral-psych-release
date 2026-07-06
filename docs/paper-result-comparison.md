@@ -36,7 +36,7 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
 
 | Benchmark | Current comparison status | Reader rule |
 | --- | --- | --- |
-| `UniMoral` | Partial task overlap for RQ1 action prediction; paper metric anchors are tracked separately. | Call it action-prediction calibration, not full UniMoral paper replication. |
+| `UniMoral` | Fresh exact Llama 3.1 8B overlap now exists for RQ1-RQ4; paper metric anchors are tracked separately. | Call it metric-bridged same-model calibration, not reproduced paper weighted-F1/BERTScore tables. |
 | `SMID` | No original LLM roster found locally. | Compare current vision-capable rows only. |
 | `Value Kaleidoscope / ValuePrism` | Current rows are prompt-based ValuePrism tasks. | Do not call them Kaleido model replication. |
 | `CCD-Bench` | The strict same-model bridge now has twelve exact CCD distribution rows; the ledger keeps unavailable and non-exact routes separate. | Never describe CCD-Bench as accuracy. |
@@ -44,7 +44,7 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
 
 ## What This Means
 
-- The strongest paper-to-current bridge is narrow: UniMoral RQ1 action prediction can support directional calibration, while metric/model caveats remain explicit.
+- The strongest paper-to-current bridge is now UniMoral Llama 3.1 8B model identity: RQ1-RQ4 were rerun on the exact paper-roster model, while metric-scale caveats remain explicit.
 - The cleanest same-model behavior bridge is now CCD-Bench: the strict bridge keeps current `Llama-4-Maverick-17B-128E-Instruct`
   plus fresh exact reruns for `Mistral Nemo`, `Llama-3.3-70B-Instruct`, `DeepSeek-chat-v3-0324`, `Qwen2.5-72B-Instruct`,
   `OpenAI GPT-4.1`, `Command-R 08-2024`, `Microsoft Phi-4`, `WizardLM-2-8x22B`, `Perplexity Sonar`, and `Claude 4 Sonnet`.
@@ -58,11 +58,12 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
 
 ### UniMoral
 
-- Paper/reference side: original setup has multiple RQs. The clean task overlap is RQ1 action prediction; local reference code names Phi-3.5 mini, Llama 3.1 8B, and DeepSeek-R1-Distill-Llama-8B.
+- Paper/reference side: original setup has multiple RQs. The reference roster names Phi-3.5 mini, Llama 3.1 8B, and DeepSeek-R1-Distill-Llama-8B.
 - Current repo side: all eligible text rows have UniMoral action accuracy. DeepSeek-M and GPT-5.5 both reach `0.683629`.
-- Calibration evidence: current full-grid Llama 3.1 8B results are in the bridge table; saved/prior May 13 Llama 3.1 8B action accuracy is `0.638775`.
-- Direct comparison: partial. Visible paper metric anchors are tracked in the RQ-level CSV, but the release headline uses exact-match accuracy while the paper tables report weighted F1/BLEU/METEOR/BERTScore cells.
-- Reviewer takeaway: use UniMoral as the clearest paper-to-current task bridge, but keep metric caveats and RQ2/RQ3/RQ4 separation visible.
+- Calibration evidence: fresh exact Llama 3.1 8B UniMoral rerun completed locally with RQ1 accuracy `0.621926`, RQ2 accuracy `0.602234`, RQ3 accuracy `0.594788`, and RQ4 live METEOR `0.121226`.
+- Direct comparison: partial. Visible paper metric anchors are tracked in the RQ-level CSV, but the release headline uses exact-match accuracy while the paper tables
+  report weighted F1/BLEU/METEOR/BERTScore cells. RQ4 BERTScore for this fresh run still needs the offline scoring pass.
+- Reviewer takeaway: use UniMoral as the clearest same-model paper-calibration bridge, but keep metric caveats and RQ2/RQ3/RQ4 separation visible.
 
 ### SMID
 
@@ -105,7 +106,7 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
 
 | Benchmark | Same-model overlap | Missing or blocked paper side | Current context only |
 | --- | --- | --- | --- |
-| `UniMoral` | Saved/prior Llama 3.1 8B action run. | Phi-3.5 mini and DeepSeek-R1-Distill-Llama-8B exact paper rows. | Qwen, MiniMax, DeepSeek, Llama, Gemma, and OpenAI text refs including GPT-5.5. |
+| `UniMoral` | Fresh exact Llama 3.1 8B RQ1-RQ4 rerun. | Phi-3.5 mini and DeepSeek-R1-Distill-Llama-8B exact paper routes. | Qwen, MiniMax, DeepSeek, Llama, Gemma, and OpenAI text refs including GPT-5.5. |
 | `SMID` | None found. | Original LLM roster is not identified locally. | Current vision-capable Qwen, MiniMax, Llama, and Gemma rows where routes exist. |
 | `Value Kaleidoscope / ValuePrism` | None. | Kaleido small/base/large/xl/xxl gated route. | All current prompt-based LLM rows and OpenAI text refs. |
 | `CCD-Bench` | Twelve exact rows in the strict bridge. | Unavailable exact paper routes stay ledger-only. | Current family rows are context unless exact identity matches. |
