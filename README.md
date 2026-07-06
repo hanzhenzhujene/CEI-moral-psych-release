@@ -24,7 +24,7 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 | --- | --- | --- |
 | Best fully observed comparable line | `MiniMax-S`: UniMoral 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611. | [benchmark accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg), [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [Value CSV](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |
 | Best text-only line | `GPT-5.5`: UniMoral 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |
-| Hardest primary metric | `SMID` has mean accuracy 0.364; best current line is `Qwen-L` at 0.483. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |
+| Visual bottleneck | `SMID` has mean accuracy 0.364; best current line is `Qwen-L` at 0.483. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |
 | Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |
 | Paper comparison status | UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg), [replication map](figures/release/option1_paper_result_alignment_map.svg) |
 
@@ -73,7 +73,7 @@ The main comparison uses three benchmark-faithful accuracy columns. The other tw
 
 - **Best all-around comparable line:** `MiniMax-S` is strongest among rows with all three primary metrics present.
 - **Best text-only line:** `GPT-5.5` leads when SMID is excluded; do not call it best overall because it has no image route.
-- **Current bottleneck:** `SMID` is the hardest primary metric here, with mean accuracy 0.364.
+- **Current bottleneck:** `SMID` is the visual-moral bottleneck here, with mean accuracy 0.364.
 - **Scaling:** bigger is not reliably better across families; treat S/M/L as empirical slots, not a law.
 - **Two caution layers:** `CCD-Bench` is cultural-choice behavior, and `DeNEVIL` is proxy behavior. They are deliberately outside the primary accuracy ranking.
 

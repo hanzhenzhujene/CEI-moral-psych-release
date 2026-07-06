@@ -37,11 +37,11 @@
 </defs>
 <rect x="0" y="0" width="1220" height="650" class="canvas"/>
 <rect x="24" y="24" width="1172" height="602" rx="22" class="panel"/>
-<title>Benchmark difficulty and spread</title>
+<title>Comparable score spread</title>
 <desc>Mean, minimum, and maximum comparable accuracy for UniMoral action prediction, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>
-<text x="48" y="64" class="title">Benchmark Difficulty And Spread</text>
-<text x="48" y="88" class="subtitle">Lower means and wider ranges indicate a harder or less stable benchmark in the current comparable slice. These summaries intentionally</text>
-<text x="48" y="108" class="subtitle">exclude proxy-only Denevil and non-comparable CCD-Bench.</text>
+<text x="48" y="64" class="title">Comparable Score Spread</text>
+<text x="48" y="88" class="subtitle">Lower means identify current bottlenecks; wider ranges show cross-line instability in the comparable slice. These summaries</text>
+<text x="48" y="108" class="subtitle">intentionally exclude proxy-only Denevil and non-comparable CCD-Bench.</text>
 <line x1="280.00" y1="158" x2="280.00" y2="512" class="guide"/>
 <text x="280.00" y="148" text-anchor="middle" class="small">0%</text>
 <line x1="415.00" y1="158" x2="415.00" y2="512" class="guide"/>
@@ -96,7 +96,7 @@
 <text x="878" y="452" class="small">Spread: 21.3% absolute accuracy points</text>
 <rect x="48" y="472" width="1096" height="116" rx="18" class="legend-card"/>
 <text x="72" y="500" class="tiny">READ THIS FIGURE</text>
-<text x="72" y="524" class="body">Hardest current comparable benchmark: SMID with a mean of 36.4%.</text>
-<text x="72" y="544" class="body">Widest cross-line spread: SMID at 28.5% from low to high.</text>
+<text x="72" y="524" class="body">Visual bottleneck in this slice: SMID with a mean of 36.4%.</text>
+<text x="72" y="544" class="body">Largest cross-line spread: SMID at 28.5% from low to high.</text>
 <text x="72" y="568" class="body">Tightest spread: UniMoral at 12.1%; current lines cluster closely there.</text>
 </svg>

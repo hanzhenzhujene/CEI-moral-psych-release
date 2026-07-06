@@ -1317,7 +1317,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "`SMID` | Look at real images and infer moral wrongness or the dominant moral foundation." in text
         assert "`CCD-Bench` | Choose among ten culturally grounded responses to a cross-cultural dilemma." in text
         assert "`DeNEVIL` | Probe how the model behaves when prompts try to surface unethical or value-violating content." in text
-        assert "### Benchmark Difficulty Profile" in text
+        assert "### Comparable Score Spread" in text
         assert "### Family Scaling Profile" in text
         assert "### CCD-Bench Choice Behavior" in text
         assert "### DeNEVIL Proxy Behavioral Evidence" in text
@@ -1478,9 +1478,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "GPT-5.5" in benchmark_bar_svg
 
     benchmark_difficulty_svg = (figure_dir / "option1_benchmark_difficulty_profile.svg").read_text(encoding="utf-8")
-    assert "Benchmark Difficulty And Spread" in benchmark_difficulty_svg
-    assert "Hardest current comparable benchmark" in benchmark_difficulty_svg
-    assert "Widest cross-line spread" in benchmark_difficulty_svg
+    assert "Comparable Score Spread" in benchmark_difficulty_svg
+    assert "Visual bottleneck in this slice" in benchmark_difficulty_svg
+    assert "Largest cross-line spread" in benchmark_difficulty_svg
 
     family_scaling_svg = (figure_dir / "option1_family_scaling_profile.svg").read_text(encoding="utf-8")
     assert "Family Scaling Profile" in family_scaling_svg

@@ -9614,13 +9614,13 @@ def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_p
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
-            "<title>Benchmark difficulty and spread</title>",
+            "<title>Comparable score spread</title>",
             "<desc>Mean, minimum, and maximum comparable accuracy for UniMoral action prediction, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>",
-            '<text x="48" y="64" class="title">Benchmark Difficulty And Spread</text>',
+            '<text x="48" y="64" class="title">Comparable Score Spread</text>',
             *svg_text_block(
                 48,
                 88,
-                "Lower means and wider ranges indicate a harder or less stable benchmark in the current comparable slice. These summaries intentionally exclude proxy-only Denevil and non-comparable CCD-Bench.",
+                "Lower means identify current bottlenecks; wider ranges show cross-line instability in the comparable slice. These summaries intentionally exclude proxy-only Denevil and non-comparable CCD-Bench.",
                 "subtitle",
                 135,
             ),
@@ -9658,11 +9658,11 @@ def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_p
     lines.append('<rect x="48" y="472" width="1096" height="116" rx="18" class="legend-card"/>')
     lines.append('<text x="72" y="500" class="tiny">READ THIS FIGURE</text>')
     lines.append(
-        f'<text x="72" y="524" class="body">Hardest current comparable benchmark: {escape_xml(lowest_mean["benchmark"])} '
+        f'<text x="72" y="524" class="body">Visual bottleneck in this slice: {escape_xml(lowest_mean["benchmark"])} '
         f'with a mean of {fmt_pct(lowest_mean["mean_accuracy"])}.</text>'
     )
     lines.append(
-        f'<text x="72" y="544" class="body">Widest cross-line spread: {escape_xml(widest_spread["benchmark"])} '
+        f'<text x="72" y="544" class="body">Largest cross-line spread: {escape_xml(widest_spread["benchmark"])} '
         f'at {fmt_pct(widest_spread["spread"])} from low to high.</text>'
     )
     lines.append(
@@ -11246,15 +11246,15 @@ def append_benchmark_difficulty_table(lines: list[str], rows: list[dict[str, Any
     tightest_spread_benchmark = min(rows, key=lambda row: row["spread"])["benchmark"] if rows else None
     for row in rows:
         if row["benchmark"] == lowest_mean_benchmark and row["benchmark"] == widest_spread_benchmark:
-            reading = "Lowest mean and widest spread in the current comparable slice."
+            reading = "Lowest mean and largest spread in the current comparable slice."
         elif row["benchmark"] == lowest_mean_benchmark:
             reading = "Lowest mean in the current comparable slice."
         elif row["benchmark"] == widest_spread_benchmark:
-            reading = "Widest cross-line spread in the current comparable slice."
+            reading = "Largest cross-line spread in the current comparable slice."
         elif row["benchmark"] == tightest_spread_benchmark:
             reading = "Tightest spread; current lines cluster closely."
         else:
-            reading = "Mid-range difficulty with meaningful but not extreme variation."
+            reading = "Mid-range score level with meaningful but not extreme variation."
         lines.append(
             f"| `{row['benchmark']}` | {fmt_float(row['mean_accuracy']) or 'n/a'} | "
             f"`{row['best_line']}` ({fmt_float(row['max_accuracy'])}) | "
@@ -11292,7 +11292,7 @@ def append_benchmark_reading_guide_table(lines: list[str], _rows: list[dict[str,
             "SMID",
             "Look at real images and infer moral wrongness or the dominant moral foundation.",
             "Moral judgment is often visual, social, and affective. SMID asks whether models can see morally relevant cues in concrete scenes, not only reason over text.",
-            "Higher accuracy means closer alignment with human image judgments. This is the current bottleneck because image-based moral cues are harder and more ambiguous than text labels.",
+            "Higher accuracy means closer alignment with human image judgments. This is the current bottleneck because image-based moral cues are more ambiguous and less directly stated than text labels.",
         ),
         (
             "Value Kaleidoscope",
@@ -12025,7 +12025,7 @@ def append_interpretation_sections(
         )
     lines.extend(
         [
-            "- **Main weakness:** SMID is the bottleneck; visual moral judgment remains much harder than text moral reasoning in this release.",
+            "- **Main weakness:** SMID is the bottleneck; visual moral judgment remains weaker than text moral reasoning in this release.",
             "- **Scaling:** there is no universal bigger-is-better curve; size helps some families and benchmarks but reverses or plateaus elsewhere.",
             "- **CCD-Bench:** read it as cultural-cluster choice behavior and concentration, never as a correctness or accuracy benchmark.",
             "- **DeNEVIL:** read it as proxy behavioral evidence only until paper-faithful MoralPrompt data is available locally.",
@@ -12062,7 +12062,7 @@ def append_interpretation_sections(
         "| Small-model capability floor | May 13 follow-up: `Mistral Nemo` reaches 0.648 on UniMoral; the 7B-12B routes sit in a narrow 0.632-0.648 band; `Llama 3.2 1B` falls to 0.406 with only 73.6% answered. | This is the practical capacity warning: below the mid-sized instruction-model range, the model may stop reliably following human moral-choice tasks, but above that floor older routes can still be useful baselines. |"
     )
     lines.append(
-        f"| Hardest current comparable benchmark | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The hard part is visual moral perception: models do not just need moral vocabulary, they need to read morally relevant cues in images. |"
+        f"| Visual bottleneck among comparable metrics | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The bottleneck is visual moral perception: models do not just need moral vocabulary, they need to read morally relevant cues in images. |"
     )
     lines.append(
         f"| Closest thing to saturation | `UniMoral` has the tightest range, from {fmt_float(unimoral_summary['min_accuracy'])} to {fmt_float(unimoral_summary['max_accuracy'])} ({fmt_float(unimoral_summary['spread'])} spread). | Most text models are already in the same band on the basic human-choice layer, so the more interesting story is which UniMoral subtask each model handles best. |"
@@ -12089,11 +12089,11 @@ def append_interpretation_sections(
     lines.extend(
         [
             "",
-            "### Benchmark Difficulty Profile",
+            "### Comparable Score Spread",
             "",
-            f"![Benchmark difficulty profile]({figure_prefix}/option1_benchmark_difficulty_profile.svg)",
+            f"![Comparable score spread]({figure_prefix}/option1_benchmark_difficulty_profile.svg)",
             "",
-            "_Figure 3. Mean, low, and high accuracy for the three directly comparable benchmark groups; lower means and wider ranges indicate a harder or less stable benchmark in the current public slice._",
+            "_Figure 3. Mean, low, and high accuracy for the three directly comparable benchmark groups; lower means identify current bottlenecks, and wider ranges indicate cross-model instability in the public slice._",
             "",
         ]
     )
@@ -12937,7 +12937,7 @@ def build_repo_readme(
         "| --- | --- | --- |",
         f"| Best fully observed comparable line | `{best_all['line_label']}`: UniMoral {fmt_float(best_all['unimoral_action_accuracy'])}, SMID {fmt_float(best_all['smid_average_accuracy'])}, Value {fmt_float(best_all['value_average_accuracy'])}; three-metric mean {fmt_float(best_all_mean)}. | [benchmark accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg), [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [Value CSV](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |",
         f"| Best text-only line | `{best_text['line_label']}`: UniMoral {fmt_float(best_text['unimoral_action_accuracy'])}, Value {fmt_float(best_text['value_average_accuracy'])}; two-metric mean {fmt_float(best_text_mean)}. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |",
-        f"| Hardest primary metric | `SMID` has mean accuracy {fmt_float(smid_summary['mean_accuracy'])}; best current line is `{best_smid['line_label']}` at {fmt_float(best_smid['smid_average_accuracy'])}. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |",
+        f"| Visual bottleneck | `SMID` has mean accuracy {fmt_float(smid_summary['mean_accuracy'])}; best current line is `{best_smid['line_label']}` at {fmt_float(best_smid['smid_average_accuracy'])}. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |",
         "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |",
         "| Paper comparison status | UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg), [replication map](figures/release/option1_paper_result_alignment_map.svg) |",
         "",
@@ -12986,7 +12986,7 @@ def build_repo_readme(
         "",
         f"- **Best all-around comparable line:** `{best_all['line_label']}` is strongest among rows with all three primary metrics present.",
         f"- **Best text-only line:** `{best_text['line_label']}` leads when SMID is excluded; do not call it best overall because it has no image route.",
-        f"- **Current bottleneck:** `SMID` is the hardest primary metric here, with mean accuracy {fmt_float(smid_summary['mean_accuracy'])}.",
+        f"- **Current bottleneck:** `SMID` is the visual-moral bottleneck here, with mean accuracy {fmt_float(smid_summary['mean_accuracy'])}.",
         "- **Scaling:** bigger is not reliably better across families; treat S/M/L as empirical slots, not a law.",
         "- **Two caution layers:** `CCD-Bench` is cultural-choice behavior, and `DeNEVIL` is proxy behavior. They are deliberately outside the primary accuracy ranking.",
         "",
