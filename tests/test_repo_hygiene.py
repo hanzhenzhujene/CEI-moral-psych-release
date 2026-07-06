@@ -428,11 +428,23 @@ def test_ci_workflow_uses_native_node24_action_releases() -> None:
 
 def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     reproducibility = (ROOT / "docs" / "reproducibility.md").read_text(encoding="utf-8")
+    assert "unimoral-full-benchmark.csv" in reproducibility
+    assert "smid-results.csv" in reproducibility
+    assert "value-kaleidoscope-results.csv" in reproducibility
+    assert "supporting generated summaries such as `benchmark-comparison.csv`" in reproducibility
     assert "ccd-choice-distribution.csv" in reproducibility
     assert "denevil-behavior-summary.csv" in reproducibility
     assert "denevil-proxy-summary.csv" in reproducibility
+    assert "option1_unimoral_family_scaling.svg" in reproducibility
+    assert "option1_unimoral_generation_quality.svg" in reproducibility
     assert "option1_ccd_choice_distribution.svg" in reproducibility
     assert "option1_denevil_behavior_outcomes.svg" in reproducibility
+    assert "option1_paper_result_comparison.svg" in reproducibility
+    assert "option1_paper_result_alignment_map.svg" in reproducibility
+    assert "option1_paper_model_calibration_bridge.svg" in reproducibility
+    assert "results/openrouter-selected-grid-moral-psych-full/README.md" in reproducibility
+    assert "benchmark_score_matrix.svg" in reproducibility
+    assert "separate OpenRouter text-only follow-up" in reproducibility
     assert "appendix QA artifacts" in reproducibility
 
     figures_readme = (ROOT / "figures" / "README.md").read_text(encoding="utf-8")

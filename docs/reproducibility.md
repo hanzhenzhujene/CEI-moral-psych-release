@@ -87,8 +87,10 @@ Release tables:
 - `results/release/2026-04-19-option1/source/authoritative-summary.csv`
 - `results/release/2026-04-19-option1/jenny-group-report.md`
 - `results/release/2026-04-19-option1/topline-summary.md`
+- `results/release/2026-04-19-option1/unimoral-full-benchmark.csv`
+- `results/release/2026-04-19-option1/smid-results.csv`
+- `results/release/2026-04-19-option1/value-kaleidoscope-results.csv`
 - `results/release/2026-04-19-option1/benchmark-catalog.csv`
-- `results/release/2026-04-19-option1/benchmark-comparison.csv`
 - `results/release/2026-04-19-option1/ccd-choice-distribution.csv`
 - `results/release/2026-04-19-option1/denevil-behavior-summary.csv`
 - `results/release/2026-04-19-option1/denevil-prompt-family-breakdown.csv`
@@ -106,11 +108,14 @@ Release tables:
 - `results/release/2026-04-19-option1/faithful-metrics.csv`
 - `results/release/2026-04-19-option1/coverage-matrix.csv`
 - `results/release/2026-04-19-option1/release-manifest.json`
+- supporting generated summaries such as `benchmark-comparison.csv`, `benchmark-summary.csv`, and `paper-result-comparison.csv`
 
 Figures:
 
 - `figures/release/option1_unimoral_four_task_dashboard.svg`
+- `figures/release/option1_unimoral_family_scaling.svg`
 - `figures/release/option1_unimoral_task_heatmap.svg`
+- `figures/release/option1_unimoral_generation_quality.svg`
 - `figures/release/option1_unimoral_task_spread.svg`
 - `figures/release/option1_unimoral_task_rankings.svg`
 - `figures/release/option1_family_size_progress_overview.svg`
@@ -129,6 +134,9 @@ Figures:
 - `figures/release/option1_coverage_matrix.svg`
 - `figures/release/option1_accuracy_heatmap.svg`
 - `figures/release/option1_sample_volume.svg`
+- `figures/release/option1_paper_result_comparison.svg`
+- `figures/release/option1_paper_result_alignment_map.svg`
+- `figures/release/option1_paper_model_calibration_bridge.svg`
 
 Headline interpretation artifacts now include:
 
@@ -137,6 +145,7 @@ Headline interpretation artifacts now include:
 - `denevil-behavior-summary.csv` + `option1_denevil_behavior_outcomes.svg` for DeNEVIL proxy behavioral outcomes
 - `readiness-tier-matrix.csv` for the generated model-line x benchmark result-readiness summary dashboard
 - appendix QA artifacts such as `denevil-proxy-summary.csv` and `option1_denevil_proxy_status_matrix.svg` for provenance, route, and visible-response diagnostics
+- `results/openrouter-selected-grid-moral-psych-full/README.md`, `interpretation.md`, `result_summary.csv`, `benchmark_summary.csv`, `model_summary.csv`, and the `within_family_scaling.svg` / `time_scaling.svg` / `benchmark_score_matrix.svg` figures for the separate OpenRouter text-only follow-up. This follow-up is tracked as a separate result package rather than folded into the frozen Option 1 release counts.
 
 ## Refresh the Tracked Authoritative Snapshot
 
