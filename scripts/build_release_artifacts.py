@@ -10965,8 +10965,8 @@ def render_paper_model_calibration_bridge_svg(rows: list[dict[str, Any]], output
     }
     gap_cards = [
         (
-            "Exact paper routes needing runs",
-            "Some paper CCD models are available as exact provider routes, but the release does not yet have their checked distribution rows. They live in the ledger CSV until run.",
+            "Remaining exact-route gaps",
+            "Available exact CCD paper routes now have checked distribution rows. Missing paper routes stay blocked until exact IDs or data exist.",
             "#2563eb",
         ),
         (

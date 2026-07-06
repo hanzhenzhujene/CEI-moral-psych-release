@@ -207,6 +207,11 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Perplexity Sonar" in paper_calibration_svg
     assert "Claude 4 Sonnet" in paper_calibration_svg
     assert "WizardLM-2-8x22B" in paper_calibration_svg
+    assert "Remaining exact-route gaps" in paper_calibration_svg
+    assert "Available exact CCD paper routes now have checked" in paper_calibration_svg
+    assert "distribution rows. Missing paper routes stay blocked" in paper_calibration_svg
+    assert "until exact IDs or data exist." in paper_calibration_svg
+    assert "Some paper CCD models are available as exact provider routes" not in paper_calibration_svg
 
     with (ROOT / "results/release/2026-04-19-option1/paper-model-calibration-bridge.csv").open(newline="", encoding="utf-8") as handle:
         bridge_rows = list(csv.DictReader(handle))
