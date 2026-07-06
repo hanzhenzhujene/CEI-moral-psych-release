@@ -78,3 +78,19 @@ Interpretation helpers:
 - `figures/within_family_scaling.svg`: direct S/M/L family-size visual.
 - `figures/time_scaling.svg`: older-vs-newer route visual.
 - `figures/benchmark_score_matrix.svg`: benchmark comparison matrix; CCD is labeled as valid-choice coverage.
+
+## Figures To Open First
+
+Use these as the visual path through the follow-up. They are text-only follow-up figures, not replacements for the frozen release figures.
+
+![Within-family scaling](figures/within_family_scaling.svg)
+
+_First: S/M/L movement for Qwen, Gemma, and Llama on completed text-classification rows._
+
+![Time scaling](figures/time_scaling.svg)
+
+_Second: older-vs-newer OpenRouter routes for Qwen, DeepSeek, and available Gemma rows._
+
+![Benchmark comparison matrix](figures/benchmark_score_matrix.svg)
+
+_Third: model x benchmark comparison; CCD-Bench is valid-choice behavior, not correctness or accuracy._

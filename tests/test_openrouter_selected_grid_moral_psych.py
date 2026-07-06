@@ -163,6 +163,30 @@ def test_completion_audit_marks_full_attempt_with_blocked_cells(tmp_path: Path) 
     assert "## Optional Targeted Retry" in content
 
 
+def test_selected_grid_readme_surfaces_first_figures(tmp_path: Path) -> None:
+    plan_rows = _minimal_plan_rows()
+    result_rows = [
+        {
+            **row,
+            "run_status": "success",
+            "actual_cost_usd": "0.01",
+            "completed_samples": "100",
+            "reasoning_tokens_actual": "0",
+        }
+        for row in plan_rows
+    ]
+
+    openrouter.write_readme(tmp_path, "test-fetch", 100, _minimal_model_rows(), plan_rows, result_rows)
+
+    content = (tmp_path / "README.md").read_text(encoding="utf-8")
+    assert "## Figures To Open First" in content
+    assert "![Within-family scaling](figures/within_family_scaling.svg)" in content
+    assert "![Time scaling](figures/time_scaling.svg)" in content
+    assert "![Benchmark comparison matrix](figures/benchmark_score_matrix.svg)" in content
+    assert "text-only follow-up figures, not replacements for the frozen release figures" in content
+    assert "CCD-Bench is valid-choice behavior, not correctness or accuracy" in content
+
+
 def test_existing_log_scan_recovers_success_even_when_newer_partial_exists(tmp_path: Path, monkeypatch) -> None:
     row = {
         "model": "qwen/qwen3-8b",
