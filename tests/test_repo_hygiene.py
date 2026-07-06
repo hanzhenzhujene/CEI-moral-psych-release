@@ -138,7 +138,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| `T3` | Interpretable: cite/compare it within the stated metric layer. |" in readme
     assert "Current dashboard: `72/105` public summary rows are Tier 3" in readme
     assert "The `105` rows are the `75` family-size cells plus `30` OpenAI text-reference cells." in readme
-    assert "Cost/accounting metadata is in the appendix. Current project total: `$896.91`." in readme
+    assert "Cost/accounting metadata is in the appendix. Current project total: `$897.48`." in readme
     assert "## OpenRouter Selected-Grid Follow-Up" not in readme
     assert "## Results First" not in readme
     assert "### DeepSeek S/M/L Log-Derived Readout" not in readme
@@ -194,7 +194,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Microsoft Phi-4" in paper_calibration_svg
     assert "Perplexity Sonar" in paper_calibration_svg
     assert "Claude 4 Sonnet" in paper_calibration_svg
-    assert "WizardLM-2-8x22B" not in paper_calibration_svg
+    assert "WizardLM-2-8x22B" in paper_calibration_svg
 
     with (ROOT / "results/release/2026-04-19-option1/paper-model-calibration-bridge.csv").open(newline="", encoding="utf-8") as handle:
         bridge_rows = list(csv.DictReader(handle))
@@ -209,6 +209,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
         "OpenAI GPT-4.1",
         "Command-R 08-2024",
         "Microsoft Phi-4",
+        "WizardLM-2-8x22B",
         "Perplexity Sonar",
         "Claude 4 Sonnet",
     }
@@ -217,7 +218,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
         ledger_rows = list(csv.DictReader(handle))
     assert any(row["paper_model"] == "Qwen2.5-72B-Instruct" and row["repo_evidence_state"] == "current_fresh_verified" for row in ledger_rows)
     assert any(row["paper_model"] == "Llama-4-Maverick-17B-128E-Instruct" and row["repo_evidence_state"] == "current_release_verified" for row in ledger_rows)
-    assert any(row["paper_model"] == "WizardLM-2-8x22B" and row["repo_evidence_state"] == "attempt_cancelled_partial_not_verified" for row in ledger_rows)
+    assert any(row["paper_model"] == "WizardLM-2-8x22B" and row["repo_evidence_state"] == "current_fresh_verified" for row in ledger_rows)
     assert any(row["benchmark"] == "DeNEVIL / MoralPrompt" and "proxy" in row["comparison_boundary"].lower() for row in ledger_rows)
 
     paper_comparison_doc = (ROOT / "docs/paper-result-comparison.md").read_text(encoding="utf-8")
@@ -236,7 +237,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "UniMoral RQ1 action prediction can support directional calibration" in paper_comparison_doc
     assert "only exact same-model evidence is plotted" in paper_comparison_doc
     assert "current `Llama-4-Maverick-17B-128E-Instruct`" in paper_comparison_doc
-    assert "cancelled `WizardLM-2-8x22B` attempt stays out of the plotted bridge" in paper_comparison_doc
+    assert "`WizardLM-2-8x22B`" in paper_comparison_doc
     assert max(len(line) for line in paper_comparison_doc.splitlines()) <= 220
 
     openrouter_scaling_svg = (ROOT / "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg").read_text(encoding="utf-8")

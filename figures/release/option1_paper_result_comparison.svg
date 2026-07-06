@@ -139,10 +139,10 @@
 <text x="292" y="971" class="body">the paper/source 17-model analysis: Nordic Europe</text>
 <text x="292" y="988" class="body">20.17%, Germanic Europe 12.36%, Sub-Saharan Africa</text>
 <text x="292" y="1005" class="body">11.51%, Anglo 11.31%, Southern Asia 10.06%, Latin...</text>
-<text x="720" y="954" class="body">Same-model rows include Mistral Nemo</text>
-<text x="720" y="971" class="body">saved/prior, Llama-3.3 and Llama-4 current</text>
-<text x="720" y="988" class="body">release rows, and fresh July 2026 exact CCD</text>
-<text x="720" y="1005" class="body">reruns: DeepSeek 23.2%, Qwen 21.1%, GPT-4.1...</text>
+<text x="720" y="954" class="body">Same-model rows include current Llama-4 and</text>
+<text x="720" y="971" class="body">fresh July 2026 exact CCD reruns: Mistral Nemo</text>
+<text x="720" y="988" class="body">25.6%, Llama-3.3 20.8%, DeepSeek 23.2%, Qwen</text>
+<text x="720" y="1005" class="body">21.1%, GPT-4.1 22.3%, Command-R 22.7%, Phi-4...</text>
 <circle cx="1118" cy="958" r="7" fill="#2563eb"/>
 <text x="1136" y="957" class="body">Same-model behavioral bridge;</text>
 <text x="1136" y="974" class="body">CCD-Bench is not accuracy</text>

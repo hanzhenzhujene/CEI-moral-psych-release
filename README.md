@@ -144,7 +144,7 @@ Current dashboard: `72/105` public summary rows are Tier 3; `33` have no tier be
 - `CCD-Bench` is never reported as accuracy.
 - `DeNEVIL` remains proxy-only until paper-faithful MoralPrompt data exists locally.
 - `Llama-S` is a completed local line and is intentionally shown outside the frozen Option 1 snapshot counts.
-- Cost/accounting metadata is in the appendix. Current project total: `$896.91`.
+- Cost/accounting metadata is in the appendix. Current project total: `$897.48`.
 
 ## Reproduce
 

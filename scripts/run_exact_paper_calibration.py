@@ -403,10 +403,8 @@ def summarize(args: argparse.Namespace) -> list[dict[str, Any]]:
 
     manifest = read_csv(args.output_dir / "run-manifest.csv")
     by_model = {row["openrouter_model_id"]: row for row in manifest}
-    existing_rows = {
-        (row.get("openrouter_model_id", ""), row.get("run_stage", "")): row
-        for row in read_csv(args.output_dir / "calibration-summary.csv")
-    }
+    prior_rows = read_csv(args.output_dir / "calibration-summary.csv")
+    existing_rows = {(row.get("openrouter_model_id", ""), row.get("run_stage", "")): row for row in prior_rows}
     rows: list[dict[str, Any]] = []
     for candidate in selected_candidates(args):
         for stage in ("smoke", "full"):
@@ -453,6 +451,16 @@ def summarize(args: argparse.Namespace) -> list[dict[str, Any]]:
                     }
                 )
             rows.append(row)
+
+    output_keys = {(row.get("openrouter_model_id", ""), row.get("run_stage", "")) for row in rows}
+    for prior_row in prior_rows:
+        key = (prior_row.get("openrouter_model_id", ""), prior_row.get("run_stage", ""))
+        if key in output_keys:
+            continue
+        if prior_row.get("run_status") in {"", "not_started"}:
+            continue
+        rows.append(dict(prior_row))
+        output_keys.add(key)
     write_csv(args.output_dir / "calibration-summary.csv", rows, SUMMARY_FIELDNAMES)
     return rows
 

@@ -23,8 +23,8 @@ Key takeaways:
 - paper-setup tasks: `16`
 - proxy tasks: `3`
 - total evaluated samples: `302,776`
-- current project total cost: `$896.91`
-- total cost breakdown: MiniMax API: `$504.66`; OpenRouter model-family/calibration runs: `$352.27`, including `$17.760398` from the full selected-grid OpenRouter follow-up and `$8.849093` from the exact same-model CCD calibration pass; OpenAI API reference sweep: `$39.98`.
+- current project total cost: `$897.48`
+- total cost breakdown: MiniMax API: `$504.66`; OpenRouter model-family/calibration runs: `$352.84`, including `$17.760398` from the full selected-grid OpenRouter follow-up and `$9.417152` from the exact same-model CCD calibration pass; OpenAI API reference sweep: `$39.98`.
 - closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`
 - key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup
 - extra local progress outside the frozen snapshot: `Llama` small is complete across `5` papers / `7` tasks and is intentionally excluded from the frozen `19 / 19` totals

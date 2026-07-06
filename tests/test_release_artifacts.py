@@ -247,16 +247,16 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["proxy_tasks"] == 3
     assert manifest["counts"]["paper_result_alignment_rows"] == 5
     assert manifest["counts"]["paper_result_comparison_rows"] == 9
-    assert manifest["counts"]["paper_model_calibration_bridge_rows"] == 11
+    assert manifest["counts"]["paper_model_calibration_bridge_rows"] == 12
     assert manifest["counts"]["paper_model_calibration_ledger_rows"] >= 20
     assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
     assert any("OpenAI reference rows" in item and "text-only markers" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_total_cost"] == "$896.91"
+    assert manifest["report_metadata"]["current_total_cost"] == "$897.48"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
         "minimax_api": "$504.66",
-        "openrouter_other_model_family_runs": "$352.27",
+        "openrouter_other_model_family_runs": "$352.84",
         "openai_api_reference_sweep": "$39.98",
     }
     assert (
@@ -404,7 +404,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     ccd_alignment = next(row for row in paper_alignment_rows if row["benchmark"] == "CCD-Bench")
     assert ccd_alignment["comparison_status"] == "distributional_comparison_available_not_accuracy"
     assert "current Llama-4-Maverick-17B-128E-Instruct" in ccd_alignment["can_compare_directly"]
-    assert "fresh verified CCD distribution rows for DeepSeek-chat-v3-0324" in ccd_alignment["can_compare_directly"]
+    assert "fresh verified CCD distribution rows for Mistral Nemo" in ccd_alignment["can_compare_directly"]
+    assert "WizardLM" in ccd_alignment["can_compare_directly"]
     denevil_alignment = next(row for row in paper_alignment_rows if row["benchmark"] == "DeNEVIL / MoralPrompt")
     assert denevil_alignment["comparison_status"] == "proxy_only_data_gap"
     assert "proxy-only" in denevil_alignment["reviewer_takeaway"]

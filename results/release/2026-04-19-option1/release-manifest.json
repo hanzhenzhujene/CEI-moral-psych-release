@@ -44,7 +44,7 @@
   "counts": {
     "authoritative_tasks": 92,
     "benchmark_faithful_tasks": 89,
-    "paper_model_calibration_bridge_rows": 11,
+    "paper_model_calibration_bridge_rows": 12,
     "paper_model_calibration_ledger_rows": 20,
     "paper_result_alignment_rows": 5,
     "paper_result_comparison_rows": 9,
@@ -188,10 +188,10 @@
     "current_cost_breakdown": {
       "minimax_api": "$504.66",
       "openai_api_reference_sweep": "$39.98",
-      "openrouter_other_model_family_runs": "$352.27"
+      "openrouter_other_model_family_runs": "$352.84"
     },
     "current_cost_scope": "User-confirmed total spend including the OpenRouter selected-grid follow-up, exact CCD calibration pass, and OpenAI reference-sweep additions.",
-    "current_total_cost": "$896.91",
+    "current_total_cost": "$897.48",
     "date": "2026-07-06",
     "frozen_snapshot_date": "2026-04-19",
     "metric_definition_summary": "Stricter visible-answer parsing is now versioned explicitly: UniMoral, SMID, and Value Kaleidoscope use structured visible-answer extraction; CCD-Bench coverage requires a parseable visible 1-10 choice; CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; Denevil appendix coverage counts non-empty visible proxy answers while the headline proxy figures classify visible behavior categories.",
