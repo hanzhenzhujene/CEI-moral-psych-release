@@ -47,18 +47,16 @@
 <text x="510" y="144" class="tiny">CURRENT REPO RESULT SIDE</text>
 <text x="824" y="144" class="tiny">SAFE COMPARISON CLAIM</text>
 <rect x="42" y="146" width="1136" height="80" rx="18" class="subpanel"/>
-<rect x="58" y="166" width="116" height="36" rx="11" fill="#d97706"/>
+<rect x="58" y="166" width="116" height="36" rx="11" fill="#7c3aed"/>
 <text x="116" y="181" text-anchor="middle" class="cellsub">UniMoral</text>
-<rect x="824" y="204" width="164" height="24" rx="10" fill="#d97706" opacity="0.92"/>
-<text x="906" y="221" text-anchor="middle" class="cellsub">Partial overlap</text>
-<text x="220" y="172" class="body">RQ1 action-prediction task; visible</text>
-<text x="220" y="188" class="body">paper metric anchors tracked</text>
-<text x="220" y="204" class="body">separately.</text>
-<text x="510" y="172" class="body">Current RQ1 accuracy rows plus</text>
-<text x="510" y="188" class="body">saved/prior May 13 Llama 3.1 8B</text>
-<text x="510" y="204" class="body">evidence.</text>
-<text x="824" y="174" class="body">Partial overlap: same task surface,</text>
-<text x="824" y="190" class="body">related metrics, saved/prior evidence.</text>
+<rect x="824" y="204" width="164" height="24" rx="10" fill="#7c3aed" opacity="0.92"/>
+<text x="906" y="221" text-anchor="middle" class="cellsub">Fresh exact bridge</text>
+<text x="220" y="172" class="body">RQ1-RQ4 paper anchors; Llama 3.1 is</text>
+<text x="220" y="188" class="body">an exact paper-roster model.</text>
+<text x="510" y="172" class="body">Fresh exact Llama 3.1 RQ1-RQ4 rerun</text>
+<text x="510" y="188" class="body">plus current release rows.</text>
+<text x="824" y="174" class="body">Same-model calibration with metric-scale</text>
+<text x="824" y="190" class="body">caveats; RQ4 BERTScore pending.</text>
 <rect x="42" y="238" width="1136" height="80" rx="18" class="subpanel"/>
 <rect x="58" y="258" width="116" height="36" rx="11" fill="#64748b"/>
 <text x="116" y="273" text-anchor="middle" class="cellsub">SMID</text>

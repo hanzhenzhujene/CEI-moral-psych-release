@@ -53,16 +53,17 @@ REPORT_PURPOSE = "Jenny Zhu's group-facing progress report for the April 14, 202
 REPORT_PROVIDER = "OpenRouter + direct MiniMax + OpenAI"
 REPORT_TEMPERATURE = "0"
 REPORT_MINIMAX_API_COST = "$504.66"
-REPORT_OPENROUTER_COST = "$352.84"
+REPORT_OPENROUTER_COST = "$352.94"
 REPORT_OPENAI_API_COST = "$39.98"
-REPORT_CURRENT_TOTAL_COST = "$897.48"
+REPORT_CURRENT_TOTAL_COST = "$897.58"
 REPORT_CURRENT_COST_BREAKDOWN = (
     f"MiniMax API: `{REPORT_MINIMAX_API_COST}`; OpenRouter model-family/calibration runs: `{REPORT_OPENROUTER_COST}`, "
-    "including `$17.760398` from the full selected-grid OpenRouter follow-up and `$9.417152` from the exact same-model CCD calibration pass; "
+    "including `$17.760398` from the full selected-grid OpenRouter follow-up, `$9.417152` from the exact same-model CCD calibration pass, "
+    "and `$0.103155` from the exact UniMoral Llama 3.1 calibration pass; "
     f"OpenAI API reference sweep: `{REPORT_OPENAI_API_COST}`."
 )
 REPORT_CURRENT_COST_SCOPE = (
-    "User-confirmed total spend including the OpenRouter selected-grid follow-up, exact CCD calibration pass, and OpenAI reference-sweep additions."
+    "User-confirmed total spend plus the tracked July 6 exact UniMoral Llama 3.1 calibration pass."
 )
 REPORT_STATUS_NOTE = (
     f"Updated {REPORT_DATE_LONG}. "
@@ -9394,11 +9395,11 @@ def render_paper_result_alignment_svg(rows: list[dict[str, Any]], output_path: P
     }
     visual_rows = {
         "UniMoral": {
-            "paper": "RQ1 action-prediction task; visible paper metric anchors tracked separately.",
-            "current": "Current RQ1 accuracy rows plus saved/prior May 13 Llama 3.1 8B evidence.",
-            "comparison": "Partial overlap: same task surface, related metrics, saved/prior evidence.",
-            "status": "Partial overlap",
-            "color": "#d97706",
+            "paper": "RQ1-RQ4 paper anchors; Llama 3.1 is an exact paper-roster model.",
+            "current": "Fresh exact Llama 3.1 RQ1-RQ4 rerun plus current release rows.",
+            "comparison": "Same-model calibration with metric-scale caveats; RQ4 BERTScore pending.",
+            "status": "Fresh exact bridge",
+            "color": "#7c3aed",
         },
         "SMID": {
             "paper": "Human-normed image stimulus set; no original LLM roster found locally.",
@@ -11327,9 +11328,9 @@ def append_benchmark_reading_guide_table(lines: list[str], _rows: list[dict[str,
 def append_paper_result_alignment_table(lines: list[str], rows: list[dict[str, Any]], csv_path: str, doc_path: str) -> None:
     overview = {
         "UniMoral": {
-            "paper_side": "RQ1 action-prediction task with visible paper metric anchors in the RQ-level comparison CSV.",
-            "our_side": "Current action-accuracy rows plus saved/prior Llama 3.1 8B and May 13 calibration rows.",
-            "compare": "Partial: same task surface, related metrics, saved/prior overlap only.",
+            "paper_side": "RQ1-RQ4 paper tables include Llama 3.1 8B; visible paper metric anchors are in the RQ-level comparison CSV.",
+            "our_side": "Fresh exact Llama 3.1 8B RQ1-RQ4 rerun plus current release rows.",
+            "compare": "Same-model calibration is available, with metric-scale caveats and RQ4 BERTScore still pending offline scoring.",
         },
         "SMID": {
             "paper_side": "Human-normed image stimulus set; no original LLM model roster found locally.",
@@ -12779,7 +12780,7 @@ def append_readiness_and_replication_section(lines: list[str], readiness_tier_ma
             "",
             "| Benchmark | Existing calibration / comparison evidence | Current status |",
             "| --- | --- | --- |",
-            "| `UniMoral` | Current RQ1 action-accuracy rows plus saved/prior May 13 older-model rows, including Llama 3.1 8B at 0.638775; visible paper metric anchors are tracked in `paper-result-comparison.csv`. | Partial: same task surface, related scoring metrics, saved/prior overlap only. |",
+            "| `UniMoral` | Fresh exact Llama 3.1 8B RQ1-RQ4 rerun: RQ1 accuracy 0.621926, RQ2 accuracy 0.602234, RQ3 accuracy 0.594788, and RQ4 live METEOR 0.121226; visible paper metric anchors are tracked in `paper-result-comparison.csv`. | Same-model calibration is available, with metric-scale caveats and RQ4 BERTScore still pending offline scoring. |",
             "| `SMID` | Current vision-route rows measure moral-rating and foundation-classification performance. | No original LLM model roster was found locally; compare only across our current vision-capable rows. |",
             "| `Value Kaleidoscope / ValuePrism` | Current prompt-based relevance/valence rows are scored and visible. | Not Kaleido model replication; direct paper-model replication is blocked until gated Kaleido access and execution are run. |",
             "| `CCD-Bench` | Current choice-distribution rows plus a strict same-model bridge with fresh exact reruns for Mistral Nemo, Llama-3.3, DeepSeek, Qwen, GPT-4.1, Command-R, Phi-4, WizardLM, Sonar, and Claude 4 Sonnet; GPT-5.5 is a current text-only context row, not paper calibration. | Partial distributional comparison only; CCD-Bench is not an accuracy benchmark. |",
@@ -12938,7 +12939,7 @@ def build_repo_readme(
         f"| Best text-only line | `{best_text['line_label']}`: UniMoral {fmt_float(best_text['unimoral_action_accuracy'])}, Value {fmt_float(best_text['value_average_accuracy'])}; two-metric mean {fmt_float(best_text_mean)}. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |",
         f"| Hardest primary metric | `SMID` has mean accuracy {fmt_float(smid_summary['mean_accuracy'])}; best current line is `{best_smid['line_label']}` at {fmt_float(best_smid['smid_average_accuracy'])}. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |",
         "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |",
-        "| Paper comparison status | UniMoral is a partial task/metric bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg), [replication map](figures/release/option1_paper_result_alignment_map.svg) |",
+        "| Paper comparison status | UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge; CCD-Bench is behavior/concentration; ValuePrism is not Kaleido replication; DeNEVIL is proxy-only. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg), [replication map](figures/release/option1_paper_result_alignment_map.svg) |",
         "",
         "## Status: What Is Usable",
         "",

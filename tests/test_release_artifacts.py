@@ -253,15 +253,15 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
     assert any("OpenAI reference rows" in item and "text-only markers" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
-    assert manifest["report_metadata"]["current_total_cost"] == "$897.48"
+    assert manifest["report_metadata"]["current_total_cost"] == "$897.58"
     assert manifest["report_metadata"]["current_cost_breakdown"] == {
         "minimax_api": "$504.66",
-        "openrouter_other_model_family_runs": "$352.84",
+        "openrouter_other_model_family_runs": "$352.94",
         "openai_api_reference_sweep": "$39.98",
     }
     assert (
         manifest["report_metadata"]["current_cost_scope"]
-        == "User-confirmed total spend including the OpenRouter selected-grid follow-up, exact CCD calibration pass, and OpenAI reference-sweep additions."
+        == "User-confirmed total spend plus the tracked July 6 exact UniMoral Llama 3.1 calibration pass."
     )
     assert manifest["report_metadata"]["ci_workflow_url"] == "https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml"
     assert manifest["report_metadata"]["metric_definition_version"] == "2026-04-30"
@@ -1636,7 +1636,9 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     paper_alignment_svg = (figure_dir / "option1_paper_result_alignment_map.svg").read_text(encoding="utf-8")
     assert "Paper-vs-current Replication Map" in paper_alignment_svg
-    assert "Partial overlap" in paper_alignment_svg
+    assert "Fresh exact bridge" in paper_alignment_svg
+    assert "Same-model calibration with" in paper_alignment_svg
+    assert "RQ4 BERTScore pending." in paper_alignment_svg
     assert "Distributional comparison only; do not" in paper_alignment_svg
     assert "read CCD as accuracy." in paper_alignment_svg
     assert "Proxy-only evidence; no paper-faithful" in paper_alignment_svg

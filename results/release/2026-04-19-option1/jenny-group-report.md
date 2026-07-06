@@ -205,7 +205,7 @@ This is the reviewer-facing lookup: what each benchmark paper contains, whether 
 
 | Benchmark | Original paper/reference side | Our current side | Direct comparison status |
 | --- | --- | --- | --- |
-| `UniMoral` | RQ1 action-prediction task with visible paper metric anchors in the RQ-level comparison CSV. | Current action-accuracy rows plus saved/prior Llama 3.1 8B and May 13 calibration rows. | Partial: same task surface, related metrics, saved/prior overlap only. |
+| `UniMoral` | RQ1-RQ4 paper tables include Llama 3.1 8B; visible paper metric anchors are in the RQ-level comparison CSV. | Fresh exact Llama 3.1 8B RQ1-RQ4 rerun plus current release rows. | Same-model calibration is available, with metric-scale caveats and RQ4 BERTScore still pending offline scoring. |
 | `SMID` | Human-normed image stimulus set; no original LLM model roster found locally. | Current vision-route moral-rating plus foundation-classification average. | No paper-model comparison; compare only across our current vision-capable rows. |
 | `Value Kaleidoscope / ValuePrism` | Kaleido gated model family and ValuePrism relevance/valence setup. | Prompt-based LLM relevance and valence classification rows. | No direct comparison until Kaleido model access and execution are run. |
 | `CCD-Bench` | Ten-cluster cultural-choice behavior; reference artifacts include 17 model routes. | Current CCD choice distributions, dominant-cluster share, and effective clusters. | Compare distributions only; never read CCD as accuracy. |
@@ -355,9 +355,9 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Report owner | `Jenny Zhu` |
 | Repo update date | `July 6, 2026` |
 | Frozen public snapshot | `Option 1`, `April 19, 2026` |
-| Current project total cost | `$897.48` |
-| Total cost breakdown | MiniMax API: `$504.66`; OpenRouter model-family/calibration runs: `$352.84`, including `$17.760398` from the full selected-grid OpenRouter follow-up and `$9.417152` from the exact same-model CCD calibration pass; OpenAI API reference sweep: `$39.98`. |
-| Cost scope | User-confirmed total spend including the OpenRouter selected-grid follow-up, exact CCD calibration pass, and OpenAI reference-sweep additions. |
+| Current project total cost | `$897.58` |
+| Total cost breakdown | MiniMax API: `$504.66`; OpenRouter model-family/calibration runs: `$352.94`, including `$17.760398` from the full selected-grid OpenRouter follow-up, `$9.417152` from the exact same-model CCD calibration pass, and `$0.103155` from the exact UniMoral Llama 3.1 calibration pass; OpenAI API reference sweep: `$39.98`. |
+| Cost scope | User-confirmed total spend plus the tracked July 6 exact UniMoral Llama 3.1 calibration pass. |
 | Purpose | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
 | Current public matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
 | Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |

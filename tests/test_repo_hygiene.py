@@ -114,6 +114,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| Best fully observed comparable line | `MiniMax-S`: UniMoral 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611." in readme
     assert "| Best text-only line | `GPT-5.5`: UniMoral 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route." in readme
     assert "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165." in readme
+    assert "UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge" in readme
     assert "`UniMoral action accuracy`" in readme
     assert "`SMID average accuracy`" in readme
     assert "`Value Kaleidoscope average`" in readme
@@ -138,7 +139,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| `T3` | Interpretable: cite/compare it within the stated metric layer. |" in readme
     assert "Current dashboard: `72/105` public summary rows are Tier 3" in readme
     assert "The `105` rows are the `75` family-size cells plus `30` OpenAI text-reference cells." in readme
-    assert "Cost/accounting metadata is in the appendix. Current project total: `$897.48`." in readme
+    assert "Cost/accounting metadata is in the appendix. Current project total: `$897.58`." in readme
     assert "## OpenRouter Selected-Grid Follow-Up" not in readme
     assert "## Results First" not in readme
     assert "### DeepSeek S/M/L Log-Derived Readout" not in readme
