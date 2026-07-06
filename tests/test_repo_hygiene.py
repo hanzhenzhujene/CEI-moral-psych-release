@@ -489,6 +489,22 @@ def test_evaluation_methodology_versions_current_metric_definition():
     methodology = (ROOT / "docs" / "evaluation-methodology.md").read_text(encoding="utf-8")
     assert "Current public metric definition version" in methodology
     assert "`2026-04-30`" in methodology
+    assert "no longer an RQ1-only surface" in methodology
+    assert "RQ1-RQ3 use exact-match accuracy" in methodology
+    assert "RQ4 consequence generation appears as two presentation rows per model line" in methodology
+    assert "BERTScore F1 plus METEOR as the two headline generation metrics" in methodology
+    assert "do not collapse RQ1-RQ4 into one universal moral score" in methodology
+    assert "the release should describe current UniMoral release results as action-prediction accuracy" not in methodology
+    assert "The current release summary covers RQ1 action prediction only" not in methodology
+
+    how_to_read = (ROOT / "docs" / "how-to-read-results.md").read_text(encoding="utf-8")
+    assert "## Result Packages" in how_to_read
+    assert "OpenAI text-reference rows" in how_to_read
+    assert "OpenRouter selected-grid follow-up" in how_to_read
+    assert "results/openrouter-selected-grid-moral-psych-full/" in how_to_read
+    assert "Separate from the frozen ranking surface" in how_to_read
+    assert "excludes SMID, DeNEVIL, and MiniMax" in how_to_read
+    assert "larger in-progress matrix" not in how_to_read
 
 
 def test_core_python_modules_have_module_docstrings():

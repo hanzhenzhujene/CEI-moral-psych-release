@@ -101,10 +101,10 @@ Until those upgrades land, the safest public stance is: accuracy claims live on 
 
 ## UniMoral RQ4 Note
 
+The current UniMoral release table is no longer an RQ1-only surface. `results/release/2026-04-19-option1/unimoral-full-benchmark.csv` reports RQ1-RQ4 separately: RQ1-RQ3 use exact-match accuracy, and RQ4 consequence generation appears as two presentation rows per model line, `bert_score_f1` and `meteor`.
+
 The reference UniMoral RQ4 consequence-generation script reports BLEU, METEOR, and BERTScore F1. In `references/UniMoral/RQ4.py`, METEOR and BERTScore F1 are computed against each available human-written consequence for the same sample, the best reference score is kept, and those best per-sample scores are averaged.
 
 METEOR is mostly lexical: it rewards overlapping or closely related words between the generated consequence and the reference. BERTScore F1 is embedding-based: it compares contextual Transformer token embeddings, so it can reward paraphrases that use different wording. With the local `bert-score` defaults, English uses `roberta-large`, Chinese uses `bert-base-chinese`, and Spanish/Arabic/Russian/Hindi fall back to `bert-base-multilingual-cased`.
 
-The current Inspect port in `src/inspect/evals/unimoral.py` uses max ROUGE-L for `unimoral_consequence_generation`, so the release should describe current UniMoral release results as action-prediction accuracy unless the RQ4 scorer is deliberately updated to match the reference metric set.
-
-UniMoral has multiple research questions with different metric layers. The current release summary covers RQ1 action prediction only; it must not be read as a complete Tier 3 summary for RQ2, RQ3, or RQ4.
+The release CSV also retains BLEU and ROUGE-L diagnostic columns for RQ4, but the public README and main RQ4 figure use BERTScore F1 plus METEOR as the two headline generation metrics. Do not compare RQ4 magnitudes directly with RQ1-RQ3 accuracy, and do not collapse RQ1-RQ4 into one universal moral score.

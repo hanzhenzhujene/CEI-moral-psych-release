@@ -5,9 +5,20 @@ This repo uses a few status words repeatedly. This page explains them in plain l
 ## Core Ideas
 
 - `Frozen snapshot`: the public result package we are treating as closed and stable for reporting. In this repo, that is `Option 1` from `April 19, 2026`.
-- `Local expansion run`: a newer or larger run that exists locally but is not yet folded into the frozen public snapshot.
+- `Text-reference row`: a completed text-only reference row, such as the OpenAI rows, that is promoted into text-capable result tables but intentionally has no SMID or DeNEVIL coverage.
+- `Selected-grid follow-up`: the separate OpenRouter text-only follow-up under `results/openrouter-selected-grid-moral-psych-full/`. It has terminal states for all planned model-task rows, but blocked/provider rows stay outside scored summaries.
+- `Exploratory sweep`: an older or smaller follow-up sweep kept outside the frozen release matrix and read as supporting context rather than the main ranking surface.
 - `Paper setup`: the benchmark line follows the same intended task setup as the paper we are testing.
 - `Proxy`: the benchmark line is useful, but it does not use the paper's original setup exactly. In this repo, `Denevil` is currently proxy-only because the original `MoralPrompt` export is not available locally.
+
+## Result Packages
+
+| Package | Where it lives | What to use it for | Boundary |
+| --- | --- | --- | --- |
+| Frozen Option 1 release | `results/release/2026-04-19-option1/` | Main public tables, figures, readiness tiers, and release report. | Closed snapshot; do not treat every later follow-up as part of its counts. |
+| OpenAI text-reference rows | `docs/openai-reference-runs.md` and benchmark-specific release CSVs | Text-only OpenAI comparison context, including promoted GPT-5.5. | No SMID, no DeNEVIL, and not paper-model calibration. |
+| OpenRouter selected-grid follow-up | `results/openrouter-selected-grid-moral-psych-full/` | Text-only scaling/time-scaling readout across UniMoral, ValuePrism, and CCD-Bench. | Separate from the frozen ranking surface; excludes SMID, DeNEVIL, and MiniMax. |
+| Exploratory follow-up sweep | `results/exploratory/2026-05-13-additional-model-sweep/` | Supporting older/smaller route context. | Not the headline release matrix. |
 
 ## Progress Table Labels
 
@@ -45,4 +56,4 @@ These tiers are paired with metric layers. Tier 3 CCD-Bench is still choice-dist
 
 If you only need one sentence:
 
-> The repo shows one closed public snapshot plus a larger in-progress matrix, and it clearly marks which lines are complete, which are proxy-only, and which still need reruns.
+> The repo shows one frozen public release, promoted text-reference rows, and separate follow-up sweeps; it marks which evidence is comparable, text-only, proxy-only, blocked, or exploratory.
