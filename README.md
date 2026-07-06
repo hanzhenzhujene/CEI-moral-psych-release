@@ -13,7 +13,7 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 | Main result CSVs | [UniMoral](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [SMID](results/release/2026-04-19-option1/smid-results.csv), [Value Kaleidoscope](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |
 | Main figures | [Main Figures](#main-figures) |
 | Exact progress / readiness | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) and [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
-| Paper replication / calibration status | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv), [paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv), [paper-result-comparison.md](docs/paper-result-comparison.md) |
+| Paper replication / calibration status | [paper-result-comparison.md](docs/paper-result-comparison.md), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), and the [calibration tables](#data-click-here-result-tables) |
 | Mentor-facing report | [jenny-group-report.md](results/release/2026-04-19-option1/jenny-group-report.md) |
 | Full detailed appendix | [results/release/2026-04-19-option1/README.md](results/release/2026-04-19-option1/README.md) |
 | Rebuild / verify | [Reproduce](#reproduce) with `make bootstrap` |
@@ -80,6 +80,18 @@ The main comparison uses three benchmark-faithful accuracy columns. The other tw
 ## Main Figures
 
 These are the audience-facing result figures to use in the deck or meeting readout. Low-level QA/provenance figures stay in the appendix so the main README stays focused on the result story.
+
+| Open in this order | Figure | What it answers |
+| --- | --- | --- |
+| 1 | UniMoral family-size scaling | Do model families change consistently from S to M to L across RQ1-RQ4? |
+| 2 | UniMoral task heatmap | Which model line is strongest for action prediction, moral typology, and factor attribution? |
+| 3 | UniMoral RQ4 generation quality | Which model line best generates plausible consequences under BERTScore F1 and METEOR? |
+| 4 | Comparable accuracy bars | Which rows are strongest on SMID and Value after the separate UniMoral result block? |
+| 5 | Family scaling profile | Where does size help or stall on SMID and Value Kaleidoscope? |
+| 6 | CCD choice distribution | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |
+| 7 | DeNEVIL behavior outcomes | What proxy behavior mix appears in the saved traces? |
+| 8 | Paper-result comparison table | What original paper metric anchors can be placed beside current rows? |
+| 9 | Paper-vs-current replication map | Which evidence is direct, partial, current-only, blocked, or proxy-only? |
 
 ![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
 
