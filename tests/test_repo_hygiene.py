@@ -207,12 +207,23 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "option1_paper_result_comparison.svg" in figures_readme
     assert "option1_paper_model_calibration_bridge.svg" in figures_readme
     assert "## Replication / calibration figures" in figures_readme
+    assert "## OpenRouter selected-grid follow-up figures" in figures_readme
     replication_block = figures_readme[
-        figures_readme.index("## Replication / calibration figures") : figures_readme.index("## Appendix QA / Provenance Figures")
+        figures_readme.index("## Replication / calibration figures") : figures_readme.index("## OpenRouter selected-grid follow-up figures")
     ]
     assert "option1_paper_result_alignment_map.svg" in replication_block
     assert "option1_paper_model_calibration_bridge.svg" in replication_block
     assert "option1_paper_result_comparison.svg" in replication_block
+    selected_grid_block = figures_readme[
+        figures_readme.index("## OpenRouter selected-grid follow-up figures") : figures_readme.index("## Appendix QA / Provenance Figures")
+    ]
+    assert "within_family_scaling.svg" in selected_grid_block
+    assert "time_scaling.svg" in selected_grid_block
+    assert "benchmark_score_matrix.svg" in selected_grid_block
+    assert "read CCD-Bench as valid-choice behavior, not correctness" in selected_grid_block
+    assert "SMID, DeNEVIL, and MiniMax are excluded" in selected_grid_block
+    assert figures_readme.index("## Replication / calibration figures") < figures_readme.index("## OpenRouter selected-grid follow-up figures")
+    assert figures_readme.index("## OpenRouter selected-grid follow-up figures") < figures_readme.index("## Appendix QA / Provenance Figures")
 
     unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
     assert "UniMoral family-size scaling by RQ" in unimoral_family_scaling_svg

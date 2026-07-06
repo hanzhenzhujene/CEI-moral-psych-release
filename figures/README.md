@@ -54,6 +54,16 @@ Open these first for a meeting, deck, or reviewer skim. They are the figures tha
 - `option1_paper_model_calibration_bridge.svg`: strict same-model paper calibration bridge; exact model rows only, with near-family, blocked, proxy, and route-probe rows left in the ledger table
 - `option1_paper_result_comparison.svg`: RQ-level paper-result comparison figure, with UniMoral RQ4 split into BERTScore F1 and METEOR rows
 
+## OpenRouter selected-grid follow-up figures
+
+These figures are separate from the frozen `2026-04-19 Option 1` ranking surface. They summarize the text-only OpenRouter follow-up across UniMoral RQ1-RQ4, ValuePrism relevance/valence, and CCD-Bench. SMID, DeNEVIL, and MiniMax are excluded.
+
+- `../results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg`: main follow-up view for Qwen, Gemma, and Llama S/M/L movement on completed text-classification rows
+- `../results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg`: older-vs-newer OpenRouter route view for Qwen, DeepSeek, and available Gemma rows
+- `../results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg`: model x benchmark matrix; read CCD-Bench as valid-choice behavior, not correctness
+- `../results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg`: detailed task matrix for audit/provenance rather than the first presentation visual
+- `../results/openrouter-selected-grid-moral-psych-full/figures/cost_estimate.svg`: planning/accounting appendix only
+
 ## Appendix QA / Provenance Figures
 
 These are still public and useful, but they answer audit/provenance questions rather than headline performance questions.
