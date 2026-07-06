@@ -1774,6 +1774,10 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "[unimoral-full-benchmark.csv](results/release/2026-04-19-option1/unimoral-full-benchmark.csv)" in root_readme
     assert "[smid-results.csv](results/release/2026-04-19-option1/smid-results.csv)" in root_readme
     assert "[value-kaleidoscope-results.csv](results/release/2026-04-19-option1/value-kaleidoscope-results.csv)" in root_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/targeted-retry-log.md" in root_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg" in root_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg" in root_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg" in root_readme
     assert "Best fully observed comparable line | `" in root_readme
     assert "Best text-only line | `" in root_readme
     assert "Best UniMoral RQ4 generation rows |" in root_readme

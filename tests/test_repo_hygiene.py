@@ -115,6 +115,11 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[result_summary.csv](results/openrouter-selected-grid-moral-psych-full/result_summary.csv)" in readme
     assert "[benchmark_summary.csv](results/openrouter-selected-grid-moral-psych-full/benchmark_summary.csv)" in readme
     assert "[model_summary.csv](results/openrouter-selected-grid-moral-psych-full/model_summary.csv)" in readme
+    assert "[completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md)" in readme
+    assert "[retry log](results/openrouter-selected-grid-moral-psych-full/targeted-retry-log.md)" in readme
+    assert "[family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
+    assert "[time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in readme
+    assert "[benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in readme
     assert "OpenRouter text-only follow-up   results/openrouter-selected-grid-moral-psych-full/" in readme
     assert "it is text-only, excludes SMID/DeNEVIL/MiniMax, and has `102/119` scored rows" in readme
     assert "| Best fully observed comparable line | `MiniMax-S`: UniMoral 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611." in readme
@@ -451,8 +456,10 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "option1_paper_result_alignment_map.svg" in reproducibility
     assert "option1_paper_model_calibration_bridge.svg" in reproducibility
     assert "results/openrouter-selected-grid-moral-psych-full/README.md" in reproducibility
+    assert "targeted-retry-log.md" in reproducibility
     assert "benchmark_score_matrix.svg" in reproducibility
     assert "separate OpenRouter text-only follow-up" in reproducibility
+    assert "blocked provider/credit rows stay documented outside scored summaries" in reproducibility
     assert "appendix QA artifacts" in reproducibility
 
     figures_readme = (ROOT / "figures" / "README.md").read_text(encoding="utf-8")
@@ -469,7 +476,9 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "results/openrouter-selected-grid-moral-psych-full/result_summary.csv" in results_readme
     assert "results/openrouter-selected-grid-moral-psych-full/benchmark_summary.csv" in results_readme
     assert "results/openrouter-selected-grid-moral-psych-full/model_summary.csv" in results_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/targeted-retry-log.md" in results_readme
     assert "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg" in results_readme
+    assert "`completion_audit.md` and `targeted-retry-log.md` document provider/credit blockers" in results_readme
     assert "separate from the frozen Option 1 ranking surface" in results_readme
     assert "`benchmark-comparison.csv` is a supporting generated summary for figures, not the main data entry point" in results_readme
     assert "CCD-Bench is valid-choice behavior, not accuracy" in results_readme
