@@ -491,6 +491,17 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "Appendix QA / Provenance Figures" in figures_readme
 
     results_readme = (ROOT / "results" / "README.md").read_text(encoding="utf-8")
+    assert "## Open First" in results_readme
+    assert "[`unimoral-full-benchmark.csv`](release/2026-04-19-option1/unimoral-full-benchmark.csv)" in results_readme
+    assert "[`smid-results.csv`](release/2026-04-19-option1/smid-results.csv)" in results_readme
+    assert "[`value-kaleidoscope-results.csv`](release/2026-04-19-option1/value-kaleidoscope-results.csv)" in results_readme
+    assert "[`../figures/README.md`](../figures/README.md)" in results_readme
+    assert "[`readiness-tier-matrix.csv`](release/2026-04-19-option1/readiness-tier-matrix.csv)" in results_readme
+    assert "[`paper-model-calibration-ledger.csv`](release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in results_readme
+    assert "[`openrouter-selected-grid-moral-psych-full/README.md`](openrouter-selected-grid-moral-psych-full/README.md)" in results_readme
+    assert "Audience-facing figures are separated from appendix QA/provenance figures." in results_readme
+    assert "Tier is result readiness, not model quality." in results_readme
+    assert "Separate text-only follow-up; not folded into the frozen Option 1 ranking surface." in results_readme
     assert "## Public Result Layers" in results_readme
     assert "## OpenRouter Selected-Grid Follow-Up" in results_readme
     assert "results/openrouter-selected-grid-moral-psych-full/result_summary.csv" in results_readme
