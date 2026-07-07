@@ -118,6 +118,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml" not in readme
     assert "Jenny Zhu's CEI moral-psych benchmark deliverable" in readme
     assert "## Start Here" in readme
+    assert "## Visual Read In 90 Seconds" in readme
     assert "## Best Results At A Glance" in readme
     assert "## Status: What Is Usable" in readme
     assert "## DATA, CLICK HERE: Result Tables" in readme
@@ -145,6 +146,21 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[detailed task matrix](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg)" in readme
     assert "OpenRouter text-only follow-up   results/openrouter-selected-grid-moral-psych-full/" in readme
     assert "it is text-only, excludes SMID/DeNEVIL/MiniMax, and has `102/119` scored rows" in readme
+    assert readme.index("## Start Here") < readme.index("## Visual Read In 90 Seconds")
+    assert readme.index("## Visual Read In 90 Seconds") < readme.index("## Best Results At A Glance")
+    assert "Use this path when a reviewer or team lead wants the story before the tables." in readme
+    assert "| Step | Open | Say this plainly |" in readme
+    assert "[UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in readme
+    assert "GPT-5 is the black text-only S/M/L line" in readme
+    assert "[SMID/Value accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
+    assert "SMID is the current visual-moral bottleneck" in readme
+    assert "[CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
+    assert "cultural-choice behavior relative to a 10% uniform baseline, not right/wrong accuracy" in readme
+    assert "[same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "[calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
+    assert "Calibration bars include only exact same-model/same-metric rows" in readme
+    assert "[DeNEVIL proxy behavior](figures/release/option1_denevil_behavior_outcomes.svg)" in readme
+    assert "not paper-faithful MoralPrompt scoring and not Tier 3" in readme
     assert "| Best fully observed comparable line | `MiniMax-S`: UniMoral RQ1/action 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611." in readme
     assert "| Best fully observed comparable line | `MiniMax-S`: UniMoral RQ1/action 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [Value CSV](results/release/2026-04-19-option1/value-kaleidoscope-results.csv), [SMID/Value bars](figures/release/option1_benchmark_accuracy_bars.svg) |" in readme
     assert "| Best text-only line | `GPT-5.5`: UniMoral RQ1/action 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route." in readme

@@ -1837,6 +1837,8 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     root_readme = (repo_copy / "README.md").read_text(encoding="utf-8")
     assert root_readme.index("## Start Here") < root_readme.index("## What To Trust First")
     assert root_readme.index("## Start Here") < root_readme.index("## Best Results At A Glance")
+    assert root_readme.index("## Start Here") < root_readme.index("## Visual Read In 90 Seconds")
+    assert root_readme.index("## Visual Read In 90 Seconds") < root_readme.index("## Best Results At A Glance")
     assert root_readme.index("## Start Here") < root_readme.index("## DATA, CLICK HERE: Result Tables")
     assert root_readme.index("## Best Results At A Glance") < root_readme.index("## Status: What Is Usable")
     assert root_readme.index("## Status: What Is Usable") < root_readme.index("## DATA, CLICK HERE: Result Tables")
@@ -1865,6 +1867,20 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "| Separate follow-up visual evidence | What it answers |" in root_readme
     assert "Separate from the frozen Option 1 ranking surface." in root_readme
     assert "CCD-Bench remains valid-choice behavior, not accuracy." in root_readme
+    assert "## Visual Read In 90 Seconds" in root_readme
+    assert "Use this path when a reviewer or team lead wants the story before the tables." in root_readme
+    assert "| Step | Open | Say this plainly |" in root_readme
+    assert "[UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
+    assert "GPT-5 is the black text-only S/M/L line" in root_readme
+    assert "[SMID/Value accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
+    assert "SMID is the current visual-moral bottleneck" in root_readme
+    assert "[CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
+    assert "cultural-choice behavior relative to a 10% uniform baseline, not right/wrong accuracy" in root_readme
+    assert "[same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "[calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
+    assert "Calibration bars include only exact same-model/same-metric rows" in root_readme
+    assert "[DeNEVIL proxy behavior](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
+    assert "not paper-faithful MoralPrompt scoring and not Tier 3" in root_readme
     assert "Best fully observed comparable line | `" in root_readme
     assert "Best text-only line | `" in root_readme
     assert "Best UniMoral RQ4 generation rows |" in root_readme
