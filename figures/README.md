@@ -11,25 +11,34 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 
 Open these first for a meeting, deck, or reviewer skim. This list mirrors the first part of the root README `Main Figures` section: result and calibration visuals are first-class; parser, coverage, sample-volume, and route-status visuals are secondary QA/provenance evidence.
 
-| Order | Open | Use it for | Read it as |
-| ---: | --- | --- | --- |
-| 1 | [UniMoral family-size scaling](release/option1_unimoral_family_scaling.svg) | Task-specific UniMoral S/M/L movement across RQ1-RQ4. | Task-by-task scaling, not one overall moral score. |
-| 2 | [UniMoral four-task dashboard](release/option1_unimoral_four_task_dashboard.svg) | RQ1-RQ4 coverage and metric boundaries. | RQ1-RQ3 are accuracy; RQ4 is generation quality. |
-| 3 | [UniMoral task heatmap](release/option1_unimoral_task_heatmap.svg) | UniMoral RQ1-RQ3 exact-match accuracy across model lines. | Classification accuracy only; RQ4 is separate. |
-| 4 | [UniMoral RQ4 generation quality](release/option1_unimoral_generation_quality.svg) | UniMoral RQ4 generation quality with BERTScore F1 and METEOR. | Higher-better generation overlap, not accuracy. |
-| 5 | [UniMoral task rankings](release/option1_unimoral_task_rankings.svg) | Per-task leaders across UniMoral task surfaces. | Rankings within tasks, not one collapsed moral score. |
-| 6 | [UniMoral task spread](release/option1_unimoral_task_spread.svg) | Exact-match spread across RQ1-RQ3 classification tasks. | Diagnostic separation, not proof of saturation. |
-| 7 | [Comparable accuracy bars](release/option1_benchmark_accuracy_bars.svg) | Benchmark-faithful SMID and Value accuracy after the separate UniMoral block. | Main comparable accuracy view after UniMoral. |
-| 8 | [Comparable accuracy heatmap](release/option1_accuracy_heatmap.svg) | Compact comparable-score matrix for UniMoral, SMID, and Value. | Presence/absence scan; hatched cells are not low scores. |
-| 9 | [Comparable score spread](release/option1_benchmark_difficulty_profile.svg) | Comparable score spread and the SMID visual-moral bottleneck. | Bottleneck/spread view, not a new metric. |
-| 10 | [Family scaling profile](release/option1_family_scaling_profile.svg) | Size effects on SMID and Value without mixing CCD or DeNEVIL. | Size trends only where metrics are comparable. |
-| 11 | [CCD choice distribution](release/option1_ccd_choice_distribution.svg) | CCD-Bench cultural-cluster choice behavior. | Cultural-choice behavior, not accuracy. |
-| 12 | [CCD dominant-option share](release/option1_ccd_dominant_option_share.svg) | Dominant cultural-cluster concentration and effective-cluster breadth. | Concentration/style summary, not correctness. |
-| 13 | [DeNEVIL behavior outcomes](release/option1_denevil_behavior_outcomes.svg) | DeNEVIL proxy behavior outcomes from saved traces. | Proxy behavior evidence, not MoralPrompt scoring. |
-| 14 | [DeNEVIL prompt-family heatmap](release/option1_denevil_prompt_family_heatmap.svg) | Protective-response rates by heuristic prompt family. | Proxy behavior audit, not paper-faithful scoring. |
-| 15 | [Same-model CCD calibration bar chart](release/option1_paper_result_alignment_map.svg) | Paper/source Nordic-share bars beside the 11 exact current CCD-Bench reruns or verified rows. | Same-model behavior comparison, not accuracy. |
-| 16 | [Same-model paper calibration bridge](release/option1_paper_model_calibration_bridge.svg) | Exact paper-model rows with the repo-side evidence and comparison boundary in one visual. | Same-model calibration only; proxy and non-exact rows stay out. |
-| 17 | [Paper-result context table](release/option1_paper_result_comparison.svg) | Paper metric anchors and release-result context. | Context only; not a same-model bar comparison. |
+### Visual Contract
+
+| Visual category | What it supports | Do not use it for |
+| --- | --- | --- |
+| Headline result | Current result claims within one metric layer. | One universal moral score across unlike benchmarks. |
+| Calibration | Exact same-model/same-metric bridges, or clearly labeled context tables. | Non-exact model comparisons or proxy substitution. |
+| Follow-up | Separate sweeps that add context beyond the frozen Option 1 package. | Replacing the primary release ranking surface. |
+| QA / provenance | Coverage, parser health, route status, sample volume, and proxy trace boundaries. | Performance leaderboards. |
+
+| Category | Order | Open | Use it for | Read it as |
+| --- | ---: | --- | --- | --- |
+| Headline | 1 | [UniMoral family-size scaling](release/option1_unimoral_family_scaling.svg) | Task-specific UniMoral S/M/L movement across RQ1-RQ4. | Task-by-task scaling, not one overall moral score. |
+| UniMoral deep dive | 2 | [UniMoral four-task dashboard](release/option1_unimoral_four_task_dashboard.svg) | RQ1-RQ4 coverage and metric boundaries. | RQ1-RQ3 are accuracy; RQ4 is generation quality. |
+| UniMoral deep dive | 3 | [UniMoral task heatmap](release/option1_unimoral_task_heatmap.svg) | UniMoral RQ1-RQ3 exact-match accuracy across model lines. | Classification accuracy only; RQ4 is separate. |
+| UniMoral deep dive | 4 | [UniMoral RQ4 generation quality](release/option1_unimoral_generation_quality.svg) | UniMoral RQ4 generation quality with BERTScore F1 and METEOR. | Higher-better generation overlap, not accuracy. |
+| UniMoral deep dive | 5 | [UniMoral task rankings](release/option1_unimoral_task_rankings.svg) | Per-task leaders across UniMoral task surfaces. | Rankings within tasks, not one collapsed moral score. |
+| UniMoral deep dive | 6 | [UniMoral task spread](release/option1_unimoral_task_spread.svg) | Exact-match spread across RQ1-RQ3 classification tasks. | Diagnostic separation, not proof of saturation. |
+| Headline | 7 | [Comparable accuracy bars](release/option1_benchmark_accuracy_bars.svg) | Benchmark-faithful SMID and Value accuracy after the separate UniMoral block. | Main comparable accuracy view after UniMoral. |
+| Headline | 8 | [Comparable accuracy heatmap](release/option1_accuracy_heatmap.svg) | Compact comparable-score matrix for UniMoral, SMID, and Value. | Presence/absence scan; hatched cells are not low scores. |
+| Headline | 9 | [Comparable score spread](release/option1_benchmark_difficulty_profile.svg) | Comparable score spread and the SMID visual-moral bottleneck. | Bottleneck/spread view, not a new metric. |
+| Deep dive | 10 | [Family scaling profile](release/option1_family_scaling_profile.svg) | Size effects on SMID and Value without mixing CCD or DeNEVIL. | Size trends only where metrics are comparable. |
+| Behavior | 11 | [CCD choice distribution](release/option1_ccd_choice_distribution.svg) | CCD-Bench cultural-cluster choice behavior. | Cultural-choice behavior, not accuracy. |
+| Behavior | 12 | [CCD dominant-option share](release/option1_ccd_dominant_option_share.svg) | Dominant cultural-cluster concentration and effective-cluster breadth. | Concentration/style summary, not correctness. |
+| Proxy behavior | 13 | [DeNEVIL behavior outcomes](release/option1_denevil_behavior_outcomes.svg) | DeNEVIL proxy behavior outcomes from saved traces. | Proxy behavior evidence, not MoralPrompt scoring. |
+| Proxy behavior | 14 | [DeNEVIL prompt-family heatmap](release/option1_denevil_prompt_family_heatmap.svg) | Protective-response rates by heuristic prompt family. | Proxy behavior audit, not paper-faithful scoring. |
+| Calibration | 15 | [Same-model CCD calibration bar chart](release/option1_paper_result_alignment_map.svg) | Paper/source Nordic-share bars beside the 11 exact current CCD-Bench reruns or verified rows. | Same-model behavior comparison, not accuracy. |
+| Calibration | 16 | [Same-model paper calibration bridge](release/option1_paper_model_calibration_bridge.svg) | Exact paper-model rows with the repo-side evidence and comparison boundary in one visual. | Same-model calibration only; proxy and non-exact rows stay out. |
+| Calibration context | 17 | [Paper-result context table](release/option1_paper_result_comparison.svg) | Paper metric anchors and release-result context. | Context only; not a same-model bar comparison. |
 
 ## Figure Bundles
 
@@ -136,3 +145,7 @@ Follow-up model-sweep figures use `figures/exploratory/`. These are now embedded
 - `additional_model_sweep_unimoral_accuracy.svg`: UniMoral accuracy for the May 13 additional-model sweep
 - `additional_model_sweep_ccd_dominant_share.svg`: CCD-Bench dominant cultural-cluster concentration for the same sweep
 - `additional_model_sweep_scaling.svg`: approximate model-size readout for the sweep, with CCD concentration encoded by point radius
+
+## Legacy Generated PNGs
+
+`figures/generated/*.png` are older generated chart outputs kept for historical continuity and teammate context. They are not the current publication-facing release surface, are not embedded in the root README, and should not be used for the July 2026 result story unless explicitly regenerated and reclassified.

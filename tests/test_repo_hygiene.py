@@ -171,15 +171,24 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "UniMoral spans 0.563 to 0.684 across the comparable slice" in readme
     assert "0.048 spread" not in readme
     assert "## Main Figures" in readme
-    assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in readme
-    assert "| 2 | [UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in readme
-    assert "| 7 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
-    assert "| 8 | [Comparable accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)" in readme
-    assert "| 11 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
-    assert "| 12 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in readme
-    assert "| 15 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in readme
-    assert "| 16 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
-    assert "| 17 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
+    assert "### Visual Contract" in readme
+    assert "| Visual category | What it supports | Do not use it for |" in readme
+    assert "| Headline result | Current result claims within one metric layer. | One universal moral score across unlike benchmarks. |" in readme
+    assert "| Calibration | Exact same-model/same-metric bridges, or clearly labeled context tables. | Non-exact model comparisons or proxy substitution. |" in readme
+    assert "| Follow-up | Separate sweeps that add context beyond the frozen Option 1 package. | Replacing the primary release ranking surface. |" in readme
+    assert "| QA / provenance | Coverage, parser health, route status, sample volume, and proxy trace boundaries. | Performance leaderboards. |" in readme
+    assert readme.index("### Visual Contract") < readme.index("### Figure Shortcuts")
+    assert "For a 3-minute skim, use only the first shortcut row." in readme
+    assert "| Category | Open in this order | Figure | What it answers |" in readme
+    assert "| Headline | 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in readme
+    assert "| UniMoral deep dive | 2 | [UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in readme
+    assert "| Headline | 7 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
+    assert "| Headline | 8 | [Comparable accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)" in readme
+    assert "| Behavior | 11 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
+    assert "| Behavior | 12 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in readme
+    assert "| Calibration | 15 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "| Calibration | 16 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
+    assert "| Calibration context | 17 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "![UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in readme
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in readme
@@ -279,13 +288,22 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| RQ4 | Consequence generation | BERTScore F1 + METEOR |" in readme
     assert "BERTScore: Llama-M (0.730); METEOR: GPT-5.5 (0.165)" in readme
     assert "RQ1-RQ3 use exact-match accuracy; RQ4 has two higher-better generation rows, BERTScore F1 and METEOR." in readme
+    assert "| Text response selection | Selection |" not in readme
+    assert "Text response selection | Ten-option cultural-choice selection/distribution" in readme
     assert "`make bootstrap`" in readme or "make audit" in readme
+    assert "Legacy generated PNGs            figures/generated/ (not the current release surface)" in readme
 
     figures_readme = (ROOT / "figures/README.md").read_text(encoding="utf-8")
     assert "side" + " metric" not in figures_readme
     assert "## Audience-Facing Result Figures" in figures_readme
+    assert "### Visual Contract" in figures_readme
+    assert "| Headline result | Current result claims within one metric layer. | One universal moral score across unlike benchmarks. |" in figures_readme
+    assert figures_readme.index("### Visual Contract") < figures_readme.index("| Category | Order | Open | Use it for | Read it as |")
     assert "## Figure Bundles" in figures_readme
     assert "## Secondary QA / Provenance Figures" in figures_readme
+    assert "## Legacy Generated PNGs" in figures_readme
+    assert "`figures/generated/*.png` are older generated chart outputs kept for historical continuity and teammate context." in figures_readme
+    assert "not the current publication-facing release surface" in figures_readme
     assert "## Appendix QA / Provenance Figures" not in figures_readme
     audience_block = figures_readme[
         figures_readme.index("## Audience-Facing Result Figures") : figures_readme.index("## Figure Bundles")
@@ -294,7 +312,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
         figures_readme.index("## Figure Bundles") : figures_readme.index("## UniMoral figures")
     ]
     appendix_block = figures_readme[figures_readme.index("## Secondary QA / Provenance Figures") :]
-    assert "| Order | Open | Use it for | Read it as |" in audience_block
+    assert "| Category | Order | Open | Use it for | Read it as |" in audience_block
     assert "This list mirrors the first part of the root README `Main Figures` section" in audience_block
     assert "Paper metric anchors and release-result context." in audience_block
     assert "[UniMoral family-size scaling](release/option1_unimoral_family_scaling.svg)" in audience_block

@@ -423,6 +423,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "proxy-only behavioral evidence and traceability support" in denevil["release_interpretation"].lower()
     ccd_bench = next(row for row in benchmark_catalog_rows if row["benchmark"] == "CCD-Bench")
     assert ccd_bench["paper_title"] == "CCD-Bench: Probing Cultural Conflict in Large Language Model Decision-Making"
+    assert ccd_bench["current_release_scope"] == "Ten-option cultural-choice selection/distribution"
     assert "canonical cluster heatmap" in ccd_bench["release_interpretation"].lower()
 
     with (release_dir / "paper-result-alignment.csv").open(newline="", encoding="utf-8") as handle:
@@ -1837,7 +1838,7 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert root_readme.index("## DATA, CLICK HERE: Result Tables") < root_readme.index("## What To Trust First")
     assert root_readme.index("## What To Trust First") < root_readme.index("## Key Takeaways")
     assert root_readme.index("## Key Takeaways") < root_readme.index("## Main Figures")
-    assert root_readme.index("### Figure Shortcuts") < root_readme.index("| Open in this order | Figure | What it answers |")
+    assert root_readme.index("### Figure Shortcuts") < root_readme.index("| Category | Open in this order | Figure | What it answers |")
     assert "The public readiness dashboard has `" in root_readme
     assert "model-line x benchmark cells. `" in root_readme
     assert "are Tier 3 and can be cited or compared within their stated metric layer" in root_readme
@@ -1892,22 +1893,31 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![DeNEVIL proxy sample volume](figures/release/option1_denevil_proxy_sample_volume.svg)" in root_readme
     assert "![DeNEVIL proxy visible-response coverage](figures/release/option1_denevil_proxy_valid_response_rate.svg)" in root_readme
     assert "![DeNEVIL proxy pipeline](figures/release/option1_denevil_proxy_pipeline.svg)" in root_readme
-    assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
-    assert "| 2 | [UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in root_readme
-    assert "| 7 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
-    assert "| 8 | [Comparable accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)" in root_readme
-    assert "| 11 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
-    assert "| 12 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in root_readme
-    assert "| 15 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
-    assert "| 16 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
-    assert "| 17 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in root_readme
+    assert "For a 3-minute skim, use only the first shortcut row." in root_readme
+    assert "| Category | Open in this order | Figure | What it answers |" in root_readme
+    assert "| Headline | 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
+    assert "| UniMoral deep dive | 2 | [UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in root_readme
+    assert "| Headline | 7 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
+    assert "| Headline | 8 | [Comparable accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)" in root_readme
+    assert "| Behavior | 11 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
+    assert "| Behavior | 12 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in root_readme
+    assert "| Calibration | 15 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "| Calibration | 16 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
+    assert "| Calibration context | 17 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in root_readme
     assert "Use this first: OpenAI GPT-5 is the black text-only S/M/L line" in root_readme
     assert "CCD behavior view: clusters are choices relative to a uniform baseline, not right/wrong labels." in root_readme
     assert "Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring." in root_readme
     assert "Bridge view: exact same-model calibration rows are visible" in root_readme
     assert "Context view: paper metric anchors are shown for orientation" in root_readme
     assert "Secondary QA/provenance figures are also embedded below" in root_readme
+    assert "### Visual Contract" in root_readme
+    assert "| Visual category | What it supports | Do not use it for |" in root_readme
+    assert "| Headline result | Current result claims within one metric layer. | One universal moral score across unlike benchmarks. |" in root_readme
+    assert "| Calibration | Exact same-model/same-metric bridges, or clearly labeled context tables. | Non-exact model comparisons or proxy substitution. |" in root_readme
+    assert "| Follow-up | Separate sweeps that add context beyond the frozen Option 1 package. | Replacing the primary release ranking surface. |" in root_readme
+    assert "| QA / provenance | Coverage, parser health, route status, sample volume, and proxy trace boundaries. | Performance leaderboards. |" in root_readme
     assert "### Figure Shortcuts" in root_readme
+    assert root_readme.index("### Visual Contract") < root_readme.index("### Figure Shortcuts")
     assert "| If you have... | Open these first | What to say |" in root_readme
     assert "| 3 minutes | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg), [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg), [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) |" in root_readme
     assert "| UniMoral questions | [four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg), [task heatmap](figures/release/option1_unimoral_task_heatmap.svg), [RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg) |" in root_readme
@@ -1939,6 +1949,9 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "Current dashboard:" in root_readme
     assert "public summary rows are Tier 3" in root_readme
     assert "../../../figures/release" not in root_readme
+    assert "| Text response selection | Selection |" not in root_readme
+    assert "Text response selection | Ten-option cultural-choice selection/distribution" in root_readme
+    assert "Legacy generated PNGs            figures/generated/ (not the current release surface)" in root_readme
     assert "## Benchmark Result Visuals" not in root_readme
     assert "## TL;DR" not in root_readme
     assert "## Claude Code Slash Commands" in root_readme
