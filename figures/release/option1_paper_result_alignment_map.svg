@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 938" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1020" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,155 +35,165 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1500" height="938" class="canvas"/>
-<rect x="24" y="24" width="1452" height="890" rx="22" class="panel"/>
+<rect x="0" y="0" width="1500" height="1020" class="canvas"/>
+<rect x="24" y="24" width="1452" height="972" rx="22" class="panel"/>
 <title>Same-model CCD calibration bar comparison</title>
-<desc>Bar comparison for exact same-model paper calibration rows with a shared numeric metric. Only plottable same-model rows are shown; non-exact, blocked, metric-mismatched, and proxy rows are excluded.</desc>
-<text x="48" y="64" class="title">Same-Model CCD Calibration Bars</text>
-<text x="48" y="90" class="subtitle">Only the 11 exact same-model CCD-Bench rows with the same plottable metric appear here. Bars compare Nordic Europe share in the paper/source reference</text>
-<text x="48" y="110" class="subtitle">versus this repo's exact rerun or verified current row.</text>
+<desc>Grouped horizontal bar chart for exact same-model CCD-Bench paper calibration rows with a shared Nordic Europe share metric. Only plottable same-model CCD rows are shown; non-exact, blocked, metric-mismatched, and proxy rows are excluded.</desc>
+<text x="48" y="64" class="title">Same-Model CCD Calibration Bar Chart</text>
+<text x="48" y="90" class="subtitle">Only the 11 exact same-model CCD-Bench rows with the same plottable metric appear here. Each model gets two bars on one shared axis: paper/source Nordic</text>
+<text x="48" y="110" class="subtitle">Europe share and this repo's exact rerun or verified current row.</text>
 <text x="48" y="132" class="subtitle">CCD-Bench is cultural-choice distribution behavior, not accuracy. Rows without an exact same-model same-metric comparison stay in the ledger, not this chart.</text>
 <text x="58" y="166" class="tiny">EXACT PAPER MODEL</text>
-<text x="388" y="166" class="tiny">PAPER / SOURCE</text>
-<text x="700" y="166" class="tiny">THIS REPO</text>
-<text x="1012" y="166" class="tiny">DELTA</text>
-<text x="1174" y="166" class="tiny">VALID CHOICES</text>
-<rect x="42" y="172" width="1416" height="46" rx="14" class="subpanel"/>
-<text x="58" y="198" class="label">Mistral Nemo</text>
-<rect x="388" y="188" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="388" y="188" width="125.9" height="16" rx="8" fill="#2563eb"/>
-<text x="630" y="202" class="body">19.0%</text>
-<text x="388" y="220" class="small">paper</text>
-<rect x="700" y="188" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="700" y="188" width="169.5" height="16" rx="8" fill="#0f766e"/>
-<text x="942" y="202" class="body">25.6%</text>
-<text x="700" y="220" class="small">ours</text>
-<text x="1012" y="202" class="label" fill="#0f766e">+6.6 pp</text>
-<text x="1174" y="202" class="body">2,182/2,182</text>
-<rect x="42" y="226" width="1416" height="46" rx="14" class="subpanel"/>
-<text x="58" y="252" class="label">Llama 3.3 70B</text>
-<rect x="388" y="242" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="388" y="242" width="130.6" height="16" rx="8" fill="#2563eb"/>
-<text x="630" y="256" class="body">19.7%</text>
-<text x="388" y="274" class="small">paper</text>
-<rect x="700" y="242" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="700" y="242" width="137.9" height="16" rx="8" fill="#0f766e"/>
-<text x="942" y="256" class="body">20.8%</text>
-<text x="700" y="274" class="small">ours</text>
-<text x="1012" y="256" class="label" fill="#0f766e">+1.1 pp</text>
-<text x="1174" y="256" class="body">2,182/2,182</text>
-<rect x="42" y="280" width="1416" height="46" rx="14" class="subpanel"/>
-<text x="58" y="306" class="label">Llama 4 Maverick</text>
-<rect x="388" y="296" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="388" y="296" width="139.9" height="16" rx="8" fill="#2563eb"/>
-<text x="630" y="310" class="body">21.1%</text>
-<text x="388" y="328" class="small">paper</text>
-<rect x="700" y="296" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="700" y="296" width="156.1" height="16" rx="8" fill="#0f766e"/>
-<text x="942" y="310" class="body">23.5%</text>
-<text x="700" y="328" class="small">ours</text>
-<text x="1012" y="310" class="label" fill="#0f766e">+2.4 pp</text>
-<text x="1174" y="310" class="body">2,013/2,182</text>
-<rect x="42" y="334" width="1416" height="46" rx="14" class="subpanel"/>
-<text x="58" y="360" class="label">DeepSeek V3</text>
-<rect x="388" y="350" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="388" y="350" width="151.8" height="16" rx="8" fill="#2563eb"/>
-<text x="630" y="364" class="body">22.9%</text>
-<text x="388" y="382" class="small">paper</text>
-<rect x="700" y="350" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="700" y="350" width="154.1" height="16" rx="8" fill="#0f766e"/>
-<text x="942" y="364" class="body">23.2%</text>
-<text x="700" y="382" class="small">ours</text>
-<text x="1012" y="364" class="label" fill="#0f766e">+0.3 pp</text>
-<text x="1174" y="364" class="body">2,108/2,182</text>
-<rect x="42" y="388" width="1416" height="46" rx="14" class="subpanel"/>
-<text x="58" y="414" class="label">Qwen2.5 72B</text>
-<rect x="388" y="404" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="388" y="404" width="117.3" height="16" rx="8" fill="#2563eb"/>
-<text x="630" y="418" class="body">17.7%</text>
-<text x="388" y="436" class="small">paper</text>
-<rect x="700" y="404" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="700" y="404" width="140.0" height="16" rx="8" fill="#0f766e"/>
-<text x="942" y="418" class="body">21.1%</text>
-<text x="700" y="436" class="small">ours</text>
-<text x="1012" y="418" class="label" fill="#0f766e">+3.4 pp</text>
-<text x="1174" y="418" class="body">2,182/2,182</text>
-<rect x="42" y="442" width="1416" height="46" rx="14" class="subpanel"/>
-<text x="58" y="468" class="label">GPT-4.1</text>
-<rect x="388" y="458" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="388" y="458" width="142.5" height="16" rx="8" fill="#2563eb"/>
-<text x="630" y="472" class="body">21.5%</text>
-<text x="388" y="490" class="small">paper</text>
-<rect x="700" y="458" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="700" y="458" width="147.6" height="16" rx="8" fill="#0f766e"/>
-<text x="942" y="472" class="body">22.3%</text>
-<text x="700" y="490" class="small">ours</text>
-<text x="1012" y="472" class="label" fill="#0f766e">+0.8 pp</text>
-<text x="1174" y="472" class="body">2,182/2,182</text>
-<rect x="42" y="496" width="1416" height="46" rx="14" class="subpanel"/>
-<text x="58" y="522" class="label">Command-R</text>
-<rect x="388" y="512" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="388" y="512" width="106.7" height="16" rx="8" fill="#2563eb"/>
-<text x="630" y="526" class="body">16.1%</text>
-<text x="388" y="544" class="small">paper</text>
-<rect x="700" y="512" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="700" y="512" width="150.4" height="16" rx="8" fill="#0f766e"/>
-<text x="942" y="526" class="body">22.7%</text>
-<text x="700" y="544" class="small">ours</text>
-<text x="1012" y="526" class="label" fill="#0f766e">+6.6 pp</text>
-<text x="1174" y="526" class="body">2,182/2,182</text>
-<rect x="42" y="550" width="1416" height="46" rx="14" class="subpanel"/>
-<text x="58" y="576" class="label">Phi-4</text>
-<rect x="388" y="566" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="388" y="566" width="125.3" height="16" rx="8" fill="#2563eb"/>
-<text x="630" y="580" class="body">18.9%</text>
-<text x="388" y="598" class="small">paper</text>
-<rect x="700" y="566" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="700" y="566" width="137.0" height="16" rx="8" fill="#0f766e"/>
-<text x="942" y="580" class="body">20.7%</text>
-<text x="700" y="598" class="small">ours</text>
-<text x="1012" y="580" class="label" fill="#0f766e">+1.8 pp</text>
-<text x="1174" y="580" class="body">2,182/2,182</text>
-<rect x="42" y="604" width="1416" height="46" rx="14" class="subpanel"/>
-<text x="58" y="630" class="label">WizardLM-2</text>
-<rect x="388" y="620" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="388" y="620" width="145.8" height="16" rx="8" fill="#2563eb"/>
-<text x="630" y="634" class="body">22.0%</text>
-<text x="388" y="652" class="small">paper</text>
-<rect x="700" y="620" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="700" y="620" width="156.8" height="16" rx="8" fill="#0f766e"/>
-<text x="942" y="634" class="body">23.6%</text>
-<text x="700" y="652" class="small">ours</text>
-<text x="1012" y="634" class="label" fill="#0f766e">+1.6 pp</text>
-<text x="1174" y="634" class="body">2,182/2,182</text>
-<rect x="42" y="658" width="1416" height="46" rx="14" class="subpanel"/>
-<text x="58" y="684" class="label">Sonar</text>
-<rect x="388" y="674" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="388" y="674" width="144.5" height="16" rx="8" fill="#2563eb"/>
-<text x="630" y="688" class="body">21.8%</text>
-<text x="388" y="706" class="small">paper</text>
-<rect x="700" y="674" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="700" y="674" width="95.1" height="16" rx="8" fill="#0f766e"/>
-<text x="942" y="688" class="body">14.3%</text>
-<text x="700" y="706" class="small">ours</text>
-<text x="1012" y="688" class="label" fill="#b45309">-7.5 pp</text>
-<text x="1174" y="688" class="body">2,182/2,182</text>
-<rect x="42" y="712" width="1416" height="46" rx="14" class="subpanel"/>
-<text x="58" y="738" class="label">Claude 4 Sonnet</text>
-<rect x="388" y="728" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="388" y="728" width="202.8" height="16" rx="8" fill="#2563eb"/>
-<text x="630" y="742" class="body">30.6%</text>
-<text x="388" y="760" class="small">paper</text>
-<rect x="700" y="728" width="232" height="16" rx="8" class="muted-bar"/>
-<rect x="700" y="728" width="200.5" height="16" rx="8" fill="#0f766e"/>
-<text x="942" y="742" class="body">30.2%</text>
-<text x="700" y="760" class="small">ours</text>
-<text x="1012" y="742" class="label" fill="#b45309">-0.4 pp</text>
-<text x="1174" y="742" class="body">2,182/2,182</text>
-<rect x="48" y="844" width="1404" height="46" rx="16" class="legend-card"/>
-<rect x="72" y="860" width="18" height="12" rx="6" fill="#2563eb"/>
-<text x="100" y="871" class="body">paper/source Nordic share</text>
-<rect x="330" y="860" width="18" height="12" rx="6" fill="#0f766e"/>
-<text x="358" y="871" class="body">current exact rerun or verified row</text>
-<text x="704" y="871" class="body">Scale shared across bars: 0-35% Nordic Europe share. This is not an accuracy leaderboard.</text>
+<text x="368" y="166" class="tiny">NORDIC EUROPE SHARE: PAPER/SOURCE VS THIS REPO</text>
+<text x="1090" y="166" class="tiny">DELTA</text>
+<text x="1230" y="166" class="tiny">VALID CHOICES</text>
+<line x1="368" y1="192" x2="1028" y2="192" class="baseline"/>
+<line x1="368.00" y1="185" x2="368.00" y2="198" class="baseline"/>
+<text x="368.00" y="178" text-anchor="middle" class="small">0%</text>
+<line x1="556.57" y1="185" x2="556.57" y2="198" class="baseline"/>
+<text x="556.57" y="178" text-anchor="middle" class="small">10%</text>
+<line x1="745.14" y1="185" x2="745.14" y2="198" class="baseline"/>
+<text x="745.14" y="178" text-anchor="middle" class="small">20%</text>
+<line x1="933.71" y1="185" x2="933.71" y2="198" class="baseline"/>
+<text x="933.71" y="178" text-anchor="middle" class="small">30%</text>
+<line x1="1028.00" y1="185" x2="1028.00" y2="198" class="baseline"/>
+<text x="1028.00" y="178" text-anchor="middle" class="small">35%</text>
+<rect x="42" y="196" width="1416" height="50" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>
+<text x="58" y="224" class="label">Mistral Nemo</text>
+<text x="350" y="217" text-anchor="end" class="small">paper</text>
+<rect x="368" y="206" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="206" width="358.3" height="14" rx="7" fill="#2563eb" data-calibration-bar="paper"/>
+<text x="734.3" y="217" text-anchor="start" class="body">19.0%</text>
+<text x="350" y="237" text-anchor="end" class="small">ours</text>
+<rect x="368" y="226" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="226" width="482.2" height="14" rx="7" fill="#0f766e" data-calibration-bar="repo"/>
+<text x="858.2" y="237" text-anchor="start" class="body">25.6%</text>
+<text x="1090" y="228" class="label" fill="#0f766e">+6.6 pp</text>
+<text x="1230" y="228" class="body">2,182/2,182</text>
+<rect x="42" y="254" width="1416" height="50" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>
+<text x="58" y="282" class="label">Llama 3.3 70B</text>
+<text x="350" y="275" text-anchor="end" class="small">paper</text>
+<rect x="368" y="264" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="264" width="371.5" height="14" rx="7" fill="#2563eb" data-calibration-bar="paper"/>
+<text x="747.5" y="275" text-anchor="start" class="body">19.7%</text>
+<text x="350" y="295" text-anchor="end" class="small">ours</text>
+<rect x="368" y="284" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="284" width="392.4" height="14" rx="7" fill="#0f766e" data-calibration-bar="repo"/>
+<text x="768.4" y="295" text-anchor="start" class="body">20.8%</text>
+<text x="1090" y="286" class="label" fill="#0f766e">+1.1 pp</text>
+<text x="1230" y="286" class="body">2,182/2,182</text>
+<rect x="42" y="312" width="1416" height="50" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>
+<text x="58" y="340" class="label">Llama 4 Maverick</text>
+<text x="350" y="333" text-anchor="end" class="small">paper</text>
+<rect x="368" y="322" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="322" width="397.9" height="14" rx="7" fill="#2563eb" data-calibration-bar="paper"/>
+<text x="773.9" y="333" text-anchor="start" class="body">21.1%</text>
+<text x="350" y="353" text-anchor="end" class="small">ours</text>
+<rect x="368" y="342" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="342" width="444.0" height="14" rx="7" fill="#0f766e" data-calibration-bar="repo"/>
+<text x="820.0" y="353" text-anchor="start" class="body">23.5%</text>
+<text x="1090" y="344" class="label" fill="#0f766e">+2.4 pp</text>
+<text x="1230" y="344" class="body">2,013/2,182</text>
+<rect x="42" y="370" width="1416" height="50" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>
+<text x="58" y="398" class="label">DeepSeek V3</text>
+<text x="350" y="391" text-anchor="end" class="small">paper</text>
+<rect x="368" y="380" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="380" width="431.8" height="14" rx="7" fill="#2563eb" data-calibration-bar="paper"/>
+<text x="807.8" y="391" text-anchor="start" class="body">22.9%</text>
+<text x="350" y="411" text-anchor="end" class="small">ours</text>
+<rect x="368" y="400" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="400" width="438.3" height="14" rx="7" fill="#0f766e" data-calibration-bar="repo"/>
+<text x="814.3" y="411" text-anchor="start" class="body">23.2%</text>
+<text x="1090" y="402" class="label" fill="#0f766e">+0.3 pp</text>
+<text x="1230" y="402" class="body">2,108/2,182</text>
+<rect x="42" y="428" width="1416" height="50" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>
+<text x="58" y="456" class="label">Qwen2.5 72B</text>
+<text x="350" y="449" text-anchor="end" class="small">paper</text>
+<rect x="368" y="438" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="438" width="333.8" height="14" rx="7" fill="#2563eb" data-calibration-bar="paper"/>
+<text x="709.8" y="449" text-anchor="start" class="body">17.7%</text>
+<text x="350" y="469" text-anchor="end" class="small">ours</text>
+<rect x="368" y="458" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="458" width="398.4" height="14" rx="7" fill="#0f766e" data-calibration-bar="repo"/>
+<text x="774.4" y="469" text-anchor="start" class="body">21.1%</text>
+<text x="1090" y="460" class="label" fill="#0f766e">+3.4 pp</text>
+<text x="1230" y="460" class="body">2,182/2,182</text>
+<rect x="42" y="486" width="1416" height="50" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>
+<text x="58" y="514" class="label">GPT-4.1</text>
+<text x="350" y="507" text-anchor="end" class="small">paper</text>
+<rect x="368" y="496" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="496" width="405.4" height="14" rx="7" fill="#2563eb" data-calibration-bar="paper"/>
+<text x="781.4" y="507" text-anchor="start" class="body">21.5%</text>
+<text x="350" y="527" text-anchor="end" class="small">ours</text>
+<rect x="368" y="516" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="516" width="420.0" height="14" rx="7" fill="#0f766e" data-calibration-bar="repo"/>
+<text x="796.0" y="527" text-anchor="start" class="body">22.3%</text>
+<text x="1090" y="518" class="label" fill="#0f766e">+0.8 pp</text>
+<text x="1230" y="518" class="body">2,182/2,182</text>
+<rect x="42" y="544" width="1416" height="50" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>
+<text x="58" y="572" class="label">Command-R</text>
+<text x="350" y="565" text-anchor="end" class="small">paper</text>
+<rect x="368" y="554" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="554" width="303.6" height="14" rx="7" fill="#2563eb" data-calibration-bar="paper"/>
+<text x="679.6" y="565" text-anchor="start" class="body">16.1%</text>
+<text x="350" y="585" text-anchor="end" class="small">ours</text>
+<rect x="368" y="574" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="574" width="427.8" height="14" rx="7" fill="#0f766e" data-calibration-bar="repo"/>
+<text x="803.8" y="585" text-anchor="start" class="body">22.7%</text>
+<text x="1090" y="576" class="label" fill="#0f766e">+6.6 pp</text>
+<text x="1230" y="576" class="body">2,182/2,182</text>
+<rect x="42" y="602" width="1416" height="50" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>
+<text x="58" y="630" class="label">Phi-4</text>
+<text x="350" y="623" text-anchor="end" class="small">paper</text>
+<rect x="368" y="612" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="612" width="356.4" height="14" rx="7" fill="#2563eb" data-calibration-bar="paper"/>
+<text x="732.4" y="623" text-anchor="start" class="body">18.9%</text>
+<text x="350" y="643" text-anchor="end" class="small">ours</text>
+<rect x="368" y="632" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="632" width="389.8" height="14" rx="7" fill="#0f766e" data-calibration-bar="repo"/>
+<text x="765.8" y="643" text-anchor="start" class="body">20.7%</text>
+<text x="1090" y="634" class="label" fill="#0f766e">+1.8 pp</text>
+<text x="1230" y="634" class="body">2,182/2,182</text>
+<rect x="42" y="660" width="1416" height="50" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>
+<text x="58" y="688" class="label">WizardLM-2</text>
+<text x="350" y="681" text-anchor="end" class="small">paper</text>
+<rect x="368" y="670" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="670" width="414.9" height="14" rx="7" fill="#2563eb" data-calibration-bar="paper"/>
+<text x="790.9" y="681" text-anchor="start" class="body">22.0%</text>
+<text x="350" y="701" text-anchor="end" class="small">ours</text>
+<rect x="368" y="690" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="690" width="445.9" height="14" rx="7" fill="#0f766e" data-calibration-bar="repo"/>
+<text x="821.9" y="701" text-anchor="start" class="body">23.6%</text>
+<text x="1090" y="692" class="label" fill="#0f766e">+1.6 pp</text>
+<text x="1230" y="692" class="body">2,182/2,182</text>
+<rect x="42" y="718" width="1416" height="50" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>
+<text x="58" y="746" class="label">Sonar</text>
+<text x="350" y="739" text-anchor="end" class="small">paper</text>
+<rect x="368" y="728" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="728" width="411.1" height="14" rx="7" fill="#2563eb" data-calibration-bar="paper"/>
+<text x="787.1" y="739" text-anchor="start" class="body">21.8%</text>
+<text x="350" y="759" text-anchor="end" class="small">ours</text>
+<rect x="368" y="748" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="748" width="270.5" height="14" rx="7" fill="#0f766e" data-calibration-bar="repo"/>
+<text x="646.5" y="759" text-anchor="start" class="body">14.3%</text>
+<text x="1090" y="750" class="label" fill="#b45309">-7.5 pp</text>
+<text x="1230" y="750" class="body">2,182/2,182</text>
+<rect x="42" y="776" width="1416" height="50" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>
+<text x="58" y="804" class="label">Claude 4 Sonnet</text>
+<text x="350" y="797" text-anchor="end" class="small">paper</text>
+<rect x="368" y="786" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="786" width="577.0" height="14" rx="7" fill="#2563eb" data-calibration-bar="paper"/>
+<text x="953.0" y="797" text-anchor="start" class="body">30.6%</text>
+<text x="350" y="817" text-anchor="end" class="small">ours</text>
+<rect x="368" y="806" width="660" height="14" rx="7" class="muted-bar"/>
+<rect x="368" y="806" width="570.4" height="14" rx="7" fill="#0f766e" data-calibration-bar="repo"/>
+<text x="946.4" y="817" text-anchor="start" class="body">30.2%</text>
+<text x="1090" y="808" class="label" fill="#b45309">-0.4 pp</text>
+<text x="1230" y="808" class="body">2,182/2,182</text>
+<rect x="48" y="926" width="1404" height="46" rx="16" class="legend-card"/>
+<rect x="72" y="942" width="18" height="12" rx="6" fill="#2563eb"/>
+<text x="100" y="953" class="body">paper/source Nordic share</text>
+<rect x="330" y="942" width="18" height="12" rx="6" fill="#0f766e"/>
+<text x="358" y="953" class="body">current exact rerun or verified row</text>
+<text x="704" y="953" class="body">Single shared x-axis: 0-35% Nordic Europe share. This is not an accuracy leaderboard.</text>
 </svg>

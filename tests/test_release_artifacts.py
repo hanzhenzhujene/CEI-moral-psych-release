@@ -1661,11 +1661,13 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "% of release" in sample_volume_svg
 
     paper_alignment_svg = (figure_dir / "option1_paper_result_alignment_map.svg").read_text(encoding="utf-8")
-    assert "Same-Model CCD Calibration Bars" in paper_alignment_svg
+    assert "Same-Model CCD Calibration Bar Chart" in paper_alignment_svg
     assert "Only the 11 exact same-model CCD-Bench rows with the same plottable metric appear here." in paper_alignment_svg
-    assert "PAPER / SOURCE" in paper_alignment_svg
-    assert "THIS REPO" in paper_alignment_svg
+    assert "NORDIC EUROPE SHARE: PAPER/SOURCE VS THIS REPO" in paper_alignment_svg
     assert "DELTA" in paper_alignment_svg
+    assert paper_alignment_svg.count('data-calibration-row="ccd-exact"') == 11
+    assert paper_alignment_svg.count('data-calibration-bar="paper"') == 11
+    assert paper_alignment_svg.count('data-calibration-bar="repo"') == 11
     for label in (
         "Mistral Nemo",
         "Llama 3.3 70B",
@@ -1687,7 +1689,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "+6.6 pp" in paper_alignment_svg
     assert "-7.5 pp" in paper_alignment_svg
     assert "This is not an accuracy leaderboard." in paper_alignment_svg
-    for forbidden in ("DeNEVIL", "MoralPrompt", "SMID", "Value Kaleidoscope", "ValuePrism", "Qwen-M 99.5", "APV"):
+    for forbidden in ("DeNEVIL", "MoralPrompt", "UniMoral", "SMID", "Value Kaleidoscope", "ValuePrism", "Qwen-M 99.5", "APV"):
         assert forbidden not in paper_alignment_svg
     assert " ".join(("low", "cost")) not in paper_alignment_svg.lower()
 

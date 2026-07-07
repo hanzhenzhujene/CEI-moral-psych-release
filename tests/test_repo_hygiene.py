@@ -436,13 +436,17 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "GPT-5-mini Ref" not in calibration_surfaces
     assert "best OpenAI text row: GPT-5 mini 0.739" in calibration_surfaces
     assert "visible paper metric anchors" in calibration_surfaces
-    assert "Same-Model CCD Calibration Bars" in paper_alignment_svg
+    assert "Same-Model CCD Calibration Bar Chart" in paper_alignment_svg
     assert "Only the 11 exact same-model CCD-Bench rows with the same plottable metric appear here." in paper_alignment_svg
-    assert "PAPER / SOURCE" in paper_alignment_svg
-    assert "THIS REPO" in paper_alignment_svg
+    assert "NORDIC EUROPE SHARE: PAPER/SOURCE VS THIS REPO" in paper_alignment_svg
     assert "DELTA" in paper_alignment_svg
+    assert paper_alignment_svg.count('data-calibration-row="ccd-exact"') == 11
+    assert paper_alignment_svg.count('data-calibration-bar="paper"') == 11
+    assert paper_alignment_svg.count('data-calibration-bar="repo"') == 11
     assert "paper/source Nordic share" in paper_alignment_svg
     assert "current exact rerun or verified row" in paper_alignment_svg
+    for forbidden in ("DeNEVIL", "MoralPrompt", "UniMoral", "SMID", "Value Kaleidoscope", "ValuePrism", "APV"):
+        assert forbidden not in paper_alignment_svg
     for label in (
         "Mistral Nemo",
         "Llama 3.3 70B",

@@ -9387,7 +9387,8 @@ def render_paper_result_alignment_svg(rows: list[dict[str, Any]], output_path: P
     plot_rows = [
         row
         for row in rows
-        if row.get("model_match_class") == "exact_same_model"
+        if row.get("benchmark") == "CCD-Bench"
+        and row.get("model_match_class") == "exact_same_model"
         and row.get("can_plot_numeric") == "yes"
     ]
 
@@ -9410,19 +9411,20 @@ def render_paper_result_alignment_svg(rows: list[dict[str, Any]], output_path: P
         }
         return replacements.get(label, label)
 
-    row_h = 54
-    top = 190
+    row_h = 58
+    top = 216
     width = 1500
-    height = top + len(plot_rows) * row_h + 154
+    height = top + len(plot_rows) * row_h + 166
     label_x = 58
-    paper_x = 388
-    current_x = 700
-    delta_x = 1012
-    n_x = 1174
-    bar_w = 232
+    chart_x = 368
+    chart_w = 660
+    delta_x = 1090
+    n_x = 1230
     bar_max = 0.35
+    bar_h = 14
     paper_color = "#2563eb"
     current_color = "#0f766e"
+    axis_ticks = [0.0, 0.10, 0.20, 0.30, 0.35]
 
     lines = svg_header(width, height)
     lines.extend(
@@ -9430,44 +9432,53 @@ def render_paper_result_alignment_svg(rows: list[dict[str, Any]], output_path: P
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Same-model CCD calibration bar comparison</title>",
-            "<desc>Bar comparison for exact same-model paper calibration rows with a shared numeric metric. Only plottable same-model rows are shown; non-exact, blocked, metric-mismatched, and proxy rows are excluded.</desc>",
-            '<text x="48" y="64" class="title">Same-Model CCD Calibration Bars</text>',
+            "<desc>Grouped horizontal bar chart for exact same-model CCD-Bench paper calibration rows with a shared Nordic Europe share metric. Only plottable same-model CCD rows are shown; non-exact, blocked, metric-mismatched, and proxy rows are excluded.</desc>",
+            '<text x="48" y="64" class="title">Same-Model CCD Calibration Bar Chart</text>',
             *svg_text_block(
                 48,
                 90,
-                "Only the 11 exact same-model CCD-Bench rows with the same plottable metric appear here. Bars compare Nordic Europe share in the paper/source reference versus this repo's exact rerun or verified current row.",
+                "Only the 11 exact same-model CCD-Bench rows with the same plottable metric appear here. Each model gets two bars on one shared axis: paper/source Nordic Europe share and this repo's exact rerun or verified current row.",
                 "subtitle",
                 154,
             ),
             '<text x="48" y="132" class="subtitle">CCD-Bench is cultural-choice distribution behavior, not accuracy. Rows without an exact same-model same-metric comparison stay in the ledger, not this chart.</text>',
             f'<text x="{label_x}" y="166" class="tiny">EXACT PAPER MODEL</text>',
-            f'<text x="{paper_x}" y="166" class="tiny">PAPER / SOURCE</text>',
-            f'<text x="{current_x}" y="166" class="tiny">THIS REPO</text>',
+            f'<text x="{chart_x}" y="166" class="tiny">NORDIC EUROPE SHARE: PAPER/SOURCE VS THIS REPO</text>',
             f'<text x="{delta_x}" y="166" class="tiny">DELTA</text>',
             f'<text x="{n_x}" y="166" class="tiny">VALID CHOICES</text>',
         ]
     )
 
+    axis_y = 192
+    lines.append(f'<line x1="{chart_x}" y1="{axis_y}" x2="{chart_x + chart_w}" y2="{axis_y}" class="baseline"/>')
+    for tick in axis_ticks:
+        x = chart_x + chart_w * tick / bar_max
+        lines.append(f'<line x1="{x:.2f}" y1="{axis_y - 7}" x2="{x:.2f}" y2="{axis_y + 6}" class="baseline"/>')
+        lines.append(f'<text x="{x:.2f}" y="{axis_y - 14}" text-anchor="middle" class="small">{tick * 100:.0f}%</text>')
+
     for index, row in enumerate(plot_rows):
         y = top + index * row_h
         paper_value = parse_share(str(row["paper_value"]))
         repo_value = parse_share(str(row["repo_value"]))
-        paper_bar = min(paper_value / bar_max, 1.0) * bar_w
-        repo_bar = min(repo_value / bar_max, 1.0) * bar_w
+        paper_bar = min(paper_value / bar_max, 1.0) * chart_w
+        repo_bar = min(repo_value / bar_max, 1.0) * chart_w
         delta = repo_value - paper_value
         delta_color = "#0f766e" if delta >= 0 else "#b45309"
         valid_text = f"{int(row['valid_n']):,}/{int(row['total_n']):,}"
 
-        lines.append(f'<rect x="42" y="{y - 18}" width="{width - 84}" height="{row_h - 8}" rx="14" class="subpanel"/>')
+        lines.append(f'<rect x="42" y="{y - 20}" width="{width - 84}" height="{row_h - 8}" rx="14" class="subpanel" data-calibration-row="ccd-exact"/>')
         lines.extend(svg_text_block(label_x, y + 8, model_label(str(row["paper_model"])), "label", 30, line_height=16)[:2])
-        for x, value, bar, color, label in (
-            (paper_x, paper_value, paper_bar, paper_color, "paper"),
-            (current_x, repo_value, repo_bar, current_color, "ours"),
+        for y_offset, value, bar, color, label, data_role in (
+            (-10, paper_value, paper_bar, paper_color, "paper", "paper"),
+            (10, repo_value, repo_bar, current_color, "ours", "repo"),
         ):
-            lines.append(f'<rect x="{x}" y="{y - 2}" width="{bar_w}" height="16" rx="8" class="muted-bar"/>')
-            lines.append(f'<rect x="{x}" y="{y - 2}" width="{bar:.1f}" height="16" rx="8" fill="{color}"/>')
-            lines.append(f'<text x="{x + bar_w + 10}" y="{y + 12}" class="body">{value * 100:.1f}%</text>')
-            lines.append(f'<text x="{x}" y="{y + 30}" class="small">{label}</text>')
+            bar_y = y + y_offset
+            value_label_x = min(chart_x + bar + 8, chart_x + chart_w - 4)
+            value_anchor = "start" if value_label_x < chart_x + chart_w - 4 else "end"
+            lines.append(f'<text x="{chart_x - 18}" y="{bar_y + 11}" text-anchor="end" class="small">{label}</text>')
+            lines.append(f'<rect x="{chart_x}" y="{bar_y}" width="{chart_w}" height="{bar_h}" rx="7" class="muted-bar"/>')
+            lines.append(f'<rect x="{chart_x}" y="{bar_y}" width="{bar:.1f}" height="{bar_h}" rx="7" fill="{color}" data-calibration-bar="{data_role}"/>')
+            lines.append(f'<text x="{value_label_x:.1f}" y="{bar_y + 11}" text-anchor="{value_anchor}" class="body">{value * 100:.1f}%</text>')
         lines.append(f'<text x="{delta_x}" y="{y + 12}" class="label" fill="{delta_color}">{delta * 100:+.1f} pp</text>')
         lines.append(f'<text x="{n_x}" y="{y + 12}" class="body">{valid_text}</text>')
 
@@ -9477,7 +9488,7 @@ def render_paper_result_alignment_svg(rows: list[dict[str, Any]], output_path: P
     lines.append(f'<text x="100" y="{legend_y + 5}" class="body">paper/source Nordic share</text>')
     lines.append(f'<rect x="330" y="{legend_y - 6}" width="18" height="12" rx="6" fill="{current_color}"/>')
     lines.append(f'<text x="358" y="{legend_y + 5}" class="body">current exact rerun or verified row</text>')
-    lines.append(f'<text x="704" y="{legend_y + 5}" class="body">Scale shared across bars: 0-35% Nordic Europe share. This is not an accuracy leaderboard.</text>')
+    lines.append(f'<text x="704" y="{legend_y + 5}" class="body">Single shared x-axis: 0-35% Nordic Europe share. This is not an accuracy leaderboard.</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
