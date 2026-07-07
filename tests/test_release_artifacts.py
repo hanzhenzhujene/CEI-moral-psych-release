@@ -383,10 +383,18 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "option1_paper_result_alignment_map.svg" in release_readme_text
     assert "option1_paper_model_calibration_bridge.svg" in release_readme_text
     visual_section = markdown_h2_section(release_readme_text, "## Benchmark Result Visuals")
-    assert "![Paper-model calibration bridge]" not in visual_section
-    assert "For the complete exact-model bridge" in visual_section
-    assert "not as a visual calibration comparison" in visual_section
-    assert "[same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)" in visual_section
+    assert "Start here. These figures are the main result and calibration surface" in visual_section
+    assert "![UniMoral four-task dashboard](../../../figures/release/option1_unimoral_four_task_dashboard.svg)" in visual_section
+    assert "![UniMoral task rankings](../../../figures/release/option1_unimoral_task_rankings.svg)" in visual_section
+    assert "![UniMoral task spread](../../../figures/release/option1_unimoral_task_spread.svg)" in visual_section
+    assert "![Comparable score spread](../../../figures/release/option1_benchmark_difficulty_profile.svg)" in visual_section
+    assert "![DeNEVIL prompt-family heatmap](../../../figures/release/option1_denevil_prompt_family_heatmap.svg)" in visual_section
+    assert "![Same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)" in visual_section
+    assert "![Paper-result context table](../../../figures/release/option1_paper_result_comparison.svg)" in visual_section
+    assert "Bridge view: exact same-model calibration rows are visible" in visual_section
+    assert "Context view: paper metric anchors are shown for orientation" in visual_section
+    assert "For the complete exact-model bridge" not in visual_section
+    assert "not as a visual calibration comparison" not in visual_section
     assert "same-model paper calibration bridge" in release_readme_text
     assert "paper-model-calibration-ledger.csv" in release_readme_text
     assert "paper-model-calibration-bridge.csv" in release_readme_text
@@ -1316,7 +1324,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "DeNEVIL is proxy behavioral evidence, not benchmark-faithful scoring" not in tldr_text
         assert "## Results First" in text
         assert "## Benchmark Result Visuals" in text
-        assert "Start here. These figures are the main result surface" in text
+        assert "Start here. These figures are the main result and calibration surface" in text
         assert "Visual readout in one sentence" in text
         assert "### 1. UniMoral RQ1-RQ4: family-size scaling and task readout" in text
         assert "### 2. SMID / Value Kaleidoscope: topline comparable accuracy" in text
@@ -1367,9 +1375,9 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "option1_ccd_choice_distribution.svg" in text
         assert "option1_ccd_dominant_option_share.svg" in text
         assert "option1_denevil_behavior_outcomes.svg" in text
+        assert "option1_denevil_prompt_family_heatmap.svg" in text
         assert "option1_family_scaling_profile.svg" in text
         assert "option1_ccd_valid_choice_coverage.svg" not in text
-        assert "option1_denevil_prompt_family_heatmap.svg" not in text
         assert "option1_denevil_proxy_status_matrix.svg" not in text
         assert "option1_denevil_proxy_sample_volume.svg" not in text
         assert "option1_denevil_proxy_valid_response_rate.svg" not in text

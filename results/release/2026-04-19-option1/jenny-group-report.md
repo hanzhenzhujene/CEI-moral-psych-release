@@ -8,7 +8,7 @@ This report covers Jenny Zhu's five assigned moral-psych benchmark papers under 
 
 ## Benchmark Result Visuals
 
-Start here. These figures are the main result surface; the tables below keep the exact numbers and caveats.
+Start here. These figures are the main result and calibration surface; the tables below keep the exact numbers and caveats.
 
 Visual readout in one sentence: text moral reasoning is stronger than image moral judgment, CCD-Bench shows cultural-choice style rather than accuracy, and DeNEVIL is proxy behavior evidence rather than paper-faithful MoralPrompt scoring.
 
@@ -23,6 +23,10 @@ _What it tests: UniMoral breaks moral reasoning into four human-facing steps: wh
 
 _Why it matters: moral psychology is about choices plus explanations, not just a right/wrong label. The figure shows that the winner changes across RQs, so the honest takeaway is not `larger model = better moral reasoner`; it is `different model families handle different parts of moral reasoning differently`._
 
+![UniMoral four-task dashboard](../../../figures/release/option1_unimoral_four_task_dashboard.svg)
+
+_Dashboard view: RQ1-RQ3 are classification accuracy surfaces, while RQ4 is generation quality. Use it as the map before reading the task-specific charts._
+
 ![UniMoral RQ1-RQ3 exact-match accuracy](../../../figures/release/option1_unimoral_task_heatmap.svg)
 
 _How to read it: RQ1, RQ2, and RQ3 all use exact-match accuracy, so the three classification surfaces stay comparable inside the same benchmark block. Higher means the model matched the human-labeled action, moral frame, or decision factor more often._
@@ -31,6 +35,14 @@ _How to read it: RQ1, RQ2, and RQ3 all use exact-match accuracy, so the three cl
 
 _How to read RQ4: consequence generation is open-ended. BERTScore F1 asks whether the model said something semantically close to the reference consequence; METEOR asks whether the wording overlaps. It is not a right/wrong accuracy score._
 
+![UniMoral task rankings](../../../figures/release/option1_unimoral_task_rankings.svg)
+
+_Task-ranking view: compare leaders within each UniMoral task surface; do not collapse these rankings into one universal moral score._
+
+![UniMoral task spread](../../../figures/release/option1_unimoral_task_spread.svg)
+
+_Spread view: shows diagnostic separation across UniMoral classification tasks. Tight ranges are not proof of benchmark saturation._
+
 ### 2. SMID / Value Kaleidoscope: topline comparable accuracy
 
 ![Comparable accuracy bars](../../../figures/release/option1_benchmark_accuracy_bars.svg)
@@ -38,6 +50,10 @@ _How to read RQ4: consequence generation is open-ended. BERTScore F1 asks whethe
 _What it tests: SMID asks whether a vision model can see morally important cues in images. Value Kaleidoscope asks whether a text model can spot which values, rights, or duties matter in a situation and whether they support or oppose the action._
 
 _How to read it: UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
+
+![Comparable score spread](../../../figures/release/option1_benchmark_difficulty_profile.svg)
+
+_Bottleneck view: SMID has the lowest mean and largest spread among the directly comparable metrics, so it is the visual-moral bottleneck rather than just another accuracy column._
 
 ### 3. SMID / Value Kaleidoscope: family-size scaling
 
@@ -69,6 +85,10 @@ _What it tests: DeNEVIL-style evaluation looks for value vulnerabilities under r
 
 _How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._
 
+![DeNEVIL prompt-family heatmap](../../../figures/release/option1_denevil_prompt_family_heatmap.svg)
+
+_Proxy prompt-family view: this helps audit where protective behavior appears, but it is still not paper-faithful DeNEVIL scoring._
+
 ### 7. Replication / calibration: exact same-model comparisons
 
 ![Same-model CCD calibration bar chart](../../../figures/release/option1_paper_result_alignment_map.svg)
@@ -77,7 +97,13 @@ _What it answers: for exact same-model CCD-Bench rows, how do paper/source Nordi
 
 _Strict rule: this visible comparison includes only exact same-model evidence on a shared metric. DeNEVIL/proxy rows, SMID human-norm rows, Value/Kaleido non-reruns, and non-exact routes stay in the ledger tables instead of being plotted._
 
-_For the complete exact-model bridge, open the [same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg). The broader paper-result context table remains available as a CSV/documentation artifact, not as a visual calibration comparison._
+![Same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)
+
+_Bridge view: exact same-model calibration rows are visible; near-family, blocked, route-probe, and proxy rows stay out of the plotted comparison._
+
+![Paper-result context table](../../../figures/release/option1_paper_result_comparison.svg)
+
+_Context view: paper metric anchors are shown for orientation; this is not a same-model calibration bar chart._
 
 Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
 
