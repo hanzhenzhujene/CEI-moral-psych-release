@@ -818,9 +818,13 @@ def test_root_readme_links_release_methodology_and_summary_paths():
 
     docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
     assert "../figures/README.md" in docs_index
+    assert "one-screen figure talk track" in docs_index
     assert "audience-facing figure order, visual caveats, and secondary QA/provenance figure map" in docs_index
+    assert "Safe Citation Matrix" in docs_index
+    assert "paper-result-comparison.md#safe-citation-matrix" in docs_index
     assert "appendix/provenance figure map" not in docs_index
     assert "## Visual Reader Path" in docs_index
+    assert "Its `What To Say From The Figures` table gives the one-screen talk track." in docs_index
     assert "[`Figure Shortcuts`](../README.md#figure-shortcuts)" in docs_index
     assert "[`Visual Contract`](../README.md#visual-contract)" in docs_index
     assert "UniMoral RQ4 is generation quality rather than accuracy" in docs_index
@@ -848,9 +852,12 @@ def test_evaluation_methodology_versions_current_metric_definition():
     assert "Separate from the frozen ranking surface" in how_to_read
     assert "excludes SMID, DeNEVIL, and MiniMax" in how_to_read
     assert "## Visual Reading Order" in how_to_read
+    assert "Its `What To Say From The Figures` table is the one-screen talk track" in how_to_read
     assert "If you have only three minutes, use the first shortcut row" in how_to_read
     assert "../README.md#figure-shortcuts" in how_to_read
     assert "../README.md#visual-contract" in how_to_read
+    assert "paper-result-comparison.md#safe-citation-matrix" in how_to_read
+    assert "exact same-model numeric bars, UniMoral metric-bridged calibration" in how_to_read
     assert "headline result figures support current result claims within one metric layer" in how_to_read
     assert "QA/provenance figures show coverage, parser health, route status, sample volume, or proxy boundaries rather than performance rankings" in how_to_read
     assert "figures/release/option1_unimoral_family_scaling.svg" in how_to_read

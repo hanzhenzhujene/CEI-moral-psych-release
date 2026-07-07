@@ -7,7 +7,7 @@
 - [`reproducibility.md`](reproducibility.md): the main public quickstart, including `make bootstrap`, setup notes, release regeneration, and benchmark run instructions.
 - [`how-to-read-results.md`](how-to-read-results.md): plain-language guide to the report terms and progress labels.
 - [`openai-reference-runs.md`](openai-reference-runs.md): completed OpenAI text-reference rows, including the promoted GPT-5.5 text-only follow-up.
-- [`paper-result-comparison.md`](paper-result-comparison.md): reviewer-facing calibration page that separates original paper/reference models and results from the repo's current rows, overlap status, and blocked/proxy-only cases.
+- [`paper-result-comparison.md`](paper-result-comparison.md): reviewer-facing calibration page with a Safe Citation Matrix separating exact paper-model bars, metric-bridged UniMoral calibration, and blocked/proxy-only cases.
 - [`calibration-replication.md`](calibration-replication.md): exact UniMoral/CCD calibration evidence, saved-prior artifacts, and current replication limits.
 - [`paper-model-replication-map.md`](paper-model-replication-map.md): benchmark-by-benchmark map separating paper-faithful candidates, route probes, saved/prior artifacts, and proxy-only evidence.
 - [`data-access.md`](data-access.md): benchmark-by-benchmark dataset and environment-variable requirements.
@@ -16,14 +16,14 @@
 ## Public Release Entry Points
 
 - [`../README.md`](../README.md): high-level project framing and key results
-- [`../figures/README.md`](../figures/README.md): audience-facing figure order, visual caveats, and secondary QA/provenance figure map
+- [`../figures/README.md`](../figures/README.md): one-screen figure talk track, audience-facing figure order, visual caveats, and secondary QA/provenance figure map
 - [`../results/release/2026-04-19-option1/README.md`](../results/release/2026-04-19-option1/README.md): release artifact index
 - [`../results/release/2026-04-19-option1/source/README.md`](../results/release/2026-04-19-option1/source/README.md): provenance note for the tracked authoritative snapshot
 - [`../results/openrouter-selected-grid-moral-psych-full/README.md`](../results/openrouter-selected-grid-moral-psych-full/README.md): separate text-only OpenRouter selected-grid follow-up, with figures, interpretation, and blocked-cell audit
 
 ## Visual Reader Path
 
-Use [`../figures/README.md`](../figures/README.md) when you need the presentation order for result visuals. For the shortest deck path, start with the root README's [`Figure Shortcuts`](../README.md#figure-shortcuts); for category rules, use the root README's [`Visual Contract`](../README.md#visual-contract). Together they separate:
+Use [`../figures/README.md`](../figures/README.md) when you need the presentation order for result visuals. Its `What To Say From The Figures` table gives the one-screen talk track. For the shortest deck path, start with the root README's [`Figure Shortcuts`](../README.md#figure-shortcuts); for category rules, use the root README's [`Visual Contract`](../README.md#visual-contract). Together they separate:
 
 - audience-facing figures for the main story
 - secondary QA / provenance figures
@@ -31,6 +31,8 @@ Use [`../figures/README.md`](../figures/README.md) when you need the presentatio
 - separate OpenRouter selected-grid follow-up figures
 
 The most important boundaries are visible there too: UniMoral RQ4 is generation quality rather than accuracy, CCD-Bench is cultural-choice behavior rather than correctness, and DeNEVIL is proxy behavior rather than paper-faithful MoralPrompt scoring.
+
+For exact wording on what can be cited against original-paper results, use [`paper-result-comparison.md#safe-citation-matrix`](paper-result-comparison.md#safe-citation-matrix).
 
 ## Archived Planning And Status
 
