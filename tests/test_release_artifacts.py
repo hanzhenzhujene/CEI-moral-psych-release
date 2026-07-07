@@ -384,7 +384,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "option1_paper_model_calibration_bridge.svg" in release_readme_text
     visual_section = markdown_h2_section(release_readme_text, "## Benchmark Result Visuals")
     assert "![Paper-model calibration bridge]" not in visual_section
-    assert "For strict one-to-one model calibration" in visual_section
+    assert "For the complete exact-model bridge" in visual_section
+    assert "not as a visual calibration comparison" in visual_section
     assert "[same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)" in visual_section
     assert "same-model paper calibration bridge" in release_readme_text
     assert "paper-model-calibration-ledger.csv" in release_readme_text
@@ -631,7 +632,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert_done_text_progress(
         deepseek_medium,
         smid_status="-",
-        summary_note="Frozen medium text line; no SMID route was included. UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses.",
+        summary_note="Frozen medium text line; no SMID route was included. UniMoral RQ1/action 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses.",
     )
     deepseek_large = row_for("DeepSeek-L")
     assert_done_text_progress(
@@ -1350,10 +1351,10 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "Metric definition version: `2026-04-30`." in text
         assert "### DeepSeek S/M/L Log-Derived Readout" in text
         assert "Valid text-only no-thinking rerun from saved May 9 logs" in text
-        assert "`DeepSeek-M` | UniMoral 0.684; Value 0.635" in text
-        assert "`DeepSeek-L` | UniMoral 0.563; Value 0.681" in text
+        assert "`DeepSeek-M` | UniMoral RQ1/action 0.684; Value 0.635" in text
+        assert "`DeepSeek-L` | UniMoral RQ1/action 0.563; Value 0.681" in text
         assert "Strongest fully observed comparable line | `MiniMax-S` averages 0.611" in text
-        assert "Strongest text-only comparable line | `GPT-5.5` reaches UniMoral 0.684 and Value 0.736" in text
+        assert "Strongest text-only comparable line | `GPT-5.5` reaches UniMoral RQ1/action 0.684 and Value 0.736" in text
         assert "Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route" in text
         assert "CCD-Bench should not be flattened into a universal accuracy number." in text
         assert "The repo still lacks a stable local `MoralPrompt` export" in text
@@ -1840,12 +1841,14 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in root_readme
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
-    assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in root_readme
+    assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" not in root_readme
+    assert "[Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in root_readme
     assert "![Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
     assert "| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
     assert "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
-    assert "| 10 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "| 9 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "| 10 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
     assert "Use this first: OpenAI GPT-5 is the black text-only S/M/L line" in root_readme
     assert "CCD behavior view: clusters are choices relative to a uniform baseline, not right/wrong labels." in root_readme
     assert "Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring." in root_readme

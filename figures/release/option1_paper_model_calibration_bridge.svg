@@ -260,9 +260,8 @@
 <rect x="518" y="1596" width="440" height="124" rx="14" class="subpanel"/>
 <rect x="518" y="1596" width="8" height="124" rx="4" fill="#64748b"/>
 <text x="540" y="1628" class="label">Unavailable or blocked routes</text>
-<text x="540" y="1662" class="body">Some UniMoral, Kaleido, Gemini, Grok, Jamba, and</text>
-<text x="540" y="1679" class="body">MoralPrompt paths are unavailable, gated, or missing</text>
-<text x="540" y="1696" class="body">local paper-faithful data.</text>
+<text x="540" y="1662" class="body">Other paper routes remain unavailable, gated,</text>
+<text x="540" y="1679" class="body">non-exact, or missing local paper-faithful data.</text>
 <rect x="988" y="1596" width="440" height="124" rx="14" class="subpanel"/>
 <rect x="988" y="1596" width="8" height="124" rx="4" fill="#b45309"/>
 <text x="1010" y="1628" class="label">Route probes stay separate</text>

@@ -122,8 +122,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in readme
     assert "OpenRouter text-only follow-up   results/openrouter-selected-grid-moral-psych-full/" in readme
     assert "it is text-only, excludes SMID/DeNEVIL/MiniMax, and has `102/119` scored rows" in readme
-    assert "| Best fully observed comparable line | `MiniMax-S`: UniMoral 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611." in readme
-    assert "| Best text-only line | `GPT-5.5`: UniMoral 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route." in readme
+    assert "| Best fully observed comparable line | `MiniMax-S`: UniMoral RQ1/action 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611." in readme
+    assert "| Best text-only line | `GPT-5.5`: UniMoral RQ1/action 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route." in readme
     assert "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165." in readme
     assert "UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge" in readme
     assert "RQ4 METEOR 0.121 and BERTScore F1 0.656" in readme
@@ -148,7 +148,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
     assert "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
-    assert "| 10 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "| 9 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "| 10 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in readme
     assert "![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)" in readme
@@ -157,7 +158,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in readme
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in readme
-    assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in readme
+    assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" not in readme
     assert "![Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
     assert readme.count("![") >= 10
     assert "| Separate follow-up visual evidence | What it answers |" in readme
@@ -185,7 +186,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_ccd_choice_distribution.svg" in readme
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
     assert "figures/release/option1_paper_result_alignment_map.svg" in readme
-    assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in readme
+    assert "[Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
     assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" not in readme
     assert "[Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
     assert "Exact paper-model visual bridge only; near-family, blocked, and proxy rows stay out of the plotted comparison." in readme
@@ -369,7 +370,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "## Benchmark Cards" in paper_comparison_doc
     assert "![Same-model CCD calibration bars](../figures/release/option1_paper_result_alignment_map.svg)" in paper_comparison_doc
     assert "Same-model CCD calibration bars: only the 11 exact CCD-Bench rows with a shared Nordic-share metric are plotted." in paper_comparison_doc
-    assert "![Paper-result comparison table](../figures/release/option1_paper_result_comparison.svg)" in paper_comparison_doc
+    assert "![Paper-result comparison table](../figures/release/option1_paper_result_comparison.svg)" not in paper_comparison_doc
+    assert "[paper result context figure](../figures/release/option1_paper_result_comparison.svg)" in paper_comparison_doc
     assert "![Paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)" in paper_comparison_doc
     assert "[paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)" in paper_comparison_doc
     assert "[paper-result-comparison.csv](../results/release/2026-04-19-option1/paper-result-comparison.csv)" in paper_comparison_doc

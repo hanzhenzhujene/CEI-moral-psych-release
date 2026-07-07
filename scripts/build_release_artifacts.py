@@ -2014,7 +2014,7 @@ FAMILY_SIZE_PROGRESS = [
         "value_kaleidoscope": "done",
         "ccd_bench": "done",
         "denevil": "proxy",
-        "summary_note": "Frozen medium text line; no SMID route was included. UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses.",
+        "summary_note": "Frozen medium text line; no SMID route was included. UniMoral RQ1/action 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses.",
     },
     {
         "family": "DeepSeek",
@@ -2122,7 +2122,7 @@ CURRENT_RESULT_LINES = [
         "scope": "Frozen Option 1",
         "status": "done",
         "coverage": "4 benchmark lines plus `Denevil` proxy; no SMID route",
-        "note": "Primary medium DeepSeek release line: UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses.",
+        "note": "Primary medium DeepSeek release line: UniMoral RQ1/action 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses.",
     },
     {
         "line_label": "Gemma-S",
@@ -7800,7 +7800,7 @@ def append_deepseek_sm_readout_section(lines: list[str], readout_rows: list[dict
     for row in readout_rows:
         comparable_bits: list[str] = []
         if row["unimoral_action_accuracy"] is not None:
-            comparable_bits.append(f"UniMoral {fmt_float(row['unimoral_action_accuracy'])}")
+            comparable_bits.append(f"UniMoral RQ1/action {fmt_float(row['unimoral_action_accuracy'])}")
         if row["value_average_accuracy"] is not None:
             comparable_bits.append(f"Value {fmt_float(row['value_average_accuracy'])}")
         comparable_text = "; ".join(comparable_bits) if comparable_bits else "withheld; visible final answers empty"
@@ -10956,7 +10956,7 @@ def render_paper_model_calibration_bridge_svg(rows: list[dict[str, Any]], output
         ),
         (
             "Unavailable or blocked routes",
-            "Some UniMoral, Kaleido, Gemini, Grok, Jamba, and MoralPrompt paths are unavailable, gated, or missing local paper-faithful data.",
+            "Other paper routes remain unavailable, gated, non-exact, or missing local paper-faithful data.",
             "#64748b",
         ),
         (
@@ -11732,11 +11732,11 @@ def append_tldr_section(
         ]
     )
     lines.append(
-        f"- **Bottom line:** text moral reasoning is usable; image moral judgment is the bottleneck. UniMoral and Value average {fmt_float(as_float(unimoral_summary['mean_accuracy']))}-{fmt_float(as_float(value_summary['mean_accuracy']))}, while SMID averages {fmt_float(as_float(smid_summary['mean_accuracy']))}; even the best SMID line, `{best_smid_line['line_label']}` at {fmt_float(as_float(best_smid_line['smid_average_accuracy']))}, stays below 0.50."
+        f"- **Bottom line:** text moral reasoning is usable; image moral judgment is the bottleneck. UniMoral RQ1/action averages {fmt_float(as_float(unimoral_summary['mean_accuracy']))} and Value averages {fmt_float(as_float(value_summary['mean_accuracy']))}, while SMID averages {fmt_float(as_float(smid_summary['mean_accuracy']))}; even the best SMID line, `{best_smid_line['line_label']}` at {fmt_float(as_float(best_smid_line['smid_average_accuracy']))}, stays below 0.50."
     )
     if best_full_line is not None and best_full_line_mean is not None:
         lines.append(
-            f"- **Best comparable all-around line:** `{best_full_line['line_label']}` is the cleanest line with text, image, and value evidence: UniMoral {fmt_float(as_float(best_full_line['unimoral_action_accuracy']))}, SMID {fmt_float(as_float(best_full_line['smid_average_accuracy']))}, Value {fmt_float(as_float(best_full_line['value_average_accuracy']))}, three-metric mean {fmt_float(best_full_line_mean)}."
+            f"- **Best comparable all-around line:** `{best_full_line['line_label']}` is the cleanest line with text, image, and value evidence: UniMoral RQ1/action {fmt_float(as_float(best_full_line['unimoral_action_accuracy']))}, SMID {fmt_float(as_float(best_full_line['smid_average_accuracy']))}, Value {fmt_float(as_float(best_full_line['value_average_accuracy']))}, three-metric mean {fmt_float(best_full_line_mean)}."
         )
     if best_text_only_line is not None:
         best_text_only_mean = mean(
@@ -11748,7 +11748,7 @@ def append_tldr_section(
             if as_float(value) is not None
         )
         lines.append(
-            f"- **Best text-only line:** `{best_text_only_line['line_label']}` is strongest when SMID is excluded: UniMoral {fmt_float(as_float(best_text_only_line['unimoral_action_accuracy']))}, Value {fmt_float(as_float(best_text_only_line['value_average_accuracy']))}, two-metric mean {fmt_float(best_text_only_mean)}. Do not call it best overall because it has no image result."
+            f"- **Best text-only line:** `{best_text_only_line['line_label']}` is strongest when SMID is excluded: UniMoral RQ1/action {fmt_float(as_float(best_text_only_line['unimoral_action_accuracy']))}, Value {fmt_float(as_float(best_text_only_line['value_average_accuracy']))}, two-metric mean {fmt_float(best_text_only_mean)}. Do not call it best overall because it has no image result."
         )
     if (
         best_text_only_line is not None
@@ -11764,7 +11764,7 @@ def append_tldr_section(
         and minimax_l is not None
     ):
         lines.append(
-            f"- **Scaling read:** bigger is not reliably better. Scale helps Qwen on SMID ({fmt_float(as_float(qwen_s['smid_average_accuracy']))} -> {fmt_float(as_float(qwen_l['smid_average_accuracy']))}) and Llama on Value from S to M ({fmt_float(as_float(llama_s['value_average_accuracy']))} -> {fmt_float(as_float(llama_m['value_average_accuracy']))}), but reverses or stalls elsewhere: Gemma SMID {fmt_float(as_float(gemma_s['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_m['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_l['smid_average_accuracy']))}, DeepSeek UniMoral {fmt_float(as_float(deepseek_m['unimoral_action_accuracy']))} -> {fmt_float(as_float(deepseek_l['unimoral_action_accuracy']))}, and `MiniMax-L` SMID {fmt_float(as_float(minimax_l['smid_average_accuracy']))}."
+            f"- **Scaling read:** bigger is not reliably better. Scale helps Qwen on SMID ({fmt_float(as_float(qwen_s['smid_average_accuracy']))} -> {fmt_float(as_float(qwen_l['smid_average_accuracy']))}) and Llama on Value from S to M ({fmt_float(as_float(llama_s['value_average_accuracy']))} -> {fmt_float(as_float(llama_m['value_average_accuracy']))}), but reverses or stalls elsewhere: Gemma SMID {fmt_float(as_float(gemma_s['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_m['smid_average_accuracy']))} -> {fmt_float(as_float(gemma_l['smid_average_accuracy']))}, DeepSeek UniMoral RQ1/action {fmt_float(as_float(deepseek_m['unimoral_action_accuracy']))} -> {fmt_float(as_float(deepseek_l['unimoral_action_accuracy']))}, and `MiniMax-L` SMID {fmt_float(as_float(minimax_l['smid_average_accuracy']))}."
         )
     unimoral_takeaway = unimoral_rq_tldr_takeaway(release_dir)
     if unimoral_takeaway is not None:
@@ -11797,7 +11797,7 @@ def append_tldr_section(
         f"- **DeNEVIL boundary:** current DeNEVIL evidence is FULCRA-backed proxy behavior, not paper-faithful MoralPrompt scoring. Use the behavioral-outcomes figure for refusal/context/risk patterns, not a benchmark accuracy ranking."
     )
     lines.append(
-        "- **Small-model floor:** the May 13 Mistral/Qwen/Llama follow-up shows a capability threshold. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral from 0.632 to 0.648; `Llama 3.2 1B` drops to 0.406."
+        "- **Small-model floor:** the May 13 Mistral/Qwen/Llama follow-up shows a capability threshold. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral RQ1/action from 0.632 to 0.648; `Llama 3.2 1B` drops to 0.406."
     )
     lines.extend(["", ""])
 
@@ -11868,17 +11868,15 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "_How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._",
             "",
-            "### 7. Replication / calibration: same-model CCD bars",
+            "### 7. Replication / calibration: exact same-model comparisons",
             "",
             f"![Same-model CCD calibration bars]({figure_prefix}/option1_paper_result_alignment_map.svg)",
             "",
             "_What it answers: for exact same-model CCD-Bench rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified current row?_",
             "",
-            f"![Paper-result comparison table]({figure_prefix}/option1_paper_result_comparison.svg)",
+            "_Strict rule: this visible comparison includes only exact same-model evidence on a shared metric. DeNEVIL/proxy rows, SMID human-norm rows, Value/Kaleido non-reruns, and non-exact routes stay in the ledger tables instead of being plotted._",
             "",
-            "_What it shows: paper metric anchors and closest current release results in one visual table. UniMoral RQ4 appears twice, once for BERTScore F1 and once for METEOR._",
-            "",
-            f"_For strict one-to-one model calibration, open the {markdown_link('same-model paper calibration bridge', f'{figure_prefix}/option1_paper_model_calibration_bridge.svg')}. It plots exact paper-model rows only and keeps near-family, unavailable, and proxy rows out of the visual comparison._",
+            f"_For the complete exact-model bridge, open the {markdown_link('same-model paper calibration bridge', f'{figure_prefix}/option1_paper_model_calibration_bridge.svg')}. The broader paper-result context table remains available as a CSV/documentation artifact, not as a visual calibration comparison._",
             "",
             "Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.",
             "",
@@ -12015,7 +12013,7 @@ def append_interpretation_sections(
     )
     if best_full_line is not None and best_full_line_mean is not None:
         lines.append(
-            f"- **Overall comparable winner:** `{best_full_line['line_label']}` is the strongest line with UniMoral, SMID, and Value all present; three-metric mean {fmt_float(best_full_line_mean)}."
+            f"- **Overall comparable winner:** `{best_full_line['line_label']}` is the strongest line with UniMoral RQ1/action, SMID, and Value all present; three-metric mean {fmt_float(best_full_line_mean)}."
         )
     if best_text_only_line is not None:
         best_text_only_mean = mean(
@@ -12044,7 +12042,7 @@ def append_interpretation_sections(
     )
     if best_full_line is not None and best_full_line_mean is not None:
         lines.append(
-            f"| Strongest fully observed comparable line | `{best_full_line['line_label']}` averages {fmt_float(best_full_line_mean)} across UniMoral action {fmt_float(best_full_line['unimoral_action_accuracy'])}, SMID {fmt_float(best_full_line['smid_average_accuracy'])}, and Value {fmt_float(best_full_line['value_average_accuracy'])}. | This is the cleanest all-around topline because it includes text moral reasoning, image moral perception, and value recognition on the same line. |"
+            f"| Strongest fully observed comparable line | `{best_full_line['line_label']}` averages {fmt_float(best_full_line_mean)} across UniMoral RQ1/action {fmt_float(best_full_line['unimoral_action_accuracy'])}, SMID {fmt_float(best_full_line['smid_average_accuracy'])}, and Value {fmt_float(best_full_line['value_average_accuracy'])}. | This is the cleanest all-around topline because it includes text moral reasoning, image moral perception, and value recognition on the same line. |"
         )
     if best_text_only_line is not None:
         best_text_only_mean = mean(
@@ -12056,7 +12054,7 @@ def append_interpretation_sections(
             if text_only_value is not None
         )
         lines.append(
-            f"| Strongest text-only comparable line | `{best_text_only_line['line_label']}` reaches UniMoral {fmt_float(best_text_only_line['unimoral_action_accuracy'])} and Value {fmt_float(best_text_only_line['value_average_accuracy'])}, a two-metric mean of {fmt_float(best_text_only_mean)}. | This is the best answer if the PI asks about text moral reasoning only; it is not the all-around winner because SMID is missing. |"
+            f"| Strongest text-only comparable line | `{best_text_only_line['line_label']}` reaches UniMoral RQ1/action {fmt_float(best_text_only_line['unimoral_action_accuracy'])} and Value {fmt_float(best_text_only_line['value_average_accuracy'])}, a two-metric mean of {fmt_float(best_text_only_mean)}. | This is the best answer if the PI asks about text moral reasoning only; it is not the all-around winner because SMID is missing. |"
         )
     if best_openai_unimoral is not None and best_openai_value is not None:
         gpt5_followup_takeaway = gpt5_unimoral_followup_takeaway(release_dir)
@@ -12065,7 +12063,7 @@ def append_interpretation_sections(
             f"| OpenAI/GPT text rows | {len(openai_reference_rows)} OpenAI rows are included: GPT-5 text-only S/M/L plus separate GPT-4o/GPT-4.1 reference markers. Best OpenAI UniMoral RQ1: `{best_openai_unimoral['line_label']}` at {fmt_float(best_openai_unimoral['unimoral_action_accuracy'])}; best OpenAI Value: `{best_openai_value['line_label']}` at {fmt_float(best_openai_value['value_average_accuracy'])}.{gpt5_followup_clause} | These tell us where GPT-style text routes sit relative to the open-weight families. They still do not cover SMID or DeNEVIL, so they are not all-benchmark OpenAI coverage. |"
         )
     lines.append(
-        "| Small-model capability floor | May 13 follow-up: `Mistral Nemo` reaches 0.648 on UniMoral; the 7B-12B routes sit in a narrow 0.632-0.648 band; `Llama 3.2 1B` falls to 0.406 with only 73.6% answered. | This is the practical capacity warning: below the mid-sized instruction-model range, the model may stop reliably following human moral-choice tasks, but above that floor older routes can still be useful baselines. |"
+        "| Small-model capability floor | May 13 follow-up: `Mistral Nemo` reaches 0.648 on UniMoral RQ1/action; the 7B-12B routes sit in a narrow 0.632-0.648 band; `Llama 3.2 1B` falls to 0.406 with only 73.6% answered. | This is the practical capacity warning: below the mid-sized instruction-model range, the model may stop reliably following human moral-choice tasks, but above that floor older routes can still be useful baselines. |"
     )
     lines.append(
         f"| Visual bottleneck among comparable metrics | `SMID` has the lowest mean accuracy at {fmt_float(smid_summary['mean_accuracy'])} and the widest spread at {fmt_float(smid_summary['spread'])}. | The bottleneck is visual moral perception: models do not just need moral vocabulary, they need to read morally relevant cues in images. |"
@@ -12365,7 +12363,7 @@ def append_small_model_capability_floor_section(lines: list[str], release_figure
             "",
             "The May 13 follow-up brings the older/smaller `Mistral`, `Qwen`, and `Llama` routes into the main interpretation. It is not a replacement for the current S/M/L release matrix; it answers a narrower question: where does moral-choice performance start to fall off?",
             "",
-            "**So what:** `Mistral Nemo` is the top follow-up line on UniMoral at 0.648, but `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` are close behind from 0.632 to 0.640. The real separation is `Llama 3.2 1B` at 0.406 with a lower answer rate. For reporting, say this as a capability-floor result: once models are around the 7B-12B instruction range, several older routes are competitive on text moral-choice/style checks; the 1B route is the line that clearly falls below the floor.",
+            "**So what:** `Mistral Nemo` is the top follow-up line on UniMoral RQ1/action at 0.648, but `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` are close behind from 0.632 to 0.640. The real separation is `Llama 3.2 1B` at 0.406 with a lower answer rate. For reporting, say this as a capability-floor result: once models are around the 7B-12B instruction range, several older routes are competitive on text moral-choice/style checks; the 1B route is the line that clearly falls below the floor.",
             "",
             "**Compared with the current main results:** this supports the same high-level story rather than changing it. Text moral-choice scores mostly live in a narrow band once the model is capable enough, so the more important differences are benchmark-specific: SMID remains the hard visual-moral bottleneck in the main matrix, while CCD-Bench remains a cultural-choice style readout instead of an accuracy race.",
             "",
@@ -12696,7 +12694,7 @@ def append_release_status_and_artifacts_section(
             "| Are any published reruns currently live? | No currently published line is shown as live. | `results/release/2026-04-19-option1/README.md` |",
             "| Are all comparable non-generation result surfaces regenerated? | Yes: root README, release tables, reports, and SVG figures are generated from tracked artifacts. | `make release`; `make audit` |",
             "| Is strict UniMoral RQ1-RQ4 completion achieved? | Not yet; documented MiniMax RQ2/RQ3/RQ4 saved-artifact gaps remain. | `unimoral-failure-checklist.csv`; `unimoral-completion-audit.md` |",
-            "| What does the May 13 Mistral/Qwen/Llama follow-up add? | A capability-floor check: 7B-12B routes cluster near 0.632-0.648 on UniMoral, while Llama 3.2 1B drops to 0.406. | `results/exploratory/2026-05-13-additional-model-sweep/` |",
+            "| What does the May 13 Mistral/Qwen/Llama follow-up add? | A capability-floor check: 7B-12B routes cluster near 0.632-0.648 on UniMoral RQ1/action, while Llama 3.2 1B drops to 0.406. | `results/exploratory/2026-05-13-additional-model-sweep/` |",
             "",
             "Key files for reviewers and collaborators:",
             "",
@@ -12727,7 +12725,7 @@ def append_deliverables_for_today_section(lines: list[str], readiness_tier_matri
             "| Short executive read | What is the bottom-line result without reading every table? | [TL;DR](#tldr) |",
             f"| Tier / progress dashboard | Which `model line x benchmark` cells are interpretable now? `{tier3_cells}` of `{total_cells}` cells are Tier 3; `{blocked_cells}` are blocked or not run. | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) |",
             "| S/M/L family progress table | Which public family-size slots are done, missing a route, or proxy-only? | [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |",
-            "| Paper comparison / calibration map | What did the original benchmark papers run, what did this repo run, and what can be compared safely? | [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [paper-result-comparison.csv](results/release/2026-04-19-option1/paper-result-comparison.csv), [paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv), [exact UniMoral Llama calibration](results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv), [exact CCD calibration](results/paper-calibration-exact-20260705/calibration-summary.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |",
+            "| Paper comparison / calibration map | What did the original benchmark papers run, what exact same-model evidence exists, and what remains blocked or non-comparable? | [paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv), [paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), [exact UniMoral Llama calibration](results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv), [exact CCD calibration](results/paper-calibration-exact-20260705/calibration-summary.csv), and [paper-result-comparison.md](docs/paper-result-comparison.md) |",
             "| OpenRouter selected-grid follow-up | What happened when the text-only OpenRouter grid was run across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench? | [full readout](results/openrouter-selected-grid-moral-psych-full/README.md), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), and [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md) |",
             "| Reproducibility package | Can a reviewer rebuild the public results without local secrets? | [Reproducibility](#reproducibility); run `make bootstrap` |",
             "| Full appendix | Where are the detailed tables, caveats, and generated release files? | [Release appendix](results/release/2026-04-19-option1/README.md) |",
@@ -12945,11 +12943,11 @@ def build_repo_readme(
         "",
         "| Reader question | Current answer | Where to verify |",
         "| --- | --- | --- |",
-        f"| Best fully observed comparable line | `{best_all['line_label']}`: UniMoral {fmt_float(best_all['unimoral_action_accuracy'])}, SMID {fmt_float(best_all['smid_average_accuracy'])}, Value {fmt_float(best_all['value_average_accuracy'])}; three-metric mean {fmt_float(best_all_mean)}. | [benchmark accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg), [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [Value CSV](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |",
-        f"| Best text-only line | `{best_text['line_label']}`: UniMoral {fmt_float(best_text['unimoral_action_accuracy'])}, Value {fmt_float(best_text['value_average_accuracy'])}; two-metric mean {fmt_float(best_text_mean)}. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |",
+        f"| Best fully observed comparable line | `{best_all['line_label']}`: UniMoral RQ1/action {fmt_float(best_all['unimoral_action_accuracy'])}, SMID {fmt_float(best_all['smid_average_accuracy'])}, Value {fmt_float(best_all['value_average_accuracy'])}; three-metric mean {fmt_float(best_all_mean)}. | [benchmark accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg), [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [Value CSV](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |",
+        f"| Best text-only line | `{best_text['line_label']}`: UniMoral RQ1/action {fmt_float(best_text['unimoral_action_accuracy'])}, Value {fmt_float(best_text['value_average_accuracy'])}; two-metric mean {fmt_float(best_text_mean)}. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |",
         f"| Visual bottleneck | `SMID` has mean accuracy {fmt_float(smid_summary['mean_accuracy'])}; best current line is `{best_smid['line_label']}` at {fmt_float(best_smid['smid_average_accuracy'])}. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |",
         "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |",
-        "| Paper comparison status | UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge, including RQ4 METEOR 0.121 and BERTScore F1 0.656. CCD-Bench has 11 exact same-model distribution bridges with a shared Nordic-share metric; remaining routes are unavailable, blocked, non-exact, or metric-mismatched rather than substituted. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg), [same-model CCD bars](figures/release/option1_paper_result_alignment_map.svg) |",
+        "| Paper comparison status | UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge, including RQ4 METEOR 0.121 and BERTScore F1 0.656. CCD-Bench has 11 exact same-model distribution bridges with a shared Nordic-share metric; remaining routes are unavailable, blocked, non-exact, or metric-mismatched rather than substituted. | [same-model CCD bars](figures/release/option1_paper_result_alignment_map.svg), [same-model bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper result status notes](docs/paper-result-comparison.md) |",
         "",
         "## Status: What Is Usable",
         "",
@@ -13017,8 +13015,8 @@ def build_repo_readme(
         "| 6 | [Family scaling profile](figures/release/option1_family_scaling_profile.svg) | Where does size help or stall on SMID and Value Kaleidoscope? |",
         "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |",
         "| 8 | [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | What proxy behavior mix appears in the saved traces? |",
-        "| 9 | [Paper-result comparison table](figures/release/option1_paper_result_comparison.svg) | What original paper metric anchors can be placed beside current rows? |",
-        "| 10 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg) | For the 11 exact same-model CCD rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified row? |",
+        "| 9 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg) | For the 11 exact same-model CCD rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified row? |",
+        "| 10 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Which exact paper-model rows can be compared, and which non-exact/proxy rows stay out of the visual comparison? |",
         "",
         "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)",
         "",
@@ -13052,13 +13050,9 @@ def build_repo_readme(
         "",
         "_Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring._",
         "",
-        "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)",
-        "",
-        "_Paper comparison view: paper anchors sit next to current rows only when the metric boundary is explicit._",
-        "",
         "![Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)",
         "",
-        "_Same-model calibration view: only CCD-Bench rows with exact model identity and a shared Nordic-share metric are plotted._",
+        "_Same-model calibration view: only CCD-Bench rows with exact model identity and a shared Nordic-share metric are plotted; DeNEVIL/proxy evidence and non-exact paper anchors are excluded from this comparison._",
         "",
         "| Appendix-only visual evidence | What it answers |",
         "| --- | --- |",
@@ -13068,6 +13062,7 @@ def build_repo_readme(
             "| [CCD valid-choice coverage](figures/release/option1_ccd_valid_choice_coverage.svg) | CCD parser/completion QA, not result ranking. |",
             "| [DeNEVIL proxy status matrix](figures/release/option1_denevil_proxy_status_matrix.svg) | Proxy route/status provenance. |",
             "| [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Exact paper-model visual bridge only; near-family, blocked, and proxy rows stay out of the plotted comparison. |",
+            "| [Paper-result context table](figures/release/option1_paper_result_comparison.svg) | Context ledger for paper metric anchors; not a same-model bar comparison. |",
         "",
         "| Separate follow-up visual evidence | What it answers |",
         "| --- | --- |",
@@ -13375,8 +13370,8 @@ def build_release_readme(
             f"- {markdown_link('CCD concentration summary', '../../../figures/release/option1_ccd_dominant_option_share.svg')}: dominant-cluster share plus effective-cluster count",
             f"- {markdown_link('DeNEVIL behavioral outcomes', '../../../figures/release/option1_denevil_behavior_outcomes.svg')}: main proxy-result view showing visible behavior categories by model line",
             f"- {markdown_link('same-model CCD calibration bars', '../../../figures/release/option1_paper_result_alignment_map.svg')}: strict bar comparison for the 11 exact CCD-Bench paper-model rows with a shared Nordic-share metric",
-            f"- {markdown_link('same-model paper calibration bridge', '../../../figures/release/option1_paper_model_calibration_bridge.svg')}: strict visual bridge for exact same-model calibration rows only",
-            f"- {markdown_link('paper result comparison', '../../../figures/release/option1_paper_result_comparison.svg')}: exact paper metric anchors beside closest current rows, with UniMoral RQ4 split into BERTScore F1 and METEOR",
+            f"- {markdown_link('same-model paper calibration bridge', '../../../figures/release/option1_paper_model_calibration_bridge.svg')}: strict visual bridge for exact same-model calibration rows only; proxy and non-exact rows stay out of the plotted comparison",
+            f"- {markdown_link('paper result context table', '../../../figures/release/option1_paper_result_comparison.svg')}: context ledger for paper metric anchors, not a same-model bar comparison",
             "",
             "## Status Key",
             "",

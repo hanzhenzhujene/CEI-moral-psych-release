@@ -69,17 +69,15 @@ _What it tests: DeNEVIL-style evaluation looks for value vulnerabilities under r
 
 _How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._
 
-### 7. Replication / calibration: same-model CCD bars
+### 7. Replication / calibration: exact same-model comparisons
 
 ![Same-model CCD calibration bars](../../../figures/release/option1_paper_result_alignment_map.svg)
 
 _What it answers: for exact same-model CCD-Bench rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified current row?_
 
-![Paper-result comparison table](../../../figures/release/option1_paper_result_comparison.svg)
+_Strict rule: this visible comparison includes only exact same-model evidence on a shared metric. DeNEVIL/proxy rows, SMID human-norm rows, Value/Kaleido non-reruns, and non-exact routes stay in the ledger tables instead of being plotted._
 
-_What it shows: paper metric anchors and closest current release results in one visual table. UniMoral RQ4 appears twice, once for BERTScore F1 and once for METEOR._
-
-_For strict one-to-one model calibration, open the [same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg). It plots exact paper-model rows only and keeps near-family, unavailable, and proxy rows out of the visual comparison._
+_For the complete exact-model bridge, open the [same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg). The broader paper-result context table remains available as a CSV/documentation artifact, not as a visual calibration comparison._
 
 Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
 
@@ -87,15 +85,15 @@ Lower-level QA/provenance figures are still generated in `figures/release/`, but
 
 Key takeaways:
 
-- **Bottom line:** text moral reasoning is usable; image moral judgment is the bottleneck. UniMoral and Value average 0.653-0.673, while SMID averages 0.364; even the best SMID line, `Qwen-L` at 0.483, stays below 0.50.
-- **Best comparable all-around line:** `MiniMax-S` is the cleanest line with text, image, and value evidence: UniMoral 0.661, SMID 0.432, Value 0.740, three-metric mean 0.611.
-- **Best text-only line:** `GPT-5.5` is strongest when SMID is excluded: UniMoral 0.684, Value 0.736, two-metric mean 0.710. Do not call it best overall because it has no image result.
-- **Scaling read:** bigger is not reliably better. Scale helps Qwen on SMID (0.368 -> 0.483) and Llama on Value from S to M (0.529 -> 0.724), but reverses or stalls elsewhere: Gemma SMID 0.417 -> 0.364 -> 0.412, DeepSeek UniMoral 0.684 -> 0.563, and `MiniMax-L` SMID 0.198.
+- **Bottom line:** text moral reasoning is usable; image moral judgment is the bottleneck. UniMoral RQ1/action averages 0.653 and Value averages 0.673, while SMID averages 0.364; even the best SMID line, `Qwen-L` at 0.483, stays below 0.50.
+- **Best comparable all-around line:** `MiniMax-S` is the cleanest line with text, image, and value evidence: UniMoral RQ1/action 0.661, SMID 0.432, Value 0.740, three-metric mean 0.611.
+- **Best text-only line:** `GPT-5.5` is strongest when SMID is excluded: UniMoral RQ1/action 0.684, Value 0.736, two-metric mean 0.710. Do not call it best overall because it has no image result.
+- **Scaling read:** bigger is not reliably better. Scale helps Qwen on SMID (0.368 -> 0.483) and Llama on Value from S to M (0.529 -> 0.724), but reverses or stalls elsewhere: Gemma SMID 0.417 -> 0.364 -> 0.412, DeepSeek UniMoral RQ1/action 0.684 -> 0.563, and `MiniMax-L` SMID 0.198.
 - **UniMoral readout:** do not collapse RQ1-RQ4 into one moral score. Winners rotate across RQ1 `DeepSeek-M` 0.684, RQ2 `GPT-5.5` 0.637, RQ3 `Llama-M` 0.631, RQ4 semantic `Llama-M` 0.730, RQ4 lexical `GPT-5.5` 0.165, so the result is task-specific moral reasoning, not one universal rank.
 - **CCD-Bench read:** this is cultural-choice behavior, not accuracy. 20 of 21 valid lines choose `Nordic Europe` as the dominant style; `GPT-5 nano` is most concentrated (27.8%), while `DeepSeek-S` is least concentrated and the only non-Nordic dominant line (13.8%, `Sub Saharan Africa`).
 - **OpenAI/GPT read:** GPT-5 is a text-only S/M/L series: `GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L. Value jumps from 0.617 to 0.739 and then plateaus at 0.736; UniMoral tops out at `GPT-5.5` (0.684). GPT-4o/GPT-4.1 rows are separate text refs, and none has SMID or DeNEVIL. Completed GPT-5 RQ2-RQ4 follow-up: `GPT-5.5` leads the GPT-5 line on RQ2 accuracy 0.637, RQ3 accuracy 0.601, RQ4 BERTScore F1 0.725, and RQ4 METEOR 0.165. Overall semantic RQ4 still peaks at `Llama-M` 0.730, so this is strong GPT text evidence, not one universal UniMoral winner.
 - **DeNEVIL boundary:** current DeNEVIL evidence is FULCRA-backed proxy behavior, not paper-faithful MoralPrompt scoring. Use the behavioral-outcomes figure for refusal/context/risk patterns, not a benchmark accuracy ranking.
-- **Small-model floor:** the May 13 Mistral/Qwen/Llama follow-up shows a capability threshold. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral from 0.632 to 0.648; `Llama 3.2 1B` drops to 0.406.
+- **Small-model floor:** the May 13 Mistral/Qwen/Llama follow-up shows a capability threshold. `Mistral Nemo`, `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` cluster on UniMoral RQ1/action from 0.632 to 0.648; `Llama 3.2 1B` drops to 0.406.
 
 
 ## Results First
@@ -105,7 +103,7 @@ This section is the fastest summary for a mentor or collaborator: which lines al
 | Line | Scope | Status | Coverage | Note |
 | --- | --- | --- | --- | --- |
 | `Qwen-S` | Frozen Option 1 | Done | 5 benchmark lines complete (`Denevil` via proxy) | Primary small Qwen release line. |
-| `DeepSeek-M` | Frozen Option 1 | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Primary medium DeepSeek release line: UniMoral 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses. |
+| `DeepSeek-M` | Frozen Option 1 | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Primary medium DeepSeek release line: UniMoral RQ1/action 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses. |
 | `Gemma-S` | Frozen Option 1 | Done | 5 benchmark lines complete (`Denevil` via proxy) | Primary small Gemma release line. |
 | `Llama-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally, outside the frozen Option 1 counts. |
 | `Gemma-M` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
@@ -158,16 +156,16 @@ _The topline comparable-accuracy chart already appears above in **Benchmark Resu
 
 | Line | Comparable text accuracy | CCD-Bench saved choices | DeNEVIL proxy visibility | Public interpretation |
 | --- | --- | --- | --- | --- |
-| `DeepSeek-S` | UniMoral 0.661; Value 0.695 | 2,180 / 2,182 (99.9%) | 20,474 / 20,518 (99.8%) | Valid text-only no-thinking rerun from saved May 9 logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has near-complete parseable choices, and Denevil is proxy-only behavioral evidence. No SMID route exists. |
-| `DeepSeek-M` | UniMoral 0.684; Value 0.635 | 2,177 / 2,182 (99.8%) | 20,514 / 20,518 (100.0%) | Valid text-only comparable line from existing logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has near-complete parseable choices, and Denevil is proxy-only behavioral evidence. No SMID route exists. |
-| `DeepSeek-L` | UniMoral 0.563; Value 0.681 | 2,109 / 2,182 (96.7%) | 20,331 / 20,518 (99.1%) | Valid text-only large R1 rerun from saved shard logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has high parseable-choice coverage, and Denevil is proxy-only behavioral evidence. No SMID route exists. |
+| `DeepSeek-S` | UniMoral RQ1/action 0.661; Value 0.695 | 2,180 / 2,182 (99.9%) | 20,474 / 20,518 (99.8%) | Valid text-only no-thinking rerun from saved May 9 logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has near-complete parseable choices, and Denevil is proxy-only behavioral evidence. No SMID route exists. |
+| `DeepSeek-M` | UniMoral RQ1/action 0.684; Value 0.635 | 2,177 / 2,182 (99.8%) | 20,514 / 20,518 (100.0%) | Valid text-only comparable line from existing logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has near-complete parseable choices, and Denevil is proxy-only behavioral evidence. No SMID route exists. |
+| `DeepSeek-L` | UniMoral RQ1/action 0.563; Value 0.681 | 2,109 / 2,182 (96.7%) | 20,331 / 20,518 (99.1%) | Valid text-only large R1 rerun from saved shard logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has high parseable-choice coverage, and Denevil is proxy-only behavioral evidence. No SMID route exists. |
 ## Interpretation
 
 Use this section as the decision readout. Each claim below is tied to tracked release artifacts, and non-comparable evidence stays out of macro-accuracy claims.
 
 ### Direct Read
 
-- **Overall comparable winner:** `MiniMax-S` is the strongest line with UniMoral, SMID, and Value all present; three-metric mean 0.611.
+- **Overall comparable winner:** `MiniMax-S` is the strongest line with UniMoral RQ1/action, SMID, and Value all present; three-metric mean 0.611.
 - **Text-only winner:** `GPT-5.5` leads the text-only comparable read with a two-metric mean of 0.710, but it is not an all-around result because SMID is missing.
 - **Main weakness:** SMID is the bottleneck; visual moral judgment remains weaker than text moral reasoning in this release.
 - **Scaling:** there is no universal bigger-is-better curve; size helps some families and benchmarks but reverses or plateaus elsewhere.
@@ -178,10 +176,10 @@ Use this section as the decision readout. Each claim below is tied to tracked re
 
 | Claim | Evidence | Why it matters |
 | --- | --- | --- |
-| Strongest fully observed comparable line | `MiniMax-S` averages 0.611 across UniMoral action 0.661, SMID 0.432, and Value 0.740. | This is the cleanest all-around topline because it includes text moral reasoning, image moral perception, and value recognition on the same line. |
-| Strongest text-only comparable line | `GPT-5.5` reaches UniMoral 0.684 and Value 0.736, a two-metric mean of 0.710. | This is the best answer if the PI asks about text moral reasoning only; it is not the all-around winner because SMID is missing. |
+| Strongest fully observed comparable line | `MiniMax-S` averages 0.611 across UniMoral RQ1/action 0.661, SMID 0.432, and Value 0.740. | This is the cleanest all-around topline because it includes text moral reasoning, image moral perception, and value recognition on the same line. |
+| Strongest text-only comparable line | `GPT-5.5` reaches UniMoral RQ1/action 0.684 and Value 0.736, a two-metric mean of 0.710. | This is the best answer if the PI asks about text moral reasoning only; it is not the all-around winner because SMID is missing. |
 | OpenAI/GPT text rows | 6 OpenAI rows are included: GPT-5 text-only S/M/L plus separate GPT-4o/GPT-4.1 reference markers. Best OpenAI UniMoral RQ1: `GPT-5.5` at 0.684; best OpenAI Value: `GPT-5 mini` at 0.739. Completed GPT-5 RQ2-RQ4 follow-up: `GPT-5.5` leads the GPT-5 line on RQ2 accuracy 0.637, RQ3 accuracy 0.601, RQ4 BERTScore F1 0.725, and RQ4 METEOR 0.165. Overall semantic RQ4 still peaks at `Llama-M` 0.730, so this is strong GPT text evidence, not one universal UniMoral winner. | These tell us where GPT-style text routes sit relative to the open-weight families. They still do not cover SMID or DeNEVIL, so they are not all-benchmark OpenAI coverage. |
-| Small-model capability floor | May 13 follow-up: `Mistral Nemo` reaches 0.648 on UniMoral; the 7B-12B routes sit in a narrow 0.632-0.648 band; `Llama 3.2 1B` falls to 0.406 with only 73.6% answered. | This is the practical capacity warning: below the mid-sized instruction-model range, the model may stop reliably following human moral-choice tasks, but above that floor older routes can still be useful baselines. |
+| Small-model capability floor | May 13 follow-up: `Mistral Nemo` reaches 0.648 on UniMoral RQ1/action; the 7B-12B routes sit in a narrow 0.632-0.648 band; `Llama 3.2 1B` falls to 0.406 with only 73.6% answered. | This is the practical capacity warning: below the mid-sized instruction-model range, the model may stop reliably following human moral-choice tasks, but above that floor older routes can still be useful baselines. |
 | Visual bottleneck among comparable metrics | `SMID` has the lowest mean accuracy at 0.364 and the widest spread at 0.285. | The bottleneck is visual moral perception: models do not just need moral vocabulary, they need to read morally relevant cues in images. |
 | Tightest comparable spread | `UniMoral` has the tightest range, from 0.563 to 0.684 (0.121 spread). | Most text models are already in the same band on the basic human-choice layer, but this is not proof of benchmark saturation. The more useful story is which UniMoral subtask each model handles best. |
 | Scaling-law read | `Gemma` is still the cleanest full S/M/L sweep. Even there, UniMoral rises from 0.635 to 0.661, Value rises from 0.593 to 0.656, but SMID is nearly flat overall (0.417 to 0.412). | The data say scale is useful but task-dependent. Bigger models are not automatically better moral reasoners across every benchmark. |
@@ -243,7 +241,7 @@ _The headline family-scaling figure already appears above in **Benchmark Result 
 
 The May 13 follow-up brings the older/smaller `Mistral`, `Qwen`, and `Llama` routes into the main interpretation. It is not a replacement for the current S/M/L release matrix; it answers a narrower question: where does moral-choice performance start to fall off?
 
-**So what:** `Mistral Nemo` is the top follow-up line on UniMoral at 0.648, but `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` are close behind from 0.632 to 0.640. The real separation is `Llama 3.2 1B` at 0.406 with a lower answer rate. For reporting, say this as a capability-floor result: once models are around the 7B-12B instruction range, several older routes are competitive on text moral-choice/style checks; the 1B route is the line that clearly falls below the floor.
+**So what:** `Mistral Nemo` is the top follow-up line on UniMoral RQ1/action at 0.648, but `Qwen2.5 7B`, `Llama 3.1 8B`, and `Llama 3 8B` are close behind from 0.632 to 0.640. The real separation is `Llama 3.2 1B` at 0.406 with a lower answer rate. For reporting, say this as a capability-floor result: once models are around the 7B-12B instruction range, several older routes are competitive on text moral-choice/style checks; the 1B route is the line that clearly falls below the floor.
 
 **Compared with the current main results:** this supports the same high-level story rather than changing it. Text moral-choice scores mostly live in a narrow band once the model is capable enough, so the more important differences are benchmark-specific: SMID remains the hard visual-moral bottleneck in the main matrix, while CCD-Bench remains a cultural-choice style readout instead of an accuracy race.
 

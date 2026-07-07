@@ -9,28 +9,27 @@ Use it as an evidence-status map, not as a leaderboard. Current benchmark rows, 
 | Need | Open |
 | --- | --- |
 | Same-model bar chart for exact CCD-Bench paper-model rows | [same-model CCD calibration bars](../figures/release/option1_paper_result_alignment_map.svg) |
-| Visual table of paper result anchors vs current rows | [paper result comparison](../figures/release/option1_paper_result_comparison.svg) |
 | Visual bridge for exact same-model calibration only | [paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg) |
 | Machine-readable alignment table | [paper-result-alignment.csv](../results/release/2026-04-19-option1/paper-result-alignment.csv) |
 | RQ-level paper/result comparison table | [paper-result-comparison.csv](../results/release/2026-04-19-option1/paper-result-comparison.csv) |
 | Paper-model overlap table | [paper-model-overlap-map.csv](../results/release/2026-04-19-option1/paper-model-overlap-map.csv) |
 | Same-model calibration planning ledger | [paper-model-calibration-ledger.csv](../results/release/2026-04-19-option1/paper-model-calibration-ledger.csv) |
 | Strict same-model bridge table | [paper-model-calibration-bridge.csv](../results/release/2026-04-19-option1/paper-model-calibration-bridge.csv) |
+| Context-only paper result table | [paper result context figure](../figures/release/option1_paper_result_comparison.svg) |
 | Planning / route-status notes | [calibration-replication.md](calibration-replication.md), [paper-model-replication-map.md](paper-model-replication-map.md) |
 
 ## Visual Summary
 
 ![Same-model CCD calibration bars](../figures/release/option1_paper_result_alignment_map.svg)
 
-_Same-model CCD calibration bars: only the 11 exact CCD-Bench rows with a shared Nordic-share metric are plotted. Current-only, blocked, metric-mismatched, and proxy evidence stays in the tables._
-
-![Paper-result comparison table](../figures/release/option1_paper_result_comparison.svg)
-
-_Result table: paper metric anchors sit beside closest current rows; UniMoral RQ4 is split into BERTScore F1 and METEOR._
+_Same-model CCD calibration bars: only the 11 exact CCD-Bench rows with a shared Nordic-share metric are plotted.
+Current-only, blocked, metric-mismatched, DeNEVIL/proxy, SMID human-norm, and Value/Kaleido non-rerun evidence stays in the tables._
 
 ![Paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)
 
 _Model bridge: only exact same-model evidence is plotted; near-family, blocked, proxy, and route-probe rows stay in the ledger table._
+
+The broader [paper result context figure](../figures/release/option1_paper_result_comparison.svg) is still available for paper-metric anchors, but it is not a same-model calibration bar comparison.
 
 ## TL;DR
 

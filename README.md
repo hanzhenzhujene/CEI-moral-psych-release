@@ -23,11 +23,11 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 
 | Reader question | Current answer | Where to verify |
 | --- | --- | --- |
-| Best fully observed comparable line | `MiniMax-S`: UniMoral 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611. | [benchmark accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg), [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [Value CSV](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |
-| Best text-only line | `GPT-5.5`: UniMoral 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |
+| Best fully observed comparable line | `MiniMax-S`: UniMoral RQ1/action 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611. | [benchmark accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg), [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [Value CSV](results/release/2026-04-19-option1/value-kaleidoscope-results.csv) |
+| Best text-only line | `GPT-5.5`: UniMoral RQ1/action 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |
 | Visual bottleneck | `SMID` has mean accuracy 0.364; best current line is `Qwen-L` at 0.483. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |
 | Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |
-| Paper comparison status | UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge, including RQ4 METEOR 0.121 and BERTScore F1 0.656. CCD-Bench has 11 exact same-model distribution bridges with a shared Nordic-share metric; remaining routes are unavailable, blocked, non-exact, or metric-mismatched rather than substituted. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg), [same-model CCD bars](figures/release/option1_paper_result_alignment_map.svg) |
+| Paper comparison status | UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge, including RQ4 METEOR 0.121 and BERTScore F1 0.656. CCD-Bench has 11 exact same-model distribution bridges with a shared Nordic-share metric; remaining routes are unavailable, blocked, non-exact, or metric-mismatched rather than substituted. | [same-model CCD bars](figures/release/option1_paper_result_alignment_map.svg), [same-model bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper result status notes](docs/paper-result-comparison.md) |
 
 ## Status: What Is Usable
 
@@ -95,8 +95,8 @@ These are the audience-facing result figures to use in the deck or meeting reado
 | 6 | [Family scaling profile](figures/release/option1_family_scaling_profile.svg) | Where does size help or stall on SMID and Value Kaleidoscope? |
 | 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |
 | 8 | [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | What proxy behavior mix appears in the saved traces? |
-| 9 | [Paper-result comparison table](figures/release/option1_paper_result_comparison.svg) | What original paper metric anchors can be placed beside current rows? |
-| 10 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg) | For the 11 exact same-model CCD rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified row? |
+| 9 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg) | For the 11 exact same-model CCD rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified row? |
+| 10 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Which exact paper-model rows can be compared, and which non-exact/proxy rows stay out of the visual comparison? |
 
 ![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
 
@@ -130,13 +130,9 @@ _CCD behavior view: clusters are choices relative to a uniform baseline, not rig
 
 _Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring._
 
-![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)
-
-_Paper comparison view: paper anchors sit next to current rows only when the metric boundary is explicit._
-
 ![Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)
 
-_Same-model calibration view: only CCD-Bench rows with exact model identity and a shared Nordic-share metric are plotted._
+_Same-model calibration view: only CCD-Bench rows with exact model identity and a shared Nordic-share metric are plotted; DeNEVIL/proxy evidence and non-exact paper anchors are excluded from this comparison._
 
 | Appendix-only visual evidence | What it answers |
 | --- | --- |
@@ -146,6 +142,7 @@ _Same-model calibration view: only CCD-Bench rows with exact model identity and 
 | [CCD valid-choice coverage](figures/release/option1_ccd_valid_choice_coverage.svg) | CCD parser/completion QA, not result ranking. |
 | [DeNEVIL proxy status matrix](figures/release/option1_denevil_proxy_status_matrix.svg) | Proxy route/status provenance. |
 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Exact paper-model visual bridge only; near-family, blocked, and proxy rows stay out of the plotted comparison. |
+| [Paper-result context table](figures/release/option1_paper_result_comparison.svg) | Context ledger for paper metric anchors; not a same-model bar comparison. |
 
 | Separate follow-up visual evidence | What it answers |
 | --- | --- |
