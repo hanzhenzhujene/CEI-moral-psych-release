@@ -128,19 +128,19 @@ For a 3-minute skim, use only the first shortcut row. The longer table underneat
 
 ![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
 
-_Use this first: OpenAI GPT-5 is the black text-only S/M/L line; read each UniMoral RQ separately._
+_Use this first: scaling is not uniform across UniMoral RQ1-RQ4; OpenAI GPT-5 is the black text-only S/M/L line, and each RQ should be read separately._
 
 ![UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)
 
-_Dashboard view: RQ1-RQ3 are classification accuracy surfaces, while RQ4 is generation quality._
+_Dashboard view: RQ1-RQ3 are classification accuracy surfaces, while RQ4 is generation quality with both BERTScore F1 and METEOR._
 
 ![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)
 
-_Classification view: RQ1-RQ3 use exact-match accuracy; RQ4 is deliberately separate._
+_Classification view: RQ1-RQ3 use exact-match accuracy; the observed leaders differ by task, so this is not one universal model ranking._
 
 ![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)
 
-_Generation view: BERTScore F1 and METEOR are higher-better overlap metrics, not accuracy._
+_Generation view: BERTScore F1 and METEOR are higher-better overlap metrics, not accuracy; the current leaders are `Llama-M` on BERTScore F1 and `GPT-5.5` on METEOR._
 
 ![UniMoral task rankings](figures/release/option1_unimoral_task_rankings.svg)
 
@@ -152,7 +152,7 @@ _Spread view: shows diagnostic separation across UniMoral classification tasks; 
 
 ![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
 
-_SMID/Value accuracy view: UniMoral is excluded here because it has its own RQ figures._
+_SMID/Value accuracy view: `Qwen-L` is the current SMID leader at 0.483, while `MiniMax-L` is the current Value leader at 0.741; UniMoral is excluded here because it has its own RQ figures._
 
 ![Comparable accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)
 
@@ -160,7 +160,7 @@ _Matrix view: use this for quick presence/absence scanning across UniMoral, SMID
 
 ![Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg)
 
-_Bottleneck view: SMID has the lowest mean and largest spread among the directly comparable metrics._
+_Bottleneck view: SMID has the lowest mean among the directly comparable metrics, with only 9 of 21 model-line cells scored because many text-only rows have no vision route._
 
 ![Family scaling profile](figures/release/option1_family_scaling_profile.svg)
 
@@ -168,7 +168,7 @@ _Size profile view: compare SMID and Value trends without mixing CCD behavior or
 
 ![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)
 
-_CCD behavior view: clusters are choices relative to a uniform baseline, not right/wrong labels._
+_CCD behavior view: option 6 / Nordic Europe is the dominant cluster for many rows, with dominant shares ranging from 13.8% to 27.8%; these are choices relative to a uniform baseline, not right/wrong labels._
 
 ![CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)
 
@@ -184,11 +184,11 @@ _Proxy prompt-family view: useful for behavior audit, but still not paper-faithf
 
 ![Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)
 
-_Same-model calibration view: only CCD-Bench rows with exact model identity and a shared Nordic-share metric are plotted; DeNEVIL/proxy evidence and non-exact paper anchors are excluded from this comparison._
+_Same-model calibration view: 11 exact CCD-Bench rows are plotted on the shared Nordic-share metric: 10 fresh reruns plus 1 current release row. DeNEVIL/proxy evidence and non-exact paper anchors are excluded from this comparison._
 
 ![Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)
 
-_Bridge view: exact same-model calibration rows are visible; near-family, blocked, route-probe, and proxy rows stay out of the plotted comparison._
+_Bridge view: exact same-model calibration rows are visible, including the fresh Llama 3.1 UniMoral bridge; near-family, blocked, route-probe, and proxy rows stay out of the plotted comparison._
 
 ![Paper-result context table](figures/release/option1_paper_result_comparison.svg)
 

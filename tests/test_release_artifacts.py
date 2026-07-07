@@ -394,6 +394,11 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "![Same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)" in visual_section
     assert "![Paper-result context table](../../../figures/release/option1_paper_result_comparison.svg)" in visual_section
     assert "Bridge view: exact same-model calibration rows are visible" in visual_section
+    assert "including the fresh Llama 3.1 UniMoral bridge" in visual_section
+    assert "The current leaders are `Llama-M` on BERTScore F1 and `GPT-5.5` on METEOR" in visual_section
+    assert "dominant shares ranging from 13.8% to 27.8%" in visual_section
+    assert "11 exact same-model CCD-Bench rows" in visual_section
+    assert "10 fresh reruns plus 1 verified current row" in visual_section
     assert "Context view: paper metric anchors are shown for orientation" in visual_section
     assert "For the complete exact-model bridge" not in visual_section
     assert "not as a visual calibration comparison" not in visual_section
@@ -1904,10 +1909,17 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "| Calibration | 15 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
     assert "| Calibration | 16 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
     assert "| Calibration context | 17 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in root_readme
-    assert "Use this first: OpenAI GPT-5 is the black text-only S/M/L line" in root_readme
-    assert "CCD behavior view: clusters are choices relative to a uniform baseline, not right/wrong labels." in root_readme
+    assert "Use this first: scaling is not uniform across UniMoral RQ1-RQ4" in root_readme
+    assert "OpenAI GPT-5 is the black text-only S/M/L line" in root_readme
+    assert "Dashboard view: RQ1-RQ3 are classification accuracy surfaces, while RQ4 is generation quality with both BERTScore F1 and METEOR." in root_readme
+    assert "the current leaders are `Llama-M` on BERTScore F1 and `GPT-5.5` on METEOR" in root_readme
+    assert "`Qwen-L` is the current SMID leader at 0.483" in root_readme
+    assert "`MiniMax-L` is the current Value leader at 0.741" in root_readme
+    assert "only 9 of 21 model-line cells scored because many text-only rows have no vision route" in root_readme
+    assert "CCD behavior view: option 6 / Nordic Europe is the dominant cluster for many rows, with dominant shares ranging from 13.8% to 27.8%" in root_readme
+    assert "11 exact CCD-Bench rows are plotted on the shared Nordic-share metric: 10 fresh reruns plus 1 current release row" in root_readme
     assert "Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring." in root_readme
-    assert "Bridge view: exact same-model calibration rows are visible" in root_readme
+    assert "Bridge view: exact same-model calibration rows are visible, including the fresh Llama 3.1 UniMoral bridge" in root_readme
     assert "Context view: paper metric anchors are shown for orientation" in root_readme
     assert "Secondary QA/provenance figures are also embedded below" in root_readme
     assert "### Visual Contract" in root_readme

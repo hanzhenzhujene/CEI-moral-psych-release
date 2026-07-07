@@ -278,7 +278,13 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg" in readme
     assert "![Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
     assert "![Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
-    assert "Bridge view: exact same-model calibration rows are visible" in readme
+    assert "Use this first: scaling is not uniform across UniMoral RQ1-RQ4" in readme
+    assert "the current leaders are `Llama-M` on BERTScore F1 and `GPT-5.5` on METEOR" in readme
+    assert "`Qwen-L` is the current SMID leader at 0.483" in readme
+    assert "`MiniMax-L` is the current Value leader at 0.741" in readme
+    assert "dominant shares ranging from 13.8% to 27.8%" in readme
+    assert "11 exact CCD-Bench rows are plotted on the shared Nordic-share metric" in readme
+    assert "Bridge view: exact same-model calibration rows are visible, including the fresh Llama 3.1 UniMoral bridge" in readme
     assert "Context view: paper metric anchors are shown for orientation" in readme
     assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in readme
     assert "[paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in readme

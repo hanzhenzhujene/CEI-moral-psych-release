@@ -25,7 +25,7 @@ _Why it matters: moral psychology is about choices plus explanations, not just a
 
 ![UniMoral four-task dashboard](../../../figures/release/option1_unimoral_four_task_dashboard.svg)
 
-_Dashboard view: RQ1-RQ3 are classification accuracy surfaces, while RQ4 is generation quality. Use it as the map before reading the task-specific charts._
+_Dashboard view: RQ1-RQ3 are classification accuracy surfaces, while RQ4 is generation quality with both BERTScore F1 and METEOR. Use it as the map before reading the task-specific charts._
 
 ![UniMoral RQ1-RQ3 exact-match accuracy](../../../figures/release/option1_unimoral_task_heatmap.svg)
 
@@ -33,7 +33,7 @@ _How to read it: RQ1, RQ2, and RQ3 all use exact-match accuracy, so the three cl
 
 ![UniMoral RQ4 generation quality](../../../figures/release/option1_unimoral_generation_quality.svg)
 
-_How to read RQ4: consequence generation is open-ended. BERTScore F1 asks whether the model said something semantically close to the reference consequence; METEOR asks whether the wording overlaps. It is not a right/wrong accuracy score._
+_How to read RQ4: consequence generation is open-ended. BERTScore F1 asks whether the model said something semantically close to the reference consequence; METEOR asks whether the wording overlaps. The current leaders are `Llama-M` on BERTScore F1 and `GPT-5.5` on METEOR; this is not a right/wrong accuracy score._
 
 ![UniMoral task rankings](../../../figures/release/option1_unimoral_task_rankings.svg)
 
@@ -57,7 +57,7 @@ _Compact heatmap view: the same comparable-score slice is shown as a matrix, wit
 
 ![Comparable score spread](../../../figures/release/option1_benchmark_difficulty_profile.svg)
 
-_Bottleneck view: SMID has the lowest mean and largest spread among the directly comparable metrics, so it is the visual-moral bottleneck rather than just another accuracy column._
+_Bottleneck view: SMID has the lowest mean among the directly comparable metrics, with only 9 of 21 model-line cells scored because many text-only rows have no vision route. It is the visual-moral bottleneck rather than just another accuracy column._
 
 ### 3. SMID / Value Kaleidoscope: family-size scaling
 
@@ -71,7 +71,7 @@ _Use this next to compare size effects on SMID and Value after the combined UniM
 
 ![CCD choice distribution](../../../figures/release/option1_ccd_choice_distribution.svg)
 
-_What it tests: CCD-Bench puts models in value conflicts where ten answer options map to cultural clusters. The figure shows which cultural response styles each model over-selects or avoids relative to a 10% uniform baseline._
+_What it tests: CCD-Bench puts models in value conflicts where ten answer options map to cultural clusters. Option 6 / Nordic Europe is the dominant cluster for many rows, with dominant shares ranging from 13.8% to 27.8%; the figure shows which cultural response styles each model over-selects or avoids relative to a 10% uniform baseline._
 
 _Why it matters: this is not a single right-answer benchmark. It tells a moral-psych reader which culturally grounded response style a model tends to privilege when values conflict._
 
@@ -97,13 +97,13 @@ _Proxy prompt-family view: this helps audit where protective behavior appears, b
 
 ![Same-model CCD calibration bar chart](../../../figures/release/option1_paper_result_alignment_map.svg)
 
-_What it answers: for exact same-model CCD-Bench rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified current row?_
+_What it answers: for 11 exact same-model CCD-Bench rows, how do paper/source Nordic-share bars compare with this repo's 10 fresh reruns plus 1 verified current row?_
 
 _Strict rule: this visible comparison includes only exact same-model evidence on a shared metric. DeNEVIL/proxy rows, SMID human-norm rows, Value/Kaleido non-reruns, and non-exact routes stay in the ledger tables instead of being plotted._
 
 ![Same-model paper calibration bridge](../../../figures/release/option1_paper_model_calibration_bridge.svg)
 
-_Bridge view: exact same-model calibration rows are visible; near-family, blocked, route-probe, and proxy rows stay out of the plotted comparison._
+_Bridge view: exact same-model calibration rows are visible, including the fresh Llama 3.1 UniMoral bridge; near-family, blocked, route-probe, and proxy rows stay out of the plotted comparison._
 
 ![Paper-result context table](../../../figures/release/option1_paper_result_comparison.svg)
 
