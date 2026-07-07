@@ -37,10 +37,10 @@
 </defs>
 <rect x="0" y="0" width="1480" height="1056" class="canvas"/>
 <rect x="24" y="24" width="1432" height="1008" rx="22" class="panel"/>
-<title>Appendix QA: DeNEVIL proxy sample volume</title>
-<desc>Appendix QA / provenance only. Absolute DeNEVIL proxy prompt volume by model line. Pale outline bars show total proxy prompts available for that line; the filled overlay shows how many prompts produced a non-empty saved visible answer.</desc>
-<text x="48" y="64" class="title">Appendix QA: DeNEVIL proxy sample volume</text>
-<text x="48" y="88" class="subtitle">Appendix QA / provenance only. Most finished proxy lines saw the full 20,518-prompt archive. The darker overlay shows how many of those prompts actually produced a visible saved proxy answer.</text>
+<title>QA / provenance: DeNEVIL proxy sample volume</title>
+<desc>QA / provenance view. Absolute DeNEVIL proxy prompt volume by model line. Pale outline bars show total proxy prompts available for that line; the filled overlay shows how many prompts produced a non-empty saved visible answer.</desc>
+<text x="48" y="64" class="title">QA / Provenance: DeNEVIL Proxy Sample Volume</text>
+<text x="48" y="88" class="subtitle">QA / provenance view. Most finished proxy lines saw the full 20,518-prompt archive. The darker overlay shows how many of those prompts actually produced a visible saved proxy answer.</text>
 <text x="48" y="108" class="subtitle">Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.</text>
 <line x1="310.00" y1="210" x2="310.00" y2="934" class="guide"/>
 <text x="310.00" y="202" text-anchor="middle" class="small">0</text>

@@ -1573,8 +1573,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Only the small line is currently comparable." not in family_scaling_svg
 
     ccd_coverage_svg = (figure_dir / "option1_ccd_valid_choice_coverage.svg").read_text(encoding="utf-8")
-    assert "Appendix QA: CCD-Bench valid-choice coverage, not accuracy." in ccd_coverage_svg
-    assert "Appendix QA only." in ccd_coverage_svg
+    assert "QA / Provenance: CCD-Bench Valid-Choice Coverage, Not Accuracy" in ccd_coverage_svg
+    assert "QA / provenance view." in ccd_coverage_svg
+    assert "Appendix QA" not in ccd_coverage_svg
     assert "parseable integer in 1-10" in ccd_coverage_svg
     assert "Hatched rows are missing (`n/a`) rather than zero." in ccd_coverage_svg
     assert "MiniMax-M" in ccd_coverage_svg
@@ -1589,7 +1590,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "SIZE" in ccd_distribution_svg
     assert "DeepSeek-S" in ccd_distribution_svg
     assert "10% uniform baseline" in ccd_distribution_svg
-    assert "Coverage stays in the appendix QA figure." in ccd_distribution_svg
+    assert "Coverage stays in the separate QA/provenance figure." in ccd_distribution_svg
     assert "Rows with no valid visible CCD selection stay hatched as `n/a`" in ccd_distribution_svg
     assert "Top cluster share" in ccd_distribution_svg
     assert "Effective clusters" in ccd_distribution_svg
@@ -1636,8 +1637,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "line chart" not in denevil_prompt_family_svg.lower()
 
     denevil_status_matrix_svg = (figure_dir / "option1_denevil_proxy_status_matrix.svg").read_text(encoding="utf-8")
-    assert "Appendix QA: DeNEVIL proxy status matrix" in denevil_status_matrix_svg
-    assert "Appendix QA / provenance only." in denevil_status_matrix_svg
+    assert "QA / Provenance: DeNEVIL Proxy Status Matrix" in denevil_status_matrix_svg
+    assert "QA / provenance view." in denevil_status_matrix_svg
+    assert "Appendix QA" not in denevil_status_matrix_svg
     assert "Proxy complete" in denevil_status_matrix_svg
     assert "Active rerun" not in denevil_status_matrix_svg
     assert "SAMPLE COUNT" in denevil_status_matrix_svg
@@ -1650,15 +1652,17 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "May 9 no-thinking archive" in denevil_status_matrix_svg
 
     denevil_sample_volume_svg = (figure_dir / "option1_denevil_proxy_sample_volume.svg").read_text(encoding="utf-8")
-    assert "Appendix QA: DeNEVIL proxy sample volume" in denevil_sample_volume_svg
-    assert "Appendix QA / provenance only." in denevil_sample_volume_svg
+    assert "QA / Provenance: DeNEVIL Proxy Sample Volume" in denevil_sample_volume_svg
+    assert "QA / provenance view." in denevil_sample_volume_svg
+    assert "Appendix QA" not in denevil_sample_volume_svg
     assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in denevil_sample_volume_svg
     assert "visible 20,474 / 20,518" in denevil_sample_volume_svg
     assert "MiniMax-M" in denevil_sample_volume_svg
 
     denevil_valid_rate_svg = (figure_dir / "option1_denevil_proxy_valid_response_rate.svg").read_text(encoding="utf-8")
-    assert "Appendix QA: DeNEVIL proxy visible-response coverage" in denevil_valid_rate_svg
-    assert "Appendix QA / provenance only." in denevil_valid_rate_svg
+    assert "QA / Provenance: DeNEVIL Proxy Visible-Response Coverage" in denevil_valid_rate_svg
+    assert "QA / provenance view." in denevil_valid_rate_svg
+    assert "Appendix QA" not in denevil_valid_rate_svg
     assert "High bars mean stronger public traceability coverage, not stronger benchmark-faithful ethical quality." in denevil_valid_rate_svg
     assert "Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring." in denevil_valid_rate_svg
     assert "MiniMax-M" in denevil_valid_rate_svg
@@ -1666,8 +1670,10 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "clearest cross-line comparison for the proxy package" not in denevil_valid_rate_svg
 
     denevil_pipeline_svg = (figure_dir / "option1_denevil_proxy_pipeline.svg").read_text(encoding="utf-8")
-    assert "Appendix explanation: DeNEVIL proxy pipeline" in denevil_pipeline_svg
-    assert "Supporting appendix only." in denevil_pipeline_svg
+    assert "QA / Provenance: DeNEVIL Proxy Pipeline" in denevil_pipeline_svg
+    assert "QA / provenance explanation." in denevil_pipeline_svg
+    assert "Appendix explanation" not in denevil_pipeline_svg
+    assert "Supporting appendix only." not in denevil_pipeline_svg
     assert "DeNEVIL paper goal" in denevil_pipeline_svg
     assert "Local limitation" in denevil_pipeline_svg
     assert "Implemented release path" in denevil_pipeline_svg

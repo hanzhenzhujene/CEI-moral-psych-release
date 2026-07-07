@@ -194,7 +194,7 @@
     "current_total_cost": "$897.58",
     "date": "2026-07-06",
     "frozen_snapshot_date": "2026-04-19",
-    "metric_definition_summary": "Stricter visible-answer parsing is now versioned explicitly: UniMoral, SMID, and Value Kaleidoscope use structured visible-answer extraction; CCD-Bench coverage requires a parseable visible 1-10 choice; CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; DeNEVIL appendix coverage counts non-empty visible proxy answers while the headline proxy figures classify visible behavior categories.",
+    "metric_definition_summary": "Stricter visible-answer parsing is now versioned explicitly: UniMoral, SMID, and Value Kaleidoscope use structured visible-answer extraction; CCD-Bench coverage requires a parseable visible 1-10 choice; CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; DeNEVIL secondary coverage counts non-empty visible proxy answers while the headline proxy figures classify visible behavior categories.",
     "metric_definition_version": "2026-04-30",
     "operations_note": "Updated July 6, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `DeepSeek-L`, `Llama-L`, `DeepSeek-S`, `MiniMax-L`, and `MiniMax-S`, and no published follow-up line is still live.",
     "owner": "Jenny Zhu",

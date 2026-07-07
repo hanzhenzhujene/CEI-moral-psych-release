@@ -44,7 +44,7 @@
 <text x="48" y="108" class="subtitle">Positive cells mean the line selected that cluster more often than uniform choice; negative cells mean under-indexing. This is CCD choice behavior, not benchmark accuracy.</text>
 <text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI GPT-5 rows are S/M/L, while GPT-4o/GPT-4.1 rows remain text-only refs.</text>
 <text x="48" y="148" class="subtitle">Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>
-<text x="48" y="168" class="subtitle">Coverage stays in the appendix QA figure.</text>
+<text x="48" y="168" class="subtitle">Coverage stays in the separate QA/provenance figure.</text>
 <text x="107.00" y="194" text-anchor="middle" class="tiny">FAMILY</text>
 <text x="212.00" y="194" text-anchor="middle" class="tiny">SIZE</text>
 <text x="258" y="194" class="tiny">MODEL LINE</text>
@@ -619,5 +619,5 @@
 <text x="72" y="1452" class="tiny">HOW TO READ THE CCD HEATMAP</text>
 <text x="72" y="1476" class="body">The baseline is 10% because the paper offers ten canonical cluster options. `+5.0` means a line selected that cluster five percentage points more often than uniform choice; `-3.0` means three points less often.</text>
 <text x="72" y="1502" class="body">`Top cluster share` is the line&apos;s most frequent cluster share among valid visible selections. `Effective clusters` is the inverse concentration count: lower means more concentrated, higher means more spread out.</text>
-<text x="72" y="1528" class="body">No explicit rationale tags are retained in the public archive, so this figure stays with choice behavior only. The appendix coverage figure still reports whether a valid visible CCD choice surfaced at all.</text>
+<text x="72" y="1528" class="body">No explicit rationale tags are retained in the public archive, so this figure stays with choice behavior only. The separate QA/provenance figure reports whether a valid visible CCD choice surfaced at all.</text>
 </svg>

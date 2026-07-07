@@ -307,5 +307,5 @@
 <text x="506" y="1059" class="small">Ambiguous visible answer</text>
 <rect x="892" y="1047" width="16" height="16" rx="4" fill="#cbd5e1"/>
 <text x="916" y="1059" class="small">No visible answer</text>
-<text x="72" y="1102" class="body">This is the headline proxy-result view for DeNEVIL in the public release. Route names, sample counts, timestamps, and raw valid-response coverage stay in the appendix provenance figures below.</text>
+<text x="72" y="1102" class="body">This is the headline proxy-result view for DeNEVIL in the public release. Route names, sample counts, timestamps, and raw valid-response coverage stay in the secondary QA/provenance figures.</text>
 </svg>

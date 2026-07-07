@@ -37,10 +37,10 @@
 </defs>
 <rect x="0" y="0" width="1420" height="1036" class="canvas"/>
 <rect x="24" y="24" width="1372" height="988" rx="22" class="panel"/>
-<title>Appendix QA: DeNEVIL proxy visible-response coverage</title>
-<desc>Appendix QA / provenance only. Valid visible response rate for each public DeNEVIL proxy line. Bars show the share of proxy prompts whose saved visible answer field contains non-empty text. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.</desc>
-<text x="48" y="64" class="title">Appendix QA: DeNEVIL proxy visible-response coverage</text>
-<text x="48" y="88" class="subtitle">Appendix QA / provenance only. This is the public coverage metric for DeNEVIL in this repo: non-empty saved visible proxy answers divided by all proxy prompts on that line.</text>
+<title>QA / provenance: DeNEVIL proxy visible-response coverage</title>
+<desc>QA / provenance view. Valid visible response rate for each public DeNEVIL proxy line. Bars show the share of proxy prompts whose saved visible answer field contains non-empty text. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.</desc>
+<text x="48" y="64" class="title">QA / Provenance: DeNEVIL Proxy Visible-Response Coverage</text>
+<text x="48" y="88" class="subtitle">QA / provenance view. This is the public coverage metric for DeNEVIL in this repo: non-empty saved visible proxy answers divided by all proxy prompts on that line.</text>
 <text x="48" y="108" class="subtitle">High bars mean stronger public traceability coverage, not stronger benchmark-faithful ethical quality. Proxy-only coverage and traceability evidence;</text>
 <text x="48" y="128" class="subtitle">MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.</text>
 <line x1="310.00" y1="198" x2="310.00" y2="922" class="guide"/>
@@ -130,5 +130,5 @@
 <text x="1052" y="871.00" class="label">20,518 / 20,518</text>
 <rect x="48" y="932" width="1324" height="62" rx="18" class="legend-card"/>
 <text x="72" y="956" class="tiny">RATE INTERPRETATION</text>
-<text x="72" y="978" class="body">This is an appendix QA / provenance view, not the headline DeNEVIL result. DeepSeek-S is 99.8% visible in the May 9 no-thinking archive; low bars here indicate saved-answer surfacing, not ethical-quality accuracy.</text>
+<text x="72" y="978" class="body">This is a QA / provenance view, not the headline DeNEVIL result. DeepSeek-S is 99.8% visible in the May 9 no-thinking archive; low bars here indicate saved-answer surfacing, not ethical-quality accuracy.</text>
 </svg>

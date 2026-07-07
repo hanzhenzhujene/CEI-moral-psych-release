@@ -37,10 +37,10 @@
 </defs>
 <rect x="0" y="0" width="1440" height="1326" class="canvas"/>
 <rect x="24" y="24" width="1392" height="1278" rx="22" class="panel"/>
-<title>Appendix QA: CCD-Bench valid-choice coverage, not accuracy.</title>
-<desc>Appendix QA only. Horizontal bar chart comparing CCD-Bench valid-choice coverage across model lines. Coverage here means the share of CCD prompts whose saved visible answer exposed one parseable integer in 1-10. It is a formatting / surfaced-choice coverage metric, not benchmark-faithful accuracy.</desc>
-<text x="48" y="64" class="title">Appendix QA: CCD-Bench valid-choice coverage, not accuracy.</text>
-<text x="48" y="88" class="subtitle">Appendix QA only. Each bar shows the share of CCD-Bench prompts whose saved visible answer exposed one parseable integer in 1-10.</text>
+<title>QA / provenance: CCD-Bench valid-choice coverage, not accuracy.</title>
+<desc>QA / provenance view. Horizontal bar chart comparing CCD-Bench valid-choice coverage across model lines. Coverage here means the share of CCD prompts whose saved visible answer exposed one parseable integer in 1-10. It is a formatting / surfaced-choice coverage metric, not benchmark-faithful accuracy.</desc>
+<text x="48" y="64" class="title">QA / Provenance: CCD-Bench Valid-Choice Coverage, Not Accuracy</text>
+<text x="48" y="88" class="subtitle">QA / provenance view. Each bar shows the share of CCD-Bench prompts whose saved visible answer exposed one parseable integer in 1-10.</text>
 <text x="48" y="108" class="subtitle">This is the first CCD public check: did the line surface a valid visible choice at all? Hidden reasoning does not count until it reaches the saved answer field.</text>
 <text x="48" y="128" class="subtitle">Hatched rows are missing (`n/a`) rather than zero. Near-ceiling labels keep exact percentages so 99.8% does not get mistaken for 100.0%.</text>
 <line x1="310.00" y1="202" x2="310.00" y2="1202" class="guide"/>

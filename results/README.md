@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | Primary result tables | [`unimoral-full-benchmark.csv`](release/2026-04-19-option1/unimoral-full-benchmark.csv), [`smid-results.csv`](release/2026-04-19-option1/smid-results.csv), [`value-kaleidoscope-results.csv`](release/2026-04-19-option1/value-kaleidoscope-results.csv) | Main comparable accuracy entry points; UniMoral RQ4 has separate BERTScore F1 and METEOR rows. |
 | Behavioral/proxy result tables | [`ccd-choice-distribution.csv`](release/2026-04-19-option1/ccd-choice-distribution.csv), [`denevil-behavior-summary.csv`](release/2026-04-19-option1/denevil-behavior-summary.csv) | CCD-Bench is cultural-choice behavior; DeNEVIL is proxy behavior. |
-| Visual reading path | [`../figures/README.md`](../figures/README.md) | Audience-facing figures are separated from appendix QA/provenance figures. |
+| Visual reading path | [`../figures/README.md`](../figures/README.md) | Audience-facing figures are separated from secondary QA/provenance figures. |
 | Readiness and progress | [`readiness-tier-matrix.csv`](release/2026-04-19-option1/readiness-tier-matrix.csv), [`family-size-progress.csv`](release/2026-04-19-option1/family-size-progress.csv) | Tier is result readiness, not model quality. |
 | Paper calibration / replication | [`paper-result-alignment.csv`](release/2026-04-19-option1/paper-result-alignment.csv), [`paper-model-calibration-ledger.csv`](release/2026-04-19-option1/paper-model-calibration-ledger.csv), [`paper-model-calibration-bridge.csv`](release/2026-04-19-option1/paper-model-calibration-bridge.csv) | Same-model rows, blocked routes, current-only rows, and proxy-only evidence stay separate. |
 | OpenRouter selected-grid follow-up | [`openrouter-selected-grid-moral-psych-full/README.md`](openrouter-selected-grid-moral-psych-full/README.md), [`result_summary.csv`](openrouter-selected-grid-moral-psych-full/result_summary.csv), [`targeted-retry-log.md`](openrouter-selected-grid-moral-psych-full/targeted-retry-log.md) | Separate text-only follow-up; not folded into the frozen Option 1 ranking surface. |
@@ -75,7 +75,7 @@ The current release separates three layers on purpose:
 
 - **Comparable accuracy:** `unimoral-full-benchmark.csv`, `smid-results.csv`, and `value-kaleidoscope-results.csv`; `benchmark-comparison.csv` is a supporting generated summary for figures, not the main data entry point
 - **Behavioral / distributional evidence:** `ccd-choice-distribution.csv` for CCD-Bench and `denevil-behavior-summary.csv` plus `denevil-prompt-family-breakdown.csv` for DeNEVIL
-- **Appendix QA / provenance:** `denevil-proxy-summary.csv`, `denevil-proxy-examples.csv`, and the QA-only coverage / status figures
+- **Secondary QA / provenance:** `denevil-proxy-summary.csv`, `denevil-proxy-examples.csv`, and the QA-only coverage / status figures
 - **Result-readiness summary dashboard:** `readiness-tier-matrix.csv`, which summarizes model-line x benchmark readiness while keeping the metric layer explicit. Tier 1 = harness completed, Tier 2 = valid result, Tier 3 = interpretable/comparable result; blocked or missing cells are not assigned a tier.
 - **OpenRouter text-only follow-up:** `results/openrouter-selected-grid-moral-psych-full/result_summary.csv`, `benchmark_summary.csv`, and `model_summary.csv` summarize the separate selected-grid follow-up; `completion_audit.md` and `targeted-retry-log.md` document provider/credit blockers; CCD-Bench is valid-choice behavior, not accuracy.
 

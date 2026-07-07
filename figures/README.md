@@ -56,7 +56,7 @@ Use these smaller bundles when you do not need the full figure set. Each bundle 
 
 - `option1_ccd_choice_distribution.svg`: main CCD result, showing deviation from the 10% uniform baseline across the ten canonical cultural clusters
 - `option1_ccd_dominant_option_share.svg`: compact CCD summary showing dominant-cluster concentration and effective cluster breadth
-- `option1_ccd_valid_choice_coverage.svg`: appendix QA only, showing parseable visible `1-10` choice coverage
+- `option1_ccd_valid_choice_coverage.svg`: QA/provenance view showing parseable visible `1-10` choice coverage
 
 ## Comparable accuracy figures
 
@@ -69,9 +69,9 @@ Use these smaller bundles when you do not need the full figure set. Each bundle 
 
 - `option1_denevil_behavior_outcomes.svg`: main DeNEVIL proxy result, showing visible behavioral outcomes from released traces
 - `option1_denevil_prompt_family_heatmap.svg`: secondary DeNEVIL view showing protective-response rates by heuristic prompt family
-- `option1_denevil_proxy_status_matrix.svg`: appendix QA / provenance table for route, timestamps, sample counts, and limitations
-- `option1_denevil_proxy_sample_volume.svg`: appendix QA sample-volume chart
-- `option1_denevil_proxy_valid_response_rate.svg`: appendix QA visible-response coverage chart
+- `option1_denevil_proxy_status_matrix.svg`: QA/provenance table for route, timestamps, sample counts, and limitations
+- `option1_denevil_proxy_sample_volume.svg`: QA/provenance sample-volume chart
+- `option1_denevil_proxy_valid_response_rate.svg`: QA/provenance visible-response coverage chart
 - `option1_denevil_proxy_pipeline.svg`: one-slide diagram of the public proxy pipeline and its limitations
 
 ## Replication / calibration figures
@@ -90,7 +90,7 @@ These figures are separate from the frozen `2026-04-19 Option 1` ranking surface
 - `../results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg`: detailed task matrix for task-level backup slides and audit detail
 - `../results/openrouter-selected-grid-moral-psych-full/figures/cost_estimate.svg`: planning/accounting appendix only
 
-## Appendix QA / Provenance Figures
+## Secondary QA / Provenance Figures
 
 These are still public and useful, but they answer audit/provenance questions rather than headline performance questions.
 
@@ -106,7 +106,7 @@ These are still public and useful, but they answer audit/provenance questions ra
 The figure set is intentionally split between:
 
 - headline research figures that support the repo's claims, and
-- appendix QA / provenance figures that explain what ran without pretending those support the same performance claims.
+- secondary QA / provenance figures that explain what ran without pretending those support the same performance claims.
 
 That split is especially important for `CCD-Bench` and `DeNEVIL`: headline figures show model behavior, while coverage, parsing, route, and trace-surfacing diagnostics stay labeled as QA/provenance even when they are embedded in the root README.
 
@@ -115,10 +115,10 @@ That split is especially important for `CCD-Bench` and `DeNEVIL`: headline figur
 Before pushing publication-facing figure changes, render every release SVG to PNG and inspect both a contact sheet and the key headline figures at full size. The visual pass should confirm:
 
 - no clipped labels, overlapping legend text, or family-group boxes extending past their rows
-- figure titles state the interpretation boundary (`accuracy`, `not accuracy`, `proxy`, or `appendix QA`) directly in the image
+- figure titles state the interpretation boundary (`accuracy`, `not accuracy`, `proxy`, or `QA/provenance`) directly in the image
 - the first UniMoral view shows RQ1-RQ3 exact-match accuracy clearly, with readable row labels and values
 - UniMoral classification figures use exact-match accuracy only; RQ4 stays in a separate generation-metric chart
-- appendix/provenance charts remain readable but do not become the primary evidence for accuracy claims
+- QA/provenance charts remain readable but do not become the primary evidence for accuracy claims
 
 One local render command used for QA is:
 

@@ -272,14 +272,15 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "side" + " metric" not in figures_readme
     assert "## Audience-Facing Result Figures" in figures_readme
     assert "## Figure Bundles" in figures_readme
-    assert "## Appendix QA / Provenance Figures" in figures_readme
+    assert "## Secondary QA / Provenance Figures" in figures_readme
+    assert "## Appendix QA / Provenance Figures" not in figures_readme
     audience_block = figures_readme[
         figures_readme.index("## Audience-Facing Result Figures") : figures_readme.index("## Figure Bundles")
     ]
     bundle_block = figures_readme[
         figures_readme.index("## Figure Bundles") : figures_readme.index("## UniMoral figures")
     ]
-    appendix_block = figures_readme[figures_readme.index("## Appendix QA / Provenance Figures") :]
+    appendix_block = figures_readme[figures_readme.index("## Secondary QA / Provenance Figures") :]
     assert "| Order | Open | Use it for | Read it as |" in audience_block
     assert "This list mirrors the first part of the root README `Main Figures` section" in audience_block
     assert "Paper metric anchors and release-result context." in audience_block
@@ -344,7 +345,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| OpenRouter follow-up |" in bundle_block
     assert "pilot_scores.svg" in bundle_block
     assert "Separate text-only follow-up; excludes SMID, DeNEVIL, and MiniMax." in bundle_block
-    assert figures_readme.index("## Audience-Facing Result Figures") < figures_readme.index("## Appendix QA / Provenance Figures")
+    assert figures_readme.index("## Audience-Facing Result Figures") < figures_readme.index("## Secondary QA / Provenance Figures")
     assert figures_readme.index("## Figure Bundles") < figures_readme.index("## UniMoral figures")
     assert "two reported generation metrics: BERTScore F1" in figures_readme
     assert "## Comparable accuracy figures" in figures_readme
@@ -361,7 +362,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "option1_paper_model_calibration_bridge.svg" in replication_block
     assert "option1_paper_result_comparison.svg" in replication_block
     selected_grid_block = figures_readme[
-        figures_readme.index("## OpenRouter selected-grid follow-up figures") : figures_readme.index("## Appendix QA / Provenance Figures")
+        figures_readme.index("## OpenRouter selected-grid follow-up figures") : figures_readme.index("## Secondary QA / Provenance Figures")
     ]
     assert "within_family_scaling.svg" in selected_grid_block
     assert "time_scaling.svg" in selected_grid_block
@@ -370,7 +371,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "read CCD-Bench as valid-choice behavior, not correctness" in selected_grid_block
     assert "SMID, DeNEVIL, and MiniMax are excluded" in selected_grid_block
     assert figures_readme.index("## Replication / calibration figures") < figures_readme.index("## OpenRouter selected-grid follow-up figures")
-    assert figures_readme.index("## OpenRouter selected-grid follow-up figures") < figures_readme.index("## Appendix QA / Provenance Figures")
+    assert figures_readme.index("## OpenRouter selected-grid follow-up figures") < figures_readme.index("## Secondary QA / Provenance Figures")
     assert "stay labeled as QA/provenance even when they are embedded in the root README" in figures_readme
     assert "stay in appendix-only visuals" not in figures_readme
 
@@ -677,15 +678,16 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "benchmark_score_matrix.svg" in reproducibility
     assert "separate OpenRouter text-only follow-up" in reproducibility
     assert "blocked provider/credit rows stay documented outside scored summaries" in reproducibility
-    assert "appendix QA artifacts" in reproducibility
+    assert "secondary QA/provenance artifacts" in reproducibility
 
     figures_readme = (ROOT / "figures" / "README.md").read_text(encoding="utf-8")
     assert "## CCD-Bench figures" in figures_readme
     assert "## DeNEVIL figures" in figures_readme
     assert "option1_ccd_choice_distribution.svg" in figures_readme
     assert "option1_denevil_behavior_outcomes.svg" in figures_readme
-    assert "appendix QA / provenance" in figures_readme
-    assert "Appendix QA / Provenance Figures" in figures_readme
+    assert "secondary QA / provenance" in figures_readme
+    assert "Secondary QA / Provenance Figures" in figures_readme
+    assert "appendix QA only" not in figures_readme
 
     results_readme = (ROOT / "results" / "README.md").read_text(encoding="utf-8")
     assert "## Open First" in results_readme
@@ -696,7 +698,7 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "[`readiness-tier-matrix.csv`](release/2026-04-19-option1/readiness-tier-matrix.csv)" in results_readme
     assert "[`paper-model-calibration-ledger.csv`](release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in results_readme
     assert "[`openrouter-selected-grid-moral-psych-full/README.md`](openrouter-selected-grid-moral-psych-full/README.md)" in results_readme
-    assert "Audience-facing figures are separated from appendix QA/provenance figures." in results_readme
+    assert "Audience-facing figures are separated from secondary QA/provenance figures." in results_readme
     assert "Tier is result readiness, not model quality." in results_readme
     assert "Separate text-only follow-up; not folded into the frozen Option 1 ranking surface." in results_readme
     assert "## Public Result Layers" in results_readme
@@ -712,7 +714,7 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "CCD-Bench is valid-choice behavior, not accuracy" in results_readme
     assert "ccd-choice-distribution.csv" in results_readme
     assert "denevil-behavior-summary.csv" in results_readme
-    assert "Appendix QA / provenance" in results_readme
+    assert "Secondary QA / provenance" in results_readme
 
     selected_grid_readme = (ROOT / "results" / "openrouter-selected-grid-moral-psych-full" / "README.md").read_text(encoding="utf-8")
     assert "## Open First" in selected_grid_readme

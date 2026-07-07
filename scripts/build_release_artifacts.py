@@ -84,7 +84,7 @@ PUBLIC_METRIC_DEFINITION_VERSION = "2026-04-30"
 PUBLIC_METRIC_DEFINITION_SUMMARY = (
     "Stricter visible-answer parsing is now versioned explicitly: UniMoral, SMID, and Value Kaleidoscope use "
     "structured visible-answer extraction; CCD-Bench coverage requires a parseable visible 1-10 choice; "
-    "CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; Denevil appendix "
+    "CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; Denevil secondary "
     "coverage counts non-empty visible proxy answers while the headline proxy figures classify visible behavior categories."
 )
 CURRENT_COMPARABLE_SNAPSHOT_NOTE = (
@@ -531,7 +531,7 @@ BENCHMARK_METADATA = {
         "dataset_note": "This repo can default to the official public JSON URL or a local cached copy.",
         "paper_focus": "A cross-cultural conflict benchmark where models adjudicate between ten culturally grounded response options tied to GLOBE cultural clusters.",
         "repo_readout": "The current harness checks whether the model produces a well-formed option selection and rationale over the full 10-way choice set.",
-        "release_interpretation": "CCD-Bench is most informative through choice behavior across cultural clusters, not through a single comparable scalar accuracy. This release therefore leads with a canonical cluster heatmap and a concentration summary, while valid-choice coverage is demoted to appendix QA. None of these CCD surfaces should be read as universal accuracy.",
+        "release_interpretation": "CCD-Bench is most informative through choice behavior across cultural clusters, not through a single comparable scalar accuracy. This release therefore leads with a canonical cluster heatmap and a concentration summary, while valid-choice coverage is labeled as secondary QA/provenance. None of these CCD surfaces should be read as universal accuracy.",
     },
     "Denevil": {
         "paper_title": "Denevil: Towards Deciphering and Navigating the Ethical Values of Large Language Models via Instruction Learning",
@@ -548,7 +548,7 @@ BENCHMARK_METADATA = {
         "dataset_note": "A paper-faithful MoralPrompt export is still required for denevil_generation. The closed release uses a clearly labeled local proxy dataset instead.",
         "paper_focus": "A dynamic generative evaluation of ethical value vulnerabilities that uses MoralPrompt to elicit potential value violations rather than only classifying fixed items.",
         "repo_readout": "The current public release can only run the FULCRA-backed proxy generation pathway, so headline DeNEVIL reporting is based on auditable visible behavioral outcomes rather than paper-faithful MoralPrompt scoring.",
-        "release_interpretation": "A finished DeNEVIL proxy line is proxy-only behavioral evidence and traceability support, not benchmark-faithful ethical-quality scoring. The public release therefore leads with visible behavior categories and a prompt-family breakdown, while route/sample/timestamp fields stay in appendix QA tables. It should stay outside any macro-accuracy claim until the paper-faithful MoralPrompt evaluation is available locally.",
+        "release_interpretation": "A finished DeNEVIL proxy line is proxy-only behavioral evidence and traceability support, not benchmark-faithful ethical-quality scoring. The public release therefore leads with visible behavior categories and a prompt-family breakdown, while route/sample/timestamp fields stay in secondary QA/provenance tables. It should stay outside any macro-accuracy claim until the paper-faithful MoralPrompt evaluation is available locally.",
     },
 }
 
@@ -9954,10 +9954,10 @@ def render_ccd_valid_choice_coverage_svg(rows: list[dict[str, Any]], output_path
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
-            "<title>Appendix QA: CCD-Bench valid-choice coverage, not accuracy.</title>",
-            "<desc>Appendix QA only. Horizontal bar chart comparing CCD-Bench valid-choice coverage across model lines. Coverage here means the share of CCD prompts whose saved visible answer exposed one parseable integer in 1-10. It is a formatting / surfaced-choice coverage metric, not benchmark-faithful accuracy.</desc>",
-            '<text x="48" y="64" class="title">Appendix QA: CCD-Bench valid-choice coverage, not accuracy.</text>',
-            '<text x="48" y="88" class="subtitle">Appendix QA only. Each bar shows the share of CCD-Bench prompts whose saved visible answer exposed one parseable integer in 1-10.</text>',
+            "<title>QA / provenance: CCD-Bench valid-choice coverage, not accuracy.</title>",
+            "<desc>QA / provenance view. Horizontal bar chart comparing CCD-Bench valid-choice coverage across model lines. Coverage here means the share of CCD prompts whose saved visible answer exposed one parseable integer in 1-10. It is a formatting / surfaced-choice coverage metric, not benchmark-faithful accuracy.</desc>",
+            '<text x="48" y="64" class="title">QA / Provenance: CCD-Bench Valid-Choice Coverage, Not Accuracy</text>',
+            '<text x="48" y="88" class="subtitle">QA / provenance view. Each bar shows the share of CCD-Bench prompts whose saved visible answer exposed one parseable integer in 1-10.</text>',
             '<text x="48" y="108" class="subtitle">This is the first CCD public check: did the line surface a valid visible choice at all? Hidden reasoning does not count until it reaches the saved answer field.</text>',
             '<text x="48" y="128" class="subtitle">Hatched rows are missing (`n/a`) rather than zero. Near-ceiling labels keep exact percentages so 99.8% does not get mistaken for 100.0%.</text>',
         ]
@@ -10056,7 +10056,7 @@ def render_ccd_choice_distribution_svg(rows: list[dict[str, Any]], output_path: 
             '<text x="48" y="108" class="subtitle">Positive cells mean the line selected that cluster more often than uniform choice; negative cells mean under-indexing. This is CCD choice behavior, not benchmark accuracy.</text>',
             '<text x="48" y="128" class="subtitle">Rows are grouped by family and ordered S → M → L where applicable; OpenAI GPT-5 rows are S/M/L, while GPT-4o/GPT-4.1 rows remain text-only refs.</text>',
             '<text x="48" y="148" class="subtitle">Rows with no valid visible CCD selection stay hatched as `n/a` rather than silently turning into zero preference.</text>',
-            '<text x="48" y="168" class="subtitle">Coverage stays in the appendix QA figure.</text>',
+            '<text x="48" y="168" class="subtitle">Coverage stays in the separate QA/provenance figure.</text>',
         ]
     )
 
@@ -10140,7 +10140,7 @@ def render_ccd_choice_distribution_svg(rows: list[dict[str, Any]], output_path: 
         f'<text x="72" y="{legend_top + 74}" class="body">`Top cluster share` is the line&apos;s most frequent cluster share among valid visible selections. `Effective clusters` is the inverse concentration count: lower means more concentrated, higher means more spread out.</text>'
     )
     lines.append(
-        f'<text x="72" y="{legend_top + 100}" class="body">No explicit rationale tags are retained in the public archive, so this figure stays with choice behavior only. The appendix coverage figure still reports whether a valid visible CCD choice surfaced at all.</text>'
+        f'<text x="72" y="{legend_top + 100}" class="body">No explicit rationale tags are retained in the public archive, so this figure stays with choice behavior only. The separate QA/provenance figure reports whether a valid visible CCD choice surfaced at all.</text>'
     )
 
     lines.append("</svg>")
@@ -10382,7 +10382,7 @@ def render_denevil_behavior_outcomes_svg(rows: list[dict[str, Any]], output_path
         lines.append(f'<rect x="{x}" y="{y - 11}" width="16" height="16" rx="4" fill="{fill}"/>')
         lines.append(f'<text x="{x + 24}" y="{y + 1}" class="small">{escape_xml(behavior_label)}</text>')
     lines.append(
-        f'<text x="72" y="{legend_top + 128}" class="body">This is the headline proxy-result view for DeNEVIL in the public release. Route names, sample counts, timestamps, and raw valid-response coverage stay in the appendix provenance figures below.</text>'
+        f'<text x="72" y="{legend_top + 128}" class="body">This is the headline proxy-result view for DeNEVIL in the public release. Route names, sample counts, timestamps, and raw valid-response coverage stay in the secondary QA/provenance figures.</text>'
     )
 
     lines.append("</svg>")
@@ -10555,11 +10555,11 @@ def render_denevil_proxy_status_matrix_svg(rows: list[dict[str, Any]], output_pa
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
-            "<title>Appendix QA: DeNEVIL proxy status matrix</title>",
-            "<desc>Appendix QA / provenance only. PI-facing matrix of the public DeNEVIL proxy evidence package for each model line, showing proxy status, total proxy samples, visible generated-response count, valid visible-response rate, route provenance, and line-specific notes. This is proxy evidence, not benchmark-faithful accuracy.</desc>",
-            '<text x="48" y="64" class="title">Appendix QA: DeNEVIL proxy status matrix</text>',
+            "<title>QA / provenance: DeNEVIL proxy status matrix</title>",
+            "<desc>QA / provenance view. PI-facing matrix of the public DeNEVIL proxy evidence package for each model line, showing proxy status, total proxy samples, visible generated-response count, valid visible-response rate, route provenance, and line-specific notes. This is proxy evidence, not benchmark-faithful accuracy.</desc>",
+            '<text x="48" y="64" class="title">QA / Provenance: DeNEVIL Proxy Status Matrix</text>',
             f'<text x="48" y="88" class="subtitle">{escape_xml(DENEVIL_PROXY_LIMITATION_LINE)}</text>',
-            '<text x="48" y="108" class="subtitle">Appendix QA / provenance only. Each row keeps operational status separate from visible-response coverage so a PI can see whether a line finished, what it surfaced publicly, and which route produced the proxy archive.</text>',
+            '<text x="48" y="108" class="subtitle">QA / provenance view. Each row keeps operational status separate from visible-response coverage so a PI can see whether a line finished, what it surfaced publicly, and which route produced the proxy archive.</text>',
         ]
     )
 
@@ -10643,10 +10643,10 @@ def render_denevil_proxy_sample_volume_svg(rows: list[dict[str, Any]], output_pa
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
-            "<title>Appendix QA: DeNEVIL proxy sample volume</title>",
-            "<desc>Appendix QA / provenance only. Absolute DeNEVIL proxy prompt volume by model line. Pale outline bars show total proxy prompts available for that line; the filled overlay shows how many prompts produced a non-empty saved visible answer.</desc>",
-            '<text x="48" y="64" class="title">Appendix QA: DeNEVIL proxy sample volume</text>',
-            '<text x="48" y="88" class="subtitle">Appendix QA / provenance only. Most finished proxy lines saw the full 20,518-prompt archive. The darker overlay shows how many of those prompts actually produced a visible saved proxy answer.</text>',
+            "<title>QA / provenance: DeNEVIL proxy sample volume</title>",
+            "<desc>QA / provenance view. Absolute DeNEVIL proxy prompt volume by model line. Pale outline bars show total proxy prompts available for that line; the filled overlay shows how many prompts produced a non-empty saved visible answer.</desc>",
+            '<text x="48" y="64" class="title">QA / Provenance: DeNEVIL Proxy Sample Volume</text>',
+            '<text x="48" y="88" class="subtitle">QA / provenance view. Most finished proxy lines saw the full 20,518-prompt archive. The darker overlay shows how many of those prompts actually produced a visible saved proxy answer.</text>',
             f'<text x="48" y="108" class="subtitle">{escape_xml(DENEVIL_PROXY_LIMITATION_LINE)}</text>',
         ]
     )
@@ -10714,10 +10714,10 @@ def render_denevil_proxy_valid_response_rate_svg(rows: list[dict[str, Any]], out
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
-            "<title>Appendix QA: DeNEVIL proxy visible-response coverage</title>",
-            f"<desc>Appendix QA / provenance only. Valid visible response rate for each public DeNEVIL proxy line. Bars show the share of proxy prompts whose saved visible answer field contains non-empty text. {escape_xml(DENEVIL_PROXY_LIMITATION_LINE)}</desc>",
-            '<text x="48" y="64" class="title">Appendix QA: DeNEVIL proxy visible-response coverage</text>',
-            '<text x="48" y="88" class="subtitle">Appendix QA / provenance only. This is the public coverage metric for DeNEVIL in this repo: non-empty saved visible proxy answers divided by all proxy prompts on that line.</text>',
+            "<title>QA / provenance: DeNEVIL proxy visible-response coverage</title>",
+            f"<desc>QA / provenance view. Valid visible response rate for each public DeNEVIL proxy line. Bars show the share of proxy prompts whose saved visible answer field contains non-empty text. {escape_xml(DENEVIL_PROXY_LIMITATION_LINE)}</desc>",
+            '<text x="48" y="64" class="title">QA / Provenance: DeNEVIL Proxy Visible-Response Coverage</text>',
+            '<text x="48" y="88" class="subtitle">QA / provenance view. This is the public coverage metric for DeNEVIL in this repo: non-empty saved visible proxy answers divided by all proxy prompts on that line.</text>',
             *svg_text_block(
                 48,
                 108,
@@ -10776,7 +10776,7 @@ def render_denevil_proxy_valid_response_rate_svg(rows: list[dict[str, Any]], out
         else "Low bars here indicate saved-answer surfacing gaps, not ethical-quality accuracy."
     )
     lines.append(
-        f'<text x="72" y="{footnote_top + 46}" class="body">This is an appendix QA / provenance view, not the headline DeNEVIL result. {escape_xml(deepseek_rate_note)}</text>'
+        f'<text x="72" y="{footnote_top + 46}" class="body">This is a QA / provenance view, not the headline DeNEVIL result. {escape_xml(deepseek_rate_note)}</text>'
     )
 
     lines.append("</svg>")
@@ -10811,13 +10811,13 @@ def render_denevil_proxy_pipeline_svg(output_path: Path) -> None:
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
-            "<title>Appendix explanation: DeNEVIL proxy pipeline</title>",
-            "<desc>Supporting appendix diagram explaining how the public DeNEVIL release package moves from the paper's MoralPrompt goal to the current FULCRA-backed proxy evidence package, and why the public output is coverage and provenance rather than ethical-quality accuracy.</desc>",
-            '<text x="48" y="64" class="title">Appendix explanation: DeNEVIL proxy pipeline</text>',
+            "<title>QA / provenance: DeNEVIL proxy pipeline</title>",
+            "<desc>Supporting QA / provenance diagram explaining how the public DeNEVIL release package moves from the paper's MoralPrompt goal to the current FULCRA-backed proxy evidence package, and why the public output is coverage and provenance rather than ethical-quality accuracy.</desc>",
+            '<text x="48" y="64" class="title">QA / Provenance: DeNEVIL Proxy Pipeline</text>',
             *svg_text_block(
                 48,
                 88,
-                "Supporting appendix only. This diagram is the high-level contract for the public DeNEVIL package: it shows what the paper asks for, what is unavailable locally, what the repo actually runs, and what claims the public release is allowed to make.",
+                "QA / provenance explanation. This diagram is the high-level contract for the public DeNEVIL package: it shows what the paper asks for, what is unavailable locally, what the repo actually runs, and what claims the public release is allowed to make.",
                 "subtitle",
                 165,
             ),
@@ -11403,7 +11403,7 @@ def append_ccd_choice_distribution_overview_table(lines: list[str], rows: list[d
         lines.append(
             f"| `{row['line_label']}` | {row['dominant_option'] or 'n/a'} | "
             f"{fmt_pct(row['dominant_option_share'], 1) or 'n/a'} | {fmt_float(row['effective_cluster_count'], 2) or 'n/a'} | "
-            f"{'No valid visible choice surfaced; see appendix coverage figure.' if row['valid_selection_count'] in {None, 0} else 'Compare against the heatmap above, not as scalar accuracy.'} |"
+            f"{'No valid visible choice surfaced; see the separate QA/provenance figure.' if row['valid_selection_count'] in {None, 0} else 'Compare against the heatmap above, not as scalar accuracy.'} |"
         )
 
 
@@ -11930,7 +11930,7 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "_Context view: paper metric anchors are shown for orientation; this is not a same-model calibration bar chart._",
             "",
-            "Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.",
+            "Secondary QA/provenance figures are embedded separately below the headline result/calibration visuals so performance, behavior, coverage, and proxy-route evidence stay visually distinct.",
             "",
         ]
     )
@@ -12188,7 +12188,7 @@ def append_interpretation_sections(
             "",
             "The repo still lacks a stable local `MoralPrompt` export, so paper-aligned APV / EVR / MVP are `n/a` in this public package. Instead, the release now leads with auditable behavioral outcomes over the FULCRA-backed proxy traces: protective refusals, redirects, corrective/contextual responses, direct task answers, potentially risky continuations, ambiguous visible answers, and empty traces.",
             "",
-            "The main DeNEVIL result surface is the visible-behavior mix across the full released proxy archive. Route/model provenance, sample volume, completion state, timestamps, and visible-response coverage are still exported in CSV/SVG artifacts, but they are not repeated in the README because they are QA/provenance rather than the audience-facing result story.",
+            "The main DeNEVIL result surface is the visible-behavior mix across the full released proxy archive. Route/model provenance, sample volume, completion state, timestamps, and visible-response coverage are exported in CSV/SVG artifacts and labeled separately as QA/provenance so they do not get mistaken for the headline result story.",
             "",
             "_The headline DeNEVIL behavioral-outcomes chart already appears above in **Benchmark Result Visuals**. This section keeps the explanatory framing and compact line-level behavior table without re-embedding low-level QA charts._",
             "",
@@ -12200,7 +12200,7 @@ def append_interpretation_sections(
     lines.extend(
         [
             "",
-            "Low-level DeNEVIL QA/provenance artifacts remain exported in the release folder for audit, but the README does not embed the status, sample-volume, or visible-response-rate charts.",
+            "Low-level DeNEVIL QA/provenance artifacts remain exported in the release folder for audit and are labeled separately from the headline behavioral-outcomes figure.",
             "",
         ]
     )
@@ -12212,13 +12212,13 @@ def append_interpretation_sections(
             "### Reporting Guardrails",
             "",
             f"- Do not fold `Denevil` into any benchmark-faithful macro-accuracy claim; it remains proxy-only behavioral evidence and traceability support even when its completion status is `Done`.",
-            f"- Read `CCD-Bench` in its dedicated choice-behavior figures, not in the family scaling line chart. `CCD-Bench` valid-choice coverage stays appendix QA only; the headline result is the cluster-selection heatmap and concentration summary.",
-            f"- Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. {DENEVIL_PROXY_LIMITATION_LINE}",
+            f"- Read `CCD-Bench` in its dedicated choice-behavior figures, not in the family scaling line chart. `CCD-Bench` valid-choice coverage stays in the separate QA/provenance figure; the headline result is the cluster-selection heatmap and concentration summary.",
+            f"- Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the secondary QA/provenance tables. {DENEVIL_PROXY_LIMITATION_LINE}",
             "- Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.",
             (
                 f"- Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = {fmt_pct(deepseek_m['ccd_completion_coverage'])}`{deepseek_ccd_ratio}, and `Denevil visible proxy coverage = {fmt_pct(deepseek_m['denevil_proxy_coverage'])}`{deepseek_denevil_ratio}. These are parser/proxy coverage checks, not CCD or Denevil accuracy."
                 if deepseek_m is not None
-                else "- If a line appears only in the appendix coverage/provenance panels, read it as a response-format / release-evidence signal rather than a benchmark-faithful accuracy result."
+                else "- If a line appears only in secondary QA/provenance panels, read it as a response-format / release-evidence signal rather than a benchmark-faithful accuracy result."
             ),
             f"- Do not call `{best_text_only_line['line_label']}` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line." if best_text_only_line is not None else "- Do not promote any text-only line into an all-around winner claim without a matching SMID route.",
             "- Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI rows are text-reference markers rather than S/M/L size curves.",
@@ -12362,12 +12362,12 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             f"| Figure 4 | Family-size scaling view for SMID and Value; UniMoral scaling is shown separately. | {markdown_link('option1_family_scaling_profile.svg', f'{figure_prefix}/option1_family_scaling_profile.svg')} |",
             f"| Figure 5 | Main CCD-Bench result: canonical cultural-cluster heatmap showing deviation from the 10% uniform baseline. | {markdown_link('option1_ccd_choice_distribution.svg', f'{figure_prefix}/option1_ccd_choice_distribution.svg')} |",
             f"| Figure 6 | Compact CCD concentration summary: dominant-cluster share plus effective-cluster count. | {markdown_link('option1_ccd_dominant_option_share.svg', f'{figure_prefix}/option1_ccd_dominant_option_share.svg')} |",
-            f"| Figure 7 | Appendix QA for CCD only: parseable visible 1-10 choice coverage by model line. | {markdown_link('option1_ccd_valid_choice_coverage.svg', f'{figure_prefix}/option1_ccd_valid_choice_coverage.svg')} |",
+            f"| Figure 7 | QA/provenance view for CCD only: parseable visible 1-10 choice coverage by model line. | {markdown_link('option1_ccd_valid_choice_coverage.svg', f'{figure_prefix}/option1_ccd_valid_choice_coverage.svg')} |",
             f"| Figure 8 | Main DeNEVIL proxy result: visible-behavior outcome mix by model line. | {markdown_link('option1_denevil_behavior_outcomes.svg', f'{figure_prefix}/option1_denevil_behavior_outcomes.svg')} |",
             f"| Figure 9 | Secondary DeNEVIL breakdown: protective-response rate by heuristic prompt family. | {markdown_link('option1_denevil_prompt_family_heatmap.svg', f'{figure_prefix}/option1_denevil_prompt_family_heatmap.svg')} |",
-            f"| Figure 10 | Appendix QA only: DeNEVIL proxy status matrix with route/model provenance and timestamps. | {markdown_link('option1_denevil_proxy_status_matrix.svg', f'{figure_prefix}/option1_denevil_proxy_status_matrix.svg')} |",
-            f"| Figure 11 | Appendix QA only: DeNEVIL proxy sample volume. | {markdown_link('option1_denevil_proxy_sample_volume.svg', f'{figure_prefix}/option1_denevil_proxy_sample_volume.svg')} |",
-            f"| Figure 12 | Appendix QA only: DeNEVIL visible-response coverage by model line. | {markdown_link('option1_denevil_proxy_valid_response_rate.svg', f'{figure_prefix}/option1_denevil_proxy_valid_response_rate.svg')} |",
+            f"| Figure 10 | QA/provenance view: DeNEVIL proxy status matrix with route/model provenance and timestamps. | {markdown_link('option1_denevil_proxy_status_matrix.svg', f'{figure_prefix}/option1_denevil_proxy_status_matrix.svg')} |",
+            f"| Figure 11 | QA/provenance view: DeNEVIL proxy sample volume. | {markdown_link('option1_denevil_proxy_sample_volume.svg', f'{figure_prefix}/option1_denevil_proxy_sample_volume.svg')} |",
+            f"| Figure 12 | QA/provenance view: DeNEVIL visible-response coverage by model line. | {markdown_link('option1_denevil_proxy_valid_response_rate.svg', f'{figure_prefix}/option1_denevil_proxy_valid_response_rate.svg')} |",
             f"| Figure 13 | Proxy pipeline diagram showing why the released DeNEVIL package is evidence/provenance rather than paper-faithful accuracy. | {markdown_link('option1_denevil_proxy_pipeline.svg', f'{figure_prefix}/option1_denevil_proxy_pipeline.svg')} |",
             f"| Figure 14 | Heatmap of the comparable UniMoral, SMID, and Value accuracy metrics, including unavailable-cell treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
             f"| Figure 15 | Frozen Option 1 coverage view for Qwen, DeepSeek, and Gemma only: paper-setup, proxy-only, or not in that release slice. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
@@ -13569,7 +13569,7 @@ def build_release_readme(
             "- `ccd-choice-distribution.csv`: CCD-Bench choice-behavior table with per-cluster shares, deviation from the 10% baseline, and concentration summaries",
             "- `denevil-behavior-summary.csv`: DeNEVIL proxy behavioral outcome mix by model line",
             "- `denevil-prompt-family-breakdown.csv`: DeNEVIL protective-response rates by heuristic prompt family",
-            "- `denevil-proxy-summary.csv`: appendix QA/provenance table with route, timestamps, sample counts, and visible-response coverage",
+            "- `denevil-proxy-summary.csv`: secondary QA/provenance table with route, timestamps, sample counts, and visible-response coverage",
             "- `denevil-proxy-examples.csv`: safe qualitative examples showing what the released Denevil proxy traces actually look like",
             "- `deepseek-sm-readout.csv`: explicit DeepSeek-S/M/L log-derived readout from saved logs",
             "- `readiness-tier-matrix.csv`: public summary dashboard for model-line x benchmark result readiness; Tier 1 = harness completed, Tier 2 = valid result, Tier 3 = interpretable/comparable result, with blocked/not-run/route-gap/data-gap cells kept outside the tier scale",

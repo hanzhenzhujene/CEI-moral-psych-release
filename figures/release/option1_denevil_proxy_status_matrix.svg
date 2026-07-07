@@ -37,11 +37,11 @@
 </defs>
 <rect x="0" y="0" width="1760" height="1426" class="canvas"/>
 <rect x="24" y="24" width="1712" height="1378" rx="22" class="panel"/>
-<title>Appendix QA: DeNEVIL proxy status matrix</title>
-<desc>Appendix QA / provenance only. PI-facing matrix of the public DeNEVIL proxy evidence package for each model line, showing proxy status, total proxy samples, visible generated-response count, valid visible-response rate, route provenance, and line-specific notes. This is proxy evidence, not benchmark-faithful accuracy.</desc>
-<text x="48" y="64" class="title">Appendix QA: DeNEVIL proxy status matrix</text>
+<title>QA / provenance: DeNEVIL proxy status matrix</title>
+<desc>QA / provenance view. PI-facing matrix of the public DeNEVIL proxy evidence package for each model line, showing proxy status, total proxy samples, visible generated-response count, valid visible-response rate, route provenance, and line-specific notes. This is proxy evidence, not benchmark-faithful accuracy.</desc>
+<text x="48" y="64" class="title">QA / Provenance: DeNEVIL Proxy Status Matrix</text>
 <text x="48" y="88" class="subtitle">Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.</text>
-<text x="48" y="108" class="subtitle">Appendix QA / provenance only. Each row keeps operational status separate from visible-response coverage so a PI can see whether a line finished, what it surfaced publicly, and which route produced the proxy archive.</text>
+<text x="48" y="108" class="subtitle">QA / provenance view. Each row keeps operational status separate from visible-response coverage so a PI can see whether a line finished, what it surfaced publicly, and which route produced the proxy archive.</text>
 <text x="48" y="158" class="tiny">MODEL LINE</text>
 <text x="226" y="158" class="tiny">PROXY STATUS</text>
 <text x="438" y="158" class="tiny">SAMPLE COUNT</text>

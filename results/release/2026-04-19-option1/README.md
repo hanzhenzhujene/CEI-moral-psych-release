@@ -122,7 +122,7 @@ _Bridge view: exact same-model calibration rows are visible; near-family, blocke
 
 _Context view: paper metric anchors are shown for orientation; this is not a same-model calibration bar chart._
 
-Lower-level QA/provenance figures are still generated in `figures/release/`, but the README keeps the visual story focused on these audience-facing result surfaces.
+Secondary QA/provenance figures are embedded separately below the headline result/calibration visuals so performance, behavior, coverage, and proxy-route evidence stay visually distinct.
 
 ## TL;DR
 
@@ -363,7 +363,7 @@ _The two headline CCD figures already appear above in **Benchmark Result Visuals
 
 The repo still lacks a stable local `MoralPrompt` export, so paper-aligned APV / EVR / MVP are `n/a` in this public package. Instead, the release now leads with auditable behavioral outcomes over the FULCRA-backed proxy traces: protective refusals, redirects, corrective/contextual responses, direct task answers, potentially risky continuations, ambiguous visible answers, and empty traces.
 
-The main DeNEVIL result surface is the visible-behavior mix across the full released proxy archive. Route/model provenance, sample volume, completion state, timestamps, and visible-response coverage are still exported in CSV/SVG artifacts, but they are not repeated in the README because they are QA/provenance rather than the audience-facing result story.
+The main DeNEVIL result surface is the visible-behavior mix across the full released proxy archive. Route/model provenance, sample volume, completion state, timestamps, and visible-response coverage are exported in CSV/SVG artifacts and labeled separately as QA/provenance so they do not get mistaken for the headline result story.
 
 _The headline DeNEVIL behavioral-outcomes chart already appears above in **Benchmark Result Visuals**. This section keeps the explanatory framing and compact line-level behavior table without re-embedding low-level QA charts._
 
@@ -387,7 +387,7 @@ The compact behavior table below is the quickest line-level read.
 | `Gemma-M` | 43.3% | 4.1% | 44.9% | 0.0% | 0.0% | 7.6% | 0.0% | Corrective / contextual response |
 | `Gemma-L` | 40.4% | 8.9% | 49.0% | 0.0% | 0.1% | 1.6% | 0.0% | Corrective / contextual response |
 
-Low-level DeNEVIL QA/provenance artifacts remain exported in the release folder for audit, but the README does not embed the status, sample-volume, or visible-response-rate charts.
+Low-level DeNEVIL QA/provenance artifacts remain exported in the release folder for audit and are labeled separately from the headline behavioral-outcomes figure.
 
 A few safe qualitative examples help clarify what the proxy traces actually look like in practice.
 
@@ -400,8 +400,8 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 ### Reporting Guardrails
 
 - Do not fold `DeNEVIL` into any benchmark-faithful macro-accuracy claim; it remains proxy-only behavioral evidence and traceability support even when its completion status is `Done`.
-- Read `CCD-Bench` in its dedicated choice-behavior figures, not in the family scaling line chart. `CCD-Bench` valid-choice coverage stays appendix QA only; the headline result is the cluster-selection heatmap and concentration summary.
-- Read `DeNEVIL` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
+- Read `CCD-Bench` in its dedicated choice-behavior figures, not in the family scaling line chart. `CCD-Bench` valid-choice coverage stays in the separate QA/provenance figure; the headline result is the cluster-selection heatmap and concentration summary.
+- Read `DeNEVIL` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the secondary QA/provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
 - Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.
 - Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%` (2,180 / 2,182), and `DeNEVIL visible proxy coverage = 99.8%` (20,474 / 20,518). These are parser/proxy coverage checks, not CCD or DeNEVIL accuracy.
 - Do not call `GPT-5.5` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
@@ -570,7 +570,7 @@ Exact per-line family-size status is saved as [family-size-progress.csv](family-
 - `ccd-choice-distribution.csv`: CCD-Bench choice-behavior table with per-cluster shares, deviation from the 10% baseline, and concentration summaries
 - `denevil-behavior-summary.csv`: DeNEVIL proxy behavioral outcome mix by model line
 - `denevil-prompt-family-breakdown.csv`: DeNEVIL protective-response rates by heuristic prompt family
-- `denevil-proxy-summary.csv`: appendix QA/provenance table with route, timestamps, sample counts, and visible-response coverage
+- `denevil-proxy-summary.csv`: secondary QA/provenance table with route, timestamps, sample counts, and visible-response coverage
 - `denevil-proxy-examples.csv`: safe qualitative examples showing what the released DeNEVIL proxy traces actually look like
 - `deepseek-sm-readout.csv`: explicit DeepSeek-S/M/L log-derived readout from saved logs
 - `readiness-tier-matrix.csv`: public summary dashboard for model-line x benchmark result readiness; Tier 1 = harness completed, Tier 2 = valid result, Tier 3 = interpretable/comparable result, with blocked/not-run/route-gap/data-gap cells kept outside the tier scale

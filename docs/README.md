@@ -26,7 +26,7 @@
 Use [`../figures/README.md`](../figures/README.md) when you need the presentation order for result visuals. It separates:
 
 - audience-facing figures for the main story
-- appendix QA / provenance figures
+- secondary QA / provenance figures
 - replication and calibration figures
 - separate OpenRouter selected-grid follow-up figures
 
