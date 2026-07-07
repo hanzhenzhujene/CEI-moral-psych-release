@@ -11901,6 +11901,25 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
     )
 
 
+def append_release_open_first_section(lines: list[str]) -> None:
+    lines.extend(
+        [
+            "## Open First",
+            "",
+            "Use this short map before the detailed appendix sections.",
+            "",
+            "| Need | Open | Boundary |",
+            "| --- | --- | --- |",
+            "| Visual story | [Benchmark Result Visuals](#benchmark-result-visuals), then [TL;DR](#tldr) | Start with the figures; they keep accuracy, distribution behavior, proxy evidence, and calibration status visually separate. |",
+            "| Primary result numbers | [Main result files](#data-click-here-main-result-files) | UniMoral RQ4 has separate BERTScore F1 and METEOR rows; CCD-Bench and DeNEVIL are not headline accuracy metrics. |",
+            "| Line status and readiness | [Results First](#results-first), [Status Key](#status-key), [family-size-progress.csv](family-size-progress.csv), [readiness-tier-matrix.csv](readiness-tier-matrix.csv) | Tier is result readiness, not model quality; missing cells are route, data, or proxy boundaries. |",
+            "| Paper calibration / replication | [Replication / calibration map](#data-click-here-main-result-files), [paper-model-calibration-ledger.csv](paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](paper-model-calibration-bridge.csv), [paper-result-comparison.md](../../../docs/paper-result-comparison.md) | Exact same-model rows, blocked routes, current-only rows, and proxy-only evidence stay separate. |",
+            "| Rebuild and audit | [Regeneration](#regeneration), [release-manifest.json](release-manifest.json), [saved-results-audit.csv](saved-results-audit.csv) | This appendix is generated from the tracked snapshot; rebuilding does not rerun live providers. |",
+            "",
+        ]
+    )
+
+
 def append_interpretation_sections(
     lines: list[str],
     benchmark_comparison: list[dict[str, Any]],
@@ -13227,6 +13246,7 @@ def build_release_readme(
         f"2. the wider `{len(BENCHMARK_ORDER)} benchmarks x {public_family_count} public model families x 3 size slots` status snapshot, with exact status kept in CSV rather than repeated as a large README table.",
         "",
     ]
+    append_release_open_first_section(lines)
     append_benchmark_result_visuals_section(lines, "../../../figures/release")
     append_tldr_section(
         lines,

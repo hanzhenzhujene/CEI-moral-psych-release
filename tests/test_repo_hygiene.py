@@ -319,6 +319,13 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert any(row["benchmark"] == "DeNEVIL / MoralPrompt" and "proxy" in row["comparison_boundary"].lower() for row in ledger_rows)
 
     release_readme = (ROOT / "results/release/2026-04-19-option1/README.md").read_text(encoding="utf-8")
+    assert "## Open First" in release_readme
+    assert release_readme.index("## Open First") < release_readme.index("## Benchmark Result Visuals")
+    assert "| Visual story | [Benchmark Result Visuals](#benchmark-result-visuals), then [TL;DR](#tldr) |" in release_readme
+    assert "| Primary result numbers | [Main result files](#data-click-here-main-result-files) |" in release_readme
+    assert "| Line status and readiness | [Results First](#results-first), [Status Key](#status-key), [family-size-progress.csv](family-size-progress.csv), [readiness-tier-matrix.csv](readiness-tier-matrix.csv) |" in release_readme
+    assert "Tier is result readiness, not model quality; missing cells are route, data, or proxy boundaries." in release_readme
+    assert "Exact same-model rows, blocked routes, current-only rows, and proxy-only evidence stay separate." in release_readme
     assert "Fresh exact UniMoral Llama calibration" in release_readme
     assert "results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv" in release_readme
     assert "results/paper-calibration-exact-20260706-unimoral-llama31/unimoral-rq4-bertscore.csv" in release_readme

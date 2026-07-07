@@ -350,6 +350,16 @@ def test_release_builder_emits_expected_files(tmp_path):
             and "no medium SMID route fixed yet" in report_text
         )
     release_readme_text = (release_dir / "README.md").read_text(encoding="utf-8")
+    assert "## Open First" in release_readme_text
+    assert release_readme_text.index("## Open First") < release_readme_text.index("## Benchmark Result Visuals")
+    assert release_readme_text.index("## Benchmark Result Visuals") < release_readme_text.index("## TL;DR")
+    assert release_readme_text.index("## TL;DR") < release_readme_text.index("## DATA, CLICK HERE: Main Result Files")
+    assert "| Visual story | [Benchmark Result Visuals](#benchmark-result-visuals), then [TL;DR](#tldr) |" in release_readme_text
+    assert "| Primary result numbers | [Main result files](#data-click-here-main-result-files) |" in release_readme_text
+    assert "| Line status and readiness | [Results First](#results-first), [Status Key](#status-key), [family-size-progress.csv](family-size-progress.csv), [readiness-tier-matrix.csv](readiness-tier-matrix.csv) |" in release_readme_text
+    assert "| Paper calibration / replication | [Replication / calibration map](#data-click-here-main-result-files), [paper-model-calibration-ledger.csv](paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](paper-model-calibration-bridge.csv), [paper-result-comparison.md](../../../docs/paper-result-comparison.md) |" in release_readme_text
+    assert "Start with the figures; they keep accuracy, distribution behavior, proxy evidence, and calibration status visually separate." in release_readme_text
+    assert "Tier is result readiness, not model quality; missing cells are route, data, or proxy boundaries." in release_readme_text
     assert "## DATA, CLICK HERE: Main Result Files" in release_readme_text
     assert "This release has a `CCD-Bench` result surface; no separate `CCG-Bench` result surface is part of the public package." in release_readme_text
     assert "I found `CCD-Bench`" not in release_readme_text
@@ -1434,6 +1444,9 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "[smid-results.csv](smid-results.csv)" in release_readme
     assert "[value-kaleidoscope-results.csv](value-kaleidoscope-results.csv)" in release_readme
     assert "## Benchmark Result Visuals" in release_readme
+    assert "## Open First" in release_readme
+    assert release_readme.index("## Open First") < release_readme.index("## Benchmark Result Visuals")
+    assert "| Rebuild and audit | [Regeneration](#regeneration), [release-manifest.json](release-manifest.json), [saved-results-audit.csv](saved-results-audit.csv) |" in release_readme
     assert "## Status Key" in release_readme
     assert "option1_benchmark_difficulty_profile.svg" in release_readme
     assert "option1_family_scaling_profile.svg" in release_readme
