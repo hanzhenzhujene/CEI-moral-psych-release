@@ -105,7 +105,7 @@ make release
 
 ## What Is Intentionally Not Claimed
 
-- `Denevil` is not treated as a benchmark-faithful scalar accuracy result in the public package.
+- `DeNEVIL` is not treated as a benchmark-faithful scalar accuracy result in the public package.
 - `DeepSeek-M` is not forced into comparable accuracy charts when its saved short-answer rerun artifacts fail validation.
 - The broader local family-size sweep is not silently folded into the frozen `Option 1` snapshot.
 

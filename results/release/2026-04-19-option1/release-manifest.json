@@ -33,7 +33,7 @@
       "task_types": 1
     },
     {
-      "benchmark": "Denevil",
+      "benchmark": "DeNEVIL",
       "evaluated_lines": 3,
       "models_covered": 3,
       "modes": "proxy",
@@ -139,7 +139,7 @@
     "figures/release/option1_unimoral_task_spread.svg"
   ],
   "interpretation_guardrails": [
-    "Denevil is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
+    "DeNEVIL is represented only by the explicit local proxy task in this release, and the public package treats it as proxy-only coverage and traceability evidence rather than benchmark-faithful scoring.",
     "DeepSeek has no SMID entries in the closed release slice because no vision route was included.",
     "DeepSeek-S text metrics come from the May 9 no-thinking saved rerun; it remains text-only because no SMID vision route exists.",
     "OpenAI reference rows are text-only markers, not claimed OpenAI family-size sweeps.",
@@ -194,7 +194,7 @@
     "current_total_cost": "$897.58",
     "date": "2026-07-06",
     "frozen_snapshot_date": "2026-04-19",
-    "metric_definition_summary": "Stricter visible-answer parsing is now versioned explicitly: UniMoral, SMID, and Value Kaleidoscope use structured visible-answer extraction; CCD-Bench coverage requires a parseable visible 1-10 choice; CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; Denevil appendix coverage counts non-empty visible proxy answers while the headline proxy figures classify visible behavior categories.",
+    "metric_definition_summary": "Stricter visible-answer parsing is now versioned explicitly: UniMoral, SMID, and Value Kaleidoscope use structured visible-answer extraction; CCD-Bench coverage requires a parseable visible 1-10 choice; CCD-Bench headline figures compare canonical cluster choice behavior against a 10% baseline; DeNEVIL appendix coverage counts non-empty visible proxy answers while the headline proxy figures classify visible behavior categories.",
     "metric_definition_version": "2026-04-30",
     "operations_note": "Updated July 6, 2026. The frozen public snapshot remains Option 1 from April 19. Complete local lines beyond the frozen slice currently include `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `DeepSeek-L`, `Llama-L`, `DeepSeek-S`, `MiniMax-L`, and `MiniMax-S`, and no published follow-up line is still live.",
     "owner": "Jenny Zhu",
@@ -207,10 +207,10 @@
     {
       "benchmark_faithful_macro_accuracy": 0.427602,
       "benchmark_faithful_tasks": 6,
-      "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
+      "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; DeNEVIL proxy",
       "exact_route": "openrouter/meta-llama/llama-3.2-11b-vision-instruct",
       "family": "Llama",
-      "missing_benchmark_lines": "Benchmark-faithful Denevil via MoralPrompt",
+      "missing_benchmark_lines": "Benchmark-faithful DeNEVIL via MoralPrompt",
       "note": "Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall.",
       "papers_covered": 5,
       "proxy_tasks": 1,
@@ -221,11 +221,11 @@
     {
       "benchmark_faithful_macro_accuracy": 0.376442,
       "benchmark_faithful_tasks": 6,
-      "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
+      "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; DeNEVIL proxy",
       "exact_route": "text: minimax-m2.5; SMID recovery: minimax-01",
       "family": "MiniMax",
-      "missing_benchmark_lines": "Benchmark-faithful Denevil via MoralPrompt",
-      "note": "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy from saved local shards.",
+      "missing_benchmark_lines": "Benchmark-faithful DeNEVIL via MoralPrompt",
+      "note": "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the DeNEVIL proxy from saved local shards.",
       "papers_covered": 5,
       "proxy_tasks": 1,
       "samples": 102886,

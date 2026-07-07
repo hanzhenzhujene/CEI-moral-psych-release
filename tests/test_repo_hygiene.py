@@ -75,6 +75,28 @@ def test_openrouter_public_surface_uses_selected_grid_label():
         assert not forbidden.search(path.read_text(encoding="utf-8")), f"old OpenRouter label found in {path}"
 
 
+def test_public_reader_surfaces_use_denevil_display_name():
+    display_paths = [
+        ROOT / "README.md",
+        ROOT / "docs" / "how-to-read-results.md",
+        ROOT / "docs" / "evaluation-methodology.md",
+        ROOT / "docs" / "data-access.md",
+        ROOT / "docs" / "reproducibility.md",
+        ROOT / "docs" / "repo-architecture.md",
+        ROOT / "scripts" / "README.md",
+        ROOT / "results" / "release" / "2026-04-19-option1" / "README.md",
+        ROOT / "results" / "release" / "2026-04-19-option1" / "jenny-group-report.md",
+        ROOT / "results" / "release" / "2026-04-19-option1" / "topline-summary.md",
+        ROOT / "results" / "release" / "2026-04-19-option1" / "release-manifest.json",
+        ROOT / "results" / "release" / "2026-04-19-option1" / "topline-summary.json",
+    ]
+    display_paths.extend((ROOT / "figures" / "release").glob("*.svg"))
+
+    for path in display_paths:
+        text = path.read_text(encoding="utf-8")
+        assert "Denevil" not in text, f"old DeNEVIL display spelling found in {path}"
+
+
 def test_env_example_exists_and_documents_core_inputs():
     env_example = ROOT / ".env.example"
     assert env_example.exists()

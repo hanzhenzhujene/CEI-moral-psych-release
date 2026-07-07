@@ -43,7 +43,7 @@
 <text x="48" y="88" class="subtitle">Supporting appendix only. This diagram is the high-level contract for the public DeNEVIL package: it shows what the paper asks for, what is unavailable locally, what</text>
 <text x="48" y="108" class="subtitle">the repo actually runs, and what claims the public release is allowed to make.</text>
 <rect x="56" y="174" width="248" height="112" rx="20" fill="#e8f0fb" stroke="#dbe4ee" stroke-width="1.25"/>
-<text x="76" y="202" class="axis">Denevil paper goal</text>
+<text x="76" y="202" class="axis">DeNEVIL paper goal</text>
 <text x="76" y="224" class="body">Use MoralPrompt to elicit ethical</text>
 <text x="76" y="242" class="body">value-vulnerability traces in a</text>
 <text x="76" y="260" class="body">benchmark-faithful generative</text>

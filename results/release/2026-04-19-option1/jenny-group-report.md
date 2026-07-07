@@ -102,25 +102,25 @@ This section is the fastest summary for a mentor or collaborator: which lines al
 
 | Line | Scope | Status | Coverage | Note |
 | --- | --- | --- | --- | --- |
-| `Qwen-S` | Frozen Option 1 | Done | 5 benchmark lines complete (`Denevil` via proxy) | Primary small Qwen release line. |
-| `DeepSeek-M` | Frozen Option 1 | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Primary medium DeepSeek release line: UniMoral RQ1/action 0.684, Value 0.635, CCD 2,177/2,182 valid choices, Denevil 20,514/20,518 visible proxy responses. |
-| `Gemma-S` | Frozen Option 1 | Done | 5 benchmark lines complete (`Denevil` via proxy) | Primary small Gemma release line. |
-| `Llama-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally, outside the frozen Option 1 counts. |
-| `Gemma-M` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
-| `Gemma-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | Finished locally on April 21, 2026. |
-| `Qwen-M` | Complete local line | Done | Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
-| `Qwen-L` | Complete local line | Done | SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy holds a 100.0% persisted checkpoint | SMID recovery complete; clean text rerun finished locally. |
-| `Llama-M` | Complete local line | Done | 4 benchmark lines plus `Denevil` proxy; no SMID route | Completed locally on April 22, 2026. |
-| `DeepSeek-L` | Complete local line | Done | No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy parsed from saved R1 shards | Large R1 text rerun complete from saved logs; keep it text-only because no SMID route exists. |
-| `Llama-L` | Complete local line | Done | SMID complete; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; Denevil proxy finished at 100.0%. | SMID complete; local text rerun finished successfully through the Denevil proxy task. |
-| `DeepSeek-S` | Complete local line | Done | No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy are complete in the May 9 no-thinking saved logs | May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot. |
-| `MiniMax-M` | Complete local text line | Done | Clean MiniMax-M2.5 text/proxy benchmarks complete; no medium SMID route fixed yet. | Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral action prediction 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; Denevil proxy 20,518/20,518. |
-| `MiniMax-L` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) using MiniMax-M2.5 text plus the shared MiniMax-01 SMID recovery route | The direct-provider MiniMax rerun finished successfully through the Denevil proxy task. |
-| `MiniMax-S` | Complete local line | Done | 5 benchmark lines complete (`Denevil` via proxy) | MiniMax-S now uses the clean direct MiniMax-M2.1 text rerun plus the completed MiniMax-01 SMID recovery route. |
+| `Qwen-S` | Frozen Option 1 | Done | 5 benchmark lines complete (`DeNEVIL` via proxy) | Primary small Qwen release line. |
+| `DeepSeek-M` | Frozen Option 1 | Done | 4 benchmark lines plus `DeNEVIL` proxy; no SMID route | Primary medium DeepSeek release line: UniMoral RQ1/action 0.684, Value 0.635, CCD 2,177/2,182 valid choices, DeNEVIL 20,514/20,518 visible proxy responses. |
+| `Gemma-S` | Frozen Option 1 | Done | 5 benchmark lines complete (`DeNEVIL` via proxy) | Primary small Gemma release line. |
+| `Llama-S` | Complete local line | Done | 5 benchmark lines complete (`DeNEVIL` via proxy) | Finished locally, outside the frozen Option 1 counts. |
+| `Gemma-M` | Complete local line | Done | 5 benchmark lines complete (`DeNEVIL` via proxy) | Finished locally on April 21, 2026. |
+| `Gemma-L` | Complete local line | Done | 5 benchmark lines complete (`DeNEVIL` via proxy) | Finished locally on April 21, 2026. |
+| `Qwen-M` | Complete local line | Done | Earlier text checkpoints withdrawn; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; DeNEVIL proxy holds a 100.0% persisted checkpoint | Clean text rerun finished locally after the withdrawn short-answer artifacts. |
+| `Qwen-L` | Complete local line | Done | SMID recovery stands; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; DeNEVIL proxy holds a 100.0% persisted checkpoint | SMID recovery complete; clean text rerun finished locally. |
+| `Llama-M` | Complete local line | Done | 4 benchmark lines plus `DeNEVIL` proxy; no SMID route | Completed locally on April 22, 2026. |
+| `DeepSeek-L` | Complete local line | Done | No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and DeNEVIL proxy parsed from saved R1 shards | Large R1 text rerun complete from saved logs; keep it text-only because no SMID route exists. |
+| `Llama-L` | Complete local line | Done | SMID complete; UniMoral action prediction done; Value Kaleidoscope and CCD-Bench are fully persisted; DeNEVIL proxy finished at 100.0%. | SMID complete; local text rerun finished successfully through the DeNEVIL proxy task. |
+| `DeepSeek-S` | Complete local line | Done | No SMID route; UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and DeNEVIL proxy are complete in the May 9 no-thinking saved logs | May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot. |
+| `MiniMax-M` | Complete local text line | Done | Clean MiniMax-M2.5 text/proxy benchmarks complete; no medium SMID route fixed yet. | Clean direct MiniMax-M2.5 text run is complete across UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the DeNEVIL proxy; no medium SMID route fixed yet. Build-time persisted text counts: UniMoral action prediction 8,784/8,784; Value 65,520/65,520; CCD 2,182/2,182; DeNEVIL proxy 20,518/20,518. |
+| `MiniMax-L` | Complete local line | Done | 5 benchmark lines complete (`DeNEVIL` via proxy) using MiniMax-M2.5 text plus the shared MiniMax-01 SMID recovery route | The direct-provider MiniMax rerun finished successfully through the DeNEVIL proxy task. |
+| `MiniMax-S` | Complete local line | Done | 5 benchmark lines complete (`DeNEVIL` via proxy) | MiniMax-S now uses the clean direct MiniMax-M2.1 text rerun plus the completed MiniMax-01 SMID recovery route. |
 
 ### Current Comparable Accuracy Snapshot
 
-The table below is intentionally limited to the three directly comparable accuracy metrics: `UniMoral`, `SMID`, and `Value Kaleidoscope`. `CCD-Bench` and `Denevil` are reported separately below as coverage / proxy evidence because neither benchmark currently supports a benchmark-faithful universal accuracy claim in this public release. `n/a` marks benchmarks that are route-missing, incomplete, or intentionally withheld after response-format validation.
+The table below is intentionally limited to the three directly comparable accuracy metrics: `UniMoral`, `SMID`, and `Value Kaleidoscope`. `CCD-Bench` and `DeNEVIL` are reported separately below as coverage / proxy evidence because neither benchmark currently supports a benchmark-faithful universal accuracy claim in this public release. `n/a` marks benchmarks that are route-missing, incomplete, or intentionally withheld after response-format validation.
 
 Metric definition version: `2026-04-30`. The visible-answer parsing rules behind these columns are versioned explicitly so later scorer changes do not silently rewrite the public story.
 
@@ -156,9 +156,9 @@ _The topline comparable-accuracy chart already appears above in **Benchmark Resu
 
 | Line | Comparable text accuracy | CCD-Bench saved choices | DeNEVIL proxy visibility | Public interpretation |
 | --- | --- | --- | --- | --- |
-| `DeepSeek-S` | UniMoral RQ1/action 0.661; Value 0.695 | 2,180 / 2,182 (99.9%) | 20,474 / 20,518 (99.8%) | Valid text-only no-thinking rerun from saved May 9 logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has near-complete parseable choices, and Denevil is proxy-only behavioral evidence. No SMID route exists. |
-| `DeepSeek-M` | UniMoral RQ1/action 0.684; Value 0.635 | 2,177 / 2,182 (99.8%) | 20,514 / 20,518 (100.0%) | Valid text-only comparable line from existing logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has near-complete parseable choices, and Denevil is proxy-only behavioral evidence. No SMID route exists. |
-| `DeepSeek-L` | UniMoral RQ1/action 0.563; Value 0.681 | 2,109 / 2,182 (96.7%) | 20,331 / 20,518 (99.1%) | Valid text-only large R1 rerun from saved shard logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has high parseable-choice coverage, and Denevil is proxy-only behavioral evidence. No SMID route exists. |
+| `DeepSeek-S` | UniMoral RQ1/action 0.661; Value 0.695 | 2,180 / 2,182 (99.9%) | 20,474 / 20,518 (99.8%) | Valid text-only no-thinking rerun from saved May 9 logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has near-complete parseable choices, and DeNEVIL is proxy-only behavioral evidence. No SMID route exists. |
+| `DeepSeek-M` | UniMoral RQ1/action 0.684; Value 0.635 | 2,177 / 2,182 (99.8%) | 20,514 / 20,518 (100.0%) | Valid text-only comparable line from existing logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has near-complete parseable choices, and DeNEVIL is proxy-only behavioral evidence. No SMID route exists. |
+| `DeepSeek-L` | UniMoral RQ1/action 0.563; Value 0.681 | 2,109 / 2,182 (96.7%) | 20,331 / 20,518 (99.1%) | Valid text-only large R1 rerun from saved shard logs: UniMoral and Value Kaleidoscope are scored, CCD-Bench has high parseable-choice coverage, and DeNEVIL is proxy-only behavioral evidence. No SMID route exists. |
 ## Interpretation
 
 Use this section as the decision readout. Each claim below is tied to tracked release artifacts, and non-comparable evidence stays out of macro-accuracy claims.
@@ -332,17 +332,17 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 
 | Model line | Proxy prompt type | Shortened model output pattern | Interpretable signal |
 | --- | --- | --- | --- |
-| `Qwen-S` | Loaded social / political judgment | Corrective / contextual response | The visible trace gives a corrective or contextual answer, which is useful proxy behavior evidence even though the release does not claim paper-faithful Denevil scoring. |
+| `Qwen-S` | Loaded social / political judgment | Corrective / contextual response | The visible trace gives a corrective or contextual answer, which is useful proxy behavior evidence even though the release does not claim paper-faithful DeNEVIL scoring. |
 | `Llama-L` | Illicit access / sabotage | Protective refusal | The visible trace refuses the request directly, which is a clear protective behavioral outcome in the proxy release. |
 | `DeepSeek-S` | Loaded social / political judgment | No visible answer | This sample shows why the proxy package separates completed archives from the subset of traces that actually surface a visible public answer. |
 
 ### Reporting Guardrails
 
-- Do not fold `Denevil` into any benchmark-faithful macro-accuracy claim; it remains proxy-only behavioral evidence and traceability support even when its completion status is `Done`.
+- Do not fold `DeNEVIL` into any benchmark-faithful macro-accuracy claim; it remains proxy-only behavioral evidence and traceability support even when its completion status is `Done`.
 - Read `CCD-Bench` in its dedicated choice-behavior figures, not in the family scaling line chart. `CCD-Bench` valid-choice coverage stays appendix QA only; the headline result is the cluster-selection heatmap and concentration summary.
-- Read `Denevil` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
+- Read `DeNEVIL` only through the dedicated proxy evidence package. Main figures show behavioral outcomes from released traces; sample counts, generated counts, route/model metadata, and timestamps stay in the appendix provenance tables. Proxy-only coverage and traceability evidence; MoralPrompt unavailable; not benchmark-faithful ethical-quality scoring.
 - Read the CCD heatmap as deviation from a 10% uniform baseline over the paper's ten canonical cluster options. It compares cultural-choice behavior, not correctness against one universal target option.
-- Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%` (2,180 / 2,182), and `Denevil visible proxy coverage = 99.8%` (20,474 / 20,518). These are parser/proxy coverage checks, not CCD or Denevil accuracy.
+- Read `DeepSeek-S` as a text-only no-SMID line from the May 9 no-thinking saved logs: `CCD-Bench valid-choice coverage = 99.9%` (2,180 / 2,182), and `DeNEVIL visible proxy coverage = 99.8%` (20,474 / 20,518). These are parser/proxy coverage checks, not CCD or DeNEVIL accuracy.
 - Do not call `GPT-5.5` the best overall line across all tasks; its text results are strong, but there is no SMID route on that line.
 - Do not claim a universal scaling law from these figures. `Gemma` is the only family with a full three-metric S/M/L sweep, the broader `Qwen` / `DeepSeek` / `Llama` text-side curves still move in mixed directions, and the OpenAI rows are text-reference markers rather than S/M/L size curves.
 - Keep `DeepSeek-S` out of all-around winner claims because it has no SMID route, but keep its validated text metrics in the comparable text rows.
@@ -360,7 +360,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Cost scope | User-confirmed total spend plus the tracked July 6 exact UniMoral Llama 3.1 calibration pass. |
 | Purpose | Jenny Zhu's group-facing progress report for the April 14, 2026 five-benchmark moral-psych plan. |
 | Current public matrix | `5 benchmarks x 5 model families x 3 size slots = 75 family-size-benchmark cells` |
-| Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `Denevil` |
+| Benchmarks being tracked | `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, `DeNEVIL` |
 | Model families in scope | `Qwen`, `MiniMax`, `DeepSeek`, `Llama`, `Gemma` |
 | OpenAI GPT/text rows | `GPT-5 nano` = S, `GPT-5 mini` = M, `GPT-5.5` = L for text-only GPT-5; `GPT-4o-mini Ref`, `GPT-4.1-nano Ref`, and `GPT-4.1-mini Ref` remain separate text references |
 | What the frozen snapshot actually covers | one closed `Option 1` slice across `Qwen`, `DeepSeek`, and `Gemma` |
@@ -368,7 +368,7 @@ A few safe qualitative examples help clarify what the proxy traces actually look
 | Run provider / temperature | `OpenRouter` + direct `MiniMax` + `OpenAI`, `temperature=0` |
 | Current live reruns | No currently published line is still running locally. |
 | Next restart focus | No published rerun is active right now. |
-| Release guardrail | Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables. |
+| Release guardrail | Public tables only show lines with trustworthy comparable outputs, and `DeNEVIL` remains proxy-only in public tables. |
 | CI workflow | [CI workflow](https://github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml) |
 | Total evaluated samples in this release | `302,776` |
 
@@ -379,7 +379,7 @@ This compact block keeps the live state readable without repeating the full fami
 - Active open-source reruns: none are currently shown in the published matrix.
 - Stalled or queued follow-up work: no published partial or queued follow-up line is waiting right now.
 - Complete local lines beyond the frozen `Option 1` slice: `Llama-S`, `Gemma-M`, `Gemma-L`, `Qwen-M`, `Qwen-L`, `Llama-M`, `DeepSeek-L`, `Llama-L`, `DeepSeek-S`, `MiniMax-L`, and `MiniMax-S`.
-- Release guardrails: Public tables only show lines with trustworthy comparable outputs, and `Denevil` remains proxy-only in public tables.
+- Release guardrails: Public tables only show lines with trustworthy comparable outputs, and `DeNEVIL` remains proxy-only in public tables.
 
 ## Local Expansion Checkpoint
 
@@ -394,7 +394,7 @@ This checkpoint summarizes the broader family-size expansion separately from the
 | `Qwen-L text batch` | Done | SMID recovery complete; clean text rerun finished locally. |
 | `Llama-M text batch` | Done | Completed April 22 with a full medium text line. |
 | `DeepSeek-S text batch` | Done | May 9 no-thinking rerun passes visible-answer validation; SMID remains unavailable for this DeepSeek size slot. |
-| `DeepSeek-L R1 text batch` | Done | Saved R1 shards now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and Denevil proxy; no SMID route exists. |
+| `DeepSeek-L R1 text batch` | Done | Saved R1 shards now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and DeNEVIL proxy; no SMID route exists. |
 | `Llama-L SMID` | Done | The large Llama vision line is complete locally. |
 | `Next queued text lines` | Done | No currently published line remains queued behind an active rerun. |
 
@@ -421,7 +421,7 @@ Plain-language terms: [`docs/how-to-read-results.md`](../../../docs/how-to-read-
 | `SMID` | Crone et al. (PLOS ONE 2018) | [paper](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0190954) | [OSF project page](https://osf.io/ngzwx/) | Vision | Moral rating + foundation classification |
 | `Value Kaleidoscope` | Sorensen et al. (AAAI 2024 / arXiv 2023) | [paper](https://arxiv.org/abs/2309.00779) | [Hugging Face dataset card](https://huggingface.co/datasets/allenai/ValuePrism) | Text value reasoning | Relevance + valence |
 | `CCD-Bench` | Rahman and Salam (arXiv 2025) | [paper](https://arxiv.org/abs/2510.03553) | [GitHub repo](https://github.com/smartlab-nyu/CCD-Bench); [JSON](https://raw.githubusercontent.com/smartlab-nyu/CCD-Bench/main/datasets/CCD-Bench.json) | Text response selection | Selection |
-| `Denevil` | Duan et al. (ICLR 2024 / arXiv 2023) | [paper](https://arxiv.org/abs/2310.11053) | No public MoralPrompt export confirmed | Text generation | Proxy generation only |
+| `DeNEVIL` | Duan et al. (ICLR 2024 / arXiv 2023) | [paper](https://arxiv.org/abs/2310.11053) | No public MoralPrompt export confirmed | Text generation | Proxy generation only |
 
 ## Model Families And Size Routes
 

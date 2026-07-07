@@ -39,15 +39,15 @@
 <rect x="0" y="0" width="1500" height="1240" class="canvas"/>
 <rect x="24" y="24" width="1452" height="1192" rx="22" class="panel"/>
 <title>Family scaling profile by benchmark</title>
-<desc>Two-panel family scaling view for the visual and text comparable-accuracy panels after the UniMoral benchmark block. OpenAI GPT-5 is plotted as a black text-only S/M/L series on Value only: S is GPT-5 nano, M is GPT-5 mini, and L is GPT-5.5. GPT-4o and GPT-4.1 rows remain gray text reference lines. CCD-Bench and Denevil are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
+<desc>Two-panel family scaling view for the visual and text comparable-accuracy panels after the UniMoral benchmark block. OpenAI GPT-5 is plotted as a black text-only S/M/L series on Value only: S is GPT-5 nano, M is GPT-5 mini, and L is GPT-5.5. GPT-4o and GPT-4.1 rows remain gray text reference lines. CCD-Bench and DeNEVIL are intentionally excluded from this line chart because they are reported separately as coverage and proxy evidence rather than benchmark-faithful accuracy.</desc>
 <text x="48" y="64" class="title">Family Scaling Profile</text>
 <text x="48" y="92" class="subtitle">UniMoral is grouped in Figure 1 above; these comparable panels start at SMID.</text>
 <text x="48" y="114" class="subtitle">Two comparable benchmark panels here: SMID and Value Kaleidoscope.</text>
-<text x="48" y="136" class="subtitle">This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence.</text>
+<text x="48" y="136" class="subtitle">This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or DeNEVIL proxy evidence.</text>
 <text x="48" y="158" class="subtitle">OpenAI GPT-5 black text-only points are S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5.</text>
 <text x="48" y="180" class="subtitle">GPT-4o and GPT-4.1 text refs are gray dashed reference lines where a text metric exists.</text>
 <text x="48" y="202" class="subtitle">SMID gaps for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M mean no public vision route, not missing text scores.</text>
-<text x="48" y="224" class="subtitle">Read CCD-Bench and Denevil in their dedicated figures.</text>
+<text x="48" y="224" class="subtitle">Read CCD-Bench and DeNEVIL in their dedicated figures.</text>
 <rect x="72" y="260" width="650" height="430" rx="20" class="subpanel"/>
 <rect x="634" y="276" width="66" height="20" rx="10" fill="#edf2f7" stroke="#d7dee6" stroke-width="1"/>
 <text x="667" y="290" text-anchor="middle" class="tiny">SCORED</text>
@@ -207,7 +207,7 @@
 <text x="72" y="964" class="legend-note">CCD-Bench is intentionally excluded here.</text>
 <text x="72" y="992" class="legend-note">Read CCD-Bench in the choice-distribution</text>
 <text x="72" y="1020" class="legend-note">and dominant-option concentration figures.</text>
-<text x="72" y="1048" class="legend-note">Read Denevil in the behavioral-outcomes figure.</text>
+<text x="72" y="1048" class="legend-note">Read DeNEVIL in the behavioral-outcomes figure.</text>
 <text x="72" y="1076" class="legend-note">Do not mix proxy evidence into accuracy scaling.</text>
 <text x="742" y="796" class="tiny">FAMILY READ</text>
 <rect x="742" y="808" width="24" height="24" rx="6" fill="#e0ad68"/>

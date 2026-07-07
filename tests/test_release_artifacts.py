@@ -249,7 +249,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert manifest["counts"]["paper_result_comparison_rows"] == 9
     assert manifest["counts"]["paper_model_calibration_bridge_rows"] == 12
     assert manifest["counts"]["paper_model_calibration_ledger_rows"] >= 20
-    assert any("Denevil" in item for item in manifest["interpretation_guardrails"])
+    assert any("DeNEVIL" in item for item in manifest["interpretation_guardrails"])
     assert any("DeepSeek-S" in item and "May 9 no-thinking" in item for item in manifest["interpretation_guardrails"])
     assert any("OpenAI reference rows" in item and "text-only markers" in item for item in manifest["interpretation_guardrails"])
     assert manifest["report_metadata"]["owner"] == "Jenny Zhu"
@@ -1384,7 +1384,7 @@ def test_release_builder_emits_expected_files(tmp_path):
         assert "| `MiniMax-S` |" in text
         assert "headline family-scaling figure already appears above" in text
         assert "Read `CCD-Bench` in its dedicated choice-behavior figures" in text
-        assert "Read `Denevil` only through the dedicated proxy evidence package." in text
+        assert "Read `DeNEVIL` only through the dedicated proxy evidence package." in text
         assert "Low-level DeNEVIL QA/provenance artifacts remain exported" in text
         assert "## Interpretation Notes" not in text
         assert text.count("![Comparable accuracy bars]") == 1
@@ -1514,7 +1514,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert 'style="max-width:100%;height:auto"' in family_scaling_svg
     assert "UniMoral is grouped in Figure 1 above" in family_scaling_svg
     assert "Two comparable benchmark panels here: SMID and Value Kaleidoscope." in family_scaling_svg
-    assert "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or Denevil proxy evidence." in family_scaling_svg
+    assert "This figure is reserved for benchmark-faithful comparable accuracy, not CCD coverage or DeNEVIL proxy evidence." in family_scaling_svg
     assert "OpenAI GPT-5 black text-only points are S=GPT-5 nano, M=GPT-5 mini, and L=GPT-5.5." in family_scaling_svg
     assert "GPT-4o and GPT-4.1 text refs are gray dashed reference lines where a text metric exists." in family_scaling_svg
     assert "OpenAI refs 67.3%-73.5%" in family_scaling_svg
@@ -1528,14 +1528,14 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "#dc2626" in family_scaling_svg
     assert ">Ref<" not in family_scaling_svg
     assert "#4 CCD-Bench" not in family_scaling_svg
-    assert "#5 Denevil" not in family_scaling_svg
+    assert "#5 DeNEVIL" not in family_scaling_svg
     assert "100% coverage" not in family_scaling_svg
     assert "67% coverage" not in family_scaling_svg
     assert "33% coverage" not in family_scaling_svg
     assert "0% coverage" not in family_scaling_svg
     assert "Read CCD-Bench in the choice-distribution" in family_scaling_svg
     assert "and dominant-option concentration figures." in family_scaling_svg
-    assert "Read Denevil in the behavioral-outcomes figure." in family_scaling_svg
+    assert "Read DeNEVIL in the behavioral-outcomes figure." in family_scaling_svg
     assert "Do not mix proxy evidence into accuracy scaling." in family_scaling_svg
     assert "Value S/M/L are parsed from saved logs" in family_scaling_svg
     assert "Qwen" in family_scaling_svg
@@ -1644,7 +1644,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     denevil_pipeline_svg = (figure_dir / "option1_denevil_proxy_pipeline.svg").read_text(encoding="utf-8")
     assert "Appendix explanation: DeNEVIL proxy pipeline" in denevil_pipeline_svg
     assert "Supporting appendix only." in denevil_pipeline_svg
-    assert "Denevil paper goal" in denevil_pipeline_svg
+    assert "DeNEVIL paper goal" in denevil_pipeline_svg
     assert "Local limitation" in denevil_pipeline_svg
     assert "Implemented release path" in denevil_pipeline_svg
     assert "Observed public evidence" in denevil_pipeline_svg

@@ -21,12 +21,12 @@ Everything below supports that path, but not every script is meant to be a publi
 
 ## Diagnostics
 
-- `check_denevil_dataset.py`: validates whether a local `Denevil` file matches the paper-faithful `MoralPrompt` schema or only a proxy-compatible format.
+- `check_denevil_dataset.py`: validates whether a local `DeNEVIL` file matches the paper-faithful `MoralPrompt` schema or only a proxy-compatible format.
 
 ## Formal Run Launchers
 
 - `full_option1_runs.sh`: original `Option 1` launcher for `Qwen`, `DeepSeek`, and `Gemma`.
-- `denevil_proxy_formal_runs.sh`: formal proxy launcher for the current local `Denevil` proxy path.
+- `denevil_proxy_formal_runs.sh`: formal proxy launcher for the current local `DeNEVIL` proxy path.
 - `full_option1_runs_llama_small.sh`: current `Llama 3.2 11B Vision` small-model launcher.
 - `full_option1_runs_minimax_small.sh`: current small-model `MiniMax` hybrid launcher. It now reads `provider_config.sh` so MiniMax routes can use a direct provider when configured, and it records `routing_metadata.csv` beside the task outputs.
 - `family_size_text_expansion.sh`: sequential fixed-order launcher for the active non-image family-by-size expansion (`Gemma`, `Qwen`, `Llama`, `MiniMax`, plus a `DeepSeek` medium distill line). It now resolves each route through `provider_config.sh`, passes `--model_base_url` through the Inspect runner, and records per-task routing metadata.

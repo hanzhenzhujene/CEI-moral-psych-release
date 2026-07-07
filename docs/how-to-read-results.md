@@ -9,7 +9,7 @@ This repo uses a few status words repeatedly. This page explains them in plain l
 - `Selected-grid follow-up`: the separate OpenRouter text-only follow-up under `results/openrouter-selected-grid-moral-psych-full/`. It has terminal states for all planned model-task rows, but blocked/provider rows stay outside scored summaries.
 - `Exploratory sweep`: an older or smaller follow-up sweep kept outside the frozen release matrix and read as supporting context rather than the main ranking surface.
 - `Paper setup`: the benchmark line follows the same intended task setup as the paper we are testing.
-- `Proxy`: the benchmark line is useful, but it does not use the paper's original setup exactly. In this repo, `Denevil` is currently proxy-only because the original `MoralPrompt` export is not available locally.
+- `Proxy`: the benchmark line is useful, but it does not use the paper's original setup exactly. In this repo, `DeNEVIL` is currently proxy-only because the original `MoralPrompt` export is not available locally.
 
 ## Result Packages
 
@@ -63,7 +63,7 @@ These tiers are paired with metric layers. Tier 3 CCD-Bench is still choice-dist
 - `Qwen`, `DeepSeek`, and `Gemma` are inside the frozen `Option 1` snapshot.
 - `Llama-S` is complete locally, but it is still outside the frozen snapshot counts.
 - A formal attempt on disk is not enough to call a line complete; use the current release status tables and task-specific failure checklists.
-- `Denevil` should be reported as `proxy` unless a real local `MoralPrompt` export becomes available and `denevil_generation` is rerun.
+- `DeNEVIL` should be reported as `proxy` unless a real local `MoralPrompt` export becomes available and `denevil_generation` is rerun.
 - In legacy release tables, `UniMoral` means the RQ1/action-prediction scalar unless the table explicitly says `UniMoral Full Benchmark`. The full RQ1-RQ4 package has its own coverage table and failure checklist.
 
 ## Short Version

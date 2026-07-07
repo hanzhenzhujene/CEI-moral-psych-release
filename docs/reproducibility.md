@@ -61,7 +61,7 @@ This validates:
 - the legacy ETHICS path
 - the `Inspect AI` CLI wrapper
 - the moral-psych dataset adapters
-- the benchmark task builders for `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, and `Denevil`
+- the benchmark task builders for `UniMoral`, `SMID`, `Value Kaleidoscope`, `CCD-Bench`, and `DeNEVIL`
 
 For the public QA gate used in CI, run:
 
@@ -216,6 +216,6 @@ The current public release is a closed `Option 1` slice, not the full intended f
 
 Two points are especially important for correct interpretation:
 
-- `Denevil` is currently a proxy line rather than the paper's original `MoralPrompt` setup.
+- `DeNEVIL` is currently a proxy line rather than the paper's original `MoralPrompt` setup.
 - `Llama` small is complete locally across all five benchmark papers, but it is tracked as an extra local result rather than folded into the closed `Option 1` counts.
 - A formal local attempt on disk is not enough to treat a cell as complete; use the generated release status tables and task-specific failure checklists.

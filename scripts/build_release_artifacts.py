@@ -5460,9 +5460,14 @@ def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> 
         writer.writerows(rows)
 
 
+def normalize_public_labels(text: str) -> str:
+    """Normalize display labels without changing lowercase file names or CSV keys."""
+    return text.replace("Denevil", "DeNEVIL")
+
+
 def write_text(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(text, encoding="utf-8")
+    path.write_text(normalize_public_labels(text), encoding="utf-8")
 
 
 def fmt_float(value: float | None, digits: int = 3) -> str:

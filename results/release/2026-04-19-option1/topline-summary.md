@@ -26,7 +26,7 @@ Key takeaways:
 - current project total cost: `$897.58`
 - total cost breakdown: MiniMax API: `$504.66`; OpenRouter model-family/calibration runs: `$352.94`, including `$18.166308` from the full selected-grid OpenRouter follow-up, `$9.417152` from the exact same-model CCD calibration pass, and `$0.103155` from the exact UniMoral Llama 3.1 calibration pass; OpenAI API reference sweep: `$39.98`.
 - closed model families in this release: `Qwen`, `DeepSeek`, `Gemma`
-- key methodological caveat: `Denevil` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup
+- key methodological caveat: `DeNEVIL` uses a clearly labeled local proxy dataset rather than the paper's original `MoralPrompt` setup
 - extra local progress outside the frozen snapshot: `Llama` small is complete across `5` papers / `7` tasks and is intentionally excluded from the frozen `19 / 19` totals
 
 ## Model Summary
@@ -37,6 +37,6 @@ Key takeaways:
 | `DeepSeek` | 4 | 1 | 97,004 | 0.651 |
 | `Gemma` | 6 | 1 | 102,886 | 0.531 |
 
-Macro accuracy is computed over paper-setup tasks with a directly comparable accuracy metric. `CCD-Bench` and `Denevil` are excluded from that average.
+Macro accuracy is computed over paper-setup tasks with a directly comparable accuracy metric. `CCD-Bench` and `DeNEVIL` are excluded from that average.
 
 For the full public package, move next to `README.md` or `results/release/2026-04-19-option1/README.md`.

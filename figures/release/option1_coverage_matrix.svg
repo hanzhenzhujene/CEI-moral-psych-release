@@ -45,7 +45,7 @@
 <text x="484.0" y="136" text-anchor="middle" class="axis">SMID</text>
 <text x="660.0" y="136" text-anchor="middle" class="axis">Value Kaleidoscope</text>
 <text x="836.0" y="136" text-anchor="middle" class="axis">CCD-Bench</text>
-<text x="1012.0" y="136" text-anchor="middle" class="axis">Denevil</text>
+<text x="1012.0" y="136" text-anchor="middle" class="axis">DeNEVIL</text>
 <text x="196" y="203.0" text-anchor="end" class="axis">Qwen</text>
 <rect x="220" y="156" width="162" height="68" rx="18" fill="#2f855a" class="outline"/>
 <text x="301.0" y="192" text-anchor="middle" class="celltext">1/4</text>

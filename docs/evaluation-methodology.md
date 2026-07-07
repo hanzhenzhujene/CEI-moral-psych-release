@@ -41,7 +41,7 @@ This repo currently exposes three different kinds of result:
    - QA gate: valid-choice coverage is still exported, but it is a parser/coverage check rather than the headline CCD metric.
 
 3. `Proxy behavior`
-   - Used for: `Denevil` in the public release
+   - Used for: `DeNEVIL` in the public release
    - Current definition: line-level mix of protective refusals, redirects, corrective/contextual responses, direct answers, risky continuations, ambiguous answers, and empty visible traces.
    - Interpretation: the model returned auditable behavior on released FULCRA-backed proxy prompts.
    - Not the same as: paper-faithful `MoralPrompt` performance or ethical-quality scoring.
@@ -67,8 +67,8 @@ Use these rules when writing claims from the current release:
 - Compare legacy `UniMoral` action prediction, `SMID`, and `Value Kaleidoscope` as accuracy-style benchmark results.
 - Read the expanded `UniMoral` RQ2/RQ3/RQ4 artifacts separately: RQ2/RQ3 are classification tasks scored by exact-match accuracy, and RQ4 is a generation task scored with BERTScore F1 plus METEOR.
 - Treat `CCD-Bench` as two separate public surfaces: valid-choice coverage, then choice-distribution / dominant-option concentration among valid visible selections. Do not collapse those into a scalar accuracy claim.
-- Treat `Denevil` as proxy-only coverage and traceability evidence unless and until the repo exposes a paper-aligned comparable scalar for it.
-- Do not fold `Denevil` into any macro-accuracy average.
+- Treat `DeNEVIL` as proxy-only coverage and traceability evidence unless and until the repo exposes a paper-aligned comparable scalar for it.
+- Do not fold `DeNEVIL` into any macro-accuracy average.
 - Do not promote a text-only line into an all-around winner without a matching `SMID` route.
 - Treat withheld cells as evidence limits, not model failures.
 
@@ -77,7 +77,7 @@ Use these rules when writing claims from the current release:
 - `Empty visible answers`: a run can consume tokens and even emit hidden reasoning while still failing to place a usable answer in the saved visible output field.
 - `Reasoning-only traces`: hidden reasoning is not treated as a valid public answer.
 - `Route mismatch`: some provider routes are text-only, some are vision-capable, and some have no stable public route for a benchmark-size slot.
-- `Proxy drift`: `Denevil` is still a proxy path in this repo, so completion there cannot be interpreted as benchmark-faithful ethical robustness.
+- `Proxy drift`: `DeNEVIL` is still a proxy path in this repo, so completion there cannot be interpreted as benchmark-faithful ethical robustness.
 - `Mixed UniMoral task types`: the legacy `UniMoral` scalar in older tables is RQ1/action prediction only. The full UniMoral package has separate RQ1/RQ2/RQ3/RQ4 artifacts and a failure checklist for any provider cells that are incomplete or parse-limited.
 
 ## How To Read DeepSeek-M
@@ -86,14 +86,14 @@ Use these rules when writing claims from the current release:
 
 - Its top-row text metrics are withheld because the saved short-answer artifacts collapse into empty visible answers.
 - Its `CCD-Bench` bottom-row value should be read as a **formatting / answer-surfacing failure**, not as proof that the model selected the wrong cultural option on every prompt.
-- Its `Denevil` bottom-row value should be read as **visible-response coverage**, not as paper-faithful ethical scoring.
+- Its `DeNEVIL` bottom-row value should be read as **visible-response coverage**, not as paper-faithful ethical scoring.
 
 ## What Would Make The Design Stronger
 
 The current repo is careful about not overclaiming, but the next rigorous upgrades are still clear:
 
 - add a paper-aligned `CCD-Bench` choice-quality metric instead of relying on coverage alone
-- obtain a paper-faithful local `MoralPrompt` export for `Denevil`
+- obtain a paper-faithful local `MoralPrompt` export for `DeNEVIL`
 - lock more provider routes so each family-size cell has a stable rerunnable configuration
 - keep bumping the public metric-definition version whenever a parser or scorer changes materially
 

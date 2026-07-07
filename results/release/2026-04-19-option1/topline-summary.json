@@ -41,8 +41,8 @@
       "tasks_completed": 7,
       "benchmark_faithful_tasks": 6,
       "proxy_tasks": 1,
-      "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
-      "missing_benchmark_lines": "Benchmark-faithful Denevil via MoralPrompt",
+      "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; DeNEVIL proxy",
+      "missing_benchmark_lines": "Benchmark-faithful DeNEVIL via MoralPrompt",
       "samples": 102886,
       "benchmark_faithful_macro_accuracy": 0.427602,
       "note": "Combines the original 2026-04-19-option1-llama32-11b-vision successes (UniMoral + SMID moral rating) with recovery-v3 completions for the remaining five tasks after a temporary OpenRouter key-limit stall."
@@ -55,11 +55,11 @@
       "tasks_completed": 6,
       "benchmark_faithful_tasks": 6,
       "proxy_tasks": 1,
-      "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; Denevil proxy",
-      "missing_benchmark_lines": "Benchmark-faithful Denevil via MoralPrompt",
+      "completed_benchmark_lines": "UniMoral; SMID; Value Kaleidoscope; CCD-Bench; DeNEVIL proxy",
+      "missing_benchmark_lines": "Benchmark-faithful DeNEVIL via MoralPrompt",
       "samples": 102886,
       "benchmark_faithful_macro_accuracy": 0.376442,
-      "note": "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the Denevil proxy from saved local shards."
+      "note": "Shared MiniMax-01 SMID recovery is complete; MiniMax-M2.5 text artifacts now cover UniMoral action prediction, Value Kaleidoscope, CCD-Bench, and the DeNEVIL proxy from saved local shards."
     }
   ]
 }
