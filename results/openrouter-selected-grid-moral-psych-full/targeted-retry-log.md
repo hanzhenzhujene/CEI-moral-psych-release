@@ -33,3 +33,15 @@ Outcome: OpenRouter remains blocked by account credits, and the direct OpenAI pa
 | `openai/chatgpt-4o-latest` | `ccd_bench_selection` | 1 sample | OpenAI `model_not_found` / no access for exact paper route |
 
 Next action: after OpenRouter credits are available, retry the named OpenRouter cells in the same cost-aware order: CCD-Bench first, UniMoral next, ValuePrism valence next, and ValuePrism relevance last. Do not substitute `gpt-4o` for `chatgpt-4o-latest` in the paper-calibration bridge unless the team explicitly changes the same-model rule.
+
+## 2026-07-07 00:43 UTC
+
+Purpose: re-check whether the cost-aware selected-grid retry plan is unblocked before launching any parallel or full-task jobs. The probe used one sample only, prioritized the lowest-estimated-spend high-signal remaining cell, and did not produce a scored benchmark row.
+
+Outcome: OpenRouter still returned `402 Insufficient credits` before completing the sample. No scored rows were added, no raw completions were committed, and no parallel full-task retry was launched.
+
+| Route | Task | Probe size | Outcome |
+| :--- | :--- | :--- | :--- |
+| `openrouter/qwen/qwen3-235b-a22b-2507` | `ccd_bench_selection` | 1 sample | OpenRouter `402 Insufficient credits` |
+
+Next action: add OpenRouter credits before retrying. Once credits are available, keep the same order: CCD-Bench cells first, UniMoral action/generation next, ValuePrism valence next, and ValuePrism relevance last because it has the largest sample count.
