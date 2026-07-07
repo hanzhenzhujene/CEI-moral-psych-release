@@ -1498,10 +1498,13 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "MiniMax-S" in progress_overview_svg
 
     heatmap_svg = (figure_dir / "option1_accuracy_heatmap.svg").read_text(encoding="utf-8")
-    assert "Current Comparable Accuracy Heatmap" in heatmap_svg
+    assert "Comparable Accuracy Matrix: UniMoral, SMID, Value" in heatmap_svg
+    assert "Three benchmark-faithful accuracy metrics: UniMoral RQ1/action, SMID average, and Value average" in heatmap_svg
+    assert "CCD-Bench and DeNEVIL use separate behavior/proxy figures" in heatmap_svg
     assert "Accuracy scale" in heatmap_svg
     assert "n/a / no route" in heatmap_svg
-    assert "withdrawn from direct comparison" in heatmap_svg
+    assert "gaps or withdrawals" in heatmap_svg
+    assert "not low scores" in heatmap_svg
     assert "Qwen-S" in heatmap_svg
 
     benchmark_bar_svg = (figure_dir / "option1_benchmark_accuracy_bars.svg").read_text(encoding="utf-8")

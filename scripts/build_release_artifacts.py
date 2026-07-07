@@ -9246,13 +9246,13 @@ def render_accuracy_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
-            "<title>Current comparable accuracy heatmap</title>",
-            "<desc>Heatmap of the latest available comparable accuracy metrics across completed and in-progress family-size lines. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation.</desc>",
-            '<text x="48" y="64" class="title">Current Comparable Accuracy Heatmap</text>',
+            "<title>Comparable accuracy matrix for UniMoral, SMID, and Value</title>",
+            "<desc>Reader-facing matrix for the three benchmark-faithful accuracy metrics in the public comparison: UniMoral RQ1 action prediction, SMID average accuracy, and Value Kaleidoscope average accuracy. Hatched cells are route gaps, incomplete rows, or withdrawn cells rather than low scores; CCD-Bench and DeNEVIL are intentionally reported in separate behavior/proxy figures.</desc>",
+            '<text x="48" y="64" class="title">Comparable Accuracy Matrix: UniMoral, SMID, Value</text>',
             *svg_text_block(
                 48,
                 88,
-                "Rows cover current comparable metrics. Hatched cells mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format validation.",
+                "Three benchmark-faithful accuracy metrics: UniMoral RQ1/action, SMID average, and Value average. Hatched cells are gaps or withdrawals, not low scores; CCD-Bench and DeNEVIL use separate behavior/proxy figures.",
                 "subtitle",
                 135,
             ),

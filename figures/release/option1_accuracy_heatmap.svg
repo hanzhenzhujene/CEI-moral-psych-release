@@ -37,11 +37,11 @@
 </defs>
 <rect x="0" y="0" width="1220" height="1996" class="canvas"/>
 <rect x="24" y="24" width="1172" height="1948" rx="22" class="panel"/>
-<title>Current comparable accuracy heatmap</title>
-<desc>Heatmap of the latest available comparable accuracy metrics across completed and in-progress family-size lines. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation.</desc>
-<text x="48" y="64" class="title">Current Comparable Accuracy Heatmap</text>
-<text x="48" y="88" class="subtitle">Rows cover current comparable metrics. Hatched cells mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct</text>
-<text x="48" y="108" class="subtitle">comparison after response-format validation.</text>
+<title>Comparable accuracy matrix for UniMoral, SMID, and Value</title>
+<desc>Reader-facing matrix for the three benchmark-faithful accuracy metrics in the public comparison: UniMoral RQ1 action prediction, SMID average accuracy, and Value Kaleidoscope average accuracy. Hatched cells are route gaps, incomplete rows, or withdrawn cells rather than low scores; CCD-Bench and DeNEVIL are intentionally reported in separate behavior/proxy figures.</desc>
+<text x="48" y="64" class="title">Comparable Accuracy Matrix: UniMoral, SMID, Value</text>
+<text x="48" y="88" class="subtitle">Three benchmark-faithful accuracy metrics: UniMoral RQ1/action, SMID average, and Value average. Hatched cells are gaps or withdrawals,</text>
+<text x="48" y="108" class="subtitle">not low scores; CCD-Bench and DeNEVIL use separate behavior/proxy figures.</text>
 <text x="430.0" y="126" text-anchor="middle" class="axis">UniMoral action</text>
 <text x="690.0" y="126" text-anchor="middle" class="axis">SMID average</text>
 <text x="950.0" y="126" text-anchor="middle" class="axis">Value Kaleidoscope average</text>
