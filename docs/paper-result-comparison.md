@@ -8,7 +8,7 @@ Use it as an evidence-status map, not as a leaderboard. Current benchmark rows, 
 
 | Need | Open |
 | --- | --- |
-| Same-model bar chart for exact CCD-Bench paper-model rows | [same-model CCD calibration bars](../figures/release/option1_paper_result_alignment_map.svg) |
+| Same-model bar chart for exact CCD-Bench paper-model rows | [same-model CCD calibration bar chart](../figures/release/option1_paper_result_alignment_map.svg) |
 | Visual bridge for exact same-model calibration only | [paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg) |
 | Machine-readable alignment table | [paper-result-alignment.csv](../results/release/2026-04-19-option1/paper-result-alignment.csv) |
 | RQ-level paper/result comparison table | [paper-result-comparison.csv](../results/release/2026-04-19-option1/paper-result-comparison.csv) |
@@ -20,9 +20,9 @@ Use it as an evidence-status map, not as a leaderboard. Current benchmark rows, 
 
 ## Visual Summary
 
-![Same-model CCD calibration bars](../figures/release/option1_paper_result_alignment_map.svg)
+![Same-model CCD calibration bar chart](../figures/release/option1_paper_result_alignment_map.svg)
 
-_Same-model CCD calibration bars: only the 11 exact CCD-Bench rows with a shared Nordic-share metric are plotted.
+_Same-model CCD calibration bar chart: only the 11 exact CCD-Bench rows with a shared Nordic-share metric are plotted.
 Current-only, blocked, metric-mismatched, DeNEVIL/proxy, SMID human-norm, and Value/Kaleido non-rerun evidence stays in the tables._
 
 ![Paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)

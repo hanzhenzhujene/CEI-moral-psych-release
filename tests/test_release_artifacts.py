@@ -1845,11 +1845,11 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" not in root_readme
     assert "[Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in root_readme
-    assert "![Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "![Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
     assert "| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
     assert "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
-    assert "| 9 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "| 9 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
     assert "| 10 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
     assert "Use this first: OpenAI GPT-5 is the black text-only S/M/L line" in root_readme
     assert "CCD behavior view: clusters are choices relative to a uniform baseline, not right/wrong labels." in root_readme

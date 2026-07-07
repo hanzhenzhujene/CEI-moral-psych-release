@@ -173,7 +173,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
     assert "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
-    assert "| 9 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "| 9 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in readme
     assert "| 10 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in readme
@@ -184,7 +184,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" not in readme
-    assert "![Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "![Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in readme
     assert readme.count("![") >= 10
     assert "| Separate follow-up visual evidence | What it answers |" in readme
     assert "[Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
@@ -242,7 +242,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[Comparable accuracy bars](release/option1_benchmark_accuracy_bars.svg)" in audience_block
     assert "[CCD choice distribution](release/option1_ccd_choice_distribution.svg)" in audience_block
     assert "[DeNEVIL behavior outcomes](release/option1_denevil_behavior_outcomes.svg)" in audience_block
-    assert "[Same-model CCD calibration bars](release/option1_paper_result_alignment_map.svg)" in audience_block
+    assert "[Same-model CCD calibration bar chart](release/option1_paper_result_alignment_map.svg)" in audience_block
     assert "[Same-model paper calibration bridge](release/option1_paper_model_calibration_bridge.svg)" in audience_block
     assert "[Paper-result comparison](release/option1_paper_result_comparison.svg)" not in audience_block
     assert "Task-by-task scaling, not one overall moral score." in audience_block
@@ -399,8 +399,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "## Visual Summary" in paper_comparison_doc
     assert "## What This Means" in paper_comparison_doc
     assert "## Benchmark Cards" in paper_comparison_doc
-    assert "![Same-model CCD calibration bars](../figures/release/option1_paper_result_alignment_map.svg)" in paper_comparison_doc
-    assert "Same-model CCD calibration bars: only the 11 exact CCD-Bench rows with a shared Nordic-share metric are plotted." in paper_comparison_doc
+    assert "![Same-model CCD calibration bar chart](../figures/release/option1_paper_result_alignment_map.svg)" in paper_comparison_doc
+    assert "Same-model CCD calibration bar chart: only the 11 exact CCD-Bench rows with a shared Nordic-share metric are plotted." in paper_comparison_doc
     assert "![Paper-result comparison table](../figures/release/option1_paper_result_comparison.svg)" not in paper_comparison_doc
     assert "[paper result context figure](../figures/release/option1_paper_result_comparison.svg)" in paper_comparison_doc
     assert "![Paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)" in paper_comparison_doc
