@@ -197,7 +197,21 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "![Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in readme
     assert "![Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
     assert "![Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
-    assert readme.count("![") >= 21
+    assert "![Family-size progress overview](figures/release/option1_family_size_progress_overview.svg)" in readme
+    assert "![Coverage matrix](figures/release/option1_coverage_matrix.svg)" in readme
+    assert "![Sample volume](figures/release/option1_sample_volume.svg)" in readme
+    assert "![CCD valid-choice coverage](figures/release/option1_ccd_valid_choice_coverage.svg)" in readme
+    assert "![DeNEVIL proxy status matrix](figures/release/option1_denevil_proxy_status_matrix.svg)" in readme
+    assert "![DeNEVIL proxy sample volume](figures/release/option1_denevil_proxy_sample_volume.svg)" in readme
+    assert "![DeNEVIL proxy visible-response coverage](figures/release/option1_denevil_proxy_valid_response_rate.svg)" in readme
+    assert "![DeNEVIL proxy pipeline](figures/release/option1_denevil_proxy_pipeline.svg)" in readme
+    assert "Secondary QA/provenance figures are also embedded below" in readme
+    assert "| Secondary QA / provenance visual evidence | What it answers |" in readme
+    assert "| Appendix-only visual evidence | What it answers |" not in readme
+    assert "Progress QA: shows which family-size cells are complete" in readme
+    assert "CCD parser QA: visible `1-10` choice coverage only" in readme
+    assert "DeNEVIL route QA: proxy route and status provenance only; no Tier 3 benchmark-faithful claim." in readme
+    assert readme.count("![") >= 29
     assert "| Separate follow-up visual evidence | What it answers |" in readme
     assert "[Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
     assert "[Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in readme

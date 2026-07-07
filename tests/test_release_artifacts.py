@@ -1862,6 +1862,14 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
     assert "![Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
     assert "![Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in root_readme
+    assert "![Family-size progress overview](figures/release/option1_family_size_progress_overview.svg)" in root_readme
+    assert "![Coverage matrix](figures/release/option1_coverage_matrix.svg)" in root_readme
+    assert "![Sample volume](figures/release/option1_sample_volume.svg)" in root_readme
+    assert "![CCD valid-choice coverage](figures/release/option1_ccd_valid_choice_coverage.svg)" in root_readme
+    assert "![DeNEVIL proxy status matrix](figures/release/option1_denevil_proxy_status_matrix.svg)" in root_readme
+    assert "![DeNEVIL proxy sample volume](figures/release/option1_denevil_proxy_sample_volume.svg)" in root_readme
+    assert "![DeNEVIL proxy visible-response coverage](figures/release/option1_denevil_proxy_valid_response_rate.svg)" in root_readme
+    assert "![DeNEVIL proxy pipeline](figures/release/option1_denevil_proxy_pipeline.svg)" in root_readme
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
     assert "| 2 | [UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in root_readme
     assert "| 7 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
@@ -1876,11 +1884,16 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring." in root_readme
     assert "Bridge view: exact same-model calibration rows are visible" in root_readme
     assert "Context view: paper metric anchors are shown for orientation" in root_readme
+    assert "Secondary QA/provenance figures are also embedded below" in root_readme
+    assert "| Secondary QA / provenance visual evidence | What it answers |" in root_readme
+    assert "| Appendix-only visual evidence | What it answers |" not in root_readme
+    assert "Coverage QA: shows benchmark-route availability and gaps across model lines; empty cells are not low scores." in root_readme
+    assert "DeNEVIL pipeline boundary: explains why the public evidence is proxy-only" in root_readme
     assert "![Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in root_readme
     assert "![Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in root_readme
     assert "![Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in root_readme
     assert "![Selected-grid detailed task matrix](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg)" in root_readme
-    assert root_readme.count("![") >= 21
+    assert root_readme.count("![") >= 29
     assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in root_readme
     assert "[paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in root_readme
     assert "[paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in root_readme

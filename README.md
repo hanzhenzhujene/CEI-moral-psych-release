@@ -83,7 +83,7 @@ The main comparison uses three benchmark-faithful accuracy columns. The other tw
 
 ## Main Figures
 
-These are the result and calibration visuals to use in the deck or meeting readout. They are embedded here so a reviewer does not need to hunt for missing charts. Low-level QA/provenance figures stay linked in the appendix.
+These are the result and calibration visuals to use in the deck or meeting readout. They are embedded here so a reviewer does not need to hunt for missing charts. Secondary QA/provenance figures are also embedded below, but they answer coverage, parsing, volume, and proxy-route questions rather than headline performance questions.
 
 | Open in this order | Figure | What it answers |
 | --- | --- | --- |
@@ -173,7 +173,7 @@ _Bridge view: exact same-model calibration rows are visible; near-family, blocke
 
 _Context view: paper metric anchors are shown for orientation; this is not a same-model calibration bar chart._
 
-| Appendix-only visual evidence | What it answers |
+| Secondary QA / provenance visual evidence | What it answers |
 | --- | --- |
 | [Family-size progress overview](figures/release/option1_family_size_progress_overview.svg) | Completion/progress QA across family-size rows. |
 | [Coverage matrix](figures/release/option1_coverage_matrix.svg) | Which model-line x benchmark cells are present or blocked. |
@@ -183,6 +183,38 @@ _Context view: paper metric anchors are shown for orientation; this is not a sam
 | [DeNEVIL proxy sample volume](figures/release/option1_denevil_proxy_sample_volume.svg) | Proxy sample-count provenance. |
 | [DeNEVIL proxy visible-response coverage](figures/release/option1_denevil_proxy_valid_response_rate.svg) | Visible-response coverage provenance, not ethical-quality scoring. |
 | [DeNEVIL proxy pipeline](figures/release/option1_denevil_proxy_pipeline.svg) | Why the DeNEVIL release evidence is proxy-only. |
+
+![Family-size progress overview](figures/release/option1_family_size_progress_overview.svg)
+
+_Progress QA: shows which family-size cells are complete, blocked, partial, or unavailable; do not read it as model performance._
+
+![Coverage matrix](figures/release/option1_coverage_matrix.svg)
+
+_Coverage QA: shows benchmark-route availability and gaps across model lines; empty cells are not low scores._
+
+![Sample volume](figures/release/option1_sample_volume.svg)
+
+_Volume QA: shows public sample counts by benchmark layer so result comparisons can be checked against coverage._
+
+![CCD valid-choice coverage](figures/release/option1_ccd_valid_choice_coverage.svg)
+
+_CCD parser QA: visible `1-10` choice coverage only; the result interpretation remains choice distribution, not accuracy._
+
+![DeNEVIL proxy status matrix](figures/release/option1_denevil_proxy_status_matrix.svg)
+
+_DeNEVIL route QA: proxy route and status provenance only; no Tier 3 benchmark-faithful claim._
+
+![DeNEVIL proxy sample volume](figures/release/option1_denevil_proxy_sample_volume.svg)
+
+_DeNEVIL volume QA: proxy sample-count provenance for saved traces, not a MoralPrompt result score._
+
+![DeNEVIL proxy visible-response coverage](figures/release/option1_denevil_proxy_valid_response_rate.svg)
+
+_DeNEVIL response QA: visible-response coverage for proxy traces, not ethical-quality scoring._
+
+![DeNEVIL proxy pipeline](figures/release/option1_denevil_proxy_pipeline.svg)
+
+_DeNEVIL pipeline boundary: explains why the public evidence is proxy-only until paper-faithful MoralPrompt data exists._
 
 | Separate follow-up visual evidence | What it answers |
 | --- | --- |
