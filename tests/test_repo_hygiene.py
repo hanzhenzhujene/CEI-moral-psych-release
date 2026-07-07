@@ -257,24 +257,41 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     ]
     appendix_block = figures_readme[figures_readme.index("## Appendix QA / Provenance Figures") :]
     assert "| Order | Open | Use it for | Read it as |" in audience_block
+    assert "This list mirrors the root README `Main Figures` section" in audience_block
     assert "[UniMoral family-size scaling](release/option1_unimoral_family_scaling.svg)" in audience_block
+    assert "[UniMoral four-task dashboard](release/option1_unimoral_four_task_dashboard.svg)" in audience_block
+    assert "[UniMoral task rankings](release/option1_unimoral_task_rankings.svg)" in audience_block
+    assert "[UniMoral task spread](release/option1_unimoral_task_spread.svg)" in audience_block
     assert "[Comparable accuracy bars](release/option1_benchmark_accuracy_bars.svg)" in audience_block
     assert "[CCD choice distribution](release/option1_ccd_choice_distribution.svg)" in audience_block
+    assert "[CCD dominant-option share](release/option1_ccd_dominant_option_share.svg)" in audience_block
     assert "[DeNEVIL behavior outcomes](release/option1_denevil_behavior_outcomes.svg)" in audience_block
+    assert "[DeNEVIL prompt-family heatmap](release/option1_denevil_prompt_family_heatmap.svg)" in audience_block
     assert "[Same-model CCD calibration bar chart](release/option1_paper_result_alignment_map.svg)" in audience_block
     assert "[Same-model paper calibration bridge](release/option1_paper_model_calibration_bridge.svg)" in audience_block
-    assert "[Paper-result comparison](release/option1_paper_result_comparison.svg)" not in audience_block
+    assert "[Paper-result context table](release/option1_paper_result_comparison.svg)" in audience_block
+    assert "Context only; not a same-model bar comparison." in audience_block
     assert "Task-by-task scaling, not one overall moral score." in audience_block
+    assert "RQ1-RQ3 are accuracy; RQ4 is generation quality." in audience_block
+    assert "Rankings within tasks, not one collapsed moral score." in audience_block
+    assert "Diagnostic separation, not proof of saturation." in audience_block
     assert "Cultural-choice behavior, not accuracy." in audience_block
+    assert "Concentration/style summary, not correctness." in audience_block
     assert "Proxy behavior evidence, not MoralPrompt scoring." in audience_block
+    assert "Proxy behavior audit, not paper-faithful scoring." in audience_block
     assert "Same-model behavior comparison, not accuracy." in audience_block
     assert "Same-model calibration only; proxy and non-exact rows stay out." in audience_block
     assert "option1_unimoral_family_scaling.svg" in audience_block
+    assert "option1_unimoral_four_task_dashboard.svg" in audience_block
+    assert "option1_unimoral_task_rankings.svg" in audience_block
+    assert "option1_unimoral_task_spread.svg" in audience_block
     assert "option1_ccd_choice_distribution.svg" in audience_block
+    assert "option1_ccd_dominant_option_share.svg" in audience_block
     assert "option1_denevil_behavior_outcomes.svg" in audience_block
+    assert "option1_denevil_prompt_family_heatmap.svg" in audience_block
     assert "option1_paper_result_alignment_map.svg" in audience_block
     assert "option1_paper_model_calibration_bridge.svg" in audience_block
-    assert "option1_paper_result_comparison.svg" not in audience_block
+    assert "option1_paper_result_comparison.svg" in audience_block
     assert "option1_family_size_progress_overview.svg" not in audience_block
     assert "option1_coverage_matrix.svg" not in audience_block
     assert "option1_sample_volume.svg" not in audience_block
@@ -284,6 +301,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| 3-slide executive read |" in bundle_block
     assert "Text reasoning, SMID/Value accuracy, and CCD behavior are three different result layers." in bundle_block
     assert "| UniMoral deep dive |" in bundle_block
+    assert "[four-task dashboard](release/option1_unimoral_four_task_dashboard.svg)" in bundle_block
     assert "RQ1-RQ3 are exact-match accuracy; RQ4 uses BERTScore F1 and METEOR." in bundle_block
     assert "| Calibration / replication review |" in bundle_block
     assert "The visible comparison starts with exact same-model evidence." in bundle_block
