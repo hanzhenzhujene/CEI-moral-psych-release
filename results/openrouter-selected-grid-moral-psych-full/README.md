@@ -16,6 +16,16 @@ Sample limit for this plan: `full dataset` per task.
 Eligible model count: `17`. Skipped model count: `0`.
 Estimated total run cost for this plan: `$51.6126`.
 
+## Open First
+
+| Need | Open | Boundary |
+| :--- | :--- | :--- |
+| Main visual read | [Figures To Open First](#figures-to-open-first), [interpretation.md](interpretation.md) | Text-only OpenRouter follow-up; separate from the frozen Option 1 ranking surface. |
+| Scored result tables | [result_summary.csv](result_summary.csv), [benchmark_summary.csv](benchmark_summary.csv), [model_summary.csv](model_summary.csv) | Scored rows only; provider/error/cancelled rows stay out of score aggregates. |
+| Completion and blockers | [completion_audit.md](completion_audit.md), [targeted-retry-log.md](targeted-retry-log.md) | Provider, credit, content-filter, and stale-route limits are evidence boundaries, not model failures. |
+| Planning and provenance | [run_plan.csv](run_plan.csv), [model_grid.csv](model_grid.csv), [benchmark_map.csv](benchmark_map.csv), [openrouter-pricing-metadata.json](openrouter-pricing-metadata.json) | Planning and pricing metadata explain what was attempted; they are not scored benchmark results. |
+| Figures | [within-family scaling](figures/within_family_scaling.svg), [time scaling](figures/time_scaling.svg), [benchmark matrix](figures/benchmark_score_matrix.svg) | CCD-Bench is valid-choice behavior; UniMoral RQ4 uses live METEOR-style generation scoring. |
+
 Primary outputs:
 - `benchmark_map.csv`: papers/repos/prompts/scorers and replication status.
 - `model_grid.csv`: selected OpenRouter model grid and cap decision.

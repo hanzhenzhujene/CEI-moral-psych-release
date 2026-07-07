@@ -183,6 +183,13 @@ def test_selected_grid_readme_surfaces_first_figures(tmp_path: Path) -> None:
     openrouter.write_readme(tmp_path, "test-fetch", 100, _minimal_model_rows(), plan_rows, result_rows)
 
     content = (tmp_path / "README.md").read_text(encoding="utf-8")
+    assert "## Open First" in content
+    assert content.index("## Open First") < content.index("Primary outputs:")
+    assert "| Main visual read | [Figures To Open First](#figures-to-open-first), [interpretation.md](interpretation.md) | Text-only OpenRouter follow-up; separate from the frozen Option 1 ranking surface. |" in content
+    assert "| Scored result tables | [result_summary.csv](result_summary.csv), [benchmark_summary.csv](benchmark_summary.csv), [model_summary.csv](model_summary.csv) | Scored rows only; provider/error/cancelled rows stay out of score aggregates. |" in content
+    assert "| Completion and blockers | [completion_audit.md](completion_audit.md), [targeted-retry-log.md](targeted-retry-log.md) | Provider, credit, content-filter, and stale-route limits are evidence boundaries, not model failures. |" in content
+    assert "| Planning and provenance | [run_plan.csv](run_plan.csv), [model_grid.csv](model_grid.csv), [benchmark_map.csv](benchmark_map.csv), [openrouter-pricing-metadata.json](openrouter-pricing-metadata.json) | Planning and pricing metadata explain what was attempted; they are not scored benchmark results. |" in content
+    assert "| Figures | [within-family scaling](figures/within_family_scaling.svg), [time scaling](figures/time_scaling.svg), [benchmark matrix](figures/benchmark_score_matrix.svg) | CCD-Bench is valid-choice behavior; UniMoral RQ4 uses live METEOR-style generation scoring. |" in content
     assert "## Figures To Open First" in content
     assert "![Within-family scaling](figures/within_family_scaling.svg)" in content
     assert "![Time scaling](figures/time_scaling.svg)" in content
@@ -216,6 +223,21 @@ def test_existing_log_scan_recovers_success_even_when_newer_partial_exists(tmp_p
 
     assert len(recovered) == 1
     assert recovered[0]["log_path"].endswith("older-success.eval")
+
+
+def test_parse_run_results_preserves_terminal_row_when_raw_log_is_missing(tmp_path: Path) -> None:
+    row = {
+        "model": "qwen/qwen3-8b",
+        "task": "unimoral_action_prediction",
+        "run_status": "success",
+        "score": "0.75",
+        "actual_cost_usd": "0.12",
+        "log_path": str(tmp_path / "missing.eval"),
+    }
+
+    parsed = openrouter.parse_run_results([row], {})
+
+    assert parsed == [row]
 
 
 def test_guarded_full_run_launcher_refuses_without_approval() -> None:

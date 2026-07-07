@@ -524,6 +524,16 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "denevil-behavior-summary.csv" in results_readme
     assert "Appendix QA / provenance" in results_readme
 
+    selected_grid_readme = (ROOT / "results" / "openrouter-selected-grid-moral-psych-full" / "README.md").read_text(encoding="utf-8")
+    assert "## Open First" in selected_grid_readme
+    assert selected_grid_readme.index("## Open First") < selected_grid_readme.index("Primary outputs:")
+    assert "[Figures To Open First](#figures-to-open-first)" in selected_grid_readme
+    assert "[result_summary.csv](result_summary.csv), [benchmark_summary.csv](benchmark_summary.csv), [model_summary.csv](model_summary.csv)" in selected_grid_readme
+    assert "Scored rows only; provider/error/cancelled rows stay out of score aggregates." in selected_grid_readme
+    assert "Provider, credit, content-filter, and stale-route limits are evidence boundaries, not model failures." in selected_grid_readme
+    assert "Planning and pricing metadata explain what was attempted; they are not scored benchmark results." in selected_grid_readme
+    assert "CCD-Bench is valid-choice behavior; UniMoral RQ4 uses live METEOR-style generation scoring." in selected_grid_readme
+
     scripts_readme = (ROOT / "scripts" / "README.md").read_text(encoding="utf-8")
     assert "one canonical reporting path" in scripts_readme
     assert "build_release_artifacts.py" in scripts_readme
