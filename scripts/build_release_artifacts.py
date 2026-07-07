@@ -9312,7 +9312,7 @@ def comparable_missing_note(row: dict[str, Any], field: str) -> str:
     note = str(row.get("comparison_note") or comparable_snapshot_note(row)).lower()
     if field == "smid_average_accuracy" and "no public smid route" in note:
         return "no SMID vision route"
-    return "no current result"
+    return "not available"
 
 
 def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
@@ -9533,13 +9533,13 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
-            "<title>SMID and Value accuracy by benchmark</title>",
-            "<desc>Horizontal bar panels comparing the latest available family-size lines on SMID and Value Kaleidoscope after the combined UniMoral benchmark block. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>",
-            '<text x="48" y="64" class="title">SMID And Value Accuracy By Benchmark</text>',
+            "<title>SMID and Value accuracy: comparable rows</title>",
+            "<desc>Reader-facing bar panels for the benchmark-faithful SMID and Value Kaleidoscope accuracy metrics after UniMoral is handled in its own figures. Hatched cells mark route gaps, incomplete runs, or rows withdrawn from direct comparison after response-format validation. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses; CCD-Bench and DeNEVIL are intentionally excluded from this accuracy chart.</desc>",
+            '<text x="48" y="64" class="title">SMID And Value Accuracy: Comparable Rows</text>',
             *svg_text_block(
                 48,
                 88,
-                "UniMoral is shown in separate accuracy and generation figures, so this comparison starts at SMID. Each panel keeps the same current lines. Hatched rows mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format validation.",
+                "UniMoral is shown in separate accuracy and generation figures. These two panels compare only SMID and Value accuracy; hatched rows mark route gaps, incomplete runs, or rows withdrawn after response-format validation.",
                 "subtitle",
                 135,
             ),
@@ -9571,7 +9571,7 @@ def render_benchmark_accuracy_bars_svg(rows: list[dict[str, Any]], output_path: 
             lines.append(f'<text x="{panel_left - 202}" y="{y + 19}" class="label">{escape_xml(line_label)}</text>')
             lines.append(f'<rect x="{panel_left}" y="{y}" width="{panel_width}" height="{bar_height}" rx="10" fill="#e2e8f0"/>')
             if value is None:
-                missing_note = comparable_missing_note(row, field) if row is not None else "no current result"
+                missing_note = comparable_missing_note(row, field) if row is not None else "not available"
                 lines.append(f'<rect x="{panel_left}" y="{y}" width="{panel_width}" height="{bar_height}" rx="10" class="muted-bar"/>')
                 lines.append(
                     f'<rect x="{panel_left}" y="{y}" width="{panel_width}" height="{bar_height}" rx="10" fill="url(#diagonalHatch)" opacity="0.7"/>'
@@ -9616,7 +9616,7 @@ def render_benchmark_difficulty_profile_svg(rows: list[dict[str, Any]], output_p
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
             "<title>Comparable score spread</title>",
-            "<desc>Mean, minimum, and maximum comparable accuracy for UniMoral action prediction, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>",
+            "<desc>Mean, minimum, and maximum values for the three comparable accuracy metrics: UniMoral RQ1 action prediction, SMID average accuracy, and Value Kaleidoscope average accuracy. CCD-Bench choice behavior and DeNEVIL proxy evidence are excluded because their metrics are not comparable accuracy scores.</desc>",
             '<text x="48" y="64" class="title">Comparable Score Spread</text>',
             *svg_text_block(
                 48,
@@ -12350,7 +12350,7 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             "",
             "| Figure | Why it matters | File |",
             "| --- | --- | --- |",
-            f"| Figure 1 | Latest line-level progress across the current published family-size matrix. | {markdown_link('option1_family_size_progress_overview.svg', f'{figure_prefix}/option1_family_size_progress_overview.svg')} |",
+            f"| Figure 1 | Line-level progress across the published family-size matrix. | {markdown_link('option1_family_size_progress_overview.svg', f'{figure_prefix}/option1_family_size_progress_overview.svg')} |",
             f"| Figure 2 | SMID and Value comparison after the separate UniMoral accuracy/generation figures. | {markdown_link('option1_benchmark_accuracy_bars.svg', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')} |",
             f"| Figure 3 | Comparable score spread across the current comparable slice. | {markdown_link('option1_benchmark_difficulty_profile.svg', f'{figure_prefix}/option1_benchmark_difficulty_profile.svg')} |",
             f"| Figure 4 | Family-size scaling view for SMID and Value; UniMoral scaling is shown separately. | {markdown_link('option1_family_scaling_profile.svg', f'{figure_prefix}/option1_family_scaling_profile.svg')} |",
@@ -12363,7 +12363,7 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             f"| Figure 11 | Appendix QA only: DeNEVIL proxy sample volume. | {markdown_link('option1_denevil_proxy_sample_volume.svg', f'{figure_prefix}/option1_denevil_proxy_sample_volume.svg')} |",
             f"| Figure 12 | Appendix QA only: DeNEVIL visible-response coverage by model line. | {markdown_link('option1_denevil_proxy_valid_response_rate.svg', f'{figure_prefix}/option1_denevil_proxy_valid_response_rate.svg')} |",
             f"| Figure 13 | Proxy pipeline diagram showing why the released DeNEVIL package is evidence/provenance rather than paper-faithful accuracy. | {markdown_link('option1_denevil_proxy_pipeline.svg', f'{figure_prefix}/option1_denevil_proxy_pipeline.svg')} |",
-            f"| Figure 14 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
+            f"| Figure 14 | Heatmap of the comparable UniMoral, SMID, and Value accuracy metrics, including unavailable-cell treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
             f"| Figure 15 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
             f"| Figure 16 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | {markdown_link('option1_sample_volume.svg', f'{figure_prefix}/option1_sample_volume.svg')} |",
             f"| Figure 17 | Same-model CCD-Bench calibration bar chart showing paper/source Nordic share beside exact current rerun or verified rows. | {markdown_link('option1_paper_result_alignment_map.svg', f'{figure_prefix}/option1_paper_result_alignment_map.svg')} |",
@@ -12372,7 +12372,7 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             "",
             f"![Accuracy heatmap]({figure_prefix}/option1_accuracy_heatmap.svg)",
             "",
-            "_Figure 14. Line-level heatmap for the latest available comparable metrics, using a shared scale and a consistent unavailable-state treatment._",
+            "_Figure 14. Line-level heatmap for the comparable UniMoral, SMID, and Value accuracy metrics, using a shared scale and a consistent unavailable-state treatment._",
             "",
             f"![Coverage matrix]({figure_prefix}/option1_coverage_matrix.svg)",
             "",

@@ -278,7 +278,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     ]
     appendix_block = figures_readme[figures_readme.index("## Appendix QA / Provenance Figures") :]
     assert "| Order | Open | Use it for | Read it as |" in audience_block
-    assert "This list mirrors the root README `Main Figures` section" in audience_block
+    assert "This list mirrors the first part of the root README `Main Figures` section" in audience_block
+    assert "Paper metric anchors and release-result context." in audience_block
     assert "[UniMoral family-size scaling](release/option1_unimoral_family_scaling.svg)" in audience_block
     assert "[UniMoral four-task dashboard](release/option1_unimoral_four_task_dashboard.svg)" in audience_block
     assert "[UniMoral task rankings](release/option1_unimoral_task_rankings.svg)" in audience_block
@@ -331,8 +332,12 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| Calibration / replication review |" in bundle_block
     assert "The visible comparison starts with exact same-model evidence." in bundle_block
     assert "Current-only, blocked, metric-mismatched, non-exact, and proxy evidence stay in tables/context." in bundle_block
-    assert "| Appendix audit |" in bundle_block
-    assert "These explain what ran and parsed; they are not the headline result figures." in bundle_block
+    assert "| QA/provenance audit |" in bundle_block
+    assert "| Appendix audit |" not in bundle_block
+    assert "QA/provenance audit" in bundle_block
+    assert "These explain what ran, parsed, and surfaced visibly" in bundle_block
+    assert "they are embedded in the root README but are not headline performance figures." in bundle_block
+    assert "These explain what ran and parsed; they are not the headline result figures." not in bundle_block
     assert "| OpenRouter follow-up |" in bundle_block
     assert "pilot_scores.svg" in bundle_block
     assert "Separate text-only follow-up; excludes SMID, DeNEVIL, and MiniMax." in bundle_block
@@ -340,6 +345,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert figures_readme.index("## Figure Bundles") < figures_readme.index("## UniMoral figures")
     assert "two reported generation metrics: BERTScore F1" in figures_readme
     assert "## Comparable accuracy figures" in figures_readme
+    assert "grouped bar chart for the benchmark-faithful SMID and Value accuracy comparison" in figures_readme
+    assert "grouped bar chart for the current benchmark-faithful" not in figures_readme
     assert "option1_paper_result_comparison.svg" in figures_readme
     assert "option1_paper_model_calibration_bridge.svg" in figures_readme
     assert "## Replication / calibration figures" in figures_readme
@@ -361,6 +368,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "SMID, DeNEVIL, and MiniMax are excluded" in selected_grid_block
     assert figures_readme.index("## Replication / calibration figures") < figures_readme.index("## OpenRouter selected-grid follow-up figures")
     assert figures_readme.index("## OpenRouter selected-grid follow-up figures") < figures_readme.index("## Appendix QA / Provenance Figures")
+    assert "stay labeled as QA/provenance even when they are embedded in the root README" in figures_readme
+    assert "stay in appendix-only visuals" not in figures_readme
 
     unimoral_family_scaling_svg = (ROOT / "figures/release/option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
     assert "UniMoral family-size scaling by RQ" in unimoral_family_scaling_svg

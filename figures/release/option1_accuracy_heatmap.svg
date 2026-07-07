@@ -208,7 +208,7 @@
 <rect x="560" y="1288" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="1288" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="1322" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="1343" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="1343" text-anchor="middle" class="small">not available</text>
 <rect x="820" y="1288" width="246" height="62" rx="16" fill="#81b3b7" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="1322" text-anchor="middle" class="celltext-dark">70.1%</text>
 <text x="943.0" y="1343" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
@@ -219,7 +219,7 @@
 <rect x="560" y="1364" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="1364" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="1398" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="1419" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="1419" text-anchor="middle" class="small">not available</text>
 <rect x="820" y="1364" width="246" height="62" rx="16" fill="#94bdbe" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="1398" text-anchor="middle" class="celltext-dark">61.7%</text>
 <text x="943.0" y="1419" text-anchor="middle" class="cellsub-dark">OpenAI GPT-5 S</text>
@@ -230,7 +230,7 @@
 <rect x="560" y="1440" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="1440" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="1474" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="1495" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="1495" text-anchor="middle" class="small">not available</text>
 <rect x="820" y="1440" width="246" height="62" rx="16" fill="#88b6b9" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="1474" text-anchor="middle" class="celltext-dark">67.3%</text>
 <text x="943.0" y="1495" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>
@@ -241,7 +241,7 @@
 <rect x="560" y="1516" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="1516" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="1550" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="1571" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="1571" text-anchor="middle" class="small">not available</text>
 <rect x="820" y="1516" width="246" height="62" rx="16" fill="#79aeb4" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="1550" text-anchor="middle" class="celltext-dark">73.9%</text>
 <text x="943.0" y="1571" text-anchor="middle" class="cellsub-dark">OpenAI GPT-5 M</text>
@@ -252,7 +252,7 @@
 <rect x="560" y="1592" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="1592" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="1626" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="1647" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="1647" text-anchor="middle" class="small">not available</text>
 <rect x="820" y="1592" width="246" height="62" rx="16" fill="#79afb4" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="1626" text-anchor="middle" class="celltext-dark">73.6%</text>
 <text x="943.0" y="1647" text-anchor="middle" class="cellsub-dark">OpenAI GPT-5 L</text>
@@ -263,7 +263,7 @@
 <rect x="560" y="1668" width="246" height="62" rx="16" class="muted-cell"/>
 <rect x="560" y="1668" width="246" height="62" rx="16" fill="url(#diagonalHatch)" opacity="0.8"/>
 <text x="683.0" y="1702" text-anchor="middle" class="label">n/a</text>
-<text x="683.0" y="1723" text-anchor="middle" class="small">no current result</text>
+<text x="683.0" y="1723" text-anchor="middle" class="small">not available</text>
 <rect x="820" y="1668" width="246" height="62" rx="16" fill="#79afb4" stroke="#ffffff" stroke-width="1"/>
 <text x="943.0" y="1702" text-anchor="middle" class="celltext-dark">73.5%</text>
 <text x="943.0" y="1723" text-anchor="middle" class="cellsub-dark">OpenAI Ref</text>

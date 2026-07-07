@@ -1508,7 +1508,12 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "Qwen-S" in heatmap_svg
 
     benchmark_bar_svg = (figure_dir / "option1_benchmark_accuracy_bars.svg").read_text(encoding="utf-8")
+    assert "SMID And Value Accuracy: Comparable Rows" in benchmark_bar_svg
+    assert "These two panels compare only SMID and Value accuracy" in benchmark_bar_svg
+    assert "CCD-Bench and DeNEVIL are intentionally excluded from this accuracy chart" in benchmark_bar_svg
     assert "Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells" in benchmark_bar_svg
+    assert "latest available" not in benchmark_bar_svg
+    assert "no current result" not in benchmark_bar_svg
     assert "no SMID vision route" not in benchmark_bar_svg
     assert "Gemma-L" in benchmark_bar_svg
     assert "GPT-4o-mini Ref" in benchmark_bar_svg
@@ -1516,6 +1521,9 @@ def test_release_builder_emits_expected_files(tmp_path):
 
     benchmark_difficulty_svg = (figure_dir / "option1_benchmark_difficulty_profile.svg").read_text(encoding="utf-8")
     assert "Comparable Score Spread" in benchmark_difficulty_svg
+    assert "three comparable accuracy metrics" in benchmark_difficulty_svg
+    assert "CCD-Bench choice behavior and DeNEVIL proxy evidence are excluded" in benchmark_difficulty_svg
+    assert "current public comparison rows" not in benchmark_difficulty_svg
     assert "Visual bottleneck in this slice" in benchmark_difficulty_svg
     assert "Largest cross-line spread" in benchmark_difficulty_svg
 

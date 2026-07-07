@@ -9,7 +9,7 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 
 ## Audience-Facing Result Figures
 
-Open these first for a meeting, deck, or reviewer skim. This list mirrors the root README `Main Figures` section: result and calibration visuals are first-class; parser, coverage, sample-volume, and route-status visuals stay in appendix/provenance.
+Open these first for a meeting, deck, or reviewer skim. This list mirrors the first part of the root README `Main Figures` section: result and calibration visuals are first-class; parser, coverage, sample-volume, and route-status visuals are secondary QA/provenance evidence.
 
 | Order | Open | Use it for | Read it as |
 | ---: | --- | --- | --- |
@@ -29,7 +29,7 @@ Open these first for a meeting, deck, or reviewer skim. This list mirrors the ro
 | 14 | [DeNEVIL prompt-family heatmap](release/option1_denevil_prompt_family_heatmap.svg) | Protective-response rates by heuristic prompt family. | Proxy behavior audit, not paper-faithful scoring. |
 | 15 | [Same-model CCD calibration bar chart](release/option1_paper_result_alignment_map.svg) | Paper/source Nordic-share bars beside the 11 exact current CCD-Bench reruns or verified rows. | Same-model behavior comparison, not accuracy. |
 | 16 | [Same-model paper calibration bridge](release/option1_paper_model_calibration_bridge.svg) | Exact paper-model rows with the repo-side evidence and comparison boundary in one visual. | Same-model calibration only; proxy and non-exact rows stay out. |
-| 17 | [Paper-result context table](release/option1_paper_result_comparison.svg) | Paper metric anchors and current-result context. | Context only; not a same-model bar comparison. |
+| 17 | [Paper-result context table](release/option1_paper_result_comparison.svg) | Paper metric anchors and release-result context. | Context only; not a same-model bar comparison. |
 
 ## Figure Bundles
 
@@ -40,7 +40,7 @@ Use these smaller bundles when you do not need the full figure set. Each bundle 
 | 3-slide executive read | [UniMoral family-size scaling](release/option1_unimoral_family_scaling.svg), [Comparable accuracy bars](release/option1_benchmark_accuracy_bars.svg), [CCD choice distribution](release/option1_ccd_choice_distribution.svg) | Text reasoning, SMID/Value accuracy, and CCD behavior are three different result layers. |
 | UniMoral deep dive | [family-size scaling](release/option1_unimoral_family_scaling.svg), [four-task dashboard](release/option1_unimoral_four_task_dashboard.svg), [task heatmap](release/option1_unimoral_task_heatmap.svg), [RQ4 generation quality](release/option1_unimoral_generation_quality.svg) | RQ1-RQ3 are exact-match accuracy; RQ4 uses BERTScore F1 and METEOR. |
 | Calibration / replication review | [same-model CCD bar chart](release/option1_paper_result_alignment_map.svg), [same-model bridge](release/option1_paper_model_calibration_bridge.svg), [paper-result context](release/option1_paper_result_comparison.svg) | The visible comparison starts with exact same-model evidence. Current-only, blocked, metric-mismatched, non-exact, and proxy evidence stay in tables/context. |
-| Appendix audit | [coverage matrix](release/option1_coverage_matrix.svg), [sample volume](release/option1_sample_volume.svg), [CCD valid-choice coverage](release/option1_ccd_valid_choice_coverage.svg), [DeNEVIL proxy status matrix](release/option1_denevil_proxy_status_matrix.svg) | These explain what ran and parsed; they are not the headline result figures. |
+| QA/provenance audit | [coverage matrix](release/option1_coverage_matrix.svg), [sample volume](release/option1_sample_volume.svg), [CCD valid-choice coverage](release/option1_ccd_valid_choice_coverage.svg), [DeNEVIL proxy status matrix](release/option1_denevil_proxy_status_matrix.svg) | These explain what ran, parsed, and surfaced visibly; they are embedded in the root README but are not headline performance figures. |
 | OpenRouter follow-up | [selected-grid family scaling](../results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg), [selected-grid time scaling](../results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg), [selected-grid benchmark matrix](../results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg), [detailed task matrix](../results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg) | Separate text-only follow-up; excludes SMID, DeNEVIL, and MiniMax. |
 
 ## UniMoral figures
@@ -60,7 +60,7 @@ Use these smaller bundles when you do not need the full figure set. Each bundle 
 
 ## Comparable accuracy figures
 
-- `option1_benchmark_accuracy_bars.svg`: grouped bar chart for the current benchmark-faithful SMID and Value accuracy comparison after the separate UniMoral result block
+- `option1_benchmark_accuracy_bars.svg`: grouped bar chart for the benchmark-faithful SMID and Value accuracy comparison after the separate UniMoral result block
 - `option1_accuracy_heatmap.svg`: compact comparable-score matrix for UniMoral action, SMID, and Value, with hatched cells marking route gaps, incomplete rows, or withdrawn cells rather than false low scores
 - `option1_benchmark_difficulty_profile.svg`: comparable score-spread chart for current bottleneck and cross-line instability context
 - `option1_family_scaling_profile.svg`: family-size scaling profile for SMID and Value only
@@ -108,7 +108,7 @@ The figure set is intentionally split between:
 - headline research figures that support the repo's claims, and
 - appendix QA / provenance figures that explain what ran without pretending those support the same performance claims.
 
-That split is especially important for `CCD-Bench` and `DeNEVIL`: headline figures show model behavior, while coverage, parsing, route, and trace-surfacing diagnostics stay in appendix-only visuals.
+That split is especially important for `CCD-Bench` and `DeNEVIL`: headline figures show model behavior, while coverage, parsing, route, and trace-surfacing diagnostics stay labeled as QA/provenance even when they are embedded in the root README.
 
 ## Visual QA
 

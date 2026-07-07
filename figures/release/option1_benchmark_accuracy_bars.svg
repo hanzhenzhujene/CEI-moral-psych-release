@@ -37,12 +37,11 @@
 </defs>
 <rect x="0" y="0" width="1220" height="1726" class="canvas"/>
 <rect x="24" y="24" width="1172" height="1678" rx="22" class="panel"/>
-<title>SMID and Value accuracy by benchmark</title>
-<desc>Horizontal bar panels comparing the latest available family-size lines on SMID and Value Kaleidoscope after the combined UniMoral benchmark block. Hatched cells may be route-missing, incomplete, or withdrawn from direct comparison after response-format validation; generic hatched rows mean no current result for this benchmark. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses.</desc>
-<text x="48" y="64" class="title">SMID And Value Accuracy By Benchmark</text>
-<text x="48" y="88" class="subtitle">UniMoral is shown in separate accuracy and generation figures, so this comparison starts at SMID. Each panel keeps the same current</text>
-<text x="48" y="108" class="subtitle">lines. Hatched rows mark route-missing benchmarks, incomplete runs, or lines withdrawn from direct comparison after response-format</text>
-<text x="48" y="128" class="subtitle">validation.</text>
+<title>SMID and Value accuracy: comparable rows</title>
+<desc>Reader-facing bar panels for the benchmark-faithful SMID and Value Kaleidoscope accuracy metrics after UniMoral is handled in its own figures. Hatched cells mark route gaps, incomplete runs, or rows withdrawn from direct comparison after response-format validation. Hatched SMID rows for DeepSeek-S, DeepSeek-M, DeepSeek-L, Qwen-M, and Llama-M are no-route cells rather than missing text-score parses; CCD-Bench and DeNEVIL are intentionally excluded from this accuracy chart.</desc>
+<text x="48" y="64" class="title">SMID And Value Accuracy: Comparable Rows</text>
+<text x="48" y="88" class="subtitle">UniMoral is shown in separate accuracy and generation figures. These two panels compare only SMID and Value accuracy; hatched rows mark</text>
+<text x="48" y="108" class="subtitle">route gaps, incomplete runs, or rows withdrawn after response-format validation.</text>
 <rect x="42" y="136" width="1136" height="456" rx="18" class="subpanel"/>
 <text x="48" y="164" class="axis">SMID</text>
 <text x="48" y="184" class="subtitle">Average of moral rating and foundation classification</text>

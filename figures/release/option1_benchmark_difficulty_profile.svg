@@ -38,7 +38,7 @@
 <rect x="0" y="0" width="1220" height="650" class="canvas"/>
 <rect x="24" y="24" width="1172" height="602" rx="22" class="panel"/>
 <title>Comparable score spread</title>
-<desc>Mean, minimum, and maximum comparable accuracy for UniMoral action prediction, SMID, and Value Kaleidoscope across the current public comparison rows.</desc>
+<desc>Mean, minimum, and maximum values for the three comparable accuracy metrics: UniMoral RQ1 action prediction, SMID average accuracy, and Value Kaleidoscope average accuracy. CCD-Bench choice behavior and DeNEVIL proxy evidence are excluded because their metrics are not comparable accuracy scores.</desc>
 <text x="48" y="64" class="title">Comparable Score Spread</text>
 <text x="48" y="88" class="subtitle">Lower means identify current bottlenecks; wider ranges show cross-line instability in the comparable slice. These summaries</text>
 <text x="48" y="108" class="subtitle">intentionally exclude proxy-only DeNEVIL and non-comparable CCD-Bench.</text>
