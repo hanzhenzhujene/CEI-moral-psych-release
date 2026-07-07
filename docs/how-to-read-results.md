@@ -22,7 +22,9 @@ This repo uses a few status words repeatedly. This page explains them in plain l
 
 ## Visual Reading Order
 
-For a presentation, deck, or reviewer skim, open [`figures/README.md`](../figures/README.md) first. It gives the ordered figure list and separates audience-facing visuals from secondary QA/provenance visuals.
+For a presentation, deck, or reviewer skim, open [`figures/README.md`](../figures/README.md) first. It gives the ordered figure list and separates audience-facing visuals from secondary QA/provenance visuals. If you have only three minutes, use the first shortcut row in the root [`README.md`](../README.md#figure-shortcuts): UniMoral family-size scaling, comparable SMID/Value bars, and CCD choice distribution.
+
+The figure set follows the root README's [`Visual Contract`](../README.md#visual-contract): headline result figures support current result claims within one metric layer; calibration figures require exact same-model/same-metric bridges or clearly labeled context; follow-up figures are separate sweeps; QA/provenance figures show coverage, parser health, route status, sample volume, or proxy boundaries rather than performance rankings.
 
 | Question | Open first | Boundary |
 | --- | --- | --- |

@@ -794,6 +794,8 @@ def test_root_readme_links_release_methodology_and_summary_paths():
     assert "audience-facing figure order, visual caveats, and secondary QA/provenance figure map" in docs_index
     assert "appendix/provenance figure map" not in docs_index
     assert "## Visual Reader Path" in docs_index
+    assert "[`Figure Shortcuts`](../README.md#figure-shortcuts)" in docs_index
+    assert "[`Visual Contract`](../README.md#visual-contract)" in docs_index
     assert "UniMoral RQ4 is generation quality rather than accuracy" in docs_index
     assert "CCD-Bench is cultural-choice behavior rather than correctness" in docs_index
     assert "DeNEVIL is proxy behavior rather than paper-faithful MoralPrompt scoring" in docs_index
@@ -819,6 +821,11 @@ def test_evaluation_methodology_versions_current_metric_definition():
     assert "Separate from the frozen ranking surface" in how_to_read
     assert "excludes SMID, DeNEVIL, and MiniMax" in how_to_read
     assert "## Visual Reading Order" in how_to_read
+    assert "If you have only three minutes, use the first shortcut row" in how_to_read
+    assert "../README.md#figure-shortcuts" in how_to_read
+    assert "../README.md#visual-contract" in how_to_read
+    assert "headline result figures support current result claims within one metric layer" in how_to_read
+    assert "QA/provenance figures show coverage, parser health, route status, sample volume, or proxy boundaries rather than performance rankings" in how_to_read
     assert "figures/release/option1_unimoral_family_scaling.svg" in how_to_read
     assert "figures/release/option1_unimoral_generation_quality.svg" in how_to_read
     assert "figures/release/option1_ccd_choice_distribution.svg" in how_to_read

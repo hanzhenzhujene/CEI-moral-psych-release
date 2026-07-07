@@ -23,7 +23,7 @@
 
 ## Visual Reader Path
 
-Use [`../figures/README.md`](../figures/README.md) when you need the presentation order for result visuals. It separates:
+Use [`../figures/README.md`](../figures/README.md) when you need the presentation order for result visuals. For the shortest deck path, start with the root README's [`Figure Shortcuts`](../README.md#figure-shortcuts); for category rules, use the root README's [`Visual Contract`](../README.md#visual-contract). Together they separate:
 
 - audience-facing figures for the main story
 - secondary QA / provenance figures
