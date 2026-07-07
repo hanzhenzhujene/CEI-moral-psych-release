@@ -1830,6 +1830,7 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg" in root_readme
     assert "results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg" in root_readme
     assert "results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg" in root_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg" in root_readme
     assert "| Separate follow-up visual evidence | What it answers |" in root_readme
     assert "Separate from the frozen Option 1 ranking surface." in root_readme
     assert "CCD-Bench remains valid-choice behavior, not accuracy." in root_readme
@@ -1848,6 +1849,7 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in root_readme
     assert "![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)" in root_readme
     assert "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
+    assert "![Comparable accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)" in root_readme
     assert "![Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg)" in root_readme
     assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in root_readme
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
@@ -1860,11 +1862,12 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
     assert "| 2 | [UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in root_readme
     assert "| 7 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
-    assert "| 10 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
-    assert "| 11 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in root_readme
-    assert "| 14 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
-    assert "| 15 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
-    assert "| 16 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in root_readme
+    assert "| 8 | [Comparable accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)" in root_readme
+    assert "| 11 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
+    assert "| 12 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in root_readme
+    assert "| 15 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "| 16 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
+    assert "| 17 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in root_readme
     assert "Use this first: OpenAI GPT-5 is the black text-only S/M/L line" in root_readme
     assert "CCD behavior view: clusters are choices relative to a uniform baseline, not right/wrong labels." in root_readme
     assert "Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring." in root_readme
@@ -1873,7 +1876,8 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in root_readme
     assert "![Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in root_readme
     assert "![Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in root_readme
-    assert root_readme.count("![") >= 19
+    assert "![Selected-grid detailed task matrix](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg)" in root_readme
+    assert root_readme.count("![") >= 21
     assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in root_readme
     assert "[paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in root_readme
     assert "[paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in root_readme

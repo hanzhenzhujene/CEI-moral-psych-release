@@ -55,7 +55,7 @@ Use these three benchmark-specific CSVs for the primary result numbers. Supporti
 | --- | --- |
 | `CCD-Bench` behavior | [ccd-choice-distribution.csv](results/release/2026-04-19-option1/ccd-choice-distribution.csv) |
 | `DeNEVIL` proxy behavior | [denevil-behavior-summary.csv](results/release/2026-04-19-option1/denevil-behavior-summary.csv) |
-| OpenRouter selected-grid follow-up | [result_summary.csv](results/openrouter-selected-grid-moral-psych-full/result_summary.csv), [benchmark_summary.csv](results/openrouter-selected-grid-moral-psych-full/benchmark_summary.csv), [model_summary.csv](results/openrouter-selected-grid-moral-psych-full/model_summary.csv), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md), [retry log](results/openrouter-selected-grid-moral-psych-full/targeted-retry-log.md), [family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg), [time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg), [benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg) |
+| OpenRouter selected-grid follow-up | [result_summary.csv](results/openrouter-selected-grid-moral-psych-full/result_summary.csv), [benchmark_summary.csv](results/openrouter-selected-grid-moral-psych-full/benchmark_summary.csv), [model_summary.csv](results/openrouter-selected-grid-moral-psych-full/model_summary.csv), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md), [retry log](results/openrouter-selected-grid-moral-psych-full/targeted-retry-log.md), [family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg), [time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg), [benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg), [detailed task matrix](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg) |
 | Readiness / progress | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv), [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
 | Exact UniMoral Llama calibration | [calibration-summary.csv](results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv), [RQ4 BERTScore rows](results/paper-calibration-exact-20260706-unimoral-llama31/unimoral-rq4-bertscore.csv), [README](results/paper-calibration-exact-20260706-unimoral-llama31/README.md) |
 | Exact CCD paper-model calibration | [calibration-summary.csv](results/paper-calibration-exact-20260705/calibration-summary.csv), [run-manifest.csv](results/paper-calibration-exact-20260705/run-manifest.csv), [README](results/paper-calibration-exact-20260705/README.md) |
@@ -94,15 +94,16 @@ These are the result and calibration visuals to use in the deck or meeting reado
 | 5 | [UniMoral task rankings](figures/release/option1_unimoral_task_rankings.svg) | Which model lines lead each UniMoral task surface? |
 | 6 | [UniMoral task spread](figures/release/option1_unimoral_task_spread.svg) | How wide is the score spread across UniMoral classification tasks? |
 | 7 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg) | Which rows are strongest on SMID and Value after the separate UniMoral result block? |
-| 8 | [Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg) | Which comparable metric is the visual bottleneck, and where is cross-line spread largest? |
-| 9 | [Family scaling profile](figures/release/option1_family_scaling_profile.svg) | Where does size help or stall on SMID and Value Kaleidoscope? |
-| 10 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |
-| 11 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg) | How concentrated is each line's dominant cultural-cluster choice? |
-| 12 | [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | What proxy behavior mix appears in the saved traces? |
-| 13 | [DeNEVIL prompt-family heatmap](figures/release/option1_denevil_prompt_family_heatmap.svg) | Which proxy prompt families trigger safer or riskier visible behavior? |
-| 14 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg) | For the 11 exact same-model CCD rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified row? |
-| 15 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Which exact paper-model rows can be compared, and which non-exact/proxy rows stay out of the visual comparison? |
-| 16 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg) | What paper metric anchors exist, even when they are context rather than direct bar comparisons? |
+| 8 | [Comparable accuracy heatmap](figures/release/option1_accuracy_heatmap.svg) | Where are the comparable UniMoral, SMID, and Value cells present, missing, or withdrawn? |
+| 9 | [Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg) | Which comparable metric is the visual bottleneck, and where is cross-line spread largest? |
+| 10 | [Family scaling profile](figures/release/option1_family_scaling_profile.svg) | Where does size help or stall on SMID and Value Kaleidoscope? |
+| 11 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |
+| 12 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg) | How concentrated is each line's dominant cultural-cluster choice? |
+| 13 | [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | What proxy behavior mix appears in the saved traces? |
+| 14 | [DeNEVIL prompt-family heatmap](figures/release/option1_denevil_prompt_family_heatmap.svg) | Which proxy prompt families trigger safer or riskier visible behavior? |
+| 15 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg) | For the 11 exact same-model CCD rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified row? |
+| 16 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg) | Which exact paper-model rows can be compared, and which non-exact/proxy rows stay out of the visual comparison? |
+| 17 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg) | What paper metric anchors exist, even when they are context rather than direct bar comparisons? |
 
 ![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
 
@@ -131,6 +132,10 @@ _Spread view: shows diagnostic separation across UniMoral classification tasks; 
 ![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)
 
 _SMID/Value accuracy view: UniMoral is excluded here because it has its own RQ figures._
+
+![Comparable accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)
+
+_Matrix view: use this for quick presence/absence scanning across UniMoral, SMID, and Value; hatched cells are route gaps, incomplete rows, or withdrawn cells, not low scores._
 
 ![Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg)
 
@@ -175,12 +180,16 @@ _Context view: paper metric anchors are shown for orientation; this is not a sam
 | [Sample volume](figures/release/option1_sample_volume.svg) | Public sample-volume QA by benchmark layer. |
 | [CCD valid-choice coverage](figures/release/option1_ccd_valid_choice_coverage.svg) | CCD parser/completion QA, not result ranking. |
 | [DeNEVIL proxy status matrix](figures/release/option1_denevil_proxy_status_matrix.svg) | Proxy route/status provenance. |
+| [DeNEVIL proxy sample volume](figures/release/option1_denevil_proxy_sample_volume.svg) | Proxy sample-count provenance. |
+| [DeNEVIL proxy visible-response coverage](figures/release/option1_denevil_proxy_valid_response_rate.svg) | Visible-response coverage provenance, not ethical-quality scoring. |
+| [DeNEVIL proxy pipeline](figures/release/option1_denevil_proxy_pipeline.svg) | Why the DeNEVIL release evidence is proxy-only. |
 
 | Separate follow-up visual evidence | What it answers |
 | --- | --- |
 | [Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg) | Text-only OpenRouter follow-up S/M/L movement for Qwen, Gemma, and Llama. Separate from the frozen Option 1 ranking surface. |
 | [Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg) | Older-vs-newer OpenRouter route view for Qwen, DeepSeek, and available Gemma rows. |
 | [Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg) | Model x benchmark matrix for scored follow-up rows; CCD-Bench remains valid-choice behavior, not accuracy. |
+| [Selected-grid detailed task matrix](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg) | More granular task-level follow-up scores for audit/detail slides. |
 
 ![Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)
 
@@ -193,6 +202,10 @@ _Follow-up chronology: older-vs-newer OpenRouter route view; treat it as explora
 ![Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)
 
 _Follow-up matrix: scored text rows only; CCD-Bench remains visible-choice behavior rather than accuracy._
+
+![Selected-grid detailed task matrix](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg)
+
+_Follow-up detail matrix: use this for task-level backup slides; it stays separate from the frozen primary ranking surface._
 
 ## Result Directory
 

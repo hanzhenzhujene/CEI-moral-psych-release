@@ -51,6 +51,10 @@ _What it tests: SMID asks whether a vision model can see morally important cues 
 
 _How to read it: UniMoral is handled in Figure 1; this chart starts at SMID for the like-for-like benchmark-faithful accuracy view. Hatched SMID rows for `DeepSeek-S`, `DeepSeek-M`, `DeepSeek-L`, `Qwen-M`, and `Llama-M` mean no public vision route, not an unparsed text result._
 
+![Comparable accuracy heatmap](../../../figures/release/option1_accuracy_heatmap.svg)
+
+_Compact heatmap view: the same comparable-score slice is shown as a matrix, with hatched cells marking route gaps, incomplete rows, or withdrawn cells rather than false low scores._
+
 ![Comparable score spread](../../../figures/release/option1_benchmark_difficulty_profile.svg)
 
 _Bottleneck view: SMID has the lowest mean and largest spread among the directly comparable metrics, so it is the visual-moral bottleneck rather than just another accuracy column._

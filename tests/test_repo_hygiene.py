@@ -142,6 +142,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
     assert "[time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in readme
     assert "[benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in readme
+    assert "[detailed task matrix](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg)" in readme
     assert "OpenRouter text-only follow-up   results/openrouter-selected-grid-moral-psych-full/" in readme
     assert "it is text-only, excludes SMID/DeNEVIL/MiniMax, and has `102/119` scored rows" in readme
     assert "| Best fully observed comparable line | `MiniMax-S`: UniMoral RQ1/action 0.661, SMID 0.432, Value 0.740; three-metric mean 0.611." in readme
@@ -173,11 +174,12 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "| 2 | [UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in readme
     assert "| 7 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
-    assert "| 10 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
-    assert "| 11 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in readme
-    assert "| 14 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in readme
-    assert "| 15 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
-    assert "| 16 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
+    assert "| 8 | [Comparable accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)" in readme
+    assert "| 11 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
+    assert "| 12 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in readme
+    assert "| 15 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "| 16 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
+    assert "| 17 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "![UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in readme
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in readme
@@ -185,6 +187,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "![UniMoral task rankings](figures/release/option1_unimoral_task_rankings.svg)" in readme
     assert "![UniMoral task spread](figures/release/option1_unimoral_task_spread.svg)" in readme
     assert "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
+    assert "![Comparable accuracy heatmap](figures/release/option1_accuracy_heatmap.svg)" in readme
     assert "![Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg)" in readme
     assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in readme
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
@@ -194,14 +197,16 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "![Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in readme
     assert "![Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
     assert "![Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
-    assert readme.count("![") >= 19
+    assert readme.count("![") >= 21
     assert "| Separate follow-up visual evidence | What it answers |" in readme
     assert "[Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
     assert "[Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in readme
     assert "[Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in readme
+    assert "[Selected-grid detailed task matrix](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg)" in readme
     assert "![Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
     assert "![Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in readme
     assert "![Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in readme
+    assert "![Selected-grid detailed task matrix](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg)" in readme
     assert "Separate from the frozen Option 1 ranking surface." in readme
     assert "CCD-Bench remains valid-choice behavior, not accuracy." in readme
     assert "## Result Directory" in readme
@@ -215,6 +220,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "### DeepSeek S/M/L Log-Derived Readout" not in readme
     assert "results/release/2026-04-19-option1/README.md" in readme
     assert "figures/release/option1_benchmark_accuracy_bars.svg" in readme
+    assert "figures/release/option1_accuracy_heatmap.svg" in readme
     assert "figures/release/option1_benchmark_difficulty_profile.svg" in readme
     assert "figures/release/option1_unimoral_task_heatmap.svg" in readme
     assert "figures/release/option1_unimoral_generation_quality.svg" in readme
@@ -230,6 +236,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_paper_result_alignment_map.svg" in readme
     assert "figures/release/option1_paper_model_calibration_bridge.svg" in readme
     assert "figures/release/option1_paper_result_comparison.svg" in readme
+    assert "results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg" in readme
     assert "![Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
     assert "![Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
     assert "Bridge view: exact same-model calibration rows are visible" in readme
@@ -263,6 +270,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[UniMoral task rankings](release/option1_unimoral_task_rankings.svg)" in audience_block
     assert "[UniMoral task spread](release/option1_unimoral_task_spread.svg)" in audience_block
     assert "[Comparable accuracy bars](release/option1_benchmark_accuracy_bars.svg)" in audience_block
+    assert "[Comparable accuracy heatmap](release/option1_accuracy_heatmap.svg)" in audience_block
     assert "[CCD choice distribution](release/option1_ccd_choice_distribution.svg)" in audience_block
     assert "[CCD dominant-option share](release/option1_ccd_dominant_option_share.svg)" in audience_block
     assert "[DeNEVIL behavior outcomes](release/option1_denevil_behavior_outcomes.svg)" in audience_block
@@ -273,6 +281,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Context only; not a same-model bar comparison." in audience_block
     assert "Task-by-task scaling, not one overall moral score." in audience_block
     assert "RQ1-RQ3 are accuracy; RQ4 is generation quality." in audience_block
+    assert "Presence/absence scan; hatched cells are not low scores." in audience_block
     assert "Rankings within tasks, not one collapsed moral score." in audience_block
     assert "Diagnostic separation, not proof of saturation." in audience_block
     assert "Cultural-choice behavior, not accuracy." in audience_block
@@ -285,6 +294,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "option1_unimoral_four_task_dashboard.svg" in audience_block
     assert "option1_unimoral_task_rankings.svg" in audience_block
     assert "option1_unimoral_task_spread.svg" in audience_block
+    assert "option1_accuracy_heatmap.svg" in audience_block
     assert "option1_ccd_choice_distribution.svg" in audience_block
     assert "option1_ccd_dominant_option_share.svg" in audience_block
     assert "option1_denevil_behavior_outcomes.svg" in audience_block
@@ -295,6 +305,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "option1_family_size_progress_overview.svg" not in audience_block
     assert "option1_coverage_matrix.svg" not in audience_block
     assert "option1_sample_volume.svg" not in audience_block
+    assert "option1_accuracy_heatmap.svg" not in appendix_block
     assert "option1_family_size_progress_overview.svg" in appendix_block
     assert "option1_coverage_matrix.svg" in appendix_block
     assert "option1_sample_volume.svg" in appendix_block
@@ -309,10 +320,12 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| Appendix audit |" in bundle_block
     assert "These explain what ran and parsed; they are not the headline result figures." in bundle_block
     assert "| OpenRouter follow-up |" in bundle_block
+    assert "pilot_scores.svg" in bundle_block
     assert "Separate text-only follow-up; excludes SMID, DeNEVIL, and MiniMax." in bundle_block
     assert figures_readme.index("## Audience-Facing Result Figures") < figures_readme.index("## Appendix QA / Provenance Figures")
     assert figures_readme.index("## Figure Bundles") < figures_readme.index("## UniMoral figures")
     assert "two reported generation metrics: BERTScore F1" in figures_readme
+    assert "## Comparable accuracy figures" in figures_readme
     assert "option1_paper_result_comparison.svg" in figures_readme
     assert "option1_paper_model_calibration_bridge.svg" in figures_readme
     assert "## Replication / calibration figures" in figures_readme
@@ -329,6 +342,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "within_family_scaling.svg" in selected_grid_block
     assert "time_scaling.svg" in selected_grid_block
     assert "benchmark_score_matrix.svg" in selected_grid_block
+    assert "pilot_scores.svg" in selected_grid_block
     assert "read CCD-Bench as valid-choice behavior, not correctness" in selected_grid_block
     assert "SMID, DeNEVIL, and MiniMax are excluded" in selected_grid_block
     assert figures_readme.index("## Replication / calibration figures") < figures_readme.index("## OpenRouter selected-grid follow-up figures")
