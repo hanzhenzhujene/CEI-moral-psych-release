@@ -31,6 +31,16 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
 
 The broader [paper result context figure](../figures/release/option1_paper_result_comparison.svg) is still available for paper-metric anchors, but it is not a same-model calibration bar comparison.
 
+## Safe Citation Matrix
+
+| If you need to say... | Cite this | Safe wording |
+| --- | --- | --- |
+| Exact CCD numeric bars | Bridge CSV + CCD bar chart | 11 exact CCD-Bench rows share the Nordic-share metric: 10 fresh reruns plus 1 verified current row. |
+| Llama UniMoral paper-roster rerun | Llama calibration CSV | Fresh exact Llama 3.1 8B RQ1-RQ4 calibration exists, with metric-scale caveats. |
+| Whether CCD-Bench is an accuracy replication | `ccd-choice-distribution.csv` and the same-model CCD bar chart | No. CCD-Bench is cultural-choice distribution and concentration behavior, not correctness. |
+| Whether ValuePrism rows replicate Kaleido | `paper-model-calibration-ledger.csv` and `paper-model-replication-map.md` | No. Current rows are prompt-based LLM ValuePrism tasks; Kaleido model inference remains blocked. |
+| Whether DeNEVIL is paper-faithful | `denevil-behavior-summary.csv` and `data-access.md` | No. Current DeNEVIL evidence is FULCRA proxy behavior until a MoralPrompt-style export exists. |
+
 ## TL;DR
 
 | Benchmark | Current comparison status | Reader rule |

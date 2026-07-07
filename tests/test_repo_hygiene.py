@@ -527,8 +527,16 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     paper_comparison_doc = (ROOT / "docs/paper-result-comparison.md").read_text(encoding="utf-8")
     assert "# Paper Result Calibration and Comparison" in paper_comparison_doc
     assert "## Visual Summary" in paper_comparison_doc
+    assert "## Safe Citation Matrix" in paper_comparison_doc
     assert "## What This Means" in paper_comparison_doc
     assert "## Benchmark Cards" in paper_comparison_doc
+    assert paper_comparison_doc.index("## Safe Citation Matrix") < paper_comparison_doc.index("## TL;DR")
+    assert "| If you need to say... | Cite this | Safe wording |" in paper_comparison_doc
+    assert "11 exact CCD-Bench rows share the Nordic-share metric: 10 fresh reruns plus 1 verified current row." in paper_comparison_doc
+    assert "Fresh exact Llama 3.1 8B RQ1-RQ4 calibration exists, with metric-scale caveats." in paper_comparison_doc
+    assert "No. CCD-Bench is cultural-choice distribution and concentration behavior, not correctness." in paper_comparison_doc
+    assert "No. Current rows are prompt-based LLM ValuePrism tasks; Kaleido model inference remains blocked." in paper_comparison_doc
+    assert "No. Current DeNEVIL evidence is FULCRA proxy behavior until a MoralPrompt-style export exists." in paper_comparison_doc
     assert "![Same-model CCD calibration bar chart](../figures/release/option1_paper_result_alignment_map.svg)" in paper_comparison_doc
     assert "Same-model CCD calibration bar chart: only the 11 exact CCD-Bench rows with a shared Nordic-share metric are plotted." in paper_comparison_doc
     assert "![Paper-result comparison table](../figures/release/option1_paper_result_comparison.svg)" not in paper_comparison_doc
