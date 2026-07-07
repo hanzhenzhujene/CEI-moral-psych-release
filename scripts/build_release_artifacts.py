@@ -9384,123 +9384,100 @@ def render_sample_volume_svg(rows: list[dict[str, Any]], output_path: Path) -> N
 
 
 def render_paper_result_alignment_svg(rows: list[dict[str, Any]], output_path: Path) -> None:
-    width, height = 1500, 880
-    top = 184
-    row_h = 116
-    col_x = {
-        "benchmark": 58,
-        "paper": 202,
-        "current": 500,
-        "numeric": 796,
-        "comparison": 1084,
-    }
-    visual_rows = {
-        "UniMoral": {
-            "paper": "Paper anchors: RQ1 WF1 66.38; RQ2 WF1 57.01; RQ3 WF1 38.59; RQ4 METEOR 19.08 / BERTScore 87.44.",
-            "current": "Fresh exact Llama 3.1 rerun: RQ1 acc 0.622; RQ2 acc 0.602; RQ3 acc 0.595; RQ4 METEOR 0.121 / BERTScore F1 0.656.",
-            "numeric": "Same Llama model: paper RQ1 66.38 WF1 vs current 0.622 acc; RQ4 19.08/87.44 vs 0.121/0.656.",
-            "comparison": "Same-model calibration with metric-scale caveats; RQ4 has METEOR and BERTScore.",
-            "status": "Fresh exact bridge",
-            "color": "#7c3aed",
-        },
-        "SMID": {
-            "paper": "Paper anchor: 2,941 images; 2,716 participants; 820,565 ratings; norm reliability ICC >= .75.",
-            "current": "Current repo: best SMID average Qwen-L 0.483; current mean 0.364 across public rows.",
-            "numeric": "No paper LLM score; current public rows are mean 0.364 and best 0.483.",
-            "comparison": "No paper-model comparison; compare current vision-capable rows only.",
-            "status": "No paper roster",
-            "color": "#64748b",
-        },
-        "Value Kaleidoscope / ValuePrism": {
-            "paper": "Paper anchors: ValuePrism 218k labels; KAL SYS 11B win rate 58.3 vs GPT-4; GPT-4 valence 93.1.",
-            "current": "Current prompt-based rows: MiniMax-L value avg 0.741; GPT-5 mini 0.739; GPT-5.5 0.736.",
-            "numeric": "No same metric: paper KAL 58.3 win / GPT-4 93.1 valence vs current value avg 0.736-0.741.",
-            "comparison": "Blocked for paper-model replication until Kaleido access and execution are run.",
-            "status": "Blocked route",
-            "color": "#7c3aed",
-        },
-        "CCD-Bench": {
-            "paper": "Paper/source anchors: mean Nordic 20.17%; plural rationales 87.9%; position-bias Cramer's V 0.0586.",
-            "current": "Exact/current rows: Mistral 25.6%; Llama-3.3 20.8%; GPT-4.1 22.3%; Claude 4 Sonnet 30.2% Nordic.",
-            "numeric": "Nordic share: paper/source mean 20.17 vs exact rows 25.6 / 20.8 / 22.3 / 30.2%.",
-            "comparison": "Distributional comparison only; do not read CCD as accuracy.",
-            "status": "Behavior map",
-            "color": "#0f766e",
-        },
-        "DeNEVIL / MoralPrompt": {
-            "paper": "Paper anchors: ChatGPT APV 65.20 +/- 26.45; GPT-4 APV 79.08 +/- 21.46; LLaMA2-70B APV 76.94 +/- 18.86.",
-            "current": "Current proxy rows: APV/EVR/MVP n/a; strongest proxy protective-response rate Qwen-M 99.5%.",
-            "numeric": "Paper APV 65.20-79.08 vs current APV n/a; proxy Qwen-M 99.5% is not comparable.",
-            "comparison": "Proxy-only evidence; no paper-faithful MoralPrompt comparison.",
-            "status": "Proxy only",
-            "color": "#b45309",
-        },
-    }
+    plot_rows = [
+        row
+        for row in rows
+        if row.get("model_match_class") == "exact_same_model"
+        and row.get("can_plot_numeric") == "yes"
+    ]
+
+    def parse_share(text: str) -> float:
+        value = float(text)
+        return value / 100.0 if value > 1.0 else value
+
+    def model_label(label: str) -> str:
+        replacements = {
+            "Llama-3.3-70B-Instruct": "Llama 3.3 70B",
+            "Llama-4-Maverick-17B-128E-Instruct": "Llama 4 Maverick",
+            "DeepSeek-chat-v3-0324": "DeepSeek V3",
+            "Qwen2.5-72B-Instruct": "Qwen2.5 72B",
+            "OpenAI GPT-4.1": "GPT-4.1",
+            "Command-R 08-2024": "Command-R",
+            "Microsoft Phi-4": "Phi-4",
+            "WizardLM-2-8x22B": "WizardLM-2",
+            "Perplexity Sonar": "Sonar",
+            "Claude 4 Sonnet": "Claude 4 Sonnet",
+        }
+        return replacements.get(label, label)
+
+    row_h = 54
+    top = 190
+    width = 1500
+    height = top + len(plot_rows) * row_h + 154
+    label_x = 58
+    paper_x = 388
+    current_x = 700
+    delta_x = 1012
+    n_x = 1174
+    bar_w = 232
+    bar_max = 0.35
+    paper_color = "#2563eb"
+    current_color = "#0f766e"
 
     lines = svg_header(width, height)
     lines.extend(
         [
             f'<rect x="0" y="0" width="{width}" height="{height}" class="canvas"/>',
             f'<rect x="24" y="24" width="{width - 48}" height="{height - 48}" rx="22" class="panel"/>',
-            "<title>Paper-vs-current replication and calibration map</title>",
-            "<desc>Reviewer-facing map with numerical paper anchors, current repo numbers, and safe comparison boundaries for each benchmark. It separates exact same-model calibration, current-only comparison, blocked routes, and proxy-only evidence.</desc>",
-            '<text x="48" y="64" class="title">Paper-vs-current Replication Map With Numeric Anchors</text>',
+            "<title>Same-model paper calibration bar comparison</title>",
+            "<desc>Bar comparison for exact same-model paper calibration rows with a shared numeric metric. Only plottable same-model rows are shown; non-exact, blocked, metric-mismatched, and proxy rows are excluded.</desc>",
+            '<text x="48" y="64" class="title">Same-Model Paper Calibration Bars</text>',
             *svg_text_block(
                 48,
                 90,
-                "Use this as the visual index for replication/calibration: paper-side numbers, current repo numbers, and safe comparison boundaries stay visible together.",
+                "Only exact same-model rows with the same plottable metric appear here. Bars compare CCD-Bench Nordic Europe share in the paper/source reference versus this repo's exact rerun or verified current row.",
                 "subtitle",
-                150,
+                154,
             ),
-            f'<text x="{col_x["benchmark"]}" y="144" class="tiny">BENCHMARK</text>',
-            f'<text x="{col_x["paper"]}" y="144" class="tiny">PAPER NUMBERS</text>',
-            f'<text x="{col_x["current"]}" y="144" class="tiny">CURRENT REPO NUMBERS</text>',
-            f'<text x="{col_x["numeric"]}" y="144" class="tiny">NUMERIC COMPARISON</text>',
-            f'<text x="{col_x["comparison"]}" y="144" class="tiny">SAFE COMPARISON CLAIM</text>',
+            '<text x="48" y="132" class="subtitle">CCD-Bench is cultural-choice distribution behavior, not accuracy. Rows without an exact same-model same-metric comparison stay in the ledger, not this chart.</text>',
+            f'<text x="{label_x}" y="166" class="tiny">EXACT PAPER MODEL</text>',
+            f'<text x="{paper_x}" y="166" class="tiny">PAPER / SOURCE</text>',
+            f'<text x="{current_x}" y="166" class="tiny">THIS REPO</text>',
+            f'<text x="{delta_x}" y="166" class="tiny">DELTA</text>',
+            f'<text x="{n_x}" y="166" class="tiny">VALID CHOICES</text>',
         ]
     )
 
-    for index, row in enumerate(rows):
-        benchmark = row["benchmark"]
-        item = visual_rows[benchmark]
+    for index, row in enumerate(plot_rows):
         y = top + index * row_h
-        color = item["color"]
-        lines.append(f'<rect x="42" y="{y - 30}" width="{width - 84}" height="{row_h - 14}" rx="18" class="subpanel"/>')
-        lines.append(f'<rect x="{col_x["benchmark"]}" y="{y - 10}" width="116" height="36" rx="11" fill="{color}"/>')
-        for line_index, line in enumerate(_wrap_svg_text(benchmark, 14)[:2]):
-            lines.append(
-                f'<text x="{col_x["benchmark"] + 58}" y="{y + 5 + line_index * 14}" text-anchor="middle" class="cellsub">{escape_xml(line)}</text>'
-            )
-        lines.append(f'<rect x="{col_x["comparison"]}" y="{y + 58}" width="164" height="24" rx="10" fill="{color}" opacity="0.92"/>')
-        lines.append(
-            f'<text x="{col_x["comparison"] + 82}" y="{y + 75}" text-anchor="middle" class="cellsub">{escape_xml(item["status"])}</text>'
-        )
-        for text_index, (x, text, max_chars) in enumerate(
-            (
-                (col_x["paper"], item["paper"], 38),
-                (col_x["current"], item["current"], 38),
-                (col_x["numeric"], item["numeric"], 36),
-                (col_x["comparison"], item["comparison"], 38),
-            )
-        ):
-            text_y = y - 4
-            if text_index == 3:
-                text_y = y - 2
-            lines.extend(svg_text_block(x, text_y, text, "body", max_chars, line_height=16)[:4])
+        paper_value = parse_share(str(row["paper_value"]))
+        repo_value = parse_share(str(row["repo_value"]))
+        paper_bar = min(paper_value / bar_max, 1.0) * bar_w
+        repo_bar = min(repo_value / bar_max, 1.0) * bar_w
+        delta = repo_value - paper_value
+        delta_color = "#0f766e" if delta >= 0 else "#b45309"
+        valid_text = f"{int(row['valid_n']):,}/{int(row['total_n']):,}"
 
-    legend_y = height - 86
-    lines.append(f'<rect x="48" y="{legend_y - 28}" width="{width - 96}" height="54" rx="16" class="legend-card"/>')
-    lines.append(f'<text x="72" y="{legend_y - 4}" class="tiny">READ THIS FIGURE</text>')
-    lines.extend(
-        svg_text_block(
-            72,
-            legend_y + 18,
-            "Numbers in this map are anchors for calibration, not one shared score scale. Use the same-model bridge for exact rows; CCD is distributional behavior, DeNEVIL is proxy-only, and Value/Kaleido remains blocked.",
-            "body",
-            150,
-            line_height=17,
-        )
-    )
+        lines.append(f'<rect x="42" y="{y - 18}" width="{width - 84}" height="{row_h - 8}" rx="14" class="subpanel"/>')
+        lines.extend(svg_text_block(label_x, y + 8, model_label(str(row["paper_model"])), "label", 30, line_height=16)[:2])
+        for x, value, bar, color, label in (
+            (paper_x, paper_value, paper_bar, paper_color, "paper"),
+            (current_x, repo_value, repo_bar, current_color, "ours"),
+        ):
+            lines.append(f'<rect x="{x}" y="{y - 2}" width="{bar_w}" height="16" rx="8" class="muted-bar"/>')
+            lines.append(f'<rect x="{x}" y="{y - 2}" width="{bar:.1f}" height="16" rx="8" fill="{color}"/>')
+            lines.append(f'<text x="{x + bar_w + 10}" y="{y + 12}" class="body">{value * 100:.1f}%</text>')
+            lines.append(f'<text x="{x}" y="{y + 30}" class="small">{label}</text>')
+        lines.append(f'<text x="{delta_x}" y="{y + 12}" class="label" fill="{delta_color}">{delta * 100:+.1f} pp</text>')
+        lines.append(f'<text x="{n_x}" y="{y + 12}" class="body">{valid_text}</text>')
+
+    legend_y = height - 72
+    lines.append(f'<rect x="48" y="{legend_y - 22}" width="{width - 96}" height="46" rx="16" class="legend-card"/>')
+    lines.append(f'<rect x="72" y="{legend_y - 6}" width="18" height="12" rx="6" fill="{paper_color}"/>')
+    lines.append(f'<text x="100" y="{legend_y + 5}" class="body">paper/source Nordic share</text>')
+    lines.append(f'<rect x="330" y="{legend_y - 6}" width="18" height="12" rx="6" fill="{current_color}"/>')
+    lines.append(f'<text x="358" y="{legend_y + 5}" class="body">current exact rerun or verified row</text>')
+    lines.append(f'<text x="704" y="{legend_y + 5}" class="body">Scale shared across bars: 0-35% Nordic Europe share. This is not an accuracy leaderboard.</text>')
 
     lines.append("</svg>")
     write_text(output_path, "\n".join(lines) + "\n")
@@ -11891,11 +11868,11 @@ def append_benchmark_result_visuals_section(lines: list[str], figure_prefix: str
             "",
             "_How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._",
             "",
-            "### 7. Replication / calibration: paper-vs-current alignment",
+            "### 7. Replication / calibration: same-model CCD bars",
             "",
-            f"![Paper-vs-current replication map]({figure_prefix}/option1_paper_result_alignment_map.svg)",
+            f"![Same-model paper calibration bars]({figure_prefix}/option1_paper_result_alignment_map.svg)",
             "",
-            "_What it answers: the paper-side numeric anchors, the closest current repo numbers, and which comparisons are direct, current-only, blocked, or proxy-only._",
+            "_What it answers: for exact same-model CCD-Bench rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified current row?_",
             "",
             f"![Paper-result comparison table]({figure_prefix}/option1_paper_result_comparison.svg)",
             "",
@@ -11921,7 +11898,7 @@ def append_release_open_first_section(lines: list[str]) -> None:
             "| Visual story | [Benchmark Result Visuals](#benchmark-result-visuals), then [TL;DR](#tldr) | Start with the figures; they keep accuracy, distribution behavior, proxy evidence, and calibration status visually separate. |",
             "| Primary result numbers | [Main result files](#data-click-here-main-result-files) | UniMoral RQ4 has separate BERTScore F1 and METEOR rows; CCD-Bench and DeNEVIL are not headline accuracy metrics. |",
             "| Line status and readiness | [Results First](#results-first), [Status Key](#status-key), [family-size-progress.csv](family-size-progress.csv), [readiness-tier-matrix.csv](readiness-tier-matrix.csv) | Tier is result readiness, not model quality; missing cells are route, data, or proxy boundaries. |",
-            "| Paper calibration / replication | [Replication / calibration map](#data-click-here-main-result-files), [paper-model-calibration-ledger.csv](paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](paper-model-calibration-bridge.csv), [paper-result-comparison.md](../../../docs/paper-result-comparison.md) | Exact same-model rows, blocked routes, current-only rows, and proxy-only evidence stay separate. |",
+            "| Paper calibration / replication | [Calibration tables and same-model bars](#data-click-here-main-result-files), [paper-model-calibration-ledger.csv](paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](paper-model-calibration-bridge.csv), [paper-result-comparison.md](../../../docs/paper-result-comparison.md) | Exact same-model rows, blocked routes, current-only rows, and proxy-only evidence stay separate. |",
             "| Rebuild and audit | [Regeneration](#regeneration), [release-manifest.json](release-manifest.json), [saved-results-audit.csv](saved-results-audit.csv) | This appendix is generated from the tracked snapshot; rebuilding does not rerun live providers. |",
             "",
         ]
@@ -12325,7 +12302,7 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
         [
             "## Supporting Figures",
             "",
-            "Figures 1 through 13 and the replication map are already embedded above in context; this gallery keeps the full set together without repeating the surrounding interpretation text.",
+            "Figures 1 through 13 and the same-model calibration bars are already embedded above in context; this gallery keeps the full set together without repeating the surrounding interpretation text.",
             "",
             "| Figure | Why it matters | File |",
             "| --- | --- | --- |",
@@ -12345,7 +12322,7 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             f"| Figure 14 | Heatmap of the latest available comparable metrics, including incomplete-benchmark treatment. | {markdown_link('option1_accuracy_heatmap.svg', f'{figure_prefix}/option1_accuracy_heatmap.svg')} |",
             f"| Figure 15 | Coverage view of which benchmark lines are paper-setup, proxy-only, or not in the frozen release. | {markdown_link('option1_coverage_matrix.svg', f'{figure_prefix}/option1_coverage_matrix.svg')} |",
             f"| Figure 16 | Sample concentration by benchmark with paper-setup versus proxy volume separated. | {markdown_link('option1_sample_volume.svg', f'{figure_prefix}/option1_sample_volume.svg')} |",
-            f"| Figure 17 | Replication/calibration map showing paper-side numeric anchors, current repo numbers, current-only rows, blocked routes, and proxy-only evidence. | {markdown_link('option1_paper_result_alignment_map.svg', f'{figure_prefix}/option1_paper_result_alignment_map.svg')} |",
+            f"| Figure 17 | Same-model CCD-Bench calibration bars showing paper/source Nordic share beside exact current rerun or verified rows. | {markdown_link('option1_paper_result_alignment_map.svg', f'{figure_prefix}/option1_paper_result_alignment_map.svg')} |",
             f"| Figure 18 | Strict same-model calibration bridge for exact paper-model rows only. | {markdown_link('option1_paper_model_calibration_bridge.svg', f'{figure_prefix}/option1_paper_model_calibration_bridge.svg')} |",
             "",
             f"![Accuracy heatmap]({figure_prefix}/option1_accuracy_heatmap.svg)",
@@ -12360,9 +12337,9 @@ def append_figure_gallery(lines: list[str], figure_prefix: str) -> None:
             "",
             "_Figure 16. Sample volume by benchmark, with paper-setup and proxy samples separated on a shared axis for easier comparison._",
             "",
-            f"![Paper-vs-current replication map]({figure_prefix}/option1_paper_result_alignment_map.svg)",
+            f"![Same-model paper calibration bars]({figure_prefix}/option1_paper_result_alignment_map.svg)",
             "",
-            "_Figure 17. Replication/calibration map with paper-side numeric anchors, current repo numbers, and direct/blocked/proxy comparison boundaries._",
+            "_Figure 17. Same-model calibration bars for CCD-Bench rows with a shared Nordic-share metric; non-exact and metric-mismatched rows stay in the ledger._",
             "",
             f"![Paper-model calibration bridge]({figure_prefix}/option1_paper_model_calibration_bridge.svg)",
             "",
@@ -12500,9 +12477,9 @@ def append_main_result_file_map(lines: list[str], figure_prefix: str) -> None:
             "| Fresh exact UniMoral Llama calibration | `results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv`<br/>`results/paper-calibration-exact-20260706-unimoral-llama31/unimoral-rq4-bertscore.csv`<br/>`results/paper-calibration-exact-20260706-unimoral-llama31/README.md` | Same-model UniMoral bridge for Llama 3.1 8B. RQ1-RQ3 use repo accuracy; RQ4 has live METEOR 0.121226 and offline BERTScore F1 0.655539. | `option1_paper_model_calibration_bridge.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| Fresh exact CCD paper-model calibration | `results/paper-calibration-exact-20260705/calibration-summary.csv`<br/>`results/paper-calibration-exact-20260705/run-manifest.csv`<br/>`results/paper-calibration-exact-20260705/README.md` | Full exact CCD distribution reruns for Mistral Nemo, Llama 3.3, DeepSeek v3, Qwen2.5-72B, GPT-4.1, Command-R, Phi-4, WizardLM, Sonar, and Claude 4 Sonnet. Remaining exact routes stay marked unavailable or blocked until the exact model ID exists. | `option1_paper_model_calibration_bridge.svg` and `option1_paper_result_alignment_map.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
             "| OpenRouter selected-grid follow-up | `results/openrouter-selected-grid-moral-psych-full/result_summary.csv`<br/>`results/openrouter-selected-grid-moral-psych-full/benchmark_summary.csv`<br/>`results/openrouter-selected-grid-moral-psych-full/model_summary.csv`<br/>`results/openrouter-selected-grid-moral-psych-full/README.md`<br/>`results/openrouter-selected-grid-moral-psych-full/interpretation.md`<br/>`results/openrouter-selected-grid-moral-psych-full/completion_audit.md`<br/>`results/openrouter-selected-grid-moral-psych-full/targeted-retry-log.md` | Separate text-only OpenRouter follow-up across UniMoral RQ1-RQ4, ValuePrism, and CCD-Bench: `102/119` model-task rows are scored. Provider/credit blockers stay documented as non-scored evidence limits. This package excludes SMID, DeNEVIL, and MiniMax; CCD-Bench is valid-choice behavior, not accuracy. | `within_family_scaling.svg`, `time_scaling.svg`, and `benchmark_score_matrix.svg` under `results/openrouter-selected-grid-moral-psych-full/figures/`. This follow-up is already tracked; `make release` rebuilds the frozen Option 1 release surfaces but does not rerun OpenRouter calls. |",
-            "| Replication / calibration map | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`results/release/2026-04-19-option1/paper-result-comparison.csv`<br/>`results/release/2026-04-19-option1/paper-model-overlap-map.csv`<br/>`results/release/2026-04-19-option1/paper-model-calibration-ledger.csv`<br/>`results/release/2026-04-19-option1/paper-model-calibration-bridge.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | This is a numeric evidence-status map, not a performance metric: paper anchors, current rows, saved/prior evidence, blocked model routes, and proxy-only evidence stay separate. | `option1_paper_model_calibration_bridge.svg`, `option1_paper_result_alignment_map.svg`, and `option1_paper_result_comparison.svg` under `figures/release/`. Rebuild through the same `make release` path. |",
+            "| Paper calibration tables + same-model CCD bars | `results/release/2026-04-19-option1/paper-result-alignment.csv`<br/>`results/release/2026-04-19-option1/paper-result-comparison.csv`<br/>`results/release/2026-04-19-option1/paper-model-overlap-map.csv`<br/>`results/release/2026-04-19-option1/paper-model-calibration-ledger.csv`<br/>`results/release/2026-04-19-option1/paper-model-calibration-bridge.csv`<br/>`docs/paper-result-comparison.md`<br/>`docs/calibration-replication.md`<br/>`docs/paper-model-replication-map.md` | Machine-readable calibration context stays in the tables. The bar figure plots exact same-model rows only when paper and repo values share the same metric scale. | `option1_paper_result_alignment_map.svg` for same-model CCD bars; `option1_paper_model_calibration_bridge.svg` for the detailed exact-model bridge; `option1_paper_result_comparison.svg` for paper anchors beside current rows. Rebuild through the same `make release` path. |",
             "",
-            f"Quick visual links: {markdown_link('UniMoral heatmap', f'{figure_prefix}/option1_unimoral_task_heatmap.svg')}, {markdown_link('SMID/Value bars', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')}, {markdown_link('CCD choice map', f'{figure_prefix}/option1_ccd_choice_distribution.svg')}, {markdown_link('same-model calibration bridge', f'{figure_prefix}/option1_paper_model_calibration_bridge.svg')}, {markdown_link('paper result comparison', f'{figure_prefix}/option1_paper_result_comparison.svg')}, {markdown_link('replication map', f'{figure_prefix}/option1_paper_result_alignment_map.svg')}, [selected-grid family scaling](../../openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg), [selected-grid time scaling](../../openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg), [selected-grid benchmark matrix](../../openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg).",
+            f"Quick visual links: {markdown_link('UniMoral heatmap', f'{figure_prefix}/option1_unimoral_task_heatmap.svg')}, {markdown_link('SMID/Value bars', f'{figure_prefix}/option1_benchmark_accuracy_bars.svg')}, {markdown_link('CCD choice map', f'{figure_prefix}/option1_ccd_choice_distribution.svg')}, {markdown_link('same-model calibration bridge', f'{figure_prefix}/option1_paper_model_calibration_bridge.svg')}, {markdown_link('paper result comparison', f'{figure_prefix}/option1_paper_result_comparison.svg')}, {markdown_link('same-model CCD bars', f'{figure_prefix}/option1_paper_result_alignment_map.svg')}, [selected-grid family scaling](../../openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg), [selected-grid time scaling](../../openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg), [selected-grid benchmark matrix](../../openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg).",
             "",
         ]
     )
@@ -12972,7 +12949,7 @@ def build_repo_readme(
         f"| Best text-only line | `{best_text['line_label']}`: UniMoral {fmt_float(best_text['unimoral_action_accuracy'])}, Value {fmt_float(best_text['value_average_accuracy'])}; two-metric mean {fmt_float(best_text_mean)}. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |",
         f"| Visual bottleneck | `SMID` has mean accuracy {fmt_float(smid_summary['mean_accuracy'])}; best current line is `{best_smid['line_label']}` at {fmt_float(best_smid['smid_average_accuracy'])}. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |",
         "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |",
-        "| Paper comparison status | UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge, including RQ4 METEOR 0.121 and BERTScore F1 0.656. CCD-Bench has exact same-model distribution bridges for ten paper routes; remaining exact routes are unavailable or blocked rather than substituted. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg), [replication map](figures/release/option1_paper_result_alignment_map.svg) |",
+        "| Paper comparison status | UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge, including RQ4 METEOR 0.121 and BERTScore F1 0.656. CCD-Bench has exact same-model distribution bridges for ten paper routes; remaining exact routes are unavailable or blocked rather than substituted. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg), [same-model calibration bars](figures/release/option1_paper_result_alignment_map.svg) |",
         "",
         "## Status: What Is Usable",
         "",
@@ -13041,7 +13018,7 @@ def build_repo_readme(
         "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |",
         "| 8 | [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | What proxy behavior mix appears in the saved traces? |",
         "| 9 | [Paper-result comparison table](figures/release/option1_paper_result_comparison.svg) | What original paper metric anchors can be placed beside current rows? |",
-        "| 10 | [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg) | What paper numbers, current numbers, and comparison boundaries line up for each benchmark? |",
+        "| 10 | [Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg) | For exact same-model CCD rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified row? |",
         "",
         "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)",
         "",
@@ -13079,9 +13056,9 @@ def build_repo_readme(
         "",
         "_Paper comparison view: paper anchors sit next to current rows only when the metric boundary is explicit._",
         "",
-        "![Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)",
+        "![Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg)",
         "",
-        "_Replication status + numbers view: paper anchors, current rows, blocked routes, and proxy-only evidence are separated._",
+        "_Same-model calibration view: only CCD-Bench rows with exact model identity and a shared Nordic-share metric are plotted._",
         "",
         "| Appendix-only visual evidence | What it answers |",
         "| --- | --- |",
@@ -13397,7 +13374,7 @@ def build_release_readme(
             f"- {markdown_link('CCD choice heatmap', '../../../figures/release/option1_ccd_choice_distribution.svg')}: main CCD-Bench result showing deviation from the 10% uniform baseline across the ten canonical clusters",
             f"- {markdown_link('CCD concentration summary', '../../../figures/release/option1_ccd_dominant_option_share.svg')}: dominant-cluster share plus effective-cluster count",
             f"- {markdown_link('DeNEVIL behavioral outcomes', '../../../figures/release/option1_denevil_behavior_outcomes.svg')}: main proxy-result view showing visible behavior categories by model line",
-            f"- {markdown_link('paper-vs-current replication map', '../../../figures/release/option1_paper_result_alignment_map.svg')}: visual map with paper-side numeric anchors, current repo numbers, current-only rows, blocked model routes, and proxy-only evidence",
+            f"- {markdown_link('same-model paper calibration bars', '../../../figures/release/option1_paper_result_alignment_map.svg')}: strict bar comparison for exact CCD-Bench paper-model rows with a shared Nordic-share metric",
             f"- {markdown_link('same-model paper calibration bridge', '../../../figures/release/option1_paper_model_calibration_bridge.svg')}: strict visual bridge for exact same-model calibration rows only",
             f"- {markdown_link('paper result comparison', '../../../figures/release/option1_paper_result_comparison.svg')}: exact paper metric anchors beside closest current rows, with UniMoral RQ4 split into BERTScore F1 and METEOR",
             "",
@@ -14598,7 +14575,10 @@ def main() -> None:
         args.figure_dir / "option1_denevil_proxy_valid_response_rate.svg",
     )
     render_denevil_proxy_pipeline_svg(args.figure_dir / "option1_denevil_proxy_pipeline.svg")
-    render_paper_result_alignment_svg(paper_result_alignment, args.figure_dir / "option1_paper_result_alignment_map.svg")
+    render_paper_result_alignment_svg(
+        paper_model_calibration_bridge,
+        args.figure_dir / "option1_paper_result_alignment_map.svg",
+    )
     render_sample_volume_svg(rows, args.figure_dir / "option1_sample_volume.svg")
 
     _clear_release_builder_caches()

@@ -22,7 +22,7 @@ Open these first for a meeting, deck, or reviewer skim. They are the figures tha
 | 7 | [CCD choice distribution](release/option1_ccd_choice_distribution.svg) | CCD-Bench cultural-cluster choice behavior. | Cultural-choice behavior, not accuracy. |
 | 8 | [DeNEVIL behavior outcomes](release/option1_denevil_behavior_outcomes.svg) | DeNEVIL proxy behavior outcomes from saved traces. | Proxy behavior evidence, not MoralPrompt scoring. |
 | 9 | [Paper-result comparison](release/option1_paper_result_comparison.svg) | Paper metric anchors beside current release rows with metric boundaries visible. | Evidence map with metric caveats. |
-| 10 | [Paper-vs-current replication map](release/option1_paper_result_alignment_map.svg) | Paper-side numeric anchors, current repo numbers, and direct/blocked/proxy comparison boundaries. | Numeric status map, not a leaderboard. |
+| 10 | [Same-model paper calibration bars](release/option1_paper_result_alignment_map.svg) | Paper/source Nordic-share bars beside exact current CCD-Bench reruns or verified rows. | Same-model behavior comparison, not accuracy. |
 
 ## Figure Bundles
 
@@ -32,7 +32,7 @@ Use these smaller bundles when you do not need the full figure set. Each bundle 
 | --- | --- | --- |
 | 3-slide executive read | [UniMoral family-size scaling](release/option1_unimoral_family_scaling.svg), [Comparable accuracy bars](release/option1_benchmark_accuracy_bars.svg), [CCD choice distribution](release/option1_ccd_choice_distribution.svg) | Text reasoning, SMID/Value accuracy, and CCD behavior are three different result layers. |
 | UniMoral deep dive | [family-size scaling](release/option1_unimoral_family_scaling.svg), [task heatmap](release/option1_unimoral_task_heatmap.svg), [RQ4 generation quality](release/option1_unimoral_generation_quality.svg) | RQ1-RQ3 are exact-match accuracy; RQ4 uses BERTScore F1 and METEOR. |
-| Calibration / replication review | [paper-result comparison](release/option1_paper_result_comparison.svg), [replication map](release/option1_paper_result_alignment_map.svg), [same-model bridge](release/option1_paper_model_calibration_bridge.svg) | Exact same-model rows, current-only rows, blocked routes, and proxy-only evidence stay separate. |
+| Calibration / replication review | [paper-result comparison](release/option1_paper_result_comparison.svg), [same-model CCD bars](release/option1_paper_result_alignment_map.svg), [same-model bridge](release/option1_paper_model_calibration_bridge.svg) | The bar chart plots exact same-model rows only; current-only, blocked, and proxy evidence stay in tables. |
 | Appendix audit | [coverage matrix](release/option1_coverage_matrix.svg), [sample volume](release/option1_sample_volume.svg), [CCD valid-choice coverage](release/option1_ccd_valid_choice_coverage.svg), [DeNEVIL proxy status matrix](release/option1_denevil_proxy_status_matrix.svg) | These explain what ran and parsed; they are not the headline result figures. |
 | OpenRouter follow-up | [selected-grid family scaling](../results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg), [selected-grid time scaling](../results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg), [selected-grid benchmark matrix](../results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg) | Separate text-only follow-up; excludes SMID, DeNEVIL, and MiniMax. |
 
@@ -62,7 +62,7 @@ Use these smaller bundles when you do not need the full figure set. Each bundle 
 
 ## Replication / calibration figures
 
-- `option1_paper_result_alignment_map.svg`: replication/calibration map showing paper-faithful overlap, current-only comparisons, blocked routes, and proxy-only evidence
+- `option1_paper_result_alignment_map.svg`: same-model calibration bar chart for exact CCD-Bench paper-model rows with a shared Nordic-share metric
 - `option1_paper_model_calibration_bridge.svg`: strict same-model paper calibration bridge; exact model rows only, with near-family, blocked, proxy, and route-probe rows left in the ledger table
 - `option1_paper_result_comparison.svg`: RQ-level paper-result comparison figure, with UniMoral RQ4 split into BERTScore F1 and METEOR rows
 

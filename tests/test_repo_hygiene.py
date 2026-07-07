@@ -148,7 +148,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
     assert "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
-    assert "| 10 | [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "| 10 | [Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in readme
     assert "![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)" in readme
@@ -158,7 +158,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in readme
-    assert "![Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "![Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
     assert readme.count("![") >= 10
     assert "| Separate follow-up visual evidence | What it answers |" in readme
     assert "[Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
@@ -216,11 +216,11 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[Comparable accuracy bars](release/option1_benchmark_accuracy_bars.svg)" in audience_block
     assert "[CCD choice distribution](release/option1_ccd_choice_distribution.svg)" in audience_block
     assert "[DeNEVIL behavior outcomes](release/option1_denevil_behavior_outcomes.svg)" in audience_block
-    assert "[Paper-vs-current replication map](release/option1_paper_result_alignment_map.svg)" in audience_block
+    assert "[Same-model paper calibration bars](release/option1_paper_result_alignment_map.svg)" in audience_block
     assert "Task-by-task scaling, not one overall moral score." in audience_block
     assert "Cultural-choice behavior, not accuracy." in audience_block
     assert "Proxy behavior evidence, not MoralPrompt scoring." in audience_block
-    assert "Numeric status map, not a leaderboard." in audience_block
+    assert "Same-model behavior comparison, not accuracy." in audience_block
     assert "option1_unimoral_family_scaling.svg" in audience_block
     assert "option1_ccd_choice_distribution.svg" in audience_block
     assert "option1_denevil_behavior_outcomes.svg" in audience_block
@@ -236,7 +236,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| UniMoral deep dive |" in bundle_block
     assert "RQ1-RQ3 are exact-match accuracy; RQ4 uses BERTScore F1 and METEOR." in bundle_block
     assert "| Calibration / replication review |" in bundle_block
-    assert "Exact same-model rows, current-only rows, blocked routes, and proxy-only evidence stay separate." in bundle_block
+    assert "The bar chart plots exact same-model rows only; current-only, blocked, and proxy evidence stay in tables." in bundle_block
     assert "| Appendix audit |" in bundle_block
     assert "These explain what ran and parsed; they are not the headline result figures." in bundle_block
     assert "| OpenRouter follow-up |" in bundle_block
@@ -367,8 +367,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "## Visual Summary" in paper_comparison_doc
     assert "## What This Means" in paper_comparison_doc
     assert "## Benchmark Cards" in paper_comparison_doc
-    assert "![Paper-vs-current replication map](../figures/release/option1_paper_result_alignment_map.svg)" in paper_comparison_doc
-    assert "Numeric status map: paper-side anchors, current repo numbers" in paper_comparison_doc
+    assert "![Same-model paper calibration bars](../figures/release/option1_paper_result_alignment_map.svg)" in paper_comparison_doc
+    assert "Same-model calibration bars: only exact CCD-Bench rows with a shared Nordic-share metric are plotted." in paper_comparison_doc
     assert "![Paper-result comparison table](../figures/release/option1_paper_result_comparison.svg)" in paper_comparison_doc
     assert "![Paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)" in paper_comparison_doc
     assert "[paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)" in paper_comparison_doc
@@ -425,34 +425,34 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "GPT-5-mini Ref" not in calibration_surfaces
     assert "best OpenAI text row: GPT-5 mini 0.739" in calibration_surfaces
     assert "visible paper metric anchors" in calibration_surfaces
-    assert "Paper-vs-current Replication Map With Numeric Anchors" in paper_alignment_svg
-    assert "PAPER NUMBERS" in paper_alignment_svg
-    assert "CURRENT REPO NUMBERS" in paper_alignment_svg
-    assert "NUMERIC COMPARISON" in paper_alignment_svg
-    assert "RQ1 WF1 66.38" in paper_alignment_svg
-    assert "RQ4 METEOR 0.121 / BERTScore F1 0.656" in paper_alignment_svg
-    assert "Same Llama model: paper RQ1 66.38" in paper_alignment_svg
-    assert "WF1 vs current 0.622 acc; RQ4" in paper_alignment_svg
-    assert "19.08/87.44 vs 0.121/0.656." in paper_alignment_svg
-    assert "Current repo: best SMID average Qwen-L" in paper_alignment_svg
-    assert "0.483; current mean 0.364" in paper_alignment_svg
-    assert "No paper LLM score; current public" in paper_alignment_svg
-    assert "rows are mean 0.364 and best 0.483." in paper_alignment_svg
-    assert "KAL SYS 11B win rate 58.3" in paper_alignment_svg
-    assert "No same metric: paper KAL 58.3 win /" in paper_alignment_svg
-    assert "GPT-4 93.1 valence vs current value" in paper_alignment_svg
-    assert "avg 0.736-0.741." in paper_alignment_svg
-    assert "Mistral 25.6%" in paper_alignment_svg
-    assert "GPT-4.1 22.3%" in paper_alignment_svg
-    assert "GPT-4.1 22.3%; Claude" in paper_alignment_svg
-    assert "4 Sonnet 30.2% Nordic" in paper_alignment_svg
-    assert "Nordic share: paper/source mean" in paper_alignment_svg
-    assert "20.17 vs exact rows 25.6 / 20.8 /" in paper_alignment_svg
-    assert "22.3 / 30.2%." in paper_alignment_svg
-    assert "Qwen-M 99.5%" in paper_alignment_svg
-    assert "Paper APV 65.20-79.08 vs current APV" in paper_alignment_svg
-    assert "n/a; proxy Qwen-M 99.5% is not" in paper_alignment_svg
-    assert "comparable." in paper_alignment_svg
+    assert "Same-Model Paper Calibration Bars" in paper_alignment_svg
+    assert "Only exact same-model rows with the same plottable metric appear here." in paper_alignment_svg
+    assert "PAPER / SOURCE" in paper_alignment_svg
+    assert "THIS REPO" in paper_alignment_svg
+    assert "DELTA" in paper_alignment_svg
+    for label in (
+        "Mistral Nemo",
+        "Llama 3.3 70B",
+        "Llama 4 Maverick",
+        "DeepSeek V3",
+        "Qwen2.5 72B",
+        "GPT-4.1",
+        "Command-R",
+        "Phi-4",
+        "WizardLM-2",
+        "Sonar",
+        "Claude 4 Sonnet",
+    ):
+        assert label in paper_alignment_svg
+    assert "19.0%" in paper_alignment_svg
+    assert "25.6%" in paper_alignment_svg
+    assert "30.6%" in paper_alignment_svg
+    assert "30.2%" in paper_alignment_svg
+    assert "+6.6 pp" in paper_alignment_svg
+    assert "-7.5 pp" in paper_alignment_svg
+    assert "This is not an accuracy leaderboard." in paper_alignment_svg
+    for forbidden in ("DeNEVIL", "MoralPrompt", "SMID", "Value Kaleidoscope", "ValuePrism", "Qwen-M 99.5", "APV"):
+        assert forbidden not in paper_alignment_svg
     assert paper_result_comparison_svg.count("UniMoral RQ4 consequence") == 2
     assert "generation - BERTScore F1" in paper_result_comparison_svg
     assert "generation - METEOR" in paper_result_comparison_svg
@@ -640,7 +640,7 @@ def test_evaluation_methodology_versions_current_metric_definition():
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in how_to_read
     assert "Cultural-cluster choice behavior, not right/wrong correctness." in how_to_read
     assert "Proxy behavior from saved traces, not paper-faithful MoralPrompt scoring." in how_to_read
-    assert "Status/evidence map, not a leaderboard." in how_to_read
+    assert "Same-model CCD-Bench bars only; not accuracy and not a leaderboard." in how_to_read
     assert "larger in-progress matrix" not in how_to_read
 
 

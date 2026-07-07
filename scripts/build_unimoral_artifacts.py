@@ -1521,7 +1521,12 @@ def svg_four_task_dashboard(
     path: Path,
 ) -> None:
     width, height = 1800, 1080
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
+    parts = svg_document_start(
+        width,
+        height,
+        "UniMoral RQ1-RQ4 dashboard",
+        "Dashboard for UniMoral task coverage and metric boundaries. RQ1-RQ3 use exact-match accuracy; RQ4 consequence generation uses BERTScore F1 and METEOR.",
+    )
     parts.append(
         "<style>"
         "text{font-family:Arial,sans-serif;font-size:14px;fill:#17202a}"
@@ -1647,7 +1652,12 @@ def svg_heatmap(rows: list[dict[str, object]], path: Path) -> None:
     left, top = 392, 204
     width = left + cell_w * len(task_names) + 52
     height = top + cell_h * len(lines) + 128
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
+    parts = svg_document_start(
+        width,
+        height,
+        "UniMoral RQ1-RQ3 exact-match accuracy heatmap",
+        "Heatmap of UniMoral RQ1 action prediction, RQ2 moral typology, and RQ3 factor attribution. All three panels use exact-match accuracy; RQ4 generation is intentionally excluded.",
+    )
     parts.append("<style>text{font-family:Arial,sans-serif;font-size:15px;fill:#17202a}.title{font-size:28px;font-weight:700}.subtitle{font-size:16px;fill:#334155}.axis{font-weight:700}.metric-header{font-size:17px;font-weight:800;fill:#17202a}.small{font-size:13px;fill:#334155}.tiny{font-size:12px;fill:#475569;font-weight:700}</style>")
     parts.append('<rect width="100%" height="100%" fill="white"/>')
     parts.append('<text x="28" y="42" class="title">UniMoral RQ1-RQ3 exact-match accuracy</text>')
@@ -1722,7 +1732,12 @@ def svg_generation_quality(rows: list[dict[str, object]], path: Path) -> None:
         position = max(0.0, min(1.0, (value - low) / (high - low)))
         return width_value * position
 
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
+    parts = svg_document_start(
+        width,
+        height,
+        "UniMoral RQ4 generation quality",
+        "Bar chart for UniMoral RQ4 consequence generation. BERTScore F1 and METEOR are higher-better generation overlap metrics, not accuracy.",
+    )
     parts.append("<style>text{font-family:Arial,sans-serif;font-size:15px;fill:#17202a}.title{font-size:30px;font-weight:700}.metric{font-size:24px;font-weight:800;fill:#17202a}.subtitle{font-size:16px;fill:#334155}.axis{font-weight:700}.small{font-size:13px;fill:#334155}.tiny{font-size:12px;fill:#475569;font-weight:700}</style>")
     parts.append('<rect width="100%" height="100%" fill="white"/>')
     parts.append('<text x="36" y="42" class="title">UniMoral RQ4 generation quality</text>')
@@ -1780,7 +1795,12 @@ def svg_rankings(rows: list[dict[str, object]], path: Path) -> None:
         for task_name, task_rows in task_rows_by_name.items()
     }
     height = 58 + sum(panel_heights.values())
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
+    parts = svg_document_start(
+        width,
+        height,
+        "UniMoral per-task model rankings for RQ1-RQ3",
+        "Per-task ranking panels for UniMoral RQ1-RQ3 exact-match accuracy. RQ4 generation quality is not mixed into these accuracy rankings.",
+    )
     parts.append("<style>text{font-family:Arial,sans-serif;font-size:12px;fill:#17202a}.title{font-size:20px;font-weight:700}.subtitle{fill:#4b5563}.axis{font-weight:700}.small{font-size:11px;fill:#4b5563}</style>")
     parts.append('<rect width="100%" height="100%" fill="white"/>')
     parts.append('<text x="24" y="32" class="title">UniMoral per-task model rankings: exact-match accuracy (RQ1-RQ3)</text>')
@@ -1812,7 +1832,12 @@ def svg_rankings(rows: list[dict[str, object]], path: Path) -> None:
 
 def svg_spread(rows: list[dict[str, object]], path: Path) -> None:
     width, height = 1280, 570
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
+    parts = svg_document_start(
+        width,
+        height,
+        "UniMoral RQ1-RQ3 exact-match accuracy score spread",
+        "Score-spread chart for UniMoral RQ1-RQ3 exact-match accuracy. It shows diagnostic separation across complete model lines and is not a solved-task claim.",
+    )
     parts.append(
         "<style>"
         "text{font-family:Arial,sans-serif;font-size:13px;fill:#17202a}"
@@ -1997,7 +2022,12 @@ def svg_family_scaling(rows: list[dict[str, object]], path: Path) -> None:
         return f"{label} ({value:.3f})"
 
     width, height = 1800, 1110
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">']
+    parts = svg_document_start(
+        width,
+        height,
+        "UniMoral family-size scaling by RQ",
+        "Line-chart panels showing S/M/L movement inside each model family across UniMoral RQ1-RQ4. RQ1-RQ3 use accuracy, while RQ4 uses BERTScore F1 and METEOR.",
+    )
     parts.append(
         "<style>"
         "text{font-family:Arial,sans-serif;font-size:13px;fill:#17202a}"
@@ -2620,6 +2650,14 @@ def format_value(value: object) -> str:
     if value in {None, ""}:
         return ""
     return f"{float(value):.3f}"
+
+
+def svg_document_start(width: int, height: int, title: str, description: str) -> list[str]:
+    return [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">',
+        f"<title>{html.escape(title)}</title>",
+        f"<desc>{html.escape(description)}</desc>",
+    ]
 
 
 def complete_metric_values(rows: list[dict[str, object]], task_name: str, field: str) -> list[float]:

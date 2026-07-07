@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="1342" viewBox="0 0 1220 1342">
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="1342" viewBox="0 0 1220 1342" role="img">
+<title>UniMoral RQ4 generation quality</title>
+<desc>Bar chart for UniMoral RQ4 consequence generation. BERTScore F1 and METEOR are higher-better generation overlap metrics, not accuracy.</desc>
 <style>text{font-family:Arial,sans-serif;font-size:15px;fill:#17202a}.title{font-size:30px;font-weight:700}.metric{font-size:24px;font-weight:800;fill:#17202a}.subtitle{font-size:16px;fill:#334155}.axis{font-weight:700}.small{font-size:13px;fill:#334155}.tiny{font-size:12px;fill:#475569;font-weight:700}</style>
 <rect width="100%" height="100%" fill="white"/>
 <text x="36" y="42" class="title">UniMoral RQ4 generation quality</text>

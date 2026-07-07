@@ -357,7 +357,7 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "| Visual story | [Benchmark Result Visuals](#benchmark-result-visuals), then [TL;DR](#tldr) |" in release_readme_text
     assert "| Primary result numbers | [Main result files](#data-click-here-main-result-files) |" in release_readme_text
     assert "| Line status and readiness | [Results First](#results-first), [Status Key](#status-key), [family-size-progress.csv](family-size-progress.csv), [readiness-tier-matrix.csv](readiness-tier-matrix.csv) |" in release_readme_text
-    assert "| Paper calibration / replication | [Replication / calibration map](#data-click-here-main-result-files), [paper-model-calibration-ledger.csv](paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](paper-model-calibration-bridge.csv), [paper-result-comparison.md](../../../docs/paper-result-comparison.md) |" in release_readme_text
+    assert "| Paper calibration / replication | [Calibration tables and same-model bars](#data-click-here-main-result-files), [paper-model-calibration-ledger.csv](paper-model-calibration-ledger.csv), [paper-model-calibration-bridge.csv](paper-model-calibration-bridge.csv), [paper-result-comparison.md](../../../docs/paper-result-comparison.md) |" in release_readme_text
     assert "Start with the figures; they keep accuracy, distribution behavior, proxy evidence, and calibration status visually separate." in release_readme_text
     assert "Tier is result readiness, not model quality; missing cells are route, data, or proxy boundaries." in release_readme_text
     assert "## DATA, CLICK HERE: Main Result Files" in release_readme_text
@@ -1660,42 +1660,34 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "% of release" in sample_volume_svg
 
     paper_alignment_svg = (figure_dir / "option1_paper_result_alignment_map.svg").read_text(encoding="utf-8")
-    assert "Paper-vs-current Replication Map With Numeric Anchors" in paper_alignment_svg
-    assert "PAPER NUMBERS" in paper_alignment_svg
-    assert "CURRENT REPO NUMBERS" in paper_alignment_svg
-    assert "NUMERIC COMPARISON" in paper_alignment_svg
-    assert "RQ1 WF1 66.38" in paper_alignment_svg
-    assert "RQ4 METEOR 0.121 / BERTScore F1 0.656" in paper_alignment_svg
-    assert "Same Llama model: paper RQ1 66.38" in paper_alignment_svg
-    assert "WF1 vs current 0.622 acc; RQ4" in paper_alignment_svg
-    assert "19.08/87.44 vs 0.121/0.656." in paper_alignment_svg
-    assert "Current repo: best SMID average Qwen-L" in paper_alignment_svg
-    assert "0.483; current mean 0.364" in paper_alignment_svg
-    assert "No paper LLM score; current public" in paper_alignment_svg
-    assert "rows are mean 0.364 and best 0.483." in paper_alignment_svg
-    assert "KAL SYS 11B win rate 58.3" in paper_alignment_svg
-    assert "No same metric: paper KAL 58.3 win /" in paper_alignment_svg
-    assert "GPT-4 93.1 valence vs current value" in paper_alignment_svg
-    assert "avg 0.736-0.741." in paper_alignment_svg
-    assert "Mistral 25.6%" in paper_alignment_svg
-    assert "GPT-4.1 22.3%" in paper_alignment_svg
-    assert "GPT-4.1 22.3%; Claude" in paper_alignment_svg
-    assert "4 Sonnet 30.2% Nordic" in paper_alignment_svg
-    assert "Nordic share: paper/source mean" in paper_alignment_svg
-    assert "20.17 vs exact rows 25.6 / 20.8 /" in paper_alignment_svg
-    assert "22.3 / 30.2%." in paper_alignment_svg
-    assert "Qwen-M 99.5%" in paper_alignment_svg
-    assert "Paper APV 65.20-79.08 vs current APV" in paper_alignment_svg
-    assert "n/a; proxy Qwen-M 99.5% is not" in paper_alignment_svg
-    assert "comparable." in paper_alignment_svg
-    assert "Fresh exact bridge" in paper_alignment_svg
-    assert "Same-model calibration with" in paper_alignment_svg
-    assert "RQ4 has METEOR" in paper_alignment_svg
-    assert "and BERTScore." in paper_alignment_svg
-    assert "Distributional comparison only; do not" in paper_alignment_svg
-    assert "read CCD as accuracy." in paper_alignment_svg
-    assert "Proxy-only evidence; no paper-faithful" in paper_alignment_svg
-    assert "MoralPrompt comparison." in paper_alignment_svg
+    assert "Same-Model Paper Calibration Bars" in paper_alignment_svg
+    assert "Only exact same-model rows with the same plottable metric appear here." in paper_alignment_svg
+    assert "PAPER / SOURCE" in paper_alignment_svg
+    assert "THIS REPO" in paper_alignment_svg
+    assert "DELTA" in paper_alignment_svg
+    for label in (
+        "Mistral Nemo",
+        "Llama 3.3 70B",
+        "Llama 4 Maverick",
+        "DeepSeek V3",
+        "Qwen2.5 72B",
+        "GPT-4.1",
+        "Command-R",
+        "Phi-4",
+        "WizardLM-2",
+        "Sonar",
+        "Claude 4 Sonnet",
+    ):
+        assert label in paper_alignment_svg
+    assert "19.0%" in paper_alignment_svg
+    assert "25.6%" in paper_alignment_svg
+    assert "30.6%" in paper_alignment_svg
+    assert "30.2%" in paper_alignment_svg
+    assert "+6.6 pp" in paper_alignment_svg
+    assert "-7.5 pp" in paper_alignment_svg
+    assert "This is not an accuracy leaderboard." in paper_alignment_svg
+    for forbidden in ("DeNEVIL", "MoralPrompt", "SMID", "Value Kaleidoscope", "ValuePrism", "Qwen-M 99.5", "APV"):
+        assert forbidden not in paper_alignment_svg
     assert " ".join(("low", "cost")) not in paper_alignment_svg.lower()
 
 
@@ -1733,6 +1725,8 @@ def test_openai_gpt_rows_are_visible_in_unimoral_and_ccd_figures():
     ]
 
     unimoral_heatmap = (figure_dir / "option1_unimoral_task_heatmap.svg").read_text(encoding="utf-8")
+    assert "<title>UniMoral RQ1-RQ3 exact-match accuracy heatmap</title>" in unimoral_heatmap
+    assert "All three panels use exact-match accuracy; RQ4 generation is intentionally excluded." in unimoral_heatmap
     for label in openai_rows:
         assert label in unimoral_heatmap
     assert "Rows include OpenAI GPT-5 S/M/L across RQ1-RQ3" in unimoral_heatmap
@@ -1740,6 +1734,8 @@ def test_openai_gpt_rows_are_visible_in_unimoral_and_ccd_figures():
     assert "OpenAI refs are one-off" not in unimoral_heatmap
 
     unimoral_scaling = (figure_dir / "option1_unimoral_family_scaling.svg").read_text(encoding="utf-8")
+    assert "<title>UniMoral family-size scaling by RQ</title>" in unimoral_scaling
+    assert "RQ1-RQ3 use accuracy, while RQ4 uses BERTScore F1 and METEOR." in unimoral_scaling
     for label in ("GPT-5 nano", "GPT-5 mini", "GPT-5.5"):
         assert label in unimoral_scaling
     assert "OpenAI GPT-5 is the black S/M/L line across RQ1-RQ4" in unimoral_scaling
@@ -1753,10 +1749,14 @@ def test_openai_gpt_rows_are_visible_in_unimoral_and_ccd_figures():
     assert "other OpenAI rows stay in the broader text-comparison tables" not in unimoral_scaling
 
     unimoral_dashboard = (figure_dir / "option1_unimoral_four_task_dashboard.svg").read_text(encoding="utf-8")
+    assert "<title>UniMoral RQ1-RQ4 dashboard</title>" in unimoral_dashboard
+    assert "RQ1-RQ3 use exact-match accuracy; RQ4 consequence generation uses BERTScore F1 and METEOR." in unimoral_dashboard
     assert "OpenAI GPT-5 now has real RQ1-RQ4 UniMoral scores" in unimoral_dashboard
     assert "Llama-M still leads semantic RQ4 overall" in unimoral_dashboard
 
     unimoral_generation = (figure_dir / "option1_unimoral_generation_quality.svg").read_text(encoding="utf-8")
+    assert "<title>UniMoral RQ4 generation quality</title>" in unimoral_generation
+    assert "BERTScore F1 and METEOR are higher-better generation overlap metrics, not accuracy." in unimoral_generation
     assert "GPT-5.5 leads GPT-5 on RQ2 0.637, RQ3 0.601, and RQ4 METEOR 0.165" in unimoral_generation
     assert "GPT-5.5 reaches BERTScore 0.725" in unimoral_generation
     assert ">0.18<" in unimoral_generation
@@ -1841,11 +1841,11 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in root_readme
-    assert "![Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "![Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
     assert "| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
     assert "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
-    assert "| 10 | [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "| 10 | [Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
     assert "Use this first: OpenAI GPT-5 is the black text-only S/M/L line" in root_readme
     assert "CCD behavior view: clusters are choices relative to a uniform baseline, not right/wrong labels." in root_readme
     assert "Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring." in root_readme

@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1080" viewBox="0 0 1800 1080">
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1080" viewBox="0 0 1800 1080" role="img">
+<title>UniMoral RQ1-RQ4 dashboard</title>
+<desc>Dashboard for UniMoral task coverage and metric boundaries. RQ1-RQ3 use exact-match accuracy; RQ4 consequence generation uses BERTScore F1 and METEOR.</desc>
 <style>text{font-family:Arial,sans-serif;font-size:14px;fill:#17202a}.title{font-size:28px;font-weight:700}.subtitle{font-size:15px;fill:#4b5563}.axis{font-weight:700}.small{font-size:12px;fill:#4b5563}.card{fill:#fbfcfd;stroke:#d8dee4;rx:8}.panel{fill:white;stroke:#d8dee4;rx:8}</style>
 <rect width="100%" height="100%" fill="#ffffff"/>
 <text x="36" y="44" class="title">UniMoral RQ1-RQ4 dashboard</text>

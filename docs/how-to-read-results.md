@@ -32,7 +32,7 @@ For a presentation, deck, or reviewer skim, open [`figures/README.md`](../figure
 | Where is the visual-moral bottleneck? | `figures/release/option1_benchmark_accuracy_bars.svg` and `figures/release/option1_benchmark_difficulty_profile.svg` | SMID and Value are comparable accuracy panels; UniMoral has its own RQ block. |
 | What does CCD-Bench show? | `figures/release/option1_ccd_choice_distribution.svg` | Cultural-cluster choice behavior, not right/wrong correctness. |
 | What does DeNEVIL show? | `figures/release/option1_denevil_behavior_outcomes.svg` | Proxy behavior from saved traces, not paper-faithful MoralPrompt scoring. |
-| What matches the original papers? | `figures/release/option1_paper_result_alignment_map.svg` | Status/evidence map, not a leaderboard. |
+| What exact paper-model rows can be compared numerically? | `figures/release/option1_paper_result_alignment_map.svg` | Same-model CCD-Bench bars only; not accuracy and not a leaderboard. |
 
 ## Progress Table Labels
 

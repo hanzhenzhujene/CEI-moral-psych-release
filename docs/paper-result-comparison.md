@@ -8,7 +8,7 @@ Use it as an evidence-status map, not as a leaderboard. Current benchmark rows, 
 
 | Need | Open |
 | --- | --- |
-| Visual map with numeric paper anchors, current repo numbers, and direct/blocked/proxy boundaries | [paper-vs-current replication map](../figures/release/option1_paper_result_alignment_map.svg) |
+| Same-model bar chart for exact CCD-Bench paper-model rows | [same-model paper calibration bars](../figures/release/option1_paper_result_alignment_map.svg) |
 | Visual table of paper result anchors vs current rows | [paper result comparison](../figures/release/option1_paper_result_comparison.svg) |
 | Visual bridge for exact same-model calibration only | [paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg) |
 | Machine-readable alignment table | [paper-result-alignment.csv](../results/release/2026-04-19-option1/paper-result-alignment.csv) |
@@ -20,9 +20,9 @@ Use it as an evidence-status map, not as a leaderboard. Current benchmark rows, 
 
 ## Visual Summary
 
-![Paper-vs-current replication map](../figures/release/option1_paper_result_alignment_map.svg)
+![Same-model paper calibration bars](../figures/release/option1_paper_result_alignment_map.svg)
 
-_Numeric status map: paper-side anchors, current repo numbers, current-only rows, blocked routes, and proxy-only evidence are kept separate._
+_Same-model calibration bars: only exact CCD-Bench rows with a shared Nordic-share metric are plotted. Current-only, blocked, metric-mismatched, and proxy evidence stays in the tables._
 
 ![Paper-result comparison table](../figures/release/option1_paper_result_comparison.svg)
 

@@ -69,11 +69,11 @@ _What it tests: DeNEVIL-style evaluation looks for value vulnerabilities under r
 
 _How to read it: protective refusals and corrective/contextual answers are the safer behaviors; risky continuations are the warning sign. This is behavior evidence from saved traces, not benchmark-faithful accuracy._
 
-### 7. Replication / calibration: paper-vs-current alignment
+### 7. Replication / calibration: same-model CCD bars
 
-![Paper-vs-current replication map](../../../figures/release/option1_paper_result_alignment_map.svg)
+![Same-model paper calibration bars](../../../figures/release/option1_paper_result_alignment_map.svg)
 
-_What it answers: the paper-side numeric anchors, the closest current repo numbers, and which comparisons are direct, current-only, blocked, or proxy-only._
+_What it answers: for exact same-model CCD-Bench rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified current row?_
 
 ![Paper-result comparison table](../../../figures/release/option1_paper_result_comparison.svg)
 
