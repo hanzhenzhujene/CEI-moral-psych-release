@@ -218,14 +218,19 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[CCD choice distribution](release/option1_ccd_choice_distribution.svg)" in audience_block
     assert "[DeNEVIL behavior outcomes](release/option1_denevil_behavior_outcomes.svg)" in audience_block
     assert "[Same-model CCD calibration bars](release/option1_paper_result_alignment_map.svg)" in audience_block
+    assert "[Same-model paper calibration bridge](release/option1_paper_model_calibration_bridge.svg)" in audience_block
+    assert "[Paper-result comparison](release/option1_paper_result_comparison.svg)" not in audience_block
     assert "Task-by-task scaling, not one overall moral score." in audience_block
     assert "Cultural-choice behavior, not accuracy." in audience_block
     assert "Proxy behavior evidence, not MoralPrompt scoring." in audience_block
     assert "Same-model behavior comparison, not accuracy." in audience_block
+    assert "Same-model calibration only; proxy and non-exact rows stay out." in audience_block
     assert "option1_unimoral_family_scaling.svg" in audience_block
     assert "option1_ccd_choice_distribution.svg" in audience_block
     assert "option1_denevil_behavior_outcomes.svg" in audience_block
     assert "option1_paper_result_alignment_map.svg" in audience_block
+    assert "option1_paper_model_calibration_bridge.svg" in audience_block
+    assert "option1_paper_result_comparison.svg" not in audience_block
     assert "option1_family_size_progress_overview.svg" not in audience_block
     assert "option1_coverage_matrix.svg" not in audience_block
     assert "option1_sample_volume.svg" not in audience_block
@@ -237,7 +242,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| UniMoral deep dive |" in bundle_block
     assert "RQ1-RQ3 are exact-match accuracy; RQ4 uses BERTScore F1 and METEOR." in bundle_block
     assert "| Calibration / replication review |" in bundle_block
-    assert "The bar chart plots only the 11 exact CCD same-model rows; current-only, blocked, metric-mismatched, and proxy evidence stay in tables." in bundle_block
+    assert "The visible comparison starts with exact same-model evidence." in bundle_block
+    assert "Current-only, blocked, metric-mismatched, non-exact, and proxy evidence stay in tables/context." in bundle_block
     assert "| Appendix audit |" in bundle_block
     assert "These explain what ran and parsed; they are not the headline result figures." in bundle_block
     assert "| OpenRouter follow-up |" in bundle_block
