@@ -737,6 +737,10 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "targeted-retry-log.md" in reproducibility
     assert "benchmark_score_matrix.svg" in reproducibility
     assert "pilot_scores.svg" in reproducibility
+    assert "### After Rebuild, Open These" in reproducibility
+    assert "[`figures/README.md`](../figures/README.md): the one-screen `What To Say From The Figures` talk track" in reproducibility
+    assert "[`paper-result-comparison.md#safe-citation-matrix`](paper-result-comparison.md#safe-citation-matrix)" in reproducibility
+    assert "Use these files to verify the regenerated public story before presenting or citing it" in reproducibility
     assert "separate OpenRouter text-only follow-up" in reproducibility
     assert "blocked provider/credit rows stay documented outside scored summaries" in reproducibility
     assert "secondary QA/provenance artifacts" in reproducibility
@@ -815,6 +819,23 @@ def test_root_readme_links_release_methodology_and_summary_paths():
     assert "docs/evaluation-methodology.md" in readme or "results/release/2026-04-19-option1/README.md" in readme
     assert "results/release/2026-04-19-option1/README.md" in readme
     assert "results/release/2026-04-19-option1/jenny-group-report.md" in readme
+    for figure in sorted((ROOT / "figures" / "release").glob("option1_*.svg")):
+        relative = figure.relative_to(ROOT).as_posix()
+        assert re.search(rf"!\[[^\]]+\]\({re.escape(relative)}\)", readme), (
+            f"Root README must embed release visual {relative}"
+        )
+    for relative in (
+        "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg",
+        "results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg",
+        "results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg",
+        "results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg",
+        "figures/exploratory/additional_model_sweep_unimoral_accuracy.svg",
+        "figures/exploratory/additional_model_sweep_scaling.svg",
+        "figures/exploratory/additional_model_sweep_ccd_dominant_share.svg",
+    ):
+        assert re.search(rf"!\[[^\]]+\]\({re.escape(relative)}\)", readme), (
+            f"Root README must embed follow-up visual {relative}"
+        )
 
     docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
     assert "../figures/README.md" in docs_index
@@ -841,6 +862,15 @@ def test_evaluation_methodology_versions_current_metric_definition():
     assert "RQ4 consequence generation appears as two presentation rows per model line" in methodology
     assert "BERTScore F1 plus METEOR as the two headline generation metrics" in methodology
     assert "do not collapse RQ1-RQ4 into one universal moral score" in methodology
+    assert "visible-choice surfacing / parsing failure" in methodology
+    assert "paper-aligned `CCD-Bench` choice-quality or human-preference metric beyond the current choice-distribution/concentration surface" in methodology
+    assert "keep each metric layer separate" in methodology
+    assert "Accuracy/classification/generation metrics, CCD choice-distribution behavior, DeNEVIL proxy behavior, and QA/provenance coverage should not be merged into one scalar story." in methodology
+    assert "top row" not in methodology
+    assert "top-row" not in methodology
+    assert "bottom row" not in methodology
+    assert "bottom-row" not in methodology
+    assert "coverage alone" not in methodology
     assert "the release should describe current UniMoral release results as action-prediction accuracy" not in methodology
     assert "The current release summary covers RQ1 action prediction only" not in methodology
 

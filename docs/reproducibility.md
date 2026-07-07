@@ -80,6 +80,15 @@ make release
 This target regenerates the public release package from the tracked authoritative snapshot committed under `results/release/2026-04-19-option1/source/`.
 In environments like this desktop workspace, that command now works even when `uv` itself is not on `PATH`, as long as `.venv/bin/python` is present.
 
+### After Rebuild, Open These
+
+Use these files to verify the regenerated public story before presenting or citing it:
+
+- root [`README.md`](../README.md): the public landing page, result table links, and embedded result/calibration visuals
+- [`figures/README.md`](../figures/README.md): the one-screen `What To Say From The Figures` talk track plus figure order
+- [`results/release/2026-04-19-option1/README.md`](../results/release/2026-04-19-option1/README.md): release artifact index, TL;DR, status key, and generated report sections
+- [`paper-result-comparison.md#safe-citation-matrix`](paper-result-comparison.md#safe-citation-matrix): exact wording for paper-calibration claims
+
 ### Expected Outputs
 
 Release tables:

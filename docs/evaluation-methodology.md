@@ -84,20 +84,20 @@ Use these rules when writing claims from the current release:
 
 `DeepSeek-M` is the clearest example of why these controls exist.
 
-- Its top-row text metrics are withheld because the saved short-answer artifacts collapse into empty visible answers.
-- Its `CCD-Bench` bottom-row value should be read as a **formatting / answer-surfacing failure**, not as proof that the model selected the wrong cultural option on every prompt.
-- Its `DeNEVIL` bottom-row value should be read as **visible-response coverage**, not as paper-faithful ethical scoring.
+- Its text metrics are withheld because the saved short-answer artifacts collapse into empty visible answers.
+- Its `CCD-Bench` value should be read as a **visible-choice surfacing / parsing failure**, not as proof that the model selected the wrong cultural option on every prompt.
+- Its `DeNEVIL` proxy value should be read as **visible-response coverage**, not as paper-faithful ethical scoring.
 
 ## What Would Make The Design Stronger
 
 The current repo is careful about not overclaiming, but the next rigorous upgrades are still clear:
 
-- add a paper-aligned `CCD-Bench` choice-quality metric instead of relying on coverage alone
+- add a paper-aligned `CCD-Bench` choice-quality or human-preference metric beyond the current choice-distribution/concentration surface
 - obtain a paper-faithful local `MoralPrompt` export for `DeNEVIL`
 - lock more provider routes so each family-size cell has a stable rerunnable configuration
 - keep bumping the public metric-definition version whenever a parser or scorer changes materially
 
-Until those upgrades land, the safest public stance is: accuracy claims live on the top row, coverage claims live on the bottom row, and the two should not be merged into a single scalar story.
+Until those upgrades land, the safest public stance is: keep each metric layer separate. Accuracy/classification/generation metrics, CCD choice-distribution behavior, DeNEVIL proxy behavior, and QA/provenance coverage should not be merged into one scalar story.
 
 ## UniMoral RQ4 Note
 
