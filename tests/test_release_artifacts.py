@@ -380,6 +380,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "This package excludes SMID, DeNEVIL, and MiniMax; CCD-Bench is valid-choice behavior, not accuracy." in release_readme_text
     assert "selected-grid family scaling" in release_readme_text
     assert "selected-grid benchmark matrix" in release_readme_text
+    assert "selected-grid detailed task matrix" in release_readme_text
+    assert "../../openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg" in release_readme_text
     assert "option1_paper_result_alignment_map.svg" in release_readme_text
     assert "option1_paper_model_calibration_bridge.svg" in release_readme_text
     visual_section = markdown_h2_section(release_readme_text, "## Benchmark Result Visuals")
