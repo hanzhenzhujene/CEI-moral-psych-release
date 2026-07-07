@@ -1836,28 +1836,36 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "`DeNEVIL` | FULCRA-backed proxy behavior categories from saved traces." in root_readme
     assert "The 6 OpenAI text-only rows are reference rows; they do not add SMID or DeNEVIL coverage and are not paper-model calibration rows." in root_readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
+    assert "![UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in root_readme
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in root_readme
     assert "![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)" in root_readme
     assert "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
     assert "![Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg)" in root_readme
     assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in root_readme
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
+    assert "![CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in root_readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
-    assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" not in root_readme
-    assert "[Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in root_readme
+    assert "![DeNEVIL prompt-family heatmap](figures/release/option1_denevil_prompt_family_heatmap.svg)" in root_readme
     assert "![Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "![Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
+    assert "![Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in root_readme
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
-    assert "| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
-    assert "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
-    assert "| 9 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
-    assert "| 10 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
+    assert "| 2 | [UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in root_readme
+    assert "| 7 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
+    assert "| 10 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
+    assert "| 11 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in root_readme
+    assert "| 14 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "| 15 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
+    assert "| 16 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in root_readme
     assert "Use this first: OpenAI GPT-5 is the black text-only S/M/L line" in root_readme
     assert "CCD behavior view: clusters are choices relative to a uniform baseline, not right/wrong labels." in root_readme
     assert "Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring." in root_readme
-    assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" not in root_readme
-    assert "[Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in root_readme
-    assert "Exact paper-model visual bridge only; near-family, blocked, and proxy rows stay out of the plotted comparison." in root_readme
-    assert root_readme.count("![") >= 9
+    assert "Bridge view: exact same-model calibration rows are visible" in root_readme
+    assert "Context view: paper metric anchors are shown for orientation" in root_readme
+    assert "![Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in root_readme
+    assert "![Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in root_readme
+    assert "![Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in root_readme
+    assert root_readme.count("![") >= 19
     assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in root_readme
     assert "[paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in root_readme
     assert "[paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in root_readme

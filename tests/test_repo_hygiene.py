@@ -171,25 +171,37 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "0.048 spread" not in readme
     assert "## Main Figures" in readme
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in readme
-    assert "| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
-    assert "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
-    assert "| 9 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in readme
-    assert "| 10 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
+    assert "| 2 | [UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in readme
+    assert "| 7 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
+    assert "| 10 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
+    assert "| 11 | [CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in readme
+    assert "| 14 | [Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "| 15 | [Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
+    assert "| 16 | [Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in readme
+    assert "![UniMoral four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg)" in readme
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in readme
     assert "![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)" in readme
+    assert "![UniMoral task rankings](figures/release/option1_unimoral_task_rankings.svg)" in readme
+    assert "![UniMoral task spread](figures/release/option1_unimoral_task_spread.svg)" in readme
     assert "![Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
     assert "![Comparable score spread](figures/release/option1_benchmark_difficulty_profile.svg)" in readme
     assert "![Family scaling profile](figures/release/option1_family_scaling_profile.svg)" in readme
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
+    assert "![CCD dominant-option share](figures/release/option1_ccd_dominant_option_share.svg)" in readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in readme
-    assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" not in readme
+    assert "![DeNEVIL prompt-family heatmap](figures/release/option1_denevil_prompt_family_heatmap.svg)" in readme
     assert "![Same-model CCD calibration bar chart](figures/release/option1_paper_result_alignment_map.svg)" in readme
-    assert readme.count("![") >= 10
+    assert "![Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
+    assert "![Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
+    assert readme.count("![") >= 19
     assert "| Separate follow-up visual evidence | What it answers |" in readme
     assert "[Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
     assert "[Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in readme
     assert "[Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in readme
+    assert "![Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
+    assert "![Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in readme
+    assert "![Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in readme
     assert "Separate from the frozen Option 1 ranking surface." in readme
     assert "CCD-Bench remains valid-choice behavior, not accuracy." in readme
     assert "## Result Directory" in readme
@@ -207,14 +219,21 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "figures/release/option1_unimoral_task_heatmap.svg" in readme
     assert "figures/release/option1_unimoral_generation_quality.svg" in readme
     assert "figures/release/option1_unimoral_family_scaling.svg" in readme
+    assert "figures/release/option1_unimoral_four_task_dashboard.svg" in readme
+    assert "figures/release/option1_unimoral_task_rankings.svg" in readme
+    assert "figures/release/option1_unimoral_task_spread.svg" in readme
     assert "figures/release/option1_family_scaling_profile.svg" in readme
     assert "figures/release/option1_ccd_choice_distribution.svg" in readme
+    assert "figures/release/option1_ccd_dominant_option_share.svg" in readme
     assert "figures/release/option1_denevil_behavior_outcomes.svg" in readme
+    assert "figures/release/option1_denevil_prompt_family_heatmap.svg" in readme
     assert "figures/release/option1_paper_result_alignment_map.svg" in readme
-    assert "[Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
-    assert "![Paper-model calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" not in readme
-    assert "[Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
-    assert "Exact paper-model visual bridge only; near-family, blocked, and proxy rows stay out of the plotted comparison." in readme
+    assert "figures/release/option1_paper_model_calibration_bridge.svg" in readme
+    assert "figures/release/option1_paper_result_comparison.svg" in readme
+    assert "![Same-model paper calibration bridge](figures/release/option1_paper_model_calibration_bridge.svg)" in readme
+    assert "![Paper-result context table](figures/release/option1_paper_result_comparison.svg)" in readme
+    assert "Bridge view: exact same-model calibration rows are visible" in readme
+    assert "Context view: paper metric anchors are shown for orientation" in readme
     assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in readme
     assert "[paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in readme
     assert "[paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in readme
