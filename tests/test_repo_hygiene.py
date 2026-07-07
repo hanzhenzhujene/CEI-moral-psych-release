@@ -302,7 +302,9 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     figures_readme = (ROOT / "figures/README.md").read_text(encoding="utf-8")
     assert "side" + " metric" not in figures_readme
     assert "## Audience-Facing Result Figures" in figures_readme
+    assert "### What To Say From The Figures" in figures_readme
     assert "### Visual Contract" in figures_readme
+    assert figures_readme.index("### What To Say From The Figures") < figures_readme.index("### Visual Contract")
     assert "| Headline result | Current result claims within one metric layer. | One universal moral score across unlike benchmarks. |" in figures_readme
     assert figures_readme.index("### Visual Contract") < figures_readme.index("| Category | Order | Open | Use it for | Read it as |")
     assert "## Figure Bundles" in figures_readme
@@ -318,6 +320,17 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
         figures_readme.index("## Figure Bundles") : figures_readme.index("## UniMoral figures")
     ]
     appendix_block = figures_readme[figures_readme.index("## Secondary QA / Provenance Figures") :]
+    assert "| Topic | Short readout | Boundary |" in audience_block
+    assert "Scaling is not uniform across RQ1-RQ4" in audience_block
+    assert "current RQ4 leaders are `Llama-M` on BERTScore F1 and `GPT-5.5` on METEOR" in audience_block
+    assert "`Qwen-L` is the current SMID leader at 0.483" in audience_block
+    assert "`MiniMax-L` is the current Value leader at 0.741" in audience_block
+    assert "SMID has only 9 of 21 model-line cells scored" in audience_block
+    assert "dominant shares ranging from 13.8% to 27.8%" in audience_block
+    assert "CCD-Bench is cultural-choice behavior relative to a 10% uniform baseline, not accuracy or correctness" in audience_block
+    assert "Proxy-only FULCRA evidence; no Tier 3 benchmark-faithful MoralPrompt scoring claim" in audience_block
+    assert "11 exact rows on the shared Nordic-share metric: 10 fresh reruns plus 1 current release row" in audience_block
+    assert "fresh Llama 3.1 UniMoral exact rerun" in audience_block
     assert "| Category | Order | Open | Use it for | Read it as |" in audience_block
     assert "This list mirrors the first part of the root README `Main Figures` section" in audience_block
     assert "Paper metric anchors and release-result context." in audience_block

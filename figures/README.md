@@ -11,6 +11,16 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 
 Open these first for a meeting, deck, or reviewer skim. This list mirrors the first part of the root README `Main Figures` section: result and calibration visuals are first-class; parser, coverage, sample-volume, and route-status visuals are secondary QA/provenance evidence.
 
+### What To Say From The Figures
+
+| Topic | Short readout | Boundary |
+| --- | --- | --- |
+| UniMoral | Scaling is not uniform across RQ1-RQ4. The current RQ4 leaders are `Llama-M` on BERTScore F1 and `GPT-5.5` on METEOR. | RQ1-RQ3 are exact-match accuracy; RQ4 is generation quality. Do not collapse them into one moral score. |
+| SMID / Value | `Qwen-L` is the current SMID leader at 0.483, while `MiniMax-L` is the current Value leader at 0.741. SMID has only 9 of 21 model-line cells scored because many text-only rows have no vision route. | This is a comparable accuracy view only for benchmark-faithful rows; missing SMID cells are route gaps, not low scores. |
+| CCD-Bench | Option 6 / Nordic Europe is the dominant cluster for many rows, with dominant shares ranging from 13.8% to 27.8%. | CCD-Bench is cultural-choice behavior relative to a 10% uniform baseline, not accuracy or correctness. |
+| DeNEVIL | The visible DeNEVIL figures show proxy behavior categories from saved traces. | Proxy-only FULCRA evidence; no Tier 3 benchmark-faithful MoralPrompt scoring claim. |
+| Paper calibration | The same-model CCD bar chart has 11 exact rows on the shared Nordic-share metric: 10 fresh reruns plus 1 current release row. The bridge also records the fresh Llama 3.1 UniMoral exact rerun. | DeNEVIL/proxy rows, non-exact model anchors, metric-mismatched rows, and blocked rows stay out of the bar comparison. |
+
 ### Visual Contract
 
 | Visual category | What it supports | Do not use it for |
