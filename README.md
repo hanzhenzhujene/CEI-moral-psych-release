@@ -27,7 +27,7 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 | Best text-only line | `GPT-5.5`: UniMoral 0.684, Value 0.736; two-metric mean 0.710. No SMID or DeNEVIL route. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [OpenAI reference notes](docs/openai-reference-runs.md) |
 | Visual bottleneck | `SMID` has mean accuracy 0.364; best current line is `Qwen-L` at 0.483. | [SMID CSV](results/release/2026-04-19-option1/smid-results.csv), [family scaling figure](figures/release/option1_family_scaling_profile.svg) |
 | Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165. | [UniMoral CSV](results/release/2026-04-19-option1/unimoral-full-benchmark.csv), [RQ4 generation figure](figures/release/option1_unimoral_generation_quality.svg) |
-| Paper comparison status | UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge, including RQ4 METEOR 0.121 and BERTScore F1 0.656. CCD-Bench has exact same-model distribution bridges for ten paper routes; remaining exact routes are unavailable or blocked rather than substituted. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg), [same-model calibration bars](figures/release/option1_paper_result_alignment_map.svg) |
+| Paper comparison status | UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge, including RQ4 METEOR 0.121 and BERTScore F1 0.656. CCD-Bench has 11 exact same-model distribution bridges with a shared Nordic-share metric; remaining routes are unavailable, blocked, non-exact, or metric-mismatched rather than substituted. | [paper result comparison](docs/paper-result-comparison.md), [paper comparison figure](figures/release/option1_paper_result_comparison.svg), [same-model CCD bars](figures/release/option1_paper_result_alignment_map.svg) |
 
 ## Status: What Is Usable
 
@@ -96,7 +96,7 @@ These are the audience-facing result figures to use in the deck or meeting reado
 | 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |
 | 8 | [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | What proxy behavior mix appears in the saved traces? |
 | 9 | [Paper-result comparison table](figures/release/option1_paper_result_comparison.svg) | What original paper metric anchors can be placed beside current rows? |
-| 10 | [Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg) | For exact same-model CCD rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified row? |
+| 10 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg) | For the 11 exact same-model CCD rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified row? |
 
 ![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
 
@@ -134,7 +134,7 @@ _Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, n
 
 _Paper comparison view: paper anchors sit next to current rows only when the metric boundary is explicit._
 
-![Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg)
+![Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)
 
 _Same-model calibration view: only CCD-Bench rows with exact model identity and a shared Nordic-share metric are plotted._
 

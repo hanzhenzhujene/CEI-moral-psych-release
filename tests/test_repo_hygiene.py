@@ -127,8 +127,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| Best UniMoral RQ4 generation rows | BERTScore F1: `Llama-M` 0.730; METEOR: `GPT-5.5` 0.165." in readme
     assert "UniMoral now has a fresh exact Llama 3.1 RQ1-RQ4 calibration bridge" in readme
     assert "RQ4 METEOR 0.121 and BERTScore F1 0.656" in readme
-    assert "CCD-Bench has exact same-model distribution bridges for ten paper routes" in readme
-    assert "remaining exact routes are unavailable or blocked rather than substituted" in readme
+    assert "CCD-Bench has 11 exact same-model distribution bridges with a shared Nordic-share metric" in readme
+    assert "remaining routes are unavailable, blocked, non-exact, or metric-mismatched rather than substituted" in readme
     assert "[calibration-summary.csv](results/paper-calibration-exact-20260706-unimoral-llama31/calibration-summary.csv)" in readme
     assert "[RQ4 BERTScore rows](results/paper-calibration-exact-20260706-unimoral-llama31/unimoral-rq4-bertscore.csv)" in readme
     assert "[calibration-summary.csv](results/paper-calibration-exact-20260705/calibration-summary.csv)" in readme
@@ -148,7 +148,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in readme
     assert "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
-    assert "| 10 | [Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "| 10 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
     assert "![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)" in readme
     assert "![UniMoral RQ1-RQ3 heatmap](figures/release/option1_unimoral_task_heatmap.svg)" in readme
     assert "![UniMoral RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg)" in readme
@@ -158,7 +158,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in readme
-    assert "![Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
+    assert "![Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in readme
     assert readme.count("![") >= 10
     assert "| Separate follow-up visual evidence | What it answers |" in readme
     assert "[Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
@@ -216,7 +216,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[Comparable accuracy bars](release/option1_benchmark_accuracy_bars.svg)" in audience_block
     assert "[CCD choice distribution](release/option1_ccd_choice_distribution.svg)" in audience_block
     assert "[DeNEVIL behavior outcomes](release/option1_denevil_behavior_outcomes.svg)" in audience_block
-    assert "[Same-model paper calibration bars](release/option1_paper_result_alignment_map.svg)" in audience_block
+    assert "[Same-model CCD calibration bars](release/option1_paper_result_alignment_map.svg)" in audience_block
     assert "Task-by-task scaling, not one overall moral score." in audience_block
     assert "Cultural-choice behavior, not accuracy." in audience_block
     assert "Proxy behavior evidence, not MoralPrompt scoring." in audience_block
@@ -236,7 +236,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| UniMoral deep dive |" in bundle_block
     assert "RQ1-RQ3 are exact-match accuracy; RQ4 uses BERTScore F1 and METEOR." in bundle_block
     assert "| Calibration / replication review |" in bundle_block
-    assert "The bar chart plots exact same-model rows only; current-only, blocked, and proxy evidence stay in tables." in bundle_block
+    assert "The bar chart plots only the 11 exact CCD same-model rows; current-only, blocked, metric-mismatched, and proxy evidence stay in tables." in bundle_block
     assert "| Appendix audit |" in bundle_block
     assert "These explain what ran and parsed; they are not the headline result figures." in bundle_block
     assert "| OpenRouter follow-up |" in bundle_block
@@ -367,8 +367,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "## Visual Summary" in paper_comparison_doc
     assert "## What This Means" in paper_comparison_doc
     assert "## Benchmark Cards" in paper_comparison_doc
-    assert "![Same-model paper calibration bars](../figures/release/option1_paper_result_alignment_map.svg)" in paper_comparison_doc
-    assert "Same-model calibration bars: only exact CCD-Bench rows with a shared Nordic-share metric are plotted." in paper_comparison_doc
+    assert "![Same-model CCD calibration bars](../figures/release/option1_paper_result_alignment_map.svg)" in paper_comparison_doc
+    assert "Same-model CCD calibration bars: only the 11 exact CCD-Bench rows with a shared Nordic-share metric are plotted." in paper_comparison_doc
     assert "![Paper-result comparison table](../figures/release/option1_paper_result_comparison.svg)" in paper_comparison_doc
     assert "![Paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)" in paper_comparison_doc
     assert "[paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)" in paper_comparison_doc
@@ -425,8 +425,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "GPT-5-mini Ref" not in calibration_surfaces
     assert "best OpenAI text row: GPT-5 mini 0.739" in calibration_surfaces
     assert "visible paper metric anchors" in calibration_surfaces
-    assert "Same-Model Paper Calibration Bars" in paper_alignment_svg
-    assert "Only exact same-model rows with the same plottable metric appear here." in paper_alignment_svg
+    assert "Same-Model CCD Calibration Bars" in paper_alignment_svg
+    assert "Only the 11 exact same-model CCD-Bench rows with the same plottable metric appear here." in paper_alignment_svg
     assert "PAPER / SOURCE" in paper_alignment_svg
     assert "THIS REPO" in paper_alignment_svg
     assert "DELTA" in paper_alignment_svg

@@ -8,7 +8,7 @@ Use it as an evidence-status map, not as a leaderboard. Current benchmark rows, 
 
 | Need | Open |
 | --- | --- |
-| Same-model bar chart for exact CCD-Bench paper-model rows | [same-model paper calibration bars](../figures/release/option1_paper_result_alignment_map.svg) |
+| Same-model bar chart for exact CCD-Bench paper-model rows | [same-model CCD calibration bars](../figures/release/option1_paper_result_alignment_map.svg) |
 | Visual table of paper result anchors vs current rows | [paper result comparison](../figures/release/option1_paper_result_comparison.svg) |
 | Visual bridge for exact same-model calibration only | [paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg) |
 | Machine-readable alignment table | [paper-result-alignment.csv](../results/release/2026-04-19-option1/paper-result-alignment.csv) |
@@ -20,9 +20,9 @@ Use it as an evidence-status map, not as a leaderboard. Current benchmark rows, 
 
 ## Visual Summary
 
-![Same-model paper calibration bars](../figures/release/option1_paper_result_alignment_map.svg)
+![Same-model CCD calibration bars](../figures/release/option1_paper_result_alignment_map.svg)
 
-_Same-model calibration bars: only exact CCD-Bench rows with a shared Nordic-share metric are plotted. Current-only, blocked, metric-mismatched, and proxy evidence stays in the tables._
+_Same-model CCD calibration bars: only the 11 exact CCD-Bench rows with a shared Nordic-share metric are plotted. Current-only, blocked, metric-mismatched, and proxy evidence stays in the tables._
 
 ![Paper-result comparison table](../figures/release/option1_paper_result_comparison.svg)
 
@@ -39,7 +39,7 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
 | `UniMoral` | Fresh exact Llama 3.1 8B overlap now exists for RQ1-RQ4; paper metric anchors are tracked separately. | Call it metric-bridged same-model calibration, not reproduced paper weighted-F1/BERTScore tables. |
 | `SMID` | No original LLM roster found locally. | Compare current vision-capable rows only. |
 | `Value Kaleidoscope / ValuePrism` | Current rows are prompt-based ValuePrism tasks. | Do not call them Kaleido model replication. |
-| `CCD-Bench` | The strict same-model bridge now has twelve exact CCD distribution rows; the ledger keeps unavailable and non-exact routes separate. | Never describe CCD-Bench as accuracy. |
+| `CCD-Bench` | The strict same-model bridge now has 11 exact CCD distribution rows; the ledger keeps unavailable and non-exact routes separate. | Never describe CCD-Bench as accuracy. |
 | `DeNEVIL / MoralPrompt` | Current evidence is FULCRA proxy behavior only. | No paper-faithful MoralPrompt comparison until the data path exists. |
 
 ## What This Means
@@ -51,7 +51,7 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
   Unavailable and non-exact routes are tracked in the ledger rather than plotted as same-model calibration.
 - The current ValuePrism rows are useful current benchmark evidence, but Kaleido model replication remains blocked until the gated model route is run.
 - SMID and DeNEVIL answer different questions from their source papers in this release: SMID is a current model-vs-human-norm layer, and DeNEVIL is proxy-only audit evidence.
-- For review, cite the CSV/figure pair that matches the claim: use the alignment map for status, the calibration ledger for exact model-name/run planning,
+- For review, cite the CSV/figure pair that matches the claim: use `paper-result-alignment.csv` for status, the calibration ledger for exact model-name/run planning,
   the calibration bridge for one-to-one model overlap, and the RQ-level CSV for paper metric anchors.
 
 ## Benchmark Cards
@@ -111,7 +111,7 @@ _Model bridge: only exact same-model evidence is plotted; near-family, blocked, 
 | `UniMoral` | Fresh exact Llama 3.1 8B RQ1-RQ4 rerun. | Phi-3.5 mini and DeepSeek-R1-Distill-Llama-8B exact paper routes. | Qwen, MiniMax, DeepSeek, Llama, Gemma, and OpenAI text refs including GPT-5.5. |
 | `SMID` | None found. | Original LLM roster is not identified locally. | Current vision-capable Qwen, MiniMax, Llama, and Gemma rows where routes exist. |
 | `Value Kaleidoscope / ValuePrism` | None. | Kaleido small/base/large/xl/xxl gated route. | All current prompt-based LLM rows and OpenAI text refs. |
-| `CCD-Bench` | Twelve exact rows in the strict bridge. | Unavailable exact paper routes stay ledger-only. | Current family rows are context unless exact identity matches. |
+| `CCD-Bench` | 11 exact CCD rows in the strict bridge. | Unavailable exact paper routes stay ledger-only. | Current family rows are context unless exact identity matches. |
 | `DeNEVIL / MoralPrompt` | None for paper-faithful DeNEVIL. | MoralPrompt paper-faithful data path. | Current FULCRA-backed proxy rows. |
 
 ## Metric Reading Rules

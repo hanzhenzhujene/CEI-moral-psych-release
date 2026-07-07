@@ -1660,8 +1660,8 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "% of release" in sample_volume_svg
 
     paper_alignment_svg = (figure_dir / "option1_paper_result_alignment_map.svg").read_text(encoding="utf-8")
-    assert "Same-Model Paper Calibration Bars" in paper_alignment_svg
-    assert "Only exact same-model rows with the same plottable metric appear here." in paper_alignment_svg
+    assert "Same-Model CCD Calibration Bars" in paper_alignment_svg
+    assert "Only the 11 exact same-model CCD-Bench rows with the same plottable metric appear here." in paper_alignment_svg
     assert "PAPER / SOURCE" in paper_alignment_svg
     assert "THIS REPO" in paper_alignment_svg
     assert "DELTA" in paper_alignment_svg
@@ -1841,11 +1841,11 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
     assert "![DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg)" in root_readme
     assert "![Paper-result comparison table](figures/release/option1_paper_result_comparison.svg)" in root_readme
-    assert "![Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "![Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
     assert "| 1 | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg)" in root_readme
     assert "| 4 | [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg)" in root_readme
     assert "| 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg)" in root_readme
-    assert "| 10 | [Same-model paper calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
+    assert "| 10 | [Same-model CCD calibration bars](figures/release/option1_paper_result_alignment_map.svg)" in root_readme
     assert "Use this first: OpenAI GPT-5 is the black text-only S/M/L line" in root_readme
     assert "CCD behavior view: clusters are choices relative to a uniform baseline, not right/wrong labels." in root_readme
     assert "Proxy-only view: DeNEVIL shows visible behavior categories from saved traces, not MoralPrompt scoring." in root_readme

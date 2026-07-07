@@ -71,7 +71,7 @@ _How to read it: protective refusals and corrective/contextual answers are the s
 
 ### 7. Replication / calibration: same-model CCD bars
 
-![Same-model paper calibration bars](../../../figures/release/option1_paper_result_alignment_map.svg)
+![Same-model CCD calibration bars](../../../figures/release/option1_paper_result_alignment_map.svg)
 
 _What it answers: for exact same-model CCD-Bench rows, how do paper/source Nordic-share bars compare with this repo's exact rerun or verified current row?_
 

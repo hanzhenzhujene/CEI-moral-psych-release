@@ -37,11 +37,11 @@
 </defs>
 <rect x="0" y="0" width="1500" height="938" class="canvas"/>
 <rect x="24" y="24" width="1452" height="890" rx="22" class="panel"/>
-<title>Same-model paper calibration bar comparison</title>
+<title>Same-model CCD calibration bar comparison</title>
 <desc>Bar comparison for exact same-model paper calibration rows with a shared numeric metric. Only plottable same-model rows are shown; non-exact, blocked, metric-mismatched, and proxy rows are excluded.</desc>
-<text x="48" y="64" class="title">Same-Model Paper Calibration Bars</text>
-<text x="48" y="90" class="subtitle">Only exact same-model rows with the same plottable metric appear here. Bars compare CCD-Bench Nordic Europe share in the paper/source reference versus</text>
-<text x="48" y="110" class="subtitle">this repo's exact rerun or verified current row.</text>
+<text x="48" y="64" class="title">Same-Model CCD Calibration Bars</text>
+<text x="48" y="90" class="subtitle">Only the 11 exact same-model CCD-Bench rows with the same plottable metric appear here. Bars compare Nordic Europe share in the paper/source reference</text>
+<text x="48" y="110" class="subtitle">versus this repo's exact rerun or verified current row.</text>
 <text x="48" y="132" class="subtitle">CCD-Bench is cultural-choice distribution behavior, not accuracy. Rows without an exact same-model same-metric comparison stay in the ledger, not this chart.</text>
 <text x="58" y="166" class="tiny">EXACT PAPER MODEL</text>
 <text x="388" y="166" class="tiny">PAPER / SOURCE</text>
