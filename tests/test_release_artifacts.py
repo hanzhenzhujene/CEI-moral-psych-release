@@ -1835,6 +1835,7 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert root_readme.index("## DATA, CLICK HERE: Result Tables") < root_readme.index("## What To Trust First")
     assert root_readme.index("## What To Trust First") < root_readme.index("## Key Takeaways")
     assert root_readme.index("## Key Takeaways") < root_readme.index("## Main Figures")
+    assert root_readme.index("### Figure Shortcuts") < root_readme.index("| Open in this order | Figure | What it answers |")
     assert "The public readiness dashboard has `" in root_readme
     assert "model-line x benchmark cells. `" in root_readme
     assert "are Tier 3 and can be cited or compared within their stated metric layer" in root_readme
@@ -1904,6 +1905,13 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "Bridge view: exact same-model calibration rows are visible" in root_readme
     assert "Context view: paper metric anchors are shown for orientation" in root_readme
     assert "Secondary QA/provenance figures are also embedded below" in root_readme
+    assert "### Figure Shortcuts" in root_readme
+    assert "| If you have... | Open these first | What to say |" in root_readme
+    assert "| 3 minutes | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg), [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg), [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) |" in root_readme
+    assert "| UniMoral questions | [four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg), [task heatmap](figures/release/option1_unimoral_task_heatmap.svg), [RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg) |" in root_readme
+    assert "| Paper calibration questions | [same-model CCD bar chart](figures/release/option1_paper_result_alignment_map.svg), [same-model bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper-result context](figures/release/option1_paper_result_comparison.svg) |" in root_readme
+    assert "Only exact same-model, same-metric rows become bar comparisons; context/proxy rows stay separate." in root_readme
+    assert "| Follow-up sweep questions | [selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg), [selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg), [selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg) |" in root_readme
     assert "| Secondary QA / provenance visual evidence | What it answers |" in root_readme
     assert "| Appendix-only visual evidence | What it answers |" not in root_readme
     assert "Coverage QA: frozen Option 1 Qwen/DeepSeek/Gemma slice only" in root_readme

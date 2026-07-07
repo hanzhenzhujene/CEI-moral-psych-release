@@ -206,6 +206,11 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "![DeNEVIL proxy visible-response coverage](figures/release/option1_denevil_proxy_valid_response_rate.svg)" in readme
     assert "![DeNEVIL proxy pipeline](figures/release/option1_denevil_proxy_pipeline.svg)" in readme
     assert "Secondary QA/provenance figures are also embedded below" in readme
+    assert "### Figure Shortcuts" in readme
+    assert "| If you have... | Open these first | What to say |" in readme
+    assert "| 3 minutes | [UniMoral family-size scaling](figures/release/option1_unimoral_family_scaling.svg), [Comparable accuracy bars](figures/release/option1_benchmark_accuracy_bars.svg), [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) |" in readme
+    assert "| Paper calibration questions | [same-model CCD bar chart](figures/release/option1_paper_result_alignment_map.svg), [same-model bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper-result context](figures/release/option1_paper_result_comparison.svg) |" in readme
+    assert "Only exact same-model, same-metric rows become bar comparisons; context/proxy rows stay separate." in readme
     assert "| Secondary QA / provenance visual evidence | What it answers |" in readme
     assert "| Appendix-only visual evidence | What it answers |" not in readme
     assert "Progress QA: shows which family-size cells are complete" in readme
