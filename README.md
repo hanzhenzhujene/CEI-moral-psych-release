@@ -96,7 +96,7 @@ These are the audience-facing result figures to use in the deck or meeting reado
 | 7 | [CCD choice distribution](figures/release/option1_ccd_choice_distribution.svg) | Which cultural-cluster choices are over-selected relative to a 10% uniform baseline? |
 | 8 | [DeNEVIL behavior outcomes](figures/release/option1_denevil_behavior_outcomes.svg) | What proxy behavior mix appears in the saved traces? |
 | 9 | [Paper-result comparison table](figures/release/option1_paper_result_comparison.svg) | What original paper metric anchors can be placed beside current rows? |
-| 10 | [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg) | Which evidence is direct, partial, current-only, blocked, or proxy-only? |
+| 10 | [Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg) | What paper numbers, current numbers, and comparison boundaries line up for each benchmark? |
 
 ![UniMoral family-size scaling by RQ](figures/release/option1_unimoral_family_scaling.svg)
 
@@ -136,7 +136,7 @@ _Paper comparison view: paper anchors sit next to current rows only when the met
 
 ![Paper-vs-current replication map](figures/release/option1_paper_result_alignment_map.svg)
 
-_Replication status view: direct, partial, blocked, current-only, and proxy-only evidence are separated._
+_Replication status + numbers view: paper anchors, current rows, blocked routes, and proxy-only evidence are separated._
 
 | Appendix-only visual evidence | What it answers |
 | --- | --- |

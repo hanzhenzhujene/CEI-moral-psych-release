@@ -1660,10 +1660,38 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "% of release" in sample_volume_svg
 
     paper_alignment_svg = (figure_dir / "option1_paper_result_alignment_map.svg").read_text(encoding="utf-8")
-    assert "Paper-vs-current Replication Map" in paper_alignment_svg
+    assert "Paper-vs-current Replication Map With Numeric Anchors" in paper_alignment_svg
+    assert "PAPER NUMBERS" in paper_alignment_svg
+    assert "CURRENT REPO NUMBERS" in paper_alignment_svg
+    assert "NUMERIC COMPARISON" in paper_alignment_svg
+    assert "RQ1 WF1 66.38" in paper_alignment_svg
+    assert "RQ4 METEOR 0.121 / BERTScore F1 0.656" in paper_alignment_svg
+    assert "Same Llama model: paper RQ1 66.38" in paper_alignment_svg
+    assert "WF1 vs current 0.622 acc; RQ4" in paper_alignment_svg
+    assert "19.08/87.44 vs 0.121/0.656." in paper_alignment_svg
+    assert "Current repo: best SMID average Qwen-L" in paper_alignment_svg
+    assert "0.483; current mean 0.364" in paper_alignment_svg
+    assert "No paper LLM score; current public" in paper_alignment_svg
+    assert "rows are mean 0.364 and best 0.483." in paper_alignment_svg
+    assert "KAL SYS 11B win rate 58.3" in paper_alignment_svg
+    assert "No same metric: paper KAL 58.3 win /" in paper_alignment_svg
+    assert "GPT-4 93.1 valence vs current value" in paper_alignment_svg
+    assert "avg 0.736-0.741." in paper_alignment_svg
+    assert "Mistral 25.6%" in paper_alignment_svg
+    assert "GPT-4.1 22.3%" in paper_alignment_svg
+    assert "GPT-4.1 22.3%; Claude" in paper_alignment_svg
+    assert "4 Sonnet 30.2% Nordic" in paper_alignment_svg
+    assert "Nordic share: paper/source mean" in paper_alignment_svg
+    assert "20.17 vs exact rows 25.6 / 20.8 /" in paper_alignment_svg
+    assert "22.3 / 30.2%." in paper_alignment_svg
+    assert "Qwen-M 99.5%" in paper_alignment_svg
+    assert "Paper APV 65.20-79.08 vs current APV" in paper_alignment_svg
+    assert "n/a; proxy Qwen-M 99.5% is not" in paper_alignment_svg
+    assert "comparable." in paper_alignment_svg
     assert "Fresh exact bridge" in paper_alignment_svg
     assert "Same-model calibration with" in paper_alignment_svg
-    assert "RQ4 has METEOR and BERTScore." in paper_alignment_svg
+    assert "RQ4 has METEOR" in paper_alignment_svg
+    assert "and BERTScore." in paper_alignment_svg
     assert "Distributional comparison only; do not" in paper_alignment_svg
     assert "read CCD as accuracy." in paper_alignment_svg
     assert "Proxy-only evidence; no paper-faithful" in paper_alignment_svg

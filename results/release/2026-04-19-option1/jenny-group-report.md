@@ -73,7 +73,7 @@ _How to read it: protective refusals and corrective/contextual answers are the s
 
 ![Paper-vs-current replication map](../../../figures/release/option1_paper_result_alignment_map.svg)
 
-_What it answers: which benchmark-paper results can be compared directly, which are current-only benchmark comparisons, which rely on saved/prior evidence, and which are blocked or proxy-only._
+_What it answers: the paper-side numeric anchors, the closest current repo numbers, and which comparisons are direct, current-only, blocked, or proxy-only._
 
 ![Paper-result comparison table](../../../figures/release/option1_paper_result_comparison.svg)
 

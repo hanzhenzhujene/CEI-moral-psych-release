@@ -202,9 +202,13 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     figures_readme = (ROOT / "figures/README.md").read_text(encoding="utf-8")
     assert "side" + " metric" not in figures_readme
     assert "## Audience-Facing Result Figures" in figures_readme
+    assert "## Figure Bundles" in figures_readme
     assert "## Appendix QA / Provenance Figures" in figures_readme
     audience_block = figures_readme[
-        figures_readme.index("## Audience-Facing Result Figures") : figures_readme.index("## UniMoral figures")
+        figures_readme.index("## Audience-Facing Result Figures") : figures_readme.index("## Figure Bundles")
+    ]
+    bundle_block = figures_readme[
+        figures_readme.index("## Figure Bundles") : figures_readme.index("## UniMoral figures")
     ]
     appendix_block = figures_readme[figures_readme.index("## Appendix QA / Provenance Figures") :]
     assert "| Order | Open | Use it for | Read it as |" in audience_block
@@ -216,7 +220,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Task-by-task scaling, not one overall moral score." in audience_block
     assert "Cultural-choice behavior, not accuracy." in audience_block
     assert "Proxy behavior evidence, not MoralPrompt scoring." in audience_block
-    assert "Status map, not a leaderboard." in audience_block
+    assert "Numeric status map, not a leaderboard." in audience_block
     assert "option1_unimoral_family_scaling.svg" in audience_block
     assert "option1_ccd_choice_distribution.svg" in audience_block
     assert "option1_denevil_behavior_outcomes.svg" in audience_block
@@ -227,7 +231,18 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "option1_family_size_progress_overview.svg" in appendix_block
     assert "option1_coverage_matrix.svg" in appendix_block
     assert "option1_sample_volume.svg" in appendix_block
+    assert "| 3-slide executive read |" in bundle_block
+    assert "Text reasoning, SMID/Value accuracy, and CCD behavior are three different result layers." in bundle_block
+    assert "| UniMoral deep dive |" in bundle_block
+    assert "RQ1-RQ3 are exact-match accuracy; RQ4 uses BERTScore F1 and METEOR." in bundle_block
+    assert "| Calibration / replication review |" in bundle_block
+    assert "Exact same-model rows, current-only rows, blocked routes, and proxy-only evidence stay separate." in bundle_block
+    assert "| Appendix audit |" in bundle_block
+    assert "These explain what ran and parsed; they are not the headline result figures." in bundle_block
+    assert "| OpenRouter follow-up |" in bundle_block
+    assert "Separate text-only follow-up; excludes SMID, DeNEVIL, and MiniMax." in bundle_block
     assert figures_readme.index("## Audience-Facing Result Figures") < figures_readme.index("## Appendix QA / Provenance Figures")
+    assert figures_readme.index("## Figure Bundles") < figures_readme.index("## UniMoral figures")
     assert "two reported generation metrics: BERTScore F1" in figures_readme
     assert "option1_paper_result_comparison.svg" in figures_readme
     assert "option1_paper_model_calibration_bridge.svg" in figures_readme
@@ -353,6 +368,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "## What This Means" in paper_comparison_doc
     assert "## Benchmark Cards" in paper_comparison_doc
     assert "![Paper-vs-current replication map](../figures/release/option1_paper_result_alignment_map.svg)" in paper_comparison_doc
+    assert "Numeric status map: paper-side anchors, current repo numbers" in paper_comparison_doc
     assert "![Paper-result comparison table](../figures/release/option1_paper_result_comparison.svg)" in paper_comparison_doc
     assert "![Paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)" in paper_comparison_doc
     assert "[paper-model calibration bridge](../figures/release/option1_paper_model_calibration_bridge.svg)" in paper_comparison_doc
@@ -409,6 +425,34 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "GPT-5-mini Ref" not in calibration_surfaces
     assert "best OpenAI text row: GPT-5 mini 0.739" in calibration_surfaces
     assert "visible paper metric anchors" in calibration_surfaces
+    assert "Paper-vs-current Replication Map With Numeric Anchors" in paper_alignment_svg
+    assert "PAPER NUMBERS" in paper_alignment_svg
+    assert "CURRENT REPO NUMBERS" in paper_alignment_svg
+    assert "NUMERIC COMPARISON" in paper_alignment_svg
+    assert "RQ1 WF1 66.38" in paper_alignment_svg
+    assert "RQ4 METEOR 0.121 / BERTScore F1 0.656" in paper_alignment_svg
+    assert "Same Llama model: paper RQ1 66.38" in paper_alignment_svg
+    assert "WF1 vs current 0.622 acc; RQ4" in paper_alignment_svg
+    assert "19.08/87.44 vs 0.121/0.656." in paper_alignment_svg
+    assert "Current repo: best SMID average Qwen-L" in paper_alignment_svg
+    assert "0.483; current mean 0.364" in paper_alignment_svg
+    assert "No paper LLM score; current public" in paper_alignment_svg
+    assert "rows are mean 0.364 and best 0.483." in paper_alignment_svg
+    assert "KAL SYS 11B win rate 58.3" in paper_alignment_svg
+    assert "No same metric: paper KAL 58.3 win /" in paper_alignment_svg
+    assert "GPT-4 93.1 valence vs current value" in paper_alignment_svg
+    assert "avg 0.736-0.741." in paper_alignment_svg
+    assert "Mistral 25.6%" in paper_alignment_svg
+    assert "GPT-4.1 22.3%" in paper_alignment_svg
+    assert "GPT-4.1 22.3%; Claude" in paper_alignment_svg
+    assert "4 Sonnet 30.2% Nordic" in paper_alignment_svg
+    assert "Nordic share: paper/source mean" in paper_alignment_svg
+    assert "20.17 vs exact rows 25.6 / 20.8 /" in paper_alignment_svg
+    assert "22.3 / 30.2%." in paper_alignment_svg
+    assert "Qwen-M 99.5%" in paper_alignment_svg
+    assert "Paper APV 65.20-79.08 vs current APV" in paper_alignment_svg
+    assert "n/a; proxy Qwen-M 99.5% is not" in paper_alignment_svg
+    assert "comparable." in paper_alignment_svg
     assert paper_result_comparison_svg.count("UniMoral RQ4 consequence") == 2
     assert "generation - BERTScore F1" in paper_result_comparison_svg
     assert "generation - METEOR" in paper_result_comparison_svg

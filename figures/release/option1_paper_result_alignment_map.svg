@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1220 760" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 880" role="img" preserveAspectRatio="xMidYMin meet" style="max-width:100%;height:auto">
 <defs>
 <linearGradient id="panelGradient" x1="0" x2="0" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff"/>
@@ -35,76 +35,103 @@
 .outline { stroke: rgba(255,255,255,0.9); stroke-width: 1; }
 </style>
 </defs>
-<rect x="0" y="0" width="1220" height="760" class="canvas"/>
-<rect x="24" y="24" width="1172" height="712" rx="22" class="panel"/>
+<rect x="0" y="0" width="1500" height="880" class="canvas"/>
+<rect x="24" y="24" width="1452" height="832" rx="22" class="panel"/>
 <title>Paper-vs-current replication and calibration map</title>
-<desc>Reviewer-facing map showing where original-paper model/result evidence overlaps with current release rows, where only current benchmark comparison is supported, and where paper-faithful replication is blocked or proxy-only.</desc>
-<text x="48" y="64" class="title">Paper-vs-current Replication Map</text>
-<text x="48" y="90" class="subtitle">Use this as the visual index for replication/calibration: paper-faithful overlap, saved/prior evidence, current-only comparisons,</text>
-<text x="48" y="110" class="subtitle">blocked model access, and proxy-only evidence stay separate.</text>
+<desc>Reviewer-facing map with numerical paper anchors, current repo numbers, and safe comparison boundaries for each benchmark. It separates exact same-model calibration, current-only comparison, blocked routes, and proxy-only evidence.</desc>
+<text x="48" y="64" class="title">Paper-vs-current Replication Map With Numeric Anchors</text>
+<text x="48" y="90" class="subtitle">Use this as the visual index for replication/calibration: paper-side numbers, current repo numbers, and safe comparison boundaries stay visible</text>
+<text x="48" y="110" class="subtitle">together.</text>
 <text x="58" y="144" class="tiny">BENCHMARK</text>
-<text x="220" y="144" class="tiny">ORIGINAL PAPER / REFERENCE SIDE</text>
-<text x="510" y="144" class="tiny">CURRENT REPO RESULT SIDE</text>
-<text x="824" y="144" class="tiny">SAFE COMPARISON CLAIM</text>
-<rect x="42" y="146" width="1136" height="80" rx="18" class="subpanel"/>
-<rect x="58" y="166" width="116" height="36" rx="11" fill="#7c3aed"/>
-<text x="116" y="181" text-anchor="middle" class="cellsub">UniMoral</text>
-<rect x="824" y="204" width="164" height="24" rx="10" fill="#7c3aed" opacity="0.92"/>
-<text x="906" y="221" text-anchor="middle" class="cellsub">Fresh exact bridge</text>
-<text x="220" y="172" class="body">RQ1-RQ4 paper anchors; Llama 3.1 is</text>
-<text x="220" y="188" class="body">an exact paper-roster model.</text>
-<text x="510" y="172" class="body">Fresh exact Llama 3.1 RQ1-RQ4 rerun</text>
-<text x="510" y="188" class="body">plus current release rows.</text>
-<text x="824" y="174" class="body">Same-model calibration with metric-scale</text>
-<text x="824" y="190" class="body">caveats; RQ4 has METEOR and BERTScore.</text>
-<rect x="42" y="238" width="1136" height="80" rx="18" class="subpanel"/>
-<rect x="58" y="258" width="116" height="36" rx="11" fill="#64748b"/>
-<text x="116" y="273" text-anchor="middle" class="cellsub">SMID</text>
-<rect x="824" y="296" width="164" height="24" rx="10" fill="#64748b" opacity="0.92"/>
-<text x="906" y="313" text-anchor="middle" class="cellsub">No paper roster</text>
-<text x="220" y="264" class="body">Human-normed image stimulus set; no</text>
-<text x="220" y="280" class="body">original LLM roster found locally.</text>
-<text x="510" y="264" class="body">Current vision-route moral-rating and</text>
-<text x="510" y="280" class="body">foundation-classification rows.</text>
-<text x="824" y="266" class="body">No paper-model comparison; compare current</text>
-<text x="824" y="282" class="body">vision-capable rows only.</text>
-<rect x="42" y="330" width="1136" height="80" rx="18" class="subpanel"/>
-<rect x="58" y="350" width="116" height="36" rx="11" fill="#7c3aed"/>
-<text x="116" y="365" text-anchor="middle" class="cellsub">Value</text>
-<text x="116" y="379" text-anchor="middle" class="cellsub">Kaleidoscope /</text>
-<rect x="824" y="388" width="164" height="24" rx="10" fill="#7c3aed" opacity="0.92"/>
-<text x="906" y="405" text-anchor="middle" class="cellsub">Blocked route</text>
-<text x="220" y="356" class="body">Kaleido model family and ValuePrism</text>
-<text x="220" y="372" class="body">relevance/valence setup.</text>
-<text x="510" y="356" class="body">Prompt-based LLM relevance and valence</text>
-<text x="510" y="372" class="body">classification rows.</text>
-<text x="824" y="358" class="body">Blocked for paper-model replication until</text>
-<text x="824" y="374" class="body">Kaleido access and execution are run.</text>
-<rect x="42" y="422" width="1136" height="80" rx="18" class="subpanel"/>
-<rect x="58" y="442" width="116" height="36" rx="11" fill="#0f766e"/>
-<text x="116" y="457" text-anchor="middle" class="cellsub">CCD-Bench</text>
-<rect x="824" y="480" width="164" height="24" rx="10" fill="#0f766e" opacity="0.92"/>
-<text x="906" y="497" text-anchor="middle" class="cellsub">Behavior map</text>
-<text x="220" y="448" class="body">Ten-cluster cultural-choice behavior</text>
-<text x="220" y="464" class="body">and concentration metrics.</text>
-<text x="510" y="448" class="body">Choice distributions, dominant-cluster</text>
-<text x="510" y="464" class="body">share, and effective clusters.</text>
-<text x="824" y="450" class="body">Distributional comparison only; do not</text>
-<text x="824" y="466" class="body">read CCD as accuracy.</text>
-<rect x="42" y="514" width="1136" height="80" rx="18" class="subpanel"/>
-<rect x="58" y="534" width="116" height="36" rx="11" fill="#b45309"/>
-<text x="116" y="549" text-anchor="middle" class="cellsub">DeNEVIL /</text>
-<text x="116" y="563" text-anchor="middle" class="cellsub">MoralPrompt</text>
-<rect x="824" y="572" width="164" height="24" rx="10" fill="#b45309" opacity="0.92"/>
-<text x="906" y="589" text-anchor="middle" class="cellsub">Proxy only</text>
-<text x="220" y="540" class="body">Paper-faithful MoralPrompt export is</text>
-<text x="220" y="556" class="body">missing locally.</text>
-<text x="510" y="540" class="body">FULCRA-backed proxy visible-behavior</text>
-<text x="510" y="556" class="body">summaries from saved traces.</text>
-<text x="824" y="542" class="body">Proxy-only evidence; no paper-faithful</text>
-<text x="824" y="558" class="body">MoralPrompt comparison.</text>
-<rect x="48" y="646" width="1124" height="54" rx="16" class="legend-card"/>
-<text x="72" y="670" class="tiny">READ THIS FIGURE</text>
-<text x="72" y="692" class="body">UniMoral RQ1 is the clearest paper-to-current task bridge, but metric/model caveats remain; CCD is distributional behavior, DeNEVIL is</text>
-<text x="72" y="709" class="body">proxy-only, and Value/Kaleido is blocked until the gated model route is run.</text>
+<text x="202" y="144" class="tiny">PAPER NUMBERS</text>
+<text x="500" y="144" class="tiny">CURRENT REPO NUMBERS</text>
+<text x="796" y="144" class="tiny">NUMERIC COMPARISON</text>
+<text x="1084" y="144" class="tiny">SAFE COMPARISON CLAIM</text>
+<rect x="42" y="154" width="1416" height="102" rx="18" class="subpanel"/>
+<rect x="58" y="174" width="116" height="36" rx="11" fill="#7c3aed"/>
+<text x="116" y="189" text-anchor="middle" class="cellsub">UniMoral</text>
+<rect x="1084" y="242" width="164" height="24" rx="10" fill="#7c3aed" opacity="0.92"/>
+<text x="1166" y="259" text-anchor="middle" class="cellsub">Fresh exact bridge</text>
+<text x="202" y="180" class="body">Paper anchors: RQ1 WF1 66.38; RQ2 WF1</text>
+<text x="202" y="196" class="body">57.01; RQ3 WF1 38.59; RQ4 METEOR 19.08</text>
+<text x="202" y="212" class="body">/ BERTScore 87.44.</text>
+<text x="500" y="180" class="body">Fresh exact Llama 3.1 rerun: RQ1 acc</text>
+<text x="500" y="196" class="body">0.622; RQ2 acc 0.602; RQ3 acc 0.595;</text>
+<text x="500" y="212" class="body">RQ4 METEOR 0.121 / BERTScore F1 0.656.</text>
+<text x="796" y="180" class="body">Same Llama model: paper RQ1 66.38</text>
+<text x="796" y="196" class="body">WF1 vs current 0.622 acc; RQ4</text>
+<text x="796" y="212" class="body">19.08/87.44 vs 0.121/0.656.</text>
+<text x="1084" y="182" class="body">Same-model calibration with</text>
+<text x="1084" y="198" class="body">metric-scale caveats; RQ4 has METEOR</text>
+<text x="1084" y="214" class="body">and BERTScore.</text>
+<rect x="42" y="270" width="1416" height="102" rx="18" class="subpanel"/>
+<rect x="58" y="290" width="116" height="36" rx="11" fill="#64748b"/>
+<text x="116" y="305" text-anchor="middle" class="cellsub">SMID</text>
+<rect x="1084" y="358" width="164" height="24" rx="10" fill="#64748b" opacity="0.92"/>
+<text x="1166" y="375" text-anchor="middle" class="cellsub">No paper roster</text>
+<text x="202" y="296" class="body">Paper anchor: 2,941 images; 2,716</text>
+<text x="202" y="312" class="body">participants; 820,565 ratings; norm</text>
+<text x="202" y="328" class="body">reliability ICC &gt;= .75.</text>
+<text x="500" y="296" class="body">Current repo: best SMID average Qwen-L</text>
+<text x="500" y="312" class="body">0.483; current mean 0.364 across</text>
+<text x="500" y="328" class="body">public rows.</text>
+<text x="796" y="296" class="body">No paper LLM score; current public</text>
+<text x="796" y="312" class="body">rows are mean 0.364 and best 0.483.</text>
+<text x="1084" y="298" class="body">No paper-model comparison; compare</text>
+<text x="1084" y="314" class="body">current vision-capable rows only.</text>
+<rect x="42" y="386" width="1416" height="102" rx="18" class="subpanel"/>
+<rect x="58" y="406" width="116" height="36" rx="11" fill="#7c3aed"/>
+<text x="116" y="421" text-anchor="middle" class="cellsub">Value</text>
+<text x="116" y="435" text-anchor="middle" class="cellsub">Kaleidoscope /</text>
+<rect x="1084" y="474" width="164" height="24" rx="10" fill="#7c3aed" opacity="0.92"/>
+<text x="1166" y="491" text-anchor="middle" class="cellsub">Blocked route</text>
+<text x="202" y="412" class="body">Paper anchors: ValuePrism 218k labels;</text>
+<text x="202" y="428" class="body">KAL SYS 11B win rate 58.3 vs GPT-4;</text>
+<text x="202" y="444" class="body">GPT-4 valence 93.1.</text>
+<text x="500" y="412" class="body">Current prompt-based rows: MiniMax-L</text>
+<text x="500" y="428" class="body">value avg 0.741; GPT-5 mini 0.739;</text>
+<text x="500" y="444" class="body">GPT-5.5 0.736.</text>
+<text x="796" y="412" class="body">No same metric: paper KAL 58.3 win /</text>
+<text x="796" y="428" class="body">GPT-4 93.1 valence vs current value</text>
+<text x="796" y="444" class="body">avg 0.736-0.741.</text>
+<text x="1084" y="414" class="body">Blocked for paper-model replication</text>
+<text x="1084" y="430" class="body">until Kaleido access and execution are</text>
+<text x="1084" y="446" class="body">run.</text>
+<rect x="42" y="502" width="1416" height="102" rx="18" class="subpanel"/>
+<rect x="58" y="522" width="116" height="36" rx="11" fill="#0f766e"/>
+<text x="116" y="537" text-anchor="middle" class="cellsub">CCD-Bench</text>
+<rect x="1084" y="590" width="164" height="24" rx="10" fill="#0f766e" opacity="0.92"/>
+<text x="1166" y="607" text-anchor="middle" class="cellsub">Behavior map</text>
+<text x="202" y="528" class="body">Paper/source anchors: mean Nordic</text>
+<text x="202" y="544" class="body">20.17%; plural rationales 87.9%;</text>
+<text x="202" y="560" class="body">position-bias Cramer's V 0.0586.</text>
+<text x="500" y="528" class="body">Exact/current rows: Mistral 25.6%;</text>
+<text x="500" y="544" class="body">Llama-3.3 20.8%; GPT-4.1 22.3%; Claude</text>
+<text x="500" y="560" class="body">4 Sonnet 30.2% Nordic.</text>
+<text x="796" y="528" class="body">Nordic share: paper/source mean</text>
+<text x="796" y="544" class="body">20.17 vs exact rows 25.6 / 20.8 /</text>
+<text x="796" y="560" class="body">22.3 / 30.2%.</text>
+<text x="1084" y="530" class="body">Distributional comparison only; do not</text>
+<text x="1084" y="546" class="body">read CCD as accuracy.</text>
+<rect x="42" y="618" width="1416" height="102" rx="18" class="subpanel"/>
+<rect x="58" y="638" width="116" height="36" rx="11" fill="#b45309"/>
+<text x="116" y="653" text-anchor="middle" class="cellsub">DeNEVIL /</text>
+<text x="116" y="667" text-anchor="middle" class="cellsub">MoralPrompt</text>
+<rect x="1084" y="706" width="164" height="24" rx="10" fill="#b45309" opacity="0.92"/>
+<text x="1166" y="723" text-anchor="middle" class="cellsub">Proxy only</text>
+<text x="202" y="644" class="body">Paper anchors: ChatGPT APV 65.20 +/-</text>
+<text x="202" y="660" class="body">26.45; GPT-4 APV 79.08 +/- 21.46;</text>
+<text x="202" y="676" class="body">LLaMA2-70B APV 76.94 +/- 18.86.</text>
+<text x="500" y="644" class="body">Current proxy rows: APV/EVR/MVP n/a;</text>
+<text x="500" y="660" class="body">strongest proxy protective-response</text>
+<text x="500" y="676" class="body">rate Qwen-M 99.5%.</text>
+<text x="796" y="644" class="body">Paper APV 65.20-79.08 vs current APV</text>
+<text x="796" y="660" class="body">n/a; proxy Qwen-M 99.5% is not</text>
+<text x="796" y="676" class="body">comparable.</text>
+<text x="1084" y="646" class="body">Proxy-only evidence; no paper-faithful</text>
+<text x="1084" y="662" class="body">MoralPrompt comparison.</text>
+<rect x="48" y="766" width="1404" height="54" rx="16" class="legend-card"/>
+<text x="72" y="790" class="tiny">READ THIS FIGURE</text>
+<text x="72" y="812" class="body">Numbers in this map are anchors for calibration, not one shared score scale. Use the same-model bridge for exact rows; CCD is distributional behavior,</text>
+<text x="72" y="829" class="body">DeNEVIL is proxy-only, and Value/Kaleido remains blocked.</text>
 </svg>
