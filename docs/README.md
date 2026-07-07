@@ -23,7 +23,7 @@
 
 ## Visual Reader Path
 
-Use [`../figures/README.md`](../figures/README.md) when you need the presentation order for result visuals. Its `What To Say From The Figures` table gives the one-screen talk track. For the shortest deck path, start with the root README's [`Figure Shortcuts`](../README.md#figure-shortcuts); for category rules, use the root README's [`Visual Contract`](../README.md#visual-contract). Together they separate:
+For the fastest reviewer path, start with the root README's [`Visual Read In 90 Seconds`](../README.md#visual-read-in-90-seconds). It gives the five-figure talk track before the dense result tables. Use [`../figures/README.md`](../figures/README.md) when you need the full presentation order for result visuals. Its `What To Say From The Figures` table expands the same story into a one-screen talk track; for category rules, use the root README's [`Visual Contract`](../README.md#visual-contract). Together they separate:
 
 - audience-facing figures for the main story
 - secondary QA / provenance figures

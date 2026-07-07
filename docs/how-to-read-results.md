@@ -22,7 +22,7 @@ This repo uses a few status words repeatedly. This page explains them in plain l
 
 ## Visual Reading Order
 
-For a presentation, deck, or reviewer skim, open [`figures/README.md`](../figures/README.md) first. Its `What To Say From The Figures` table is the one-screen talk track: UniMoral scaling, SMID/Value leaders, CCD-Bench choice behavior, DeNEVIL proxy status, and paper-calibration boundaries. If you have only three minutes, use the first shortcut row in the root [`README.md`](../README.md#figure-shortcuts): UniMoral family-size scaling, comparable SMID/Value bars, and CCD choice distribution.
+For a presentation, deck, or reviewer skim, start with the root [`Visual Read In 90 Seconds`](../README.md#visual-read-in-90-seconds): UniMoral scaling, SMID/Value bars, CCD-Bench choice behavior, same-model calibration, and the DeNEVIL proxy boundary. Then open [`figures/README.md`](../figures/README.md) for the fuller figure order. Its `What To Say From The Figures` table expands the same story into a one-screen talk track, and the root [`Figure Shortcuts`](../README.md#figure-shortcuts) give follow-up bundles for deeper questions.
 
 The figure set follows the root README's [`Visual Contract`](../README.md#visual-contract): headline result figures support current result claims within one metric layer; calibration figures require exact same-model/same-metric bridges or clearly labeled context; follow-up figures are separate sweeps; QA/provenance figures show coverage, parser health, route status, sample volume, or proxy boundaries rather than performance rankings.
 

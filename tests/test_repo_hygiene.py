@@ -348,7 +348,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "11 exact rows on the shared Nordic-share metric: 10 fresh reruns plus 1 current release row" in audience_block
     assert "fresh Llama 3.1 UniMoral exact rerun" in audience_block
     assert "| Category | Order | Open | Use it for | Read it as |" in audience_block
-    assert "This list mirrors the first part of the root README `Main Figures` section" in audience_block
+    assert "The fastest entrypoint is the root README [`Visual Read In 90 Seconds`](../README.md#visual-read-in-90-seconds)" in audience_block
+    assert "this page expands that same story into the full figure order" in audience_block
     assert "Paper metric anchors and release-result context." in audience_block
     assert "[UniMoral family-size scaling](release/option1_unimoral_family_scaling.svg)" in audience_block
     assert "[UniMoral four-task dashboard](release/option1_unimoral_four_task_dashboard.svg)" in audience_block
@@ -779,7 +780,9 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "[`readiness-tier-matrix.csv`](release/2026-04-19-option1/readiness-tier-matrix.csv)" in results_readme
     assert "[`paper-model-calibration-ledger.csv`](release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in results_readme
     assert "[`openrouter-selected-grid-moral-psych-full/README.md`](openrouter-selected-grid-moral-psych-full/README.md)" in results_readme
-    assert "Audience-facing figures are separated from secondary QA/provenance figures." in results_readme
+    assert "../README.md#visual-read-in-90-seconds" in results_readme
+    assert "Start with the five-figure talk track" in results_readme
+    assert "the figure index separates audience-facing figures from secondary QA/provenance figures." in results_readme
     assert "Tier is result readiness, not model quality." in results_readme
     assert "Separate text-only follow-up; not folded into the frozen Option 1 ranking surface." in results_readme
     assert "## Public Result Layers" in results_readme
@@ -861,8 +864,9 @@ def test_root_readme_links_release_methodology_and_summary_paths():
     assert "paper-result-comparison.md#safe-citation-matrix" in docs_index
     assert "appendix/provenance figure map" not in docs_index
     assert "## Visual Reader Path" in docs_index
-    assert "Its `What To Say From The Figures` table gives the one-screen talk track." in docs_index
-    assert "[`Figure Shortcuts`](../README.md#figure-shortcuts)" in docs_index
+    assert "[`Visual Read In 90 Seconds`](../README.md#visual-read-in-90-seconds)" in docs_index
+    assert "It gives the five-figure talk track before the dense result tables." in docs_index
+    assert "Its `What To Say From The Figures` table expands the same story into a one-screen talk track" in docs_index
     assert "[`Visual Contract`](../README.md#visual-contract)" in docs_index
     assert "UniMoral RQ4 is generation quality rather than accuracy" in docs_index
     assert "CCD-Bench is cultural-choice behavior rather than correctness" in docs_index
@@ -898,8 +902,10 @@ def test_evaluation_methodology_versions_current_metric_definition():
     assert "Separate from the frozen ranking surface" in how_to_read
     assert "excludes SMID, DeNEVIL, and MiniMax" in how_to_read
     assert "## Visual Reading Order" in how_to_read
-    assert "Its `What To Say From The Figures` table is the one-screen talk track" in how_to_read
-    assert "If you have only three minutes, use the first shortcut row" in how_to_read
+    assert "[`Visual Read In 90 Seconds`](../README.md#visual-read-in-90-seconds)" in how_to_read
+    assert "UniMoral scaling, SMID/Value bars, CCD-Bench choice behavior, same-model calibration, and the DeNEVIL proxy boundary" in how_to_read
+    assert "Its `What To Say From The Figures` table expands the same story into a one-screen talk track" in how_to_read
+    assert "the root [`Figure Shortcuts`](../README.md#figure-shortcuts) give follow-up bundles for deeper questions" in how_to_read
     assert "../README.md#figure-shortcuts" in how_to_read
     assert "../README.md#visual-contract" in how_to_read
     assert "paper-result-comparison.md#safe-citation-matrix" in how_to_read

@@ -9,7 +9,7 @@ The publication-facing figures for the closed `2026-04-19 Option 1` release are 
 
 ## Audience-Facing Result Figures
 
-Open these first for a meeting, deck, or reviewer skim. This list mirrors the first part of the root README `Main Figures` section: result and calibration visuals are first-class; parser, coverage, sample-volume, and route-status visuals are secondary QA/provenance evidence.
+Open these first for a meeting, deck, or reviewer skim. The fastest entrypoint is the root README [`Visual Read In 90 Seconds`](../README.md#visual-read-in-90-seconds); this page expands that same story into the full figure order. Result and calibration visuals are first-class; parser, coverage, sample-volume, and route-status visuals are secondary QA/provenance evidence.
 
 ### What To Say From The Figures
 
