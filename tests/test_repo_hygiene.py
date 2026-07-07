@@ -209,6 +209,9 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "| Secondary QA / provenance visual evidence | What it answers |" in readme
     assert "| Appendix-only visual evidence | What it answers |" not in readme
     assert "Progress QA: shows which family-size cells are complete" in readme
+    assert "| [Coverage matrix](figures/release/option1_coverage_matrix.svg) | Which Qwen/DeepSeek/Gemma cells were paper-setup, proxy-only, or absent in frozen Option 1? |" in readme
+    assert "Coverage QA: frozen Option 1 Qwen/DeepSeek/Gemma slice only" in readme
+    assert "hatched cells are absent from that release slice, not low scores" in readme
     assert "CCD parser QA: visible `1-10` choice coverage only" in readme
     assert "DeNEVIL route QA: proxy route and status provenance only; no Tier 3 benchmark-faithful claim." in readme
     assert readme.count("![") >= 29
@@ -501,6 +504,10 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "Benchmark comparison matrix" in openrouter_matrix_svg
     assert "CCD is" in openrouter_matrix_svg
     assert "choice-format coverage rather than accuracy" in openrouter_matrix_svg
+
+    coverage_svg = (ROOT / "figures/release/option1_coverage_matrix.svg").read_text(encoding="utf-8")
+    assert "Frozen Option 1 Coverage: Qwen, DeepSeek, Gemma" in coverage_svg
+    assert "This matrix is the frozen Option 1 slice only: Qwen, DeepSeek, and Gemma." in coverage_svg
     assert "GPT 4o-mini 0.711" in unimoral_family_scaling_svg
     assert "GPT-5 nano" in unimoral_family_scaling_svg
     assert "GPT-5 mini" in unimoral_family_scaling_svg

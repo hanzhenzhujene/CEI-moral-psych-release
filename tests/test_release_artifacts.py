@@ -1507,6 +1507,11 @@ def test_release_builder_emits_expected_files(tmp_path):
     assert "not low scores" in heatmap_svg
     assert "Qwen-S" in heatmap_svg
 
+    coverage_svg = (figure_dir / "option1_coverage_matrix.svg").read_text(encoding="utf-8")
+    assert "Frozen Option 1 Coverage: Qwen, DeepSeek, Gemma" in coverage_svg
+    assert "This matrix is the frozen Option 1 slice only: Qwen, DeepSeek, and Gemma." in coverage_svg
+    assert "broader family-size/OpenAI rows" not in coverage_svg
+
     benchmark_bar_svg = (figure_dir / "option1_benchmark_accuracy_bars.svg").read_text(encoding="utf-8")
     assert "SMID And Value Accuracy: Comparable Rows" in benchmark_bar_svg
     assert "These two panels compare only SMID and Value accuracy" in benchmark_bar_svg
@@ -1895,7 +1900,8 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "Secondary QA/provenance figures are also embedded below" in root_readme
     assert "| Secondary QA / provenance visual evidence | What it answers |" in root_readme
     assert "| Appendix-only visual evidence | What it answers |" not in root_readme
-    assert "Coverage QA: shows benchmark-route availability and gaps across model lines; empty cells are not low scores." in root_readme
+    assert "Coverage QA: frozen Option 1 Qwen/DeepSeek/Gemma slice only" in root_readme
+    assert "hatched cells are absent from that release slice, not low scores" in root_readme
     assert "DeNEVIL pipeline boundary: explains why the public evidence is proxy-only" in root_readme
     assert "![Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in root_readme
     assert "![Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in root_readme

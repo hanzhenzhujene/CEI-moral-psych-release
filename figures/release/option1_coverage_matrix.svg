@@ -37,10 +37,11 @@
 </defs>
 <rect x="0" y="0" width="1220" height="590" class="canvas"/>
 <rect x="24" y="24" width="1172" height="542" rx="22" class="panel"/>
-<title>Option 1 benchmark coverage matrix</title>
-<desc>Coverage matrix for the frozen Option 1 release across Qwen, DeepSeek, and Gemma for the five benchmark lines.</desc>
-<text x="48" y="64" class="title">Option 1 Benchmark Coverage</text>
-<text x="48" y="88" class="subtitle">Green cells follow the paper setup. Amber cells are proxy-only. Hatched gray cells were not part of the frozen release.</text>
+<title>Frozen Option 1 coverage: Qwen, DeepSeek, Gemma</title>
+<desc>Coverage matrix for the frozen Option 1 release slice across Qwen, DeepSeek, and Gemma only. Green cells are benchmark-faithful paper-setup rows, amber cells are proxy-only, and hatched gray cells were not part of that frozen release slice.</desc>
+<text x="48" y="64" class="title">Frozen Option 1 Coverage: Qwen, DeepSeek, Gemma</text>
+<text x="48" y="88" class="subtitle">This matrix is the frozen Option 1 slice only: Qwen, DeepSeek, and Gemma. Green cells follow the paper setup; amber cells are</text>
+<text x="48" y="108" class="subtitle">proxy-only; hatched gray cells were not part of that release slice.</text>
 <text x="308.0" y="136" text-anchor="middle" class="axis">UniMoral</text>
 <text x="484.0" y="136" text-anchor="middle" class="axis">SMID</text>
 <text x="660.0" y="136" text-anchor="middle" class="axis">Value Kaleidoscope</text>

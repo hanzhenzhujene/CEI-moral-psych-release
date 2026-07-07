@@ -176,7 +176,7 @@ _Context view: paper metric anchors are shown for orientation; this is not a sam
 | Secondary QA / provenance visual evidence | What it answers |
 | --- | --- |
 | [Family-size progress overview](figures/release/option1_family_size_progress_overview.svg) | Completion/progress QA across family-size rows. |
-| [Coverage matrix](figures/release/option1_coverage_matrix.svg) | Which model-line x benchmark cells are present or blocked. |
+| [Coverage matrix](figures/release/option1_coverage_matrix.svg) | Which Qwen/DeepSeek/Gemma cells were paper-setup, proxy-only, or absent in frozen Option 1? |
 | [Sample volume](figures/release/option1_sample_volume.svg) | Public sample-volume QA by benchmark layer. |
 | [CCD valid-choice coverage](figures/release/option1_ccd_valid_choice_coverage.svg) | CCD parser/completion QA, not result ranking. |
 | [DeNEVIL proxy status matrix](figures/release/option1_denevil_proxy_status_matrix.svg) | Proxy route/status provenance. |
@@ -190,7 +190,7 @@ _Progress QA: shows which family-size cells are complete, blocked, partial, or u
 
 ![Coverage matrix](figures/release/option1_coverage_matrix.svg)
 
-_Coverage QA: shows benchmark-route availability and gaps across model lines; empty cells are not low scores._
+_Coverage QA: frozen Option 1 Qwen/DeepSeek/Gemma slice only; hatched cells are absent from that release slice, not low scores._
 
 ![Sample volume](figures/release/option1_sample_volume.svg)
 
