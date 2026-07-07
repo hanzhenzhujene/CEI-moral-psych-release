@@ -133,6 +133,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "[RQ4 BERTScore rows](results/paper-calibration-exact-20260706-unimoral-llama31/unimoral-rq4-bertscore.csv)" in readme
     assert "[calibration-summary.csv](results/paper-calibration-exact-20260705/calibration-summary.csv)" in readme
     assert "[run-manifest.csv](results/paper-calibration-exact-20260705/run-manifest.csv)" in readme
+    assert "[same-model bridge table](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in readme
+    assert "[calibration ledger](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in readme
     assert "`UniMoral action accuracy`" in readme
     assert "`SMID average accuracy`" in readme
     assert "`Value Kaleidoscope average`" in readme
@@ -438,6 +440,8 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "PAPER / SOURCE" in paper_alignment_svg
     assert "THIS REPO" in paper_alignment_svg
     assert "DELTA" in paper_alignment_svg
+    assert "paper/source Nordic share" in paper_alignment_svg
+    assert "current exact rerun or verified row" in paper_alignment_svg
     for label in (
         "Mistral Nemo",
         "Llama 3.3 70B",
@@ -459,7 +463,17 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "+6.6 pp" in paper_alignment_svg
     assert "-7.5 pp" in paper_alignment_svg
     assert "This is not an accuracy leaderboard." in paper_alignment_svg
-    for forbidden in ("DeNEVIL", "MoralPrompt", "SMID", "Value Kaleidoscope", "ValuePrism", "Qwen-M 99.5", "APV"):
+    for forbidden in (
+        "DeNEVIL",
+        "MoralPrompt",
+        "SMID",
+        "Value Kaleidoscope",
+        "ValuePrism",
+        "Kaleido",
+        "UniMoral",
+        "Qwen-M 99.5",
+        "APV",
+    ):
         assert forbidden not in paper_alignment_svg
     assert paper_result_comparison_svg.count("UniMoral RQ4 consequence") == 2
     assert "generation - BERTScore F1" in paper_result_comparison_svg
@@ -470,6 +484,22 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     openai_reference_doc = (ROOT / "docs" / "openai-reference-runs.md").read_text(encoding="utf-8")
     assert "Use the benchmark-specific result tables first" in openai_reference_doc
     assert "benchmark-comparison.csv` is a supporting generated summary for figures, not the main OpenAI data entry" in openai_reference_doc
+
+    calibration_doc = (ROOT / "docs" / "calibration-replication.md").read_text(encoding="utf-8")
+    assert "the July 2026 exact CCD pass has 11 plottable same-model distribution rows" in calibration_doc
+    assert "Qwen2.5-72B-Instruct 2,182/2,182 and 21.13%" in calibration_doc
+    assert "OpenAI GPT-4.1 2,182/2,182 and 22.27%" in calibration_doc
+    assert "Claude 4 Sonnet 2,182/2,182 and 30.25%" in calibration_doc
+    assert "Perplexity Sonar 2,182/2,182 and 14.34%" in calibration_doc
+    assert "CCD remains distributional behavior, not accuracy" in calibration_doc
+    assert "CCD exact same-model overlap: `mistralai/mistral-nemo` saved May 13" not in calibration_doc
+    assert "saved OpenAI text references and Qwen/Qwen2.5 rows differ from the exact paper model" not in calibration_doc
+
+    replication_map = (ROOT / "docs" / "paper-model-replication-map.md").read_text(encoding="utf-8")
+    assert "July 2026 strict bridge has 11 exact same-model CCD distribution rows" in replication_map
+    assert "The saved May 13 Mistral artifact remains saved/prior evidence" in replication_map
+    assert "the May 21 Mistral route probe remains route-only evidence" in replication_map
+    assert "Use the same-model CCD bar chart and `paper-model-calibration-bridge.csv` for exact rows" in replication_map
 
 
 def test_repository_root_keeps_legacy_files_archived():

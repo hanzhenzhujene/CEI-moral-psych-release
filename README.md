@@ -14,7 +14,7 @@ Jenny Zhu's CEI moral-psych benchmark deliverable for five assigned benchmark pa
 | OpenRouter text-only follow-up | [selected-grid readout](results/openrouter-selected-grid-moral-psych-full/README.md), [interpretation](results/openrouter-selected-grid-moral-psych-full/interpretation.md), [completion audit](results/openrouter-selected-grid-moral-psych-full/completion_audit.md), and [retry log](results/openrouter-selected-grid-moral-psych-full/targeted-retry-log.md) |
 | Main figures | [Main Figures](#main-figures) |
 | Exact progress / readiness | [readiness-tier-matrix.csv](results/release/2026-04-19-option1/readiness-tier-matrix.csv) and [family-size-progress.csv](results/release/2026-04-19-option1/family-size-progress.csv) |
-| Paper replication / calibration status | [paper-result-comparison.md](docs/paper-result-comparison.md), [paper-result-alignment.csv](results/release/2026-04-19-option1/paper-result-alignment.csv), and the [calibration tables](#data-click-here-result-tables) |
+| Paper replication / calibration status | [same-model bridge table](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv), [calibration ledger](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv), [paper-result-comparison.md](docs/paper-result-comparison.md), and the [calibration tables](#data-click-here-result-tables) |
 | Mentor-facing report | [jenny-group-report.md](results/release/2026-04-19-option1/jenny-group-report.md) |
 | Full detailed appendix | [results/release/2026-04-19-option1/README.md](results/release/2026-04-19-option1/README.md) |
 | Rebuild / verify | [Reproduce](#reproduce) with `make bootstrap` |
