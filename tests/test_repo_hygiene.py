@@ -219,7 +219,7 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "hatched cells are absent from that release slice, not low scores" in readme
     assert "CCD parser QA: visible `1-10` choice coverage only" in readme
     assert "DeNEVIL route QA: proxy route and status provenance only; no Tier 3 benchmark-faithful claim." in readme
-    assert readme.count("![") >= 29
+    assert readme.count("![") >= 32
     assert "| Separate follow-up visual evidence | What it answers |" in readme
     assert "[Selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg)" in readme
     assert "[Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in readme
@@ -229,6 +229,14 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert "![Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in readme
     assert "![Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in readme
     assert "![Selected-grid detailed task matrix](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg)" in readme
+    assert "| Exploratory follow-up visual evidence | What it answers |" in readme
+    assert "[May 13 UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg)" in readme
+    assert "[May 13 size/capability readout](figures/exploratory/additional_model_sweep_scaling.svg)" in readme
+    assert "[May 13 CCD concentration](figures/exploratory/additional_model_sweep_ccd_dominant_share.svg)" in readme
+    assert "![May 13 additional-model UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg)" in readme
+    assert "![May 13 additional-model size and capability readout](figures/exploratory/additional_model_sweep_scaling.svg)" in readme
+    assert "![May 13 additional-model CCD concentration](figures/exploratory/additional_model_sweep_ccd_dominant_share.svg)" in readme
+    assert "Exploratory follow-up figures    figures/exploratory/" in readme
     assert "Separate from the frozen Option 1 ranking surface." in readme
     assert "CCD-Bench remains valid-choice behavior, not accuracy." in readme
     assert "## Result Directory" in readme
@@ -683,6 +691,7 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "results/openrouter-selected-grid-moral-psych-full/README.md" in reproducibility
     assert "targeted-retry-log.md" in reproducibility
     assert "benchmark_score_matrix.svg" in reproducibility
+    assert "pilot_scores.svg" in reproducibility
     assert "separate OpenRouter text-only follow-up" in reproducibility
     assert "blocked provider/credit rows stay documented outside scored summaries" in reproducibility
     assert "secondary QA/provenance artifacts" in reproducibility
@@ -715,6 +724,8 @@ def test_supporting_docs_track_current_release_artifacts_and_boundaries():
     assert "results/openrouter-selected-grid-moral-psych-full/model_summary.csv" in results_readme
     assert "results/openrouter-selected-grid-moral-psych-full/targeted-retry-log.md" in results_readme
     assert "results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg" in results_readme
+    assert "results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg" in results_readme
+    assert "`within_family_scaling.svg`, `time_scaling.svg`, `benchmark_score_matrix.svg`, and `pilot_scores.svg` are the visual entry points" in results_readme
     assert "`completion_audit.md` and `targeted-retry-log.md` document provider/credit blockers" in results_readme
     assert "separate from the frozen Option 1 ranking surface" in results_readme
     assert "`benchmark-comparison.csv` is a supporting generated summary for figures, not the main data entry point" in results_readme
@@ -762,7 +773,8 @@ def test_root_readme_links_release_methodology_and_summary_paths():
 
     docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
     assert "../figures/README.md" in docs_index
-    assert "audience-facing figure order, visual caveats, and appendix/provenance figure map" in docs_index
+    assert "audience-facing figure order, visual caveats, and secondary QA/provenance figure map" in docs_index
+    assert "appendix/provenance figure map" not in docs_index
     assert "## Visual Reader Path" in docs_index
     assert "UniMoral RQ4 is generation quality rather than accuracy" in docs_index
     assert "CCD-Bench is cultural-choice behavior rather than correctness" in docs_index

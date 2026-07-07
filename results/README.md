@@ -68,6 +68,7 @@ Visual entry points:
 - `results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg`
 - `results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg`
 - `results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg`
+- `results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg`
 
 ## Public Result Layers
 
@@ -77,7 +78,7 @@ The current release separates three layers on purpose:
 - **Behavioral / distributional evidence:** `ccd-choice-distribution.csv` for CCD-Bench and `denevil-behavior-summary.csv` plus `denevil-prompt-family-breakdown.csv` for DeNEVIL
 - **Secondary QA / provenance:** `denevil-proxy-summary.csv`, `denevil-proxy-examples.csv`, and the QA-only coverage / status figures
 - **Result-readiness summary dashboard:** `readiness-tier-matrix.csv`, which summarizes model-line x benchmark readiness while keeping the metric layer explicit. Tier 1 = harness completed, Tier 2 = valid result, Tier 3 = interpretable/comparable result; blocked or missing cells are not assigned a tier.
-- **OpenRouter text-only follow-up:** `results/openrouter-selected-grid-moral-psych-full/result_summary.csv`, `benchmark_summary.csv`, and `model_summary.csv` summarize the separate selected-grid follow-up; `completion_audit.md` and `targeted-retry-log.md` document provider/credit blockers; CCD-Bench is valid-choice behavior, not accuracy.
+- **OpenRouter text-only follow-up:** `results/openrouter-selected-grid-moral-psych-full/result_summary.csv`, `benchmark_summary.csv`, and `model_summary.csv` summarize the separate selected-grid follow-up; `within_family_scaling.svg`, `time_scaling.svg`, `benchmark_score_matrix.svg`, and `pilot_scores.svg` are the visual entry points; `completion_audit.md` and `targeted-retry-log.md` document provider/credit blockers; CCD-Bench is valid-choice behavior, not accuracy.
 
 This split keeps the public package honest: coverage, parser health, route provenance, and timestamps remain inspectable, but they are not promoted into headline performance claims.
 

@@ -145,7 +145,7 @@ Headline interpretation artifacts now include:
 - `denevil-behavior-summary.csv` + `option1_denevil_behavior_outcomes.svg` for DeNEVIL proxy behavioral outcomes
 - `readiness-tier-matrix.csv` for the generated model-line x benchmark result-readiness summary dashboard
 - secondary QA/provenance artifacts such as `denevil-proxy-summary.csv` and `option1_denevil_proxy_status_matrix.svg` for provenance, route, and visible-response diagnostics
-- `results/openrouter-selected-grid-moral-psych-full/README.md`, `interpretation.md`, `completion_audit.md`, `targeted-retry-log.md`, `result_summary.csv`, `benchmark_summary.csv`, `model_summary.csv`, and the `within_family_scaling.svg` / `time_scaling.svg` / `benchmark_score_matrix.svg` figures for the separate OpenRouter text-only follow-up. This follow-up is tracked as a separate result package rather than folded into the frozen Option 1 release counts; blocked provider/credit rows stay documented outside scored summaries.
+- `results/openrouter-selected-grid-moral-psych-full/README.md`, `interpretation.md`, `completion_audit.md`, `targeted-retry-log.md`, `result_summary.csv`, `benchmark_summary.csv`, `model_summary.csv`, and the `within_family_scaling.svg` / `time_scaling.svg` / `benchmark_score_matrix.svg` / `pilot_scores.svg` figures for the separate OpenRouter text-only follow-up. This follow-up is tracked as a separate result package rather than folded into the frozen Option 1 release counts; blocked provider/credit rows stay documented outside scored summaries.
 
 ## Refresh the Tracked Authoritative Snapshot
 

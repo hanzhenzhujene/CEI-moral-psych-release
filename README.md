@@ -93,7 +93,7 @@ These are the result and calibration visuals to use in the deck or meeting reado
 | UniMoral questions | [four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg), [task heatmap](figures/release/option1_unimoral_task_heatmap.svg), [RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg) | RQ1-RQ3 are accuracy; RQ4 has BERTScore F1 and METEOR. |
 | Paper calibration questions | [same-model CCD bar chart](figures/release/option1_paper_result_alignment_map.svg), [same-model bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper-result context](figures/release/option1_paper_result_comparison.svg) | Only exact same-model, same-metric rows become bar comparisons; context/proxy rows stay separate. |
 | Audit questions | [coverage matrix](figures/release/option1_coverage_matrix.svg), [sample volume](figures/release/option1_sample_volume.svg), [CCD valid-choice coverage](figures/release/option1_ccd_valid_choice_coverage.svg), [DeNEVIL proxy status matrix](figures/release/option1_denevil_proxy_status_matrix.svg) | These show what ran, parsed, or surfaced visibly; they are not performance leaderboards. |
-| Follow-up sweep questions | [selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg), [selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg), [selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg) | This is a separate text-only OpenRouter follow-up, not the frozen Option 1 ranking surface. |
+| Follow-up sweep questions | [selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg), [selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg), [selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg), [May 13 UniMoral follow-up](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg) | These are separate follow-up visuals, not the frozen Option 1 ranking surface. |
 
 | Open in this order | Figure | What it answers |
 | --- | --- | --- |
@@ -249,6 +249,24 @@ _Follow-up matrix: scored text rows only; CCD-Bench remains visible-choice behav
 
 _Follow-up detail matrix: use this for task-level backup slides; it stays separate from the frozen primary ranking surface._
 
+| Exploratory follow-up visual evidence | What it answers |
+| --- | --- |
+| [May 13 UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg) | Older/smaller Mistral, Qwen, and Llama action-prediction context. |
+| [May 13 size/capability readout](figures/exploratory/additional_model_sweep_scaling.svg) | Approximate model-size view for the follow-up; point size encodes CCD concentration. |
+| [May 13 CCD concentration](figures/exploratory/additional_model_sweep_ccd_dominant_share.svg) | Dominant cultural-cluster concentration for the same follow-up rows. |
+
+![May 13 additional-model UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg)
+
+_Exploratory follow-up: older/smaller routes provide capability-floor context; this is not the frozen Option 1 ranking surface._
+
+![May 13 additional-model size and capability readout](figures/exploratory/additional_model_sweep_scaling.svg)
+
+_Exploratory scaling view: 7B-12B routes cluster on UniMoral action accuracy, while the 1B route is the clear low line._
+
+![May 13 additional-model CCD concentration](figures/exploratory/additional_model_sweep_ccd_dominant_share.svg)
+
+_Exploratory CCD view: dominant-share concentration is behavior/style evidence, not correctness._
+
 ## Result Directory
 
 ```text
@@ -259,6 +277,7 @@ SMID results                     results/release/2026-04-19-option1/smid-results
 Value results                    results/release/2026-04-19-option1/value-kaleidoscope-results.csv
 All release tables               results/release/2026-04-19-option1/
 All release figures              figures/release/
+Exploratory follow-up figures    figures/exploratory/
 OpenRouter text-only follow-up   results/openrouter-selected-grid-moral-psych-full/
 Paper replication/calibration    docs/paper-result-comparison.md
 How to interpret metrics         docs/how-to-read-results.md

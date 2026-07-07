@@ -1913,7 +1913,7 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "| UniMoral questions | [four-task dashboard](figures/release/option1_unimoral_four_task_dashboard.svg), [task heatmap](figures/release/option1_unimoral_task_heatmap.svg), [RQ4 generation quality](figures/release/option1_unimoral_generation_quality.svg) |" in root_readme
     assert "| Paper calibration questions | [same-model CCD bar chart](figures/release/option1_paper_result_alignment_map.svg), [same-model bridge](figures/release/option1_paper_model_calibration_bridge.svg), [paper-result context](figures/release/option1_paper_result_comparison.svg) |" in root_readme
     assert "Only exact same-model, same-metric rows become bar comparisons; context/proxy rows stay separate." in root_readme
-    assert "| Follow-up sweep questions | [selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg), [selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg), [selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg) |" in root_readme
+    assert "| Follow-up sweep questions | [selected-grid family scaling](results/openrouter-selected-grid-moral-psych-full/figures/within_family_scaling.svg), [selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg), [selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg), [May 13 UniMoral follow-up](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg) |" in root_readme
     assert "| Secondary QA / provenance visual evidence | What it answers |" in root_readme
     assert "| Appendix-only visual evidence | What it answers |" not in root_readme
     assert "Coverage QA: frozen Option 1 Qwen/DeepSeek/Gemma slice only" in root_readme
@@ -1923,7 +1923,15 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     assert "![Selected-grid time scaling](results/openrouter-selected-grid-moral-psych-full/figures/time_scaling.svg)" in root_readme
     assert "![Selected-grid benchmark matrix](results/openrouter-selected-grid-moral-psych-full/figures/benchmark_score_matrix.svg)" in root_readme
     assert "![Selected-grid detailed task matrix](results/openrouter-selected-grid-moral-psych-full/figures/pilot_scores.svg)" in root_readme
-    assert root_readme.count("![") >= 29
+    assert "| Exploratory follow-up visual evidence | What it answers |" in root_readme
+    assert "[May 13 UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg)" in root_readme
+    assert "[May 13 size/capability readout](figures/exploratory/additional_model_sweep_scaling.svg)" in root_readme
+    assert "[May 13 CCD concentration](figures/exploratory/additional_model_sweep_ccd_dominant_share.svg)" in root_readme
+    assert "![May 13 additional-model UniMoral accuracy](figures/exploratory/additional_model_sweep_unimoral_accuracy.svg)" in root_readme
+    assert "![May 13 additional-model size and capability readout](figures/exploratory/additional_model_sweep_scaling.svg)" in root_readme
+    assert "![May 13 additional-model CCD concentration](figures/exploratory/additional_model_sweep_ccd_dominant_share.svg)" in root_readme
+    assert "Exploratory follow-up figures    figures/exploratory/" in root_readme
+    assert root_readme.count("![") >= 32
     assert "[paper-model-calibration-ledger.csv](results/release/2026-04-19-option1/paper-model-calibration-ledger.csv)" in root_readme
     assert "[paper-model-calibration-bridge.csv](results/release/2026-04-19-option1/paper-model-calibration-bridge.csv)" in root_readme
     assert "[paper-model-overlap-map.csv](results/release/2026-04-19-option1/paper-model-overlap-map.csv)" in root_readme

@@ -131,7 +131,7 @@ done
 
 ## Exploratory Figures
 
-Follow-up model-sweep figures use `figures/exploratory/`.
+Follow-up model-sweep figures use `figures/exploratory/`. These are now embedded in the root README after the selected-grid follow-up visuals, with an explicit exploratory/capability-floor label.
 
 - `additional_model_sweep_unimoral_accuracy.svg`: UniMoral accuracy for the May 13 additional-model sweep
 - `additional_model_sweep_ccd_dominant_share.svg`: CCD-Bench dominant cultural-cluster concentration for the same sweep

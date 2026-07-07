@@ -22,7 +22,7 @@ This repo uses a few status words repeatedly. This page explains them in plain l
 
 ## Visual Reading Order
 
-For a presentation, deck, or reviewer skim, open [`figures/README.md`](../figures/README.md) first. It gives the ordered figure list and separates audience-facing visuals from appendix/provenance visuals.
+For a presentation, deck, or reviewer skim, open [`figures/README.md`](../figures/README.md) first. It gives the ordered figure list and separates audience-facing visuals from secondary QA/provenance visuals.
 
 | Question | Open first | Boundary |
 | --- | --- | --- |
