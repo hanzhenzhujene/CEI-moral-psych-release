@@ -1835,6 +1835,10 @@ def test_write_root_readme_keeps_clean_landing_page_and_org_tail(tmp_path):
     subprocess.run([sys.executable, str(script_copy), "--write-root-readme"], check=True, cwd=repo_copy)
 
     root_readme = (repo_copy / "README.md").read_text(encoding="utf-8")
+    assert "Jenny Zhu built the evaluation and release pipeline" in root_readme
+    assert root_readme.index("## Latest Audited Results") < root_readme.index("## Start Here")
+    assert "`143` model x task cells" in root_readme
+    assert "These are different evaluation sets, not successive completion counts." in root_readme
     assert root_readme.index("## Start Here") < root_readme.index("## What To Trust First")
     assert root_readme.index("## Start Here") < root_readme.index("## Best Results At A Glance")
     assert root_readme.index("## Start Here") < root_readme.index("## Visual Read In 90 Seconds")
