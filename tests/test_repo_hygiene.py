@@ -116,7 +116,15 @@ def test_root_readme_points_to_final_moral_psych_deliverable():
     assert readme.startswith("# CEI Moral-Psych Benchmark Suite")
     assert "github.com/hanzhenzhujene/CEI-moral-psych-release/actions/workflows/ci.yml" in readme
     assert "github.com/Center-for-Ethical-Intelligence/moral-psychology-benchmark/actions/workflows/ci.yml" not in readme
-    assert "Jenny Zhu's CEI moral-psych benchmark deliverable" in readme
+    assert "How do language models make moral judgments, and how reliably can we measure them?" in readme
+    assert "Jenny Zhu built the evaluation and release pipeline at the Center for Ethical Intelligence" in readme
+    assert "## Latest Audited Results" in readme
+    assert "https://github.com/hanzhenzhujene/cei-moral-psychology-results-brief" in readme
+    assert "`143` model x task cells" in readme
+    assert "`78` primary text, `26` sensitivity-only text, `9` multimodal extension, and `30` excluded for missing images" in readme
+    assert "These are different evaluation sets, not successive completion counts." in readme
+    assert "Neither a cross-benchmark average nor computational validity establishes an overall ranking of moral judgment." in readme
+    assert readme.index("## Latest Audited Results") < readme.index("## Start Here")
     assert "## Start Here" in readme
     assert "## Visual Read In 90 Seconds" in readme
     assert "## Best Results At A Glance" in readme
